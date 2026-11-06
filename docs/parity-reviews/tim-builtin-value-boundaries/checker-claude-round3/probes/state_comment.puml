@@ -1,0 +1,4 @@
+@startuml
+state "Pool%substr("🦉",0,1)" as Pool
+[*] --> Pool
+@enduml

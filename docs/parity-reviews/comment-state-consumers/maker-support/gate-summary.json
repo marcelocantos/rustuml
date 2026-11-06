@@ -1,0 +1,271 @@
+[
+  {
+    "name": "library",
+    "argv": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--lib",
+      "--release"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 33.46512233300018,
+    "test_results": [
+      "test result: ok. 41 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+      "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s",
+      "test result: ok. 31 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s",
+      "test result: ok. 624 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s",
+      "test result: FAILED. 799 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s"
+    ],
+    "diagnostic_lines": [
+      "test result: ok. 41 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+      "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s",
+      "test result: ok. 31 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s",
+      "test result: ok. 624 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s",
+      "test result: FAILED. 799 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s",
+      "error: test failed, to rerun pass `-p rustuml-render --lib`"
+    ]
+  },
+  {
+    "name": "cli",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml",
+      "--test",
+      "pipe_mode",
+      "--release",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 0,
+    "seconds": 40.99885937498766,
+    "test_results": [
+      "test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 40.01s"
+    ],
+    "diagnostic_lines": [
+      "XML corpus=golden inputs=12550 emitted=12470 malformed=0 process_errors=80 panics=0",
+      "XML corpus=perturbation inputs=2139 emitted=2024 malformed=14 process_errors=115 panics=36",
+      "test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 40.01s"
+    ]
+  },
+  {
+    "name": "main-product",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "golden_no_oracle",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 5.991426957989461,
+    "test_results": [
+      "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.85s"
+    ],
+    "diagnostic_lines": [
+      "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.85s",
+      "error: test failed, to rerun pass `-p rustuml-oracle --test golden_no_oracle`"
+    ]
+  },
+  {
+    "name": "main-assisted",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "golden_pairs",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 4.027913249999983,
+    "test_results": [
+      "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.81s"
+    ],
+    "diagnostic_lines": [
+      "golden_pairs: 12550 total, 10497 passed, 754 failed, 1299 skipped",
+      "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.81s",
+      "error: test failed, to rerun pass `-p rustuml-oracle --test golden_pairs`"
+    ]
+  },
+  {
+    "name": "standing",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "parity_perturbations",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 3.253833459006273,
+    "test_results": [
+      "test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.17s"
+    ],
+    "diagnostic_lines": [
+      "test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.17s",
+      "error: test failed, to rerun pass `-p rustuml-oracle --test parity_perturbations`"
+    ]
+  },
+  {
+    "name": "guards",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "harness_guards",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 2.4284775420092046,
+    "test_results": [
+      "test result: FAILED. 4 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.28s"
+    ],
+    "diagnostic_lines": [
+      "test result: FAILED. 4 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.28s",
+      "error: test failed, to rerun pass `-p rustuml-oracle --test harness_guards`"
+    ]
+  },
+  {
+    "name": "clippy",
+    "argv": [
+      "cargo",
+      "clippy",
+      "--workspace",
+      "--all-targets",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 3.86730958300177,
+    "test_results": [],
+    "diagnostic_lines": [
+      "warning: build failed, waiting for other jobs to finish..."
+    ]
+  },
+  {
+    "name": "format",
+    "argv": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 1,
+    "seconds": 1.2219437500025379,
+    "test_results": [],
+    "diagnostic_lines": []
+  },
+  {
+    "name": "diff",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 0,
+    "seconds": 0.09184074999939185,
+    "test_results": [],
+    "diagnostic_lines": []
+  }
+]

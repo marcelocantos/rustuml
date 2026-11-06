@@ -1,0 +1,1629 @@
+{
+ "goldens": {
+  "sources": 12550,
+  "java_valid": 11351,
+  "java_error": 1199,
+  "base_valid_strict_match": 11181,
+  "base_comments_exact": 11563,
+  "base_exit": {
+   "1": 76,
+   "0": 12474
+  },
+  "base_panics": 0,
+  "base_timeouts": 0,
+  "base_java_error_rejected": 76,
+  "base_nonempty_stderr": 94,
+  "merge_valid_strict_match": 11181,
+  "merge_comments_exact": 11781,
+  "merge_exit": {
+   "1": 76,
+   "0": 12474
+  },
+  "merge_panics": 0,
+  "merge_timeouts": 0,
+  "merge_java_error_rejected": 76,
+  "merge_nonempty_stderr": 76,
+  "c1_valid_strict_match": 11181,
+  "c1_comments_exact": 11781,
+  "c1_exit": {
+   "1": 76,
+   "0": 12474
+  },
+  "c1_panics": 0,
+  "c1_timeouts": 0,
+  "c1_java_error_rejected": 76,
+  "c1_nonempty_stderr": 76,
+  "tip1_valid_strict_match": 11181,
+  "tip1_comments_exact": 11781,
+  "tip1_exit": {
+   "1": 76,
+   "0": 12474
+  },
+  "tip1_panics": 0,
+  "tip1_timeouts": 0,
+  "tip1_java_error_rejected": 76,
+  "tip1_nonempty_stderr": 76,
+  "base_to_tip1": {
+   "comments_gained": 218,
+   "gained_match": [
+    "test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml",
+    "test-diagrams/golden/state/state_history_shallow.puml",
+    "test-diagrams/golden/state/state_note_composite.puml"
+   ],
+   "lost_match_GET_provenance": [
+    "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+   ],
+   "outputs_changed": 396,
+   "stderr_changed": [
+    "test-diagrams/golden/activity/act_action_ending_flow_final.puml",
+    "test-diagrams/golden/activity/act_action_ending_fork_bar.puml",
+    "test-diagrams/golden/activity/act_action_ending_input.puml",
+    "test-diagrams/golden/activity/act_action_ending_output.puml",
+    "test-diagrams/golden/activity/act_action_ending_receive.puml",
+    "test-diagrams/golden/activity/act_action_ending_send.puml",
+    "test-diagrams/golden/activity/act_edge_all_action_endings_in_if.puml",
+    "test-diagrams/golden/state/state_composite_entry_only.puml",
+    "test-diagrams/golden/state/state_composite_exit_only.puml",
+    "test-diagrams/golden/state/state_entry1_exit1.puml",
+    "test-diagrams/golden/state/state_entry1_exit2.puml",
+    "test-diagrams/golden/state/state_entry1_exit3.puml",
+    "test-diagrams/golden/state/state_entry2_exit1.puml",
+    "test-diagrams/golden/state/state_entry2_exit2.puml",
+    "test-diagrams/golden/state/state_entry2_exit3.puml",
+    "test-diagrams/golden/state/state_entry3_exit1.puml",
+    "test-diagrams/golden/state/state_entry3_exit2.puml",
+    "test-diagrams/golden/state/state_entry3_exit3.puml",
+    "test-diagrams/golden/state/state_entry_exit_both.puml",
+    "test-diagrams/golden/state/state_entry_exit_in_composite.puml",
+    "test-diagrams/golden/state/state_entry_in_composite.puml",
+    "test-diagrams/golden/state/state_exit_in_composite.puml",
+    "test-diagrams/golden/state/state_multiple_entry_points.puml",
+    "test-diagrams/golden/state/state_multiple_exit_points.puml",
+    "test-diagrams/golden/usecase/usecase_long_names.puml"
+   ]
+  },
+  "base_to_tip1_counts": {
+   "comments_gained": 218,
+   "gained_match": 3,
+   "lost_match_GET_provenance": 3,
+   "outputs_changed": 396,
+   "stderr_changed": 25
+  },
+  "merge_to_tip1": {},
+  "merge_to_tip1_counts": {},
+  "c1_to_tip1": {},
+  "c1_to_tip1_counts": {}
+ },
+ "perturbations": {
+  "sources": 4314,
+  "java_valid": 4001,
+  "java_error": 313,
+  "base_valid_strict_match": 1790,
+  "base_comments_exact": 2878,
+  "base_exit": {
+   "0": 4209,
+   "1": 95,
+   "101": 10
+  },
+  "base_panics": 10,
+  "base_timeouts": 0,
+  "base_java_error_rejected": 84,
+  "base_nonempty_stderr": 129,
+  "merge_valid_strict_match": 2644,
+  "merge_comments_exact": 3681,
+  "merge_exit": {
+   "0": 4148,
+   "1": 162,
+   "101": 4
+  },
+  "merge_panics": 4,
+  "merge_timeouts": 0,
+  "merge_java_error_rejected": 155,
+  "merge_nonempty_stderr": 166,
+  "c1_valid_strict_match": 2660,
+  "c1_comments_exact": 3681,
+  "c1_exit": {
+   "0": 4151,
+   "1": 159,
+   "101": 4
+  },
+  "c1_panics": 4,
+  "c1_timeouts": 0,
+  "c1_java_error_rejected": 155,
+  "c1_nonempty_stderr": 163,
+  "tip1_valid_strict_match": 2660,
+  "tip1_comments_exact": 3681,
+  "tip1_exit": {
+   "0": 4151,
+   "1": 159,
+   "101": 4
+  },
+  "tip1_panics": 4,
+  "tip1_timeouts": 0,
+  "tip1_java_error_rejected": 155,
+  "tip1_nonempty_stderr": 163,
+  "base_to_tip1": {
+   "comments_gained": 805,
+   "comments_lost": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+   ],
+   "error_now_renders_valid_ref": [
+    "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_colon_key.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_trailing_backslash.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_whitespace_lines.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_left_align.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_unknown_pair_escaped_tab.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "gained_match": 870,
+   "outputs_changed": 1611,
+   "panic_removed": [
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "rejection_gained": 71,
+   "stderr_changed": 113
+  },
+  "base_to_tip1_counts": {
+   "comments_gained": 805,
+   "comments_lost": 2,
+   "error_now_renders_valid_ref": 13,
+   "gained_match": 870,
+   "outputs_changed": 1611,
+   "panic_removed": 6,
+   "rejection_gained": 71,
+   "stderr_changed": 113
+  },
+  "merge_to_tip1": {
+   "error_now_renders_valid_ref": [
+    "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+   ],
+   "gained_match": [
+    "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_flow_escape.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_cr.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_arabic.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_seq_arabic.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1ad0.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1e6e3.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u18_05c8.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_end.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_nested.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_relative_indent.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_flow_seq_escapes.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_real_tab_value.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+   ],
+   "outputs_changed": [
+    "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_flow_escape.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_cr.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_helv_hebrew.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_arabic.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_menlo_hebrew.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_seq_arabic.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1ad0.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1e6e3.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u18_05c8.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_end.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_nested.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_relative_indent.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_flow_seq_escapes.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_real_tab_value.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+   ],
+   "stderr_changed": [
+    "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+   ]
+  },
+  "merge_to_tip1_counts": {
+   "error_now_renders_valid_ref": 3,
+   "gained_match": 16,
+   "outputs_changed": 18,
+   "stderr_changed": 7
+  },
+  "c1_to_tip1": {
+   "stderr_changed": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+   ]
+  },
+  "c1_to_tip1_counts": {
+   "stderr_changed": 4
+  }
+ },
+ "all": {
+  "sources": 16864,
+  "java_valid": 15352,
+  "java_error": 1512,
+  "base_valid_strict_match": 12971,
+  "base_comments_exact": 14441,
+  "base_exit": {
+   "1": 171,
+   "0": 16683,
+   "101": 10
+  },
+  "base_panics": 10,
+  "base_timeouts": 0,
+  "base_java_error_rejected": 160,
+  "base_nonempty_stderr": 223,
+  "merge_valid_strict_match": 13825,
+  "merge_comments_exact": 15462,
+  "merge_exit": {
+   "1": 238,
+   "0": 16622,
+   "101": 4
+  },
+  "merge_panics": 4,
+  "merge_timeouts": 0,
+  "merge_java_error_rejected": 231,
+  "merge_nonempty_stderr": 242,
+  "c1_valid_strict_match": 13841,
+  "c1_comments_exact": 15462,
+  "c1_exit": {
+   "1": 235,
+   "0": 16625,
+   "101": 4
+  },
+  "c1_panics": 4,
+  "c1_timeouts": 0,
+  "c1_java_error_rejected": 231,
+  "c1_nonempty_stderr": 239,
+  "tip1_valid_strict_match": 13841,
+  "tip1_comments_exact": 15462,
+  "tip1_exit": {
+   "1": 235,
+   "0": 16625,
+   "101": 4
+  },
+  "tip1_panics": 4,
+  "tip1_timeouts": 0,
+  "tip1_java_error_rejected": 231,
+  "tip1_nonempty_stderr": 239,
+  "base_to_tip1": {
+   "comments_gained": 1023,
+   "comments_lost": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+   ],
+   "error_now_renders_valid_ref": [
+    "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_colon_key.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_trailing_backslash.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_whitespace_lines.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_left_align.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_unknown_pair_escaped_tab.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "gained_match": 873,
+   "lost_match_GET_provenance": [
+    "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+   ],
+   "outputs_changed": 2007,
+   "panic_removed": [
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "rejection_gained": 71,
+   "stderr_changed": 138
+  },
+  "base_to_tip1_counts": {
+   "comments_gained": 1023,
+   "comments_lost": 2,
+   "error_now_renders_valid_ref": 13,
+   "gained_match": 873,
+   "lost_match_GET_provenance": 3,
+   "outputs_changed": 2007,
+   "panic_removed": 6,
+   "rejection_gained": 71,
+   "stderr_changed": 138
+  },
+  "base_to_tip1_stderr_lines_lost": {
+   "Warning: node X port P unrecognized": 158,
+   "parse error: line N: unterminated activity action; multiline actions must end with ';'": 7,
+   "": 6,
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/preprocess/mod.rs:N:N:": 6,
+   "note: run with `RUST_BACKTRACE=N` environment variable to display a backtrace": 6,
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4,
+   "parse error: line N: YAML parse error: found unknown escape character at line N column N, while parsing a quoted scalar ": 3,
+   "parse error: line N: JSON parse error: expected value at line N column N": 2,
+   "end byte index N is not a char boundary; it is inside '\ud83d\ude80' (bytes N..N of string)": 2,
+   "Warning: Unable to reclaim box space in spline routing for edge \"PCCT\" -> \"VPIFC\". Something is probably seriously wrong": 1,
+   "Warning: GenericPeerReview was already in a rankset, deleted from cluster G": 1,
+   "Warning: PlainPeerReview was already in a rankset, deleted from cluster G": 1,
+   "Warning: removing empty cluster": 1,
+   "Warning: ReviewNMemoN was already in a rankset, deleted from cluster G": 1,
+   "end byte index N is not a char boundary; it is inside '\ud83e\udd8a' (bytes N..N of string)": 1,
+   "end byte index N is not a char boundary; it is inside '\\u{Nfffd}' (bytes N..N of string)": 1,
+   "end byte index N is not a char boundary; it is inside '\\u{NfeN}' (bytes N..N of string)": 1,
+   "parse error: line N: YAML parse error: found unknown escape character at line N column N, while parsing a quoted scalar": 1,
+   "parse error: line N: YAML parse error: found a tab character where an indentation space is expected at line N column N, ": 1,
+   "parse error: line N: YAML parse error: mapping values are not allowed in this context at line N column N": 1,
+   "end byte index N is not a char boundary; it is inside '\u00e9' (bytes N..N of string)": 1
+  },
+  "base_to_tip1_stderr_lines_gained": {
+   "parse error: line N: Bad date pattern: unsupported letter Q": 17,
+   "parse error: line N: Integer literal outside signed N-bit range": 8,
+   "parse error: line N: unterminated activity action; multiline actions must end with ';'": 7,
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4,
+   "parse error: line N: Bad date pattern: X must have one to three letters": 4,
+   "parse error: line N: Substring index out of range": 4,
+   "parse error: line N: Cannot nest sub": 4,
+   "parse error: line N: Illegal call here. Is there a return directive in your function?": 3,
+   "parse error: line N: Bad sub name": 3,
+   "parse error: line N: Unknown built-in function %strlen": 2,
+   "parse error: line N: Unknown built-in function $emit": 2,
+   "parse error: line N: Cannot convert N.N to integer.": 2,
+   "parse error: line N: Bad date pattern: unterminated quote": 2,
+   "parse error: line N: Unknown built-in function %missing_checkerN": 2,
+   "parse error: line N: Data parsing error: missing intermediate member": 2,
+   "parse error: line N: Foreach requires a JSON array or object": 2,
+   "parse error: line N: Expression operand stack underflow": 2,
+   "parse error: line N: Unknown built-in function %fresh_unregistered": 1,
+   "export error: Invalid UTF-N surrogate detected: dNe N ?": 1,
+   "parse error: line N: Cannot convert  true  to boolean.": 1,
+   "export error: An invalid XML character (Unicode: NxdeN) was found in the node's character data content.": 1,
+   "parse error: line N: Division by zero": 1,
+   "parse error: line N: Function not found %strlen": 1,
+   "parse error: line N: Unknown built-in function $join": 1,
+   "parse error: line N: Cannot convert bad to integer.": 1,
+   "parse error: line N: Cannot convert +-N to integer.": 1,
+   "parse error: line N: Cannot convert -N to integer.": 1,
+   "parse error: line N: Cannot convert x to integer.": 1,
+   "parse error: line N: Unknown built-in function $inner": 1,
+   "parse error: line N: Cannot convert bad to boolean.": 1
+  },
+  "base_to_tip1_stderr_per_source": {
+   "test-diagrams/golden/activity/act_action_ending_flow_final.puml": {
+    "lost": [
+     "parse error: line 2: unterminated activity action; multiline actions must end with ';'"
+    ],
+    "gained": [
+     "parse error: line 3: unterminated activity action; multiline actions must end with ';'"
+    ]
+   },
+   "test-diagrams/golden/activity/act_action_ending_fork_bar.puml": {
+    "lost": [
+     "parse error: line 2: unterminated activity action; multiline actions must end with ';'"
+    ],
+    "gained": [
+     "parse error: line 3: unterminated activity action; multiline actions must end with ';'"
+    ]
+   },
+   "test-diagrams/golden/activity/act_action_ending_input.puml": {
+    "lost": [
+     "parse error: line 2: unterminated activity action; multiline actions must end with ';'"
+    ],
+    "gained": [
+     "parse error: line 3: unterminated activity action; multiline actions must end with ';'"
+    ]
+   },
+   "test-diagrams/golden/activity/act_action_ending_output.puml": {
+    "lost": [
+     "parse error: line 2: unterminated activity action; multiline actions must end with ';'"
+    ],
+    "gained": [
+     "parse error: line 3: unterminated activity action; multiline actions must end with ';'"
+    ]
+   },
+   "test-diagrams/golden/activity/act_action_ending_receive.puml": {
+    "lost": [
+     "parse error: line 2: unterminated activity action; multiline actions must end with ';'"
+    ],
+    "gained": [
+     "parse error: line 3: unterminated activity action; multiline actions must end with ';'"
+    ]
+   },
+   "test-diagrams/golden/activity/act_action_ending_send.puml": {
+    "lost": [
+     "parse error: line 2: unterminated activity action; multiline actions must end with ';'"
+    ],
+    "gained": [
+     "parse error: line 3: unterminated activity action; multiline actions must end with ';'"
+    ]
+   },
+   "test-diagrams/golden/activity/act_edge_all_action_endings_in_if.puml": {
+    "lost": [
+     "parse error: line 5: unterminated activity action; multiline actions must end with ';'"
+    ],
+    "gained": [
+     "parse error: line 6: unterminated activity action; multiline actions must end with ';'"
+    ]
+   },
+   "test-diagrams/golden/state/state_composite_entry_only.puml": {
+    "lost": [
+     "Warning: node Composite.ep, port P unrecognized",
+     "Warning: node Composite.ep, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_composite_exit_only.puml": {
+    "lost": [
+     "Warning: node Composite.xp, port P unrecognized",
+     "Warning: node Composite.xp, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry1_exit1.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry1_exit2.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry1_exit3.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry2_exit1.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.ep1, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry2_exit2.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.ep1, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp1, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry2_exit3.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.ep1, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp1, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry3_exit1.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.ep1, port P unrecognized",
+     "Warning: node Composite.ep2, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry3_exit2.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.ep1, port P unrecognized",
+     "Warning: node Composite.ep2, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp1, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry3_exit3.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.ep1, port P unrecognized",
+     "Warning: node Composite.ep2, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp1, port P unrecognized",
+     "Warning: node Composite.xp2, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry_exit_both.puml": {
+    "lost": [
+     "Warning: node Composite.ep, port P unrecognized",
+     "Warning: node Composite.ep, port P unrecognized",
+     "Warning: node Composite.xp, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry_exit_in_composite.puml": {
+    "lost": [
+     "Warning: node Composite.exit1, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry_in_composite.puml": {
+    "lost": [
+     "Warning: node Composite.ep, port P unrecognized",
+     "Warning: node Composite.ep, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_exit_in_composite.puml": {
+    "lost": [
+     "Warning: node Composite.xp, port P unrecognized",
+     "Warning: node Composite.xp, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_multiple_entry_points.puml": {
+    "lost": [
+     "Warning: node Composite.ep1, port P unrecognized",
+     "Warning: node Composite.ep2, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_multiple_exit_points.puml": {
+    "lost": [
+     "Warning: node Composite.xp1, port P unrecognized",
+     "Warning: node Composite.xp2, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/usecase/usecase_long_names.puml": {
+    "lost": [
+     "Warning: Unable to reclaim box space in spline routing for edge \"PCCT\" -> \"VPIFC\". Something is probably seriously wrong."
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_lr_together_generic_rank_edge.puml": {
+    "lost": [
+     "Warning: GenericPeerReview was already in a rankset, deleted from cluster G",
+     "Warning: PlainPeerReview was already in a rankset, deleted from cluster G",
+     "Warning: removing empty cluster"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/class-together-structural-layout/review2_note_target_squaremaker_together.puml": {
+    "lost": [
+     "Warning: Review2Memo6503 was already in a rankset, deleted from cluster G"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml": {
+    "lost": [
+     "parse error: line 1: JSON parse error: expected value at line 1 column 1"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml": {
+    "lost": [
+     "thread 'main' (54120821) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (54313785) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml": {
+    "lost": [
+     "thread 'main' (54120837) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (54313787) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml": {
+    "lost": [
+     "thread 'main' (54120839) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (54313797) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml": {
+    "lost": [
+     "thread 'main' (54120842) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (54313799) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_integer_thresholds.puml": {
+    "lost": [
+     "Warning: node ThresholdCabinet.WWWJ, port P unrecognized",
+     "Warning: node ThresholdCabinet.WWWJ, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.puml": {
+    "lost": [
+     "Warning: node PortEnvelopeMatrix.ThresholdBasic, port P unrecognized",
+     "Warning: node PortEnvelopeMatrix.ThresholdBasic, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_short_labels.puml": {
+    "lost": [
+     "Warning: node ShortPortCabinet.I, port P unrecognized",
+     "Warning: node ShortPortCabinet.I, port P unrecognized",
+     "Warning: node ShortPortCabinet.O, port P unrecognized",
+     "Warning: node ShortPortCabinet.O, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/cardinal_abbreviation_grid.puml": {
+    "lost": [
+     "Warning: node EastQuay47.ei, port P unrecognized",
+     "Warning: node EastQuay47.ex, port P unrecognized",
+     "Warning: node NorthQuay47.ni, port P unrecognized",
+     "Warning: node NorthQuay47.nx, port P unrecognized",
+     "Warning: node SouthQuay47.si, port P unrecognized",
+     "Warning: node SouthQuay47.sx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/directional_left_up_groups.puml": {
+    "lost": [
+     "Warning: node EastCell.ei, port P unrecognized",
+     "Warning: node EastCell.ex, port P unrecognized",
+     "Warning: node NorthCell.ni, port P unrecognized",
+     "Warning: node NorthCell.nx, port P unrecognized",
+     "Warning: node WestCell.wi, port P unrecognized",
+     "Warning: node WestCell.wx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/dual_composite_basic_ports.puml": {
+    "lost": [
+     "Warning: node PodAlpha.qa, port P unrecognized",
+     "Warning: node PodAlpha.qz, port P unrecognized",
+     "Warning: node PodBeta.rb, port P unrecognized",
+     "Warning: node PodBeta.ry, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_left_group_link_minimal.puml": {
+    "lost": [
+     "Warning: node LeftNode.li, port P unrecognized",
+     "Warning: node LeftNode.lx, port P unrecognized",
+     "Warning: node RightNode.ri, port P unrecognized",
+     "Warning: node RightNode.rx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_up_group_link_minimal.puml": {
+    "lost": [
+     "Warning: node LowerNode.li, port P unrecognized",
+     "Warning: node LowerNode.lx, port P unrecognized",
+     "Warning: node UpperNode.ui, port P unrecognized",
+     "Warning: node UpperNode.ux, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/five_group_depth_reordered.puml": {
+    "lost": [
+     "Warning: node AlphaField47.ai, port P unrecognized",
+     "Warning: node AlphaField47.ax, port P unrecognized",
+     "Warning: node BetaField47.bi, port P unrecognized",
+     "Warning: node BetaField47.bx, port P unrecognized",
+     "Warning: node DeltaField47.di, port P unrecognized",
+     "Warning: node DeltaField47.dx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/forward_referenced_composite_order.puml": {
+    "lost": [
+     "Warning: node CedarBay.ci, port P unrecognized",
+     "Warning: node CedarBay.co, port P unrecognized",
+     "Warning: node MapleBay.mi, port P unrecognized",
+     "Warning: node MapleBay.mo, port P unrecognized",
+     "Warning: node PineBay.pi, port P unrecognized",
+     "Warning: node PineBay.po, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/four_groups_parallel_projection_order.puml": {
+    "lost": [
+     "Warning: node AlphaPack.ai, port P unrecognized",
+     "Warning: node AlphaPack.ax, port P unrecognized",
+     "Warning: node BetaPack.bi, port P unrecognized",
+     "Warning: node BetaPack.bx, port P unrecognized",
+     "Warning: node DeltaPack.di, port P unrecognized",
+     "Warning: node DeltaPack.dx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/mixed_parallel_direction_identity.puml": {
+    "lost": [
+     "Warning: node CobaltDock47.ci, port P unrecognized",
+     "Warning: node CobaltDock47.cx, port P unrecognized",
+     "Warning: node SableDock47.si, port P unrecognized",
+     "Warning: node SableDock47.sx, port P unrecognized",
+     "Warning: node UmberDock47.ui, port P unrecognized",
+     "Warning: node UmberDock47.ux, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/reordered_basic_ports.puml": {
+    "lost": [
+     "Warning: node ShellKappa.uh, port P unrecognized",
+     "Warning: node ShellKappa.vx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/reverse_explicit_direction_matrix.puml": {
+    "lost": [
+     "Warning: node IbisVault47.ii, port P unrecognized",
+     "Warning: node IbisVault47.ix, port P unrecognized",
+     "Warning: node LumenVault47.li, port P unrecognized",
+     "Warning: node LumenVault47.lx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_group_link_minimal.puml": {
+    "lost": [
+     "Warning: node FirstNode.fi, port P unrecognized",
+     "Warning: node FirstNode.fx, port P unrecognized",
+     "Warning: node SecondNode.si, port P unrecognized",
+     "Warning: node SecondNode.sx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_parallel_group_links.puml": {
+    "lost": [
+     "Warning: node CyanCell.ci, port P unrecognized",
+     "Warning: node CyanCell.cx, port P unrecognized",
+     "Warning: node RubyCell.ri, port P unrecognized",
+     "Warning: node RubyCell.rx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/same_container_port_link.puml": {
+    "lost": [
+     "Warning: node RelayBox.ln, port P unrecognized",
+     "Warning: node RelayBox.mq, port P unrecognized",
+     "Warning: node RelayBox.mq, port P unrecognized",
+     "Warning: node RelayBox.rt, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/scoped_projection_reuse.puml": {
+    "lost": [
+     "Warning: node AspenArc.ai, port P unrecognized",
+     "Warning: node AspenArc.ax, port P unrecognized",
+     "Warning: node BirchArc.bi, port P unrecognized",
+     "Warning: node BirchArc.bx, port P unrecognized",
+     "Warning: node CedarArc.ci, port P unrecognized",
+     "Warning: node CedarArc.cx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_long_cubic_round4.puml": {
+    "lost": [
+     "Warning: node ZenithBay47.zi, port P unrecognized",
+     "Warning: node ZenithBay47.zx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_short_cubic_round4.puml": {
+    "lost": [
+     "Warning: node MicaGate47.mi, port P unrecognized",
+     "Warning: node MicaGate47.mx, port P unrecognized",
+     "Warning: node OpalGate47.oi, port P unrecognized",
+     "Warning: node OpalGate47.ox, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_root_leaf_interleave.puml": {
+    "lost": [
+     "Warning: node AmberZone.aa, port P unrecognized",
+     "Warning: node AmberZone.ax, port P unrecognized",
+     "Warning: node MossZone.ma, port P unrecognized",
+     "Warning: node MossZone.mx, port P unrecognized",
+     "Warning: node QuartzZone.qa, port P unrecognized",
+     "Warning: node QuartzZone.qx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_scoped_pseudos.puml": {
+    "lost": [
+     "Warning: node BirchCell.bi, port P unrecognized",
+     "Warning: node BirchCell.bo, port P unrecognized",
+     "Warning: node CedarCell.ci, port P unrecognized",
+     "Warning: node CedarCell.co, port P unrecognized",
+     "Warning: node DeltaCell.di, port P unrecognized",
+     "Warning: node DeltaCell.do, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unknown_expression.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Unknown built-in function %fresh_unregistered"
+    ]
+   },
+   "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_arity_without_later_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Unknown built-in function %strlen"
+    ]
+   },
+   "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_strlen_arity_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Unknown built-in function %strlen"
+    ]
+   },
+   "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml": {
+    "lost": [
+     "",
+     "end byte index 16 is not a char boundary; it is inside '\ud83e\udd8a' (bytes 15..19 of string)",
+     "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+     "thread 'main' (54121945) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_projection.puml": {
+    "lost": [],
+    "gained": [
+     "export error: Invalid UTF-16 surrogate detected: d83e 20 ?"
+    ]
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml": {
+    "lost": [
+     "",
+     "end byte index 20 is not a char boundary; it is inside '\\u{10fffd}' (bytes 19..23 of string)",
+     "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+     "thread 'main' (54122032) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml": {
+    "lost": [
+     "",
+     "end byte index 42 is not a char boundary; it is inside '\\u{10fe80}' (bytes 41..45 of string)",
+     "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+     "thread 'main' (54122034) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_colon_key.puml": {
+    "lost": [
+     "parse error: line 1: YAML parse error: found unknown escape character at line 1 column 5, while parsing a quoted scalar"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_trailing_backslash.puml": {
+    "lost": [
+     "parse error: line 1: YAML parse error: found unknown escape character at line 1 column 10, while parsing a quoted scalar at line 1 column 7"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml": {
+    "lost": [
+     "parse error: line 1: JSON parse error: expected value at line 1 column 1"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_whitespace_lines.puml": {
+    "lost": [
+     "parse error: line 4: YAML parse error: found a tab character where an indentation space is expected at line 4 column 1, while scanning a block scalar at line 1 column 7"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml": {
+    "lost": [
+     "parse error: line 2: YAML parse error: mapping values are not allowed in this context at line 2 column 2"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_left_align.puml": {
+    "lost": [
+     "parse error: line 1: YAML parse error: found unknown escape character at line 1 column 19, while parsing a quoted scalar at line 1 column 4"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_unknown_pair_escaped_tab.puml": {
+    "lost": [
+     "parse error: line 1: YAML parse error: found unknown escape character at line 1 column 10, while parsing a quoted scalar at line 1 column 4"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/bool_space_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Cannot convert  true  to boolean."
+    ]
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml": {
+    "lost": [
+     "",
+     "end byte index 10 is not a char boundary; it is inside '\ud83d\ude80' (bytes 7..11 of string)",
+     "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+     "thread 'main' (54122841) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:"
+    ],
+    "gained": [
+     "export error: An invalid XML character (Unicode: 0xde80) was found in the node's character data content."
+    ]
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml": {
+    "lost": [
+     "",
+     "end byte index 21 is not a char boundary; it is inside '\ud83d\ude80' (bytes 20..24 of string)",
+     "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+     "thread 'main' (54122843) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_covered.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 9: Illegal call here. Is there a return directive in your function?"
+    ]
+   },
+   "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_missing.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 4: Unknown built-in function $emit"
+    ]
+   },
+   "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_rhs_first_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Cannot convert 4.5 to integer."
+    ]
+   },
+   "test-diagrams/perturbations/tim-call-resolution-arity/checker5/adjacent_dispatch.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 4: Cannot convert 12.5 to integer."
+    ]
+   },
+   "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_argument_first.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Division by zero"
+    ]
+   },
+   "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_plain_named_builtin.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Function not found %strlen"
+    ]
+   },
+   "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_procedure_first.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 4: Unknown built-in function $emit"
+    ]
+   },
+   "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_letter.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_quote.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Bad date pattern: unterminated quote"
+    ]
+   },
+   "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_x.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Bad date pattern: X must have one to three letters"
+    ]
+   },
+   "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_four_x.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Bad date pattern: X must have one to three letters"
+    ]
+   },
+   "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_unclosed_pattern.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Bad date pattern: unterminated quote"
+    ]
+   },
+   "test-diagrams/perturbations/tim-duplicate-formal-binding/checker8/duplicate_negative.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 4: Unknown built-in function $join"
+    ]
+   },
+   "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_nested.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Substring index out of range"
+    ]
+   },
+   "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr_only.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Substring index out of range"
+    ]
+   },
+   "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Unknown built-in function %missing_checker3"
+    ]
+   },
+   "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown_only.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Unknown built-in function %missing_checker3"
+    ]
+   },
+   "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_arguments.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 6: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_logical.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Integer literal outside signed 32-bit range"
+    ]
+   },
+   "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml": {
+    "lost": [
+     "",
+     "end byte index 26 is not a char boundary; it is inside '\u00e9' (bytes 25..27 of string)",
+     "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+     "thread 'main' (54123318) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_json_missing_chain.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Data parsing error: missing intermediate member"
+    ]
+   },
+   "test-diagrams/perturbations/tim-external-sub-selection/checker3_retained_sub_selected_fatal.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Bad date pattern: X must have one to three letters"
+    ]
+   },
+   "test-diagrams/perturbations/tim-external-sub-selection/checker3_selected_origin.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_scalar_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Foreach requires a JSON array or object"
+    ]
+   },
+   "test-diagrams/perturbations/tim-function-execution-kind/checker3_procedure_expression.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 4: Illegal call here. Is there a return directive in your function?"
+    ]
+   },
+   "test-diagrams/perturbations/tim-function-signature-availability/checker7/kind_after_exact.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 7: Illegal call here. Is there a return directive in your function?"
+    ]
+   },
+   "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_bad_arity.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Cannot convert bad to integer."
+    ]
+   },
+   "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_invalid_sign.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Cannot convert +-3 to integer."
+    ]
+   },
+   "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_underflow_bound.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Cannot convert -2147483649 to integer."
+    ]
+   },
+   "test-diagrams/perturbations/tim-json-container-validation/checker5/json_missing_dot.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Data parsing error: missing intermediate member"
+    ]
+   },
+   "test-diagrams/perturbations/tim-json-container-validation/checker5/json_scalar_null.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Foreach requires a JSON array or object"
+    ]
+   },
+   "test-diagrams/perturbations/tim-legacy-raw-caller-prefix/checker6/legacy_prefix_failure.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 7: Cannot convert x to integer."
+    ]
+   },
+   "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_collect_error_precedence.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Cannot nest sub"
+    ]
+   },
+   "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_uncalled_function.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Cannot nest sub"
+    ]
+   },
+   "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_duplicate.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 4: Expression operand stack underflow"
+    ]
+   },
+   "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_nested_call.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 7: Unknown built-in function $inner"
+    ]
+   },
+   "test-diagrams/perturbations/tim-original-macro-scanning/checker5/macro_argument_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 4: Cannot convert bad to boolean."
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Integer literal outside signed 32-bit range"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker2_error_after_theme.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 3: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker2_function_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 3: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker2_include_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 0: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_0.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_1.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Integer literal outside signed 32-bit range"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_2.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_3.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Integer literal outside signed 32-bit range"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sequence_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 3: Bad date pattern: X must have one to three letters"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Integer literal outside signed 32-bit range"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker2_two_errors.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker3_default_first_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Substring index out of range"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_literal.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Integer literal outside signed 32-bit range"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_pattern.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_literal.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Integer literal outside signed 32-bit range"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_pattern.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Bad date pattern: unsupported letter Q"
+    ]
+   },
+   "test-diagrams/perturbations/tim-parser-error-propagation/checker3_literal_before_date.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Integer literal outside signed 32-bit range"
+    ]
+   },
+   "test-diagrams/perturbations/tim-return-unwind/checker4_procedure_argument_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 4: Substring index out of range"
+    ]
+   },
+   "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_duplicate_underflow.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 4: Expression operand stack underflow"
+    ]
+   },
+   "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_nested_negative.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 2: Cannot nest sub"
+    ]
+   },
+   "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_commented_invalid.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Bad sub name"
+    ]
+   },
+   "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_invalid_after_selected.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 3: Bad sub name"
+    ]
+   },
+   "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_local_nested.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 1: Cannot nest sub"
+    ]
+   },
+   "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_raw_tail_error.puml": {
+    "lost": [],
+    "gained": [
+     "parse error: line 4: Bad sub name"
+    ]
+   }
+  },
+  "merge_to_tip1": {
+   "error_now_renders_valid_ref": [
+    "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+   ],
+   "gained_match": [
+    "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_flow_escape.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_cr.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_arabic.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_seq_arabic.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1ad0.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1e6e3.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u18_05c8.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_end.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_nested.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_relative_indent.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_flow_seq_escapes.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_real_tab_value.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+   ],
+   "outputs_changed": [
+    "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_flow_escape.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_cr.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_helv_hebrew.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_arabic.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_menlo_hebrew.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_seq_arabic.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1ad0.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1e6e3.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u18_05c8.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_end.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_nested.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_relative_indent.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_flow_seq_escapes.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_real_tab_value.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+   ],
+   "stderr_changed": [
+    "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+   ]
+  },
+  "merge_to_tip1_counts": {
+   "error_now_renders_valid_ref": 3,
+   "gained_match": 16,
+   "outputs_changed": 18,
+   "stderr_changed": 7
+  },
+  "merge_to_tip1_stderr_lines_lost": {
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4,
+   "parse error: line N: JSON parse error: expected value at line N column N": 2,
+   "parse error: line N: YAML parse error: mapping values are not allowed in this context at line N column N": 1
+  },
+  "merge_to_tip1_stderr_lines_gained": {
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4
+  },
+  "merge_to_tip1_stderr_per_source": {
+   "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml": {
+    "lost": [
+     "parse error: line 1: JSON parse error: expected value at line 1 column 1"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml": {
+    "lost": [
+     "thread 'main' (54170125) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (54313785) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml": {
+    "lost": [
+     "thread 'main' (54170129) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (54313787) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml": {
+    "lost": [
+     "thread 'main' (54170142) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (54313797) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml": {
+    "lost": [
+     "thread 'main' (54170140) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (54313799) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml": {
+    "lost": [
+     "parse error: line 1: JSON parse error: expected value at line 1 column 1"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml": {
+    "lost": [
+     "parse error: line 2: YAML parse error: mapping values are not allowed in this context at line 2 column 2"
+    ],
+    "gained": []
+   }
+  },
+  "c1_to_tip1": {
+   "stderr_changed": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+   ]
+  },
+  "c1_to_tip1_counts": {
+   "stderr_changed": 4
+  },
+  "c1_to_tip1_stderr_lines_lost": {
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4
+  },
+  "c1_to_tip1_stderr_lines_gained": {
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4
+  },
+  "c1_to_tip1_stderr_per_source": {
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml": {
+    "lost": [
+     "thread 'main' (54232533) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (54313785) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml": {
+    "lost": [
+     "thread 'main' (54232561) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (54313787) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml": {
+    "lost": [
+     "thread 'main' (54232570) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (54313797) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml": {
+    "lost": [
+     "thread 'main' (54232572) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (54313799) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   }
+  }
+ },
+ "GET_goldens": {
+  "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml": {
+   "base": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "merge": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "c1": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "tip1": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  },
+  "test-diagrams/golden/activity/act_skinparam_shadowing.puml": {
+   "base": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "merge": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "c1": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "tip1": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  },
+  "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml": {
+   "base": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "merge": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "c1": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "tip1": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  }
+ }
+}

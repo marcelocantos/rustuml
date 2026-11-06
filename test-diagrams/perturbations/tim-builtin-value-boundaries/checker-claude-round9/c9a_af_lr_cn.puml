@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+skinparam ArrowFontName Courier New
+class A
+class B
+A --> B : Pier quay
+@enduml

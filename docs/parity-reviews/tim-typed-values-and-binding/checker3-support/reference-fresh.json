@@ -1,0 +1,989 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_string.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "builtin typed argument boundary",
+      "string/JSON/integer or UTF16"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "a5a25dbfa1d6bbf447c1d3975df5df8dd0e0f17ee9a9f0c81121e0adc7907cc6",
+    "java_svg_sha256": "9f902d2bff8ce07d7c9edc5602743b85adda94dd107b7dddfabfe4ff23d08bb0"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_json.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "builtin typed argument boundary",
+      "string/JSON/integer or UTF16"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "b6eacadb44cb838fb618ebf9be13e5649d6b5e60a8130ac2a8aa2dc1e811d41f",
+    "java_svg_sha256": "946063c71fbfe79474e604fc5b4b6f2d88d0ccf28711d03b3e8fb0d41bce19ac"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_string.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "builtin typed argument boundary",
+      "string/JSON/integer or UTF16"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "c91508982fbf8a5102fd94a7d75b3ec6f92cdce05d04ae6d55c25a217f1c3e2f",
+    "java_svg_sha256": "ecd562aeacfaf1ea41b9af06c8b4974c18535699e342e13d5a82be778f29893c"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_negative.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "builtin typed argument boundary",
+      "string/JSON/integer or UTF16"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "d86ac10d31ffc71f6d7d7649d41f1fcd53ea5068792d7d314d653b9bf2abfc32",
+    "java_svg_sha256": "5c46bb074d6a24d6754b73fb5d5f8d07efe09b9324bf006db8dcf970b738dda4"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_index.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "builtin typed argument boundary",
+      "string/JSON/integer or UTF16"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "0037e724ecd07f0e2ac5a0fdcad4acefeb2ac4a0f76fc4d19e937f0b0cf59302",
+    "java_svg_sha256": "818ceeea242fefc0cce9a256c24a5be68806d3e3f5926fe0ef6fcfaca7b5f70e"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_slice.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "builtin typed argument boundary",
+      "string/JSON/integer or UTF16"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "bde7e0bdf64214385d8ed2cb302b31de1043385682177fa2632fac8ba4c58f3b",
+    "java_svg_sha256": "e96cd1b94940d7a6f3353ecfa566839d9ce7381f651cd76667fabee4187a956a"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_json_default.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "JSON declaration capture",
+      "named override with numeric string"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "379dd3afab40e1c3279b639681944386936126497f948c8514abcc69397ad7cf",
+    "java_svg_sha256": "f40cce7773b2157deda1da70355ef28a36c8400614c1bec1ab9ab0af7e760372"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_json_index.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "JSON field and array indexing",
+      "numeric-looking string type"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "48095b00a5a47c77608ff4168307bf2d82e3cff696fea98ac06cc6bd90573223",
+    "java_svg_sha256": "0d09c7581227878681869522423fce04c010d3041c09bd7ee212c84541febc24"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_named_siblings.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "sibling/global versus parameter memory",
+      "named/default types"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "fe2d0bfd26416cb23e903569cedd3e4a142b87a109acc19356b256ecc475426e",
+    "java_svg_sha256": "da47f63b35a19a3a88d3feb24f186cc6238f4394863be5403091bdb3ef80baaa"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_snapshot.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "variable token capture timing",
+      "function side effect"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "704aa8fa5e8385f4acc8b44e36c098bb555465d304158100c0e808960cb09766",
+    "java_svg_sha256": "6ae3f48d834c9e79acfd6f5e98d4e031dec1800bea4af91a46b5e54a374a5dde"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_literal_macro.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "legacy token adapter",
+      "quoted returned text"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "27af67992b955215637a6dc88ac45fc1a4d24522e179ac489a1aefe72db39d82",
+    "java_svg_sha256": "b234ae05446f99413b25b9943ae060a65f11177115ea257ebef0f1d638bfe77d"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker3_wrap_mul.puml",
+    "mechanism": "tim-explicit-date-instant",
+    "axes": [
+      "signed int arithmetic",
+      "explicit date conversion"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "78b08c3bf20867a6d3e2ee99c324073b09783ae4693bcb877c8be2ab7fc33f93",
+    "java_svg_sha256": "968ca95d761a52852621e60a427423c6cd9e504ed060ea9e46abd5fe56046cbb"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker3_negative_div.puml",
+    "mechanism": "tim-explicit-date-instant",
+    "axes": [
+      "signed int arithmetic",
+      "explicit date conversion"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "47b8a110a17ed1eebfa338943ccbdab3d5ad7fd89703bd522489a27a8c7b8322",
+    "java_svg_sha256": "bb0f3ee4b0ae1b237eb90e6a23071fe9244839274585cc10525bffa78deeadac"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker3_negative_quotient.puml",
+    "mechanism": "tim-explicit-date-instant",
+    "axes": [
+      "signed int arithmetic",
+      "explicit date conversion"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "32136a2f2b6c424edc5a020c163574ea9ced0799a599857323592cccb2fa3d15",
+    "java_svg_sha256": "851af3ce134569461c66efb93e340b48a880bb8185c6347f940f11b7e1ccba1f"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_shift_scope.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "operator grammar boundary",
+      "integer"
+    ],
+    "kind": "fresh independent",
+    "scope_probe": true,
+    "java_exit": 1,
+    "source_exit": 1,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "f51e3f4f9c0528414db07691009aab219db0a40af5a9dd6e892472d12036eea2",
+    "java_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unary_variable.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "unary signed expression",
+      "typed variable"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 1,
+    "source_exit": 1,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "30506d6fd32aad0b07f4bf42cb3909caacbf1befbec6170f6a67f812ee6d62f1",
+    "java_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_eager_recursion.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "recursive effects",
+      "AND and OR eager operand order"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "b84127b82990634c2123613673d35307f83a8fb05817b83829fdbf74b5b7da79",
+    "java_svg_sha256": "403ecbf84ab89d67c72ff3c2d2965aaff674786311953719f0e956af231379d1"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_quoted_unicode.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "Unicode literal function text",
+      "logical truth without reparsing"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "a4b8cd36fe72bf4e6721be089b010f7c644eff291884956c31fce9cc922a9a52",
+    "java_svg_sha256": "44d2d45268f4197ba1ce85e53c3f13446fdd2c499cc9d398eee8a9f770e4c70c"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_snapshot_logical.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "logical eager call",
+      "variable read timing"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "8bee7eb83501ed4d68d22848ce2e3fc796ab24eaf745c62385492a54aac5c58c",
+    "java_svg_sha256": "87daf66c752b0bd7b160fa1f78cfd2cd9f9a4598cca111ec27755bd933a905ff"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "builtin exception before date",
+      "first error cancellation"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true,
+    "java_exit": 1,
+    "source_exit": 1,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "cd2a23aa95083a6c1e292f6db7b98bc84bf3cc7fef5749ba213f2a6cdeea2480",
+    "java_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "unknown builtin before date",
+      "first error cancellation"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true,
+    "java_exit": 200,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "06b389ef096025395c723913d9184068f8041400fdbec7966c996674f23238ab",
+    "java_svg_sha256": "8696bee2932873070b329cb7580f195d09737264d4a29e1a995891c2ea9fc66e"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_nested.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "nested function origins",
+      "multiple fatal expressions"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true,
+    "java_exit": 200,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "1227bdb5607da2e651a637ebb99112727ab6aa92e3507a008fbe20cc42be4eca",
+    "java_svg_sha256": "d3c8a624c3cf3332b25f82454fd5c0d36a08965c37a40051dc5682f6372c6f9c"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_literal_before_date.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "axes": [
+      "integer literal before invalid formatter",
+      "diagnostic and source line"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true,
+    "java_exit": 1,
+    "source_exit": 1,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "90a503d5794752496d377a04b6ee7c4c69c7386c5cf1097df791ff0ab4567a73",
+    "java_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_default_first_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "axes": [
+      "default evaluation exceptions",
+      "declaration-time order"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true,
+    "java_exit": 1,
+    "source_exit": 1,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "1155cfabd5892532d968e21c11efd909411d5046577a7326ce9a4f8e39c24255",
+    "java_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_recursive_plain.puml",
+    "mechanism": "tim-function-execution-kind",
+    "axes": [
+      "recursive return frames",
+      "nested emitting procedure versus plain suppression"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "211d7fce23d5459c1ada4214a3990ead36602d4287ba0bcea05217eec96734d4",
+    "java_svg_sha256": "2b83ad889a25e053e09034a37a2d7724294ab09f676002a21412c22ae1172809"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_loop_early_return.puml",
+    "mechanism": "tim-function-execution-kind",
+    "axes": [
+      "return inside while",
+      "post-return mutation"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "43546629325d1afe527b00d874242a005709bc7a660cf6d28f7a41f536b0cfc2",
+    "java_svg_sha256": "4334a873354d7a619a4223eec1a80fb9fadc22bfef351316e3dd9f9465e6d340"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_foreach_return.puml",
+    "mechanism": "tim-function-execution-kind",
+    "axes": [
+      "typed foreach values",
+      "early return termination"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "b94b17b74b6bb5bd958e4e69e665f3bb725722955cee5f6dafd9b449945ab280",
+    "java_svg_sha256": "cfb0cc3d91afb12f633af855dff55482ef6a17fe1550c1f949c34b3a41bf06d5"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_procedure_expression.puml",
+    "mechanism": "tim-function-execution-kind",
+    "axes": [
+      "procedure versus return call context",
+      "illegal expression invocation"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true,
+    "java_exit": 200,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "7255c8ed9e560e1e001e1b41588d57f7afb3595733b9f21ed8a63866526f554b",
+    "java_svg_sha256": "a936cc685582abd0bd8959eee9d27ebd263968d1a2f913d697b13d569c8aabc4"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_no_return_extension.puml",
+    "mechanism": "tim-function-execution-kind",
+    "axes": [
+      "declaration kind",
+      "documented no-return extension"
+    ],
+    "kind": "fresh independent",
+    "scope_probe": true,
+    "java_exit": 200,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "be0e2270f4cf943304c85881002768b85a3c1f74d864666cda1bf89e3dc2056d",
+    "java_svg_sha256": "8300a9a24e1bdc78d4db1e1077a6d20504ce610357e881edb7b344fffa9eabe8"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+    "mechanism": "tim-external-sub-selection",
+    "axes": [
+      "raw block selection shape repeated",
+      "caller memory and ignored errors"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "e923d3a405ba6bd57f472bb5ec9b2cf65ab0977434d4da4e97851d03758ecd8d",
+    "java_svg_sha256": "3d312557db34da19683a8c768733334544d231b3d8c05e9be4b67385404ed814"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+    "mechanism": "tim-external-sub-selection",
+    "axes": [
+      "raw block selection shape tabs",
+      "caller memory and ignored errors"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "8ef8d78d120d0696adcc4fcf1e2fb0a46d6f10e4a025484a0835018d986754b7",
+    "java_svg_sha256": "e2f11f979d0e0c997c93bb47082d43d9f518a8196a71b6f4dca49b870e1e9fe2"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+    "mechanism": "tim-external-sub-selection",
+    "axes": [
+      "raw block selection shape nested",
+      "caller memory and ignored errors"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "93524ac435b9b90637cc16c8abd3e890562610282692b3506ab5b5efc3fd7ac2",
+    "java_svg_sha256": "72ae213a9825a1c285f810467d68435d300ce33ec6473f267818764506c62a5d"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+    "mechanism": "tim-external-sub-selection",
+    "axes": [
+      "raw block selection shape relative",
+      "caller memory and ignored errors"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "483efe882415f6f72ee319595f859ba9bc0874c26a303f49b399f0450d01a76e",
+    "java_svg_sha256": "3f5bd3c0c30273326097429110a30aeeed5336ea98eb039c5e024a5822d8ee61"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml",
+    "mechanism": "tim-external-sub-selection",
+    "axes": [
+      "evaluated selected name",
+      "ignored fatal prelude"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "f211f00da1123f716fe9ff65ea3a1342df354e9e16457e72ef876588fabd7565",
+    "java_svg_sha256": "66eb0a3c2d997bccfc776a528bc59706d76328f2e8a0ae7b3fcbec0c14bf16f7"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_selected_origin.puml",
+    "mechanism": "tim-external-sub-selection",
+    "axes": [
+      "selected fatal versus ignored body",
+      "first diagnostic and file origin"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true,
+    "java_exit": 200,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "ca785da15bd5d36e2d677b32f0751e2308fdc0181fc5abf9d348fd77fa87fbc7",
+    "java_svg_sha256": "9c45af34a79a002d9b0fd47184fb302a287397c0da2719528239e96f20bb6934"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+    "mechanism": "tim-function-execution-kind",
+    "axes": [
+      "external sub in return function",
+      "nested include and execution-kind restoration"
+    ],
+    "kind": "fresh independent",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "91faa19d33b1e1bd713853d52ba163740ac1b75dea1e4993f1face874b0cdd7b",
+    "java_svg_sha256": "b4c70c9ede072485a506ac993841d40c60f2bcd6c835019529035574434b970f"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "zone Europe/London",
+      "run widths and daylight/instant"
+    ],
+    "kind": "fresh independent",
+    "zone": "Europe/London",
+    "debug": "date=1774210426000",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "Europe/London",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "9bfe0c63a7b4303e826d2be7c3f7c7a622efba4dc7d90b9dbc2921466f9534c2",
+    "java_svg_sha256": "211b004b67503147763b3d8604f78dac3999cfea8dfeb7a485d93cbcc0c90843"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "zone Europe/London",
+      "run widths and daylight/instant"
+    ],
+    "kind": "fresh independent",
+    "zone": "Europe/London",
+    "debug": "date=1774210426000",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "Europe/London",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "079a91d81be971d135143670cc694af5bdd5c50a12e8af2f0fbb1d4248ea7e99",
+    "java_svg_sha256": "451aa910c7ee17f7876c20c56845dfa044d658f93f6c185b002cb299bb7acdce"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "zone Australia/Lord_Howe",
+      "run widths and daylight/instant"
+    ],
+    "kind": "fresh independent",
+    "zone": "Australia/Lord_Howe",
+    "debug": "date=1774210426000",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "Australia/Lord_Howe",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "9bfe0c63a7b4303e826d2be7c3f7c7a622efba4dc7d90b9dbc2921466f9534c2",
+    "java_svg_sha256": "1721f2744222113e55a26a22672cff565ff2aca216478770d317473df6d9edee"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "zone Europe/Dublin",
+      "run widths and daylight/instant"
+    ],
+    "kind": "fresh independent",
+    "zone": "Europe/Dublin",
+    "debug": "date=1774210426000",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "Europe/Dublin",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "9bfe0c63a7b4303e826d2be7c3f7c7a622efba4dc7d90b9dbc2921466f9534c2",
+    "java_svg_sha256": "211b004b67503147763b3d8604f78dac3999cfea8dfeb7a485d93cbcc0c90843"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "zone Asia/Kathmandu",
+      "run widths and daylight/instant"
+    ],
+    "kind": "fresh independent",
+    "zone": "Asia/Kathmandu",
+    "debug": "date=1774210426000",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "Asia/Kathmandu",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "645e7abf2b2ea8588a519c1cf2297b2420383a32bc8aefb429e2776c4198e3c5",
+    "java_svg_sha256": "e8a53eaf67d5a82db12090d95c189eb5399df006c0dbcab0b93d22f0d8463527"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_fixed_fraction.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "fixed fractional offset",
+      "negative epoch and width"
+    ],
+    "kind": "fresh independent",
+    "zone": "GMT-03:30",
+    "debug": "date=1774210426000,tz=FIX-0330",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT-03:30",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "37c3216d2c4ea9977f591894e628ea0e6a766a9ca8f6efa43e4edc092975f527",
+    "java_svg_sha256": "6c2a84c30c930171d170f43d3130d5b636df94d42487ef9b80fc772941db1fc9"
+  }
+]

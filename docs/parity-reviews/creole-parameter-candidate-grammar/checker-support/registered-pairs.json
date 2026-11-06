@@ -1,0 +1,734 @@
+[
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_zero.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_zero.svg",
+    "axes": [
+      "zero numeric conversion",
+      "activity consumer"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "3e88f044428d570bac6ae6e23392f2595c60a75d989c31d6f214e1c6c68db967",
+    "golden_sha256": "bc422c6379680985c9d316b3e83115a847d51c2e7ec5bbebf9aef68311b0eb96",
+    "reference_valid": false,
+    "intended_validity": "intended_valid",
+    "reference_classification": "runtime_error_svg",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 2
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_signed_decimal.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_signed_decimal.svg",
+    "axes": [
+      "signed and decimal rejection",
+      "state descriptions"
+    ],
+    "result": "pass",
+    "before_result": "fail",
+    "source_sha256": "27f441a7dff635bf07c3392081c5fc25e9b3ffa9e99223e6267071d1a77c36c4",
+    "golden_sha256": "0bc394df53c0c15cb340dcd695b642b6dbd217c3818820b02bfd596d3162c70f",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_space_boundaries.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_space_boundaries.svg",
+    "axes": [
+      "ASCII versus NBSP separator",
+      "leading zero and closing case"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "5b1b7f78614ebb1b13e521632cf0ebb5a1e478f22a17926e6417456cdd0d4409",
+    "golden_sha256": "2d8ad0d7f19b363982dea29d8bce25073f7a7d31f830bbae6c0f57b9ae722031",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_overflow.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_overflow.svg",
+    "axes": [
+      "integer overflow",
+      "recognized grammar versus conversion"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "31c74aecb053ecb07ef3bb26c1e18d57a692344fa2ef02d75a19c0719a987286",
+    "golden_sha256": "689880ea862d0d118b4291cc0f9e353cbfa3323cce5ff93582fedb0a5f751866",
+    "reference_valid": false,
+    "intended_validity": "intended_negative",
+    "reference_classification": "runtime_error_svg",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 2
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_rgb.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_rgb.svg",
+    "axes": [
+      "short mixed hex",
+      "activity"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "99ac9f51527428f9599e85420fe08779b8f24dd09654c89537046b435faf59be",
+    "golden_sha256": "f82888a1b90ae90b5a1116797501d380320f9aa97a5927d960ade11f497a41b9",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_rgba.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_rgba.svg",
+    "axes": [
+      "eight digit hex via word alternative",
+      "alpha serialization"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "89d3c5c0c358fdc1279318fcbf659ee4978f903cbfc4abc7a7b76b560e8dae8b",
+    "golden_sha256": "5eafa270781761618304e53fb1b91d4b8ee9768ad3cebe831b6a0394d8f35f57",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_named_alias.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_named_alias.svg",
+    "axes": [
+      "named aliases versus full hex",
+      "note"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "8016b87d091eee5eeb7586f8db46c6b331c0657b69c604362f08a54a6826cab2",
+    "golden_sha256": "b68648f3419d4c33a8d3dd3ebbcc3c8472ef2058b0a0ec1d6605e442ff542aa9",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_invalid_hex.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_invalid_hex.svg",
+    "axes": [
+      "word alternative accepts invalid hex",
+      "error contract"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "7cca5dc71695326b747019574b7809660d8c2dbb71f742def8930865e7eae6ed",
+    "golden_sha256": "24c0e8194b90970780c7fddc7f62111bcb9568e122a7dfea7e301be6c05833a6",
+    "reference_valid": true,
+    "intended_validity": "intended_negative",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/hidden_selection.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/hidden_selection.svg",
+    "axes": [
+      "hidden markers nested in bold",
+      "class-member literal fallback"
+    ],
+    "result": "pass",
+    "before_result": "fail",
+    "source_sha256": "b83dec55d3a303b84ecb717663239d093dec42e96060a00308528097574047bb",
+    "golden_sha256": "7f1b7a4d1bce3c459205eaca10ded8f68ef660d8408fa0c5980d597c98bcf83b",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_attr_order.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_attr_order.svg",
+    "axes": [
+      "repeated capture retention both orders",
+      "activity"
+    ],
+    "result": "pass",
+    "before_result": "fail",
+    "source_sha256": "8ff4e59d4c939c69ae1d946b45feb89522a41dba0740314860ec0e389d0c0384",
+    "golden_sha256": "36dafe554ec33b412d8c5e1ef312116181a8546ee79d353b98e70f396c4ad0ed",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_curly_nbsp.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_curly_nbsp.svg",
+    "axes": [
+      "Pattern2 quote class",
+      "NBSP between attributes"
+    ],
+    "result": "pass",
+    "before_result": "fail",
+    "source_sha256": "19bf50694ab160f535d44ca6a6f6222c1477e8dc53e64505bf8067d49db023a6",
+    "golden_sha256": "42d862da47b98d15d77f1483fca473317cb7aefc7c501ed82386f48bbd6cb2ec",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_empty_unknown.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_empty_unknown.svg",
+    "axes": [
+      "empty values and family fallback",
+      "unknown quoted family"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "b6cc59a06013afeac48adfd106d0f3c129feeba2ab5e24050220b6c0fb0ef34e",
+    "golden_sha256": "61dab4ad2f90bc9bf21cdc478f613c27587e1e1773942ecd920905fd9ccad4fc",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 3
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_hidden_precedent.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_hidden_precedent.svg",
+    "axes": [
+      "legitimate hidden family payload",
+      "nested WBS inheritance"
+    ],
+    "result": "pass",
+    "before_result": "fail",
+    "source_sha256": "cb795c815c35bb50fa0d2036c517ad31116de2ca691c5d2c18e37c7d2d4991db",
+    "golden_sha256": "bb0a4dfd1b8c674d29f9ec95b3dd058b69d42e6b88e107f3b685de041496d7c6",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/back_forms.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/back_forms.svg",
+    "axes": [
+      "background short/full/alpha/name grammars",
+      "state"
+    ],
+    "result": "pass",
+    "before_result": "fail",
+    "source_sha256": "92c4e79f096baeed9a2829f3bd65e458ce37616cc65890681f727793da263172",
+    "golden_sha256": "0ae682d70569d688fa21453935141b5a2487b023b8f2252bf8ae6ae7439430b0",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/back_gradient.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/back_gradient.svg",
+    "axes": [
+      "gradient second operand grammar",
+      "slash versus dash"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "f475b71f60a3bd5c7020f60c6364042077d9a05948b51b16870ebc6f6cf44ec6",
+    "golden_sha256": "840d89d34aa4d911b33e0ed0ffd144a5bc4df7640476e6d5c746dfaacc340d9f",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/back_hidden_invalid.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/back_hidden_invalid.svg",
+    "axes": [
+      "hidden and empty backgrounds",
+      "nested activity"
+    ],
+    "result": "pass",
+    "before_result": "fail",
+    "source_sha256": "1c9a6a85f8bcb342347eec80df1689b69a5caa128171d9876274b4031c14865b",
+    "golden_sha256": "f854e55360ba36e2700fedd94e8f8636503baa5daf4a8e6b98e1e5fb2803c600",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/image_grammar.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/image_grammar.svg",
+    "axes": [
+      "src quoted versus colon",
+      "valid decimal versus invalid scale"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "98bbcd405ed33806cb7c0e0d472b7524dca09ca802e8a4a81df0d7cfd007ec19",
+    "golden_sha256": "469b258056f90f5dae49b4ca6c5231b0459b58eb03ac3ab3f5bd6a1d625a8c61",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/image_nested.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/image_nested.svg",
+    "axes": [
+      "image nested style",
+      "rejected candidate leaves inner command"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "24df0bbe2842a9c5cc55d52c78c0390fdee9f6728e4ea8fb6ec66dfbe6e348b0",
+    "golden_sha256": "ef7f07d80ea229b091206bbbac954a48caa4914df915486e475427bd448d0812",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/icon_valid.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/icon_valid.svg",
+    "axes": [
+      "prefix color and scale variants",
+      "valid empty lexical result"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "46f5e75469e226e23d3d346a034b3622ca216527b1ee9a16f6edd37297f2d8f3",
+    "golden_sha256": "c7fecdca2e2a080caff42a3294af69cb64fefb21d607dc64e026c3f87838af62",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/icon_invalid.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/icon_invalid.svg",
+    "axes": [
+      "signed scale and hidden color",
+      "invalid suffix"
+    ],
+    "result": "pass",
+    "before_result": "fail",
+    "source_sha256": "ea48215196c93f4485053b98317f20bc82060a88f76e5be0278dc35e974db2df",
+    "golden_sha256": "c3fc9c21bd4e69f6c33c09e1ed423135e9b5b3fa7f1d868fba177fc21f934bb4",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/parameter_neighbors.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/parameter_neighbors.svg",
+    "axes": [
+      "URL sprite icon adjacency",
+      "hidden-family exception isolated"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "5efcbf6b2ff3613f9b2689407553c5c3434361700e6ae2a94993d0ea337c29c8",
+    "golden_sha256": "6ffa3dce8599f057dec6629e22ee0d90d0dba57d189782413f5a1b028384757e",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/wbs_nested_parameters.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/wbs_nested_parameters.svg",
+    "axes": [
+      "nested parameter stack",
+      "WBS sibling topology"
+    ],
+    "result": "pass",
+    "before_result": "fail",
+    "source_sha256": "632ecbeaae0599e4f4bfa83166c0837a23bb052359b9e27b59ea9f1568a41917",
+    "golden_sha256": "a5023341a6ae062e721cf3f1913b982dc2013a2c9a92c819c80cc854b5262d48",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/family_slash.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/family_slash.svg",
+    "axes": [
+      "greedy optional slash capture",
+      "quoted family"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "d1e45ee253be22d50bf3ed180594bb948b057419b81771712a20f2638d551b8b",
+    "golden_sha256": "2a931ddbc6f5d102293a86675bc3c96056e458ab76ba887ebddc5ab1d020ec33",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 3
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/cross_close.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/cross_close.svg",
+    "axes": [
+      "crossed closing tags",
+      "first bounded capture"
+    ],
+    "result": "pass",
+    "before_result": "fail",
+    "source_sha256": "2c67aa2ed5a480f824cbad8f631ef698d0e9b15de3eaa8f12090f9f187bb041e",
+    "golden_sha256": "d61bf75fba7c84efda7789afedba47baadabb2780d605d9ce2d768cee3ab2006",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_courier_upper.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_courier_upper.svg",
+    "axes": [
+      "family 'COURIER'",
+      "plain versus bold/size/color nesting",
+      "act"
+    ],
+    "result": "pass",
+    "before_result": "pass",
+    "source_sha256": "d23e20a1bdf53e9968bd22e6d098fe0a40f9398aa182ebc6bdd750adf541a64a",
+    "golden_sha256": "ce339fb6217e3b132a6d22216f1d1129cca7d1d68d4ec6a7cf941c45d0eeda64",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_courier_new.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_courier_new.svg",
+    "axes": [
+      "family 'Courier New'",
+      "plain versus bold/size/color nesting",
+      "note"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "f39decf5b1d532e45fdf512879b64cf97d2217ad1a140582161acf2eb55849dd",
+    "golden_sha256": "abf52baaa64dd608402b9d4e3d0095f85aa465cdaba8cfe7d2d8729046807feb",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_monospace_padded.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_monospace_padded.svg",
+    "axes": [
+      "family '\" monospace \"'",
+      "plain versus bold/size/color nesting",
+      "seq"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "c03cd22f1d38d1bb27649752ff0e1863581504f94ccdbc66c95f685281c7ef48",
+    "golden_sha256": "7b7f0293cc50e9ce726f49035ec7fa7be23cc469628d44cc1798610709aabb68",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 3
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_courier_trailing.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_courier_trailing.svg",
+    "axes": [
+      "family 'Courier '",
+      "plain versus bold/size/color nesting",
+      "seq"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "5deefb2e1133683b0863ba2f3b435cfa47cf480ad03101c4d4f5d9a805a40892",
+    "golden_sha256": "c9894830bb532758ff6b0484738eed6c32b3de4da7e5702bbfc85d4787e3f9e4",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_mono.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_mono.svg",
+    "axes": [
+      "family 'mono'",
+      "plain versus bold/size/color nesting",
+      "state"
+    ],
+    "result": "pass",
+    "before_result": "fail",
+    "source_sha256": "f73804441711e8c42826f76bc889391ea3aadb20d7170312996abbd62e0813f9",
+    "golden_sha256": "13e271daa046ac693a49202475cfcc31224582a3c83ab9e8cae73af9235b19c2",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_dialoginput.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_dialoginput.svg",
+    "axes": [
+      "family 'DialogInput'",
+      "plain versus bold/size/color nesting",
+      "seq"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "4730f54bba5d995e85511ea568953ae199d9ca7d93ad853e9d8e38fb2fe3b42c",
+    "golden_sha256": "3c7712d9cbce37b277b91ffcfdae4d8ac030a1f7e170e5be435faca442b649d8",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_lucida.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_lucida.svg",
+    "axes": [
+      "family 'Lucida Console'",
+      "plain versus bold/size/color nesting",
+      "wbs"
+    ],
+    "result": "pass",
+    "before_result": "fail",
+    "source_sha256": "02676bf32c49eaffdb675c03eea06a992b15e013aaaf30160b910ff40badba2d",
+    "golden_sha256": "5fc74992a238b0dcfc8051565312f48901579b1eed4070157553a16d174f9ca0",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_logical.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_logical.svg",
+    "axes": [
+      "family 'Serif'",
+      "plain versus bold/size/color nesting",
+      "cls"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "2d02cfd2add1721aee24ca8a51e71e188dd0551dfe7abec28133932fd979f8ca",
+    "golden_sha256": "9ec8a5a207a76b68725cba90b0f5c3f80651d3ba903d0f0f92c17adf86a2f2cb",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_dialog.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_dialog.svg",
+    "axes": [
+      "family 'Dialog'",
+      "plain versus bold/size/color nesting",
+      "note"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "5cb80173bdc1c5ac19c0907d7f5c926df671490f28a38b35df6694010fbd59f1",
+    "golden_sha256": "ad3048443b84e0e1cbeb7cef517d042de4e8c611b80a7449a1f2258bfc4f6b51",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_sansserif.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_sansserif.svg",
+    "axes": [
+      "family 'SansSerif'",
+      "plain versus bold/size/color nesting",
+      "act"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "7c3e7eb3c3f03b8aba4499c81166f8d3a096f47ecacd9f660a16f247f4e3e279",
+    "golden_sha256": "787a79a50291fcf5de3060344c0c4cbd80f00e80fdda97ba424643ab576036be",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_monospaced_case.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_monospaced_case.svg",
+    "axes": [
+      "family 'mOnOsPaCeD'",
+      "plain versus bold/size/color nesting",
+      "seq"
+    ],
+    "result": "fail",
+    "before_result": "fail",
+    "source_sha256": "fb69cd4344ff8d2ba6cf1dacb165c79159ce5c9685ced9965870fb5e738cc189",
+    "golden_sha256": "03b0e619148c676c047647c79c01af531497facc9a288365227562ea6c1aa811",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 1
+  },
+  {
+    "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+    "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_monospace_case.puml",
+    "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_monospace_case.svg",
+    "axes": [
+      "family 'MONOSPACE'",
+      "plain versus bold/size/color nesting",
+      "wbs"
+    ],
+    "result": "pass",
+    "before_result": "pass",
+    "source_sha256": "917d1fb22cd05d6e940819acaba287a3485d47b7ccc8bb096406f510c28afc8d",
+    "golden_sha256": "1d09567158c882b276099be603e0bc3cf7ec6b6fa9c429493cb67486d333aedb",
+    "reference_valid": true,
+    "intended_validity": "intended_valid",
+    "reference_classification": "valid_diagram",
+    "reference_exit": 0,
+    "cli_svg_exit": 0,
+    "cli_yaml_exit": 0,
+    "comparison_exit": 0
+  }
+]

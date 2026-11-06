@@ -1,0 +1,6 @@
+@startuml
+!$n=0
+!includesub checker4-resources/bad_tail.inc!chosen
+!$later=%date("Q",0)
+class After
+@enduml

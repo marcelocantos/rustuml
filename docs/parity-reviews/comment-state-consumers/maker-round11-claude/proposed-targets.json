@@ -1,0 +1,32 @@
+{
+ "schema_version": 1,
+ "note": "Proposed by the round-11 maker; not entered in the ledger.",
+ "targets": [
+  {
+   "name": "Non-ASCII characters a table-measured face maps are measured with that face's advances",
+   "acceptance": [
+    "In Verdana, Arial and Helvetica faces, a character outside U+0020..U+007E that the face's own cmap maps (JDK composite slot 0) is measured with the face's own advance (extracted per face with tools/AsciiAdvanceExtract.swift extended to the own-cmap runs, provenance recorded), not with the SansSerif (Lucida Grande) fallback that chain_text_width uses for ChainGlyph::Mapped.",
+    "BT c10a_st_{usec,actu,part,clss}_vd (Verdana italic «Ferrous gauge vista»: Java 157.2197, Rust 153.8428), class-current-spot-cascade/checker custom_class, custom_grouped_class, theme_interface («marker»: Java 61.2366, Rust 58.2214) and BP m9a_vi_hebrew_italic(_ctrl) move to Java's widths, plus held-out Latin-1 / Latin Extended probes; no pass is lost."
+   ],
+   "evidence": "round-11 sweep: these DIFF->DIFF outputs changed only in their ASCII part (now Java's face advances); the remaining gap is the non-ASCII part."
+  },
+  {
+   "name": "StateNodeFont bold is pinned or removed like its italic",
+   "acceptance": [
+    "state.rs StateNodeFont.bold (layout_node_size_with_font, reached in the CLI only with an empty style program) is shown observable and pinned by a Java-backed test, or shown CLI-unobservable as the italic was (a stateFontStyle skinparam always adds a style declaration) and removed; the oracle-tier golden_pairs result names stay identical."
+   ]
+  },
+  {
+   "name": "T14.49 note (no new target)",
+   "acceptance": [
+    "tools/font-chain-reference/ascii-advances-round11/Helvetica*.ascii.tsv already gives Helvetica's printable-ASCII advances; they reproduce the reviewer's Java Helvetica N-Z 129.1172 (W 1933, not 1934) and equal Arial's on all 95 code points; the oblique faces equal the upright ones."
+   ]
+  },
+  {
+   "name": "T14.46 note (no new target)",
+   "acceptance": [
+    "<style> FontWeight bold with FontStyle italic (BT c10a_ft_vd_bolditalic, M11A m11a_cs_*_vd_bi) still draws and measures italic only; the Verdana bold-italic ASCII table itself is pinned by c10a_ft_vd_creolebi (MATCH) and verdana_faces_measure_java_widths."
+   ]
+  }
+ ]
+}

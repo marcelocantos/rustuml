@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob : ping
+Bob --> Alice : pong
+@enduml

@@ -1,0 +1,40 @@
+[
+  {
+    "phase": "before",
+    "revision": "a33dccc8e94dc44b5bafdc756fc1b88c42823a7d",
+    "argv": [
+      "cargo",
+      "build",
+      "--release",
+      "--locked",
+      "-p",
+      "rustuml",
+      "-p",
+      "rustuml-oracle"
+    ],
+    "cwd": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/source-before",
+    "target": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/target-before",
+    "jobs": 4,
+    "exit": 0,
+    "seconds": 76.41818284988403
+  },
+  {
+    "phase": "after",
+    "revision": "346f6b3f680895d3eb457041ed88ae224c583d95",
+    "argv": [
+      "cargo",
+      "build",
+      "--release",
+      "--locked",
+      "-p",
+      "rustuml",
+      "-p",
+      "rustuml-oracle"
+    ],
+    "cwd": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/source-after",
+    "target": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/target-after",
+    "jobs": 4,
+    "exit": 0,
+    "seconds": 75.73314905166626
+  }
+]

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-builtin-typed-contracts",
+  "rust_revision": "7bb210e9f7578705638c8f3b7c3b43d8b4b906c3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/builtin/Substr.java:executeReturnFunction",
+    "tim/builtin/Strpos.java:executeReturnFunction",
+    "tim/builtin/Dec2hex.java:executeReturnFunction",
+    "tim/expression/TValue.java:toInt",
+    "tim/expression/ReversePolishInterpretor.java"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Builtin arguments retain TValue type until each builtin chooses toInt or toString. Substring/index positions are UTF-16 units; Integer.toHexString formats 32 bits. Invalid substring indices and unknown builtin calls fail before later execution.",
+  "causal_divergence": "The shared string adapter reparses JSON/string values, widens hex to i64, uses scalar/byte positions, and returns empty for missing builtins or negative indices.",
+  "planned_change": "Introduce typed builtin dispatch for numeric/index contracts and UTF-16 slicing/search. Preserve invalid statuses through the existing first-error latch. Reject unknown expression builtins rather than fabricating empty values; no parser handoff edits.",
+  "perturbation_axes": [
+    "String/JSON/integer positions and signed hex boundaries",
+    "Supplementary Unicode and substring bounds including negative errors"
+  ],
+  "oracle_plan": [
+    "Reuse checker3 exact references and unchanged shipped CLI comparator; source diagnostics supplementary.",
+    "Bounded new axes via remote headless Monkey Man only, preserving every success/failure.",
+    "Parser/CLI, guards, touched format and both main tiers once stabilized; report actual local cohort and all invalid/error/renderer dependencies."
+  ],
+  "constraints": [
+    "No renderer/parser handoff edits; timezone width implementation unchanged.",
+    "No fixture/reference/comparator/baseline/review/target changes; no self-review.",
+    "All prior evidence retained; new independent checker required."
+  ]
+}

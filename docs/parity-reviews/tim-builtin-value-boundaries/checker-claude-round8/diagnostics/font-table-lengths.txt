@@ -1,0 +1,17 @@
+# fontTools table-directory lengths (equal to the maker's CTFontCopyTable lengths for Courier New regular/bold); blocklist = HarfBuzz 15.0.0 is_blocklisted
+Courier New.ttf	sha256=c886ca3172d8ce9189976992d145ec090500a4ff516ecb9d4df56b1a78336247	GDEF,GSUB,GPOS=(588, 5078, 14418)	blocklisted=True	notdef_gdef_class=1
+Courier New Bold.ttf	sha256=500df4e46b554ae7d646e8727952fd8c7e60e94423481f6b82325cfddba2ee6a	GDEF,GSUB,GPOS=(588, 5078, 14238)	blocklisted=True	notdef_gdef_class=1
+Courier New Italic.ttf	sha256=b5c6d453f16fb1693652671fa2e11d8c8ad1cd0046c3f38ae2608d165838ecf1	GDEF,GSUB,GPOS=(162, 914, 8502)	blocklisted=False	notdef_gdef_class=1
+Courier New Bold Italic.ttf	sha256=60e4c514200985d3f8405af039ffb89cd24b45fef5005b019825a4937b96135d	GDEF,GSUB,GPOS=(114, 928, 8322)	blocklisted=False	notdef_gdef_class=1
+Times New Roman.ttf	sha256=f3b4ffff71c2a0c7227d37497683b2498fb2d0a4e8beae26f022e3ccfcaabfa3	GDEF,GSUB,GPOS=(670, 7000, 39180)	blocklisted=False	notdef_gdef_class=1
+Times New Roman Bold.ttf	sha256=50f5b1f27b7d34621090e437e8b1dd4510a22d2823fc876b3286bed327b64bbb	GDEF,GSUB,GPOS=(670, 7008, 39810)	blocklisted=False	notdef_gdef_class=1
+Times New Roman Italic.ttf	sha256=7bb99c3a67697fbce15ab66d806d9a2151432ce1dab2eaba4156e1251da486c0	GDEF,GSUB,GPOS=(490, 3046, 41638)	blocklisted=True	notdef_gdef_class=1
+Times New Roman Bold Italic.ttf	sha256=906157e8294fdf168d83002eaabde01c2d30fc3f44977be89e33fa22f262002a	GDEF,GSUB,GPOS=(478, 3046, 41902)	blocklisted=True	notdef_gdef_class=1
+Tahoma.ttf	sha256=359413e76969fc8a03e0acf91b355a98bb13c42472614e54bff5c8e4f4817fbb	GDEF,GSUB,GPOS=(832, 7324, 47162)	blocklisted=True	notdef_gdef_class=1
+Tahoma Bold.ttf	sha256=fc1863ab504b9c160abaa12b92296363db72f5b759311982510a85fe2aa9ff4f	GDEF,GSUB,GPOS=(844, 7302, 45474)	blocklisted=True	notdef_gdef_class=1
+Verdana.ttf	sha256=0da8c12f3e15d95585434d2cf294b3113a3e3fc84bf9ba9d64f2ef834ef4bd98	GDEF,GSUB,GPOS=(30, 148, 56)	blocklisted=False	notdef_gdef_class=1
+Verdana Italic.ttf	sha256=a1149e84da9e5c0a9b4cad68b62542b8503cb16ed8d1d7efd2640b36ce202b44	GDEF,GSUB,GPOS=(30, 148, 56)	blocklisted=False	notdef_gdef_class=1
+Verdana Bold Italic.ttf	sha256=252ef50efa09218d77d83311b531c14d7c0d45230e79389bd3db78448bc942f4	GDEF,GSUB,GPOS=(30, 148, 56)	blocklisted=False	notdef_gdef_class=1
+Arial.ttf	sha256=525979822591a3447cfc49d943d6f7683508e25543407871c0ed8fed05fd2bd9	GDEF,GSUB,GPOS=(706, 7064, 45346)	blocklisted=False	notdef_gdef_class=1
+Arial Italic.ttf	sha256=ce1d2f1ab89db45f9796100eee960f5702a40e84c225c2b48c3ec3e81d153f98	GDEF,GSUB,GPOS=(502, 2974, 39834)	blocklisted=False	notdef_gdef_class=1
+Arial Bold Italic.ttf	sha256=374b0190a9844343110d8f8ed1818117a4591803d022bbb2bd189d63a681e731	GDEF,GSUB,GPOS=(502, 2974, 38926)	blocklisted=False	notdef_gdef_class=1

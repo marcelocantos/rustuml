@@ -1,0 +1,6 @@
+@startuml
+!$counter=0
+!$which="chosen"
+!includesub test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/blocks.inc!$which
+class "$counter" as Result
+@enduml

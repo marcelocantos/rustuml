@@ -1,0 +1,8 @@
+@startuml
+participant Grove
+note right of Grove
+X[[https://example.test/~#part fir]]Y
+X[[https://example.test/a\~b fir]]Y
+X[[https://example.test/x{tip~[x~]} fir]]Y
+end note
+@enduml

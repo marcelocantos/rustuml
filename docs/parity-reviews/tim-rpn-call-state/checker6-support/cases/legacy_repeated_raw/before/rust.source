@@ -1,0 +1,8 @@
+@startuml
+note as Memo
+  cooked first oak
+second oak
+RAW first elm
+second elm
+end note
+@enduml

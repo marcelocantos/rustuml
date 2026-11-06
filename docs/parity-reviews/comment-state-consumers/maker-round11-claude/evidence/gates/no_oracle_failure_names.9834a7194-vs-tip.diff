@@ -1,0 +1,11 @@
+0a1,2
+> activity/act_skinparam_shadowing
+> activity/act_skinparam2_shadowing_true
+34a37
+> edge-cases/edge_whitespace_multiple_blank_lines
+40d42
+< preprocessing/preproc_complex_theme_override
+67d68
+< state/state_history_shallow
+69d69
+< state/state_note_composite

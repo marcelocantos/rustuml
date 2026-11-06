@@ -1,0 +1,46 @@
+{
+ "m9a_vi_hebrew_italic": {
+  "strict_merge": "DIFF",
+  "strict_tip": "DIFF",
+  "changed_texts": [
+   {
+    "index": 1,
+    "text": "Quay א 𝅧ב",
+    "family": "Verdana",
+    "style": "italic",
+    "weight": null,
+    "merge": "62.0293",
+    "tip": "62.0156",
+    "java": null,
+    "tip_eq_java": false
+   }
+  ],
+  "every_changed_text_eq_java": false,
+  "len_merge_tip": [
+   2,
+   2
+  ]
+ },
+ "m9a_vi_hebrew_italic_ctrl": {
+  "strict_merge": "DIFF",
+  "strict_tip": "DIFF",
+  "changed_texts": [
+   {
+    "index": 1,
+    "text": "Quay א ב",
+    "family": "Verdana",
+    "style": "italic",
+    "weight": null,
+    "merge": "62.0293",
+    "tip": "62.0156",
+    "java": null,
+    "tip_eq_java": false
+   }
+  ],
+  "every_changed_text_eq_java": false,
+  "len_merge_tip": [
+   2,
+   2
+  ]
+ }
+}

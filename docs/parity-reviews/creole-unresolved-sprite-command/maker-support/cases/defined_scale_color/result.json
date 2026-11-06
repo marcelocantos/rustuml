@@ -1,0 +1,100 @@
+{
+  "row": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/defined_scale_color.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "defined sprite",
+      "scale color"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  "classification": "positive_reference",
+  "reference_valid": true,
+  "java_svg_exit": 0,
+  "java_probe_exit": 0,
+  "xml_valid": true,
+  "factory": "CLASS",
+  "reference_comparator_exit": 0,
+  "source_sha256": "c2cdf15e82f63e40b261ce047f55e9123a4a9a7b6ce9b08b4af994f7d1a0d5d4",
+  "golden_sha256": "e57ca8d68539603e0a8dfd129d07caae917bb892aa20a45a5ea35e3b02e9544e",
+  "java_source_sha256": "c2cdf15e82f63e40b261ce047f55e9123a4a9a7b6ce9b08b4af994f7d1a0d5d4",
+  "phases": {
+    "after": {
+      "id": "fresh18/defined_scale_color",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new",
+        "exit": 0,
+        "seconds": 0.016913915998884477,
+        "stdout_sha256": "ccc0eb001ff4de679adaaf51bda04eadfebc37c6245da8927a71833af26b635f",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new",
+        "exit": 0,
+        "seconds": 0.013645917002577335,
+        "stdout_sha256": "747f81d28b7e4aacb96781af92b28bf633c2246c02a9bbedf9546d89f3d83037",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/defined_scale_color/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/defined_scale_color/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 1,
+        "seconds": 0.009937458002241328,
+        "stdout_sha256": "a5337337c6def6a4f57a9176d51ccb5c17ae3cf6813ed17e42262a7abce77b67",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "CLASS",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": false,
+      "panic": false,
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nsprite $gem [2x2/16] {\nF0\n0F\n}\nclass Anchor\nnote right\n<#red$gem{scale=2}> Cedar <$gem{color=blue}> end\nend note\n@enduml\n"
+      },
+      "exact_source": true
+    }
+  },
+  "direct_source": {
+    "argv": [
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/source-probe",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/defined_scale_color.puml",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new"
+    ],
+    "cwd": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new",
+    "exit": 0,
+    "seconds": 0.008160249999491498,
+    "stdout_sha256": "c2cdf15e82f63e40b261ce047f55e9123a4a9a7b6ce9b08b4af994f7d1a0d5d4",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "direct_source_equal": true
+}

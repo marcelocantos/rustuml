@@ -1,0 +1,8 @@
+@startuml
+!definelong BLOCK()
+!startsub stash
+class "retained" as Node
+!endsub
+!enddefinelong
+!includesub stash
+@enduml

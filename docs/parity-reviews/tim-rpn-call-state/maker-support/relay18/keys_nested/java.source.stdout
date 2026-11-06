@@ -1,0 +1,2 @@
+@startuml
+!$x=$join($a="one",$b=%upper("two"))

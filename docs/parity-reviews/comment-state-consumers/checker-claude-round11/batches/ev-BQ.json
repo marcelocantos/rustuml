@@ -1,0 +1,350 @@
+{
+ "cases": 8,
+ "trees": {
+  "base": {
+   "java_valid": 6,
+   "strict_match_valid": 0,
+   "viewBox_exact": 1,
+   "comments_exact": 8,
+   "nonzero_exit": 0,
+   "panics": 0,
+   "nonempty_stderr": 0
+  },
+  "merge": {
+   "java_valid": 6,
+   "strict_match_valid": 0,
+   "viewBox_exact": 1,
+   "comments_exact": 8,
+   "nonzero_exit": 0,
+   "panics": 0,
+   "nonempty_stderr": 0
+  },
+  "tip": {
+   "java_valid": 6,
+   "strict_match_valid": 0,
+   "viewBox_exact": 1,
+   "comments_exact": 8,
+   "nonzero_exit": 0,
+   "panics": 0,
+   "nonempty_stderr": 0
+  }
+ },
+ "deltas": {
+  "base->tip": {
+   "output_changed": [
+    "m9b_act_p2029_pdf",
+    "m9b_seqnote_nel_pdf",
+    "m9b_seqnote_nel_pdf_ctrl",
+    "m9b_seqnote_p2029_mixed",
+    "m9b_seqnote_p2029_pdf"
+   ],
+   "ndiff_worse": [
+    "m9b_seqnote_nel_pdf_ctrl"
+   ]
+  },
+  "base->tip_counts": {
+   "output_changed": 5,
+   "ndiff_worse": 1
+  },
+  "merge->tip": {},
+  "merge->tip_counts": {},
+  "base->merge": {
+   "output_changed": [
+    "m9b_act_p2029_pdf",
+    "m9b_seqnote_nel_pdf",
+    "m9b_seqnote_nel_pdf_ctrl",
+    "m9b_seqnote_p2029_mixed",
+    "m9b_seqnote_p2029_pdf"
+   ],
+   "ndiff_worse": [
+    "m9b_seqnote_nel_pdf_ctrl"
+   ]
+  },
+  "base->merge_counts": {
+   "output_changed": 5,
+   "ndiff_worse": 1
+  }
+ },
+ "per_case": {
+  "m9b_seqnote_p2029_pdf": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 61 130",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "1017ed9fda383d5b5f7694d3db4d99e78d00d951095a6015426cb00330a8b47c"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "03b45456789c8a3de522a9058c57876d6bb97d62ef734e727b08ef819665a6f9"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "03b45456789c8a3de522a9058c57876d6bb97d62ef734e727b08ef819665a6f9"
+   }
+  },
+  "m9b_seqnote_p2029_pdf_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 61 130",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e2d467c0f003f685945e4ed614f6a68608ad73d80ff9d79b831cb12bb403712a"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e2d467c0f003f685945e4ed614f6a68608ad73d80ff9d79b831cb12bb403712a"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e2d467c0f003f685945e4ed614f6a68608ad73d80ff9d79b831cb12bb403712a"
+   }
+  },
+  "m9b_seqnote_nel_pdf": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 66 130",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "0f6fd6fe865149158131b0945de03e6935e7e1f683a2487d78f48f00edd64d39"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d83eb21bd24b871bb212b19496fcf1267097d18e2a6ad7aa2ef654061a664eb8"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d83eb21bd24b871bb212b19496fcf1267097d18e2a6ad7aa2ef654061a664eb8"
+   }
+  },
+  "m9b_seqnote_nel_pdf_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 66 130",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 9,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "7c086ab8ba82e5ee07344d5cf723a5e6fc0b92087eccd8b1825db9dfc2fb7b3a"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "371b19a63a9dfbe36a4f4cbf9b50f4fd6e568deedb48a2d65f1b33364aa9d52a"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "371b19a63a9dfbe36a4f4cbf9b50f4fd6e568deedb48a2d65f1b33364aa9d52a"
+   }
+  },
+  "m9b_act_p2029_pdf": {
+   "java_valid": false,
+   "java_stderr": "ERROR\n3\nSyntax Error? (Assumed diagram type: activity)",
+   "java_viewBox": "0 0 460 153",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 13,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "c4d39f8b1f50d7df9864d8ee75009f4fcf3c32e8e1c55d1371ea2aec4ab556cc"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 13,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "b2dac157a8822be8fa2cbb75ff314e70954299339a969b7dc893aa8d30df2052"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 13,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "b2dac157a8822be8fa2cbb75ff314e70954299339a969b7dc893aa8d30df2052"
+   }
+  },
+  "m9b_act_p2029_pdf_ctrl": {
+   "java_valid": false,
+   "java_stderr": "ERROR\n3\nSyntax Error? (Assumed diagram type: activity)",
+   "java_viewBox": "0 0 460 153",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 13,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "2dc121d5a852daf91db0ee0bd8f18a44733e6eca2003d8e996f4214ca2c9f571"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 13,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "2dc121d5a852daf91db0ee0bd8f18a44733e6eca2003d8e996f4214ca2c9f571"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 13,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "2dc121d5a852daf91db0ee0bd8f18a44733e6eca2003d8e996f4214ca2c9f571"
+   }
+  },
+  "m9b_seqnote_p2029_mixed": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 57 130",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "6dde5bd499dd810288b1b967504e2f010cdf6aa49227b080ee603ff70f5cb713"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 3,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "2bf4d990c572a2fa5988382974b6c7c898ef616d73d4b2741f75a6813db609ff"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 3,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "2bf4d990c572a2fa5988382974b6c7c898ef616d73d4b2741f75a6813db609ff"
+   }
+  },
+  "m9b_seqnote_p2029_mixed_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 57 130",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 3,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "3f2d312b28dfc17610e324e4c684cba388f641be619501dced93b3023c3f0272"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 3,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "3f2d312b28dfc17610e324e4c684cba388f641be619501dced93b3023c3f0272"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 3,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "3f2d312b28dfc17610e324e4c684cba388f641be619501dced93b3023c3f0272"
+   }
+  }
+ }
+}

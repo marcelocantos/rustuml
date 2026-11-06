@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "base_revision": "a2167f93695497e49b8ae71c4830bac96309023b",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rejection": "4931481fd495ffff9da55a0c7514f43a487b087e",
+  "import_commit": "2ed88eb55ec5f0974ec2830deccfcc401f6d9885",
+  "mechanism": "user-text SVG comment serialization",
+  "java_locations": [
+    "svek/image/EntityImageClass.java:140\u2013141 class comment",
+    "svek/image/EntityImageDescription.java:289 entity comment",
+    "svek/Cluster.java:299\u2013311 cluster comment, hidden/synthetic-name eligibility remains consumer-specific",
+    "svek/SvekEdge.java:837 and abel/Link.java:116\u2013120 forward/reverse endpoint comment",
+    "klimt/drawing/svg/UGraphicSvg.java:163\u2013164 and SvgGraphics.java:1164\u20131166 DOM Comment construction; getTransformer:770\u2013778 lowercase us-ascii",
+    "OpenJDK21.0.5 ToStream.java:2312\u20132333 inserts space before adjacent dash and after final dash; emits literal content, not text/attribute entity escaping",
+    "ToStream.setOutputStreamInternal:700\u2013712 lowercase us-ascii goes through Encodings.getWriter:83\u2013105 \u2192 OutputStreamWriter \u2192 StreamEncoder:264\u2013268 REPLACE; US_ASCII.Encoder:163\u2013178 rejects non-ASCII scalar/surrogate pair with default ? replacement"
+  ],
+  "rust_locations": [
+    "45 exact macros in comment-routing-list.json",
+    "crates/rustuml-render/src/svg.rs new shared comment-body serializer"
+  ],
+  "invariant": "Comment content is serialized once as a whole. Adjacent hyphens gain a separating space; a final hyphen gains one trailing space. Literal ASCII &, <, > and quotes stay literal; non-ASCII scalars become ? under Java US-ASCII writer. Prefixes/endpoints stay as the existing consumer provides them. Attribute encoding and text rendering stay separate.",
+  "causal_divergence": "Rust comments interpolate unnormalized user strings and some sites incorrectly apply text/attribute escaping. Double--Tail- forms invalid XML. Existing Unicode/comment entity spellings also diverge from Java comment writer.",
+  "planned_change": "Add one shared comment-body encoder in svg.rs. Mechanically route exactly45 approved comment producers, formatting the complete body before serialization; remove direct text/attribute escapers from comment-only arguments, retain existing ASCII-folding inputs where already present. Mixed macros replace only comment fields/arguments. No topology, IDs, attributes, text or geometry changes; no Rust comment removal.",
+  "perturbation_axes": [
+    "adjacent runs of2/3 dashes, final dash and dash before inter-endpoint separator",
+    "ASCII special characters versus BMP/non-BMP, class/entity/cluster/link consumers"
+  ],
+  "production_files": [
+    "crates/rustuml-render/src/activity.rs",
+    "crates/rustuml-render/src/archimate.rs",
+    "crates/rustuml-render/src/class.rs",
+    "crates/rustuml-render/src/component.rs",
+    "crates/rustuml-render/src/deployment.rs",
+    "crates/rustuml-render/src/object.rs",
+    "crates/rustuml-render/src/state.rs",
+    "crates/rustuml-render/src/svg.rs",
+    "crates/rustuml-render/src/usecase.rs"
+  ],
+  "verification": "Fresh compact16 independently validated:15valid, comment_state_links is Java syntax-error SVG exit200 and remains nonpositive. Unicode comment is ???- -Leaf- (one replacement per scalar). Run all goldens/retained/checker87, compare whole SVG and comment projection; keep every whole failure. Source/branch name-selection differences are not silently repaired."
+}

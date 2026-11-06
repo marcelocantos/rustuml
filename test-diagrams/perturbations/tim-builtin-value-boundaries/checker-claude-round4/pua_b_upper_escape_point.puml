@@ -1,0 +1,3 @@
+@startuml
+class "%upper("a􏟿b􏿿")" as Up
+@enduml

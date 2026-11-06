@@ -1,0 +1,8 @@
+@startuml
+state Vault {
+  [*] --> Seal
+  Seal --> Open
+}
+Guard --> Vault[H]
+Guard --> Vault[H*]
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+state Mine {
+  state Shaft {
+    state cage <<entryPoint>>
+    cage --> Ore
+  }
+  Ore --> Lift
+}
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+skinparam rectangleFontStyle italic
+rectangle "Pylon vk" as E1
+@enduml

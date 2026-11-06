@@ -1,0 +1,4039 @@
+{
+ "schema_version": 1,
+ "reviewer": {
+  "task_id": "t3-51190f64 independent shared-SVG round-10 checker (claude)",
+  "model": "claude-opus-5-5 / Claude Code in T3 Code; no children; did not implement the candidate; no Java run locally (all Java via the parent relay)"
+ },
+ "mechanism": "comment-state-consumers",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "base_revision": "95291dc6bc460b0faeb2d80f15b4010ed56864ab",
+ "base_code_identical_to": "9834a719455308120c3289b59a260567f141b724",
+ "merge": "d06667af0e6cd326e8b22a65a2781130f6db41de",
+ "merge_code_identical_to": "14dd5efaeb388dd557bd39f8b6ab40c4338ada6d",
+ "tested_revision": "e24240b3542aaabdaf6286b87c1cb23217898ddc",
+ "packet_tip": "e24240b3542aaabdaf6286b87c1cb23217898ddc",
+ "answers_rejection": "d8242a8dcafa603db77dcc7251418f8aba03749c",
+ "account_commit": "681fce4c43532fbf99231266e2b11177350b29de",
+ "implementation_commit": "df9365441fafb4e4af6763681eafe23934278ecb",
+ "other_commits_reviewed": [
+  "681fce4c4",
+  "e1ee5ce7f",
+  "2a352f67b",
+  "6f86bf825",
+  "df9365441",
+  "e24240b35"
+ ],
+ "no_production_changes": true,
+ "no_shipping": true,
+ "scope": "round-10 obligations: element text measured in its drawn face, style included (component, activity, sequence participant, state, use case/actor); ValueImpl.asFontFace; face-routing gate and regeneration record; 6413e26b4 process record. Whole shared-SVG packet line (rounds 1-10) for local merge readiness.",
+ "commands": [
+  "git switch -c review/shared-svg-round10-claude e24240b35; git -c protocol.file.allow=always submodule update --init --reference .../rustuml/test-diagrams/golden test-diagrams/golden  # 9efdc12f",
+  "git archive <rev> | tar -x -C ~/Library/Caches/rustuml-shared-svg-round10-claude-checker/src/<rev>; CARGO_TARGET_DIR=<private> cargo build --release -j 6 -p rustuml  # 95291dc6b d06667af0 e24240b35 (binaries.sha256)",
+  "python3 -I tools/c10a_sources.py c10a; python3 -I tools/predict.py c10a base=... merge=... tip=...; python3 -I tools/c10a_expect.py c10a; python3 -I tools/stage.py <abs c10a>  # pre-registered in 77327eb70 before any Java run",
+  "python3 -I tools/batch.py work <relay dir> <L> bin/rustuml-95291dc6b=base bin/rustuml-d06667af0=merge bin/rustuml-e24240b35=tip  # AR..BT (run_batches10.sh); unchanged strict comparator (cmp/ wraps rustuml-oracle compare_svg_strict at 95291dc6b) + exact comment list",
+  "python3 -I tools/bs_eval.py work/batch-BS.json <maker-expectations.json> work/bs-eval.json; python3 -I tools/bt_eval.py work/batch-BT.json c10a/checker-expectations.json work/bt-eval.json; python3 -I tools/vbcensus10.py ...; python3 -I tools/batchsum10.py ...",
+  "bash tools/sweep10.sh  # all 12,550 goldens + 4,960 perturbations x 3 trees, recorded cwd (cwd_map.py), whole output; cohorts.py",
+  "bash tools/gates10.sh  # tip: workspace lib, pipe_mode, golden_no_oracle, golden_pairs, parity_perturbations, harness_guards, doc_claims; base: perturbations/guards/golden_pairs; 9834a7194: golden_no_oracle (re-run after ENOSPC)",
+  "bash tools/clippy10.sh; python3 -I tools/clippy_list.py gates gates/clippy-diags.json",
+  "python3 -I tools/routing_drill10.py drill/tree drill/logs-routing  # maker drill; python3 -I tools/consumer_drill10.py drill/tree drill/logs-consumer; python3 -I tools/build_variants10.py; python3 -I tools/mutant_net10.py <repo> work/pairs.json work/mutant-net.json",
+  "regeneration: the monkeyman-round9/README.md command on a git-archive copy; shasum before/after (regen/)",
+  "python3 -I tools/t1447.py <repo> work/cwd_map.json work/t1447.json; golden_no_oracle and golden_pairs on the tip gate tree with v1 / v2 state.rs (t1447-*.patch)",
+  "python3 -I tools/register10.py <repo> work/pairs.json BS=... BT=..."
+ ],
+ "relays_answered": {
+  "BS (maker M10A, held out from the maker)": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round10-m10a",
+   "reference_results_sha256": "236ca869013dfc8fcea700f47306ac7350e478899b4e1ad477476354e3e975de"
+  },
+  "BT (checker C10A)": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round10-c10a",
+   "reference_results_sha256": "9660501647d2e216776788b8364194df1263e3eb6fce47e1ebb402a4613e09fd",
+   "reference_manifest_sha256": "2fb673a344885dbd498a91c36825772f588ddc93fdcb558185b011d9b732eb3e",
+   "pre_registration_commit": "77327eb704fc10ab973993e504460446094092ac",
+   "rust_predictions_sha256": "742b2068fbbd29c70a52bcac563e52d6cb010a7a986085709711777442eb4dd3",
+   "checker_expectations_sha256": "338f7bc539ed53c1f4503a806e2a2f98c1ae898eca48a7c85276c34d1502b1db"
+  }
+ },
+ "evidence": {
+  "dir": "checker-claude-round10 (byte-identical copy under docs/parity-reviews/comment-state-consumers/ and tim-builtin-value-boundaries/; SHA256SUMS.json)",
+  "private_cache": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round10-claude-checker"
+ },
+ "frozen_items": "unchanged 95291dc6b..e24240b35 and d06667af0..e24240b35: crates/rustuml-oracle (GEOM_EPS 0.02, syntax markers, park list, error census, guard allow-lists, 14-entry strict-XML list), test-diagrams/no_oracle_baseline.txt and ulp_parked.txt; no perturbation edited or deleted",
+ "account_chronology": {
+  "accounts (docs only)": "681fce4c4 07:37",
+  "code obligation 1": "e1ee5ce7f 07:53",
+  "gate + regeneration record": "2a352f67b 07:53",
+  "asFontFace addendum (docs only)": "6f86bf825 08:00",
+  "asFontFace code": "df9365441 08:02",
+  "evidence (docs only)": "e24240b35 08:15"
+ },
+ "counts": {
+  "batches": {
+   "AR": {
+    "n": 20,
+    "base": 6,
+    "merge": 17,
+    "tip": 17,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "AU": {
+    "n": 32,
+    "base": 6,
+    "merge": 21,
+    "tip": 21,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "AW": {
+    "n": 45,
+    "base": 6,
+    "merge": 30,
+    "tip": 30,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BB": {
+    "n": 36,
+    "base": 2,
+    "merge": 25,
+    "tip": 25,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BC": {
+    "n": 19,
+    "base": 0,
+    "merge": 18,
+    "tip": 18,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BE": {
+    "n": 34,
+    "base": 0,
+    "merge": 22,
+    "tip": 22,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BF": {
+    "n": 46,
+    "base": 1,
+    "merge": 32,
+    "tip": 32,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BG": {
+    "n": 53,
+    "base": 0,
+    "merge": 42,
+    "tip": 42,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BH": {
+    "n": 99,
+    "base": 3,
+    "merge": 78,
+    "tip": 78,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BI": {
+    "n": 48,
+    "base": 1,
+    "merge": 39,
+    "tip": 39,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BJ": {
+    "n": 120,
+    "base": 15,
+    "merge": 96,
+    "tip": 96,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BK": {
+    "n": 49,
+    "base": 0,
+    "merge": 32,
+    "tip": 32,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BL": {
+    "n": 142,
+    "base": 7,
+    "merge": 65,
+    "tip": 65,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BM": {
+    "n": 26,
+    "base": 0,
+    "merge": 8,
+    "tip": 8,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BN": {
+    "n": 63,
+    "base": 0,
+    "merge": 32,
+    "tip": 32,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BO": {
+    "n": 81,
+    "base": 12,
+    "merge": 36,
+    "tip": 36,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BP": {
+    "n": 60,
+    "base": 15,
+    "merge": 24,
+    "tip": 24,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BQ": {
+    "n": 8,
+    "base": 0,
+    "merge": 0,
+    "tip": 0,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 0,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 0
+   },
+   "BR": {
+    "n": 288,
+    "base": 42,
+    "merge": 91,
+    "tip": 92,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 1,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 1
+   },
+   "BS": {
+    "n": 374,
+    "base": 111,
+    "merge": 147,
+    "tip": 211,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 64,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 81
+   },
+   "BT": {
+    "n": 379,
+    "base": 81,
+    "merge": 86,
+    "tip": 157,
+    "lost_merge_to_tip": 0,
+    "lost_base_to_tip": 0,
+    "gained_merge_to_tip": 71,
+    "lost_rejections": 0,
+    "new_valid_input_errors": 0,
+    "panics_tip": 0,
+    "stderr_changed_merge_to_tip": 0,
+    "tip_output_changed_vs_merge": 134
+   }
+  },
+  "viewbox_comment_census": {
+   "AR": {
+    "cases": 20,
+    "viewbox_exact_base": 13,
+    "comments_exact_base": 13,
+    "viewbox_exact_merge": 18,
+    "comments_exact_merge": 19,
+    "viewbox_exact_tip": 18,
+    "comments_exact_tip": 19,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "AU": {
+    "cases": 32,
+    "viewbox_exact_base": 19,
+    "comments_exact_base": 22,
+    "viewbox_exact_merge": 23,
+    "comments_exact_merge": 29,
+    "viewbox_exact_tip": 23,
+    "comments_exact_tip": 29,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "AW": {
+    "cases": 45,
+    "viewbox_exact_base": 13,
+    "comments_exact_base": 22,
+    "viewbox_exact_merge": 30,
+    "comments_exact_merge": 43,
+    "viewbox_exact_tip": 30,
+    "comments_exact_tip": 43,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BB": {
+    "cases": 36,
+    "viewbox_exact_base": 2,
+    "comments_exact_base": 11,
+    "viewbox_exact_merge": 25,
+    "comments_exact_merge": 35,
+    "viewbox_exact_tip": 25,
+    "comments_exact_tip": 35,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BC": {
+    "cases": 19,
+    "viewbox_exact_base": 0,
+    "comments_exact_base": 4,
+    "viewbox_exact_merge": 18,
+    "comments_exact_merge": 18,
+    "viewbox_exact_tip": 18,
+    "comments_exact_tip": 18,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BE": {
+    "cases": 34,
+    "viewbox_exact_base": 0,
+    "comments_exact_base": 2,
+    "viewbox_exact_merge": 22,
+    "comments_exact_merge": 24,
+    "viewbox_exact_tip": 22,
+    "comments_exact_tip": 24,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BF": {
+    "cases": 46,
+    "viewbox_exact_base": 8,
+    "comments_exact_base": 6,
+    "viewbox_exact_merge": 34,
+    "comments_exact_merge": 42,
+    "viewbox_exact_tip": 34,
+    "comments_exact_tip": 42,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BG": {
+    "cases": 53,
+    "viewbox_exact_base": 16,
+    "comments_exact_base": 6,
+    "viewbox_exact_merge": 47,
+    "comments_exact_merge": 49,
+    "viewbox_exact_tip": 47,
+    "comments_exact_tip": 49,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BH": {
+    "cases": 99,
+    "viewbox_exact_base": 14,
+    "comments_exact_base": 22,
+    "viewbox_exact_merge": 82,
+    "comments_exact_merge": 93,
+    "viewbox_exact_tip": 82,
+    "comments_exact_tip": 93,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BI": {
+    "cases": 48,
+    "viewbox_exact_base": 7,
+    "comments_exact_base": 15,
+    "viewbox_exact_merge": 42,
+    "comments_exact_merge": 48,
+    "viewbox_exact_tip": 42,
+    "comments_exact_tip": 48,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BJ": {
+    "cases": 120,
+    "viewbox_exact_base": 24,
+    "comments_exact_base": 55,
+    "viewbox_exact_merge": 99,
+    "comments_exact_merge": 118,
+    "viewbox_exact_tip": 99,
+    "comments_exact_tip": 118,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BK": {
+    "cases": 49,
+    "viewbox_exact_base": 6,
+    "comments_exact_base": 16,
+    "viewbox_exact_merge": 36,
+    "comments_exact_merge": 49,
+    "viewbox_exact_tip": 36,
+    "comments_exact_tip": 49,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BL": {
+    "cases": 142,
+    "viewbox_exact_base": 21,
+    "comments_exact_base": 71,
+    "viewbox_exact_merge": 77,
+    "comments_exact_merge": 141,
+    "viewbox_exact_tip": 77,
+    "comments_exact_tip": 141,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BM": {
+    "cases": 26,
+    "viewbox_exact_base": 7,
+    "comments_exact_base": 0,
+    "viewbox_exact_merge": 12,
+    "comments_exact_merge": 26,
+    "viewbox_exact_tip": 12,
+    "comments_exact_tip": 26,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BN": {
+    "cases": 63,
+    "viewbox_exact_base": 18,
+    "comments_exact_base": 1,
+    "viewbox_exact_merge": 33,
+    "comments_exact_merge": 63,
+    "viewbox_exact_tip": 33,
+    "comments_exact_tip": 63,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BO": {
+    "cases": 81,
+    "viewbox_exact_base": 27,
+    "comments_exact_base": 25,
+    "viewbox_exact_merge": 39,
+    "comments_exact_merge": 81,
+    "viewbox_exact_tip": 39,
+    "comments_exact_tip": 81,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 1,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BP": {
+    "cases": 60,
+    "viewbox_exact_base": 27,
+    "comments_exact_base": 44,
+    "viewbox_exact_merge": 36,
+    "comments_exact_merge": 50,
+    "viewbox_exact_tip": 36,
+    "comments_exact_tip": 50,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BQ": {
+    "cases": 8,
+    "viewbox_exact_base": 1,
+    "comments_exact_base": 8,
+    "viewbox_exact_merge": 1,
+    "comments_exact_merge": 8,
+    "viewbox_exact_tip": 1,
+    "comments_exact_tip": 8,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BR": {
+    "cases": 288,
+    "viewbox_exact_base": 67,
+    "comments_exact_base": 274,
+    "viewbox_exact_merge": 113,
+    "comments_exact_merge": 286,
+    "viewbox_exact_tip": 113,
+    "comments_exact_tip": 286,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 3,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BS": {
+    "cases": 374,
+    "viewbox_exact_base": 150,
+    "comments_exact_base": 284,
+    "viewbox_exact_merge": 174,
+    "comments_exact_merge": 374,
+    "viewbox_exact_tip": 208,
+    "comments_exact_tip": 374,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 4,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   },
+   "BT": {
+    "cases": 379,
+    "viewbox_exact_base": 87,
+    "comments_exact_base": 334,
+    "viewbox_exact_merge": 93,
+    "comments_exact_merge": 349,
+    "viewbox_exact_tip": 138,
+    "comments_exact_tip": 349,
+    "viewbox_lost_merge_to_tip": 0,
+    "viewbox_lost_base_to_tip": 0,
+    "comments_lost_merge_to_tip": 0,
+    "comments_lost_base_to_tip": 0
+   }
+  },
+  "goldens_and_sweep": {
+   "goldens": {
+    "sources": 12550,
+    "java_valid": 11351,
+    "java_error": 1199,
+    "95291dc6b_valid_strict_match": 11181,
+    "95291dc6b_comments_exact": 11563,
+    "95291dc6b_exit": {
+     "1": 76,
+     "0": 12474
+    },
+    "95291dc6b_panics": 0,
+    "95291dc6b_timeouts": 0,
+    "95291dc6b_java_error_rejected": 76,
+    "95291dc6b_nonempty_stderr": 94,
+    "d06667af0_valid_strict_match": 11181,
+    "d06667af0_comments_exact": 11781,
+    "d06667af0_exit": {
+     "1": 76,
+     "0": 12474
+    },
+    "d06667af0_panics": 0,
+    "d06667af0_timeouts": 0,
+    "d06667af0_java_error_rejected": 76,
+    "d06667af0_nonempty_stderr": 76,
+    "e24240b35_valid_strict_match": 11181,
+    "e24240b35_comments_exact": 11781,
+    "e24240b35_exit": {
+     "1": 76,
+     "0": 12474
+    },
+    "e24240b35_panics": 0,
+    "e24240b35_timeouts": 0,
+    "e24240b35_java_error_rejected": 76,
+    "e24240b35_nonempty_stderr": 76,
+    "95291dc6b_to_e24240b35": {
+     "comments_gained": 218,
+     "gained_match": [
+      "test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml",
+      "test-diagrams/golden/state/state_history_shallow.puml",
+      "test-diagrams/golden/state/state_note_composite.puml"
+     ],
+     "lost_match_GET_provenance": [
+      "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+      "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+      "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+     ],
+     "outputs_changed": 398,
+     "stderr_changed": [
+      "test-diagrams/golden/activity/act_action_ending_flow_final.puml",
+      "test-diagrams/golden/activity/act_action_ending_fork_bar.puml",
+      "test-diagrams/golden/activity/act_action_ending_input.puml",
+      "test-diagrams/golden/activity/act_action_ending_output.puml",
+      "test-diagrams/golden/activity/act_action_ending_receive.puml",
+      "test-diagrams/golden/activity/act_action_ending_send.puml",
+      "test-diagrams/golden/activity/act_edge_all_action_endings_in_if.puml",
+      "test-diagrams/golden/state/state_composite_entry_only.puml",
+      "test-diagrams/golden/state/state_composite_exit_only.puml",
+      "test-diagrams/golden/state/state_entry1_exit1.puml",
+      "test-diagrams/golden/state/state_entry1_exit2.puml",
+      "test-diagrams/golden/state/state_entry1_exit3.puml",
+      "test-diagrams/golden/state/state_entry2_exit1.puml",
+      "test-diagrams/golden/state/state_entry2_exit2.puml",
+      "test-diagrams/golden/state/state_entry2_exit3.puml",
+      "test-diagrams/golden/state/state_entry3_exit1.puml",
+      "test-diagrams/golden/state/state_entry3_exit2.puml",
+      "test-diagrams/golden/state/state_entry3_exit3.puml",
+      "test-diagrams/golden/state/state_entry_exit_both.puml",
+      "test-diagrams/golden/state/state_entry_exit_in_composite.puml",
+      "test-diagrams/golden/state/state_entry_in_composite.puml",
+      "test-diagrams/golden/state/state_exit_in_composite.puml",
+      "test-diagrams/golden/state/state_multiple_entry_points.puml",
+      "test-diagrams/golden/state/state_multiple_exit_points.puml",
+      "test-diagrams/golden/usecase/usecase_long_names.puml"
+     ]
+    },
+    "95291dc6b_to_e24240b35_counts": {
+     "comments_gained": 218,
+     "gained_match": 3,
+     "lost_match_GET_provenance": 3,
+     "outputs_changed": 398,
+     "stderr_changed": 25
+    },
+    "d06667af0_to_e24240b35": {
+     "outputs_changed": [
+      "test-diagrams/golden/skinparam/skin_usecase_fontStyle_bold.puml",
+      "test-diagrams/golden/skinparam/skin_usecase_fontStyle_italic.puml"
+     ]
+    },
+    "d06667af0_to_e24240b35_counts": {
+     "outputs_changed": 2
+    }
+   },
+   "perturbations": {
+    "sources": 4960,
+    "java_valid": 4647,
+    "java_error": 313,
+    "95291dc6b_valid_strict_match": 1904,
+    "95291dc6b_comments_exact": 3262,
+    "95291dc6b_exit": {
+     "0": 4829,
+     "1": 121,
+     "101": 10
+    },
+    "95291dc6b_panics": 10,
+    "95291dc6b_timeouts": 0,
+    "95291dc6b_java_error_rejected": 84,
+    "95291dc6b_nonempty_stderr": 155,
+    "d06667af0_valid_strict_match": 2926,
+    "d06667af0_comments_exact": 4324,
+    "d06667af0_exit": {
+     "0": 4789,
+     "1": 167,
+     "101": 4
+    },
+    "d06667af0_panics": 4,
+    "d06667af0_timeouts": 0,
+    "d06667af0_java_error_rejected": 155,
+    "d06667af0_nonempty_stderr": 171,
+    "e24240b35_valid_strict_match": 2929,
+    "e24240b35_comments_exact": 4324,
+    "e24240b35_exit": {
+     "0": 4789,
+     "1": 167,
+     "101": 4
+    },
+    "e24240b35_panics": 4,
+    "e24240b35_timeouts": 0,
+    "e24240b35_java_error_rejected": 155,
+    "e24240b35_nonempty_stderr": 171,
+    "95291dc6b_to_e24240b35": {
+     "comments_gained": 1064,
+     "comments_lost": [
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+      "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+     ],
+     "error_now_renders_valid_ref": [
+      "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+      "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_colon_key.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_trailing_backslash.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_whitespace_lines.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_left_align.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_unknown_pair_escaped_tab.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7j_hide_pragma.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7j_skinparam_ws_block.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_block_crlf.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_block_depths.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_block_tab_body.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_block_text_col0.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_cr_block.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_flow_list_item_key.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_flow_quote_trailing.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_handwritten.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_pre_mix.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_pre_skinparam_indented.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_skinparam_brace_inline.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_tab_nested_key.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/j9_skinparam_block.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/y9_block_text_dedent.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/y9_hide_then_data.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/y9_tab_indent.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+      "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+     ],
+     "gained_match": 1025,
+     "outputs_changed": 2095,
+     "panic_removed": [
+      "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+      "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+     ],
+     "rejection_gained": 71,
+     "stderr_changed": 131
+    },
+    "95291dc6b_to_e24240b35_counts": {
+     "comments_gained": 1064,
+     "comments_lost": 2,
+     "error_now_renders_valid_ref": 31,
+     "gained_match": 1025,
+     "outputs_changed": 2095,
+     "panic_removed": 6,
+     "rejection_gained": 71,
+     "stderr_changed": 131
+    },
+    "d06667af0_to_e24240b35": {
+     "gained_match": [
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_cn_comp_italic.puml",
+      "test-diagrams/perturbations/times-new-roman-face-metrics/checker_unicode_fallback_italic_tb.puml",
+      "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_supplementary_math_face_sizes_tb.puml"
+     ],
+     "outputs_changed": [
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_cn_comp_italic.puml",
+      "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_italic_lr_mixed_case.puml",
+      "test-diagrams/perturbations/times-new-roman-face-metrics/checker_unicode_fallback_italic_tb.puml",
+      "test-diagrams/perturbations/times-new-roman-unicode-advances/checker_cyrillic_italic_lr_nested.puml",
+      "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_mixed_scripts_four_faces_tb.puml",
+      "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_supplementary_math_face_sizes_tb.puml"
+     ],
+     "stderr_changed": [
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+     ]
+    },
+    "d06667af0_to_e24240b35_counts": {
+     "gained_match": 3,
+     "outputs_changed": 6,
+     "stderr_changed": 4
+    }
+   },
+   "all": {
+    "sources": 17510,
+    "java_valid": 15998,
+    "java_error": 1512,
+    "95291dc6b_valid_strict_match": 13085,
+    "95291dc6b_comments_exact": 14825,
+    "95291dc6b_exit": {
+     "1": 197,
+     "0": 17303,
+     "101": 10
+    },
+    "95291dc6b_panics": 10,
+    "95291dc6b_timeouts": 0,
+    "95291dc6b_java_error_rejected": 160,
+    "95291dc6b_nonempty_stderr": 249,
+    "d06667af0_valid_strict_match": 14107,
+    "d06667af0_comments_exact": 16105,
+    "d06667af0_exit": {
+     "1": 243,
+     "0": 17263,
+     "101": 4
+    },
+    "d06667af0_panics": 4,
+    "d06667af0_timeouts": 0,
+    "d06667af0_java_error_rejected": 231,
+    "d06667af0_nonempty_stderr": 247,
+    "e24240b35_valid_strict_match": 14110,
+    "e24240b35_comments_exact": 16105,
+    "e24240b35_exit": {
+     "1": 243,
+     "0": 17263,
+     "101": 4
+    },
+    "e24240b35_panics": 4,
+    "e24240b35_timeouts": 0,
+    "e24240b35_java_error_rejected": 231,
+    "e24240b35_nonempty_stderr": 247,
+    "95291dc6b_to_e24240b35": {
+     "comments_gained": 1282,
+     "comments_lost": [
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+      "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+     ],
+     "error_now_renders_valid_ref": [
+      "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+      "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_colon_key.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_trailing_backslash.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_whitespace_lines.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_left_align.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_unknown_pair_escaped_tab.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7j_hide_pragma.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7j_skinparam_ws_block.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_block_crlf.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_block_depths.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_block_tab_body.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_block_text_col0.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_cr_block.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_flow_list_item_key.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_flow_quote_trailing.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_handwritten.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_pre_mix.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_pre_skinparam_indented.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_skinparam_brace_inline.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_tab_nested_key.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/j9_skinparam_block.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/y9_block_text_dedent.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/y9_hide_then_data.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/y9_tab_indent.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+      "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+     ],
+     "gained_match": 1028,
+     "lost_match_GET_provenance": [
+      "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+      "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+      "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+     ],
+     "outputs_changed": 2493,
+     "panic_removed": [
+      "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+      "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+     ],
+     "rejection_gained": 71,
+     "stderr_changed": 156
+    },
+    "95291dc6b_to_e24240b35_counts": {
+     "comments_gained": 1282,
+     "comments_lost": 2,
+     "error_now_renders_valid_ref": 31,
+     "gained_match": 1028,
+     "lost_match_GET_provenance": 3,
+     "outputs_changed": 2493,
+     "panic_removed": 6,
+     "rejection_gained": 71,
+     "stderr_changed": 156
+    },
+    "95291dc6b_to_e24240b35_stderr_lines_lost": {
+     "Warning: node X port P unrecognized": 158,
+     "parse error: line N: unterminated activity action; multiline actions must end with ';'": 7,
+     "": 6,
+     "thread 'main' (N) panicked at crates/rustuml-parser/src/preprocess/mod.rs:N:N:": 6,
+     "note: run with `RUST_BACKTRACE=N` environment variable to display a backtrace": 6,
+     "parse error: line N: YAML parse error: mapping values are not allowed in this context at line N column N": 6,
+     "parse error: line N: JSON parse error: expected value at line N column N": 5,
+     "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4,
+     "parse error: line N: YAML parse error: found unknown escape character at line N column N, while parsing a quoted scalar ": 3,
+     "parse error: line N: YAML parse error: could not find expected ':' at line N column N, while scanning a simple key at li": 3,
+     "parse error: line N: YAML parse error: found a tab character where an indentation space is expected at line N column N, ": 2,
+     "parse error: line N: YAML parse error: did not find expected ',' or ']' at line N column N, while parsing a flow sequenc": 2,
+     "parse error: line N: YAML parse error: found character that cannot start any token at line N column N, while scanning fo": 2,
+     "end byte index N is not a char boundary; it is inside '🚀' (bytes N..N of string)": 2,
+     "Warning: Unable to reclaim box space in spline routing for edge \"PCCT\" -> \"VPIFC\". Something is probably seriously wrong": 1,
+     "Warning: GenericPeerReview was already in a rankset, deleted from cluster G": 1,
+     "Warning: PlainPeerReview was already in a rankset, deleted from cluster G": 1,
+     "Warning: removing empty cluster": 1,
+     "Warning: ReviewNMemoN was already in a rankset, deleted from cluster G": 1,
+     "end byte index N is not a char boundary; it is inside '🦊' (bytes N..N of string)": 1,
+     "end byte index N is not a char boundary; it is inside '\\u{Nfffd}' (bytes N..N of string)": 1,
+     "end byte index N is not a char boundary; it is inside '\\u{NfeN}' (bytes N..N of string)": 1,
+     "parse error: line N: YAML parse error: found unknown escape character at line N column N, while parsing a quoted scalar": 1,
+     "parse error: line N: YAML parse error: did not find expected key at line N column N, while parsing a block mapping at li": 1,
+     "parse error: line N: YAML parse error: did not find expected node X at line N column N, while parsing a flow node": 1,
+     "end byte index N is not a char boundary; it is inside 'é' (bytes N..N of string)": 1
+    },
+    "95291dc6b_to_e24240b35_stderr_lines_gained": {
+     "parse error: line N: Bad date pattern: unsupported letter Q": 17,
+     "parse error: line N: Integer literal outside signed N-bit range": 8,
+     "parse error: line N: unterminated activity action; multiline actions must end with ';'": 7,
+     "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4,
+     "parse error: line N: Bad date pattern: X must have one to three letters": 4,
+     "parse error: line N: Substring index out of range": 4,
+     "parse error: line N: Cannot nest sub": 4,
+     "parse error: line N: Illegal call here. Is there a return directive in your function?": 3,
+     "parse error: line N: Bad sub name": 3,
+     "parse error: line N: Unknown built-in function %strlen": 2,
+     "parse error: line N: Unknown built-in function $emit": 2,
+     "parse error: line N: Cannot convert N.N to integer.": 2,
+     "parse error: line N: Bad date pattern: unterminated quote": 2,
+     "parse error: line N: Unknown built-in function %missing_checkerN": 2,
+     "parse error: line N: Data parsing error: missing intermediate member": 2,
+     "parse error: line N: Foreach requires a JSON array or object": 2,
+     "parse error: line N: Expression operand stack underflow": 2,
+     "parse error: line N: Unknown built-in function %fresh_unregistered": 1,
+     "export error: Invalid UTF-N surrogate detected: dNe N ?": 1,
+     "parse error: line N: Cannot convert  true  to boolean.": 1,
+     "export error: An invalid XML character (Unicode: NxdeN) was found in the node's character data content.": 1,
+     "parse error: line N: Division by zero": 1,
+     "parse error: line N: Function not found %strlen": 1,
+     "parse error: line N: Unknown built-in function $join": 1,
+     "parse error: line N: Cannot convert bad to integer.": 1,
+     "parse error: line N: Cannot convert +-N to integer.": 1,
+     "parse error: line N: Cannot convert -N to integer.": 1,
+     "parse error: line N: Cannot convert x to integer.": 1,
+     "parse error: line N: Unknown built-in function $inner": 1,
+     "parse error: line N: Cannot convert bad to boolean.": 1
+    },
+    "95291dc6b_to_e24240b35_stderr_per_source": {
+     "test-diagrams/golden/activity/act_action_ending_flow_final.puml": {
+      "lost": [
+       "parse error: line 2: unterminated activity action; multiline actions must end with ';'"
+      ],
+      "gained": [
+       "parse error: line 3: unterminated activity action; multiline actions must end with ';'"
+      ]
+     },
+     "test-diagrams/golden/activity/act_action_ending_fork_bar.puml": {
+      "lost": [
+       "parse error: line 2: unterminated activity action; multiline actions must end with ';'"
+      ],
+      "gained": [
+       "parse error: line 3: unterminated activity action; multiline actions must end with ';'"
+      ]
+     },
+     "test-diagrams/golden/activity/act_action_ending_input.puml": {
+      "lost": [
+       "parse error: line 2: unterminated activity action; multiline actions must end with ';'"
+      ],
+      "gained": [
+       "parse error: line 3: unterminated activity action; multiline actions must end with ';'"
+      ]
+     },
+     "test-diagrams/golden/activity/act_action_ending_output.puml": {
+      "lost": [
+       "parse error: line 2: unterminated activity action; multiline actions must end with ';'"
+      ],
+      "gained": [
+       "parse error: line 3: unterminated activity action; multiline actions must end with ';'"
+      ]
+     },
+     "test-diagrams/golden/activity/act_action_ending_receive.puml": {
+      "lost": [
+       "parse error: line 2: unterminated activity action; multiline actions must end with ';'"
+      ],
+      "gained": [
+       "parse error: line 3: unterminated activity action; multiline actions must end with ';'"
+      ]
+     },
+     "test-diagrams/golden/activity/act_action_ending_send.puml": {
+      "lost": [
+       "parse error: line 2: unterminated activity action; multiline actions must end with ';'"
+      ],
+      "gained": [
+       "parse error: line 3: unterminated activity action; multiline actions must end with ';'"
+      ]
+     },
+     "test-diagrams/golden/activity/act_edge_all_action_endings_in_if.puml": {
+      "lost": [
+       "parse error: line 5: unterminated activity action; multiline actions must end with ';'"
+      ],
+      "gained": [
+       "parse error: line 6: unterminated activity action; multiline actions must end with ';'"
+      ]
+     },
+     "test-diagrams/golden/state/state_composite_entry_only.puml": {
+      "lost": [
+       "Warning: node Composite.ep, port P unrecognized",
+       "Warning: node Composite.ep, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_composite_exit_only.puml": {
+      "lost": [
+       "Warning: node Composite.xp, port P unrecognized",
+       "Warning: node Composite.xp, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_entry1_exit1.puml": {
+      "lost": [
+       "Warning: node Composite.ep0, port P unrecognized",
+       "Warning: node Composite.xp0, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_entry1_exit2.puml": {
+      "lost": [
+       "Warning: node Composite.ep0, port P unrecognized",
+       "Warning: node Composite.xp0, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_entry1_exit3.puml": {
+      "lost": [
+       "Warning: node Composite.ep0, port P unrecognized",
+       "Warning: node Composite.xp0, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_entry2_exit1.puml": {
+      "lost": [
+       "Warning: node Composite.ep0, port P unrecognized",
+       "Warning: node Composite.ep1, port P unrecognized",
+       "Warning: node Composite.xp0, port P unrecognized",
+       "Warning: node Composite.xp0, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_entry2_exit2.puml": {
+      "lost": [
+       "Warning: node Composite.ep0, port P unrecognized",
+       "Warning: node Composite.ep1, port P unrecognized",
+       "Warning: node Composite.xp0, port P unrecognized",
+       "Warning: node Composite.xp1, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_entry2_exit3.puml": {
+      "lost": [
+       "Warning: node Composite.ep0, port P unrecognized",
+       "Warning: node Composite.ep1, port P unrecognized",
+       "Warning: node Composite.xp0, port P unrecognized",
+       "Warning: node Composite.xp1, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_entry3_exit1.puml": {
+      "lost": [
+       "Warning: node Composite.ep0, port P unrecognized",
+       "Warning: node Composite.ep1, port P unrecognized",
+       "Warning: node Composite.ep2, port P unrecognized",
+       "Warning: node Composite.xp0, port P unrecognized",
+       "Warning: node Composite.xp0, port P unrecognized",
+       "Warning: node Composite.xp0, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_entry3_exit2.puml": {
+      "lost": [
+       "Warning: node Composite.ep0, port P unrecognized",
+       "Warning: node Composite.ep1, port P unrecognized",
+       "Warning: node Composite.ep2, port P unrecognized",
+       "Warning: node Composite.xp0, port P unrecognized",
+       "Warning: node Composite.xp0, port P unrecognized",
+       "Warning: node Composite.xp1, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_entry3_exit3.puml": {
+      "lost": [
+       "Warning: node Composite.ep0, port P unrecognized",
+       "Warning: node Composite.ep1, port P unrecognized",
+       "Warning: node Composite.ep2, port P unrecognized",
+       "Warning: node Composite.xp0, port P unrecognized",
+       "Warning: node Composite.xp1, port P unrecognized",
+       "Warning: node Composite.xp2, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_entry_exit_both.puml": {
+      "lost": [
+       "Warning: node Composite.ep, port P unrecognized",
+       "Warning: node Composite.ep, port P unrecognized",
+       "Warning: node Composite.xp, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_entry_exit_in_composite.puml": {
+      "lost": [
+       "Warning: node Composite.exit1, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_entry_in_composite.puml": {
+      "lost": [
+       "Warning: node Composite.ep, port P unrecognized",
+       "Warning: node Composite.ep, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_exit_in_composite.puml": {
+      "lost": [
+       "Warning: node Composite.xp, port P unrecognized",
+       "Warning: node Composite.xp, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_multiple_entry_points.puml": {
+      "lost": [
+       "Warning: node Composite.ep1, port P unrecognized",
+       "Warning: node Composite.ep2, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/state/state_multiple_exit_points.puml": {
+      "lost": [
+       "Warning: node Composite.xp1, port P unrecognized",
+       "Warning: node Composite.xp2, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/golden/usecase/usecase_long_names.puml": {
+      "lost": [
+       "Warning: Unable to reclaim box space in spline routing for edge \"PCCT\" -> \"VPIFC\". Something is probably seriously wrong."
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_lr_together_generic_rank_edge.puml": {
+      "lost": [
+       "Warning: GenericPeerReview was already in a rankset, deleted from cluster G",
+       "Warning: PlainPeerReview was already in a rankset, deleted from cluster G",
+       "Warning: removing empty cluster"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/class-together-structural-layout/review2_note_target_squaremaker_together.puml": {
+      "lost": [
+       "Warning: Review2Memo6503 was already in a rankset, deleted from cluster G"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml": {
+      "lost": [
+       "parse error: line 1: JSON parse error: expected value at line 1 column 1"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml": {
+      "lost": [
+       "thread 'main' (61591141) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ],
+      "gained": [
+       "thread 'main' (62035234) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ]
+     },
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml": {
+      "lost": [
+       "thread 'main' (61591118) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ],
+      "gained": [
+       "thread 'main' (62035240) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ]
+     },
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml": {
+      "lost": [
+       "thread 'main' (61591162) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ],
+      "gained": [
+       "thread 'main' (62035246) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ]
+     },
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml": {
+      "lost": [
+       "thread 'main' (61591148) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ],
+      "gained": [
+       "thread 'main' (62035253) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ]
+     },
+     "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_integer_thresholds.puml": {
+      "lost": [
+       "Warning: node ThresholdCabinet.WWWJ, port P unrecognized",
+       "Warning: node ThresholdCabinet.WWWJ, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.puml": {
+      "lost": [
+       "Warning: node PortEnvelopeMatrix.ThresholdBasic, port P unrecognized",
+       "Warning: node PortEnvelopeMatrix.ThresholdBasic, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_short_labels.puml": {
+      "lost": [
+       "Warning: node ShortPortCabinet.I, port P unrecognized",
+       "Warning: node ShortPortCabinet.I, port P unrecognized",
+       "Warning: node ShortPortCabinet.O, port P unrecognized",
+       "Warning: node ShortPortCabinet.O, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/cardinal_abbreviation_grid.puml": {
+      "lost": [
+       "Warning: node EastQuay47.ei, port P unrecognized",
+       "Warning: node EastQuay47.ex, port P unrecognized",
+       "Warning: node NorthQuay47.ni, port P unrecognized",
+       "Warning: node NorthQuay47.nx, port P unrecognized",
+       "Warning: node SouthQuay47.si, port P unrecognized",
+       "Warning: node SouthQuay47.sx, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/directional_left_up_groups.puml": {
+      "lost": [
+       "Warning: node EastCell.ei, port P unrecognized",
+       "Warning: node EastCell.ex, port P unrecognized",
+       "Warning: node NorthCell.ni, port P unrecognized",
+       "Warning: node NorthCell.nx, port P unrecognized",
+       "Warning: node WestCell.wi, port P unrecognized",
+       "Warning: node WestCell.wx, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/dual_composite_basic_ports.puml": {
+      "lost": [
+       "Warning: node PodAlpha.qa, port P unrecognized",
+       "Warning: node PodAlpha.qz, port P unrecognized",
+       "Warning: node PodBeta.rb, port P unrecognized",
+       "Warning: node PodBeta.ry, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_left_group_link_minimal.puml": {
+      "lost": [
+       "Warning: node LeftNode.li, port P unrecognized",
+       "Warning: node LeftNode.lx, port P unrecognized",
+       "Warning: node RightNode.ri, port P unrecognized",
+       "Warning: node RightNode.rx, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_up_group_link_minimal.puml": {
+      "lost": [
+       "Warning: node LowerNode.li, port P unrecognized",
+       "Warning: node LowerNode.lx, port P unrecognized",
+       "Warning: node UpperNode.ui, port P unrecognized",
+       "Warning: node UpperNode.ux, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/five_group_depth_reordered.puml": {
+      "lost": [
+       "Warning: node AlphaField47.ai, port P unrecognized",
+       "Warning: node AlphaField47.ax, port P unrecognized",
+       "Warning: node BetaField47.bi, port P unrecognized",
+       "Warning: node BetaField47.bx, port P unrecognized",
+       "Warning: node DeltaField47.di, port P unrecognized",
+       "Warning: node DeltaField47.dx, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/forward_referenced_composite_order.puml": {
+      "lost": [
+       "Warning: node CedarBay.ci, port P unrecognized",
+       "Warning: node CedarBay.co, port P unrecognized",
+       "Warning: node MapleBay.mi, port P unrecognized",
+       "Warning: node MapleBay.mo, port P unrecognized",
+       "Warning: node PineBay.pi, port P unrecognized",
+       "Warning: node PineBay.po, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/four_groups_parallel_projection_order.puml": {
+      "lost": [
+       "Warning: node AlphaPack.ai, port P unrecognized",
+       "Warning: node AlphaPack.ax, port P unrecognized",
+       "Warning: node BetaPack.bi, port P unrecognized",
+       "Warning: node BetaPack.bx, port P unrecognized",
+       "Warning: node DeltaPack.di, port P unrecognized",
+       "Warning: node DeltaPack.dx, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/mixed_parallel_direction_identity.puml": {
+      "lost": [
+       "Warning: node CobaltDock47.ci, port P unrecognized",
+       "Warning: node CobaltDock47.cx, port P unrecognized",
+       "Warning: node SableDock47.si, port P unrecognized",
+       "Warning: node SableDock47.sx, port P unrecognized",
+       "Warning: node UmberDock47.ui, port P unrecognized",
+       "Warning: node UmberDock47.ux, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/reordered_basic_ports.puml": {
+      "lost": [
+       "Warning: node ShellKappa.uh, port P unrecognized",
+       "Warning: node ShellKappa.vx, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/reverse_explicit_direction_matrix.puml": {
+      "lost": [
+       "Warning: node IbisVault47.ii, port P unrecognized",
+       "Warning: node IbisVault47.ix, port P unrecognized",
+       "Warning: node LumenVault47.li, port P unrecognized",
+       "Warning: node LumenVault47.lx, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_group_link_minimal.puml": {
+      "lost": [
+       "Warning: node FirstNode.fi, port P unrecognized",
+       "Warning: node FirstNode.fx, port P unrecognized",
+       "Warning: node SecondNode.si, port P unrecognized",
+       "Warning: node SecondNode.sx, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_parallel_group_links.puml": {
+      "lost": [
+       "Warning: node CyanCell.ci, port P unrecognized",
+       "Warning: node CyanCell.cx, port P unrecognized",
+       "Warning: node RubyCell.ri, port P unrecognized",
+       "Warning: node RubyCell.rx, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/same_container_port_link.puml": {
+      "lost": [
+       "Warning: node RelayBox.ln, port P unrecognized",
+       "Warning: node RelayBox.mq, port P unrecognized",
+       "Warning: node RelayBox.mq, port P unrecognized",
+       "Warning: node RelayBox.rt, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/scoped_projection_reuse.puml": {
+      "lost": [
+       "Warning: node AspenArc.ai, port P unrecognized",
+       "Warning: node AspenArc.ax, port P unrecognized",
+       "Warning: node BirchArc.bi, port P unrecognized",
+       "Warning: node BirchArc.bx, port P unrecognized",
+       "Warning: node CedarArc.ci, port P unrecognized",
+       "Warning: node CedarArc.cx, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_long_cubic_round4.puml": {
+      "lost": [
+       "Warning: node ZenithBay47.zi, port P unrecognized",
+       "Warning: node ZenithBay47.zx, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_short_cubic_round4.puml": {
+      "lost": [
+       "Warning: node MicaGate47.mi, port P unrecognized",
+       "Warning: node MicaGate47.mx, port P unrecognized",
+       "Warning: node OpalGate47.oi, port P unrecognized",
+       "Warning: node OpalGate47.ox, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_root_leaf_interleave.puml": {
+      "lost": [
+       "Warning: node AmberZone.aa, port P unrecognized",
+       "Warning: node AmberZone.ax, port P unrecognized",
+       "Warning: node MossZone.ma, port P unrecognized",
+       "Warning: node MossZone.mx, port P unrecognized",
+       "Warning: node QuartzZone.qa, port P unrecognized",
+       "Warning: node QuartzZone.qx, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_scoped_pseudos.puml": {
+      "lost": [
+       "Warning: node BirchCell.bi, port P unrecognized",
+       "Warning: node BirchCell.bo, port P unrecognized",
+       "Warning: node CedarCell.ci, port P unrecognized",
+       "Warning: node CedarCell.co, port P unrecognized",
+       "Warning: node DeltaCell.di, port P unrecognized",
+       "Warning: node DeltaCell.do, port P unrecognized"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unknown_expression.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Unknown built-in function %fresh_unregistered"
+      ]
+     },
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_arity_without_later_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Unknown built-in function %strlen"
+      ]
+     },
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_strlen_arity_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Unknown built-in function %strlen"
+      ]
+     },
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml": {
+      "lost": [
+       "",
+       "end byte index 16 is not a char boundary; it is inside '🦊' (bytes 15..19 of string)",
+       "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+       "thread 'main' (61592785) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_projection.puml": {
+      "lost": [],
+      "gained": [
+       "export error: Invalid UTF-16 surrogate detected: d83e 20 ?"
+      ]
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml": {
+      "lost": [
+       "",
+       "end byte index 20 is not a char boundary; it is inside '\\u{10fffd}' (bytes 19..23 of string)",
+       "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+       "thread 'main' (61592903) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml": {
+      "lost": [
+       "",
+       "end byte index 42 is not a char boundary; it is inside '\\u{10fe80}' (bytes 41..45 of string)",
+       "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+       "thread 'main' (61592905) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_colon_key.puml": {
+      "lost": [
+       "parse error: line 1: YAML parse error: found unknown escape character at line 1 column 5, while parsing a quoted scalar"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_trailing_backslash.puml": {
+      "lost": [
+       "parse error: line 1: YAML parse error: found unknown escape character at line 1 column 10, while parsing a quoted scalar at line 1 column 7"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml": {
+      "lost": [
+       "parse error: line 1: JSON parse error: expected value at line 1 column 1"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_whitespace_lines.puml": {
+      "lost": [
+       "parse error: line 4: YAML parse error: found a tab character where an indentation space is expected at line 4 column 1, while scanning a block scalar at line 1 column 7"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml": {
+      "lost": [
+       "parse error: line 2: YAML parse error: mapping values are not allowed in this context at line 2 column 2"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_left_align.puml": {
+      "lost": [
+       "parse error: line 1: YAML parse error: found unknown escape character at line 1 column 19, while parsing a quoted scalar at line 1 column 4"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_unknown_pair_escaped_tab.puml": {
+      "lost": [
+       "parse error: line 1: YAML parse error: found unknown escape character at line 1 column 10, while parsing a quoted scalar at line 1 column 4"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7j_hide_pragma.puml": {
+      "lost": [
+       "parse error: line 1: JSON parse error: expected value at line 1 column 1"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7j_skinparam_ws_block.puml": {
+      "lost": [
+       "parse error: line 1: JSON parse error: expected value at line 1 column 3"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_block_crlf.puml": {
+      "lost": [
+       "parse error: line 6: YAML parse error: did not find expected ',' or ']' at line 6 column 1, while parsing a flow sequence at line 4 column 7"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_block_depths.puml": {
+      "lost": [
+       "parse error: line 7: YAML parse error: did not find expected key at line 7 column 5, while parsing a block mapping at line 5 column 3"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_block_tab_body.puml": {
+      "lost": [
+       "parse error: line 2: YAML parse error: found a tab character where an indentation space is expected at line 2 column 1, while scanning a block scalar at line 1 column 7"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_block_text_col0.puml": {
+      "lost": [
+       "parse error: line 4: YAML parse error: could not find expected ':' at line 4 column 1, while scanning a simple key at line 3 column 1"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_cr_block.puml": {
+      "lost": [
+       "parse error: line 4: YAML parse error: could not find expected ':' at line 4 column 4, while scanning a simple key at line 3 column 1"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_flow_list_item_key.puml": {
+      "lost": [
+       "parse error: line 2: YAML parse error: did not find expected node content at line 2 column 1, while parsing a flow node"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_flow_quote_trailing.puml": {
+      "lost": [
+       "parse error: line 1: YAML parse error: did not find expected ',' or ']' at line 1 column 14, while parsing a flow sequence at line 1 column 4"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_handwritten.puml": {
+      "lost": [
+       "parse error: line 2: YAML parse error: mapping values are not allowed in this context at line 2 column 2"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_pre_mix.puml": {
+      "lost": [
+       "parse error: line 4: YAML parse error: mapping values are not allowed in this context at line 4 column 2"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_pre_skinparam_indented.puml": {
+      "lost": [
+       "parse error: line 2: YAML parse error: mapping values are not allowed in this context at line 2 column 2"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_skinparam_brace_inline.puml": {
+      "lost": [
+       "parse error: line 2: YAML parse error: mapping values are not allowed in this context at line 2 column 2"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7y_tab_nested_key.puml": {
+      "lost": [
+       "parse error: line 2: YAML parse error: found character that cannot start any token at line 2 column 1, while scanning for the next token"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/j9_skinparam_block.puml": {
+      "lost": [
+       "parse error: line 1: JSON parse error: expected value at line 1 column 1"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/y9_block_text_dedent.puml": {
+      "lost": [
+       "parse error: line 4: YAML parse error: could not find expected ':' at line 4 column 1, while scanning a simple key at line 3 column 1"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/y9_hide_then_data.puml": {
+      "lost": [
+       "parse error: line 2: YAML parse error: mapping values are not allowed in this context at line 2 column 2"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/y9_tab_indent.puml": {
+      "lost": [
+       "parse error: line 2: YAML parse error: found character that cannot start any token at line 2 column 1, while scanning for the next token"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/bool_space_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Cannot convert  true  to boolean."
+      ]
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml": {
+      "lost": [
+       "",
+       "end byte index 10 is not a char boundary; it is inside '🚀' (bytes 7..11 of string)",
+       "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+       "thread 'main' (61597139) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:"
+      ],
+      "gained": [
+       "export error: An invalid XML character (Unicode: 0xde80) was found in the node's character data content."
+      ]
+     },
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml": {
+      "lost": [
+       "",
+       "end byte index 21 is not a char boundary; it is inside '🚀' (bytes 20..24 of string)",
+       "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+       "thread 'main' (61597143) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_covered.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 9: Illegal call here. Is there a return directive in your function?"
+      ]
+     },
+     "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_missing.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 4: Unknown built-in function $emit"
+      ]
+     },
+     "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_rhs_first_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Cannot convert 4.5 to integer."
+      ]
+     },
+     "test-diagrams/perturbations/tim-call-resolution-arity/checker5/adjacent_dispatch.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 4: Cannot convert 12.5 to integer."
+      ]
+     },
+     "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_argument_first.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Division by zero"
+      ]
+     },
+     "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_plain_named_builtin.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Function not found %strlen"
+      ]
+     },
+     "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_procedure_first.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 4: Unknown built-in function $emit"
+      ]
+     },
+     "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_letter.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_quote.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Bad date pattern: unterminated quote"
+      ]
+     },
+     "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_x.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Bad date pattern: X must have one to three letters"
+      ]
+     },
+     "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_four_x.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Bad date pattern: X must have one to three letters"
+      ]
+     },
+     "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_unclosed_pattern.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Bad date pattern: unterminated quote"
+      ]
+     },
+     "test-diagrams/perturbations/tim-duplicate-formal-binding/checker8/duplicate_negative.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 4: Unknown built-in function $join"
+      ]
+     },
+     "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_nested.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Substring index out of range"
+      ]
+     },
+     "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr_only.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Substring index out of range"
+      ]
+     },
+     "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Unknown built-in function %missing_checker3"
+      ]
+     },
+     "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown_only.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Unknown built-in function %missing_checker3"
+      ]
+     },
+     "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_arguments.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 6: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_logical.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Integer literal outside signed 32-bit range"
+      ]
+     },
+     "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml": {
+      "lost": [
+       "",
+       "end byte index 26 is not a char boundary; it is inside 'é' (bytes 25..27 of string)",
+       "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+       "thread 'main' (61597827) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:"
+      ],
+      "gained": []
+     },
+     "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_json_missing_chain.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Data parsing error: missing intermediate member"
+      ]
+     },
+     "test-diagrams/perturbations/tim-external-sub-selection/checker3_retained_sub_selected_fatal.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Bad date pattern: X must have one to three letters"
+      ]
+     },
+     "test-diagrams/perturbations/tim-external-sub-selection/checker3_selected_origin.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_scalar_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Foreach requires a JSON array or object"
+      ]
+     },
+     "test-diagrams/perturbations/tim-function-execution-kind/checker3_procedure_expression.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 4: Illegal call here. Is there a return directive in your function?"
+      ]
+     },
+     "test-diagrams/perturbations/tim-function-signature-availability/checker7/kind_after_exact.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 7: Illegal call here. Is there a return directive in your function?"
+      ]
+     },
+     "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_bad_arity.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Cannot convert bad to integer."
+      ]
+     },
+     "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_invalid_sign.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Cannot convert +-3 to integer."
+      ]
+     },
+     "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_underflow_bound.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Cannot convert -2147483649 to integer."
+      ]
+     },
+     "test-diagrams/perturbations/tim-json-container-validation/checker5/json_missing_dot.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Data parsing error: missing intermediate member"
+      ]
+     },
+     "test-diagrams/perturbations/tim-json-container-validation/checker5/json_scalar_null.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Foreach requires a JSON array or object"
+      ]
+     },
+     "test-diagrams/perturbations/tim-legacy-raw-caller-prefix/checker6/legacy_prefix_failure.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 7: Cannot convert x to integer."
+      ]
+     },
+     "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_collect_error_precedence.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Cannot nest sub"
+      ]
+     },
+     "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_uncalled_function.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Cannot nest sub"
+      ]
+     },
+     "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_duplicate.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 4: Expression operand stack underflow"
+      ]
+     },
+     "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_nested_call.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 7: Unknown built-in function $inner"
+      ]
+     },
+     "test-diagrams/perturbations/tim-original-macro-scanning/checker5/macro_argument_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 4: Cannot convert bad to boolean."
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Integer literal outside signed 32-bit range"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker2_error_after_theme.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 3: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker2_function_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 3: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker2_include_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 0: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_0.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_1.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Integer literal outside signed 32-bit range"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_2.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_3.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Integer literal outside signed 32-bit range"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sequence_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 3: Bad date pattern: X must have one to three letters"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Integer literal outside signed 32-bit range"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker2_two_errors.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker3_default_first_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Substring index out of range"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_literal.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Integer literal outside signed 32-bit range"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_pattern.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_literal.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Integer literal outside signed 32-bit range"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_pattern.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Bad date pattern: unsupported letter Q"
+      ]
+     },
+     "test-diagrams/perturbations/tim-parser-error-propagation/checker3_literal_before_date.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Integer literal outside signed 32-bit range"
+      ]
+     },
+     "test-diagrams/perturbations/tim-return-unwind/checker4_procedure_argument_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 4: Substring index out of range"
+      ]
+     },
+     "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_duplicate_underflow.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 4: Expression operand stack underflow"
+      ]
+     },
+     "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_nested_negative.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 2: Cannot nest sub"
+      ]
+     },
+     "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_commented_invalid.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Bad sub name"
+      ]
+     },
+     "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_invalid_after_selected.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 3: Bad sub name"
+      ]
+     },
+     "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_local_nested.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 1: Cannot nest sub"
+      ]
+     },
+     "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_raw_tail_error.puml": {
+      "lost": [],
+      "gained": [
+       "parse error: line 4: Bad sub name"
+      ]
+     }
+    },
+    "d06667af0_to_e24240b35": {
+     "gained_match": [
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_cn_comp_italic.puml",
+      "test-diagrams/perturbations/times-new-roman-face-metrics/checker_unicode_fallback_italic_tb.puml",
+      "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_supplementary_math_face_sizes_tb.puml"
+     ],
+     "outputs_changed": [
+      "test-diagrams/golden/skinparam/skin_usecase_fontStyle_bold.puml",
+      "test-diagrams/golden/skinparam/skin_usecase_fontStyle_italic.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_cn_comp_italic.puml",
+      "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_italic_lr_mixed_case.puml",
+      "test-diagrams/perturbations/times-new-roman-face-metrics/checker_unicode_fallback_italic_tb.puml",
+      "test-diagrams/perturbations/times-new-roman-unicode-advances/checker_cyrillic_italic_lr_nested.puml",
+      "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_mixed_scripts_four_faces_tb.puml",
+      "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_supplementary_math_face_sizes_tb.puml"
+     ],
+     "stderr_changed": [
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+     ]
+    },
+    "d06667af0_to_e24240b35_counts": {
+     "gained_match": 3,
+     "outputs_changed": 8,
+     "stderr_changed": 4
+    },
+    "d06667af0_to_e24240b35_stderr_lines_lost": {
+     "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4
+    },
+    "d06667af0_to_e24240b35_stderr_lines_gained": {
+     "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4
+    },
+    "d06667af0_to_e24240b35_stderr_per_source": {
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml": {
+      "lost": [
+       "thread 'main' (61952214) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ],
+      "gained": [
+       "thread 'main' (62035234) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ]
+     },
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml": {
+      "lost": [
+       "thread 'main' (61952218) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ],
+      "gained": [
+       "thread 'main' (62035240) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ]
+     },
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml": {
+      "lost": [
+       "thread 'main' (61952225) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ],
+      "gained": [
+       "thread 'main' (62035246) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ]
+     },
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml": {
+      "lost": [
+       "thread 'main' (61952227) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ],
+      "gained": [
+       "thread 'main' (62035253) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+      ]
+     }
+    }
+   },
+   "GET_goldens": {
+    "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml": {
+     "95291dc6b": {
+      "exit": 0,
+      "strict": "MATCH"
+     },
+     "d06667af0": {
+      "exit": 0,
+      "strict": "DIFF"
+     },
+     "e24240b35": {
+      "exit": 0,
+      "strict": "DIFF"
+     }
+    },
+    "test-diagrams/golden/activity/act_skinparam_shadowing.puml": {
+     "95291dc6b": {
+      "exit": 0,
+      "strict": "MATCH"
+     },
+     "d06667af0": {
+      "exit": 0,
+      "strict": "DIFF"
+     },
+     "e24240b35": {
+      "exit": 0,
+      "strict": "DIFF"
+     }
+    },
+    "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml": {
+     "95291dc6b": {
+      "exit": 0,
+      "strict": "MATCH"
+     },
+     "d06667af0": {
+      "exit": 0,
+      "strict": "DIFF"
+     },
+     "e24240b35": {
+      "exit": 0,
+      "strict": "DIFF"
+     }
+    }
+   }
+  },
+  "BS_vs_maker_expectations": {
+   "control": {
+    "n": 88,
+    "tip_match": 60,
+    "merge_match": 60,
+    "base_match": 43
+   },
+   "match-iff-control-matches": {
+    "n": 128,
+    "tip_match": 98,
+    "merge_match": 59,
+    "base_match": 48,
+    "controls_fail": 20,
+    "no_named_control_mapped": 16
+   },
+   "same-as-plain": {
+    "n": 55,
+    "tip_match": 40,
+    "merge_match": 15,
+    "base_match": 12,
+    "twin_named": 55,
+    "rust_equiv_twin": 10,
+    "java_equiv_twin": 10
+   },
+   "fail": {
+    "n": 103,
+    "tip_match": 13,
+    "merge_match": 13,
+    "base_match": 8,
+    "unexpected_match": 13
+   }
+  },
+  "BT_vs_checker_expectations": {
+   "record": {
+    "n": 82,
+    "tip": 25,
+    "merge": 8,
+    "base": 7
+   },
+   "match": {
+    "n": 16,
+    "tip": 4,
+    "merge": 0,
+    "base": 0
+   },
+   "fail": {
+    "n": 47,
+    "tip": 6,
+    "merge": 6,
+    "base": 6
+   },
+   "control": {
+    "n": 86,
+    "tip": 48,
+    "merge": 45,
+    "base": 41
+   },
+   "match-iff-control": {
+    "n": 148,
+    "tip": 74,
+    "merge": 27,
+    "base": 27
+   }
+  },
+  "BT_by_group": {
+   "st": {
+    "n": 54,
+    "tip": 10,
+    "merge": 6,
+    "base": 5
+   },
+   "cl": {
+    "n": 16,
+    "tip": 9,
+    "merge": 2,
+    "base": 2
+   },
+   "ml": {
+    "n": 42,
+    "tip": 11,
+    "merge": 9,
+    "base": 9
+   },
+   "cr": {
+    "n": 40,
+    "tip": 30,
+    "merge": 15,
+    "base": 12
+   },
+   "pr": {
+    "n": 29,
+    "tip": 14,
+    "merge": 1,
+    "base": 1
+   },
+   "ns": {
+    "n": 27,
+    "tip": 3,
+    "merge": 2,
+    "base": 2
+   },
+   "fv": {
+    "n": 65,
+    "tip": 40,
+    "merge": 25,
+    "base": 25
+   },
+   "bi": {
+    "n": 28,
+    "tip": 9,
+    "merge": 9,
+    "base": 8
+   },
+   "ft": {
+    "n": 30,
+    "tip": 5,
+    "merge": 5,
+    "base": 5
+   },
+   "sz": {
+    "n": 10,
+    "tip": 10,
+    "merge": 5,
+    "base": 5
+   },
+   "sx": {
+    "n": 20,
+    "tip": 12,
+    "merge": 4,
+    "base": 4
+   },
+   "ax": {
+    "n": 18,
+    "tip": 4,
+    "merge": 3,
+    "base": 3
+   }
+  },
+  "registered_pairs": {
+   "comment-state-consumers": {
+    "registered": 84,
+    "pass_at_tip": 50,
+    "fail_at_tip": 34
+   },
+   "tim-builtin-value-boundaries": {
+    "registered": 669,
+    "pass_at_tip": 318,
+    "fail_at_tip": 351
+   }
+  },
+  "gates_tip": [
+   "lib exit 0",
+   "pipe_mode exit 0",
+   "golden_no_oracle exit 101",
+   "golden_pairs exit 101",
+   "parity_perturbations exit 101",
+   "harness_guards exit 101",
+   "doc_claims exit 0"
+  ],
+  "gates_base": [
+   "parity_perturbations exit 101",
+   "harness_guards exit 101",
+   "golden_pairs exit 101"
+  ],
+  "no_oracle": {
+   "9834a7194": "11181/11251",
+   "tip": "11181/11251",
+   "failure_name_diff_vs_9834a7194": [
+    "0a1,2",
+    "> activity/act_skinparam2_shadowing_true",
+    "> activity/act_skinparam_shadowing",
+    "34a37",
+    "> edge-cases/edge_whitespace_multiple_blank_lines",
+    "40d42",
+    "< preprocessing/preproc_complex_theme_override",
+    "67d68",
+    "< state/state_history_shallow",
+    "69d69",
+    "< state/state_note_composite"
+   ],
+   "note": "3 out (the 3 GET-provenance goldens act_skinparam_shadowing, act_skinparam2_shadowing_true, edge_whitespace_multiple_blank_lines), 3 in; identical to the maker's diff; merge->tip identical"
+  },
+  "golden_pairs": {
+   "base": "10497 passed / 754 failed / 1299 skipped",
+   "tip": "10497 / 754 / 1299",
+   "failure_names_identical_base_tip": true
+  },
+  "parity_perturbations": {
+   "base_fail": 1365,
+   "tip_fail": 2061,
+   "pre_existing_files_at_base": 3008,
+   "new_failures_in_pre_existing_files": 0,
+   "fixed_base_to_tip": 117,
+   "note": "tip count measured before this review's 753 pairs were registered"
+  },
+  "harness_guards": "decimal_literal_ratchet and parity_review_records_are_complete fail at base and tip; the decimal list differs only by svg.rs 0->1 (a test literal with a SvgGraphics.fillMe provenance comment, earlier round); round 10 adds no 3+-decimal literal",
+  "clippy_error_diagnostics_per_crate": {
+   "base": {
+    "rustuml-render": 19,
+    "rustuml-parser": 1,
+    "rustuml-oracle": 1,
+    "rustuml-layout": 0,
+    "rustuml": 0,
+    "rustuml-math": 0
+   },
+   "tip": {
+    "rustuml-render": 19,
+    "rustuml-parser": 1,
+    "rustuml-oracle": 1,
+    "rustuml-layout": 0,
+    "rustuml": 0,
+    "rustuml-math": 0
+   },
+   "same_lint_codes_and_files": true
+  },
+  "routing_drill": {
+   "M00_unmodified": "pass",
+   "Arial_face_italic_slot_to_plain": "caught",
+   "Arial_face_bolditalic_slot_to_bold": "caught",
+   "Helvetica_face_italic_slot_to_plain": "caught",
+   "Helvetica_face_bolditalic_slot_to_bold": "caught",
+   "Verdana_face_italic_slot_to_plain": "caught",
+   "Verdana_face_bolditalic_slot_to_bold": "caught",
+   "Menlo_face_italic_slot_to_plain": "caught",
+   "Menlo_face_bolditalic_slot_to_bold": "pass",
+   "CourierNew_face_italic_slot_to_plain": "caught",
+   "CourierNew_face_bolditalic_slot_to_bold": "caught",
+   "M15_checker_arial_italic_routed_plain": "caught",
+   "Mono_arm_italic_dropped": "caught",
+   "CourierNew_arm_italic_dropped": "caught",
+   "Helvetica_arm_italic_dropped": "caught"
+  },
+  "consumer_drill_lib_suite": {
+   "M00_unmodified": "baseline",
+   "T1_times_arm_italic_dropped": "caught",
+   "C1_component_label_measure_italic_dropped": "SURVIVED",
+   "C2_component_stereotype_measured_plain": "SURVIVED",
+   "C3_participant_block_italic_dropped_5663": "SURVIVED",
+   "C4_activity_layout_italic_dropped": "SURVIVED",
+   "C5_state_node_font_italic_dropped": "SURVIVED",
+   "C6_usecase_label_measure_italic_dropped": "SURVIVED"
+  },
+  "consumer_mutants_vs_registered_pairs": {
+   "C1_component_label_measure_italic_dropped": 19,
+   "C2_component_stereotype_measured_plain": 6,
+   "C3_participant_block_italic_dropped_5663": 0,
+   "C4_activity_layout_italic_dropped": 9,
+   "C5_state_node_font_italic_dropped": 0,
+   "C6_usecase_label_measure_italic_dropped": 14
+  },
+  "T14.47": {
+   "branch": "crates/rustuml-render/src/state.rs arial_text_width: `if !bold && size == 14 { match text { \"A\" | \"B\" => return 9.3379 } }` then text_render::measure (SansSerif); base 95291dc6b line 1581, tip line 1653; introduced ceda8d9f2 (2026-06-05, 'state: honor custom state font names')",
+   "variants": {
+    "v1": "branch deleted, SansSerif fallback kept",
+    "v2": "arial_text_width = text_render::measure_with_family(text, size, bold, \"Arial\") (the Arial table; italic still dropped)"
+   },
+   "cli_whole_output_over_arial_selectable_sources": {
+    "selected": 481,
+    "selector": "arial|!theme|!include|!import",
+    "95291dc6b-v1": {
+     "outputs_changed": 1,
+     "lost": [
+      "test-diagrams/golden/state/state_skinparam_state_fontname.puml"
+     ],
+     "gained": []
+    },
+    "95291dc6b-v2": {
+     "outputs_changed": 11,
+     "lost": [],
+     "gained": [
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_ar_i.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_ar_i.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_ar_i.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_ar_i.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state_ctrl.puml"
+     ]
+    },
+    "e24240b35-v1": {
+     "outputs_changed": 1,
+     "lost": [
+      "test-diagrams/golden/state/state_skinparam_state_fontname.puml"
+     ],
+     "gained": []
+    },
+    "e24240b35-v2": {
+     "outputs_changed": 11,
+     "lost": [],
+     "gained": [
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_ar_i.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_ar_i.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_ar_i.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_ar_i.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state_ctrl.puml"
+     ]
+    }
+   },
+   "tiers_at_tip": {
+    "golden_no_oracle": {
+     "tip": "11181/11251 (state 897/901)",
+     "v1": "11180/11251 (state 896/901; +state/state_skinparam_state_fontname)",
+     "v2": "11181/11251, failure names identical to tip"
+    },
+    "golden_pairs": {
+     "tip": "10497 passed / 754 failed",
+     "v1": "10496 / 755 (+state/state_skinparam_state_fontname)",
+     "v2": "10497 / 754, failure names identical"
+    }
+   },
+   "answer": "Exactly one golden depends on the label-keyed branch (state/state_skinparam_state_fontname, `skinparam state { FontName Arial }`, states A and B): it is lost in both tiers when the branch is deleted, and no perturbation depends on it. The traced replacement (Arial advance table) keeps that golden in both tiers, loses nothing in 481 Arial-selectable goldens/perturbations, and gains 5 (base) / 6 (tip) held-out Arial state pairs. The branch inflates each tier by 1 only relative to the untraced SansSerif fallback."
+  }
+ },
+ "attributed_regressions": {
+  "round 10": "none on any cohort",
+  "earlier rounds (already at merge)": {
+   "goldens (base->tip)": "3 GET-provenance goldens act_skinparam_shadowing, act_skinparam2_shadowing_true, edge_whitespace_multiple_blank_lines (no-oracle and sweep; recorded in earlier rounds)",
+   "exact viewBox only (case fails at every tree)": [
+    "BO c8a_bl_lucida_thai_digit_after_r",
+    "BR c9a_sp_seqnote_pdf_N_ctrl, c9a_sv_actmid_N_sp_ctrl, c9a_sv_classnote_N_ctrl (T14.43)",
+    "BS m10a_acts_cn_i, m10a_css_actv_cn_i, m10a_css_part_cn_i, m10a_dbse_cn_i (Courier New marks on T14.46 paths; rounds 7/8)"
+   ],
+   "comment lists (perturbations, base->tip)": [
+    "shared-svg-corrective/checker-independent-astra/unicode_activity",
+    "tim-sub-marker-layers/checker5/sub_suffix_continuation"
+   ]
+  }
+ },
+ "verdict": "rejected",
+ "packet_verdict": "Packet e24240b35 rejected. Round 10 causes no loss anywhere and ports the style -> face path and ValueImpl.asFontFace faithfully, but round-9 obligation 1's own acceptance ('in plain Latin ... match where their controls match') fails on fresh held-out Java: plain-Latin Verdana Italic and Verdana Bold Italic text is measured with the upright ASCII tables (10 BS + 2 BT probes with matching controls). Per the parent ruling this blocks the line regardless of the round that introduced it.",
+ "per_mechanism_verdicts": {
+  "drawn face, style included (e1ee5ce7f)": "confirmed for routing at component, activity, participant, state and use-case/actor sites (BS 98/128, BT match-iff-control cases match wherever controls match except Verdana italic); NOT accept-ready: Verdana Italic/Bold Italic ASCII data absent; participant (5663) and StateNodeFont sites unpinned",
+  "ValueImpl.asFontFace (df9365441)": "accepted as a port of the face decision (13 forms x 5 sites); residue: numeric font-weight emission, 'bold italic' outside the packet",
+  "face-routing gate + regeneration (2a352f67b)": "drill reproduced 14/15, regeneration byte-identical; gate blind to own-table face data and to consumer sites; Menlo Bold Italic equivalence holds only in Rust's cell model",
+  "6413e26b4 process record (681fce4c4)": "accurate (not re-measured beyond the record)",
+  "two disclosed golden changes": "explained, Java error pages either way"
+ },
+ "findings": [
+  "REJECT (round-9 obligation 1 acceptance not met; parent ruling 2026-11-06): plain-Latin text in Verdana Italic and Verdana Bold Italic is measured with the upright ASCII tables. text_render.rs family_table_text_width picks VERDANA_WIDTH / VERDANA_BOLD_WIDTH by `bold` only and routes ASCII through the own table, so the italic face reaches only characters outside 32..126. Java (BT ft tables, 14 pt): Verdana Italic A-M 119.4717 / N-Z 130.3477 / a-m 98.3145 / n-z 106.0869 vs Rust (Regular) 119.5537 / 130.3408 / 98.3965 / 106.1143; Verdana Bold Italic n-z 120.3945 vs Rust (Bold) 120.4219. Probes whose controls match and that fail: BS m10a_{comp,nodc,artc,dbsc,actu,usec,stat,part,clss,actv}_vd_i (10), BT c10a_ml_part_vd_i (Java 127.9482 vs 127.9688) and c10a_ft_vd_creolebi (bold label + <i>: Java 149.8301 vs 149.8574; control c10a_ft_vd_creolebi_ctrl matches). Fails at merge and tip (not a round-10 loss). Not affected (Java italic advances equal the tables Rust uses): Arial Italic/Bold Italic, Helvetica Oblique, Times New Roman (four tables), Courier New, SansSerif derived italics.",
+  "No round-10 loss on any cohort: AR..BT 0 matches, rejections, exact viewBoxes or comment lists lost merge->tip; 0 new valid-input errors, panics or stderr changes; goldens byte-identical merge->tip except the 2 disclosed Java error pages; perturbations: 6 outputs changed merge->tip (3 gains, 3 DIFF->DIFF moving toward Java's viewBox), 4 stderr changes are only the panic thread id of the pre-existing class.rs:285 panic.",
+  "Style -> face path confirmed against Java wherever the control matches (BT): Creole runs in italic labels (30/40 incl. all 20 component/participant/activity/use-case italic probes whose control matches), multi-line labels (Times), size + italic (10/10), state title/fields (Times, stateFontName), activity deprecated-colour action, skinparam vs <style> order for the label (both orders), <style> nested, stereotype and element selectors for component and use case, cloud outline in component diagrams (9/16; all stereotype variants fail on the multi-word stereotype parser gap). Fresh failing paths are all outside the packet or filed: <style> FontStyle on participants and activity (T14.46), stereotype face, sequence boxes / nested containers / swimlanes (fail at control), multi-word stereotypes.",
+  "ValueImpl.asFontFace port exact for the (bold, italic) decision: 13 forms x 5 sites (BOLD, Italic, bolder, lighter, 600, 650, 900, normal, 'italic bold', oblique, style 800, style 'bold italic', control) match Java's face; widths match. Residue: Java writes the CSS weight string (DriverTextSvg 104-110: font-weight=\"800\"/\"300\"/\"600\"/\"900\"), Rust collapses to bold/plain, so 25 width-correct probes fail on the attribute (also at merge). Unprobed static differences: Java trim() strips only <= U+0020 (Rust trims Unicode whitespace, e.g. NBSP) and Integer.parseInt accepts non-ASCII digits.",
+  "'bold italic' is plain only at the packet's sites. Still drawn bold italic (Java plain): class names (BS 5 m10a_clss_*_bi, plain twins match), class attributes (c10a_bi_classattr_bi), sequence arrows (c10a_bi_seqarrow_bi); other consumers fail at their control.",
+  "Stereotype face hardcoded italic (component, use case, actor, participant) in measurement and drawing; Java resolves it from the stereotype style cascade: `<style> component { FontStyle bold }` after `skinparam componentFontStyle italic` draws and measures «Dock» bold (c10a_pr_{comp,usec}_sp_then_css; part/actv also fail on T14.46).",
+  "Disclosed golden changes skin_usecase_fontStyle_bold/_italic: Java syntax-error pages (`rectangle System {{`) at every tree; Rust renders at merge and tip (exit 0); tip draws the use-case labels bold/italic through the new SkinColors face (usecase.rs). Explained by the style fix; DIFF -> DIFF.",
+  "Gate every_italic_slot_measures_in_its_own_face: maker drill reproduced 14/15 (each caught by the test's assertion, no build failure); Menlo bold-italic -> Menlo Bold survives. It is equivalent only under Rust's cell-only monospaced model: Menlo Bold maps U+01F0, U+0220, U+2060 and U+2580..U+27AF runs that Menlo Bold Italic does not; Java gives fallback glyphs their own advances, so the routes are probably distinguishable in Java (unprobed). The gate's own-table branch uses the public width as its oracle (`Some(own) if own(c) => public(c)`), so it cannot see the Verdana Italic ASCII gap. Consumer drill: 6/6 consumer-site italic mutants survive the whole rustuml-render lib suite (860 tests); the registered round-10 pairs catch C1 (component label, 19 pairs), C2 (component stereotype, 6), C4 (activity, 9), C6 (use case, 14); C3 (participant block 5663) and C5 (StateNodeFont italic) are caught by nothing. Times arm mutant caught by awt_named_font_metrics_match_goldens.",
+  "Regeneration command in monkeyman-round9/README.md reproduces font_chain_coverage.rs byte-identically (eef8a552...3479; generator prints SHA256SUMS ad8e6566...).",
+  "T14.47 confirmed in base (state.rs:1581 at 95291dc6b, 1653 at tip; introduced ceda8d9f2 2026-06-05): see T14.47 measurement.",
+  "Process: accounts 681fce4c4 (07:37) and addendum 6f86bf825 (08:00) precede their code commits e1ee5ce7f/2a352f67b (07:53) and df9365441 (08:02); account/addendum/evidence commits touch only docs/parity-reviews. Addendum inaccurate in one prediction (no golden changes) - disclosed by the maker. Maker expectations wrong in 3 places: 10 Verdana italic 'match-iff-control' probes fail; 5 class 'same-as-plain' probes fail; 13 'fail' probes match (bold italic renders plain on both sides). No fixture-keyed logic and no fitted constant in the round-10 diff (constants: CSS weights 100/300/700/800/900 from UFontFace/UFontWeight, stereotype italic from plantuml.skin). Frozen items unchanged base..tip (crates/rustuml-oracle incl. GEOM_EPS 0.02, syntax markers, park list, error census, guard allow-lists, strict-XML list; ulp_parked.txt; non-perturbation test-diagrams; no perturbation edited or deleted). bullseye.yaml = base + T14.39 (and its T14 depends_on entry), merge == tip; parity-recovery has since added T14.46/T14.47, so the T14 depends_on list needs a union at merge. T14.6.7 path categories unchanged (98 source / 98 golden path violations, as at base)."
+ ],
+ "t14_47_measurement": {
+  "branch": "crates/rustuml-render/src/state.rs arial_text_width: `if !bold && size == 14 { match text { \"A\" | \"B\" => return 9.3379 } }` then text_render::measure (SansSerif); base 95291dc6b line 1581, tip line 1653; introduced ceda8d9f2 (2026-06-05, 'state: honor custom state font names')",
+  "variants": {
+   "v1": "branch deleted, SansSerif fallback kept",
+   "v2": "arial_text_width = text_render::measure_with_family(text, size, bold, \"Arial\") (the Arial table; italic still dropped)"
+  },
+  "cli_whole_output_over_arial_selectable_sources": {
+   "selected": 481,
+   "selector": "arial|!theme|!include|!import",
+   "95291dc6b-v1": {
+    "outputs_changed": 1,
+    "lost": [
+     "test-diagrams/golden/state/state_skinparam_state_fontname.puml"
+    ],
+    "gained": []
+   },
+   "95291dc6b-v2": {
+    "outputs_changed": 11,
+    "lost": [],
+    "gained": [
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_ar_i.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_ar_i.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_ar_i.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_ar_i.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state_ctrl.puml"
+    ]
+   },
+   "e24240b35-v1": {
+    "outputs_changed": 1,
+    "lost": [
+     "test-diagrams/golden/state/state_skinparam_state_fontname.puml"
+    ],
+    "gained": []
+   },
+   "e24240b35-v2": {
+    "outputs_changed": 11,
+    "lost": [],
+    "gained": [
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_ar_i.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_ar_i.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_ar_i.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_ar_i.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state_ctrl.puml"
+    ]
+   }
+  },
+  "tiers_at_tip": {
+   "golden_no_oracle": {
+    "tip": "11181/11251 (state 897/901)",
+    "v1": "11180/11251 (state 896/901; +state/state_skinparam_state_fontname)",
+    "v2": "11181/11251, failure names identical to tip"
+   },
+   "golden_pairs": {
+    "tip": "10497 passed / 754 failed",
+    "v1": "10496 / 755 (+state/state_skinparam_state_fontname)",
+    "v2": "10497 / 754, failure names identical"
+   }
+  },
+  "answer": "Exactly one golden depends on the label-keyed branch (state/state_skinparam_state_fontname, `skinparam state { FontName Arial }`, states A and B): it is lost in both tiers when the branch is deleted, and no perturbation depends on it. The traced replacement (Arial advance table) keeps that golden in both tiers, loses nothing in 481 Arial-selectable goldens/perturbations, and gains 5 (base) / 6 (tip) held-out Arial state pairs. The branch inflates each tier by 1 only relative to the untraced SansSerif fallback."
+ },
+ "held_out_failures": {
+  "blocking (obligation 1 acceptance)": [
+   "BS m10a_{comp,nodc,artc,dbsc,actu,usec,stat,part,clss,actv}_vd_i",
+   "BT c10a_ml_part_vd_i",
+   "BT c10a_ft_vd_creolebi"
+  ],
+  "filed / proposed residues": "T14.46 paths, stereotype cascade, numeric weights, class/attribute/arrow bold italic, multi-word stereotypes, {|} labels, Helvetica tables, state Arial (T14.47/T14.39)"
+ },
+ "bounded_next_obligations": [
+  "Blocking: Verdana Italic and Verdana Bold Italic printable-ASCII advances measured from those faces (per-face extraction with provenance, no fitted values); the face-routing gate's own-table branch checks the face's own table (a dropped italic table fails it). Acceptance: the 10 BS and 2 BT Verdana probes named above match, plus fresh renamed held-out Verdana italic/bold-italic probes (other labels, sizes, contexts), and no pass is lost on AR..BT, goldens, sweep and registered pairs.",
+  "Pin the two unpinned round-10 consumer sites (sequence ParticipantTextBlock at the 5663 call; StateNodeFont italic) with a lib test or a registered perturbation that fails when the italic is dropped, or show the site is unobservable and remove it.",
+  "Record at merge (not obligations of this packet): the proposed targets below; T14.46 extended with the stereotype style cascade; T14.47 measurement."
+ ],
+ "proposed_targets": [
+  {
+   "name": "Verdana Italic and Bold Italic measure plain-Latin text with their own advances",
+   "blocking": true,
+   "acceptance": [
+    "Printable ASCII in Verdana Italic and Verdana Bold Italic measures with those faces' advances (extracted from the face files with the existing per-face extractor, provenance recorded), not the Regular/Bold tables.",
+    "The face-routing gate compares own-table characters against the face's own table, so dropping the italic table is caught.",
+    "BS m10a_*_vd_i, BT c10a_ml_part_vd_i and c10a_ft_vd_creolebi match, plus renamed held-out Verdana italic/bold-italic probes, and no pass is lost."
+   ]
+  },
+  {
+   "name": "Helvetica upright tables match Java",
+   "acceptance": [
+    "Rust's Helvetica plain table matches Java in N-Z (129.124 vs 129.1172 at 14 pt) and the Helvetica Bold table in a-m/n-z (94.8965/103.4551 vs 94.1309/101.9033); Java measures \"Helvetica\" as Arial's advances there. Trace JDK 21's macOS resolution of the name before changing data.",
+    "BT c10a_ft_hv_* per-label widths match, plus held-out Helvetica probes, and no pass is lost."
+   ]
+  },
+  {
+   "name": "Multi-word stereotypes after `as` are kept",
+   "acceptance": [
+    "`component \"Kiln\" as E1 <<Ferrous gauge vista>>` (and node, database, cloud, queue, actor, class) keeps and draws the stereotype as Java does.",
+    "BT c10a_st_* match where the family/face is otherwise right, plus renamed variants."
+   ]
+  },
+  {
+   "name": "Labels containing `{|}` parse as Java parses them",
+   "acceptance": [
+    "`component \"... {|}\" as E4` renders one label as Java does instead of two texts (sans-serif bold + monospace).",
+    "BT c10a_ft_* match once face data is right, plus held-out punctuation probes."
+   ]
+  },
+  {
+   "name": "Stereotype text face resolves through the style cascade",
+   "acceptance": [
+    "The stereotype face is the stereotype style's (EntityImageDescription styleStereo, AbstractTextualComponent stereo): an element <style> FontStyle declared after the skinparam reaches it, and <kind>StereotypeFontStyle is honoured; measured and drawn alike.",
+    "BT c10a_pr_{comp,usec}_sp_then_css match, plus held-out stereotype-style probes."
+   ],
+   "note": "extends T14.46's <kind>StereotypeFontStyle item"
+  },
+  {
+   "name": "Numeric CSS font weights are written as Java writes them",
+   "acceptance": [
+    "FontStyle values that resolve to a CSS weight other than 400/700 (bolder, lighter, 600, 900, style 800) emit font-weight=\"<weight>\" as DriverTextSvg 104-110 does; measurement keeps the bold/plain face (isBold).",
+    "BT c10a_fv_*_{bolder,lighter,w600,w900,css800} match where their controls match."
+   ]
+  },
+  {
+   "name": "Menlo Bold Italic fallback advances are modelled, or the equivalence is proven",
+   "acceptance": [
+    "Fresh Java probes with U+01F0, U+0220, U+2060 and U+2580..U+27AF in Menlo Bold Italic vs Menlo Bold show whether the routes differ; if they do, monospaced text uses fallback glyph advances (not the cell) and the gate's EQUIVALENT entry is removed.",
+    "No pass is lost."
+   ]
+  },
+  {
+   "name": "'bold italic' FontStyle is plain in every consumer",
+   "acceptance": [
+    "Class names and attributes, sequence arrows and every other FontStyle reader use ValueImpl.asFontFace (style_cascade::font_face).",
+    "BS m10a_clss_*_bi and BT c10a_bi_{classname,classattr,seqarrow}_bi match where their controls match."
+   ]
+  },
+  {
+   "name": "Every round-10 consumer site is pinned by a test",
+   "acceptance": [
+    "Dropping the italic at sequence ParticipantTextBlock (5663) or StateNodeFont fails a lib test or a registered perturbation (today nothing catches either); if a site is unobservable it is removed or documented as such."
+   ]
+  }
+ ],
+ "perturbations": [
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_css_stat_cn_b.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_css_stat_cn_b.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "cn",
+    "bold",
+    "style-block"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_css_stat_cn_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_css_stat_cn_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "cn",
+    "italic",
+    "style-block"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_css_stat_tn_b.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_css_stat_tn_b.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "tn",
+    "bold",
+    "style-block"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_css_stat_tn_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_css_stat_tn_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "tn",
+    "italic",
+    "style-block"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_b.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_b.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "cn",
+    "bold"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_b_ctrl.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_b_ctrl.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_bi.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_bi.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "cn",
+    "bold italic"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_bi_ctrl.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_bi_ctrl.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "cn",
+    "italic"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_i_ctrl.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_i_ctrl.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "cn",
+    "plain",
+    "control"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_p_ctrl.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_cn_p_ctrl.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_ss_b.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_ss_b.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "ss",
+    "bold"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_ss_bi.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_ss_bi.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "ss",
+    "bold italic"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_ss_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_ss_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "ss",
+    "italic"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_ss_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_ss_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "ss",
+    "plain",
+    "control"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_tn_b.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_tn_b.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "tn",
+    "bold"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_tn_bi.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_tn_bi.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "tn",
+    "bold italic"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_tn_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_tn_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "tn",
+    "italic"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_tn_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_tn_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "tn",
+    "plain",
+    "control"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_vd_b.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_vd_b.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "vd",
+    "bold"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_vd_bi.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_vd_bi.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "vd",
+    "bold italic"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_vd_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_vd_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "vd",
+    "italic"
+   ],
+   "batch": "BS",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_vd_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_vd_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "stat",
+    "vd",
+    "plain",
+    "control"
+   ],
+   "batch": "BS",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_bi_statattr_bi.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_bi_statattr_bi.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "bold-italic-consumer",
+    "statattr",
+    "stateAttributeFontStyle",
+    "bold italic"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_bi_statattr_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_bi_statattr_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "bold-italic-consumer",
+    "statattr",
+    "stateAttributeFontStyle",
+    "none",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_bt_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_bt_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "creole",
+    "stat",
+    "bt",
+    "italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_bt_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_bt_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "creole",
+    "stat",
+    "bt",
+    "plain",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_fo_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_fo_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "creole",
+    "stat",
+    "fo",
+    "italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_fo_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_fo_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "creole",
+    "stat",
+    "fo",
+    "plain",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_st_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_st_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "creole",
+    "stat",
+    "st",
+    "italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_st_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_st_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "creole",
+    "stat",
+    "st",
+    "plain",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_sz_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_sz_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "creole",
+    "stat",
+    "sz",
+    "italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_sz_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_cr_stat_sz_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "creole",
+    "stat",
+    "sz",
+    "plain",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_BOLD.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_BOLD.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "BOLD"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_Italic.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_Italic.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "Italic"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_bolder.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_bolder.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "bolder"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_css800.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_css800.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "style 800"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_cssbi.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_cssbi.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "style bold italic"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_ctrl.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_ctrl.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "none",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_italicbold.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_italicbold.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "italic bold"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_lighter.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_lighter.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "lighter"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_normal.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_normal.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "normal"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_oblique.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_oblique.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "oblique"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_w600.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_w600.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "600"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_w650.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_w650.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "650"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_w900.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_fv_stat_w900.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "900"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ml_stat_tn_b.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ml_stat_tn_b.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "multiline",
+    "stat",
+    "tn",
+    "bold"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ml_stat_tn_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ml_stat_tn_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "multiline",
+    "stat",
+    "tn",
+    "italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ml_stat_tn_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ml_stat_tn_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "multiline",
+    "stat",
+    "tn",
+    "plain",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ml_stat_vd_b.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ml_stat_vd_b.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "multiline",
+    "stat",
+    "vd",
+    "bold"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ml_stat_vd_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ml_stat_vd_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "multiline",
+    "stat",
+    "vd",
+    "italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ml_stat_vd_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ml_stat_vd_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "multiline",
+    "stat",
+    "vd",
+    "plain",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ns_compst_tn_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ns_compst_tn_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "nested",
+    "compst",
+    "tn",
+    "italic"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ns_compst_tn_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ns_compst_tn_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "nested",
+    "compst",
+    "tn",
+    "plain",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ns_compst_vd_b.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ns_compst_vd_b.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "nested",
+    "compst",
+    "vd",
+    "bold"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_pr_stat_css_then_sp.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_pr_stat_css_then_sp.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "precedence",
+    "stat",
+    "style bold then skinparam italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_pr_stat_ctrl.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_pr_stat_ctrl.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "precedence",
+    "stat",
+    "no style",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_pr_stat_element_sel.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_pr_stat_element_sel.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "precedence",
+    "stat",
+    "element selector italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_pr_stat_nested_sel.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_pr_stat_nested_sel.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "precedence",
+    "stat",
+    "diagram-scoped selector italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_pr_stat_sp_then_css.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_pr_stat_sp_then_css.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "precedence",
+    "stat",
+    "skinparam italic then style bold"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_pr_stat_stereo_sel.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_pr_stat_stereo_sel.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "precedence",
+    "stat",
+    "stereotype selector italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_ar_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_ar_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "composite",
+    "Arial italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "composite",
+    "italic"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_nm_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_nm_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "composite",
+    "stateFontName + italic"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "composite",
+    "plain",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_ar_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_ar_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "concurrent",
+    "Arial italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "concurrent",
+    "italic"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_nm_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_nm_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "concurrent",
+    "stateFontName + italic"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "concurrent",
+    "plain",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_descs_ar_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_descs_ar_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "descs",
+    "Arial italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_descs_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_descs_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "descs",
+    "italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_descs_nm_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_descs_nm_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "descs",
+    "stateFontName + italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_descs_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_descs_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "descs",
+    "plain",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_ar_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_ar_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "longname",
+    "Arial italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "longname",
+    "italic"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_nm_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_nm_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "longname",
+    "stateFontName + italic"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "longname",
+    "plain",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_ar_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_ar_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "statename",
+    "Arial italic"
+   ],
+   "batch": "BT",
+   "result": "fail",
+   "tip_strict": "DIFF",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "statename",
+    "italic"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_nm_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_nm_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "statename",
+    "stateFontName + italic"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "state",
+    "statename",
+    "plain",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sz_stat_i.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sz_stat_i.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "size",
+    "stat",
+    "19",
+    "italic"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "DIFF",
+   "base_strict": "DIFF"
+  },
+  {
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sz_stat_p.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sz_stat_p.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10",
+   "axes": [
+    "size",
+    "stat",
+    "19",
+    "plain",
+    "control"
+   ],
+   "batch": "BT",
+   "result": "pass",
+   "tip_strict": "match",
+   "merge_strict": "match",
+   "base_strict": "match"
+  }
+ ]
+}

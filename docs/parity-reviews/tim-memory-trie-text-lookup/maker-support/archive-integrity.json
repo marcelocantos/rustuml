@@ -1,0 +1,11 @@
+{
+  "files_verified": 19766,
+  "archive_sha256": "0fc1e3eae99598c557ab4f5071f18745b0aea2ceca23f52dddaa95315f29119f",
+  "excluded_only": [
+    "before-rustuml",
+    "iteration1-rustuml",
+    "iteration2-rustuml",
+    "final-rustuml",
+    "probe"
+  ]
+}

@@ -1,0 +1,11 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam stateFontSize 23
+<style>
+state {
+  FontStyle italic
+  FontWeight bold
+}
+</style>
+state "Avid Dawky Vow 4.7, gym kayak ovo!" as E1
+@enduml

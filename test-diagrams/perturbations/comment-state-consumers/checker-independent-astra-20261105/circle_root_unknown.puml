@@ -1,0 +1,9 @@
+@startuml
+<style>
+root {
+LineColor NoSuchHarborColor
+}
+</style>
+[*] --> Harbor
+Harbor --> [*]
+@enduml

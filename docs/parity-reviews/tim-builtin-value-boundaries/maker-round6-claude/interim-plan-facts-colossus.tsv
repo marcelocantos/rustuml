@@ -1,0 +1,11 @@
+# HarfBuzz plan facts measured on colossus (macOS 27.2 26B123) by tools/FontChainExtract.swift round 6; interim input only
+LucidaGrande.tsv	gdef_glyph_classes=0	notdef_gdef_class=0	gsub=0	gpos=0	morx=1	kerx=0	kern=0	kern_formats=	machine_kern=0
+LucidaGrande-Bold.tsv	gdef_glyph_classes=0	notdef_gdef_class=0	gsub=0	gpos=0	morx=1	kerx=0	kern=0	kern_formats=	machine_kern=0
+ArialMT.tsv	gdef_glyph_classes=1	notdef_gdef_class=1	gsub=1	gpos=1	morx=0	kerx=0	kern=1	kern_formats=0	machine_kern=0
+Arial-BoldMT.tsv	gdef_glyph_classes=1	notdef_gdef_class=1	gsub=1	gpos=1	morx=0	kerx=0	kern=1	kern_formats=0	machine_kern=0
+Helvetica.tsv	gdef_glyph_classes=0	notdef_gdef_class=0	gsub=0	gpos=0	morx=1	kerx=0	kern=1	kern_formats=0	machine_kern=0
+Helvetica-Bold.tsv	gdef_glyph_classes=0	notdef_gdef_class=0	gsub=0	gpos=0	morx=1	kerx=0	kern=1	kern_formats=0	machine_kern=0
+Verdana.tsv	gdef_glyph_classes=1	notdef_gdef_class=1	gsub=1	gpos=1	morx=0	kerx=0	kern=1	kern_formats=0	machine_kern=0
+Verdana-Bold.tsv	gdef_glyph_classes=1	notdef_gdef_class=1	gsub=1	gpos=1	morx=0	kerx=0	kern=0	kern_formats=	machine_kern=0
+Menlo-Regular.tsv	gdef_glyph_classes=0	notdef_gdef_class=0	gsub=0	gpos=0	morx=1	kerx=0	kern=0	kern_formats=	machine_kern=0
+CourierNewPSMT.tsv	gdef_glyph_classes=1	notdef_gdef_class=1	gsub=1	gpos=1	morx=0	kerx=0	kern=0	kern_formats=	machine_kern=0

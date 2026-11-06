@@ -1,0 +1,34 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-9.json and comment-state-consumers/review-10.json (8089ef150) bounded_next_obligations",
+ "base": "merge of parity-recovery-2026-11-03 dcf6d9076 (code identical to 9834a7194) into 8089ef150 (code identical to c3116f0b0): 9d6af0a0e",
+ "sub_mechanism": "obligation 2 (BLOCKING): text_line_levels returns BidiUtils.getLevels, i.e. the java.text.Bidi run levels",
+ "sources": [
+  "OpenJDK jdk21u tag jdk-21.0.5-ga raw files (the reference JVM is Homebrew openjdk@21 21.0.5), sha256 prefixes: TextLine.java 4568ae07, BidiUtils.java 1ebac3a8, java/text/Bidi.java e80d3188, BidiBase.java df973a5f, BidiLine.java 15910df5"
+ ],
+ "java_locations": [
+  "TextLine.fastCreateTextLine 933-948: levels = BidiUtils.getLevels(bidi) when !bidi.isLeftToRight().",
+  "BidiUtils.getLevels 54-82: fills each run [.., getRunLimit(i)) with getRunLevel(i), i in logical run order.",
+  "BidiBase.getRunLevel 4443-4456 / getRunLimit 4502-: BidiLine.getRuns(this) first.",
+  "BidiLine.getRuns 475-575: direction != MIXED -> getSingleRun(bidiBase, bidiBase.paraLevel) (one run over the whole text at the FIRST paragraph's level: 'bidiBase.paraLevel is ok even for contextual multiple paragraphs'); MIXED -> runs of equal levels[] up to trailingWSStart, each run's level = levels[run start] (559-566), and a trailing WS run at paraLevel.",
+  "BidiBase.setPara 3593: trailingWSStart = length for a paragraph object (java.text.Bidi never calls setLine), so a MIXED paragraph's runs are exactly its levels[]."
+ ],
+ "rust_locations": [
+  "java_bidi.rs text_line_levels 176-182 returns Paragraph.levels, which for direction LTR/RTL are per-paragraph para_level_at(i) (getLevelAt semantics), not the single run."
+ ],
+ "planned_change": [
+  "java_bidi.rs: Paragraph keeps getLevelAt levels; text_line_levels returns vec![para_level; n] for a non-MIXED direction and levels for MIXED (BidiLine.getRuns + BidiUtils.getLevels)."
+ ],
+ "precommitted_measurement": {
+  "oracle": "the checker's Java differential bidi-java-levels.txt (e09425f4...) over bidi-input.txt (fb7cd937...): run field for DIRECTION_DEFAULT_LEFT_TO_RIGHT inputs where requiresBidi && !isLeftToRight",
+  "expect": [
+   "0 run-level differences (352 now); requiresBidi, isLeftToRight, base level and getLevelAt stay at 0 differences over 242,508 inputs.",
+   "No golden or batch case changes (no carried label holds a paragraph separator inside complex text) except relayed U+2029/U+0085 probes.",
+   "Relayed probe: a Hebrew label + U+2029 + unmapped U+1D167 in Verdana is one RTL component; the mark is in the slot-0 buffer with U+2029 (hebrew shaper, Verdana GPOS lacks 'hebr' -> fallback positioning) and is zeroed, where the per-paragraph split kept it."
+  ]
+ }
+}

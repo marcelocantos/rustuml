@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam componentFontStyle italic
+component "Wavy <b>Dog kim Vay</b> 9 ovo" as E1
+@enduml

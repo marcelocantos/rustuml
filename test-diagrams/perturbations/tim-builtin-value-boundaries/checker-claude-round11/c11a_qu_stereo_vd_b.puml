@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam participantFontStyle bold
+queue "Dawky Vow" as Q <<Vivid kayak>>
+participant A
+A -> Q : go
+@enduml

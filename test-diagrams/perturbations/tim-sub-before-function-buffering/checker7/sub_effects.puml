@@ -1,0 +1,13 @@
+@startuml
+!$count=0
+!procedure $increment()
+!startsub stash
+!$count=$count+1
+!endsub
+!endprocedure
+!$before=$count
+!includesub stash
+$increment()
+!includesub stash
+class "$before/$count" as Node
+@enduml

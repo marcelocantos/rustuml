@@ -1,0 +1,7 @@
+# colossus (checker host), 27.2 26B123
+## openjdk@21 21.0.13 libfontmanager
+	/opt/homebrew/opt/harfbuzz/lib/libharfbuzz.0.dylib (compatibility version 61460.0.0, current version 61460.0.0)
+## installed harfbuzz keg
+15.0.0_1
+/opt/homebrew/opt/harfbuzz/lib/libharfbuzz.0.dylib:
+	/opt/homebrew/opt/harfbuzz/lib/libharfbuzz.0.dylib (compatibility version 61500.0.0, current version 61500.0.0)

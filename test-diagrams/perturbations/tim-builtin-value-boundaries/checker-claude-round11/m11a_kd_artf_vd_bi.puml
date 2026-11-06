@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam artifactFontStyle italic
+artifact "<b>Ovo vow cove</b>" as E1
+@enduml

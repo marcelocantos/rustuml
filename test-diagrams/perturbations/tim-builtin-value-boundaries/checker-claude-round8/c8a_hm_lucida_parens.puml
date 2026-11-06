@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontSize 60
+class "א((((ב))))" as K
+@enduml

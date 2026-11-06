@@ -1,0 +1,16 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-builtin-value-boundaries",
+ "kind": "account addendum for a round-4 change made without an account entry",
+ "change": "svg::comment_text and svg_export::Serializer::comment write '?' for an unpaired unit carried in a comment (round 4, f793a5e76), where round 3 left the carrier scalar in the output.",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-4.json (per_mechanism_verdicts \"'?' for a carrier in an SVG comment\", bounded_next_obligations[3])",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "java_trace": [
+  "PlantUML klimt/drawing/svg/SvgGraphics.getTransformer (769-779): OutputKeys.ENCODING is \"us-ascii\" (lower case).",
+  "JDK 21 com.sun.org.apache.xml.internal.serializer.ToStream.setOutputStreamInternal: 'US-ASCII'.equals(encoding) is case-sensitive and fails, so the writer is Encodings.getWriter(output, \"us-ascii\") (Encodings 83-97: new OutputStreamWriter(output, encoding)); sun.nio.cs.StreamEncoder (265-268) builds its encoder with onMalformedInput(REPLACE) and onUnmappableCharacter(REPLACE).",
+  "ToStream.comment(char[], int, int) (2275-2340) writes the comment's chars straight to that writer (no character-reference escaping, unlike text and attributes). The US-ASCII encoder replaces each unmappable code point, and each malformed input (an unpaired surrogate is a malformed input of length 1), by '?'.",
+  "Golden corpus evidence for the scalar half of the rule: comments such as <!--class ??????????--> in edge-cases/edge_unicode_korean_class_diagram.svg, and no golden comment holds a non-ASCII character."
+ ],
+ "observability": "In Java a comment's text (entity code, link endpoints, cluster code) is also written in attributes (data-qualified-name, data-entity) or text, where an unpaired unit fails ToStream.writeAttrString / characters and the export becomes the crash diagram. The rule therefore cannot change a successful Java output on its own; Rust's export reaches the same structured error. Relay batch m5a stages three Java probes (cm_unit_*) that put an unpaired unit only in an entity code, to show the Java outcome.",
+ "decision": "Keep the rule: it is the traced JDK mechanism, it never leaks a carrier scalar into output, and it is the scalar rule svg::comment_text already applies. Revert it if the m5a references show a successful Java output whose comment differs."
+}

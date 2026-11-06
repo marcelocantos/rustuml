@@ -1,0 +1,7 @@
+@startuml
+state Mill {
+  Grind --> Sift
+  note left of Grind : coarse
+}
+Mill --> Store
+@enduml

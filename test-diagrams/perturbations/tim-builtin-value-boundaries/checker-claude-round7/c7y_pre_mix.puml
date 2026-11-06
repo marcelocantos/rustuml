@@ -1,0 +1,6 @@
+@startyaml
+!pragma x y
+hide y
+skinparam z w
+k: v
+@endyaml

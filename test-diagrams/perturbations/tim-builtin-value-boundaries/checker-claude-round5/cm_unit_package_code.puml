@@ -1,0 +1,6 @@
+@startuml
+!$u = %substr("🚀", 0, 1)
+package "Shown" as P$u {
+  class C
+}
+@enduml

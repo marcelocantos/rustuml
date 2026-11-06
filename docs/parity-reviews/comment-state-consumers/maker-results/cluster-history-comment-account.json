@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "mechanism": "comment-state-consumers",
+  "sub_mechanism": "state cluster and history comment producer selection (rejection 7ed71f3e5, finding 1 and the history part of finding 2)",
+  "status": "maker causal account before draft; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "svek/Cluster.java#drawU (lines 309-311): the only state-group producer of UComment(\"cluster \" + group.getName()); reached only for groups still of group type when the root SVEK image is drawn.",
+    "dot/CucaDiagramSimplifierState.java#simplify: deepest-first, every group with Entity.isAutarkic() is replaced by a GroupMakerState image via Entity.overrideImage, so it never reaches Cluster.drawU and emits no cluster comment.",
+    "abel/Entity.java#isAutarkic (lines 686-712): CONCURRENT_STATE is autarkic; otherwise autarkic iff every diagram link satisfies EntityUtils.isPureInnerLink3 and every direct leaf has EntityPosition.NORMAL.",
+    "abel/EntityUtils.java#isPureInnerLink3/isParent: compares whether the parent containers of both endpoints are inside the group.",
+    "abel/Entity.java#getEntityPosition: only STATE leaves with a position stereotype (and PORTIN/PORTOUT) are non-NORMAL.",
+    "statediagram/StateDiagram.java#getHistorical/getDeepHistory (lines 125-182): [H]/[H*] create the leaf *historical*<group> / *deephistory*<group> as a Quark child of the current group (bare *historical* at root), so the marker's parent container is that group.",
+    "abel/Link.java#commentForSvg (lines 116-121): link comments use Entity.getName() of both endpoints, i.e. *historical*Lower, never the owning group's name."
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs#endpoint_parent_scope",
+    "crates/rustuml-render/src/state.rs#autonomous_group_is_autarkic",
+    "crates/rustuml-render/src/state.rs#emit_root_state_cluster",
+    "crates/rustuml-render/src/state.rs#emit_autonomous_scope_links"
+  ],
+  "invariant": "A state cluster comment is produced iff Java's consumer for that group is Cluster.drawU (the group is not autarkic). Link comment endpoint names are projected once from the lossless endpoint id; a history marker keeps its *historical*/*deephistory* name.",
+  "causal_divergence": "(1) The packet emits the cluster comment for every group painted by emit_root_state_cluster. render_non_autarkic_root_clusters is entered for root groups that Java treats as autarkic (1162 R3/O3, 1164 SharedGate593/OuterShell593), so Rust adds comments Java never produces. (2) endpoint_parent_scope only knows the [*] prefix; [H]Top.Lower and [H*]Top.Lower have no parent scope, so the transition [*] --> [H] looks like it crosses Lower's boundary and Lower/Top are wrongly non-autarkic (state_history_nested_identity). (3) emit_autonomous_scope_links shortens [H]Top.Lower to Lower with autonomous_endpoint_svg_name before state_comment_endpoint can recognise the marker, so comments read 'Lower' instead of '*historical*Lower'. (4) autonomous_group_is_autarkic omits isAutarkic's direct-leaf EntityPosition clause.",
+  "planned_change": "Give [H]/[H*] endpoints their group as parent scope (root when unscoped), as getHistorical does. Add the direct-leaf NORMAL-position clause and the CONCURRENT_STATE rule to a Java isAutarkic predicate. Emit the cluster comment from emit_root_state_cluster only when that predicate is false. Name link comment endpoints once, from the raw transition endpoints. Geometry, the <g class=\"cluster\"> wrapper and layout routing of groups Java treats as autarkic images are out of scope and stay residual.",
+  "perturbation_axes": [
+    "nested [H]/[H*] markers at depth 1 and 2, root-level [H]",
+    "root group reuse through Quark (1162/1164 shape) with and without a crossing link",
+    "a group with an entry/exit point leaf versus none"
+  ],
+  "precommitted_measurement": {
+    "oracle": "docs/parity-reviews/comment-state-consumers/maker-results/tools/comment_lists.py over test-diagrams/golden and test-diagrams/perturbations, base binary 9834a7194 versus after",
+    "expect_fixed": [
+      "perturbations/state-parser-pass-entity-order/review_root_quark_no_reparent (comment list equals Java)",
+      "perturbations/state-parser-pass-entity-order/root_quark_nested_reuse_control (comment list equals Java)",
+      "perturbations/comment-state-consumers/checker-independent-astra-20261105/state_history_nested_identity (no cluster comments; *historical*/*deephistory* names)"
+    ],
+    "expect": "zero comment-list losses against the base binary among valid references; zero lost no-oracle and perturbation passes against the merged tree before this draft"
+  }
+}

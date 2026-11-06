@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Verdana
+class Quay
+legend
+quay
+אב ‬‬ 
+endlegend
+@enduml

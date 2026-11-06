@@ -1,0 +1,115 @@
+[
+  {
+    "name": "main-product",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "golden_no_oracle",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 38.20377595900209
+  },
+  {
+    "name": "main-assisted",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "golden_pairs",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 2.5881128330074716
+  },
+  {
+    "name": "perturbations",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "parity_perturbations",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 2.779404417000478
+  },
+  {
+    "name": "guards",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "harness_guards",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 1.4129950829956215
+  },
+  {
+    "name": "cli",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml",
+      "--test",
+      "pipe_mode"
+    ],
+    "exit": 0,
+    "seconds": 34.85206170899619
+  },
+  {
+    "name": "clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "rustuml-parser",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit": 101,
+    "seconds": 2.774251958995592
+  },
+  {
+    "name": "format",
+    "command": [
+      "rustfmt",
+      "--edition",
+      "2024",
+      "--check",
+      "crates/rustuml-parser/src/preprocess/mod.rs"
+    ],
+    "exit": 0,
+    "seconds": 0.06282683400786482
+  },
+  {
+    "name": "diff",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "seconds": 0.028232666008989327
+  }
+]

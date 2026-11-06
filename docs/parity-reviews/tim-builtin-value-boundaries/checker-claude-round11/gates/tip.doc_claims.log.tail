@@ -1,0 +1,19 @@
+warning: function `looks_like_description_bracket_command` is never used
+  --> crates/rustuml-parser/src/parse/component.rs:74:15
+   |
+74 | pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rustuml-parser` (lib) generated 1 warning
+   Compiling rustuml-oracle v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/crates/rustuml-oracle)
+    Finished `release` profile [optimized] target(s) in 0.44s
+     Running tests/doc_claims.rs (/Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/tgt-gates-tip/release/deps/doc_claims-d13c7c37546fb23d)
+
+running 2 tests
+test readme_no_oracle_table_matches_baseline ... ok
+test docs_name_the_product_truth_metric_and_error_skips ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

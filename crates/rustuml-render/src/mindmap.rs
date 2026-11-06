@@ -430,8 +430,8 @@ fn emit_box(buf: &mut String, p: &Placed) {
             h = pm::fmt_coord(p.h),
             w = pm::fmt_coord(p.w),
             x = pm::fmt_coord(p.x),
-            y = pm::fmt_coord(y),
-        )
+            y = pm::fmt_coord(y), fill = crate::svg::escape_attribute(fill),
+)
         .unwrap();
         (p.x + PAD_X, y + TEXT_BASELINE_DY)
     };

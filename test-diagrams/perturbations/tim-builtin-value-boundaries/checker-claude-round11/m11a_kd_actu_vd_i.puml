@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam actorFontStyle italic
+actor "Dawn Vow gym kit" as E1
+usecase "x" as U1
+E1 --> U1
+@enduml

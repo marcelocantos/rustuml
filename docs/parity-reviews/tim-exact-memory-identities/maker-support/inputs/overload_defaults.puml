@@ -1,0 +1,10 @@
+@startuml
+!function $pick($a,$b="old")
+!return $a+"/"+$b
+!endfunction
+!function $pick($a)
+!return "one "+$a
+!endfunction
+!$v=$pick("oak")
+class "$v/$pick($a="ash",$b="new")" as Defaults
+@enduml

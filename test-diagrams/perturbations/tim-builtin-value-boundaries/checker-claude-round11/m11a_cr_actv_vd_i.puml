@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+start
+:Tidy <i>Wavy kingdom</i> end;
+@enduml

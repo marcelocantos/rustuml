@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Times New Roman
+abstract class "Pier x" as K
+@enduml

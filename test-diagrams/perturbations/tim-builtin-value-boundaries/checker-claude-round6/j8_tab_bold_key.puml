@@ -1,0 +1,3 @@
+@startjson
+{"a\tb": 1, "wide key\tz": 2}
+@endjson

@@ -1,0 +1,9 @@
+@startuml
+class Shelter
+!if 0
+!startsub quiet
+!endsub
+!endif
+!$x=%intval("unreachable")
+class Lost
+@enduml

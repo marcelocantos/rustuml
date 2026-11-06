@@ -1,0 +1,100 @@
+{
+  "row": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/empty_open_style.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "empty stripe",
+      "open size"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  "classification": "positive_reference",
+  "reference_valid": true,
+  "java_svg_exit": 0,
+  "java_probe_exit": 0,
+  "xml_valid": true,
+  "factory": "SEQUENCE",
+  "reference_comparator_exit": 0,
+  "source_sha256": "09753bd46dba6c5f3537911cf2c848af5200c3285f116121057e2ae26d901134",
+  "golden_sha256": "0228b2f3c0fa389204a4d174e18932e715d0352e245f4a7b4d1c4dc84b5752e8",
+  "java_source_sha256": "09753bd46dba6c5f3537911cf2c848af5200c3285f116121057e2ae26d901134",
+  "phases": {
+    "after": {
+      "id": "fresh18/empty_open_style",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new",
+        "exit": 0,
+        "seconds": 0.01183504200889729,
+        "stdout_sha256": "4f1baf527a6179f1a641f63105956ce958898c3e9d806618e4c6714c267b882d",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new",
+        "exit": 0,
+        "seconds": 0.010948958006338216,
+        "stdout_sha256": "bf3ce952f2feef8c98f83c706786af24f8a5da6642af4335829ff1a8f85366f5",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/empty_open_style/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/empty_open_style/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.003736333004781045,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "SEQUENCE",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Sequence",
+        "entities": null,
+        "source": "@startuml\nAlice -> Bob : <size:20><$absent>\n@enduml\n"
+      },
+      "exact_source": true
+    }
+  },
+  "direct_source": {
+    "argv": [
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/source-probe",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/empty_open_style.puml",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new"
+    ],
+    "cwd": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new",
+    "exit": 0,
+    "seconds": 0.006683833009446971,
+    "stdout_sha256": "09753bd46dba6c5f3537911cf2c848af5200c3285f116121057e2ae26d901134",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "direct_source_equal": true
+}

@@ -1,0 +1,35 @@
+type: Wbs
+diagram:
+  meta:
+    source: |
+      @startwbs
+      *_ Crown
+      **_ q<size:21></size>r
+      ***_ <b>i</b>
+      --_ q<color:navy></color>r
+      @endwbs
+  nodes:
+  - label: Crown
+    shape: None
+    color: null
+    depth: 1
+    side: Right
+    children:
+    - label: q<size:21></size>r
+      shape: None
+      color: null
+      depth: 2
+      side: Right
+      children:
+      - label: <b>i</b>
+        shape: None
+        color: null
+        depth: 3
+        side: Right
+        children: []
+    - label: q<color:navy></color>r
+      shape: None
+      color: null
+      depth: 2
+      side: Left
+      children: []

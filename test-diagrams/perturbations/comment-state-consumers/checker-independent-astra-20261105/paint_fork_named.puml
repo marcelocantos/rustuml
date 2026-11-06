@@ -1,0 +1,7 @@
+@startuml
+skinparam stateBackgroundColor DarkSlateBlue
+state Empty <<fork>>
+state Body <<fork>>
+Body : split cargo
+Empty --> Body
+@enduml

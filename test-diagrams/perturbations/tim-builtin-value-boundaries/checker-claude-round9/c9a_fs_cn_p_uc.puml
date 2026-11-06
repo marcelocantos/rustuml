@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Courier New
+usecase "Wharf q𝅧r" as U1
+@enduml

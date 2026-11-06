@@ -1,0 +1,5 @@
+@startuml
+start
+:a<b><back:~#44aa77>seed</back></b>z\na<back:#GGGGGG>seed</back>z\na<back:>seed</back>z;
+stop
+@enduml

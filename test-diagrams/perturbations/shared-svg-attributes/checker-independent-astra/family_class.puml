@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName   Quill'"Reed"'  
+class Vault {
+Beacon
+}
+@enduml

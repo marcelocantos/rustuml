@@ -1,0 +1,4 @@
+@startuml
+class "one / ab / abc / abcd / abX" as History
+class "one / again / abc / abcd / abX" as Again
+@enduml

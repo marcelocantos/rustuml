@@ -21,8 +21,10 @@ use std::fmt::Write;
 
 use crate::creole::{self, Segment, Style};
 use crate::filter_registry;
+use crate::font_chain::{ChainFace, ChainFamily, ChainGlyph};
 use crate::plantuml_metrics as pm;
 use crate::svg::normalize_svg_link_title;
+use rustuml_parser::java_utf16;
 
 const TAB_STOP_SPACES: usize = 8;
 
@@ -47,15 +49,31 @@ pub struct TextBase<'a> {
     pub skip_underline: bool,
 }
 
+/// Project an actual text line, including a present empty line. Absent
+/// displays are handled by callers before asking to measure or paint a line;
+/// lexical `creole::parse_segments` deliberately keeps its zero-atom result.
+fn line_segments(content: &str, skip_underline: bool) -> Vec<Segment> {
+    let mut segments = if skip_underline {
+        creole::parse_segments_no_underline(content)
+    } else {
+        creole::parse_segments(content)
+    };
+    if segments.is_empty() {
+        // StripeSimple.getAtoms inserts a space after recursive commands have
+        // restored the surrounding configuration, also for an ordinary blank.
+        segments.push(Segment {
+            text: " ".to_string(),
+            style: Style::default(),
+        });
+    }
+    segments
+}
+
 /// Emit one or more `<text>` elements covering `content` with creole markup
 /// resolved. Writes to `buf`. Returns the total advance width.
 pub fn emit_text(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
     let content = normalize_tab_escapes(content);
-    let segments = if base.skip_underline {
-        creole::parse_segments_no_underline(&content)
-    } else {
-        creole::parse_segments(&content)
-    };
+    let segments = line_segments(&content, base.skip_underline);
     emit_segments(buf, &segments, base)
 }
 
@@ -66,11 +84,7 @@ pub fn emit_text(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
 /// is consumed and the inner text falls back to the surrounding font.
 pub fn emit_text_no_mono(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
     let content = normalize_tab_escapes(content);
-    let mut segments = if base.skip_underline {
-        creole::parse_segments_no_underline(&content)
-    } else {
-        creole::parse_segments(&content)
-    };
+    let mut segments = line_segments(&content, base.skip_underline);
     for seg in &mut segments {
         seg.style.monospace = false;
     }
@@ -82,11 +96,7 @@ pub fn emit_text_no_mono(buf: &mut String, content: &str, base: &TextBase<'_>) -
 /// one baseline; mixed font sizes/families can consume multiple oracle y slots.
 pub fn emitted_baseline_count(content: &str, base: &TextBase<'_>) -> usize {
     let content = normalize_tab_escapes(content);
-    let segments = if base.skip_underline {
-        creole::parse_segments_no_underline(&content)
-    } else {
-        creole::parse_segments(&content)
-    };
+    let segments = line_segments(&content, base.skip_underline);
     if segments.is_empty() {
         return 1;
     }
@@ -118,11 +128,7 @@ pub fn emitted_baseline_count(content: &str, base: &TextBase<'_>) -> usize {
 /// safely override the line start.
 pub fn emitted_text_element_count(content: &str, base: &TextBase<'_>) -> usize {
     let content = normalize_tab_escapes(content);
-    let segments = if base.skip_underline {
-        creole::parse_segments_no_underline(&content)
-    } else {
-        creole::parse_segments(&content)
-    };
+    let segments = line_segments(&content, base.skip_underline);
     if segments.is_empty() {
         return 1;
     }
@@ -178,7 +184,19 @@ pub fn measure_no_underline_with_family(
     bold: bool,
     font_family: &str,
 ) -> f64 {
-    measure_inner_with_family(content, font_size, bold, false, true, font_family)
+    measure_no_underline_with_family_and_face(content, font_size, bold, false, font_family)
+}
+
+/// [`measure_no_underline_with_family`] in the complete face the label is
+/// drawn in (Java measures the TextBlock it draws).
+pub fn measure_no_underline_with_family_and_face(
+    content: &str,
+    font_size: f64,
+    bold: bool,
+    italic: bool,
+    font_family: &str,
+) -> f64 {
+    measure_inner_with_family(content, font_size, bold, italic, true, font_family)
 }
 
 fn measure_inner(content: &str, font_size: f64, bold: bool, skip_underline: bool) -> f64 {
@@ -227,7 +245,7 @@ pub fn label_height(content: &str, font_size: f64) -> f64 {
 
 /// Height of `content` using the caller's base font family.
 pub fn label_height_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
-    let segments = creole::parse_segments(content);
+    let segments = line_segments(content, false);
     if segments.is_empty() {
         return family_text_height(font_size, metric_family(font_family));
     }
@@ -262,7 +280,7 @@ pub fn label_ascent(content: &str, font_size: f64) -> f64 {
 
 /// Ascent of `content` using the caller's base font family.
 pub fn label_ascent_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
-    let segments = creole::parse_segments(content);
+    let segments = line_segments(content, false);
     if segments.is_empty() {
         return family_ascent(font_size, metric_family(font_family));
     }
@@ -292,7 +310,7 @@ pub fn label_first_baseline_ascent_with_family(
     font_size: f64,
     font_family: &str,
 ) -> f64 {
-    let segments = creole::parse_segments(content);
+    let segments = line_segments(content, false);
     if segments.is_empty() {
         return family_ascent(font_size, metric_family(font_family));
     }
@@ -332,7 +350,7 @@ pub(crate) fn label_limit_finder_height_with_family(
     font_size: f64,
     font_family: &str,
 ) -> f64 {
-    let segments = creole::parse_segments(content);
+    let segments = line_segments(content, false);
     let first_baseline = label_first_baseline_ascent_with_family(content, font_size, font_family);
     let Some(first) = segments.first() else {
         return first_baseline + 1.5;
@@ -421,14 +439,42 @@ fn sub_extra_space(segments: &[Segment]) -> f64 {
 /// total advance for layout before deciding `x`.
 pub fn total_width(content: &str, base: &TextBase<'_>) -> f64 {
     let content = normalize_tab_escapes(content);
-    let segments = if base.skip_underline {
-        creole::parse_segments_no_underline(&content)
-    } else {
-        creole::parse_segments(&content)
-    };
+    let segments = line_segments(&content, base.skip_underline);
     let mut advance = 0.0;
     for seg in &segments {
         advance = segment_advance(seg, base, advance);
+    }
+    advance
+}
+
+/// Width of a run of atoms that is only part of one stripe, such as the
+/// spacer atoms before a label's first ink atom.
+///
+/// Java provenance: `StripeSimple.getAtoms` adds its single `" "` atom only
+/// when a whole stripe has no atoms. A prefix of a stripe is not a stripe, so
+/// an empty run is zero atoms and has zero width. Whole lines must keep using
+/// [`measure_with_family`].
+pub fn measure_atom_run_with_family(
+    content: &str,
+    font_size: f64,
+    bold: bool,
+    font_family: &str,
+) -> f64 {
+    let base = TextBase {
+        x: 0.0,
+        y: 0.0,
+        font_size: font_size as u32,
+        font_family,
+        fill: "#000000",
+        bold,
+        italic: false,
+        underline: false,
+        skip_underline: false,
+    };
+    let content = normalize_tab_escapes(content);
+    let mut advance = 0.0;
+    for seg in &creole::parse_segments(&content) {
+        advance = segment_advance(seg, &base, advance);
     }
     advance
 }
@@ -824,416 +870,152 @@ fn sans_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
     }
 }
 
-const ARIAL_WIDTH: [f64; 95] = [
-    0.277832031250,
-    0.277832031250,
-    0.354980468750,
-    0.556152343750,
-    0.556152343750,
-    0.889160156250,
-    0.666992187500,
-    0.190917968750,
-    0.333007812500,
-    0.333007812500,
-    0.389160156250,
-    0.583984375000,
-    0.277832031250,
-    0.333007812500,
-    0.277832031250,
-    0.277832031250,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.277832031250,
-    0.277832031250,
-    0.583984375000,
-    0.583984375000,
-    0.583984375000,
-    0.556152343750,
-    1.015136718750,
-    0.666992187500,
-    0.666992187500,
-    0.722167968750,
-    0.722167968750,
-    0.666992187500,
-    0.610839843750,
-    0.777832031250,
-    0.722167968750,
-    0.277832031250,
-    0.500000000000,
-    0.666992187500,
-    0.556152343750,
-    0.833007812500,
-    0.722167968750,
-    0.777832031250,
-    0.666992187500,
-    0.777832031250,
-    0.722167968750,
-    0.666992187500,
-    0.610839843750,
-    0.722167968750,
-    0.666992187500,
-    0.943847656250,
-    0.666992187500,
-    0.666992187500,
-    0.610839843750,
-    0.277832031250,
-    0.277832031250,
-    0.277832031250,
-    0.469238281250,
-    0.556152343750,
-    0.333007812500,
-    0.556152343750,
-    0.556152343750,
-    0.500000000000,
-    0.556152343750,
-    0.556152343750,
-    0.277832031250,
-    0.556152343750,
-    0.556152343750,
-    0.222167968750,
-    0.222167968750,
-    0.500000000000,
-    0.222167968750,
-    0.833007812500,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.333007812500,
-    0.500000000000,
-    0.277832031250,
-    0.556152343750,
-    0.500000000000,
-    0.722167968750,
-    0.500000000000,
-    0.500000000000,
-    0.500000000000,
-    0.333984375000,
-    0.259765625000,
-    0.333984375000,
-    0.583984375000,
+/// Printable-ASCII (U+0020..U+007E) advances, in font units, of the face
+/// JDK 21 measures for each style slot of a table-measured family: the
+/// face's own glyph advance (CTFontGetAdvancesForGlyphs at 2048 units per em)
+/// from `tools/font-chain-reference/ascii-advances-round11`
+/// (`tools/AsciiAdvanceExtract.swift`; gate `ascii_tables_are_the_extracted_faces`).
+/// Verdana-Italic and Verdana-BoldItalic have advances of their own
+/// (CFontManager registers them as the family's italic faces); Arial's
+/// italics happen to share the upright advances.
+const ASCII_UNITS_PER_EM: f64 = 2048.0;
+
+/// `ArialMT.plain.ascii.tsv`.
+const ARIAL_ASCII: [u16; 95] = [
+    569, 569, 727, 1139, 1139, 1821, 1366, 391, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,
+    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 569, 569, 1196, 1196, 1196, 1139, 2079,
+    1366, 1366, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1024, 1366, 1139, 1706, 1479, 1593, 1366,
+    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 569, 569, 569, 961, 1139, 682,
+    1139, 1139, 1024, 1139, 1139, 569, 1139, 1139, 455, 455, 1024, 455, 1706, 1139, 1139, 1139,
+    1139, 682, 1024, 569, 1139, 1024, 1479, 1024, 1024, 1024, 684, 532, 684, 1196,
 ];
 
-const ARIAL_BOLD_WIDTH: [f64; 95] = [
-    0.277832031250,
-    0.333007812500,
-    0.474121093750,
-    0.556152343750,
-    0.556152343750,
-    0.889160156250,
-    0.722167968750,
-    0.237792968750,
-    0.333007812500,
-    0.333007812500,
-    0.389160156250,
-    0.583984375000,
-    0.277832031250,
-    0.333007812500,
-    0.277832031250,
-    0.277832031250,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.333007812500,
-    0.333007812500,
-    0.583984375000,
-    0.583984375000,
-    0.583984375000,
-    0.610839843750,
-    0.975097656250,
-    0.722167968750,
-    0.722167968750,
-    0.722167968750,
-    0.722167968750,
-    0.666992187500,
-    0.610839843750,
-    0.777832031250,
-    0.722167968750,
-    0.277832031250,
-    0.556152343750,
-    0.722167968750,
-    0.610839843750,
-    0.833007812500,
-    0.722167968750,
-    0.777832031250,
-    0.666992187500,
-    0.777832031250,
-    0.722167968750,
-    0.666992187500,
-    0.610839843750,
-    0.722167968750,
-    0.666992187500,
-    0.943847656250,
-    0.666992187500,
-    0.666992187500,
-    0.610839843750,
-    0.333007812500,
-    0.277832031250,
-    0.333007812500,
-    0.583984375000,
-    0.556152343750,
-    0.333007812500,
-    0.556152343750,
-    0.610839843750,
-    0.556152343750,
-    0.610839843750,
-    0.556152343750,
-    0.333007812500,
-    0.610839843750,
-    0.610839843750,
-    0.277832031250,
-    0.277832031250,
-    0.556152343750,
-    0.277832031250,
-    0.889160156250,
-    0.610839843750,
-    0.610839843750,
-    0.610839843750,
-    0.610839843750,
-    0.389160156250,
-    0.556152343750,
-    0.333007812500,
-    0.610839843750,
-    0.556152343750,
-    0.777832031250,
-    0.556152343750,
-    0.556152343750,
-    0.500000000000,
-    0.389160156250,
-    0.279785156250,
-    0.389160156250,
-    0.583984375000,
+/// `Arial-BoldMT.bold.ascii.tsv`.
+const ARIAL_BOLD_ASCII: [u16; 95] = [
+    569, 682, 971, 1139, 1139, 1821, 1479, 487, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,
+    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 682, 682, 1196, 1196, 1196, 1251, 1997,
+    1479, 1479, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1139, 1479, 1251, 1706, 1479, 1593, 1366,
+    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 682, 569, 682, 1196, 1139, 682,
+    1139, 1251, 1139, 1251, 1139, 682, 1251, 1251, 569, 569, 1139, 569, 1821, 1251, 1251, 1251,
+    1251, 797, 1139, 682, 1251, 1139, 1593, 1139, 1139, 1024, 797, 573, 797, 1196,
 ];
 
-const VERDANA_WIDTH: [f64; 95] = [
-    0.351562500000,
-    0.393554687500,
-    0.458984375000,
-    0.818359375000,
-    0.635742187500,
-    1.076171875000,
-    0.726562500000,
-    0.268554687500,
-    0.454101562500,
-    0.454101562500,
-    0.635742187500,
-    0.818359375000,
-    0.363769531250,
-    0.454101562500,
-    0.363769531250,
-    0.454101562500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.454101562500,
-    0.454101562500,
-    0.818359375000,
-    0.818359375000,
-    0.818359375000,
-    0.545410156250,
-    1.000000000000,
-    0.683593750000,
-    0.685546875000,
-    0.698242187500,
-    0.770507812500,
-    0.632324218750,
-    0.574707031250,
-    0.775390625000,
-    0.751464843750,
-    0.420898437500,
-    0.454589843750,
-    0.692871093750,
-    0.556640625000,
-    0.842773437500,
-    0.748046875000,
-    0.787109375000,
-    0.603027343750,
-    0.787109375000,
-    0.695312500000,
-    0.683593750000,
-    0.616210937500,
-    0.731933593750,
-    0.683593750000,
-    0.988769531250,
-    0.685058593750,
-    0.615234375000,
-    0.685058593750,
-    0.454101562500,
-    0.454101562500,
-    0.454101562500,
-    0.818359375000,
-    0.635742187500,
-    0.635742187500,
-    0.600585937500,
-    0.623046875000,
-    0.520996093750,
-    0.623046875000,
-    0.595703125000,
-    0.351562500000,
-    0.623046875000,
-    0.632812500000,
-    0.274414062500,
-    0.344238281250,
-    0.591796875000,
-    0.274414062500,
-    0.972656250000,
-    0.632812500000,
-    0.606933593750,
-    0.623046875000,
-    0.623046875000,
-    0.426757812500,
-    0.520996093750,
-    0.394042968750,
-    0.632812500000,
-    0.591796875000,
-    0.818359375000,
-    0.591796875000,
-    0.591796875000,
-    0.525390625000,
-    0.634765625000,
-    0.454101562500,
-    0.634765625000,
-    0.818359375000,
+/// `Arial-ItalicMT.italic.ascii.tsv`.
+const ARIAL_ITALIC_ASCII: [u16; 95] = [
+    569, 569, 727, 1139, 1139, 1821, 1366, 391, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,
+    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 569, 569, 1196, 1196, 1196, 1139, 2079,
+    1366, 1366, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1024, 1366, 1139, 1706, 1479, 1593, 1366,
+    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 569, 569, 569, 961, 1139, 682,
+    1139, 1139, 1024, 1139, 1139, 569, 1139, 1139, 455, 455, 1024, 455, 1706, 1139, 1139, 1139,
+    1139, 682, 1024, 569, 1139, 1024, 1479, 1024, 1024, 1024, 684, 532, 684, 1196,
 ];
 
-const VERDANA_BOLD_WIDTH: [f64; 95] = [
-    0.341796875000,
-    0.402343750000,
-    0.587402343750,
-    0.867187500000,
-    0.710937500000,
-    1.271972656250,
-    0.862304687500,
-    0.332031250000,
-    0.543457031250,
-    0.543457031250,
-    0.710937500000,
-    0.867187500000,
-    0.361328125000,
-    0.479980468750,
-    0.361328125000,
-    0.689453125000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.402343750000,
-    0.402343750000,
-    0.867187500000,
-    0.867187500000,
-    0.867187500000,
-    0.616699218750,
-    0.963867187500,
-    0.776367187500,
-    0.761718750000,
-    0.723632812500,
-    0.830078125000,
-    0.683105468750,
-    0.650390625000,
-    0.811035156250,
-    0.837402343750,
-    0.545898437500,
-    0.555175781250,
-    0.770996093750,
-    0.637207031250,
-    0.947753906250,
-    0.846679687500,
-    0.850097656250,
-    0.732910156250,
-    0.850097656250,
-    0.782226562500,
-    0.710449218750,
-    0.681640625000,
-    0.812011718750,
-    0.763671875000,
-    1.128417968750,
-    0.763671875000,
-    0.736816406250,
-    0.691894531250,
-    0.543457031250,
-    0.689453125000,
-    0.543457031250,
-    0.867187500000,
-    0.710937500000,
-    0.710937500000,
-    0.667968750000,
-    0.699218750000,
-    0.588378906250,
-    0.699218750000,
-    0.664062500000,
-    0.422363281250,
-    0.699218750000,
-    0.712402343750,
-    0.341796875000,
-    0.402832031250,
-    0.670898437500,
-    0.341796875000,
-    1.058105468750,
-    0.712402343750,
-    0.686523437500,
-    0.699218750000,
-    0.699218750000,
-    0.497070312500,
-    0.593261718750,
-    0.455566406250,
-    0.712402343750,
-    0.649902343750,
-    0.979492187500,
-    0.668945312500,
-    0.650878906250,
-    0.596679687500,
-    0.710937500000,
-    0.543457031250,
-    0.710937500000,
-    0.867187500000,
+/// `Arial-BoldItalicMT.bolditalic.ascii.tsv`.
+const ARIAL_BOLD_ITALIC_ASCII: [u16; 95] = [
+    569, 682, 971, 1139, 1139, 1821, 1479, 487, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,
+    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 682, 682, 1196, 1196, 1196, 1251, 1997,
+    1479, 1479, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1139, 1479, 1251, 1706, 1479, 1593, 1366,
+    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 682, 569, 682, 1196, 1139, 682,
+    1139, 1251, 1139, 1251, 1139, 682, 1251, 1251, 569, 569, 1139, 569, 1821, 1251, 1251, 1251,
+    1251, 797, 1139, 682, 1251, 1139, 1593, 1139, 1139, 1024, 797, 573, 797, 1196,
 ];
+
+/// `Verdana.plain.ascii.tsv`.
+const VERDANA_ASCII: [u16; 95] = [
+    720, 806, 940, 1676, 1302, 2204, 1488, 550, 930, 930, 1302, 1676, 745, 930, 745, 930, 1302,
+    1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 930, 930, 1676, 1676, 1676, 1117, 2048,
+    1400, 1404, 1430, 1578, 1295, 1177, 1588, 1539, 862, 931, 1419, 1140, 1726, 1532, 1612, 1235,
+    1612, 1424, 1400, 1262, 1499, 1400, 2025, 1403, 1260, 1403, 930, 930, 930, 1676, 1302, 1302,
+    1230, 1276, 1067, 1276, 1220, 720, 1276, 1296, 562, 705, 1212, 562, 1992, 1296, 1243, 1276,
+    1276, 874, 1067, 807, 1296, 1212, 1676, 1212, 1212, 1076, 1300, 930, 1300, 1676,
+];
+
+/// `Verdana-Bold.bold.ascii.tsv`.
+const VERDANA_BOLD_ASCII: [u16; 95] = [
+    700, 824, 1203, 1776, 1456, 2605, 1766, 680, 1113, 1113, 1456, 1776, 740, 983, 740, 1412, 1456,
+    1456, 1456, 1456, 1456, 1456, 1456, 1456, 1456, 1456, 824, 824, 1776, 1776, 1776, 1263, 1974,
+    1590, 1560, 1482, 1700, 1399, 1332, 1661, 1715, 1118, 1137, 1579, 1305, 1941, 1734, 1741, 1501,
+    1741, 1602, 1455, 1396, 1663, 1564, 2311, 1564, 1509, 1417, 1113, 1412, 1113, 1776, 1456, 1456,
+    1368, 1432, 1205, 1432, 1360, 865, 1432, 1459, 700, 825, 1374, 700, 2167, 1459, 1406, 1432,
+    1432, 1018, 1215, 933, 1459, 1331, 2006, 1370, 1333, 1222, 1456, 1113, 1456, 1776,
+];
+
+/// `Verdana-Italic.italic.ascii.tsv`.
+const VERDANA_ITALIC_ASCII: [u16; 95] = [
+    720, 806, 940, 1676, 1302, 2204, 1488, 550, 930, 930, 1302, 1676, 745, 930, 745, 930, 1302,
+    1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 930, 930, 1676, 1676, 1676, 1117, 2048,
+    1398, 1404, 1430, 1568, 1295, 1177, 1588, 1539, 862, 931, 1419, 1140, 1726, 1532, 1612, 1235,
+    1612, 1424, 1400, 1262, 1499, 1398, 2028, 1403, 1260, 1403, 930, 930, 930, 1676, 1302, 1302,
+    1230, 1276, 1067, 1276, 1220, 720, 1273, 1296, 562, 705, 1202, 562, 1993, 1296, 1243, 1276,
+    1276, 874, 1067, 807, 1296, 1210, 1676, 1212, 1210, 1076, 1300, 930, 1300, 1676,
+];
+
+/// `Verdana-BoldItalic.bolditalic.ascii.tsv`.
+const VERDANA_BOLD_ITALIC_ASCII: [u16; 95] = [
+    700, 824, 1203, 1776, 1456, 2605, 1766, 680, 1113, 1113, 1456, 1776, 740, 983, 740, 1412, 1456,
+    1456, 1456, 1456, 1456, 1456, 1456, 1456, 1456, 1456, 824, 824, 1776, 1776, 1776, 1263, 1974,
+    1590, 1560, 1482, 1700, 1399, 1332, 1661, 1715, 1118, 1137, 1579, 1305, 1941, 1734, 1741, 1501,
+    1741, 1602, 1455, 1396, 1663, 1564, 2311, 1564, 1509, 1417, 1113, 1412, 1113, 1776, 1456, 1456,
+    1368, 1432, 1205, 1432, 1360, 865, 1432, 1459, 700, 825, 1374, 700, 2167, 1459, 1404, 1432,
+    1432, 1018, 1215, 933, 1459, 1329, 2006, 1370, 1333, 1222, 1456, 1113, 1456, 1776,
+];
+
+/// The four style slots of a table-measured family.
+struct AsciiFaces {
+    plain: &'static [u16; 95],
+    bold: &'static [u16; 95],
+    italic: &'static [u16; 95],
+    bold_italic: &'static [u16; 95],
+}
+
+impl AsciiFaces {
+    /// The table of the face measured for (bold, italic), the same slot
+    /// `ChainFace::for_style` resolves.
+    fn slot(&self, bold: bool, italic: bool) -> &'static [u16; 95] {
+        match (bold, italic) {
+            (false, false) => self.plain,
+            (true, false) => self.bold,
+            (false, true) => self.italic,
+            (true, true) => self.bold_italic,
+        }
+    }
+}
+
+const ARIAL_FACES: AsciiFaces = AsciiFaces {
+    plain: &ARIAL_ASCII,
+    bold: &ARIAL_BOLD_ASCII,
+    italic: &ARIAL_ITALIC_ASCII,
+    bold_italic: &ARIAL_BOLD_ITALIC_ASCII,
+};
+
+const VERDANA_FACES: AsciiFaces = AsciiFaces {
+    plain: &VERDANA_ASCII,
+    bold: &VERDANA_BOLD_ASCII,
+    italic: &VERDANA_ITALIC_ASCII,
+    bold_italic: &VERDANA_BOLD_ITALIC_ASCII,
+};
 
 fn family_table_text_width(
     text: &str,
     font_size: f64,
     bold: bool,
-    plain_table: &[f64; 95],
-    bold_table: &[f64; 95],
+    italic: bool,
+    family: ChainFamily,
+    faces: &AsciiFaces,
 ) -> f64 {
-    let table = if bold { bold_table } else { plain_table };
-    text.chars()
-        .map(|c| {
+    let table = faces.slot(bold, italic);
+    chain_text_width(
+        text,
+        font_size,
+        bold,
+        ChainFace::for_style(family, bold, italic),
+        |c| {
             let code = c as usize;
-            if (32..=126).contains(&code) {
-                table[code - 32] * font_size
-            } else {
-                sans_text_width(&c.to_string(), font_size, bold)
-            }
-        })
-        .sum()
+            (32..=126)
+                .contains(&code)
+                .then(|| f64::from(table[code - 32]) / ASCII_UNITS_PER_EM * font_size)
+        },
+    )
 }
 
 const HELVETICA_UPM: f64 = 2048.0;
@@ -1332,16 +1114,50 @@ fn helvetica_bold_char_units(c: char) -> Option<f64> {
     Some(units)
 }
 
-fn helvetica_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
-    text.chars()
-        .map(|c| {
-            match if bold {
-                helvetica_bold_char_units(c)
-            } else {
-                helvetica_char_units(c)
-            } {
-                Some(units) => units / HELVETICA_UPM * font_size,
-                None => sans_text_width(&c.to_string(), font_size, bold),
+fn helvetica_text_width(text: &str, font_size: f64, bold: bool, italic: bool) -> f64 {
+    let face = ChainFace::for_style(ChainFamily::Helvetica, bold, italic);
+    chain_text_width(text, font_size, bold, face, |c| {
+        if bold {
+            helvetica_bold_char_units(c)
+        } else {
+            helvetica_char_units(c)
+        }
+        .map(|units| units / HELVETICA_UPM * font_size)
+    })
+}
+
+/// Width of carried text in a physical face whose own table covers some
+/// characters (`own`): an unpaired unit and a table miss keep the SansSerif
+/// measurement, except that a character the face's chain cannot map takes
+/// the face's `.notdef` and an unmapped default-ignorable of complex text is
+/// hidden (font_chain). The escape prefix is never measured.
+fn chain_text_width(
+    text: &str,
+    font_size: f64,
+    bold: bool,
+    face: ChainFace,
+    own: impl Fn(char) -> Option<f64>,
+) -> f64 {
+    let complexity = face.complexity_per_token(text);
+    let mut buffer = [0_u8; 4];
+    java_utf16::tokens(text)
+        .zip(complexity)
+        .map(|(token, complexity)| match token {
+            java_utf16::Token::Unit(unit) => sans_text_width(
+                java_utf16::carrier(unit).encode_utf8(&mut buffer),
+                font_size,
+                bold,
+            ),
+            java_utf16::Token::Char(c) => {
+                own(c).unwrap_or_else(|| match face.resolve(c, complexity) {
+                    ChainGlyph::Missing => face.notdef_per_em() * font_size,
+                    ChainGlyph::Hidden => 0.0,
+                    ChainGlyph::Mapped => sans_text_width(
+                        &java_utf16::escape(c.encode_utf8(&mut buffer)),
+                        font_size,
+                        bold,
+                    ),
+                })
             }
         })
         .sum()
@@ -1355,15 +1171,25 @@ fn family_text_width(
     family: MetricFamily,
 ) -> f64 {
     match family {
-        MetricFamily::Mono => pm::mono_text_width(text, font_size),
-        MetricFamily::CourierNew => pm::courier_new_text_width(text, font_size),
-        MetricFamily::Arial => {
-            family_table_text_width(text, font_size, bold, &ARIAL_WIDTH, &ARIAL_BOLD_WIDTH)
-        }
-        MetricFamily::Helvetica => helvetica_text_width(text, font_size, bold),
-        MetricFamily::Verdana => {
-            family_table_text_width(text, font_size, bold, &VERDANA_WIDTH, &VERDANA_BOLD_WIDTH)
-        }
+        MetricFamily::Mono => pm::mono_text_width_styled(text, font_size, bold, italic),
+        MetricFamily::CourierNew => pm::courier_new_text_width(text, font_size, bold, italic),
+        MetricFamily::Arial => family_table_text_width(
+            text,
+            font_size,
+            bold,
+            italic,
+            ChainFamily::Arial,
+            &ARIAL_FACES,
+        ),
+        MetricFamily::Helvetica => helvetica_text_width(text, font_size, bold, italic),
+        MetricFamily::Verdana => family_table_text_width(
+            text,
+            font_size,
+            bold,
+            italic,
+            ChainFamily::Verdana,
+            &VERDANA_FACES,
+        ),
         MetricFamily::TimesNewRoman => {
             pm::times_new_roman_text_width(text, font_size, bold, italic)
         }
@@ -1436,20 +1262,49 @@ pub(crate) fn single_pass_unescape(s: &str) -> String {
     out
 }
 
-/// Normalise a colour spec to PlantUML's preferred form: lower-case hex
-/// (`#RRGGBB`) for known named colours, pass-through otherwise.
-///
-/// PlantUML emits resolved hex colours in SVG output even when the source
-/// uses HTML colour names — `<color:blue>` becomes `fill="#0000FF"`.
+/// HColorSet.parseSimpleColor / XColor.toSvg: expand short hex and use
+/// uppercase RGB, retaining the alpha byte until the paint role is known.
 pub(crate) fn normalize_color(s: &str) -> String {
-    if s.starts_with('#') {
-        return s.to_string();
+    let value = s.strip_prefix('#').unwrap_or(s);
+    if value.bytes().all(|ch| ch.is_ascii_hexdigit()) {
+        match value.len() {
+            1 => return format!("#{}", value.repeat(6).to_ascii_uppercase()),
+            3 => {
+                let mut rgb = String::from("#");
+                for ch in value.chars() {
+                    rgb.push(ch.to_ascii_uppercase());
+                    rgb.push(ch.to_ascii_uppercase());
+                }
+                return rgb;
+            }
+            6 | 8 => return format!("#{}", value.to_ascii_uppercase()),
+            _ => {}
+        }
     }
-    let lower = s.to_ascii_lowercase();
+    let lower = value.to_ascii_lowercase();
+    // HColors.none() is transparent black. Automatic needs the consumer's
+    // active/default background, and must not be guessed here (T14.15).
+    if matches!(lower.as_str(), "transparent" | "background") {
+        return "#00000000".to_string();
+    }
     match css_color_hex(&lower) {
         Some(hex) => hex.to_string(),
         None => s.to_string(),
     }
+}
+
+/// Split Java RRGGBBAA into the RGB value and its non-default opacity.
+/// The renderer-only Style carries the byte without a floating-point model.
+pub(crate) fn color_with_opacity(value: &str) -> (String, Option<u8>) {
+    let color = normalize_color(value);
+    if color.len() == 9
+        && color.starts_with('#')
+        && color[1..].bytes().all(|ch| ch.is_ascii_hexdigit())
+    {
+        let alpha = u8::from_str_radix(&color[7..], 16).unwrap();
+        return (color[..7].to_string(), (alpha != u8::MAX).then_some(alpha));
+    }
+    (color, None)
 }
 
 /// CSS3 named colours, lowercased keys. PlantUML accepts the same names
@@ -1458,6 +1313,14 @@ fn css_color_hex(name: &str) -> Option<&'static str> {
     // Listed in case-insensitive lookup order; values are uppercase
     // `#RRGGBB` to match PlantUML's golden SVG output.
     match name {
+        // HColorSet delegates to ColorTrieNode's Archimate palette.
+        "business" => Some("#FFFFCC"),
+        "application" => Some("#C2F0FF"),
+        "motivation" => Some("#CCCCFF"),
+        "strategy" => Some("#F8E7C0"),
+        "technology" => Some("#C9FFC9"),
+        "physical" => Some("#97FF97"),
+        "implementation" => Some("#FFE0E0"),
         "aliceblue" => Some("#F0F8FF"),
         "antiquewhite" => Some("#FAEBD7"),
         "aqua" | "cyan" => Some("#00FFFF"),
@@ -1655,7 +1518,15 @@ fn write_text_element(
         _ => (nominal_size, line_descent_diff),
     };
     let raw_fill = style.fill.as_deref().unwrap_or(base.fill);
-    let fill = normalize_color(raw_fill);
+    let (fill, parsed_opacity) = color_with_opacity(raw_fill);
+    let opacity = style.fill_opacity.or(parsed_opacity);
+    // DriverTextSvg.draw:94-97 suppresses transparent text before painting.
+    // The caller still measures and advances this atom. Shape fill-none
+    // serialization is a separate SvgGraphics path.
+    if opacity == Some(0) {
+        return;
+    }
+    let opacity_attr = crate::svg::fill_opacity_attribute(opacity);
 
     // `<back:color>` segments carry an SVG `<filter>` reference. The id is
     // allocated lazily in the active `FilterRegistry`; the filter element
@@ -1697,10 +1568,10 @@ fn write_text_element(
     // When the segment carries a link URL, PlantUML wraps the <text> in an
     // <a> element with both modern (href) and legacy (xlink:*) attributes.
     if let Some(url) = style.link_url.as_deref() {
-        let escaped = escape_xml_attr(url);
+        let escaped = crate::svg::escape_attribute(url);
         // `title` / `xlink:title` is the `{tooltip}` when supplied, else the URL.
         let normalized_title = normalize_svg_link_title(style.link_title.as_deref().unwrap_or(url));
-        let title = escape_xml_attr(&normalized_title);
+        let title = crate::svg::escape_attribute(&normalized_title);
         write!(
             buf,
             r#"<a href="{escaped}" target="_top" title="{title}" xlink:actuate="onRequest" xlink:href="{escaped}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,
@@ -1724,29 +1595,78 @@ fn write_text_element(
     let content = content.replace('\u{00a0}', "&#160;");
     write!(
         buf,
-        r#"<text fill="{fill}"{filter_attr} font-family="{font_family}" font-size="{font_size}"{style_attr}{weight_attr} lengthAdjust="spacing"{text_decoration} textLength="{tl}" x="{x_s}" y="{y_s}">{content}</text>"#,
+        r#"<text fill="{fill}"{opacity_attr}{filter_attr} font-family="{font_family}" font-size="{font_size}"{style_attr}{weight_attr} lengthAdjust="spacing"{text_decoration} textLength="{tl}" x="{x_s}" y="{y_s}">{content}</text>"#,
         tl = pm::fmt_coord(width),
         x_s = pm::fmt_coord(x),
-        y_s = pm::fmt_coord(effective_y),
-    )
+        y_s = pm::fmt_coord(effective_y), fill = crate::svg::escape_attribute(&fill), font_family = crate::svg::font_family_attribute(font_family),
+)
     .unwrap();
     if style.link_url.is_some() {
         buf.push_str("</a>");
     }
 }
 
-/// Escape characters that have special meaning in an XML attribute value.
-fn escape_xml_attr(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
-        .replace('\n', "&#10;")
-}
-
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn atom_run_measurement_does_not_apply_the_empty_stripe_space() {
+        assert_eq!(
+            measure_atom_run_with_family("", 11.0, false, "sans-serif"),
+            0.0
+        );
+        assert!(measure_with_family("", 11.0, false, "sans-serif") > 0.0);
+        for run in [" ", "   ", "\t"] {
+            assert_eq!(
+                measure_atom_run_with_family(run, 11.0, false, "sans-serif"),
+                measure_with_family(run, 11.0, false, "sans-serif"),
+            );
+        }
+    }
+
     use super::*;
+
+    #[test]
+    fn every_family_measures_java_characters_not_the_escape_prefix() {
+        // A legitimate U+10FFFD enters as ESCAPE + itself (java_utf16::escape).
+        let escaped = java_utf16::escape("Vault \u{10FFFD}").into_owned();
+        assert_ne!(escaped, "Vault \u{10FFFD}");
+        for family in [
+            "sans-serif",
+            "Arial",
+            "Helvetica",
+            "Verdana",
+            "Courier New",
+            "Courier",
+            "Monospaced",
+            "Times New Roman",
+        ] {
+            let control = measure_with_family("Vault ", 14.0, false, family);
+            let width = measure_with_family(&escaped, 14.0, false, family);
+            // One missing glyph: the family's .notdef (Times keeps its Java table).
+            let notdef = width - control;
+            let expected = match family {
+                "sans-serif" | "Arial" => 10.5,
+                "Helvetica" => 1298.0 / 2048.0 * 14.0,
+                "Verdana" => 14.0,
+                "Courier New" => pm::courier_new_text_width(" ", 14.0, false, false),
+                "Courier" | "Monospaced" => pm::mono_text_width(" ", 14.0),
+                _ => 1593.0 / 2048.0 * 14.0,
+            };
+            assert!(
+                (notdef - expected).abs() < 1e-3,
+                "{family}: {notdef} vs {expected}"
+            );
+        }
+    }
+
+    #[test]
+    fn unmapped_supplementary_format_characters_are_hidden_in_every_family() {
+        for family in ["sans-serif", "Arial", "Courier", "Monospaced"] {
+            let control = measure_with_family("Vault ", 14.0, false, family);
+            let tagged = measure_with_family("Vault \u{E0041}", 14.0, false, family);
+            assert!((tagged - control).abs() < 1e-9, "{family}");
+        }
+    }
 
     #[test]
     fn inline_colors_use_the_legacy_plantuml_palette() {
@@ -1769,6 +1689,19 @@ mod tests {
     }
 
     #[test]
+    fn transparent_text_advances_without_painting() {
+        let style = base(0.0, 20.0);
+        for color in ["transparent", "background", "#8044aa00"] {
+            let source = format!("q<color:{color}>fir</color>r");
+            let mut output = String::new();
+            let advance = emit_text(&mut output, &source, &style);
+            assert_eq!(advance, total_width("qfirr", &style));
+            assert_eq!(output.matches("<text ").count(), 2);
+            assert!(!output.contains(">fir</text>"));
+        }
+    }
+
+    #[test]
     fn plain_text_emits_one_element() {
         let mut buf = String::new();
         emit_text(&mut buf, "hello", &base(10.0, 20.0));
@@ -1777,6 +1710,52 @@ mod tests {
         );
         assert!(buf.contains(">hello</text>"));
         assert_eq!(buf.matches("<text").count(), 1);
+    }
+
+    #[test]
+    fn unresolved_sprite_commands_share_emission_and_measurement() {
+        let style = base(0.0, 20.0);
+        let mut output = String::new();
+        let advance = emit_text(&mut output, "Oak<$missing>Grove", &style);
+        assert_eq!(output.matches("<text ").count(), 2);
+        assert!(!output.contains("missing"));
+        assert_eq!(advance, total_width("OakGrove", &style));
+        assert_eq!(advance, total_width("Oak<$missing>Grove", &style));
+        output.clear();
+        let blank = emit_text(&mut output, "<$missing>", &style);
+        assert_eq!(blank, total_width(" ", &style));
+        assert!(output.contains("&#160;"));
+    }
+
+    #[test]
+    fn present_empty_lines_share_the_restored_space_atom() {
+        for size in [8, 12, 24] {
+            let mut style = base(0.0, 20.0);
+            style.font_size = size;
+            style.bold = true;
+            let mut expected = String::new();
+            let width = emit_text(&mut expected, " ", &style);
+            for content in [
+                "",
+                "<$leaf>",
+                "<size:31></size>",
+                "<size:31><color:red><$leaf>",
+            ] {
+                let mut output = String::new();
+                assert_eq!(emit_text(&mut output, content, &style), width, "{content}");
+                assert_eq!(output, expected, "{content}");
+                assert_eq!(total_width(content, &style), width);
+                assert_eq!(
+                    label_height(content, size as f64),
+                    label_height(" ", size as f64)
+                );
+                assert_eq!(
+                    label_ascent(content, size as f64),
+                    label_ascent(" ", size as f64)
+                );
+                assert_eq!(emitted_text_element_count(content, &style), 1);
+            }
+        }
     }
 
     #[test]
@@ -1911,6 +1890,150 @@ mod tests {
             pm::fmt_coord(measure(r"col1\tcol2", 13.0, false)),
             pm::fmt_coord(width)
         );
+    }
+
+    /// Java's widths for the four alphabet runs at 14 pt in each Verdana
+    /// face (BT relay, `c10a_ft_vd_{italic,bolditalic,bold}.svg` textLength,
+    /// pinned Java 71806a23): the italic faces have advances of their own.
+    #[test]
+    fn verdana_faces_measure_java_widths() {
+        let runs = [
+            "ABCDEFGHIJKLM",
+            "NOPQRSTUVWXYZ",
+            "abcdefghijklm",
+            "nopqrstuvwxyz",
+        ];
+        for (bold, italic, java) in [
+            (false, true, ["119.4717", "130.3477", "98.3145", "106.0869"]),
+            (true, true, ["133.4307", "144.9082", "111.5557", "120.3945"]),
+            (
+                true,
+                false,
+                ["133.4307", "144.9082", "111.5557", "120.4219"],
+            ),
+        ] {
+            for (run, java) in runs.iter().zip(java) {
+                assert_eq!(
+                    pm::fmt_coord(measure_with_family_and_face(
+                        run, 14.0, bold, italic, "Verdana"
+                    )),
+                    java,
+                    "{run} bold={bold} italic={italic}"
+                );
+            }
+        }
+    }
+
+    /// Every ASCII table is its face's stored extraction
+    /// (tools/font-chain-reference/ascii-advances-round11, whose font files
+    /// hash as the reference host's), and each (bold, italic) slot reads its
+    /// own face's table.
+    #[test]
+    fn ascii_tables_are_the_extracted_faces() {
+        use sha2::{Digest, Sha256};
+        use std::collections::HashMap;
+        const DIR: &str = "tools/font-chain-reference/ascii-advances-round11";
+        const SHA256SUMS_SHA256: &str =
+            "1fa07b8c424f6f6e1d385cbdcd439d6f9d3dab5e0cd9096b0a66ac497ce845d4";
+        const REFERENCE_HOST_FONT_HASHES: &str =
+            "tools/font-chain-reference/monkeyman-round9/font-hashes.txt";
+        let hex = |bytes: &[u8]| {
+            Sha256::digest(bytes)
+                .iter()
+                .map(|b| format!("{b:02x}"))
+                .collect::<String>()
+        };
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let dir = root.join(DIR);
+        let sums = std::fs::read(dir.join("SHA256SUMS")).expect("stored SHA256SUMS");
+        assert_eq!(hex(&sums), SHA256SUMS_SHA256);
+        for line in String::from_utf8(sums).unwrap().lines() {
+            let (hash, name) = line.split_once("  ").expect("shasum line");
+            let data = std::fs::read(dir.join(name)).unwrap_or_else(|e| panic!("{name}: {e}"));
+            assert_eq!(hex(&data), hash, "{name}");
+        }
+        let font_hashes = |path: std::path::PathBuf| -> HashMap<String, String> {
+            std::fs::read_to_string(path)
+                .unwrap()
+                .lines()
+                .filter_map(|line| {
+                    let (hash, path) = line.split_once("  ")?;
+                    (hash.len() == 64).then(|| (path.to_string(), hash.to_string()))
+                })
+                .collect()
+        };
+        let here = font_hashes(dir.join("font-hashes.txt"));
+        let reference_host = font_hashes(root.join(REFERENCE_HOST_FONT_HASHES));
+        let mut slots = Vec::new();
+        for (faces, family, files) in [
+            (
+                &ARIAL_FACES,
+                "Arial",
+                [
+                    "ArialMT.plain",
+                    "Arial-BoldMT.bold",
+                    "Arial-ItalicMT.italic",
+                    "Arial-BoldItalicMT.bolditalic",
+                ],
+            ),
+            (
+                &VERDANA_FACES,
+                "Verdana",
+                [
+                    "Verdana.plain",
+                    "Verdana-Bold.bold",
+                    "Verdana-Italic.italic",
+                    "Verdana-BoldItalic.bolditalic",
+                ],
+            ),
+        ] {
+            let styles = [(false, false), (true, false), (false, true), (true, true)];
+            for ((bold, italic), file) in styles.into_iter().zip(files) {
+                let text = std::fs::read_to_string(dir.join(format!("{file}.ascii.tsv")))
+                    .unwrap_or_else(|e| panic!("{file}: {e}"));
+                let header = |key: &str| {
+                    text.lines()
+                        .find_map(|line| line.strip_prefix(key))
+                        .unwrap_or_else(|| panic!("{file}: no {key}"))
+                        .to_string()
+                };
+                assert!(header("#units_per_em\t").starts_with("2048\t"), "{file}");
+                let font_file = header("#file\t");
+                assert!(
+                    font_file.contains(family),
+                    "{file}: measured face file {font_file}"
+                );
+                assert_eq!(
+                    here.get(&font_file),
+                    reference_host.get(&font_file),
+                    "{font_file}: extraction host and reference host disagree"
+                );
+                assert!(reference_host.contains_key(&font_file), "{font_file}");
+                let units: Vec<u16> = text
+                    .lines()
+                    .filter_map(|line| line.strip_prefix("A\t"))
+                    .enumerate()
+                    .map(|(index, fields)| {
+                        let fields: Vec<&str> = fields.split('\t').collect();
+                        assert_eq!(
+                            u32::from_str_radix(fields[0], 16).unwrap(),
+                            0x20 + index as u32,
+                            "{file}"
+                        );
+                        let advance: f64 = fields[2].parse().unwrap();
+                        assert_eq!(advance.fract(), 0.0, "{file} {}", fields[0]);
+                        advance as u16
+                    })
+                    .collect();
+                assert_eq!(
+                    faces.slot(bold, italic).as_slice(),
+                    units.as_slice(),
+                    "{file}: bold={bold} italic={italic}"
+                );
+                slots.push(file);
+            }
+        }
+        assert_eq!(slots.len(), 8);
     }
 
     #[test]
@@ -2128,6 +2251,152 @@ mod tests {
                 !buf.contains("<tspan"),
                 "tspan in output for {input:?}: {buf}"
             );
+        }
+    }
+
+    /// The face routing of every width consumer for each italic and
+    /// bold-italic slot of the families whose faces differ by style (Arial,
+    /// Helvetica, Verdana, Menlo, Courier New). Through the public consumer
+    /// path (`measure_with_family_and_face`, as layout and emission call it)
+    /// a string measures as it does in `ChainFace::for_style`'s face (JDK
+    /// `FontFamily.getFont`), by the per-glyph rule of `chain_text_width`
+    /// (own table, else the chain: mapped, `.notdef` or hidden) or the
+    /// monospaced cell rule. A character in the family's own table is
+    /// measured with the table of that very face (selected here, not through
+    /// the router under test), so a dropped italic table is caught. The
+    /// strings that tell the italic face from the face a dropped italic would
+    /// pick are searched in the stored tables and coverage (ASCII letters and
+    /// digits alone; each scalar from U+00A0 alone, after `a` and after a
+    /// Hebrew base, so both JDK paths are reached), not listed by hand. A slot with no such
+    /// string fails unless it is in `EQUIVALENT`: a pair whose faces give
+    /// every candidate the same width, so no output can tell the routes
+    /// apart; the list fails when stale in either direction.
+    #[test]
+    fn every_italic_slot_measures_in_its_own_face() {
+        use crate::font_chain::{ChainFace, ChainFamily, ChainGlyph};
+        const SIZE: f64 = 14.0;
+        const MAX_PROBES: usize = 8;
+        const HEBREW_ALEF: char = '\u{05D0}';
+        // Menlo Bold Italic and Menlo Bold hide the same scalars in every
+        // context (monospaced width counts cells only).
+        const EQUIVALENT: [(&str, bool); 1] = [("Monospaced", true)];
+        // The face's own ASCII table, chosen by the face's own (bold, italic).
+        fn ascii(table: &[u16; 95], c: char) -> Option<f64> {
+            let code = c as usize;
+            (32..=126)
+                .contains(&code)
+                .then(|| f64::from(table[code - 32]) / ASCII_UNITS_PER_EM * SIZE)
+        }
+        type OwnWidth = fn(char, bool, bool) -> Option<f64>;
+        // (family name as consumers pass it, chain family, own advance table)
+        let families: [(&str, ChainFamily, Option<OwnWidth>); 5] = [
+            (
+                "Arial",
+                ChainFamily::Arial,
+                Some(|c, bold, italic| match (bold, italic) {
+                    (false, false) => ascii(&ARIAL_ASCII, c),
+                    (true, false) => ascii(&ARIAL_BOLD_ASCII, c),
+                    (false, true) => ascii(&ARIAL_ITALIC_ASCII, c),
+                    (true, true) => ascii(&ARIAL_BOLD_ITALIC_ASCII, c),
+                }),
+            ),
+            (
+                // Helvetica-Oblique and -BoldOblique share the upright
+                // advances (ascii-advances-round11); the upright tables
+                // themselves are T14.49.
+                "Helvetica",
+                ChainFamily::Helvetica,
+                Some(|c, bold, _| {
+                    if bold {
+                        helvetica_bold_char_units(c)
+                    } else {
+                        helvetica_char_units(c)
+                    }
+                    .map(|units| units / HELVETICA_UPM * SIZE)
+                }),
+            ),
+            (
+                "Verdana",
+                ChainFamily::Verdana,
+                Some(|c, bold, italic| match (bold, italic) {
+                    (false, false) => ascii(&VERDANA_ASCII, c),
+                    (true, false) => ascii(&VERDANA_BOLD_ASCII, c),
+                    (false, true) => ascii(&VERDANA_ITALIC_ASCII, c),
+                    (true, true) => ascii(&VERDANA_BOLD_ITALIC_ASCII, c),
+                }),
+            ),
+            ("Monospaced", ChainFamily::Menlo, None),
+            ("Courier New", ChainFamily::CourierNew, None),
+        ];
+        let candidates: Vec<String> = ('0'..='9')
+            .chain('A'..='Z')
+            .chain('a'..='z')
+            .map(String::from)
+            .chain(
+                (0xA0_u32..=0x2_FFFF)
+                    .filter_map(char::from_u32)
+                    .flat_map(|c| [format!("{c}"), format!("a{c}"), format!("{HEBREW_ALEF}{c}")]),
+            )
+            .collect();
+        for (name, family, own) in &families {
+            for bold in [false, true] {
+                let public =
+                    |text: &str| measure_with_family_and_face(text, SIZE, bold, true, name);
+                let cell = public("a");
+                // Width of `text` in `face` (style `italic`), per Java token
+                // of the string.
+                let in_face = |face: ChainFace, italic: bool, text: &str| -> f64 {
+                    let complexity = face.complexity_per_token(text);
+                    text.chars()
+                        .zip(complexity)
+                        .map(|(c, complexity)| {
+                            let glyph = face.resolve(c, complexity);
+                            match own.map(|own| own(c, bold, italic)) {
+                                None => f64::from(u8::from(glyph != ChainGlyph::Hidden)) * cell,
+                                Some(Some(width)) => width,
+                                Some(None) => match glyph {
+                                    ChainGlyph::Missing => face.notdef_per_em() * SIZE,
+                                    ChainGlyph::Hidden => 0.0,
+                                    ChainGlyph::Mapped => sans_text_width(
+                                        &java_utf16::escape(c.encode_utf8(&mut [0_u8; 4])),
+                                        SIZE,
+                                        bold,
+                                    ),
+                                },
+                            }
+                        })
+                        .sum()
+                };
+                let face = ChainFace::for_style(*family, bold, true);
+                let dropped = ChainFace::for_style(*family, bold, false);
+                let probes: Vec<&String> = candidates
+                    .iter()
+                    .filter(|text| {
+                        (in_face(face, true, text) - in_face(dropped, false, text)).abs() > 1e-9
+                    })
+                    .take(MAX_PROBES)
+                    .collect();
+                assert_eq!(
+                    probes.is_empty(),
+                    EQUIVALENT.contains(&(*name, bold)),
+                    "{name} bold={bold}: {face:?} vs {dropped:?} probes {probes:?}; update EQUIVALENT only if the faces' widths agree on every candidate"
+                );
+                if probes.is_empty() {
+                    assert!(
+                        face != dropped,
+                        "{name} bold={bold}: for_style ignores italic"
+                    );
+                }
+                for text in probes {
+                    assert!(
+                        (public(text) - in_face(face, true, text)).abs() < 1e-9,
+                        "{name} bold={bold} italic {text:?}: measured {}, {face:?} gives {}, {dropped:?} gives {}",
+                        public(text),
+                        in_face(face, true, text),
+                        in_face(dropped, false, text),
+                    );
+                }
+            }
         }
     }
 }

@@ -1,0 +1,27 @@
+{
+  "cargo": [
+    "cargo",
+    "build",
+    "-p",
+    "rustuml-oracle",
+    "--release",
+    "-j",
+    "4"
+  ],
+  "rustc": [
+    "rustc",
+    "--edition=2024",
+    "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/probe.rs",
+    "-L",
+    "dependency=/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/target-before/release/deps",
+    "--extern",
+    "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/target-before/release/librustuml_oracle.rlib",
+    "--extern",
+    "rustuml_parser=/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/target-before/release/deps/librustuml_parser-69497e1bef91509b.rlib",
+    "-o",
+    "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/probe"
+  ],
+  "exit": 0,
+  "source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+  "binary_sha256": "0b18b474c55665babbe361e32fa5f0c0b482e5f1fb006efe4e32508d4fb11b20"
+}

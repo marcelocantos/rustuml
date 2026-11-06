@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+Kestrel -> Osprey : ping
+...ninety seconds...
+Osprey -> Kestrel : pong
+@enduml

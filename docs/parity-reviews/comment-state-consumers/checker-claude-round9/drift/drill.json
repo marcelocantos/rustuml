@@ -1,0 +1,180 @@
+{
+ "M00_unmodified": {
+  "lib_exit": 0,
+  "lib_failing_tests": [],
+  "lib_result": "test result: ok. 182 passed; 0 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.29s",
+  "perturbations_exit": 101,
+  "perturbation_failures": 1861,
+  "caught_by_lib": false
+ },
+ "M01_extraction_verdana_italic_chain_run_dropped_sums_untouched": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ],
+  "lib_result": "test result: FAILED. 181 passed; 1 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.30s",
+  "caught_by_lib": true
+ },
+ "M02_extraction_courier_italic_lengths_blocklisted_regen": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction",
+   "font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef"
+  ],
+  "lib_result": "test result: FAILED. 180 passed; 2 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.29s",
+  "caught_by_lib": true
+ },
+ "M03_extraction_courier_bolditalic_lengths_blocklisted_regen": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction",
+   "font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef"
+  ],
+  "lib_result": "test result: FAILED. 180 passed; 2 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.31s",
+  "caught_by_lib": true
+ },
+ "M04_extraction_lucida_italic_real_italic_face_regen": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ],
+  "lib_result": "test result: FAILED. 181 passed; 1 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.30s",
+  "caught_by_lib": true
+ },
+ "M05_extraction_menlo_italic_notdef_regen": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ],
+  "lib_result": "test result: FAILED. 181 passed; 1 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.30s",
+  "caught_by_lib": true
+ },
+ "M06_mm_font_hash_courier_bold_changed_regen": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ],
+  "lib_result": "test result: FAILED. 181 passed; 1 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.32s",
+  "caught_by_lib": true
+ },
+ "M07_mm_font_hash_courier_italic_changed_regen": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ],
+  "lib_result": "test result: FAILED. 181 passed; 1 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.30s",
+  "caught_by_lib": true
+ },
+ "M08_mm_font_hash_helvetica_removed_regen": {
+  "lib_exit": 0,
+  "lib_failing_tests": [],
+  "lib_result": "test result: ok. 182 passed; 0 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.30s",
+  "caught_by_lib": false
+ },
+ "M09_code_arial_italic_uses_plain_table": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ],
+  "lib_result": "test result: FAILED. 181 passed; 1 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.29s",
+  "caught_by_lib": true
+ },
+ "M10_code_courier_italic_uses_plain_table": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction",
+   "font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef"
+  ],
+  "lib_result": "test result: FAILED. 180 passed; 2 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.29s",
+  "caught_by_lib": true
+ },
+ "M11_code_menlo_bolditalic_uses_bold_table": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ],
+  "lib_result": "test result: FAILED. 181 passed; 1 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.30s",
+  "caught_by_lib": true
+ },
+ "M12_code_helvetica_boldoblique_uses_bold_table": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ],
+  "lib_result": "test result: FAILED. 181 passed; 1 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.29s",
+  "caught_by_lib": true
+ },
+ "M13_code_verdana_bolditalic_uses_bold_table": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ],
+  "lib_result": "test result: FAILED. 181 passed; 1 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.30s",
+  "caught_by_lib": true
+ },
+ "M14_code_sansserif_italic_maps_to_bold": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ],
+  "lib_result": "test result: FAILED. 181 passed; 1 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.28s",
+  "caught_by_lib": true
+ },
+ "M15_code_arial_italic_routed_plain": {
+  "lib_exit": 0,
+  "lib_failing_tests": [],
+  "lib_result": "test result: ok. 182 passed; 0 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.29s",
+  "perturbations_exit": 101,
+  "perturbation_failures": 1861,
+  "caught_by_lib": false
+ },
+ "M16_code_courier_width_ignores_italic": {
+  "lib_exit": 0,
+  "lib_failing_tests": [],
+  "lib_result": "test result: ok. 182 passed; 0 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.29s",
+  "perturbations_exit": 101,
+  "perturbation_failures": 1868,
+  "caught_by_lib": false
+ },
+ "M17_code_run_levels_per_paragraph": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "java_bidi::tests::java_bidi_oracle"
+  ],
+  "lib_result": "test result: FAILED. 181 passed; 1 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.29s",
+  "caught_by_lib": true
+ },
+ "M18_code_run_levels_mixed_single_run": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "font_chain::tests::harfbuzz_buffers_split_at_bidi_level_changes",
+   "java_bidi::tests::java_bidi_oracle"
+  ],
+  "lib_result": "test result: FAILED. 180 passed; 2 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.31s",
+  "caught_by_lib": true
+ },
+ "M19_oracle_line_dropped_sums_and_constant_forged": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "java_bidi::tests::java_bidi_oracle"
+  ],
+  "lib_result": "test result: FAILED. 181 passed; 1 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.29s",
+  "caught_by_lib": true
+ },
+ "M20_oracle_java_run_level_flipped_sums_and_constant_forged": {
+  "lib_exit": 101,
+  "lib_failing_tests": [
+   "java_bidi::tests::java_bidi_oracle"
+  ],
+  "lib_result": "test result: FAILED. 181 passed; 1 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.30s",
+  "caught_by_lib": true
+ },
+ "M21_code_class_link_label_measured_sans13": {
+  "lib_exit": 0,
+  "lib_failing_tests": [],
+  "lib_result": "test result: ok. 182 passed; 0 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.29s",
+  "perturbations_exit": 101,
+  "perturbation_failures": 1862,
+  "caught_by_lib": false
+ }
+}

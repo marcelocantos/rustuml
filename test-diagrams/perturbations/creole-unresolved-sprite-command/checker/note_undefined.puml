@@ -1,0 +1,7 @@
+@startuml
+class Birch
+note right of Birch
+A<$north>B
+<$south>
+end note
+@enduml

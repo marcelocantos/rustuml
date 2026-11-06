@@ -1,0 +1,10 @@
+@startuml
+<style>
+arrow {
+  LineColor transparent
+}
+</style>
+state Rinse
+state Spin
+Rinse --> Spin
+@enduml

@@ -1,0 +1,16 @@
+{
+  "setup_failures": [],
+  "build_failures": [],
+  "report_script_errors": [
+    {
+      "script": "residue_audit.py",
+      "error": "SyntaxError: unclosed list in reporting print; corrected before execution; no CLI rerun needed"
+    },
+    {
+      "command": "intermediate chronology/summary inspection",
+      "error": "summary.json not yet created by concurrent aggregation; later successful read used"
+    }
+  ],
+  "production_changes": false,
+  "broad_gate_runs": 1
+}

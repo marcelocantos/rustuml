@@ -1,0 +1,155 @@
+[
+ {
+  "directive": "!theme nosuchtheme",
+  "cwd": "probes/theme/localtheme (holds puml-theme-plain.puml, puml-theme-fresh.puml)",
+  "50f4f5414": {
+   "exit": 0,
+   "stdout_sha256": "68678531ab3f9221fc36d54387bf065aa695284b9177d9b1dcc061c40702c9f2",
+   "background": "default",
+   "plain_emulation_circle_r9": false
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "68678531ab3f9221fc36d54387bf065aa695284b9177d9b1dcc061c40702c9f2",
+   "background": "default",
+   "plain_emulation_circle_r9": false
+  },
+  "base_equals_tip": true
+ },
+ {
+  "directive": "!theme Plain",
+  "cwd": "probes/theme/localtheme (holds puml-theme-plain.puml, puml-theme-fresh.puml)",
+  "50f4f5414": {
+   "exit": 0,
+   "stdout_sha256": "68044e004abe50dda29064cc4dc57b8821515a278e6c2304bf87c2dea99e008c",
+   "background": "default",
+   "plain_emulation_circle_r9": true
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "68678531ab3f9221fc36d54387bf065aa695284b9177d9b1dcc061c40702c9f2",
+   "background": "default",
+   "plain_emulation_circle_r9": false
+  },
+  "base_equals_tip": false
+ },
+ {
+  "directive": "!theme plain",
+  "cwd": "probes/theme/localtheme (holds puml-theme-plain.puml, puml-theme-fresh.puml)",
+  "50f4f5414": {
+   "exit": 0,
+   "stdout_sha256": "68044e004abe50dda29064cc4dc57b8821515a278e6c2304bf87c2dea99e008c",
+   "background": "default",
+   "plain_emulation_circle_r9": true
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "68044e004abe50dda29064cc4dc57b8821515a278e6c2304bf87c2dea99e008c",
+   "background": "default",
+   "plain_emulation_circle_r9": true
+  },
+  "base_equals_tip": true
+ },
+ {
+  "directive": "!theme plain from .",
+  "cwd": "probes/theme/localtheme (holds puml-theme-plain.puml, puml-theme-fresh.puml)",
+  "50f4f5414": {
+   "exit": 0,
+   "stdout_sha256": "68044e004abe50dda29064cc4dc57b8821515a278e6c2304bf87c2dea99e008c",
+   "background": "default",
+   "plain_emulation_circle_r9": true
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "cdb3655edfca4f1bebb16cbba6154e1e0fbf8f314f2f7d6a24ce587555d161ed",
+   "background": "#ABCDEF",
+   "plain_emulation_circle_r9": true
+  },
+  "base_equals_tip": false
+ },
+ {
+  "directive": "!theme fresh",
+  "cwd": "probes/theme/localtheme (holds puml-theme-plain.puml, puml-theme-fresh.puml)",
+  "50f4f5414": {
+   "exit": 0,
+   "stdout_sha256": "68678531ab3f9221fc36d54387bf065aa695284b9177d9b1dcc061c40702c9f2",
+   "background": "default",
+   "plain_emulation_circle_r9": false
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "68678531ab3f9221fc36d54387bf065aa695284b9177d9b1dcc061c40702c9f2",
+   "background": "default",
+   "plain_emulation_circle_r9": false
+  },
+  "base_equals_tip": true
+ },
+ {
+  "directive": "!theme fresh from .",
+  "cwd": "probes/theme/localtheme (holds puml-theme-plain.puml, puml-theme-fresh.puml)",
+  "50f4f5414": {
+   "exit": 0,
+   "stdout_sha256": "68678531ab3f9221fc36d54387bf065aa695284b9177d9b1dcc061c40702c9f2",
+   "background": "default",
+   "plain_emulation_circle_r9": false
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "6cf1a329dad94430c99bd0d3da839f322fe91e8fb364732517ba10f235bb20d9",
+   "background": "#FEDCBA",
+   "plain_emulation_circle_r9": false
+  },
+  "base_equals_tip": false
+ },
+ {
+  "directive": "!theme plain from localtheme",
+  "cwd": "probes/theme/localtheme (holds puml-theme-plain.puml, puml-theme-fresh.puml)",
+  "50f4f5414": {
+   "exit": 0,
+   "stdout_sha256": "68044e004abe50dda29064cc4dc57b8821515a278e6c2304bf87c2dea99e008c",
+   "background": "default",
+   "plain_emulation_circle_r9": true
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "68678531ab3f9221fc36d54387bf065aa695284b9177d9b1dcc061c40702c9f2",
+   "background": "default",
+   "plain_emulation_circle_r9": false
+  },
+  "base_equals_tip": false
+ },
+ {
+  "directive": "!theme cerulean",
+  "cwd": "probes/theme/localtheme (holds puml-theme-plain.puml, puml-theme-fresh.puml)",
+  "50f4f5414": {
+   "exit": 0,
+   "stdout_sha256": "eed543abbafb9bdd8a93168707ee301061ebca68b6225cdcb21fb474581c180c",
+   "background": "default",
+   "plain_emulation_circle_r9": false
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "eed543abbafb9bdd8a93168707ee301061ebca68b6225cdcb21fb474581c180c",
+   "background": "default",
+   "plain_emulation_circle_r9": false
+  },
+  "base_equals_tip": true
+ },
+ {
+  "directive": "!$t = \"mono\"\n!theme $t",
+  "cwd": "probes/theme/localtheme (holds puml-theme-plain.puml, puml-theme-fresh.puml)",
+  "50f4f5414": {
+   "exit": 0,
+   "stdout_sha256": "163ad82135a5f84e6e7cbf6eefc2913774df880a6718f9862e5bb3903d472dcb",
+   "background": "default",
+   "plain_emulation_circle_r9": false
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "163ad82135a5f84e6e7cbf6eefc2913774df880a6718f9862e5bb3903d472dcb",
+   "background": "default",
+   "plain_emulation_circle_r9": false
+  },
+  "base_equals_tip": true
+ }
+]

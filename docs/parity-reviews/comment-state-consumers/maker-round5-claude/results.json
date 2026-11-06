@@ -1,0 +1,588 @@
+{
+ "schema_version": 1,
+ "status": "maker packet for independent review; Java relay m5a pending",
+ "identities": {
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "base": "fbb2e59ed (parity-recovery-2026-11-03; crates identical to 9834a7194)",
+  "before": "d6f63a8aa merge (crates identical to round-4 maker tip 7ec2e5af8)",
+  "tip_code": "5149e8ecb",
+  "private_release_builds": {
+   "fbb2e59ed": {
+    "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round5-claude-maker/bin/rustuml-fbb2e59ed",
+    "sha256": "8c483b5645336c4de9a43273ea577c3667dfef92e17939d50d1095bd8c92034e"
+   },
+   "7ec2e5af8": {
+    "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round5-claude-maker/bin/rustuml-7ec2e5af8",
+    "sha256": "0454ec7623c027f9e679508b776ad17284c038aaac719da0ab76d8c052a42eb4"
+   },
+   "5149e8ecb": {
+    "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round5-claude-maker/bin/rustuml-5149e8ecb",
+    "sha256": "605e12f1a07f2c01cf77231d7516eeb0e65fb62cdc43e63a68e3795fbd529959"
+   }
+  },
+  "tip_build_note": "the sweep and gates ran on ce1e52e30; 5149e8ecb only rewrites one vec! for clippy and its build is byte-identical on all 16,508 sweep outputs, the 7 batches and m5a"
+ },
+ "measurement_contract": "Whole CLI output (-pipe, the case's -t flag) from the recorded cwd, RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100, TZ=GMT+11:00, PLANTUML_STDLIB pinned; unchanged strict comparator rustuml_oracle::compare::compare_svg_strict built from base (tools/checker-cmp-*); exact SVG comment lists.",
+ "sweep": {
+  "goldens": {
+   "sources": 12550,
+   "fbb2e59ed_comments_exact": 11563,
+   "7ec2e5af8_comments_exact": 11781,
+   "ce1e52e30_comments_exact": 11781,
+   "java_valid": 11351,
+   "java_error": 1199,
+   "fbb2e59ed_valid_strict_match": 11181,
+   "fbb2e59ed_exit": {
+    "1": 76,
+    "0": 12474
+   },
+   "fbb2e59ed_panics": 0,
+   "fbb2e59ed_timeouts": 0,
+   "fbb2e59ed_java_error_rejected": 76,
+   "7ec2e5af8_valid_strict_match": 11181,
+   "7ec2e5af8_exit": {
+    "1": 76,
+    "0": 12474
+   },
+   "7ec2e5af8_panics": 0,
+   "7ec2e5af8_timeouts": 0,
+   "7ec2e5af8_java_error_rejected": 76,
+   "ce1e52e30_valid_strict_match": 11181,
+   "ce1e52e30_exit": {
+    "1": 76,
+    "0": 12474
+   },
+   "ce1e52e30_panics": 0,
+   "ce1e52e30_timeouts": 0,
+   "ce1e52e30_java_error_rejected": 76,
+   "fbb2e59ed_to_ce1e52e30_counts": {
+    "comments_gained": 218,
+    "gained_match": 3,
+    "lost_match_GET_provenance": 3,
+    "outputs_changed": 394
+   },
+   "7ec2e5af8_to_ce1e52e30_counts": {
+    "outputs_changed": 148
+   },
+   "fbb2e59ed_to_tip_counts": {
+    "comments_gained": 218,
+    "gained_match": 3,
+    "lost_match_GET_provenance": 3,
+    "outputs_changed": 394
+   },
+   "fbb2e59ed_to_tip": {
+    "comments_gained": 218,
+    "gained_match": [
+     "test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml",
+     "test-diagrams/golden/state/state_history_shallow.puml",
+     "test-diagrams/golden/state/state_note_composite.puml"
+    ],
+    "lost_match_GET_provenance": [
+     "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+     "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+     "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+    ],
+    "outputs_changed": 394
+   },
+   "7ec2e5af8_to_tip_counts": {
+    "outputs_changed": 148
+   },
+   "7ec2e5af8_to_tip": {
+    "outputs_changed": 148
+   }
+  },
+  "perturbations": {
+   "sources": 3958,
+   "fbb2e59ed_comments_exact": 2779,
+   "7ec2e5af8_comments_exact": 3336,
+   "ce1e52e30_comments_exact": 3336,
+   "java_valid": 3645,
+   "java_error": 313,
+   "fbb2e59ed_valid_strict_match": 1730,
+   "fbb2e59ed_exit": {
+    "0": 3860,
+    "1": 88,
+    "101": 10
+   },
+   "fbb2e59ed_panics": 10,
+   "fbb2e59ed_timeouts": 0,
+   "fbb2e59ed_java_error_rejected": 84,
+   "7ec2e5af8_valid_strict_match": 2366,
+   "7ec2e5af8_exit": {
+    "0": 3794,
+    "1": 160,
+    "101": 4
+   },
+   "7ec2e5af8_panics": 4,
+   "7ec2e5af8_timeouts": 0,
+   "7ec2e5af8_java_error_rejected": 155,
+   "ce1e52e30_valid_strict_match": 2374,
+   "ce1e52e30_exit": {
+    "0": 3794,
+    "1": 160,
+    "101": 4
+   },
+   "ce1e52e30_panics": 4,
+   "ce1e52e30_timeouts": 0,
+   "ce1e52e30_java_error_rejected": 155,
+   "fbb2e59ed_to_ce1e52e30_counts": {
+    "comments_gained": 559,
+    "comments_lost": 2,
+    "error_now_renders_valid_ref": 5,
+    "gained_match": 644,
+    "outputs_changed": 1265,
+    "rejection_gained": 71
+   },
+   "7ec2e5af8_to_ce1e52e30_counts": {
+    "gained_match": 8,
+    "outputs_changed": 150
+   },
+   "fbb2e59ed_to_tip_counts": {
+    "comments_gained": 559,
+    "comments_lost": 2,
+    "error_now_renders_valid_ref": 5,
+    "gained_match": 644,
+    "outputs_changed": 1265,
+    "rejection_gained": 71
+   },
+   "fbb2e59ed_to_tip": {
+    "comments_gained": 559,
+    "comments_lost": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+     "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+    ],
+    "error_now_renders_valid_ref": [
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+     "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+    ],
+    "gained_match": 644,
+    "outputs_changed": 1265,
+    "rejection_gained": 71
+   },
+   "7ec2e5af8_to_tip_counts": {
+    "gained_match": 8,
+    "outputs_changed": 150
+   },
+   "7ec2e5af8_to_tip": {
+    "gained_match": [
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_outer_note_left_of_image.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_outer_two_notes_on_image.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_root_cluster_note.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_root_two_clusters_notes.puml",
+     "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_concurrent_nested_labels.puml",
+     "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_root_ellipse_nested_chain.puml",
+     "test-diagrams/perturbations/state-parallel-transition-route-identity/review_compound_endpoint_parallel_order.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_upper_escape_point.puml"
+    ],
+    "outputs_changed": 150
+   }
+  },
+  "all": {
+   "sources": 16508,
+   "fbb2e59ed_comments_exact": 14342,
+   "7ec2e5af8_comments_exact": 15117,
+   "ce1e52e30_comments_exact": 15117,
+   "java_valid": 14996,
+   "java_error": 1512,
+   "fbb2e59ed_valid_strict_match": 12911,
+   "fbb2e59ed_exit": {
+    "1": 164,
+    "0": 16334,
+    "101": 10
+   },
+   "fbb2e59ed_panics": 10,
+   "fbb2e59ed_timeouts": 0,
+   "fbb2e59ed_java_error_rejected": 160,
+   "7ec2e5af8_valid_strict_match": 13547,
+   "7ec2e5af8_exit": {
+    "1": 236,
+    "0": 16268,
+    "101": 4
+   },
+   "7ec2e5af8_panics": 4,
+   "7ec2e5af8_timeouts": 0,
+   "7ec2e5af8_java_error_rejected": 231,
+   "ce1e52e30_valid_strict_match": 13555,
+   "ce1e52e30_exit": {
+    "1": 236,
+    "0": 16268,
+    "101": 4
+   },
+   "ce1e52e30_panics": 4,
+   "ce1e52e30_timeouts": 0,
+   "ce1e52e30_java_error_rejected": 231,
+   "fbb2e59ed_to_ce1e52e30_counts": {
+    "comments_gained": 777,
+    "comments_lost": 2,
+    "error_now_renders_valid_ref": 5,
+    "gained_match": 647,
+    "lost_match_GET_provenance": 3,
+    "outputs_changed": 1659,
+    "rejection_gained": 71
+   },
+   "7ec2e5af8_to_ce1e52e30_counts": {
+    "gained_match": 8,
+    "outputs_changed": 298
+   },
+   "fbb2e59ed_to_tip_counts": {
+    "comments_gained": 777,
+    "comments_lost": 2,
+    "error_now_renders_valid_ref": 5,
+    "gained_match": 647,
+    "lost_match_GET_provenance": 3,
+    "outputs_changed": 1659,
+    "rejection_gained": 71
+   },
+   "fbb2e59ed_to_tip": {
+    "comments_gained": 777,
+    "comments_lost": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+     "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+    ],
+    "error_now_renders_valid_ref": [
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+     "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+    ],
+    "gained_match": 647,
+    "lost_match_GET_provenance": [
+     "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+     "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+     "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+    ],
+    "outputs_changed": 1659,
+    "rejection_gained": 71
+   },
+   "7ec2e5af8_to_tip_counts": {
+    "gained_match": 8,
+    "outputs_changed": 298
+   },
+   "7ec2e5af8_to_tip": {
+    "gained_match": [
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_outer_note_left_of_image.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_outer_two_notes_on_image.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_root_cluster_note.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_root_two_clusters_notes.puml",
+     "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_concurrent_nested_labels.puml",
+     "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_root_ellipse_nested_chain.puml",
+     "test-diagrams/perturbations/state-parallel-transition-route-identity/review_compound_endpoint_parallel_order.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_upper_escape_point.puml"
+    ],
+    "outputs_changed": 298
+   }
+  }
+ },
+ "sweep_note": "16,508 sources = 12,550 goldens + 3,958 perturbation pairs in the final tree (the round-4 checker's registered BE/BC pairs included). No new pairs were registered by this maker: maker-registered pairs would be unnamed in any checker review. Before->tip: 298 outputs changed, 234 MATCH->MATCH (154 of them now have Java's canvas size exactly; the comparator tolerates the 1 px root size), 49 DIFF->DIFF, 8 DIFF->MATCH, 7 ERR->ERR (Java crash pages; stderr equal). One DIFF->DIFF perturbation, state-themed-pseudostate-paint/checker_history_font_state_channel, loses Java's canvas height: Rust draws its history labels in the wrong font (pre-existing), and the painted bounds follow the wrong label.",
+ "GET_goldens": {
+  "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml": {
+   "fbb2e59ed": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "7ec2e5af8": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "ce1e52e30": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  },
+  "test-diagrams/golden/activity/act_skinparam_shadowing.puml": {
+   "fbb2e59ed": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "7ec2e5af8": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "ce1e52e30": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  },
+  "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml": {
+   "fbb2e59ed": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "7ec2e5af8": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "ce1e52e30": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  }
+ },
+ "stderr": "before->tip: 4 sweep sources change stderr, each only in the thread id of the pre-existing class.rs panic line. Batches: no stderr change apart from the BF YAML/JSON cases that no longer print an export error.",
+ "batches": {
+  "BF": {
+   "cases": 46,
+   "svg_cases": 46,
+   "java_valid_svg": 45,
+   "base_java_valid_svg_strict_match": 6,
+   "base_comment_lists_exact": 6,
+   "before_java_valid_svg_strict_match": 17,
+   "before_comment_lists_exact": 41,
+   "tip_java_valid_svg_strict_match": 32,
+   "tip_comment_lists_exact": 42,
+   "before_to_tip": {
+    "lost_match": [],
+    "gained_match": [
+     "cr_json_u_escape",
+     "cr_yaml_u_escape",
+     "w_arial_pua_b",
+     "w_times_pua_b",
+     "w_arial_nonchar_10ffff",
+     "w_sans_nonchar_10ffff",
+     "w_sans_nonchar_10fffe",
+     "w_sans_unassigned_3fffd",
+     "w_sans_tag_e0041",
+     "w_sans_bmp_pua_f000",
+     "st_np_note_before_target",
+     "st_np_outer_note_left_multiline",
+     "st_np_outer_note_left_on_leaf_with_image",
+     "st_np_root_note_before_states",
+     "st_np_root_three_clusters"
+    ],
+    "new_valid_input_error": [],
+    "lost_rejection": [],
+    "new_panic": [],
+    "outputs_changed": 29,
+    "stderr_changed": [
+     "cr_json_u_escape",
+     "cr_yaml_u_escape"
+    ]
+   },
+   "tip_failing_java_valid_svg": {
+    "cr_ent_dec_10fffd": "DIFF 6 (before DIFF 6, base DIFF 6)",
+    "cr_wrap_seq_pua": "DIFF 16 (before DIFF 16, base DIFF 16)",
+    "cr_stereotype_pua": "DIFF 6 (before DIFF 6, base DIFF 5)",
+    "w_courier_pua_b": "DIFF 1 (before DIFF 6, base DIFF 1)",
+    "w_monospaced_pua_b": "DIFF 2 (before DIFF 6, base DIFF 2)",
+    "st_bp_multiline_label": "DIFF 29 (before DIFF 29, base DIFF 35)",
+    "st_bp_root_wide_multiline": "DIFF 25 (before DIFF 25, base DIFF 24)",
+    "st_np_concurrent_regions": "DIFF 48 (before DIFF 48, base DIFF 48)",
+    "st_np_link_note_in_cluster": "DIFF 40 (before DIFF 40, base DIFF 40)",
+    "st_np_outer_floating_with_image": "DIFF 31 (before DIFF 31, base DIFF 31)",
+    "st_np_outer_note_in_live_cluster_on_image": "DIFF 38 (before DIFF 38, base DIFF 38)",
+    "st_np_outer_note_top_of_image": "DIFF 14 (before DIFF 14, base DIFF 14)",
+    "st_np_three_notes_one_cluster": "DIFF 26 (before DIFF 26, base DIFF 46)"
+   }
+  },
+  "BE": {
+   "cases": 34,
+   "svg_cases": 24,
+   "java_valid_svg": 22,
+   "base_java_valid_svg_strict_match": 0,
+   "base_comment_lists_exact": 2,
+   "before_java_valid_svg_strict_match": 17,
+   "before_comment_lists_exact": 22,
+   "tip_java_valid_svg_strict_match": 22,
+   "tip_comment_lists_exact": 22,
+   "before_to_tip": {
+    "lost_match": [],
+    "gained_match": [
+     "no_outer_note_left_of_image",
+     "no_outer_two_notes_on_image",
+     "no_root_cluster_note",
+     "no_root_two_clusters_notes",
+     "pua_b_upper_escape_point"
+    ],
+    "new_valid_input_error": [],
+    "lost_rejection": [],
+    "new_panic": [],
+    "outputs_changed": 17,
+    "stderr_changed": []
+   },
+   "tip_failing_java_valid_svg": {}
+  },
+  "BC": {
+   "cases": 19,
+   "svg_cases": 19,
+   "java_valid_svg": 19,
+   "base_java_valid_svg_strict_match": 0,
+   "base_comment_lists_exact": 4,
+   "before_java_valid_svg_strict_match": 18,
+   "before_comment_lists_exact": 18,
+   "tip_java_valid_svg_strict_match": 18,
+   "tip_comment_lists_exact": 18,
+   "before_to_tip": {
+    "lost_match": [],
+    "gained_match": [],
+    "new_valid_input_error": [],
+    "lost_rejection": [],
+    "new_panic": [],
+    "outputs_changed": 8,
+    "stderr_changed": []
+   },
+   "tip_failing_java_valid_svg": {
+    "pua_b_usecase": "DIFF 12 (before DIFF 12, base DIFF 12)"
+   }
+  },
+  "BB": {
+   "cases": 36,
+   "svg_cases": 36,
+   "java_valid_svg": 26,
+   "base_java_valid_svg_strict_match": 2,
+   "base_comment_lists_exact": 8,
+   "before_java_valid_svg_strict_match": 25,
+   "before_comment_lists_exact": 26,
+   "tip_java_valid_svg_strict_match": 25,
+   "tip_comment_lists_exact": 26,
+   "before_to_tip": {
+    "lost_match": [],
+    "gained_match": [],
+    "new_valid_input_error": [],
+    "lost_rejection": [],
+    "new_panic": [],
+    "outputs_changed": 11,
+    "stderr_changed": []
+   },
+   "tip_failing_java_valid_svg": {
+    "sur_removed_entity": "DIFF 1 (before DIFF 1, base DIFF 1)"
+   }
+  },
+  "AW": {
+   "cases": 45,
+   "svg_cases": 45,
+   "java_valid_svg": 39,
+   "base_java_valid_svg_strict_match": 6,
+   "base_comment_lists_exact": 20,
+   "before_java_valid_svg_strict_match": 30,
+   "before_comment_lists_exact": 37,
+   "tip_java_valid_svg_strict_match": 30,
+   "tip_comment_lists_exact": 37,
+   "before_to_tip": {
+    "lost_match": [],
+    "gained_match": [],
+    "new_valid_input_error": [],
+    "lost_rejection": [],
+    "new_panic": [],
+    "outputs_changed": 2,
+    "stderr_changed": []
+   },
+   "tip_failing_java_valid_svg": {
+    "theme_plain_activity": "DIFF 27 (before DIFF 27, base DIFF 27)",
+    "theme_mono_sequence": "DIFF 19 (before DIFF 19, base DIFF 19)",
+    "theme_amiga_class": "DIFF 19 (before DIFF 19, base DIFF 19)",
+    "theme_plain_state": "DIFF 16 (before DIFF 16, base DIFF 16)",
+    "theme_mono_usecase": "DIFF 12 (before DIFF 12, base DIFF 12)",
+    "theme_amiga_component": "DIFF 17 (before DIFF 17, base DIFF 17)",
+    "theme_plain_variable": "DIFF 15 (before DIFF 15, base DIFF 15)",
+    "theme_plain_then_cerulean": "DIFF 9 (before DIFF 9, base DIFF 9)",
+    "rh_suffix_undeclared": "DIFF 2 (before DIFF 2, base DIFF 2)"
+   }
+  },
+  "AU": {
+   "cases": 32,
+   "svg_cases": 32,
+   "java_valid_svg": 29,
+   "base_java_valid_svg_strict_match": 6,
+   "base_comment_lists_exact": 22,
+   "before_java_valid_svg_strict_match": 21,
+   "before_comment_lists_exact": 29,
+   "tip_java_valid_svg_strict_match": 21,
+   "tip_comment_lists_exact": 29,
+   "before_to_tip": {
+    "lost_match": [],
+    "gained_match": [],
+    "new_valid_input_error": [],
+    "lost_rejection": [],
+    "new_panic": [],
+    "outputs_changed": 2,
+    "stderr_changed": []
+   },
+   "tip_failing_java_valid_svg": {
+    "delay_legacy_lead2_creole": "DIFF 9 (before DIFF 9, base DIFF 9)",
+    "delay_legacy_multiline": "DIFF 18 (before DIFF 18, base DIFF 18)",
+    "delay_teoz_lead3_multiline": "DIFF 17 (before DIFF 17, base DIFF 17)",
+    "raw_blank_before_start": "DIFF 7 (before DIFF 7, base DIFF 7)",
+    "raw_sequence_two_blanks": "DIFF 16 (before DIFF 16, base DIFF 25)",
+    "theme_mono_class": "DIFF 15 (before DIFF 15, base DIFF 15)",
+    "theme_plain_class_note": "DIFF 18 (before DIFF 18, base DIFF 18)",
+    "theme_plain_sequence": "DIFF 16 (before DIFF 16, base DIFF 16)"
+   }
+  },
+  "AR": {
+   "cases": 20,
+   "svg_cases": 20,
+   "java_valid_svg": 20,
+   "base_java_valid_svg_strict_match": 6,
+   "base_comment_lists_exact": 13,
+   "before_java_valid_svg_strict_match": 17,
+   "before_comment_lists_exact": 19,
+   "tip_java_valid_svg_strict_match": 17,
+   "tip_comment_lists_exact": 19,
+   "before_to_tip": {
+    "lost_match": [],
+    "gained_match": [],
+    "new_valid_input_error": [],
+    "lost_rejection": [],
+    "new_panic": [],
+    "outputs_changed": 1,
+    "stderr_changed": []
+   },
+   "tip_failing_java_valid_svg": {
+    "delay_legacy_short": "DIFF 40 (before DIFF 40, base DIFF 40)",
+    "delay_legacy_wide": "DIFF 27 (before DIFF 27, base DIFF 27)",
+    "deploy_alias_reverse_up": "DIFF 15 (before DIFF 15, base DIFF 16)"
+   }
+  }
+ },
+ "gates": {
+  "exit_codes": "base, before, tip identical: lib 0, pipe_mode 0, doc_claims 0; golden_no_oracle, golden_pairs, parity_perturbations, harness_guards 101 (measurements/gates/*.exit)",
+  "golden_no_oracle": "11181/11251 in all three trees. before and tip fail the ratchet on the 3 GET goldens only (activity 1299->1297, edge-cases 760->759), as in round 4; base fails on unlocked improvements (class, preprocessing, rendering).",
+  "no_oracle_failure_names_vs_9834a7194": "tip vs base: +3 GET goldens (act_skinparam2_shadowing_true, act_skinparam_shadowing, edge_whitespace_multiple_blank_lines), -3 (preproc_complex_theme_override, state_history_shallow, state_note_composite now match). tip vs before: identical (measurements/gates/*.golden_nonmatch_names.txt).",
+  "golden_pairs": "12550 total, 10497 passed, 754 failed, 1299 skipped in base, before and tip.",
+  "parity_perturbations": "merge tree 1622 failing, tip 1614: 0 new failures, 8 now pass (BE no_outer_note_left_of_image, no_outer_two_notes_on_image, no_root_cluster_note, no_root_two_clusters_notes, pua_b_upper_escape_point; state-autonomous-root-painted-normalization checker_lr_concurrent_nested_labels, checker_lr_root_ellipse_nested_chain; state-parallel-transition-route-identity review_compound_endpoint_parallel_order).",
+  "harness_guards": "guard categories and counts identical between the merge tree and tip (measurements/gates/merge.guard_cats.txt, tip.guard_cats.txt); decimal_literal_ratchet output identical (the round-5 drafts add no high-precision literal and remove the 0.75 constant); parity_review_records_are_complete categories identical.",
+  "pipe_mode": "17 passed (before, tip); base 13 passed.",
+  "workspace_lib": "tip 1584 passed, 0 failed (before 1574, base 1468).",
+  "fmt_clippy": "cargo fmt --check clean. clippy findings (warning mode, toolchain 1.99) identical between the merge tree and tip (23 distinct pre-existing lines, measurements/gates/*.clippy.txt); -D warnings fails on both on the pre-existing dead looks_like_description_bracket_command."
+ },
+ "frozen_items": "Unchanged: comparator slack, golden_has_syntax_error markers, park list, error census, guard allow-lists and the 14-entry strict-XML list (no file under crates/rustuml-oracle, test-diagrams, Makefile or scripts changed by the round-5 commits).",
+ "relay_request": "relay-request-m5a.json: 53 held-out -tsvg probes staged immutable at ~/Library/Caches/rustuml-shared-svg-round5-claude-maker/m5a with Rust predictions of a18a76980, equal to the outputs of ce1e52e30 and 5149e8ecb.",
+ "mechanism": "comment-state-consumers",
+ "obligations": {
+  "1 outer image origin (BLOCKING)": {
+   "status": "implemented f3ebc92f3 (account outer-image-origin-account.json, f5442f4e5) + ce1e52e30 (addendum note-anchor-pass-three-addendum.json, d80bee422)",
+   "java_trace": "SvekResult.calculateDimension 128-136 (moveDelta(6 - minX, 6 - minY), dimension delta 15); LimitFinder.drawRectangle 175-179 (x-1,y-1) vs drawUPath 155-158 (Opale note path, no adjustment); CucaDiagram.getDefaultMargins 803-806 (0,5,5,0). Pass three: StateDiagramFactory 97-100 registers CommandFactoryNoteOnEntity for ParserPass.THREE; executeInternal 224-240 finds the anchor created by a pass-two link.",
+   "acceptance": "BE no_outer_note_left_of_image MATCH, no_outer_two_notes_on_image MATCH; BF st_np_outer_note_left_multiline MATCH, st_np_outer_note_left_on_leaf_with_image MATCH (and st_np_note_before_target, st_np_root_note_before_states). Held-out: m5a no5_* (8 probes) pending relay.",
+   "still_failing_BF": "st_np_outer_note_top_of_image (note top/bottom of an image falls through), st_np_outer_floating_with_image (floating note), st_np_outer_note_in_live_cluster_on_image, st_np_concurrent_regions, st_np_link_note_in_cluster, st_np_three_notes_one_cluster (top/bottom notes in a cluster), st_bp_multiline_label, st_bp_root_wide_multiline; all DIFF in before as well."
+  },
+  "5 root-path note qualified name": {
+   "status": "implemented 3ebcb763e (account root-path-note-names-account.json)",
+   "java_trace": "CommandFactoryNoteOnEntity.executeInternal 258-260 (getUniqueSequence(GMN), quarkInContext(true, tmp)); CucaDiagram.quarkInContextSafe 249-275 (getCurrentGroup().getQuark().child(full)).",
+   "acceptance": "BE no_root_cluster_note MATCH, no_root_two_clusters_notes MATCH, BF st_np_root_three_clusters MATCH; held-out m5a rp5_root_note_depth2, rp5_two_groups_sides pending."
+  },
+  "6 routing guard f6b7f66f0": {
+   "status": "addendum routing-guard-addendum.json (f5442f4e5)",
+   "java_trace": "CucaDiagramSimplifierState.simplify 57-70 decides whether any GroupMakerState image exists; GraphvizImageBuilder.buildImage is the one root builder; with no image, render_non_autarkic_root_clusters is its port."
+  }
+ },
+ "residue": [
+  "Notes above/below images (note top/bottom of) and floating notes keep falling through.",
+  "A note anchor resolved at its own line to a quark a later line makes ambiguous keeps the earlier resolution.",
+  "checker_history_font_state_channel: the history label font is wrong (pre-existing), so the painted bounds and canvas height follow it."
+ ],
+ "commits": {
+  "f5442f4e5": "accounts (all round-5 obligations), docs only",
+  "f3ebc92f3": "draft: outer image origin and size from LimitFinder bounds",
+  "3ebcb763e": "draft: note qualified names on every path",
+  "d80bee422": "post-measurement addendum: note anchors in pass three, docs only",
+  "ce1e52e30": "draft: pass-three note anchor resolution",
+  "02fa4159f": "relay request m5a (before any Java result), docs only",
+  "5149e8ecb": "clippy-only rewrite in the YAML pre-pass (no output change)"
+ }
+}

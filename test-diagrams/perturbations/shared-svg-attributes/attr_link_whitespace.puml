@@ -1,0 +1,6 @@
+@startuml
+participant Elm
+note right of Elm
+q[[https://example.org/tree{Oak<U+0009>Fir<U+000D>Pine<U+000A>Elm}leaf]]r
+end note
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+state Kiln {
+  Fire --> Cool
+  note right of Fire : hot
+  note left of Cool : slow
+}
+Kiln --> Shelf
+@enduml

@@ -1,0 +1,3 @@
+dyld[13809]: <6E98C4AB-4080-3720-A1FD-8B1D2970F53A> /opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib
+dyld[13809]: <1B09A439-3CC1-32FF-B220-D7DF73A78B9A> /opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib
+dyld[13809]: <B780F53E-4D94-3E1D-8761-DDFA7A0BAB30> /opt/homebrew/Cellar/freetype/2.15.0/lib/libfreetype.6.dylib

@@ -1,0 +1,29 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      note as Memo
+        cooked first oak
+      second oak
+      RAW first elm
+      second elm
+      end note
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Note 0
+  entities: []
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - '  cooked first oak'
+    - second oak
+    - RAW first elm
+    - second elm
+    target: null
+    position: null
+    alias: Memo
+    source_line: 3
+  hide_show: []

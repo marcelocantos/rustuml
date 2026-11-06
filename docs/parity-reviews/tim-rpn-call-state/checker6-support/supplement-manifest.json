@@ -1,0 +1,54 @@
+[
+  {
+    "source": "/tmp/rustuml-checker6/supplement/sub_defined_in_uncalled.puml",
+    "mechanism": "tim-local-sub-collection",
+    "axes": [
+      "function collection",
+      "external local replay"
+    ],
+    "negative": false,
+    "cwd": "supplement",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/supplement/operand_overload_return.puml",
+    "mechanism": "tim-call-operand-resolution",
+    "axes": [
+      "signature arity",
+      "return/procedure dispatch"
+    ],
+    "negative": false,
+    "cwd": "supplement",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/supplement/operand_overload_procedure.puml",
+    "mechanism": "tim-call-operand-resolution",
+    "axes": [
+      "declaration order",
+      "plain dispatch"
+    ],
+    "negative": false,
+    "cwd": "supplement",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/supplement/rpn_bare_read.puml",
+    "mechanism": "tim-rpn-call-state",
+    "axes": [
+      "parameter identity",
+      "direct expression lookup"
+    ],
+    "negative": false,
+    "cwd": "supplement",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  }
+]

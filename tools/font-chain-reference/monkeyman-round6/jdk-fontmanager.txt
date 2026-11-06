@@ -1,0 +1,16 @@
+## /opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib
+/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib:
+	/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib (compatibility version 1.0.0, current version 1.0.0)
+	/opt/homebrew/opt/harfbuzz/lib/libharfbuzz.0.dylib (compatibility version 61001.0.0, current version 61001.0.0)
+	/opt/homebrew/opt/freetype/lib/libfreetype.6.dylib (compatibility version 27.0.0, current version 27.2.0)
+	@rpath/libawt.dylib (compatibility version 1.0.0, current version 1.0.0)
+	@rpath/libjava.dylib (compatibility version 1.0.0, current version 1.0.0)
+	@rpath/libjvm.dylib (compatibility version 1.0.0, current version 1.0.0)
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1345.100.2)
+	@rpath/libawt_lwawt.dylib (compatibility version 1.0.0, current version 1.0.0)
+	/System/Library/Frameworks/CoreText.framework/Versions/A/CoreText (compatibility version 1.0.0, current version 1.0.0)
+	/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation (compatibility version 150.0.0, current version 2420.0.0)
+	/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics (compatibility version 64.0.0, current version 1774.4.3)
+	/usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 1700.255.0)
+## version-like strings
+80488062f9ab885f1860b0e3b8fc3d13030a0a05765c06d12301668d7404812c  /opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib

@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam classAttributeFontStyle bold
+class E1 {
+  +Avid Dawky Vow 4.7, gym kayak ovo!
+}
+@enduml

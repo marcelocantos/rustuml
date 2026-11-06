@@ -1,0 +1,4 @@
+@startuml
+skinparam shadowing true
+class "Vault x" as V
+@enduml

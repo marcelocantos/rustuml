@@ -1,0 +1,3 @@
+@startyaml
+k: [x%chr(13)y, z]
+@endyaml

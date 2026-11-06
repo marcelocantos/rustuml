@@ -8,5 +8,6 @@
 
 pub mod diagram;
 pub mod display;
+pub mod java_utf16;
 pub mod parse;
 pub mod preprocess;

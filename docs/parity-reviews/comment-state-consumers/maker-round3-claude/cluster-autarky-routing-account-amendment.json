@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "mechanism": "comment-state-consumers",
+  "amends": "docs/parity-reviews/comment-state-consumers/maker-round2-claude/cluster-autarky-routing-account.json (account commit 066603e48)",
+  "reason": "Review-3 (dc9d6136b) found that the round-2 cluster account does not name the special-point and rank mechanisms that drafts 1603cc54e and 47cc04b28 implement. This amendment names them after the fact; it does not change those drafts and it does not backdate the account. The chronology of the original account and its drafts stays as recorded in review-3.",
+  "status": "amendment by the maker; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "mechanisms_implemented_but_not_named": [
+    {
+      "mechanism": "cluster special point",
+      "java_locations": [
+        "svek/ClusterDotString.java#printInternal (lines 91-99, 146-150): thereALinkFromOrToGroup2 = isThereALinkFromOrToGroup(lines); when true the cluster writes Cluster.getSpecialPointId(group) as a [shape=point,width=.01] node inside the cluster, wrapped in the 'a' and 'i' protection subgraphs when GraphvizVersion.useProtectionWhenThereALinkFromOrToGroup().",
+        "svek/ClusterDotString.java#isThereALinkFromOrToGroup (317-323): true when any SvekEdge of the current builder isLinkFromOrTo(cluster.getGroup()); SvekEdges come from DotData.getLinks, which include note links as well as transitions."
+      ],
+      "rust_locations": [
+        "crates/rustuml-render/src/state.rs#layout_autonomous_scope: a live cluster keeps its endpoint node (LayoutGraph::add_svek_cluster_endpoint) only when some transition names the group (the id filter at the top of the function); draft 1603cc54e (root path) and 47cc04b28 (inside images)."
+      ],
+      "known_gap": "Rust tests transitions only; Java's isThereALinkFromOrToGroup also counts a note link anchored to the group itself. That case is untested against Java (review-3 bounded obligation 'relay one Java pair for a group whose only link is a note anchored to the group'); it is part of the round-3 relay request."
+    },
+    {
+      "mechanism": "cluster source/sink ranks for border points",
+      "java_locations": [
+        "svek/ClusterDotString.java#printInternal (134-142): when the cluster has non-NORMAL entity positions, printRanks(RANK_SOURCE, inputs) and printRanks(RANK_SINK, outputs), then the 'ee' subgraph (with the cluster label unless hasPort()).",
+        "svek/ClusterDotString.java#printRanks (254-288): '{rank=source|sink; uid;...}' followed by each node's shape; with ports, the entries are chained with arrowhead=none edges to the empty() node.",
+        "svek/EntityPosition getInputs/getOutputs: entryPoint/inputPin/expansionInput are inputs, exitPoint/outputPin/expansionOutput are outputs."
+      ],
+      "rust_locations": [
+        "crates/rustuml-render/src/state.rs#layout_autonomous_scope (draft 47cc04b28) and render_non_autarkic_root_clusters (draft 1603cc54e): StateEntityPosition::is_input -> LayoutGraph::add_cluster_source_node, is_output -> add_cluster_sink_node, otherwise add_cluster_node.",
+        "crates/rustuml-layout/src/graph.rs#graphviz_node_creation_order: a cluster's source-rank and sink-rank nodes are created before its other nodes, as printRanks writes them before printCluster2."
+      ]
+    }
+  ],
+  "round3_related_change": "Round 3 (account 5cb1c89bc) also ports DotStringFactory.createDotString -> Cluster.printCluster2 node order for state scopes with live clusters; see scope-dot-node-order-account.json."
+}

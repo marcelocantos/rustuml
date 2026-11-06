@@ -56,10 +56,12 @@ fn parse_description_bracket_declaration(trimmed: &str) -> Option<(String, Strin
     let captures = RE_DESCRIPTION_BRACKET_DECL.captures(trimmed)?;
     if let Some(display) = captures.get(1) {
         let label = display.as_str().to_string();
+        // CommandCreateElementFull: quarkInContext(cleanId(codeRaw)), and
+        // CucaDiagram.cleanId removes one [ ] pair, keeping spaces.
         let id = captures
             .get(2)
             .map(|alias| alias.as_str().to_string())
-            .unwrap_or_else(|| label.replace(' ', "_"));
+            .unwrap_or_else(|| label.clone());
         return Some((id, label));
     }
 

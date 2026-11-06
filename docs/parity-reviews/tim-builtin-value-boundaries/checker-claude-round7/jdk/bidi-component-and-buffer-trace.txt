@@ -1,0 +1,197 @@
+# OpenJDK jdk21u tag jdk-21.0.5-ga, https://github.com/openjdk/jdk21u (raw files)
+b798df7b1b37bd900156142403a34a161a4aa02e4e9256fc11f23d963d84dbe8  CCharToGlyphMapper.java
+33a73e47afbb4442d3872c2731a2045cdcfc2216db9aa3f2f4cdf0ccd10094c6  CCompositeGlyphMapper.java
+8743d68a994e3c10beb75c08a8a861cb04f1e16fddd18d2fc997a3412354e868  CharInfo.java
+82e68fbd63d5afd75ccb69a799009d503640837834be4fc754d39dc6bf89163d  ExtendedTextSourceLabel.java
+06e4691d8a47f7b6eefe46fd2f5d89098df402f20ab2ac870fde6ff2b1f1f970  Font.java
+1cb0916194925a3abca47e45804797f574ef029cf54b6d9649a07f9ce9fe00e5  FontRunIterator.java
+cb95ae86fdb667fb1b5876c56d3ed3095ae1f484ba2849f5b72092a70d4f07d6  GlyphLayout.java
+ae8c4d2f360bf174df301981a1ca49ba17c6f5ce8f4ca0ec1be1b72c05d4abc4  ScriptRun.java
+618555ad7b569e74b5456dc33ff87e143bc2a1e1df9b09b967eeee744e363422  StandardTextSource.java
+13dae525c407827712159600d3818eaaf59fdb4ee8a3447b6ff458b760d18ff3  SunLayoutEngine.java
+f22871a7096beb1710ce122f70aaa3014ca793029a92356b5ff49f427016658a  TextLabelFactory.java
+3a1f3346a9c65517c1d988057a71c86a6c2e9df853880309ac2bf28b3538b981  TextLayout.java
+4568ae0716573d32ea503ca3515de7a59d92268e38b033745c1a717fe02cb5bd  TextLine.java
+5579427642883c4f0666e96eb66197c66bbe9ec109eb870ba9b4f02597262ca2  ToStream.java
+8027d83a94f5bbb00ffc26cf8a46e4ee6b6181d53456db5ceb8637a2083a9544  hb-jdk-font.cc
+2fbbde51399d24f49737f960b3df860ba5f8d11494c68ff82f78f1be2262d617  HBShaper.c
+0a329fea19df6cc75f40a451d98c87b140cbcca47f57abce2b50d257001ce5d9  scriptMapping.c
+9bb5464506e06d9adaae3dac0a42139d376a7e99088bd169a6af6ec723bc6dcf  CoreTextSupport.m
+
+## java/awt/font/TextLine.java 933-965 (fastCreateTextLine: Bidi levels, createComponentsOnRun)
+        if (!requiresBidi) {
+            requiresBidi = Bidi.requiresBidi(chars, 0, chars.length);
+        }
+
+        if (requiresBidi) {
+          int bidiflags = values == null
+              ? Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT
+              : values.getRunDirection();
+
+          bidi = new Bidi(chars, 0, embs, 0, chars.length, bidiflags);
+          if (!bidi.isLeftToRight()) {
+              levels = BidiUtils.getLevels(bidi);
+              int[] charsVtoL = BidiUtils.createVisualToLogicalMap(levels);
+              charsLtoV = BidiUtils.createInverseMap(charsVtoL);
+              isDirectionLTR = bidi.baseIsLeftToRight();
+          }
+        }
+
+        Decoration decorator = Decoration.getDecoration(values);
+
+        int layoutFlags = 0; // no extra info yet, bidi determines run and line direction
+        TextLabelFactory factory = new TextLabelFactory(frc, chars, bidi, layoutFlags);
+
+        TextLineComponent[] components = new TextLineComponent[1];
+
+        components = createComponentsOnRun(0, chars.length,
+                                           chars,
+                                           charsLtoV, levels,
+                                           factory, font, lm,
+                                           frc,
+                                           decorator,
+                                           components,
+                                           0);
+## TextLine.java 1007-1037 (one component per firstVisualChunk)
+        int pos = runStart;
+        do {
+            int chunkLimit = firstVisualChunk(charsLtoV, levels, pos, runLimit); // <= displayLimit
+
+            do {
+                int startPos = pos;
+                int lmCount;
+
+                if (cm == null) {
+                    LineMetrics lineMetrics = font.getLineMetrics(chars, startPos, chunkLimit, frc);
+                    cm = CoreMetrics.get(lineMetrics);
+                    lmCount = lineMetrics.getNumChars();
+                }
+                else {
+                    lmCount = (chunkLimit-startPos);
+                }
+
+                TextLineComponent nextComponent =
+                    factory.createExtended(font, cm, decorator, startPos, startPos + lmCount);
+
+                ++numComponents;
+                if (numComponents >= components.length) {
+                    components = expandArray(components);
+                }
+
+                components[numComponents-1] = nextComponent;
+
+                pos += lmCount;
+            } while (pos < chunkLimit);
+
+        } while (pos < runLimit);
+## TextLine.java 1296-1305 (firstVisualChunk: split at a level change)
+    private static int firstVisualChunk(int[] order, byte[] direction,
+                                        int start, int limit)
+    {
+        if (order != null && direction != null) {
+          byte dir = direction[start];
+          while (++start < limit && direction[start] == dir) {}
+          return start;
+        }
+        return limit;
+    }
+## sun/font/TextLabelFactory.java 116-134
+  public ExtendedTextLabel createExtended(Font font,
+                                          CoreMetrics lm,
+                                          Decoration decorator,
+                                          int start,
+                                          int limit) {
+
+    if (start >= limit || start < lineStart || limit > lineLimit) {
+      throw new IllegalArgumentException("bad start: " + start + " or limit: " + limit);
+    }
+
+    int level = lineBidi == null ? 0 : lineBidi.getLevelAt(start - lineStart);
+    int linedir = (lineBidi == null || lineBidi.baseIsLeftToRight()) ? 0 : 1;
+    int layoutFlags = flags & ~0x9; // remove bidi, line direction flags
+    if ((level & 0x1) != 0) layoutFlags |= 1; // rtl
+    if ((linedir & 0x1) != 0) layoutFlags |= 8; // line rtl
+
+    TextSource source = new StandardTextSource(text, start, limit - start, lineStart, lineLimit - lineStart, level, layoutFlags, font, frc, lm);
+    return new ExtendedTextSourceLabel(source, decorator);
+  }
+## sun/font/ExtendedTextSourceLabel.java 325-335
+  protected StandardGlyphVector createGV() {
+    FontRenderContext frc = source.getFRC();
+    int flags = source.getLayoutFlags();
+    char[] context = source.getChars();
+    int start = source.getStart();
+    int length = source.getLength();
+
+    GlyphLayout gl = GlyphLayout.get(null); // !!! no custom layout engines
+    gv = gl.layout(font, frc, context, start, length, flags, null); // ??? use textsource
+    GlyphLayout.done(gl);
+
+## sun/font/GlyphLayout.java 405-431 (script runs over [offset, offset+count) only)
+            font2D = ((FontSubstitution)font2D).getCompositeFont2D();
+        }
+
+        _textRecord.init(text, offset, lim, min, max);
+        int start = offset;
+        if (font2D instanceof CompositeFont) {
+            _scriptRuns.init(text, offset, count); // ??? how to handle 'common' chars
+            _fontRuns.init((CompositeFont)font2D, text, offset, lim);
+            while (_scriptRuns.next()) {
+                int limit = _scriptRuns.getScriptLimit();
+                int script = _scriptRuns.getScriptCode();
+                while (_fontRuns.next(script, limit)) {
+                    Font2D pfont = _fontRuns.getFont();
+                    /* layout can't deal with NativeFont instances. The
+                     * native font is assumed to know of a suitable non-native
+                     * substitute font. This currently works because
+                     * its consistent with the way NativeFonts delegate
+                     * in other cases too.
+                     */
+                    if (pfont instanceof NativeFont) {
+                        pfont = ((NativeFont)pfont).getDelegateFont();
+                    }
+                    int gmask = _fontRuns.getGlyphMask();
+                    int pos = _fontRuns.getPos();
+                    nextEngineRecord(start, pos, script, lang, pfont, gmask);
+                    start = pos;
+                }
+## share/native/libfontmanager/hb-jdk-font.cc 198-207
+static hb_bool_t
+hb_jdk_get_glyph_extents (hb_font_t *font HB_UNUSED,
+                         void *font_data,
+                         hb_codepoint_t glyph,
+                         hb_glyph_extents_t *extents,
+                         void *user_data HB_UNUSED)
+{
+  /* TODO */
+  return false;
+}
+## sun/font/FontRunIterator.java 115-126
+    public boolean next(int script, int lim) {
+        if (pos == lim) {
+            return false;
+        }
+
+        int ch = nextCodePoint(lim);
+        int sl = mapper.charToGlyph(ch) & CompositeGlyphMapper.SLOTMASK;
+        slot = sl >>> 24;
+        while ((ch = nextCodePoint(lim)) != DONE && (mapper.charToGlyph(ch) & CompositeGlyphMapper.SLOTMASK) == sl);
+        pushback(ch);
+
+        return true;
+## CCompositeGlyphMapper.java 54-68
+    private int convertToGlyph(int unicode) {
+        for (int slot = 0; slot < font.numSlots; slot++) {
+            CharToGlyphMapper mapper = getSlotMapper(slot);
+            int glyphCode = mapper.charToGlyph(unicode);
+            // The CFont Mappers will return a negative code
+            // for fonts that will fill the glyph from fallbacks
+            // - cascading font in OSX-speak. But we need to be
+            //  know here that only the codes > 0 are really present.
+            if (glyphCode > 0) {
+                glyphCode = compositeGlyphCode(slot, glyphCode);
+                return glyphCode;
+            }
+        }
+        return missingGlyph;
+    }

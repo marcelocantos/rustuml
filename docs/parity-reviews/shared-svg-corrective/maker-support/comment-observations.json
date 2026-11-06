@@ -1,0 +1,1341 @@
+[
+  {
+    "id": "collateral/1272-checker2_quote_unicode",
+    "cohort": "retained",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1272-checker2_quote_unicode/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1272-checker2_quote_unicode/java.svg",
+    "before_comments": [
+      "class 1970 \u00e9t\u00e9 ' nuit 10:59:59 +1100"
+    ],
+    "after_comments": [
+      "class 1970 ?t? ' nuit 10:59:59 +1100"
+    ],
+    "java_comments": [
+      "class Clock"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "collateral/1286-checker2_retained_default_explicit_override",
+    "cohort": "retained",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1286-checker2_retained_default_explicit_override/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1286-checker2_retained_default_explicit_override/java.svg",
+    "before_comments": [
+      "class \u00e9,(x)early / othertail"
+    ],
+    "after_comments": [
+      "class ?,(x)early / othertail"
+    ],
+    "java_comments": [
+      "class Copper"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "collateral/1350-checker2_theme_comment_origin",
+    "cohort": "retained",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1350-checker2_theme_comment_origin/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1350-checker2_theme_comment_origin/java.svg",
+    "before_comments": [
+      "class \u00c9rable",
+      "class Oak",
+      "link \u00c9rable to Oak"
+    ],
+    "after_comments": [
+      "class ?rable",
+      "class Oak",
+      "link ?rable to Oak"
+    ],
+    "java_comments": [
+      "class ?rable",
+      "class Oak",
+      "link ?rable to Oak"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "collateral/1493-checker3_retained_values_binding",
+    "cohort": "retained",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1493-checker3_retained_values_binding/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1493-checker3_retained_values_binding/java.svg",
+    "before_comments": [
+      "class 0072 / 10 / \u00e9\u03bb"
+    ],
+    "after_comments": [
+      "class 0072 / 10 / ??"
+    ],
+    "java_comments": [
+      "class Values"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "prior31/0002-checker4_surrogate_projection",
+    "cohort": "retained",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/prior31/0002-checker4_surrogate_projection/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/prior31/0002-checker4_surrogate_projection/java.svg",
+    "before_comments": [
+      "class left \ufffd right"
+    ],
+    "after_comments": [
+      "class left ? right"
+    ],
+    "java_comments": [],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "fresh29/0004-surrogate_display_residue",
+    "cohort": "retained",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/fresh29/0004-surrogate_display_residue/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/fresh29/0004-surrogate_display_residue/java.svg",
+    "before_comments": [
+      "class \ufffd"
+    ],
+    "after_comments": [
+      "class ?"
+    ],
+    "java_comments": [],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "maker13/0005-surrogate_prefix",
+    "cohort": "retained",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/maker13/0005-surrogate_prefix/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/maker13/0005-surrogate_prefix/java.svg",
+    "before_comments": [
+      "class ax\ud83d\ude01 / ax\ud83d\ude00x / short / long / \ud83d\ude00ax / short\u00b2"
+    ],
+    "after_comments": [
+      "class ax? / ax?x / short / long / ?ax / short?"
+    ],
+    "java_comments": [
+      "class Astral"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "checker8/astral_offsets",
+    "cohort": "retained",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker8/astral_offsets/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker8/astral_offsets/java.svg",
+    "before_comments": [
+      "class long replacement / a\ud83d\ude01 / pair / \ud83d\ude00a / \\nshort / short\u00b2"
+    ],
+    "after_comments": [
+      "class long replacement / a? / pair / ?a / \\nshort / short?"
+    ],
+    "java_comments": [
+      "class Offsets"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "checker38/unicode_name",
+    "cohort": "checker38",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker38/unicode_name/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker38/unicode_name/java.svg",
+    "before_comments": [
+      "class A<$\u679d/\u03a9-7> B<$e\u0301> C<$\ud801\udc00>!"
+    ],
+    "after_comments": [
+      "class A<$?/?-7> B<$e?> C<$?>!"
+    ],
+    "java_comments": [
+      "class Review"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "checker38/unicode_color",
+    "cohort": "checker38",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker38/unicode_color/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker38/unicode_color/java.svg",
+    "before_comments": [
+      "class A<#\u00e9$north>B<$north{color=\u00e9}>!"
+    ],
+    "after_comments": [
+      "class A<#?$north>B<$north{color=?}>!"
+    ],
+    "java_comments": [
+      "class Review"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "checker38/nested_angle",
+    "cohort": "checker38",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker38/nested_angle/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker38/nested_angle/java.svg",
+    "before_comments": [
+      "class A\u00ab$north\u00bbB<bad<$south>>C"
+    ],
+    "after_comments": [
+      "class A?$north?B<bad<$south>>C"
+    ],
+    "java_comments": [
+      "class Review"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "checker87/identity_class",
+    "cohort": "checker87",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker87/identity_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker87/identity_class/java.svg",
+    "before_comments": [
+      "class Delta & <Q> \u00e9\ud801\udc00"
+    ],
+    "after_comments": [
+      "class Delta & <Q> ??"
+    ],
+    "java_comments": [
+      "class Delta & <Q> ??"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "checker87/identity_deployment",
+    "cohort": "checker87",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker87/identity_deployment/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker87/identity_deployment/java.svg",
+    "before_comments": [
+      "entity Delta & <Q> \u00e9\ud801\udc00"
+    ],
+    "after_comments": [
+      "entity Delta & <Q> ??"
+    ],
+    "java_comments": [
+      "entity Delta & <Q> ??"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "checker87/comment_double_hyphen",
+    "cohort": "checker87",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker87/comment_double_hyphen/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker87/comment_double_hyphen/java.svg",
+    "before_comments": [
+      "class Double--Tail-"
+    ],
+    "after_comments": [
+      "class Double- -Tail- "
+    ],
+    "java_comments": [
+      "class Double- -Tail- "
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "corrective16/comment_class_runs",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_class_runs.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_class_runs/java.svg.stdout",
+    "before_comments": [
+      "class Pine---Ridge-"
+    ],
+    "after_comments": [
+      "class Pine- - -Ridge- "
+    ],
+    "java_comments": [
+      "class Pine- - -Ridge- "
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "corrective16/comment_class_unicode",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_class_unicode.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_class_unicode/java.svg.stdout",
+    "before_comments": [
+      "class \u00c9\u03a9\ud801\udc37--Leaf-"
+    ],
+    "after_comments": [
+      "class ???- -Leaf- "
+    ],
+    "java_comments": [
+      "class ???- -Leaf- "
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "corrective16/comment_class_symbols",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_class_symbols.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_class_symbols/java.svg.stdout",
+    "before_comments": [
+      "class Oak & Fir--"
+    ],
+    "after_comments": [
+      "class Oak & Fir- - "
+    ],
+    "java_comments": [
+      "class Oak & Fir- - "
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "corrective16/comment_class_links",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_class_links.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_class_links/java.svg.stdout",
+    "before_comments": [
+      "class Fir--",
+      "class Ash-",
+      "link Fir-- to Ash-"
+    ],
+    "after_comments": [
+      "class Fir- - ",
+      "class Ash- ",
+      "link Fir- - to Ash- "
+    ],
+    "java_comments": [
+      "class Fir- - ",
+      "class Ash- ",
+      "link Fir- - to Ash- "
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "corrective16/comment_package",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_package.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_package/java.svg.stdout",
+    "before_comments": [
+      "cluster Grove--",
+      "class Pine-"
+    ],
+    "after_comments": [
+      "cluster Grove- - ",
+      "class Pine- "
+    ],
+    "java_comments": [
+      "cluster Grove- - ",
+      "class Pine- "
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "corrective16/comment_component",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_component.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_component/java.svg.stdout",
+    "before_comments": [
+      "entity Node--Tail-"
+    ],
+    "after_comments": [
+      "entity Node- -Tail- "
+    ],
+    "java_comments": [
+      "entity Node- -Tail- "
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "corrective16/comment_deployment",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_deployment.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_deployment/java.svg.stdout",
+    "before_comments": [
+      "cluster Host--Tail-",
+      "entity Disk--"
+    ],
+    "after_comments": [
+      "cluster Host- -Tail- ",
+      "entity Disk- - "
+    ],
+    "java_comments": [
+      "cluster Host- -Tail- ",
+      "entity Disk- - "
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "corrective16/comment_usecase",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_usecase.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_usecase/java.svg.stdout",
+    "before_comments": [
+      "entity Guide--",
+      "entity Case--Tail-",
+      "link Guide-- to Case--Tail-"
+    ],
+    "after_comments": [
+      "entity Guide- - ",
+      "entity Case- -Tail- ",
+      "link Guide- - to Case- -Tail- "
+    ],
+    "java_comments": [
+      "entity Guide- - ",
+      "entity Case- -Tail- ",
+      "link Guide- - to Case- -Tail- "
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "corrective16/comment_object_links",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_object_links.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_object_links/java.svg.stdout",
+    "before_comments": [],
+    "after_comments": [],
+    "java_comments": [
+      "link Obj- - to Peer- "
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": false
+  },
+  {
+    "id": "corrective16/comment_state_links",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_state_links.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_state_links/java.svg.stdout",
+    "before_comments": [],
+    "after_comments": [],
+    "java_comments": [],
+    "producer_comments_before_match_java": true,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": false
+  },
+  {
+    "id": "corrective16/comment_activity_legacy",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_activity_legacy.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_activity_legacy/java.svg.stdout",
+    "before_comments": [],
+    "after_comments": [],
+    "java_comments": [
+      "link start to Task- - ",
+      "link Task- - to end"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": false
+  },
+  {
+    "id": "corrective16/comment_archimate",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_archimate.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_archimate/java.svg.stdout",
+    "before_comments": [],
+    "after_comments": [],
+    "java_comments": [
+      "entity Ledger"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": false
+  },
+  {
+    "id": "corrective16/state_alpha_empty",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/state_alpha_empty.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/state_alpha_empty/java.svg.stdout",
+    "before_comments": [],
+    "after_comments": [],
+    "java_comments": [],
+    "producer_comments_before_match_java": true,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": false
+  },
+  {
+    "id": "corrective16/state_alpha_description",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/state_alpha_description.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/state_alpha_description/java.svg.stdout",
+    "before_comments": [],
+    "after_comments": [],
+    "java_comments": [],
+    "producer_comments_before_match_java": true,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": false
+  },
+  {
+    "id": "corrective16/state_alpha_zero",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/state_alpha_zero.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/state_alpha_zero/java.svg.stdout",
+    "before_comments": [],
+    "after_comments": [],
+    "java_comments": [],
+    "producer_comments_before_match_java": true,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": false
+  },
+  {
+    "id": "corrective16/state_alpha_opaque",
+    "cohort": "corrective16",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/state_alpha_opaque.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/state_alpha_opaque/java.svg.stdout",
+    "before_comments": [],
+    "after_comments": [],
+    "java_comments": [],
+    "producer_comments_before_match_java": true,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": false
+  },
+  {
+    "id": "full-golden/class/class_edge_unicode_names",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/class/class_edge_unicode_names/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/class/class_edge_unicode_names/java.svg",
+    "before_comments": [
+      "class \u00c5ngstr\u00f6m",
+      "class Fa\u00e7ade"
+    ],
+    "after_comments": [
+      "class ?ngstr?m",
+      "class Fa?ade"
+    ],
+    "java_comments": [
+      "class ?ngstr?m",
+      "class Fa?ade"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/component/comp_unicode_stereotypes",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/component/comp_unicode_stereotypes/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/component/comp_unicode_stereotypes/java.svg",
+    "before_comments": [
+      "entity Service ?",
+      "entity Service ?",
+      "link Service \u03b1 to Service \u03b2"
+    ],
+    "after_comments": [
+      "entity Service ?",
+      "entity Service ?",
+      "link Service ? to Service ?"
+    ],
+    "java_comments": [
+      "entity Service ?",
+      "entity Service ?",
+      "link Service ? to Service ?"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_boundary",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_boundary/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_boundary/java.svg",
+    "before_comments": [
+      "class **BoundaryClass** \u00abboundary\u00bb"
+    ],
+    "after_comments": [
+      "class **BoundaryClass** ?boundary?"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_controller",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_controller/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_controller/java.svg",
+    "before_comments": [
+      "class **ControllerClass** \u00abcontroller\u00bb"
+    ],
+    "after_comments": [
+      "class **ControllerClass** ?controller?"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_entity",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_entity/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_entity/java.svg",
+    "before_comments": [
+      "class **EntityClass** \u00abentity\u00bb"
+    ],
+    "after_comments": [
+      "class **EntityClass** ?entity?"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_repository",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_repository/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_repository/java.svg",
+    "before_comments": [
+      "class **RepositoryClass** \u00abrepository\u00bb"
+    ],
+    "after_comments": [
+      "class **RepositoryClass** ?repository?"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_service",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_service/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_service/java.svg",
+    "before_comments": [
+      "class **ServiceClass** \u00abservice\u00bb"
+    ],
+    "after_comments": [
+      "class **ServiceClass** ?service?"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_value",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_value/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_value/java.svg",
+    "before_comments": [
+      "class **ValueClass** \u00abvalue object\u00bb"
+    ],
+    "after_comments": [
+      "class **ValueClass** ?value object?"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/deployment/deploy_unicode",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/deployment/deploy_unicode/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/deployment/deploy_unicode/java.svg",
+    "before_comments": [
+      "entity \u0421\u0435\u0440\u0432\u0435\u0440 \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0439",
+      "entity \u0411\u0430\u0437\u0430 \u0434\u0430\u043d\u043d\u044b\u0445",
+      "entity \u0412\u0435\u0431-\u0441\u0435\u0440\u0432\u0435\u0440",
+      "link WS to SA",
+      "link SA to BD"
+    ],
+    "after_comments": [
+      "entity ?????? ??????????",
+      "entity ???? ??????",
+      "entity ???-??????",
+      "link WS to SA",
+      "link SA to BD"
+    ],
+    "java_comments": [
+      "entity SA",
+      "entity BD",
+      "entity WS",
+      "link WS to SA",
+      "link SA to BD"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_meta_unicode_title",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_meta_unicode_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_meta_unicode_title/java.svg",
+    "before_comments": [
+      "class \u7528\u6237",
+      "class \u7cfb\u7edf",
+      "link \u7528\u6237 to \u7cfb\u7edf"
+    ],
+    "after_comments": [
+      "class ??",
+      "class ??",
+      "link ?? to ??"
+    ],
+    "java_comments": [
+      "class ??",
+      "class ??",
+      "link ?? to ??"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_accented_class",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_accented_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_accented_class/java.svg",
+    "before_comments": [
+      "class \u00c9l\u00e8ve",
+      "class Se\u00f1or",
+      "class \u00dcber",
+      "class \u00d8rsted"
+    ],
+    "after_comments": [
+      "class ?l?ve",
+      "class Se?or",
+      "class ?ber",
+      "class ?rsted"
+    ],
+    "java_comments": [
+      "class ?l?ve",
+      "class Se?or",
+      "class ?ber",
+      "class ?rsted"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_arabic_class_diagram",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_arabic_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_arabic_class_diagram/java.svg",
+    "before_comments": [
+      "class \u0645\u0633\u062a\u062e\u062f\u0645",
+      "class \u0646\u0638\u0627\u0645",
+      "link \u0645\u0633\u062a\u062e\u062f\u0645 to \u0646\u0638\u0627\u0645"
+    ],
+    "after_comments": [
+      "class ??????",
+      "class ????",
+      "link ?????? to ????"
+    ],
+    "java_comments": [
+      "class ??????",
+      "class ????",
+      "link ?????? to ????"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_arabic_title",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_arabic_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_arabic_title/java.svg",
+    "before_comments": [
+      "class \u0645\u0633\u062a\u062e\u062f\u0645"
+    ],
+    "after_comments": [
+      "class ??????"
+    ],
+    "java_comments": [
+      "class ??????"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_chinese_class",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_class/java.svg",
+    "before_comments": [
+      "class \u7528\u6237",
+      "class \u8ba2\u5355",
+      "link \u7528\u6237 to \u8ba2\u5355"
+    ],
+    "after_comments": [
+      "class ??",
+      "class ??",
+      "link ?? to ??"
+    ],
+    "java_comments": [
+      "class ??",
+      "class ??",
+      "link ?? to ??"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_chinese_class_diagram",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_class_diagram/java.svg",
+    "before_comments": [
+      "class \u7528\u6237",
+      "class \u7cfb\u7edf",
+      "link \u7528\u6237 to \u7cfb\u7edf"
+    ],
+    "after_comments": [
+      "class ??",
+      "class ??",
+      "link ?? to ??"
+    ],
+    "java_comments": [
+      "class ??",
+      "class ??",
+      "link ?? to ??"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_chinese_title",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_title/java.svg",
+    "before_comments": [
+      "class \u7528\u6237"
+    ],
+    "after_comments": [
+      "class ??"
+    ],
+    "java_comments": [
+      "class ??"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_combining_chars",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_combining_chars/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_combining_chars/java.svg",
+    "before_comments": [
+      "class e\u0301le\u0300ve"
+    ],
+    "after_comments": [
+      "class e?le?ve"
+    ],
+    "java_comments": [
+      "class e?le?ve"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_emoji_class",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_emoji_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_emoji_class/java.svg",
+    "before_comments": [
+      "class \ud83d\ude80 Rocket",
+      "class \ud83c\udf0d Earth",
+      "link \ud83d\ude80 Rocket to \ud83c\udf0d Earth"
+    ],
+    "after_comments": [
+      "class ? Rocket",
+      "class ? Earth",
+      "link ? Rocket to ? Earth"
+    ],
+    "java_comments": [
+      "class ? Rocket",
+      "class ? Earth",
+      "link ? Rocket to ? Earth"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_greek_class_diagram",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_greek_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_greek_class_diagram/java.svg",
+    "before_comments": [
+      "class \u03a7\u03c1\u03ae\u03c3\u03c4\u03b7\u03c2",
+      "class \u03a3\u03cd\u03c3\u03c4\u03b7\u03bc\u03b1",
+      "link \u03a7\u03c1\u03ae\u03c3\u03c4\u03b7\u03c2 to \u03a3\u03cd\u03c3\u03c4\u03b7\u03bc\u03b1"
+    ],
+    "after_comments": [
+      "class ???????",
+      "class ???????",
+      "link ??????? to ???????"
+    ],
+    "java_comments": [
+      "class ???????",
+      "class ???????",
+      "link ??????? to ???????"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_greek_title",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_greek_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_greek_title/java.svg",
+    "before_comments": [
+      "class \u03a7\u03c1\u03ae\u03c3\u03c4\u03b7\u03c2"
+    ],
+    "after_comments": [
+      "class ???????"
+    ],
+    "java_comments": [
+      "class ???????"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_hebrew_class_diagram",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hebrew_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hebrew_class_diagram/java.svg",
+    "before_comments": [
+      "class \u05de\u05e9\u05ea\u05de\u05e9",
+      "class \u05de\u05e2\u05e8\u05db\u05ea",
+      "link \u05de\u05e9\u05ea\u05de\u05e9 to \u05de\u05e2\u05e8\u05db\u05ea"
+    ],
+    "after_comments": [
+      "class ?????",
+      "class ?????",
+      "link ????? to ?????"
+    ],
+    "java_comments": [
+      "class ?????",
+      "class ?????",
+      "link ????? to ?????"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_hebrew_title",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hebrew_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hebrew_title/java.svg",
+    "before_comments": [
+      "class \u05de\u05e9\u05ea\u05de\u05e9"
+    ],
+    "after_comments": [
+      "class ?????"
+    ],
+    "java_comments": [
+      "class ?????"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_hindi_class_diagram",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hindi_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hindi_class_diagram/java.svg",
+    "before_comments": [
+      "class \u0909\u092a\u092f\u094b\u0917\u0915\u0930\u094d\u0924\u093e",
+      "class \u092a\u094d\u0930\u0923\u093e\u0932\u0940",
+      "link \u0909\u092a\u092f\u094b\u0917\u0915\u0930\u094d\u0924\u093e to \u092a\u094d\u0930\u0923\u093e\u0932\u0940"
+    ],
+    "after_comments": [
+      "class ??????????",
+      "class ???????",
+      "link ?????????? to ???????"
+    ],
+    "java_comments": [],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_hindi_title",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hindi_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hindi_title/java.svg",
+    "before_comments": [
+      "class \u0909\u092a\u092f\u094b\u0917\u0915\u0930\u094d\u0924\u093e"
+    ],
+    "after_comments": [
+      "class ??????????"
+    ],
+    "java_comments": [
+      "class ??????????"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_japanese_class",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_class/java.svg",
+    "before_comments": [
+      "class \u30e6\u30fc\u30b6\u30fc",
+      "class \u6ce8\u6587",
+      "link \u30e6\u30fc\u30b6\u30fc to \u6ce8\u6587"
+    ],
+    "after_comments": [
+      "class ????",
+      "class ??",
+      "link ???? to ??"
+    ],
+    "java_comments": [
+      "class ????",
+      "class ??",
+      "link ???? to ??"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_japanese_class_diagram",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_class_diagram/java.svg",
+    "before_comments": [
+      "class \u30e6\u30fc\u30b6\u30fc",
+      "class \u30b7\u30b9\u30c6\u30e0",
+      "link \u30e6\u30fc\u30b6\u30fc to \u30b7\u30b9\u30c6\u30e0"
+    ],
+    "after_comments": [
+      "class ????",
+      "class ????",
+      "link ???? to ????"
+    ],
+    "java_comments": [
+      "class ????",
+      "class ????",
+      "link ???? to ????"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_japanese_title",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_title/java.svg",
+    "before_comments": [
+      "class \u30e6\u30fc\u30b6\u30fc"
+    ],
+    "after_comments": [
+      "class ????"
+    ],
+    "java_comments": [
+      "class ????"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_korean_class",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_korean_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_korean_class/java.svg",
+    "before_comments": [
+      "class \uc0ac\uc6a9\uc790",
+      "class \uc8fc\ubb38",
+      "link \uc0ac\uc6a9\uc790 to \uc8fc\ubb38"
+    ],
+    "after_comments": [
+      "class ???",
+      "class ??",
+      "link ??? to ??"
+    ],
+    "java_comments": [
+      "class ???",
+      "class ??",
+      "link ??? to ??"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_korean_class_diagram",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_korean_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_korean_class_diagram/java.svg",
+    "before_comments": [
+      "class \uc0ac\uc6a9\uc790",
+      "class \uc2dc\uc2a4\ud15c",
+      "link \uc0ac\uc6a9\uc790 to \uc2dc\uc2a4\ud15c"
+    ],
+    "after_comments": [
+      "class ???",
+      "class ???",
+      "link ??? to ???"
+    ],
+    "java_comments": [
+      "class ???",
+      "class ???",
+      "link ??? to ???"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_korean_title",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_korean_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_korean_title/java.svg",
+    "before_comments": [
+      "class \uc0ac\uc6a9\uc790"
+    ],
+    "after_comments": [
+      "class ???"
+    ],
+    "java_comments": [
+      "class ???"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_math_symbols",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_math_symbols/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_math_symbols/java.svg",
+    "before_comments": [
+      "class \u03a3_Calculator"
+    ],
+    "after_comments": [
+      "class ?_Calculator"
+    ],
+    "java_comments": [
+      "class ?_Calculator"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_mixed_scripts",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_mixed_scripts/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_mixed_scripts/java.svg",
+    "before_comments": [
+      "class \u6df7\u5408 Mixed \u043c\u0435\u0448\u0430\u043d\u044b\u0439"
+    ],
+    "after_comments": [
+      "class ?? Mixed ???????"
+    ],
+    "java_comments": [
+      "class ?? Mixed ???????"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_russian_class_diagram",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_russian_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_russian_class_diagram/java.svg",
+    "before_comments": [
+      "class \u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c",
+      "class \u0421\u0438\u0441\u0442\u0435\u043c\u0430",
+      "link \u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c to \u0421\u0438\u0441\u0442\u0435\u043c\u0430"
+    ],
+    "after_comments": [
+      "class ????????????",
+      "class ???????",
+      "link ???????????? to ???????"
+    ],
+    "java_comments": [
+      "class ????????????",
+      "class ???????",
+      "link ???????????? to ???????"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_russian_title",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_russian_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_russian_title/java.svg",
+    "before_comments": [
+      "class \u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c"
+    ],
+    "after_comments": [
+      "class ????????????"
+    ],
+    "java_comments": [
+      "class ????????????"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_surrogate_pairs",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_surrogate_pairs/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_surrogate_pairs/java.svg",
+    "before_comments": [
+      "class \ud83d\ude00 Emoji Class"
+    ],
+    "after_comments": [
+      "class ? Emoji Class"
+    ],
+    "java_comments": [
+      "class ? Emoji Class"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_thai_class_diagram",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_thai_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_thai_class_diagram/java.svg",
+    "before_comments": [
+      "class \u0e1c\u0e39\u0e49\u0e43\u0e0a\u0e49",
+      "class \u0e23\u0e30\u0e1a\u0e1a",
+      "link \u0e1c\u0e39\u0e49\u0e43\u0e0a\u0e49 to \u0e23\u0e30\u0e1a\u0e1a"
+    ],
+    "after_comments": [
+      "class ??????",
+      "class ????",
+      "link ?????? to ????"
+    ],
+    "java_comments": [],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": false,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_thai_title",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_thai_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_thai_title/java.svg",
+    "before_comments": [
+      "class \u0e1c\u0e39\u0e49\u0e43\u0e0a\u0e49"
+    ],
+    "after_comments": [
+      "class ??????"
+    ],
+    "java_comments": [
+      "class ??????"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_zero_width",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_zero_width/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_zero_width/java.svg",
+    "before_comments": [
+      "class Foo\u200bBar"
+    ],
+    "after_comments": [
+      "class Foo?Bar"
+    ],
+    "java_comments": [
+      "class Foo?Bar"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  },
+  {
+    "id": "full-golden/rendering/text/text_unicode_class_names",
+    "cohort": "full-golden",
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/rendering/text/text_unicode_class_names/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/rendering/text/text_unicode_class_names/java.svg",
+    "before_comments": [
+      "class \u00c4rger",
+      "class \u00dcbung",
+      "class \u00d6ffnung",
+      "link \u00c4rger to \u00dcbung",
+      "link \u00dcbung to \u00d6ffnung"
+    ],
+    "after_comments": [
+      "class ?rger",
+      "class ?bung",
+      "class ?ffnung",
+      "link ?rger to ?bung",
+      "link ?bung to ?ffnung"
+    ],
+    "java_comments": [
+      "class ?rger",
+      "class ?bung",
+      "class ?ffnung",
+      "link ?rger to ?bung",
+      "link ?bung to ?ffnung"
+    ],
+    "producer_comments_before_match_java": false,
+    "producer_comments_after_match_java": true,
+    "comment_body_change": true
+  }
+]

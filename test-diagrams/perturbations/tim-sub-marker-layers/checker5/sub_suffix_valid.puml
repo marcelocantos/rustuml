@@ -1,0 +1,12 @@
+@startuml
+!$n=0
+!startsub alpha
+!$n=$n+2
+!endsub! ignored
+!startsub beta
+!$n=$n+5
+!endsub . trailing
+!includesub alpha
+!includesub beta
+class "$n" as Suffix
+@enduml

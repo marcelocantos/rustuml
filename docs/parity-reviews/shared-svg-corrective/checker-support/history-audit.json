@@ -1,0 +1,24 @@
+{
+  "accounts": [
+    {
+      "account": "docs/parity-reviews/shared-svg-corrective/doctype-account.json",
+      "commit": "4157ec70f277dbb4795f5272859c8aec5d43ede0",
+      "implementation": "47dece176b375bea41a575085ab71832d0d1a76a",
+      "unchanged_since_account": true
+    },
+    {
+      "account": "docs/parity-reviews/shared-svg-corrective/comment-account.json",
+      "commit": "db89554110b766979582ef46c6303db09f489447",
+      "implementation": "346f6b3f680895d3eb457041ed88ae224c583d95",
+      "unchanged_since_account": true
+    },
+    {
+      "account": "docs/parity-reviews/shared-svg-corrective/state-fill-account.json",
+      "commit": "db89554110b766979582ef46c6303db09f489447",
+      "implementation": "346f6b3f680895d3eb457041ed88ae224c583d95",
+      "unchanged_since_account": true
+    }
+  ],
+  "prior_files": 11325,
+  "all_prior_blobs_identical": true
+}

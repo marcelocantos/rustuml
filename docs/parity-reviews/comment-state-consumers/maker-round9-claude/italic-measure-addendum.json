@@ -1,0 +1,24 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "status": "maker addendum after a measurement, before the change is committed; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "amends": "per-face-facts-account.json (c518a95d5)",
+ "measurement_that_prompted_it": "BO (C8A) through a dev build of the per-face change before commit: c8a_ci_creole_italic, c8a_ci_creole_bolditalic and c8a_lt_verdana_deva_link matched, but c8a_ci_abstract_latin/_hebrew/_leading/_size11 stayed DIFF (4 differences: box and lines 8.4014 narrower than the drawn text) and c8a_ci_usecase_italic DIFF3 (ellipse sized without the mark).",
+ "cause": [
+  "The per-face model makes the measured face depend on italic, so every path that measures text drawn italic must pass the style. Three did not (before round 8 every Courier New style had the plain face's facts, so the omission was invisible):",
+  "class.rs calc_entity_dims and the header emission measure the entity name with measure_no_underline_with_family (no italic) while emit_text draws it with name_italic (abstract class, interface, italic class font or stereotype style).",
+  "class.rs calc_entity_dims measures member text without italic while emit_member draws {abstract} members italic (member.is_abstract || attr_font.italic).",
+  "usecase.rs use_case_footprint_atoms measures each creole atom with measure_with_family(atom, size, bold, family), dropping segment.style.italic."
+ ],
+ "java_locations": [
+  "Java measures the TextBlock it draws: EntityImageClassHeader builds the name block from a FontConfiguration that is italic for abstract classes and interfaces; member lines (MethodsOrFieldsArea) are created with the italic font for abstract members; the use-case body (BodyFactory.create2 / CreoleStripeSimpleParser AtomText) measures each atom with its own FontConfiguration, italic included (Footprint.MyUGraphic.drawText records the UText of that font)."
+ ],
+ "change": [
+  "class.rs: entity_name_italic(entity, font), the emission's existing rule, is shared by calc_entity_dims and the header emission; names are measured with measure_no_underline_with_family_and_face(.., name_italic, ..); abstract members are measured italic as they are drawn.",
+  "text_render.rs: measure_no_underline_with_family_and_face.",
+  "usecase.rs: footprint atoms are measured with segment.style.italic."
+ ],
+ "check": "A self-consistency scan (a private probe build logging every family_text_width call for text holding U+1D167) over sequence, activity, class, object, state, component, usecase, mindmap, wbs, title/legend/header/footer inputs with italic Courier New finds no remaining text measured both italic and not italic. It does find text measured in SansSerif while drawn in the defaultFontName (activity if-diamond conditions, component edge labels, state box widths, sequence title); that is the obligation-3 pattern in other renderers, pre-existing and out of this packet's scope (filed as a target).",
+ "expect": "BO c8a_ci_abstract_latin/_hebrew/_leading/_size11 and c8a_ci_usecase_italic MATCH; no golden changes (no golden carries an unmapped mark or other face-dependent character in italic Courier New/Menlo/Arial/Verdana/Helvetica text)."
+}

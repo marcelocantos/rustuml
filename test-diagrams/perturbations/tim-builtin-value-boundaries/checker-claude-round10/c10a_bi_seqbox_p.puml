@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Times New Roman
+box "Kiln wq vista"
+participant A
+end box
+@enduml

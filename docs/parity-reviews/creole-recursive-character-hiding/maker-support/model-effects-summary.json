@@ -1,0 +1,7 @@
+{
+  "entries": 1948,
+  "all_full_yaml_byte_equal": true,
+  "semantic_changes": [],
+  "UID_identity_factory_source_topology_changes": [],
+  "serialization": "All WBS and other model bytes unchanged, including existing explicit None shape fields. Parser and WBS renderer unchanged."
+}

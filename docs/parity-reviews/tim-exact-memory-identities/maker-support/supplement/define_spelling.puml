@@ -1,0 +1,7 @@
+@startuml
+!define PERSON Alice
+!define MESSAGE hello
+note as N
+PERSON / $PERSON / MESSAGE / $MESSAGE
+end note
+@enduml

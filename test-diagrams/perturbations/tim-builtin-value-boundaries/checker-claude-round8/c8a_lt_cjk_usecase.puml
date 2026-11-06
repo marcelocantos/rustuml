@@ -1,0 +1,5 @@
+@startuml
+usecase "漢字かな €́" as U
+actor "한국어" as A
+A --> U : テスト́
+@enduml

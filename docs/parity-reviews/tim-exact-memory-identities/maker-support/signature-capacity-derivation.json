@@ -1,0 +1,531 @@
+{
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jvm_standard_signature_count": 74,
+  "source_methods": [
+    "TContext.addStandardFunctions",
+    "TFunctionSignature.hashCode",
+    "HashMap.hash/putVal/resize/HashIterator"
+  ],
+  "jdk_source_zip": "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/lib/src.zip",
+  "jdk_hashmap_source_sha256": "71c8d82247c2736e9fbe3769f366e9bd250bc73ecf390749998e830201aaabf2",
+  "standard_signatures": [
+    {
+      "class_": "AlwaysFalse",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/AlwaysFalse.java",
+      "name": "%false",
+      "arity": 0,
+      "sha256": "c10af7ff4ba9e18434f87fad93e270c7b9559f86d52395720874f8637ddec16c"
+    },
+    {
+      "class_": "AlwaysTrue",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/AlwaysTrue.java",
+      "name": "%true",
+      "arity": 0,
+      "sha256": "c2ebd955cdf733f5e0c439d8195038c78c5cc886515f27831bc7b952cfc2ed27"
+    },
+    {
+      "class_": "Backslash",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Backslash.java",
+      "name": "%backslash",
+      "arity": 0,
+      "sha256": "41473c812455ed8e94176811f92ab1aaa993c2c492facd560c25f21780a1f67b"
+    },
+    {
+      "class_": "BoolVal",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/BoolVal.java",
+      "name": "%boolval",
+      "arity": 1,
+      "sha256": "bc6c805e00603e4b81b204470aabd0967108283912fdd0d883929aaea718a3f4"
+    },
+    {
+      "class_": "Breakline",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Breakline.java",
+      "name": "%breakline",
+      "arity": 0,
+      "sha256": "368551cbaf7290c3db3d9fece0883c5e941ddb79687d86848eac6e9771b51bfc"
+    },
+    {
+      "class_": "CallUserFunction",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/CallUserFunction.java",
+      "name": "%call_user_func",
+      "arity": 1,
+      "sha256": "9e094850edd309d3dcdf7699a52c6178f74c75a713585b23a959c4ad21b60819"
+    },
+    {
+      "class_": "Chr",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Chr.java",
+      "name": "%chr",
+      "arity": 1,
+      "sha256": "e381406c7be418c7222dedc6ce78812d6524312cf6acd1af13a425d60fb1b643"
+    },
+    {
+      "class_": "Darken",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Darken.java",
+      "name": "%darken",
+      "arity": 2,
+      "sha256": "e27c2e87ae6c267370bd70f1d97593a3d3e395145ead2f8de42c8ca27e9a6d00"
+    },
+    {
+      "class_": "DateFunction",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/DateFunction.java",
+      "name": "%date",
+      "arity": 2,
+      "sha256": "9e98290027e6f93e31fbc5818ffa8b8e42c4c1a493bed76852e489cb1d57bb05"
+    },
+    {
+      "class_": "Dec2hex",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Dec2hex.java",
+      "name": "%dec2hex",
+      "arity": 1,
+      "sha256": "ef79ed247871c041c810512678997e3d434ff3205fec308b5e6961f2a65e195e"
+    },
+    {
+      "class_": "Dirpath",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Dirpath.java",
+      "name": "%dirpath",
+      "arity": 0,
+      "sha256": "87cb73f123345a799fe71d1c68049a021ae1b4317f1c709d0bb5f9eda13610f0"
+    },
+    {
+      "class_": "Dollar",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Dollar.java",
+      "name": "%dollar",
+      "arity": 0,
+      "sha256": "9ae42bdddcfe25148f7eec0a3494a44f4868d3b05e659244497174dec2332bd3"
+    },
+    {
+      "class_": "Eval",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Eval.java",
+      "name": "%eval",
+      "arity": 1,
+      "sha256": "164bc59e180bfd6e320fd634260d50d711ae9960b5843cdcf3748dddcfe11b72"
+    },
+    {
+      "class_": "Feature",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Feature.java",
+      "name": "%feature",
+      "arity": 1,
+      "sha256": "2882db98c8eb4e2ea8083dc83056060ff89bc0823e08557eef38ba3fc8fa8619"
+    },
+    {
+      "class_": "Filedate",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Filedate.java",
+      "name": "%filedate",
+      "arity": 0,
+      "sha256": "d0b814257a720d957df9c46b54ae5ed2f2538215d65cb182f77c6ccb085a7b16"
+    },
+    {
+      "class_": "FileExists",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/FileExists.java",
+      "name": "%file_exists",
+      "arity": 1,
+      "sha256": "53a3cf5b3bfb52c3227b296272ee754bb699041d92abdf77c4f1dd0c035e64b3"
+    },
+    {
+      "class_": "Filename",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Filename.java",
+      "name": "%filename",
+      "arity": 0,
+      "sha256": "1715d15eeae54258b53be521a4bce0ee9f9c9ecdaf0da23b952e4d194a8dc534"
+    },
+    {
+      "class_": "FilenameNoExtension",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/FilenameNoExtension.java",
+      "name": "%filename_no_extension",
+      "arity": 0,
+      "sha256": "39d48a3c82e1ab7d805eeb51d859a22c4392f07a19cf8c4cae850c3699b57776"
+    },
+    {
+      "class_": "FunctionExists",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/FunctionExists.java",
+      "name": "%function_exists",
+      "arity": 1,
+      "sha256": "f5e30acf6c4008a26f66ed6b1c14daa566e493b3cd17cbe4f1e559c92a8cbe77"
+    },
+    {
+      "class_": "GetAllStdlib",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/GetAllStdlib.java",
+      "name": "%get_all_stdlib",
+      "arity": 1,
+      "sha256": "7a88f6631872b7d52ec0c80a8f43fb4fd3fe14d3e4fa7e1cdbd85f9d5c551b69"
+    },
+    {
+      "class_": "GetAllTheme",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/GetAllTheme.java",
+      "name": "%get_all_theme",
+      "arity": 0,
+      "sha256": "2e6028e065b6a12ad8cbf9241882ffea82195c1a9ba522ca72b96b6ab895e442"
+    },
+    {
+      "class_": "GetCurrentTheme",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/GetCurrentTheme.java",
+      "name": "%get_current_theme",
+      "arity": 0,
+      "sha256": "9e15c66bc818b4c94f3a565b78657df5bb14c968caef5c3c13ffccc8a6da910e"
+    },
+    {
+      "class_": "GetJsonKey",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/GetJsonKey.java",
+      "name": "%get_json_keys",
+      "arity": 1,
+      "sha256": "7dd817447172114d588f4990a8fac5b627c50f4c2575c425dc9a586daaa8b024"
+    },
+    {
+      "class_": "GetJsonType",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/GetJsonType.java",
+      "name": "%get_json_type",
+      "arity": 1,
+      "sha256": "bc1e7a081ecb58133bbcfc8c791849e6b7d74f1b94e5d2823eda057e15036fc3"
+    },
+    {
+      "class_": "GetStdlib",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/GetStdlib.java",
+      "name": "%get_stdlib",
+      "arity": 1,
+      "sha256": "f9c311433b83e1b41b304bd4f2996a808e6947bcae2fda28b2418145253ddff9"
+    },
+    {
+      "class_": "GetVariableValue",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/GetVariableValue.java",
+      "name": "%get_variable_value",
+      "arity": 1,
+      "sha256": "df4e0a1012d686aeae9db691cde276f36da7aa81365d8267e3f0589792b55cd1"
+    },
+    {
+      "class_": "GetVersion",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/GetVersion.java",
+      "name": "%version",
+      "arity": 0,
+      "sha256": "ca280efbf825975a18d257972b80466b3b37ee397ca2722084360a00e741ebc4"
+    },
+    {
+      "class_": "Getenv",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Getenv.java",
+      "name": "%getenv",
+      "arity": 1,
+      "sha256": "3af4d3d2fd6967446e464d1329113549a87a383fb396986cfe442d3adff9e784"
+    },
+    {
+      "class_": "Hex2dec",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Hex2dec.java",
+      "name": "%hex2dec",
+      "arity": 1,
+      "sha256": "f74b54e723ca1da4e6a29d4bb8d3f9b640a05cbc0c9bd4da2231de5bee291486"
+    },
+    {
+      "class_": "HslColor",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/HslColor.java",
+      "name": "%hsl_color",
+      "arity": 3,
+      "sha256": "46714d24741db0cc9354d6fc4f60a26871f975135d22aa28570e14103c43b317"
+    },
+    {
+      "class_": "IntVal",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/IntVal.java",
+      "name": "%intval",
+      "arity": 1,
+      "sha256": "bbb54b1b693e2cc5c68b570e8f02e8beca7511fb548b3d8a0d0fc8890e795c32"
+    },
+    {
+      "class_": "InvokeProcedure",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/InvokeProcedure.java",
+      "name": "%invoke_procedure",
+      "arity": 1,
+      "sha256": "281c696a8975790f1b70e5c06924de782baade1c8513e3a211835cc9074cb287"
+    },
+    {
+      "class_": "IsDark",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/IsDark.java",
+      "name": "%is_dark",
+      "arity": 1,
+      "sha256": "4ac345318ab354fcd3e0a4adc1f6f8668d44e25119c01b3aa4d283aac77dd7f5"
+    },
+    {
+      "class_": "IsLight",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/IsLight.java",
+      "name": "%is_light",
+      "arity": 1,
+      "sha256": "8eafcb23647ba044a819f6af32fd69ffb8eab53ff58e5f3d27cf53042e44ca34"
+    },
+    {
+      "class_": "JsonAdd",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/JsonAdd.java",
+      "name": "%json_add",
+      "arity": 3,
+      "sha256": "4a03452a3a6cdc37cf87288b0a361a74bc0535d1c851da810b4d584716cb6905"
+    },
+    {
+      "class_": "JsonKeyExists",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/JsonKeyExists.java",
+      "name": "%json_key_exists",
+      "arity": 1,
+      "sha256": "321422810d6870aede55c56d8f64ffdec42b6e4ccdc586696af711b9625d7492"
+    },
+    {
+      "class_": "JsonMerge",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/JsonMerge.java",
+      "name": "%json_merge",
+      "arity": 2,
+      "sha256": "c3dde41b4b706a1e093f152f2ac2c123862df36bb31b2ac939b55938c3be0fa5"
+    },
+    {
+      "class_": "JsonRemove",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/JsonRemove.java",
+      "name": "%json_remove",
+      "arity": 2,
+      "sha256": "ebf7b9377e5efed0d05cfe2d1751d2cc902daf8e8a9f3408d7801c8b620e178a"
+    },
+    {
+      "class_": "JsonSet",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/JsonSet.java",
+      "name": "%json_set",
+      "arity": 3,
+      "sha256": "82e38e02826c8efc45ebb05eae71c0787b3c8372c73bcaaab840dabe7412311c"
+    },
+    {
+      "class_": "LeftAlign",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/LeftAlign.java",
+      "name": "%left_align",
+      "arity": 0,
+      "sha256": "99d8676ba017485fbdee691ac35c9cc2aaf1d6de5c4d9799f7518e9cf287fc26"
+    },
+    {
+      "class_": "Lighten",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Lighten.java",
+      "name": "%lighten",
+      "arity": 2,
+      "sha256": "f8ad8b4269a3fe5c551c5722d3861bf6b8328e5358d99139fb420da554cd02ed"
+    },
+    {
+      "class_": "LoadJson",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/LoadJson.java",
+      "name": "%load_json",
+      "arity": 3,
+      "sha256": "49d8e12aba2191f181e5656fce606eeb158408052913fc98e1716a1de6b5afe5"
+    },
+    {
+      "class_": "LogicalAnd",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/LogicalAnd.java",
+      "name": "%and",
+      "arity": 2,
+      "sha256": "7806750f21b5a385e0c88d80980b5f1daecbeaeb4aba94b7a8006b9c576395a4"
+    },
+    {
+      "class_": "LogicalNand",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/LogicalNand.java",
+      "name": "%nand",
+      "arity": 2,
+      "sha256": "da3c5d5d79c029693cab3b0dc9099eb0bc1ac1e438a1b54c3e5cc2bff8869dad"
+    },
+    {
+      "class_": "LogicalNor",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/LogicalNor.java",
+      "name": "%nor",
+      "arity": 2,
+      "sha256": "0ae98cffd078593c89a9112e2b69b39e575f6c8b98ac3991989016187465f490"
+    },
+    {
+      "class_": "LogicalNot",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/LogicalNot.java",
+      "name": "%not",
+      "arity": 1,
+      "sha256": "baad29375db366e111f7031de12fa39d20abc4f8f7f82c33ae744009ec95e445"
+    },
+    {
+      "class_": "LogicalNxor",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/LogicalNxor.java",
+      "name": "%nxor",
+      "arity": 2,
+      "sha256": "ae0fa4c271d8ca8ae73820e1cb2e1d3e080139ca3f91185c97575061c4dc6f0b"
+    },
+    {
+      "class_": "LogicalOr",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/LogicalOr.java",
+      "name": "%or",
+      "arity": 2,
+      "sha256": "3eae4dff3ee611cc2fc6f9a2f645a81e3dce2ebe9afdacc9423e6a54c78a7636"
+    },
+    {
+      "class_": "LogicalXor",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/LogicalXor.java",
+      "name": "%xor",
+      "arity": 2,
+      "sha256": "61dc01cc82c3870823bc20ef7ad67e4372a2f13781bd4fcd11d7389bcc82dabc"
+    },
+    {
+      "class_": "Lower",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Lower.java",
+      "name": "%lower",
+      "arity": 1,
+      "sha256": "cf890aad8de1c08fd85aaff5aba81e9b6752caba5c32c39f5bd0dc83cced4490"
+    },
+    {
+      "class_": "Modulo",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Modulo.java",
+      "name": "%mod",
+      "arity": 2,
+      "sha256": "3d1fd03910a2fc299080e24ca738799d87e067028772cb3a5df3a52262d724a9"
+    },
+    {
+      "class_": "Newline",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Newline.java",
+      "name": "%newline",
+      "arity": 0,
+      "sha256": "6f330331647d4e41690f1b24c31ef7aad1b15a87c4e7695fc3f6b08723eb6809"
+    },
+    {
+      "class_": "NewlineShort",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/NewlineShort.java",
+      "name": "%n",
+      "arity": 0,
+      "sha256": "0cd1159391c79b6ccf5487e3b65db050f4ab768e7c6649774ae6e5699d7551f8"
+    },
+    {
+      "class_": "Now",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Now.java",
+      "name": "%now",
+      "arity": 0,
+      "sha256": "b4972dcce37bfaef4379e113e97b1ebffaa65c5d6d7860c6d8aef38c8b5bf200"
+    },
+    {
+      "class_": "Ord",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Ord.java",
+      "name": "%ord",
+      "arity": 1,
+      "sha256": "2b64e73ecca4bc16d1c4feb450cea9f9c8e7b84bee398c1ccedfc1cb0f2e5de8"
+    },
+    {
+      "class_": "Percent",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Percent.java",
+      "name": "%percent",
+      "arity": 0,
+      "sha256": "b9ed3a43e908ff90d8acd3178e52c0eddf34d779499a889791b14927157eda8b"
+    },
+    {
+      "class_": "RandomFunction",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/RandomFunction.java",
+      "name": "%random",
+      "arity": 2,
+      "sha256": "9f3874f87e9e1533dbb3596a1169bb35fa312de83abbddce4dba6db034ddcbcf"
+    },
+    {
+      "class_": "RetrieveProcedure",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/RetrieveProcedure.java",
+      "name": "%retrieve_procedure",
+      "arity": 1,
+      "sha256": "a1bbeb3b608bfe7c14c20e22296425ecaf896c926a004331cedd94e516900a54"
+    },
+    {
+      "class_": "ReverseColor",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/ReverseColor.java",
+      "name": "%reverse_color",
+      "arity": 1,
+      "sha256": "25624c2de16dcc70fb0156a0b8f40093a928ae8c5f27ab81c9a42cb3c51ed76d"
+    },
+    {
+      "class_": "ReverseHsluvColor",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/ReverseHsluvColor.java",
+      "name": "%reverse_hsluv_color",
+      "arity": 1,
+      "sha256": "580f3223883e3a4b0004ebc3b238075f245b4a528df594163dcd8f331abaf3b5"
+    },
+    {
+      "class_": "RightAlign",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/RightAlign.java",
+      "name": "%right_align",
+      "arity": 0,
+      "sha256": "46a65f93cb004493c394fcbbc84d7bd24e09abea3c37f4223d7adcde40105383"
+    },
+    {
+      "class_": "SetVariableValue",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/SetVariableValue.java",
+      "name": "%set_variable_value",
+      "arity": 2,
+      "sha256": "4f41026b7218b639e5b86e883d879bfa816c1dfb7772756c2d031f3da97de27e"
+    },
+    {
+      "class_": "Size",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Size.java",
+      "name": "%size",
+      "arity": 1,
+      "sha256": "3137c6c98f04f7fd259aa8edb6cd9813bdd7400a3a7ef8a50e3b5716d4438520"
+    },
+    {
+      "class_": "SplitStr",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/SplitStr.java",
+      "name": "%splitstr",
+      "arity": 3,
+      "sha256": "93000aff274651ba2c6ac6dffe60e82116e9ff98a1fcff16780bc8fbd9385efc"
+    },
+    {
+      "class_": "SplitStrRegex",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/SplitStrRegex.java",
+      "name": "%splitstr_regex",
+      "arity": 2,
+      "sha256": "7e8a794b5bff64c18dac880807c49070a373e71a08a5d7c565dbfd4514e4786b"
+    },
+    {
+      "class_": "Str2Json",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Str2Json.java",
+      "name": "%str2json",
+      "arity": 1,
+      "sha256": "1a2104aa1fd536cdd494590e9fbb5f7ebc69f87ebe6bd78e222c72e28053cf99"
+    },
+    {
+      "class_": "StringFunction",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/StringFunction.java",
+      "name": "%string",
+      "arity": 1,
+      "sha256": "a0d8637844b0a1fed0762a085dde4eb3da37050ec40166a2d24369136c941488"
+    },
+    {
+      "class_": "Strlen",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Strlen.java",
+      "name": "%strlen",
+      "arity": 1,
+      "sha256": "f1e83b78e4fec55d174dee415ce2b54a6839a395abc59ac58861f8cc15b1e246"
+    },
+    {
+      "class_": "Strpos",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Strpos.java",
+      "name": "%strpos",
+      "arity": 2,
+      "sha256": "066ae4b23f6879bb0499996abf8d49834f6a1e4a93249d522e31feba4c5516a7"
+    },
+    {
+      "class_": "Substr",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Substr.java",
+      "name": "%substr",
+      "arity": 3,
+      "sha256": "d7865d9f9c06da910c2bcfddb30d8d9d66e1a3c38882f044999039c9773c671a"
+    },
+    {
+      "class_": "Tabulation",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Tabulation.java",
+      "name": "%tab",
+      "arity": 0,
+      "sha256": "a28943b8dc02e821582ea99431cb020bb3dfe5d7a0057a7c886885a82b424e1f"
+    },
+    {
+      "class_": "Upper",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Upper.java",
+      "name": "%upper",
+      "arity": 1,
+      "sha256": "685f50cd06d9e3227fef646cc6523d491fc6dd025abe07db34cacc12cb32e0a3"
+    },
+    {
+      "class_": "VariableExists",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/VariableExists.java",
+      "name": "%variable_exists",
+      "arity": 1,
+      "sha256": "b0627688f7fce6ef6de8fbb2f2d8cf652c55e57f301a035636643ca99b1b9871"
+    },
+    {
+      "class_": "Xargs",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/tim/builtin/Xargs.java",
+      "name": "%xargs",
+      "arity": 0,
+      "sha256": "5b5a40be344657120075df28d7c03f3fd91b4a0cff345af36baa37e51a7013e3"
+    }
+  ]
+}

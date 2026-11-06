@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Verdana
+class "<b>Vault 􏿽</b>" as V
+@enduml

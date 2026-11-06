@@ -1,0 +1,34 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "sub_mechanism": "YAML '|' block values: a port of YamlParser.getBlockStyleString with cleanBlockStyle's per-line trim (round-7 obligation 1, BLOCKING)",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-7.json (attributed_regressions y8_block_inner_pipe, _end, _nested; findings[0..2]; bounded_next_obligations[0])",
+ "java_locations": [
+  "src/main/java/net/sourceforge/plantuml/yaml/parser/YamlLine.java 52-97 build: TAB -> four spaces (54); indent = leading spaces; removeYamlComment of the trimmed rest (63, 199-221: '#' first or ' #' outside quotes); '- ' list prefix adds 2 to the indent (73-76); key/value split at findColonSeparator (the first ':' outside quotes, 101-115); rawValue (trimmed) equal to '|' is KEY_AND_BLOCK_STYLE (87-88); unquote strips one pair of matching quotes from the key (180-191).",
+  "src/main/java/net/sourceforge/plantuml/yaml/parser/YamlParser.java 84-85: a non-list KEY_AND_BLOCK_STYLE line takes getBlockStyleString(indent); a list-item one reaches 72-73 ('wip3', unchanged here).",
+  "src/main/java/net/sourceforge/plantuml/yaml/parser/YamlParser.java 132-149 getBlockStyleString: following lines are the body until one whose YamlLine type is neither NO_KEY_ONLY_TEXT nor EMPTY_LINE and whose indent is <= the key's (139-141); every body line is appended as cleanBlockStyle(indent, line) followed by '\\n' (143-144), so text lines at any indent, deeper key lines, list lines and comment lines are all body.",
+  "src/main/java/net/sourceforge/plantuml/yaml/parser/YamlParser.java 151-154 cleanBlockStyle: String.trim() of the raw line (characters <= U+0020 at both ends; TABs inside are kept).",
+  "src/main/java/net/sourceforge/plantuml/jsondiagram/StyleExtractor.java 59-64: whitespace-only lines never reach YamlParser (ported in round 6)."
+ ],
+ "rust_locations": [
+  "crates/rustuml-parser/src/parse/json_diagram.rs keep_block_line_breaks (round 6) rewrites every line ending ': |' to '|+', block bodies included; serde_yml then applies YAML block semantics (relative indentation kept, body ends by YAML rules)."
+ ],
+ "cause": "Rust delegates the block to serde_yml and patches its chomping by text rewriting; Java builds the value itself with a different body rule and a per-line trim.",
+ "planned_change": [
+  "Remove keep_block_line_breaks.",
+  "Before serde, classify each YAML line as YamlLine.build does (TAB replacement, indent, comment removal, list prefix, colon separator). A KEY_AND_BLOCK_STYLE line and its body (the getBlockStyleString rule) become one line: the same indentation and list prefix, the key as a single-quoted scalar (unquote's text, literal), and the value as a double-quoted scalar whose text is the concatenation of java_trim(line) + '\\n' over the body lines.",
+  "keep_quoted_backslashes no longer guesses block bodies from ': |' / ': >' suffixes for '|' blocks; it uses the same classification (folded '>' is unchanged: Java throws 'wip4' there)."
+ ],
+ "precommitted_measurement": {
+  "oracle": "BJ (K6A) Java references, plus the earlier batches and goldens",
+  "expect": [
+   "BJ y8_block_inner_pipe, y8_block_inner_pipe_end, y8_block_inner_pipe_nested and y8_block_relative_indent match whole-output.",
+   "Block cases that match at the merge keep matching: BJ y8_block_spaced_pipe, y8_block_comment_pipe, y8_block_two_blocks_end, y8_block_dash_body, y8_block_nested_key, y8_block_whitespace_lines; BI yd7_block_mid_document; BH dc6_yaml_block.",
+   "No lost match, lost rejection, new valid-input error or panic in any cohort.",
+   "A fresh perturbation (staged for relay) with a body line ending ': |' at depth 3 and renamed labels."
+  ]
+ }
+}

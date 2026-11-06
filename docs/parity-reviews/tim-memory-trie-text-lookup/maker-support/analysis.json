@@ -1,0 +1,567 @@
+{
+  "implementation": "2274e808433568aa1d8042bf9e3cb1f1de338b4b",
+  "measurement_phase": "iteration2",
+  "module_sha256": "3d99e98125f55671b8e8b0f6353a2aece3c4f9106e99dccd0b5d9f2b588cb334",
+  "frozen_subsets": {
+    "955": {
+      "total": 955,
+      "matches": 431
+    },
+    "1044": {
+      "total": 1044,
+      "matches": 495
+    },
+    "1449": {
+      "total": 1449,
+      "matches": 520
+    }
+  },
+  "standing": {
+    "total": 1628,
+    "passed": 609,
+    "failed": 1019,
+    "exit": 101
+  },
+  "matching_environment_cli": 636,
+  "standing_cli_differences": [
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=-0330",
+        "TZ": "GMT-03:30",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Australia/Melbourne",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 1: cannot include test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_body.inc!useful",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/blocks.inc!chosen",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/tabs.inc!chosen",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/nested.inc!chosen",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/caller.inc!chosen",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 3: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/blocks.inc!chosen",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 3: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/caller.inc!chosen",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Europe/London",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Europe/London",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Australia/Lord_Howe",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Europe/Dublin",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Asia/Kathmandu",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_fixed_fraction.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=FIX-0330",
+        "TZ": "GMT-03:30",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_tokyo_width.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Asia/Tokyo",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "test-diagrams/perturbations/tim-zone-display-width/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_new_york_summer.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "America/New_York",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "test-diagrams/perturbations/tim-zone-display-width/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_utc_width.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "UTC",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "test-diagrams/perturbations/tim-zone-display-width/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Africa/Casablanca",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Africa/Casablanca",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_function_selector.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 5: cannot include checker4-resources/blocks.inc!chosen",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "test-diagrams/perturbations/tim-sub-directive-selection"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_filtered_environment.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+        "PLANTUML_CHECKER4": "007,oak",
+        "CHECKER4_PRIVATE": "benign-control",
+        "plantuml.security.checker4": "benign-hidden",
+        "PLANTUML_SECURITY_PROFILE": "LEGACY"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unsecure_environment.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+        "CHECKER4_PRIVATE": "visible-control",
+        "plantuml.security.checker4": "benign-hidden",
+        "PLANTUML_SECURITY_PROFILE": "UNSECURE"
+      },
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_repeated_comments.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 2: cannot include lib/repeated.inc!chosen",
+      "env": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new"
+    }
+  ],
+  "membership_counts": {
+    "collateral": 1516,
+    "prior31": 31,
+    "fresh29": 29,
+    "maker15": 15,
+    "maker17": 17,
+    "maker18": 18,
+    "fresh6": 29,
+    "newmaker15": 15,
+    "supplement2": 2,
+    "fresh23": 23,
+    "new13": 13,
+    "new2": 2
+  },
+  "unique_source_reference_pairs": {
+    "collateral": 1437,
+    "prior31": 31,
+    "fresh29": 29,
+    "maker15": 15,
+    "maker17": 17,
+    "maker18": 18,
+    "fresh6": 29,
+    "newmaker15": 15,
+    "supplement2": 2,
+    "fresh23": 23,
+    "new13": 13,
+    "new2": 2
+  },
+  "pair_overlap": {
+    "collateral & prior31": 0,
+    "collateral & fresh29": 0,
+    "collateral & maker15": 0,
+    "collateral & maker17": 0,
+    "collateral & maker18": 0,
+    "collateral & fresh6": 0,
+    "collateral & newmaker15": 0,
+    "collateral & supplement2": 0,
+    "collateral & fresh23": 0,
+    "collateral & new13": 0,
+    "collateral & new2": 0,
+    "prior31 & fresh29": 0,
+    "prior31 & maker15": 0,
+    "prior31 & maker17": 0,
+    "prior31 & maker18": 0,
+    "prior31 & fresh6": 0,
+    "prior31 & newmaker15": 0,
+    "prior31 & supplement2": 0,
+    "prior31 & fresh23": 0,
+    "prior31 & new13": 0,
+    "prior31 & new2": 0,
+    "fresh29 & maker15": 0,
+    "fresh29 & maker17": 0,
+    "fresh29 & maker18": 0,
+    "fresh29 & fresh6": 0,
+    "fresh29 & newmaker15": 0,
+    "fresh29 & supplement2": 0,
+    "fresh29 & fresh23": 0,
+    "fresh29 & new13": 0,
+    "fresh29 & new2": 0,
+    "maker15 & maker17": 0,
+    "maker15 & maker18": 0,
+    "maker15 & fresh6": 0,
+    "maker15 & newmaker15": 0,
+    "maker15 & supplement2": 0,
+    "maker15 & fresh23": 0,
+    "maker15 & new13": 0,
+    "maker15 & new2": 0,
+    "maker17 & maker18": 0,
+    "maker17 & fresh6": 0,
+    "maker17 & newmaker15": 0,
+    "maker17 & supplement2": 0,
+    "maker17 & fresh23": 0,
+    "maker17 & new13": 0,
+    "maker17 & new2": 0,
+    "maker18 & fresh6": 0,
+    "maker18 & newmaker15": 0,
+    "maker18 & supplement2": 0,
+    "maker18 & fresh23": 0,
+    "maker18 & new13": 0,
+    "maker18 & new2": 0,
+    "fresh6 & newmaker15": 0,
+    "fresh6 & supplement2": 0,
+    "fresh6 & fresh23": 0,
+    "fresh6 & new13": 0,
+    "fresh6 & new2": 0,
+    "newmaker15 & supplement2": 0,
+    "newmaker15 & fresh23": 0,
+    "newmaker15 & new13": 0,
+    "newmaker15 & new2": 0,
+    "supplement2 & fresh23": 0,
+    "supplement2 & new13": 0,
+    "supplement2 & new2": 0,
+    "fresh23 & new13": 0,
+    "fresh23 & new2": 0,
+    "new13 & new2": 0
+  },
+  "union_unique_pairs": 1631,
+  "panic_groups": {
+    "panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615": [
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_2.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_3.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w1.puml"
+    ],
+    "panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615": [
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e1.puml"
+    ]
+  },
+  "other_valid_errors": [
+    "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/body_ownership.puml",
+    "/tmp/rustuml-checker6/new/intval_unicode_digits.puml",
+    "/tmp/rustuml-checker6/new/intval_unicode_json.puml"
+  ],
+  "model_drops": [
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/sub_empty_0.puml",
+      "valid": false,
+      "before": {
+        "type": "Class",
+        "entities": 2,
+        "source": "@startuml\nclass Anchor\nclass Tail\nAnchor --> Tail\n@enduml\n"
+      },
+      "current": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass Anchor\n"
+      }
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/sub_empty_1.puml",
+      "valid": false,
+      "before": {
+        "type": "Class",
+        "entities": 2,
+        "source": "@startuml\nclass Anchor\nclass Tail\nAnchor --> Tail\n@enduml\n"
+      },
+      "current": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass Anchor\n"
+      }
+    }
+  ],
+  "valid_source_mismatches": [
+    "/tmp/rustuml-checker6/new/intval_unicode_digits.puml",
+    "/tmp/rustuml-checker6/new/intval_unicode_json.puml"
+  ],
+  "retained_and_checker7_gains": [
+    "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/key_dollar.puml",
+    "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/key_combining.puml",
+    "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/parameter_duplicate.puml"
+  ],
+  "lost_valid_passes": [],
+  "new_valid_errors": []
+}

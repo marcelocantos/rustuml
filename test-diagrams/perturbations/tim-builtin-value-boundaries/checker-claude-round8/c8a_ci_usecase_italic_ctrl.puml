@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Courier New
+usecase "<i>Pier x</i>" as U
+@enduml

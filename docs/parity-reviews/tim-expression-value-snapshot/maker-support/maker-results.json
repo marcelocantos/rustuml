@@ -1,0 +1,258 @@
+{
+  "candidate": "6c550246b458eb5f37539713510dc7d919843421",
+  "kind": "maker measurements; not a review",
+  "fresh_reference_status": "17 immutable cases awaiting parent T3 byte relay; local Java prohibited",
+  "delta": {
+    "frozen": {
+      "summary": {
+        "total": 1038,
+        "matches": 489,
+        "invalid": 32,
+        "cli_errors": 23,
+        "valid_cli_errors": 2,
+        "panics": 2,
+        "sources": 0
+      },
+      "delta": {
+        "gains": [],
+        "lost_passes": [],
+        "new_valid_errors": [],
+        "new_errors": []
+      },
+      "baseline": "checker3 after-frozen.json",
+      "missing": 411
+    },
+    "cohort955": {
+      "total": 949,
+      "matches": 425,
+      "invalid": 10,
+      "cli_errors": 4,
+      "valid_cli_errors": 2,
+      "panics": 2,
+      "sources": 0
+    },
+    "cohort1044": {
+      "total": 1038,
+      "matches": 489,
+      "invalid": 32,
+      "cli_errors": 23,
+      "valid_cli_errors": 2,
+      "panics": 2,
+      "sources": 0
+    },
+    "fresh": {
+      "summary": {
+        "total": 42,
+        "matches": 32,
+        "invalid": 10,
+        "cli_errors": 7,
+        "valid_cli_errors": 0,
+        "panics": 0,
+        "sources": 32
+      },
+      "delta": {
+        "gains": [
+          "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_string.puml",
+          "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_json.puml",
+          "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_string.puml",
+          "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_negative.puml",
+          "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_index.puml",
+          "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_slice.puml",
+          "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_json_index.puml",
+          "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_snapshot.puml",
+          "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_literal_macro.puml",
+          "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_snapshot_logical.puml",
+          "test-diagrams/perturbations/tim-function-execution-kind/checker3_loop_early_return.puml",
+          "test-diagrams/perturbations/tim-function-execution-kind/checker3_foreach_return.puml",
+          "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+          "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml"
+        ],
+        "lost_passes": [],
+        "new_valid_errors": [],
+        "new_errors": [
+          "test-diagrams/perturbations/tim-function-execution-kind/checker3_procedure_expression.puml"
+        ]
+      },
+      "baseline": "checker3 after-fresh.json",
+      "missing": 0
+    },
+    "retained": {
+      "summary": {
+        "total": 21,
+        "matches": 13,
+        "invalid": 7,
+        "cli_errors": 7,
+        "valid_cli_errors": 0,
+        "panics": 0,
+        "sources": 14
+      },
+      "delta": {
+        "gains": [],
+        "lost_passes": [],
+        "new_valid_errors": [],
+        "new_errors": []
+      },
+      "baseline": "checker3 after-retained.json",
+      "missing": 0
+    },
+    "supplement": {
+      "summary": {
+        "total": 4,
+        "matches": 2,
+        "invalid": 2,
+        "cli_errors": 2,
+        "valid_cli_errors": 0,
+        "panics": 0,
+        "sources": 2
+      },
+      "delta": {
+        "gains": [],
+        "lost_passes": [],
+        "new_valid_errors": [],
+        "new_errors": [
+          "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr_only.puml",
+          "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown_only.puml"
+        ]
+      },
+      "baseline": "checker3 after-supplement.json",
+      "missing": 0
+    }
+  },
+  "validation": [
+    {
+      "name": "oracle-final",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rustuml-oracle",
+        "--release",
+        "--test",
+        "golden_no_oracle",
+        "--test",
+        "golden_pairs",
+        "--test",
+        "parity_perturbations",
+        "--test",
+        "harness_guards",
+        "--no-fail-fast",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101
+    },
+    {
+      "name": "cli-final",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rustuml",
+        "--test",
+        "pipe_mode"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "parser-final",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rustuml-parser",
+        "--lib"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "clippy-final",
+      "command": [
+        "cargo",
+        "clippy",
+        "-p",
+        "rustuml-parser",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 101
+    },
+    {
+      "name": "format-final",
+      "command": [
+        "rustfmt",
+        "--edition",
+        "2024",
+        "--check",
+        "crates/rustuml-parser/src/preprocess/mod.rs"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "diff-final",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0
+    }
+  ],
+  "main_product": {
+    "matches": 11179,
+    "eligible": 11251,
+    "exit": 101
+  },
+  "main_assisted": {
+    "matches": 10497,
+    "eligible": 11251,
+    "failures": 754,
+    "skipped": 1299,
+    "exit": 101
+  },
+  "guards": {
+    "passed": 4,
+    "total": 6,
+    "exit": 101
+  },
+  "builtin_fixed_gate": {
+    "matches": 513,
+    "total": 1105,
+    "exit": 101,
+    "panics": 2
+  },
+  "builtin_initial_no_debug": {
+    "matches": 499,
+    "total": 1105,
+    "exit": 101
+  },
+  "parser": {
+    "passed": 590,
+    "exit": 0
+  },
+  "cli": {
+    "passed": 15,
+    "exit": 0
+  },
+  "model_comparison": {
+    "valid_pairs": 48,
+    "entity_count_drops": 0
+  },
+  "new_maker_local": {
+    "total": 17,
+    "rendered": 14,
+    "intended_error_controls": 3,
+    "java_comparisons": 0
+  },
+  "historical_preservation": {
+    "files": 5674,
+    "base": "7bb210e9f7578705638c8f3b7c3b43d8b4b906c3",
+    "modified": 0
+  },
+  "pending": [
+    "All 17 fresh Java source/SVG references",
+    "New independent checker; old rejected verdicts unchanged",
+    "Parent combined class/sequence integration",
+    "Unowned source_line0 fallback/entity order/style/palette/activity/handwritten/sequence issues"
+  ]
+}

@@ -1,0 +1,14 @@
+@startuml
+!leaf="first"
+!$leaf="second"
+!function $sibling()
+!return leaf+"/"+$leaf
+!endfunction
+!function $frame(leaf=leaf,$leaf=$leaf)
+!local leaf="hidden"
+!return $sibling()+"/"+leaf+"/"+$leaf
+!endfunction
+!leaf="changed"
+!$answer=$frame()
+class "$answer" as Node
+@enduml

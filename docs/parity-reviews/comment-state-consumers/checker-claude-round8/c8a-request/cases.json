@@ -1,0 +1,716 @@
+{
+ "batch": "C8A",
+ "cases": [
+  {
+   "name": "c8a_ci_abstract_latin",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract"
+   ]
+  },
+  {
+   "name": "c8a_ci_abstract_latin_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_abstract_hebrew",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract",
+    "hebrew"
+   ]
+  },
+  {
+   "name": "c8a_ci_abstract_hebrew_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract",
+    "hebrew",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_abstract_leading",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract",
+    "leading-mark"
+   ]
+  },
+  {
+   "name": "c8a_ci_abstract_leading_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract",
+    "leading-mark",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_stereo_latin",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "stereotype"
+   ]
+  },
+  {
+   "name": "c8a_ci_stereo_latin_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "stereotype",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_fontstyle_italic",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "defaultFontStyle"
+   ]
+  },
+  {
+   "name": "c8a_ci_fontstyle_italic_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "defaultFontStyle",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_creole_italic",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "creole-member"
+   ]
+  },
+  {
+   "name": "c8a_ci_creole_italic_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "creole-member",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_creole_bolditalic",
+   "intended_valid": true,
+   "axes": [
+    "courier-bold-italic",
+    "creole-member"
+   ]
+  },
+  {
+   "name": "c8a_ci_creole_bolditalic_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "courier-bold-italic",
+    "creole-member",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_usecase_italic",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "usecase"
+   ]
+  },
+  {
+   "name": "c8a_ci_usecase_italic_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "usecase",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_abstract_size11",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract",
+    "size"
+   ]
+  },
+  {
+   "name": "c8a_ci_abstract_size11_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract",
+    "size",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_cr_member_plain",
+   "intended_valid": true,
+   "axes": [
+    "courier-regular",
+    "member"
+   ]
+  },
+  {
+   "name": "c8a_cr_member_plain_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "courier-regular",
+    "member",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_cr_member_bold",
+   "intended_valid": true,
+   "axes": [
+    "courier-bold",
+    "creole-member"
+   ]
+  },
+  {
+   "name": "c8a_cr_member_bold_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "courier-bold",
+    "creole-member",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_cr_usecase_plain",
+   "intended_valid": true,
+   "axes": [
+    "courier-regular",
+    "usecase"
+   ]
+  },
+  {
+   "name": "c8a_cr_usecase_plain_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "courier-regular",
+    "usecase",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_hm_rtl_left",
+   "intended_valid": true,
+   "axes": [
+    "mirroring",
+    "helvetica"
+   ]
+  },
+  {
+   "name": "c8a_hm_rtl_right",
+   "intended_valid": true,
+   "axes": [
+    "mirroring",
+    "helvetica"
+   ]
+  },
+  {
+   "name": "c8a_hm_ltr_left",
+   "intended_valid": true,
+   "axes": [
+    "mirroring",
+    "helvetica",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_hm_ltr_right",
+   "intended_valid": true,
+   "axes": [
+    "mirroring",
+    "helvetica",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_hm_lucida_parens",
+   "intended_valid": true,
+   "axes": [
+    "mirroring",
+    "lucida",
+    "equal-advance"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_bracket_nsm_latin",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "NSM-after-bracket",
+    "jdk-deviation"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_bracket_nsm_latin_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "NSM-after-bracket",
+    "jdk-deviation",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_square_nsm_end",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "NSM-after-bracket"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_square_nsm_end_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "NSM-after-bracket",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_angle_nsm_end",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "canonical-bracket"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_angle_nsm_end_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "canonical-bracket",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_bracket_nsm_r",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "N1"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_bracket_nsm_r_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "N1",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_mark_then_digit",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "R-run"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_mark_then_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "R-run",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_open_l_context",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "embedding-direction"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_open_l_context_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "embedding-direction",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_an_digit_thai",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AN",
+    "script-of-component"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_an_digit_thai_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AN",
+    "script-of-component",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_al_en_thai",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W2"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_al_en_thai_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W2",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_al_then_thai_en",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W2",
+    "W7"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_al_then_thai_en_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W2",
+    "W7",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_thai_digit_after_r",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "L-digit"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_thai_digit_after_r_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "L-digit",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_ext_arabic_digit",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "EN",
+    "arabic-script-digit"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_ext_arabic_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "EN",
+    "arabic-script-digit",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_en_cs_en",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W4"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_en_cs_en_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W4",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_an_cs_an",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W4",
+    "AN"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_an_cs_an_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W4",
+    "AN",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_et_en",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W5"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_et_en_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W5",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_rli_digit",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "RLI",
+    "isolate"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_rli_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "RLI",
+    "isolate",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_deva_digit_r",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "L-digit",
+    "deva"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_deva_digit_r_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "L-digit",
+    "deva",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_cnew_khmer_split",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "courier-regular",
+    "khmer"
+   ]
+  },
+  {
+   "name": "c8a_bl_cnew_khmer_split_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "courier-regular",
+    "khmer",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_cnew_hangul_split",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "courier-regular",
+    "hangul"
+   ]
+  },
+  {
+   "name": "c8a_bl_cnew_hangul_split_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "courier-regular",
+    "hangul",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_sequence",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "sequence",
+    "N0"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_sequence_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "sequence",
+    "N0",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_activity",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "activity"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_activity_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "activity",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_tn_abstract_italic",
+   "intended_valid": true,
+   "axes": [
+    "times-italic",
+    "blocklisted"
+   ]
+  },
+  {
+   "name": "c8a_tn_abstract_italic_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "times-italic",
+    "blocklisted",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_tn_regular",
+   "intended_valid": true,
+   "axes": [
+    "times-regular"
+   ]
+  },
+  {
+   "name": "c8a_tn_regular_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "times-regular",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_lt_deva_participant",
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  },
+  {
+   "name": "c8a_lt_thai_note",
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  },
+  {
+   "name": "c8a_lt_cjk_usecase",
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  },
+  {
+   "name": "c8a_lt_emoji_title",
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  },
+  {
+   "name": "c8a_lt_latin_marks_state",
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  },
+  {
+   "name": "c8a_lt_verdana_deva_link",
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  },
+  {
+   "name": "c8a_lt_arial_tibetan",
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  },
+  {
+   "name": "c8a_lt_cnew_thai_stereo",
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  }
+ ]
+}

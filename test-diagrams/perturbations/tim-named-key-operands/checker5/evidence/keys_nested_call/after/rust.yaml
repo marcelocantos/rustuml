@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "blue/inner" as Nested
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Nested
+  entities:
+  - id: Nested
+    label: blue/inner
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 8
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

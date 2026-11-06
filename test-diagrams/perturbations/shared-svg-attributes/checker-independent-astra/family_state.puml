@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Quill<Reed>é𐐀
+state Chamber
+Chamber : Beacon
+@enduml

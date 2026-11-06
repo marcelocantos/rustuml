@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "rustc",
+    "--edition=2024",
+    "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing_slice.rs",
+    "-L",
+    "dependency=/Users/marcelo/Library/Caches/rustuml-tim8-checker/target-after/release/deps",
+    "--extern",
+    "rustuml_parser=/Users/marcelo/Library/Caches/rustuml-tim8-checker/target-after/release/deps/librustuml_parser-69497e1bef91509b.rlib",
+    "--extern",
+    "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-tim8-checker/target-after/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+    "--extern",
+    "rustuml_render=/Users/marcelo/Library/Caches/rustuml-tim8-checker/target-after/release/deps/librustuml_render-6cf93ea168f1c658.rlib",
+    "-o",
+    "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice"
+  ],
+  "exit": 0
+}

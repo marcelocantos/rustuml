@@ -1,0 +1,10 @@
+@startuml
+!function $pair($a="root",$b="leaf")
+!return $a+"/"+$b
+!endfunction
+!function $outer($a="$b")
+!return $pair($a="ash")
+!endfunction
+!$v=$outer()
+class "$v / $pair($a="birch")" as Local
+@enduml

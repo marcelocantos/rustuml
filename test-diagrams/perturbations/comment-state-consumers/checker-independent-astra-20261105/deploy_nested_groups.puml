@@ -1,0 +1,12 @@
+@startuml
+node "Upper Vault" as Vault {
+node "Inner Cage" as Cage {
+artifact "Glass Key" as Key
+}
+}
+node "Remote Pier" as Pier {
+artifact Lock
+}
+Vault --> Pier
+Cage <.. Pier
+@enduml

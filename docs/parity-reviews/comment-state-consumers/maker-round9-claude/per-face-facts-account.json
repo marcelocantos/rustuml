@@ -1,0 +1,42 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-9.json and comment-state-consumers/review-10.json (8089ef150) bounded_next_obligations",
+ "base": "merge of parity-recovery-2026-11-03 dcf6d9076 (code identical to 9834a7194) into 8089ef150 (code identical to c3116f0b0): 9d6af0a0e",
+ "sub_mechanism": "obligation 1 (BLOCKING): HarfBuzz plan facts, GDEF blocklist decision, own cmap, .notdef advance and composite cascade come from the physical face Java measures for family x bold x italic",
+ "sources": [
+  "OpenJDK jdk21u tag jdk-21.0.5-ga raw files (the reference JVM is Homebrew openjdk@21 21.0.5), sha256 prefixes: CFontManager.java 3ace8c4c, FontFamily.java 11323b8b, Font2D.java a2c16f1d, CFont.java 6ab8feb0, AWTFont.m 8f834825, hb-jdk-font.cc 8027d83a; HarfBuzz 15.0.0 hb-ot-layout.cc 3c4e62bc (pinned in tools/font-chain-reference/shaping-sources)"
+ ],
+ "java_locations": [
+  "CFontManager.loadFonts 209-235: loadNativeFonts() registers every face of every NSFontManager family (AWTFont.m GetFilteredFonts) through registerFont 168-172 -> new CFont(name, family); registerItalicDerived 174-203 then adds createItalicVariant() of the plain and bold faces only for families with no italic/bold-italic face.",
+  "CFont(String, String) 160-166 -> Font2D.setStyle 151-175: the style slot comes from the face's full name ('bolditalic'/'boldoblique'/... -> BOLD|ITALIC, 'italic'/'oblique' -> ITALIC, 'bold' -> BOLD); FontFamily.setFont 234-289 keeps per slot the face of closest weight; FontFamily.getFont(style) 320-360 returns the slot's face.",
+  "CFont.createItalicVariant 177-185: the derived italic keeps nativeFontName = the plain/bold face's full name and sets style |= ITALIC (isFakeItalic).",
+  "CFont.getNativeFontPtr 187-191 -> createNativeFont(nativeFontName, style) -> AWTFont.m Java_sun_font_CFont_createNativeFont 429-448 -> awtFontForName 71-111: [NSFont fontWithName:name], then convertFont:toHaveTrait:NSItalicFontMask if ITALIC, then NSBoldFontMask if BOLD.",
+  "CFont.getTableBytes 81-85 -> AWTFont.m getTableBytesNative 368-410: CTFontCopyTable of that native font (no options); hb-jdk-font.cc reference_table hands those blobs to HarfBuzz, so OT::GDEF::is_blocklisted (hb-ot-layout.cc 152-266) keys on the measured face's own (GDEF, GSUB, GPOS) lengths, and GDEF classes, GSUB/GPOS script lists come from the same face.",
+  "CFont.createCompositeFont 203-239 with getCascadeList(nativeFontPtr) (AWTFont.m 547-580): the composite slots, slot 0's own cmap and .notdef are those of the same native font."
+ ],
+ "rust_locations": [
+  "font_chain.rs ChainFace has ten faces; plantuml_metrics::courier_new_text_width measures plain, bold, italic and bold-italic Courier New with ChainFace::CourierNew (the plain face's facts 588/5078/14418, blocklisted). mono_text_width measures every Menlo style with Menlo-Regular. text_render::family_text_width picks Arial/Helvetica/Verdana faces by bold only.",
+  "On colossus (macOS 27.2 26B123, same build as Monkey Man) Courier New Italic is (162, 914, 8502) and Bold Italic (114, 928, 8322): not blocklisted, GDEF classes present, glyph 0 class 1; GSUB/GPOS hebr,latn. Own cmaps and the cascade (complex) coverage differ by style in every family (100-207 code points on colossus)."
+ ],
+ "planned_change": [
+  "tools/PrimaryFaceExtract.swift takes <nativeFontName> <java style> and resolves the face as awtFontForName does (NSFont fontWithName, NSFontManager italic then bold trait), printing the resolved PostScript name and path, the #hb_plan facts and the .notdef advance with the existing own cmap and #plan_extra. Run on colossus for the 24 (family, style) slots of the six modelled families (Lucida Grande italic slots are its derived variants).",
+  "tools/FontChainExtract.swift (unchanged) on colossus for the ten italic/bold-italic/oblique faces Monkey Man has no extraction of; stored as a provisional, separately SHA-gated directory; a Monkey Man extraction of every style (both tools, plus font-file hashes) is requested in this round and replaces it.",
+  "tools/font_chain_coverage.py: faces may come from the reference-host directory or the provisional one; generated FaceCoverage for 22 physical faces (Courier New Bold and Menlo Bold from monkeyman-round6, already extracted there).",
+  "font_chain.rs: ChainFace is the physical face; ChainFace::for_style(family, bold, italic) follows FontFamily.getFont (Lucida Grande italic -> its plain/bold face). Courier New and Monospaced widths take bold/italic; Arial/Helvetica/Verdana chain faces take italic. Advance tables are not changed (Courier New and Menlo cells are style-independent; Arial/Verdana/Helvetica italic advance tables are out of scope).",
+  "Drift gate: every face's stored facts (hb_plan, plan_extra, own cmap, chain runs) equal the generated table; the blocklist decision is asserted per face (Courier New plain and bold only); Courier New Italic/Bold Italic not blocklisted with glyph-0 class 1; each (family, style) slot resolves to the expected PostScript name; derived italic slots equal their upright faces; reference-host file hashes for every face whose plan can zero; the provisional-chain faces are an explicit list that fails when stale."
+ ],
+ "precommitted_measurement": {
+  "oracle": "BO (C8A) Java references; BN, BM, BL, BK, BJ and earlier batches; all goldens; fresh relayed italic probes",
+  "expect": [
+   "BO c8a_ci_abstract_latin, _hebrew, _leading, _size11, c8a_ci_creole_italic, c8a_ci_creole_bolditalic, c8a_ci_usecase_italic: whole-output MATCH (the mark keeps its Courier New .notdef cell, as at merge).",
+   "BO c8a_ci_stereo_latin stereotype width 64.8105 (Java; control + 7.2011) and c8a_lt_cnew_thai_stereo keeps the mark (+7.2011 over tip); both still fail on their control residues.",
+   "Courier New regular and bold zeroing unchanged (BN/BO c8a_cr_*, c8a_bl_cnew_khmer_split, BM c7b_cnew_* gains kept).",
+   "No golden changes (no golden carries an unmapped mark in italic Courier New, Menlo, Arial, Verdana or Helvetica text); no other batch case changes except italic/bold-italic cases in those families, each traced to a per-face fact.",
+   "Fresh relayed probes: italic and bold-italic Courier New marks in sequence, activity and note text match Java."
+  ]
+ }
+}

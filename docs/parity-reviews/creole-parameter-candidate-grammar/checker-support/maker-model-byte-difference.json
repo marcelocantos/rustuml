@@ -1,0 +1,6 @@
+[
+  {
+    "id": "sprites/sprite_multiple",
+    "diff": "--- \n+++ \n@@ -2,6 +2,18 @@\n diagram:\n   meta:\n     sprites:\n+      user:\n+        width: 8\n+        height: 8\n+        rows:\n+        - '00011000'\n+        - '00111100'\n+        - '00111100'\n+        - '00011000'\n+        - '01111110'\n+        - '11111111'\n+        - '11111111'\n+        - '01111110'\n       server:\n         width: 8\n         height: 8\n@@ -14,18 +26,6 @@\n         - '10000001'\n         - '11111111'\n         - '11111111'\n-      user:\n-        width: 8\n-        height: 8\n-        rows:\n-        - '00011000'\n-        - '00111100'\n-        - '00111100'\n-        - '00011000'\n-        - '01111110'\n-        - '11111111'\n-        - '11111111'\n-        - '01111110'\n     source: |\n       @startuml\n       sprite $user [8x8/16] {\n"
+  }
+]

@@ -1,0 +1,4 @@
+@startuml
+skinparam stateBackgroundColor #2468ac00
+state Birch
+@enduml

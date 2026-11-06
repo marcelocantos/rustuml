@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Arial
+participant Ann
+participant Bob
+Ann -> Bob : <b>Wharf q𝅧r</b>
+@enduml

@@ -1,0 +1,314 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/units_rejoin.puml",
+    "mechanism": "tim-builtin-value-boundaries",
+    "negative": false,
+    "axes": [
+      "UTF16 split position",
+      "upper/lower and expansion"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/chr_types.puml",
+    "mechanism": "tim-builtin-value-boundaries",
+    "negative": false,
+    "axes": [
+      "integer/string/JSON",
+      "invalid code point"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/bool_types.puml",
+    "mechanism": "tim-builtin-value-boundaries",
+    "negative": false,
+    "axes": [
+      "JSON/text/number",
+      "arithmetic result type"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/bool_space_error.puml",
+    "mechanism": "tim-builtin-value-boundaries",
+    "negative": true,
+    "axes": [
+      "whitespace",
+      "first error before arity"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/surrogate_display_residue.puml",
+    "mechanism": "tim-builtin-value-boundaries",
+    "negative": true,
+    "axes": [
+      "surrogate side",
+      "text projection"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/arity_valid_defaults.puml",
+    "mechanism": "tim-call-resolution-arity",
+    "negative": false,
+    "axes": [
+      "plain/expression",
+      "default/positional count"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/arity_argument_first.puml",
+    "mechanism": "tim-call-resolution-arity",
+    "negative": true,
+    "axes": [
+      "nested argument failure",
+      "excess arity"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/arity_procedure_first.puml",
+    "mechanism": "tim-call-resolution-arity",
+    "negative": true,
+    "axes": [
+      "call kind",
+      "missing arity"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/arity_plain_named_builtin.puml",
+    "mechanism": "tim-call-resolution-arity",
+    "negative": true,
+    "axes": [
+      "plain builtin named key",
+      "positional coverage"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/keys_exact_spelling.puml",
+    "mechanism": "tim-named-key-operands",
+    "negative": false,
+    "axes": [
+      "key value lacks dollar",
+      "plain versus RPN"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/keys_local_snapshot.puml",
+    "mechanism": "tim-named-key-operands",
+    "negative": false,
+    "axes": [
+      "local/global keys",
+      "later mutation"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/keys_duplicate.puml",
+    "mechanism": "tim-named-key-operands",
+    "negative": true,
+    "axes": [
+      "duplicate key",
+      "RPN argument counting"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/macro_literals.puml",
+    "mechanism": "tim-original-macro-scanning",
+    "negative": false,
+    "axes": [
+      "value versus source",
+      "caller/body indentation"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/macro_multiline_suffix.puml",
+    "mechanism": "tim-original-macro-scanning",
+    "negative": false,
+    "axes": [
+      "multiline body",
+      "caller prefix/suffix"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/macro_argument_error.puml",
+    "mechanism": "tim-original-macro-scanning",
+    "negative": true,
+    "axes": [
+      "argument failure",
+      "wrong arity"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/sub_suffix_continuation.puml",
+    "mechanism": "tim-sub-marker-layers",
+    "negative": false,
+    "axes": [
+      "suffix punctuation",
+      "identifier continuation"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/sub_repeated_comments.puml",
+    "mechanism": "tim-sub-marker-layers",
+    "negative": false,
+    "axes": [
+      "repeated selection",
+      "selected-body comments"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/sub_raw_tail_error.puml",
+    "mechanism": "tim-sub-marker-layers",
+    "negative": true,
+    "axes": [
+      "invalid marker after selected",
+      "raw comment"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/sub_local_nested.puml",
+    "mechanism": "tim-sub-marker-layers",
+    "negative": true,
+    "axes": [
+      "local marker validation",
+      "nested block"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/json_terminal_and_skip.puml",
+    "mechanism": "tim-json-container-validation",
+    "negative": false,
+    "axes": [
+      "terminal missing",
+      "nonJSON versus containers"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/json_scalar_null.puml",
+    "mechanism": "tim-json-container-validation",
+    "negative": true,
+    "axes": [
+      "JSON null",
+      "foreach versus nonJSON"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/json_missing_dot.puml",
+    "mechanism": "tim-json-container-validation",
+    "negative": true,
+    "axes": [
+      "nested prefix",
+      "dot continuation"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/json_missing_index_residue.puml",
+    "mechanism": "tim-json-container-validation",
+    "negative": true,
+    "axes": [
+      "function in index",
+      "valid array operand"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/adjacent_dispatch.puml",
+    "mechanism": "tim-call-resolution-arity",
+    "negative": false,
+    "axes": [
+      "implemented variable arity",
+      "typed numeric conversions"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  }
+]

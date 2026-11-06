@@ -1,0 +1,6 @@
+@startuml
+note left of Mill : busy
+state Yard {
+  Mill --> Gate
+}
+@enduml

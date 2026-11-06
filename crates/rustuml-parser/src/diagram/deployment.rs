@@ -60,6 +60,11 @@ pub enum DeploymentNotePosition {
 pub struct DeploymentNode {
     pub id: String,
     pub label: String,
+    /// Java Quark local name when it differs from `id`: the declared code
+    /// of a quoted or bracket declaration without `as ALIAS`, or of an
+    /// undeclared link endpoint. `None` means the Quark name is `id`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub quark_name: Option<String>,
     pub kind: DeploymentNodeKind,
     pub stereotype: Option<String>,
     /// Explicit background colour from a trailing `#color` token (raw, e.g.

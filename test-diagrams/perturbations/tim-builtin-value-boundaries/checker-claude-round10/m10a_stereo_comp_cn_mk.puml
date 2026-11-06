@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Courier New
+component "Pylon vk" as E1 <<Pier𝅧>>
+@enduml

@@ -1,0 +1,26 @@
+{
+ "schema_version": 1,
+ "note": "Byte-identical copies of cited inputs and Java references (T14.6.7); originals unchanged.",
+ "files": [
+  {
+   "original": "test-diagrams/perturbations/state-parser-pass-entity-order/review_root_quark_no_reparent.puml",
+   "copy": "docs/parity-reviews/comment-state-consumers/maker-results/cited/review_root_quark_no_reparent.puml",
+   "sha256": "83981eb365fa34171532957fbfb735bcb01ead88fff75b9be4a45ce0e6ceee13"
+  },
+  {
+   "original": "test-diagrams/perturbations/state-parser-pass-entity-order/review_root_quark_no_reparent.svg",
+   "copy": "docs/parity-reviews/comment-state-consumers/maker-results/cited/review_root_quark_no_reparent.svg",
+   "sha256": "7e42f3d92e10ad02286e604782a4bad287d962044a6d73064f567a6ef4026c5b"
+  },
+  {
+   "original": "test-diagrams/perturbations/state-parser-pass-entity-order/root_quark_nested_reuse_control.puml",
+   "copy": "docs/parity-reviews/comment-state-consumers/maker-results/cited/root_quark_nested_reuse_control.puml",
+   "sha256": "47ede98780ec81f5edd6d8cf549f6e7aad01831dddcaea5cfd9bff73ff0cbc75"
+  },
+  {
+   "original": "test-diagrams/perturbations/state-parser-pass-entity-order/root_quark_nested_reuse_control.svg",
+   "copy": "docs/parity-reviews/comment-state-consumers/maker-results/cited/root_quark_nested_reuse_control.svg",
+   "sha256": "b0cdca9e400f4e7665376d9e4aff8add08adf59d2437def5daea411b40577524"
+  }
+ ]
+}

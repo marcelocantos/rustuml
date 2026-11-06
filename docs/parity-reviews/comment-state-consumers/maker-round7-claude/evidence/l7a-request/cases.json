@@ -1,0 +1,426 @@
+{
+ "cases": [
+  {
+   "name": "mk9_u17_1ad5",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "default-run"
+   ]
+  },
+  {
+   "name": "mk9_u17_10efa",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "default-run"
+   ]
+  },
+  {
+   "name": "mk9_u17_11b60",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "default-run"
+   ]
+  },
+  {
+   "name": "mk9_u18_b53",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "default-run"
+   ]
+  },
+  {
+   "name": "mk9_u18_1d127",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "default-run"
+   ]
+  },
+  {
+   "name": "mk9_u18_10ecb",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "default-run"
+   ]
+  },
+  {
+   "name": "mk9_180f_thai",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "default-ignorable",
+    "thai-run"
+   ]
+  },
+  {
+   "name": "mk9_180f_thai_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control"
+   ]
+  },
+  {
+   "name": "mk9_lucida_hebrew_space",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "buffer",
+    "hebrew-run",
+    "lucida"
+   ]
+  },
+  {
+   "name": "mk9_lucida_hebrew_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "lucida"
+   ]
+  },
+  {
+   "name": "mk9_helv_hebrew_space",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "buffer",
+    "hebrew-run",
+    "helv"
+   ]
+  },
+  {
+   "name": "mk9_helv_hebrew_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "helv"
+   ]
+  },
+  {
+   "name": "mk9_verdana_hebrew_space",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "buffer",
+    "hebrew-run",
+    "verdana"
+   ]
+  },
+  {
+   "name": "mk9_verdana_hebrew_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "verdana"
+   ]
+  },
+  {
+   "name": "mk9_arial_hebrew_space",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "buffer",
+    "hebrew-run",
+    "arial"
+   ]
+  },
+  {
+   "name": "mk9_arial_hebrew_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "arial"
+   ]
+  },
+  {
+   "name": "mk9_couriernew_hebrew_space",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "buffer",
+    "hebrew-run",
+    "couriernew"
+   ]
+  },
+  {
+   "name": "mk9_couriernew_hebrew_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "couriernew"
+   ]
+  },
+  {
+   "name": "mk9_mono_hebrew_space",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "buffer",
+    "hebrew-run",
+    "mono"
+   ]
+  },
+  {
+   "name": "mk9_mono_hebrew_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "mono"
+   ]
+  },
+  {
+   "name": "mk9_lucida_arabic_space",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "buffer",
+    "arabic-run"
+   ]
+  },
+  {
+   "name": "mk9_lucida_arabic_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control"
+   ]
+  },
+  {
+   "name": "mk9_helv_syriac",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "buffer",
+    "syriac-unmapped-base"
+   ]
+  },
+  {
+   "name": "mk9_helv_syriac_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control"
+   ]
+  },
+  {
+   "name": "mk9_lucida_thai_base",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "thai-run"
+   ]
+  },
+  {
+   "name": "mk9_lucida_deva_base",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "indic-run"
+   ]
+  },
+  {
+   "name": "mk9_lucida_deva_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control"
+   ]
+  },
+  {
+   "name": "mk9_lucida_hebrew_wj",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "default-ignorable-between"
+   ]
+  },
+  {
+   "name": "mk9_lucida_hebrew_hiriq",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "mapped-mark-between"
+   ]
+  },
+  {
+   "name": "mk9_lucida_hebrew_hiriq_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control"
+   ]
+  },
+  {
+   "name": "mk9_hangul_space",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "buffer",
+    "hangul-run",
+    "hb12.2-fallback"
+   ]
+  },
+  {
+   "name": "mk9_hangul_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control"
+   ]
+  },
+  {
+   "name": "mk9_hangul_base",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "buffer",
+    "hangul-other-slot"
+   ]
+  },
+  {
+   "name": "mk9_seq_hebrew",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "sequence"
+   ]
+  },
+  {
+   "name": "mk9_seq_hebrew_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "sequence"
+   ]
+  },
+  {
+   "name": "y9_block_depth3",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "block",
+    "depth3"
+   ]
+  },
+  {
+   "name": "y9_block_text_dedent",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "block",
+    "dedented-text"
+   ]
+  },
+  {
+   "name": "y9_block_hash_lines",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "block",
+    "comments"
+   ]
+  },
+  {
+   "name": "y9_block_tab_inside",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "block",
+    "tab"
+   ]
+  },
+  {
+   "name": "y9_block_quoted_key",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "block",
+    "quoted-key"
+   ]
+  },
+  {
+   "name": "y9_tab_indent",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "tab",
+    "indent"
+   ]
+  },
+  {
+   "name": "y9_tab_key",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "tab",
+    "key"
+   ]
+  },
+  {
+   "name": "y9_flow_seq_quotes",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "flow-sequence"
+   ]
+  },
+  {
+   "name": "y9_flow_seq_empty",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "flow-sequence",
+    "empty"
+   ]
+  },
+  {
+   "name": "y9_flow_seq_number",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "flow-sequence",
+    "strings"
+   ]
+  },
+  {
+   "name": "j9_skinparam_block",
+   "intended_valid": true,
+   "axes": [
+    "json",
+    "skinparam",
+    "block"
+   ]
+  },
+  {
+   "name": "y9_hide_then_data",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "preamble"
+   ]
+  },
+  {
+   "name": "y9_skinparam_after_data",
+   "intended_valid": false,
+   "axes": [
+    "yaml",
+    "skinparam",
+    "after-data"
+   ]
+  },
+  {
+   "name": "j9_cr_key",
+   "intended_valid": true,
+   "axes": [
+    "json",
+    "cr",
+    "key"
+   ]
+  }
+ ]
+}

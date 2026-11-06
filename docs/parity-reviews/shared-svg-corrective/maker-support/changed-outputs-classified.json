@@ -1,0 +1,2418 @@
+[
+  {
+    "id": "collateral/1272-checker2_quote_unicode",
+    "cohort": "retained",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1272-checker2_quote_unicode/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1272-checker2_quote_unicode/java.svg",
+    "before_sha": "9e41a7d21cb2a0d3562356e86020019afc89d53479d5f3b99e77bb6072b9ddc7",
+    "after_sha": "07be0af8862a63e95097cf9fc1f92c7eac676fb78011504f20eba45533565648",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 11,
+    "element_count_after": 11,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class 1970 \u00e9t\u00e9 ' nuit 10:59:59 +1100",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class 1970 ?t? ' nuit 10:59:59 +1100",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "collateral/1286-checker2_retained_default_explicit_override",
+    "cohort": "retained",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1286-checker2_retained_default_explicit_override/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1286-checker2_retained_default_explicit_override/java.svg",
+    "before_sha": "1936273cd88e900bdd70a0d9708d0f9fa93c533fe920348246afccc769403fd1",
+    "after_sha": "e2a178d5be3c6728d15d7d60db8166305f228f8c9064171de1fa732ff01c4f11",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 11,
+    "element_count_after": 11,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u00e9,(x)early / othertail",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ?,(x)early / othertail",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "collateral/1350-checker2_theme_comment_origin",
+    "cohort": "retained",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1350-checker2_theme_comment_origin/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1350-checker2_theme_comment_origin/java.svg",
+    "before_sha": "17e770e52704792be17d602c0edcf3ad5abe604796b19a75effdc0b43f6ff104",
+    "after_sha": "c10b110686e3f251f9185b6e05b69289e75fd3958c01db8a8d288dc0fd0007c7",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 35,
+    "element_count_after": 35,
+    "decoded_changes": [
+      {
+        "index": 9,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u00c9rable",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ?rable",
+          null
+        ]
+      },
+      {
+        "index": 31,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \u00c9rable to Oak",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ?rable to Oak",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "collateral/1493-checker3_retained_values_binding",
+    "cohort": "retained",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1493-checker3_retained_values_binding/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/collateral/1493-checker3_retained_values_binding/java.svg",
+    "before_sha": "d1f504666c971142d6330ddc69ba4810da666168cafe0b463751ee273702411b",
+    "after_sha": "419fa913c73f0627f9c22abed45b3f3380185535bc460860c4a4a63956c8f964",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 11,
+    "element_count_after": 11,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class 0072 / 10 / \u00e9\u03bb",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class 0072 / 10 / ??",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "prior31/0002-checker4_surrogate_projection",
+    "cohort": "retained",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/prior31/0002-checker4_surrogate_projection/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/prior31/0002-checker4_surrogate_projection/java.svg",
+    "before_sha": "6c1805396de7924c4e97f61d5fea00a5b2ce41e1738eb597609a51867c5fb414",
+    "after_sha": "96b6393550b824b5623f12a23c791888d1058ad27b6951f1179bd41d828b4c9b",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 11,
+    "element_count_after": 11,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class left \ufffd right",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class left ? right",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "fresh29/0004-surrogate_display_residue",
+    "cohort": "retained",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/fresh29/0004-surrogate_display_residue/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/fresh29/0004-surrogate_display_residue/java.svg",
+    "before_sha": "1aae6089a4ccbbfcc643fcd19c4794c8626bb5d7575aea87c87144c39f2eb00c",
+    "after_sha": "6317eec0dfc8dce5586dacbf3ba3b68668825e29bb314759eb6931e3e0f87174",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 11,
+    "element_count_after": 11,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \ufffd",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ?",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "maker13/0005-surrogate_prefix",
+    "cohort": "retained",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/maker13/0005-surrogate_prefix/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/maker13/0005-surrogate_prefix/java.svg",
+    "before_sha": "578ca5d8d245c555da103e863ee848dc78f52a2b2a26ff36ebaafe325bbb3e49",
+    "after_sha": "65f9b019e00903d7e1297289b59feebc62dbf9210f2543e4bde8788d6099155c",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 11,
+    "element_count_after": 11,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class ax\ud83d\ude01 / ax\ud83d\ude00x / short / long / \ud83d\ude00ax / short\u00b2",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ax? / ax?x / short / long / ?ax / short?",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "checker8/astral_offsets",
+    "cohort": "retained",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker8/astral_offsets/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker8/astral_offsets/java.svg",
+    "before_sha": "8755ccde8872cbe32f3af48f56088ffb317baf8bde9ce90bc306010d18caa045",
+    "after_sha": "f4e014add69fd6f437649b3f4b427d799fba38079a882138429df6547903e077",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 12,
+    "element_count_after": 12,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class long replacement / a\ud83d\ude01 / pair / \ud83d\ude00a / \\nshort / short\u00b2",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class long replacement / a? / pair / ?a / \\nshort / short?",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "checker38/unicode_name",
+    "cohort": "checker38",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker38/unicode_name/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker38/unicode_name/java.svg",
+    "before_sha": "c5ccfdfec4684daf8259a5b5fe3825af6b5d8b20afecf906126c2f6a9263476b",
+    "after_sha": "b9d79e11901cb5a6aa2a5d02ccd58da288d042507148f3fa5874c2997bcb5310",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 13,
+    "element_count_after": 13,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class A<$\u679d/\u03a9-7> B<$e\u0301> C<$\ud801\udc00>!",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class A<$?/?-7> B<$e?> C<$?>!",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "checker38/unicode_color",
+    "cohort": "checker38",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker38/unicode_color/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker38/unicode_color/java.svg",
+    "before_sha": "ecd5e7625ea9e3789e53717f6156e2932b84497c16bb66179531c745facfa919",
+    "after_sha": "bb53b49d3bce81a8cd0c93e1f9417f3ac43d6f619b895dd1807d31c85b6abb6a",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 11,
+    "element_count_after": 11,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class A<#\u00e9$north>B<$north{color=\u00e9}>!",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class A<#?$north>B<$north{color=?}>!",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "checker38/nested_angle",
+    "cohort": "checker38",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker38/nested_angle/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker38/nested_angle/java.svg",
+    "before_sha": "97de15dfe795a6606126b9ae970d02032f2178473646c0a25b2b1c9e9adab796",
+    "after_sha": "505df52fe2a92a592ea736b595bd01c0d928c0b4c47f39d171d5f0c00d6d8150",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 12,
+    "element_count_after": 12,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class A\u00ab$north\u00bbB<bad<$south>>C",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class A?$north?B<bad<$south>>C",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "checker87/identity_class",
+    "cohort": "checker87",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker87/identity_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker87/identity_class/java.svg",
+    "before_sha": "bd2f52c9b13c459f316d9db89a9fe5b1ee1b30063b45c03a01abf5803a2887bb",
+    "after_sha": "f1e93d6a328e77af3d0d72a82e9218ba0f4d7d11bbc960cc8448713569799fe9",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 11,
+    "element_count_after": 11,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class Delta & <Q> \u00e9\ud801\udc00",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class Delta & <Q> ??",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "checker87/identity_deployment",
+    "cohort": "checker87",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker87/identity_deployment/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker87/identity_deployment/java.svg",
+    "before_sha": "ddd347ca46efbbda35b759f047afadaf787deaeb0781853fbb62866e748ea4c1",
+    "after_sha": "001f8fb64b5e102ace5810dcc065d6dd92d62baee0096eea6cccfff94c9271da",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 10,
+    "element_count_after": 10,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "entity Delta & <Q> \u00e9\ud801\udc00",
+          "\n"
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "entity Delta & <Q> ??",
+          "\n"
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "checker87/comment_double_hyphen",
+    "cohort": "checker87",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker87/comment_double_hyphen/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker87/comment_double_hyphen/java.svg",
+    "before_sha": "f1793a0b68e480d1bf79fe39ea57639b68124d09efe6a47b3b381c4cabd6052e",
+    "after_sha": "2712358a294b2c9020264a0f73190168dc36fea040de21b7a4ddfc9fb87b089c",
+    "cause": "XML parse transition",
+    "parse_error": "not well-formed (invalid token): line 1, column 354",
+    "explanation": "Before contains invalid double/trailing dash in user comment; source-derived whole-body comment serialization makes after well formed. Whole comparator verdict remains separately recorded."
+  },
+  {
+    "id": "checker87/shape_alpha",
+    "cohort": "checker87",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker87/shape_alpha/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/checker87/shape_alpha/java.svg",
+    "before_sha": "022508d4595c702bdc006e253df793b09d0fa5acee7a8d7d5892e85827c64c32",
+    "after_sha": "9b42fadb5ecb14b778df51a4847a9b2817016a232c50f60975713a031d465b93",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 7,
+    "element_count_after": 7,
+    "decoded_changes": [
+      {
+        "index": 4,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#3579bd80",
+        "after": "#3579BD"
+      },
+      {
+        "index": 4,
+        "kind": "attribute",
+        "attribute": "fill-opacity",
+        "before": null,
+        "after": "0.50196"
+      }
+    ],
+    "cause": "state fill serialization",
+    "explanation": "Two ordinary state rectangle consumers now call existing shared RGB/alpha serializer; no coordinate or dimension changes."
+  },
+  {
+    "id": "corrective16/comment_class_runs",
+    "cohort": "corrective16",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_class_runs.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_class_runs/java.svg.stdout",
+    "before_sha": "8cc8e2f1774099bcedad61b71911b8511452a629d3edc5d18916582c140461c9",
+    "after_sha": "fc537bfc4510f5c46ce38a361966c218f5e9bed3e219c80a68431968b1617450",
+    "cause": "XML parse transition",
+    "parse_error": "not well-formed (invalid token): line 1, column 352",
+    "explanation": "Before contains invalid double/trailing dash in user comment; source-derived whole-body comment serialization makes after well formed. Whole comparator verdict remains separately recorded."
+  },
+  {
+    "id": "corrective16/comment_class_unicode",
+    "cohort": "corrective16",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_class_unicode.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_class_unicode/java.svg.stdout",
+    "before_sha": "c1f8a1723c012c47b83ef85ac34782cdfc57ddaba0fe45e5f56c7358194d8aa5",
+    "after_sha": "b3986acb10af827cf0654d755a8cd12a24e07d7109420cea413f569013f7b0e6",
+    "cause": "XML parse transition",
+    "parse_error": "not well-formed (invalid token): line 1, column 351",
+    "explanation": "Before contains invalid double/trailing dash in user comment; source-derived whole-body comment serialization makes after well formed. Whole comparator verdict remains separately recorded."
+  },
+  {
+    "id": "corrective16/comment_class_symbols",
+    "cohort": "corrective16",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_class_symbols.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_class_symbols/java.svg.stdout",
+    "before_sha": "a674751fc3d9c137b6e0abc237880d482d02cb329504ad3d166791ef2d3eae7a",
+    "after_sha": "fad944ab3c8c2e96d57c00ecfa425a63f8d944d12b055a4931806fff17886ebf",
+    "cause": "XML parse transition",
+    "parse_error": "not well-formed (invalid token): line 1, column 357",
+    "explanation": "Before contains invalid double/trailing dash in user comment; source-derived whole-body comment serialization makes after well formed. Whole comparator verdict remains separately recorded."
+  },
+  {
+    "id": "corrective16/comment_class_links",
+    "cohort": "corrective16",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_class_links.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_class_links/java.svg.stdout",
+    "before_sha": "7d2443b47aea0024382e181493e808aa5bdfaf6675a9372e7bc6e447ed6676f2",
+    "after_sha": "8c594a81157f4c232e6ea419440e9ba2b29b07596094517a0484709ae7557d45",
+    "cause": "XML parse transition",
+    "parse_error": "not well-formed (invalid token): line 1, column 351",
+    "explanation": "Before contains invalid double/trailing dash in user comment; source-derived whole-body comment serialization makes after well formed. Whole comparator verdict remains separately recorded."
+  },
+  {
+    "id": "corrective16/comment_package",
+    "cohort": "corrective16",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_package.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_package/java.svg.stdout",
+    "before_sha": "50f7d23b7d5a1bec2aa5f52154824576c3a6b4b01c8e115760c088a642fc45ca",
+    "after_sha": "2dbaa352d10d4211c0c1bb7e5e9f924c6d739ddff640afb0b08d80222bbdb348",
+    "cause": "XML parse transition",
+    "parse_error": "not well-formed (invalid token): line 1, column 358",
+    "explanation": "Before contains invalid double/trailing dash in user comment; source-derived whole-body comment serialization makes after well formed. Whole comparator verdict remains separately recorded."
+  },
+  {
+    "id": "corrective16/comment_component",
+    "cohort": "corrective16",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_component.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_component/java.svg.stdout",
+    "before_sha": "13b9bbb789ca036a9c967dba602b4bb953571efbd49685848884a5308c634677",
+    "after_sha": "e744bda11755e843432a274618b358283481fa6e5ce41dbd8856a8cdfb4d7b09",
+    "cause": "XML parse transition",
+    "parse_error": "not well-formed (invalid token): line 1, column 346",
+    "explanation": "Before contains invalid double/trailing dash in user comment; source-derived whole-body comment serialization makes after well formed. Whole comparator verdict remains separately recorded."
+  },
+  {
+    "id": "corrective16/comment_deployment",
+    "cohort": "corrective16",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_deployment.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_deployment/java.svg.stdout",
+    "before_sha": "c313a7bc474e4271ea4c3c0a1f7916432ca52e9a503a51794b87bf7c45ab72e6",
+    "after_sha": "e016ee2a90b59a6d70b40938873924c73560a2e160c0ccdc37b51fc150df74ca",
+    "cause": "XML parse transition",
+    "parse_error": "not well-formed (invalid token): line 1, column 350",
+    "explanation": "Before contains invalid double/trailing dash in user comment; source-derived whole-body comment serialization makes after well formed. Whole comparator verdict remains separately recorded."
+  },
+  {
+    "id": "corrective16/comment_usecase",
+    "cohort": "corrective16",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_usecase.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_usecase/java.svg.stdout",
+    "before_sha": "5da6eb2808b971d79fc076d48dd5cb19c745fec77fcf29d2b0e767e31396c534",
+    "after_sha": "e542f0c7a90412bc07a85dffa35462ca3774a0de6208f3782cf7892a72323367",
+    "cause": "XML parse transition",
+    "parse_error": "not well-formed (invalid token): line 1, column 350",
+    "explanation": "Before contains invalid double/trailing dash in user comment; source-derived whole-body comment serialization makes after well formed. Whole comparator verdict remains separately recorded."
+  },
+  {
+    "id": "corrective16/state_alpha_empty",
+    "cohort": "corrective16",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/state_alpha_empty.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/state_alpha_empty/java.svg.stdout",
+    "before_sha": "f08620b7f67d9092dd3e6415ffe0345744a00c451ce2fd0047c31a20756062bb",
+    "after_sha": "3326327d95ddd1d61c7fe8aea36b4f8e276cc0a7c0ff0a0030b53cbf0d1dbb42",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 5,
+    "element_count_after": 5,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#2468ac01",
+        "after": "#2468AC"
+      },
+      {
+        "index": 3,
+        "kind": "attribute",
+        "attribute": "fill-opacity",
+        "before": null,
+        "after": "0.00392"
+      }
+    ],
+    "cause": "state fill serialization",
+    "explanation": "Two ordinary state rectangle consumers now call existing shared RGB/alpha serializer; no coordinate or dimension changes."
+  },
+  {
+    "id": "corrective16/state_alpha_description",
+    "cohort": "corrective16",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/state_alpha_description.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/state_alpha_description/java.svg.stdout",
+    "before_sha": "bdf065c89586ad80c9d926d06d8706c77d958ac5aafbf2636f14d78d5b6354d2",
+    "after_sha": "38c2f57c8f86aff857efbef64e210d5b14055acd29b290c15f57238726f60df2",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 8,
+    "element_count_after": 8,
+    "decoded_changes": [
+      {
+        "index": 4,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#2468acfe",
+        "after": "#2468AC"
+      },
+      {
+        "index": 4,
+        "kind": "attribute",
+        "attribute": "fill-opacity",
+        "before": null,
+        "after": "0.99608"
+      }
+    ],
+    "cause": "state fill serialization",
+    "explanation": "Two ordinary state rectangle consumers now call existing shared RGB/alpha serializer; no coordinate or dimension changes."
+  },
+  {
+    "id": "corrective16/state_alpha_zero",
+    "cohort": "corrective16",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/state_alpha_zero.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/state_alpha_zero/java.svg.stdout",
+    "before_sha": "485b4c213caad1dddcb13d7891695d2919c9000b88f0e23fb931a4714a048efe",
+    "after_sha": "038f076fdf2d26ba470f5bf879b3d0f5070dcb3a2791ad736ad7d633929bd078",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 7,
+    "element_count_after": 7,
+    "decoded_changes": [
+      {
+        "index": 4,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#2468ac00",
+        "after": "none"
+      }
+    ],
+    "cause": "state fill serialization",
+    "explanation": "Two ordinary state rectangle consumers now call existing shared RGB/alpha serializer; no coordinate or dimension changes."
+  },
+  {
+    "id": "corrective16/state_alpha_opaque",
+    "cohort": "corrective16",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/state_alpha_opaque.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/state_alpha_opaque/java.svg.stdout",
+    "before_sha": "cb2b04792187af05397b7ef33e52bd8498208a90bf13b7ab9587f2323de45ab1",
+    "after_sha": "b87b478dca4a32b903014454f93b37caf01335423b620c547b9161189ac23b8b",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 7,
+    "element_count_after": 7,
+    "decoded_changes": [
+      {
+        "index": 4,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#2468acff",
+        "after": "#2468AC"
+      }
+    ],
+    "cause": "state fill serialization",
+    "explanation": "Two ordinary state rectangle consumers now call existing shared RGB/alpha serializer; no coordinate or dimension changes."
+  },
+  {
+    "id": "full-golden/class/class_edge_unicode_names",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/class/class_edge_unicode_names/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/class/class_edge_unicode_names/java.svg",
+    "before_sha": "dc059c25aa37bd19668aa3d2114213562c4e73f5af912daf6ad70ad1a5083d00",
+    "after_sha": "46c2461e4087e1e62ce2daf66d3e3b64fd07679890ee9548e8cac2b531f7b1cf",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 22,
+    "element_count_after": 22,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u00c5ngstr\u00f6m",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ?ngstr?m",
+          null
+        ]
+      },
+      {
+        "index": 14,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class Fa\u00e7ade",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class Fa?ade",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/component/comp_unicode_stereotypes",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/component/comp_unicode_stereotypes/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/component/comp_unicode_stereotypes/java.svg",
+    "before_sha": "91a5535a52cb49309b420c75cbd0a90dcf27869cec5991f8a7b546195cf7b595",
+    "after_sha": "c3649855cde5560f4b23f92bcf4d4deeee990ae2eec91aa816ae34e86148d12a",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 23,
+    "element_count_after": 23,
+    "decoded_changes": [
+      {
+        "index": 19,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link Service \u03b1 to Service \u03b2",
+          "\n"
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link Service ? to Service ?",
+          "\n"
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_boundary",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_boundary/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_boundary/java.svg",
+    "before_sha": "41072b6110aef2907b573681337af894665288f36044ecdf0545a43e6de45943",
+    "after_sha": "c0963b5d4a9ca882fc13a4d94a0c869d940e33ee9761ddc030c5d9d26c0480ff",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 20,
+    "element_count_after": 20,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class **BoundaryClass** \u00abboundary\u00bb",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class **BoundaryClass** ?boundary?",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_controller",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_controller/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_controller/java.svg",
+    "before_sha": "4594f58360106b01a0259ef53148cfb96f6ed6066c95de38bca172ca021ebb5d",
+    "after_sha": "e1199705f7275f6498709c7856ed18f19e51eb4838abd708b9f0bc705a69f50f",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 20,
+    "element_count_after": 20,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class **ControllerClass** \u00abcontroller\u00bb",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class **ControllerClass** ?controller?",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_entity",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_entity/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_entity/java.svg",
+    "before_sha": "d561b8407d4fbd03e1648c88ebf1155e15369f63b19443f07229b1c6c1f1500d",
+    "after_sha": "369b76cd02110bac872566f015c6b56a65d91b2a7453c08676c00d93cadf581d",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 20,
+    "element_count_after": 20,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class **EntityClass** \u00abentity\u00bb",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class **EntityClass** ?entity?",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_repository",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_repository/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_repository/java.svg",
+    "before_sha": "cf3f4f8e3a95298d6381a1acb9593ea4a314ac266888bbb13954cc80e8718fa1",
+    "after_sha": "e3e5e6a838701065122db6fcf02f0f40a43ef50bc8a69cb90cd6307acf091141",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 20,
+    "element_count_after": 20,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class **RepositoryClass** \u00abrepository\u00bb",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class **RepositoryClass** ?repository?",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_service",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_service/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_service/java.svg",
+    "before_sha": "29f067cef44375227aa1132695dd96b2c55ccb31d883f63b713789b309dc3e42",
+    "after_sha": "57bfae8c9836af8504188c731797692b40b4ef05b73232301cc40d2007b9273b",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 20,
+    "element_count_after": 20,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class **ServiceClass** \u00abservice\u00bb",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class **ServiceClass** ?service?",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_value",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_value/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/creole/creole_in_stereotype_value/java.svg",
+    "before_sha": "9461b0172e4eafcbec2d132f9d469cf2a3aa05029f576dc1e9324fbee26bed10",
+    "after_sha": "ce197fe4c564f3d32faed662568e8f219ededa7d4c5c7d3be8652fe806b34ebd",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 20,
+    "element_count_after": 20,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class **ValueClass** \u00abvalue object\u00bb",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class **ValueClass** ?value object?",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/deployment/deploy_unicode",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/deployment/deploy_unicode/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/deployment/deploy_unicode/java.svg",
+    "before_sha": "a8a105ac7ab5597bfdf80459e730b37788d24104adcafdef5dea6ff02d0d9160",
+    "after_sha": "c4f35ce8667b10d0f5262822f925aeef660dbb8b3836cd8f00a05a9304b939b7",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 32,
+    "element_count_after": 32,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "entity \u0421\u0435\u0440\u0432\u0435\u0440 \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0439",
+          "\n"
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "entity ?????? ??????????",
+          "\n"
+        ]
+      },
+      {
+        "index": 10,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "entity \u0411\u0430\u0437\u0430 \u0434\u0430\u043d\u043d\u044b\u0445",
+          "\n"
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "entity ???? ??????",
+          "\n"
+        ]
+      },
+      {
+        "index": 15,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "entity \u0412\u0435\u0431-\u0441\u0435\u0440\u0432\u0435\u0440",
+          "\n"
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "entity ???-??????",
+          "\n"
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_meta_unicode_title",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_meta_unicode_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_meta_unicode_title/java.svg",
+    "before_sha": "89a3b312a3be0e6b944c041d66f1f317deb33d6354a0a38881699e712d75ef33",
+    "after_sha": "d3e79d93c5fef06e81cafa8a553deaa3e4ceec41c38ff2f8da7dd97f2aa224f0",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 25,
+    "element_count_after": 25,
+    "decoded_changes": [
+      {
+        "index": 5,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u7528\u6237",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ??",
+          null
+        ]
+      },
+      {
+        "index": 13,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u7cfb\u7edf",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ??",
+          null
+        ]
+      },
+      {
+        "index": 21,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \u7528\u6237 to \u7cfb\u7edf",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ?? to ??",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_accented_class",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_accented_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_accented_class/java.svg",
+    "before_sha": "07efb0ec67e99f9a1fad8f2fad60e25b4bd677f83fe397298b58432bfe3e2440",
+    "after_sha": "3b8bc4758d88c8bbb67ed49dfe5e20419af71047d476c89bbfd70c245ddc210e",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 41,
+    "element_count_after": 41,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u00c9l\u00e8ve",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ?l?ve",
+          null
+        ]
+      },
+      {
+        "index": 14,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class Se\u00f1or",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class Se?or",
+          null
+        ]
+      },
+      {
+        "index": 23,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u00dcber",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ?ber",
+          null
+        ]
+      },
+      {
+        "index": 32,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u00d8rsted",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ?rsted",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_arabic_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_arabic_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_arabic_class_diagram/java.svg",
+    "before_sha": "4c0e86234991d4263a874dfcbe22e74f54dc3ac07c30e0ce088b1c16bc18fb36",
+    "after_sha": "46b6c294658831e0f2b4e941ec2077693c3aaa5c3780a147820077c7accb46ab",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 28,
+    "element_count_after": 28,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u0645\u0633\u062a\u062e\u062f\u0645",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ??????",
+          null
+        ]
+      },
+      {
+        "index": 15,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u0646\u0638\u0627\u0645",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ????",
+          null
+        ]
+      },
+      {
+        "index": 24,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \u0645\u0633\u062a\u062e\u062f\u0645 to \u0646\u0638\u0627\u0645",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ?????? to ????",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_arabic_title",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_arabic_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_arabic_title/java.svg",
+    "before_sha": "5dcadfd2b69330f056fb6725877cf9d7dae74048073f6cea35c213377f1d131f",
+    "after_sha": "1543f5d4d03566551c487d0717be38dab84648c8276b2b208815c8bb7bd13c6e",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 13,
+    "element_count_after": 13,
+    "decoded_changes": [
+      {
+        "index": 5,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u0645\u0633\u062a\u062e\u062f\u0645",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ??????",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_chinese_class",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_class/java.svg",
+    "before_sha": "5334cf112ef20d755aab60f344152f2491973cd10ade33940228de416567cf95",
+    "after_sha": "4db1659efc4d80a9c5cf6665850b34071d7dfbe34b3b1e7198a1932484f4aab7",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 29,
+    "element_count_after": 29,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u7528\u6237",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ??",
+          null
+        ]
+      },
+      {
+        "index": 16,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u8ba2\u5355",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ??",
+          null
+        ]
+      },
+      {
+        "index": 25,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \u7528\u6237 to \u8ba2\u5355",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ?? to ??",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_chinese_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_class_diagram/java.svg",
+    "before_sha": "53ca8372df90af2db004c6baf16da796b328df0f27142d57a984d0360404d7f1",
+    "after_sha": "736862fd70f8c6cebc1c3cfcaf586596ee89d8d48918a3b5cf37fd317e8565ad",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 28,
+    "element_count_after": 28,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u7528\u6237",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ??",
+          null
+        ]
+      },
+      {
+        "index": 15,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u7cfb\u7edf",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ??",
+          null
+        ]
+      },
+      {
+        "index": 24,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \u7528\u6237 to \u7cfb\u7edf",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ?? to ??",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_chinese_title",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_title/java.svg",
+    "before_sha": "43c535255c84606181e5e3978d1b896c97f19c3bbde4f3a10a2c6d2c1d6316a6",
+    "after_sha": "daeb6db1db8c80c39fd2bd960c7f2dd4512083f6c4e20a2db2a96611a09cbc66",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 13,
+    "element_count_after": 13,
+    "decoded_changes": [
+      {
+        "index": 5,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u7528\u6237",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ??",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_combining_chars",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_combining_chars/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_combining_chars/java.svg",
+    "before_sha": "d9a5475443fe763c1fdaf28dc9150d6f0cfbd7cafd3a8d3a12970f0489670551",
+    "after_sha": "7dad1d44aae4a69d16dca67cb093baa38796a15c48752c4604145fd1f836ffef",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 12,
+    "element_count_after": 12,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class e\u0301le\u0300ve",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class e?le?ve",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_emoji_class",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_emoji_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_emoji_class/java.svg",
+    "before_sha": "704305aa8709abf9f0d63c4b345406ec787825137a0272caeff54ff157ff2404",
+    "after_sha": "a81dd7f9c3c3a1a2e331890a3ac12e57542daee84749b65b3647def430b97e41",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 28,
+    "element_count_after": 28,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \ud83d\ude80 Rocket",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ? Rocket",
+          null
+        ]
+      },
+      {
+        "index": 15,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \ud83c\udf0d Earth",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ? Earth",
+          null
+        ]
+      },
+      {
+        "index": 24,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \ud83d\ude80 Rocket to \ud83c\udf0d Earth",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ? Rocket to ? Earth",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_greek_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_greek_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_greek_class_diagram/java.svg",
+    "before_sha": "e000f5a3ebc77d04ff4648b40b362020c9154edd720b4a34e5c6fd6500d77158",
+    "after_sha": "a96ab14faaf93dd22c467aef4c8745db736fba64ac279a7c1ec59d135d082e1f",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 28,
+    "element_count_after": 28,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u03a7\u03c1\u03ae\u03c3\u03c4\u03b7\u03c2",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ???????",
+          null
+        ]
+      },
+      {
+        "index": 15,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u03a3\u03cd\u03c3\u03c4\u03b7\u03bc\u03b1",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ???????",
+          null
+        ]
+      },
+      {
+        "index": 24,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \u03a7\u03c1\u03ae\u03c3\u03c4\u03b7\u03c2 to \u03a3\u03cd\u03c3\u03c4\u03b7\u03bc\u03b1",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ??????? to ???????",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_greek_title",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_greek_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_greek_title/java.svg",
+    "before_sha": "9c0354e7bb45afb7fd28eeb1ca6d6cacda41287919dbe1acb877564bdb1e2868",
+    "after_sha": "ed619f19db800e28e2385f4284fb176e2f08def3950448ddcaf09c3a2611df49",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 13,
+    "element_count_after": 13,
+    "decoded_changes": [
+      {
+        "index": 5,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u03a7\u03c1\u03ae\u03c3\u03c4\u03b7\u03c2",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ???????",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_hebrew_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hebrew_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hebrew_class_diagram/java.svg",
+    "before_sha": "be85bb616a88c040473cee71850a33738c294db0d9ef47433d5665cef8cca337",
+    "after_sha": "4f2f145d22ab5e50e8ac7c4820f15f6195ba14eb4d6528e9ff634bec90e42be2",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 28,
+    "element_count_after": 28,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u05de\u05e9\u05ea\u05de\u05e9",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ?????",
+          null
+        ]
+      },
+      {
+        "index": 15,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u05de\u05e2\u05e8\u05db\u05ea",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ?????",
+          null
+        ]
+      },
+      {
+        "index": 24,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \u05de\u05e9\u05ea\u05de\u05e9 to \u05de\u05e2\u05e8\u05db\u05ea",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ????? to ?????",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_hebrew_title",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hebrew_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hebrew_title/java.svg",
+    "before_sha": "785f86320396a681b28eae7fb74347be6969b4e3b1ac8ccfc4132f3e130a3467",
+    "after_sha": "6608388fd5876700174165a3fcfa8147eea716909fc0fc68caf1d05d15fc86f1",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 13,
+    "element_count_after": 13,
+    "decoded_changes": [
+      {
+        "index": 5,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u05de\u05e9\u05ea\u05de\u05e9",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ?????",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_hindi_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hindi_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hindi_class_diagram/java.svg",
+    "before_sha": "c0f805fd7ea2a143f4b05c2d4d2b88c18efb52a58232ab841ff05f8594cf4984",
+    "after_sha": "90ff6b56e3e7c64d5204df0a53826b2eb8225bf8833d172097dc824e4666c287",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 28,
+    "element_count_after": 28,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u0909\u092a\u092f\u094b\u0917\u0915\u0930\u094d\u0924\u093e",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ??????????",
+          null
+        ]
+      },
+      {
+        "index": 15,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u092a\u094d\u0930\u0923\u093e\u0932\u0940",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ???????",
+          null
+        ]
+      },
+      {
+        "index": 24,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \u0909\u092a\u092f\u094b\u0917\u0915\u0930\u094d\u0924\u093e to \u092a\u094d\u0930\u0923\u093e\u0932\u0940",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ?????????? to ???????",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_hindi_title",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hindi_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_hindi_title/java.svg",
+    "before_sha": "8a89ffe8922028c2387802ccd91267d5bf84e5174896fa6300c1ca36a8e50783",
+    "after_sha": "f5645d2e7073c2140d5bcde6cb979ec8a44a882cad3a3b7c341bb3a30e6a230b",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 13,
+    "element_count_after": 13,
+    "decoded_changes": [
+      {
+        "index": 5,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u0909\u092a\u092f\u094b\u0917\u0915\u0930\u094d\u0924\u093e",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ??????????",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_japanese_class",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_class/java.svg",
+    "before_sha": "c5241ba7d13963c1a6a7bf8754d63521800d243d3dc0e6b92ff2bbbef66458f7",
+    "after_sha": "f25c70952c14239d7a126b77ed4c176b524855ebcfb9f004270822057536ffb7",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 26,
+    "element_count_after": 26,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u30e6\u30fc\u30b6\u30fc",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ????",
+          null
+        ]
+      },
+      {
+        "index": 13,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u6ce8\u6587",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ??",
+          null
+        ]
+      },
+      {
+        "index": 22,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \u30e6\u30fc\u30b6\u30fc to \u6ce8\u6587",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ???? to ??",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_japanese_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_class_diagram/java.svg",
+    "before_sha": "56233d0d2b1dfadad068d5e8ada5222e61302fc565ecfb7c50266936d4a80778",
+    "after_sha": "f6e65051fdf302f0d0e13dcc3286c1d5a7245a8007ff562e66bf9b3de5709cf5",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 28,
+    "element_count_after": 28,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u30e6\u30fc\u30b6\u30fc",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ????",
+          null
+        ]
+      },
+      {
+        "index": 15,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u30b7\u30b9\u30c6\u30e0",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ????",
+          null
+        ]
+      },
+      {
+        "index": 24,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \u30e6\u30fc\u30b6\u30fc to \u30b7\u30b9\u30c6\u30e0",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ???? to ????",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_japanese_title",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_title/java.svg",
+    "before_sha": "8ca2aa86933be30eb8addf529d2db30d61ee2e00f6cbe65ae254eb48e77eafee",
+    "after_sha": "556326c86deaa0dd9c37c09af327f58d9380d3f5970d0d518f505ce60eed1d64",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 13,
+    "element_count_after": 13,
+    "decoded_changes": [
+      {
+        "index": 5,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u30e6\u30fc\u30b6\u30fc",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ????",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_korean_class",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_korean_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_korean_class/java.svg",
+    "before_sha": "f7b2f9caaa8d8b33c3f11bf49894b7139d6f5a49d45ad0c23743d6ab0e12e570",
+    "after_sha": "ca55cb47397319d532a13487d4699aa4dbef72787e07235e109752c7a5fefe08",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 26,
+    "element_count_after": 26,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \uc0ac\uc6a9\uc790",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ???",
+          null
+        ]
+      },
+      {
+        "index": 13,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \uc8fc\ubb38",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ??",
+          null
+        ]
+      },
+      {
+        "index": 22,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \uc0ac\uc6a9\uc790 to \uc8fc\ubb38",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ??? to ??",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_korean_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_korean_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_korean_class_diagram/java.svg",
+    "before_sha": "02e21cd8cceefcd1ef9433fae18e8c04177d430da14abc388c37e2870a8820a6",
+    "after_sha": "6ae7de4f6d9b7cad5fd8dd7bd389bb0849fb9e4872544f98784075b73773eec2",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 28,
+    "element_count_after": 28,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \uc0ac\uc6a9\uc790",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ???",
+          null
+        ]
+      },
+      {
+        "index": 15,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \uc2dc\uc2a4\ud15c",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ???",
+          null
+        ]
+      },
+      {
+        "index": 24,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \uc0ac\uc6a9\uc790 to \uc2dc\uc2a4\ud15c",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ??? to ???",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_korean_title",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_korean_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_korean_title/java.svg",
+    "before_sha": "b57517a044b66527d40deee636575a2fa6b628a9fdb4144b354bc86a7d93af36",
+    "after_sha": "7f0496c667a5da2889a00ac74e9109d08835d21793cea80509336ffa1b6f1bce",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 13,
+    "element_count_after": 13,
+    "decoded_changes": [
+      {
+        "index": 5,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \uc0ac\uc6a9\uc790",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ???",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_math_symbols",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_math_symbols/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_math_symbols/java.svg",
+    "before_sha": "1ae3329e0a4d946aed24ec8721006f4bbb2d0d80c7f3d9c0ab10bb7b0913c70f",
+    "after_sha": "98d82e3acf611360881637b5a856e5fe0d71f6eab77bcb71e8ddf3cbca3521cf",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 15,
+    "element_count_after": 15,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u03a3_Calculator",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ?_Calculator",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_mixed_scripts",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_mixed_scripts/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_mixed_scripts/java.svg",
+    "before_sha": "3128754eb929bc032d15a3be9afa7563de9255861fe5dc15e3f3a62dd26bd557",
+    "after_sha": "d71900cc45d57d3cf1587abfd802be190cc27b2f5c5388e59b977d25490d88eb",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 14,
+    "element_count_after": 14,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u6df7\u5408 Mixed \u043c\u0435\u0448\u0430\u043d\u044b\u0439",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ?? Mixed ???????",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_russian_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_russian_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_russian_class_diagram/java.svg",
+    "before_sha": "e6bcb57dbef2954e2580890eac34ba3b7d99b64e8ae296b42a6647c212c45a54",
+    "after_sha": "f19041e7dbbfa31b750befa8b797e680a5ee03c45ad5447cca9a0102f403eb93",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 28,
+    "element_count_after": 28,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ????????????",
+          null
+        ]
+      },
+      {
+        "index": 15,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u0421\u0438\u0441\u0442\u0435\u043c\u0430",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ???????",
+          null
+        ]
+      },
+      {
+        "index": 24,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c to \u0421\u0438\u0441\u0442\u0435\u043c\u0430",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ???????????? to ???????",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_russian_title",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_russian_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_russian_title/java.svg",
+    "before_sha": "36e8e772da1d1ac738eedf21c0c74f8b479626d6a50cf0b1a30631daa6d43727",
+    "after_sha": "7314f49bc8a72c1bb387de92364e40c5a98d840d03ed5ed0fa01169c0c35c636",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 13,
+    "element_count_after": 13,
+    "decoded_changes": [
+      {
+        "index": 5,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ????????????",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_surrogate_pairs",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_surrogate_pairs/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_surrogate_pairs/java.svg",
+    "before_sha": "0b3b677697f6ae00f045671fec15c8bc733697056dc04c7ab8277a25c5be9801",
+    "after_sha": "f7a0e006bfc4995b875963b8a12904a75110377498d7bd8ef6ae63ca3dcfd3a9",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 12,
+    "element_count_after": 12,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \ud83d\ude00 Emoji Class",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ? Emoji Class",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_thai_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_thai_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_thai_class_diagram/java.svg",
+    "before_sha": "2c8c3d5c4b6910b74f8a36517d74d24fdd96347d5ce6afe7f22b08fd01e1d96b",
+    "after_sha": "0caddbe542be5485309dcf724ce80be9822708a627fe16fc08a7a67f99d7d228",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 28,
+    "element_count_after": 28,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u0e1c\u0e39\u0e49\u0e43\u0e0a\u0e49",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ??????",
+          null
+        ]
+      },
+      {
+        "index": 15,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u0e23\u0e30\u0e1a\u0e1a",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ????",
+          null
+        ]
+      },
+      {
+        "index": 24,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \u0e1c\u0e39\u0e49\u0e43\u0e0a\u0e49 to \u0e23\u0e30\u0e1a\u0e1a",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ?????? to ????",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_thai_title",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_thai_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_thai_title/java.svg",
+    "before_sha": "95e6235b2de537ab61b4e3480d46c34a3cf7e5a41ef0332821ae5d45675a8fda",
+    "after_sha": "3228f559c8f453ffaebfb6256688a0470c6c3fc241ed1e62b7a1f51fde62db0b",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 13,
+    "element_count_after": 13,
+    "decoded_changes": [
+      {
+        "index": 5,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u0e1c\u0e39\u0e49\u0e43\u0e0a\u0e49",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ??????",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_zero_width",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_zero_width/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/edge-cases/edge_unicode_zero_width/java.svg",
+    "before_sha": "0eb3106409d179b3444feea229d5cae2edfe981463d5981e62649477c97eff59",
+    "after_sha": "8b2e03d779d9de3679ea6ee7847bd1eb03fc0de8246eda073aff4db0dbbe7695",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 12,
+    "element_count_after": 12,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class Foo\u200bBar",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class Foo?Bar",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  },
+  {
+    "id": "full-golden/rendering/text/text_unicode_class_names",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/rendering/text/text_unicode_class_names/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/frozen/full-golden/rendering/text/text_unicode_class_names/java.svg",
+    "before_sha": "39507f1d97e8df2992d2401b75653b0ef5a218359c8a0e4582fc28eb234c5a67",
+    "after_sha": "1ded3ebba9f8a25eca497e95abdfe40453c1d476245fc39c6eb0bb2cac832efe",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 35,
+    "element_count_after": 35,
+    "decoded_changes": [
+      {
+        "index": 3,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u00c4rger",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ?rger",
+          null
+        ]
+      },
+      {
+        "index": 11,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u00dcbung",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ?bung",
+          null
+        ]
+      },
+      {
+        "index": 19,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "class \u00d6ffnung",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "class ?ffnung",
+          null
+        ]
+      },
+      {
+        "index": 27,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \u00c4rger to \u00dcbung",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ?rger to ?bung",
+          null
+        ]
+      },
+      {
+        "index": 31,
+        "kind": "tag/text/tail",
+        "before": [
+          "<function Comment at 0x105b49da0>",
+          "link \u00dcbung to \u00d6ffnung",
+          null
+        ],
+        "after": [
+          "<function Comment at 0x105b49da0>",
+          "link ?bung to ?ffnung",
+          null
+        ]
+      }
+    ],
+    "cause": "comment serialization",
+    "explanation": "Java ToStream whole-body dash spacing and US-ASCII writer scalar replacement. Attribute/text/geometry projection unchanged."
+  }
+]

@@ -1,0 +1,1588 @@
+[
+  {
+    "reference_category": "valid_class",
+    "row": {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/stored_names.puml",
+      "mechanism": "tim-memory-trie-text-lookup",
+      "negative": false,
+      "intended_validity": "intended_valid",
+      "cwd": "new",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/stored_names.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "source_sha256": "01fe7683223b3856d48d8da8539cb91c52ec6579377e0c46feb1612ee22e449d",
+    "java_exit": 0,
+    "java_probe_exit": 0,
+    "xml_valid": true,
+    "reference_valid": true,
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "svg_match": false,
+        "source_equal": false,
+        "comparison_exit": 1,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "af8b1d35877d1af8da1aa75385d0c231f95484b1d4b5d7bad50b69559f78ce06",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "7b7775b51f55b6b88e95b4f999c223627e9d1a4943ac45f7ad51104a414454a8",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/stored_names/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/stored_names/before/rust.svg"
+        ]
+      },
+      "iteration2": {
+        "cli_exit": 0,
+        "svg_match": true,
+        "source_equal": true,
+        "comparison_exit": 0,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "c3e623f1da326daf3993cef360c2ff47bb5b4774e5b1bee56d652d1733879e93",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "1f4cfb21a92a37a93de1fdd8b4acf5d3ace90c00404334fd2ee7cd2cc9c8c1e5",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/stored_names/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/stored_names/iteration2/rust.svg"
+        ]
+      }
+    }
+  },
+  {
+    "reference_category": "valid_class",
+    "row": {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/prefix_paths.puml",
+      "mechanism": "tim-memory-trie-text-lookup",
+      "negative": false,
+      "intended_validity": "intended_valid",
+      "cwd": "new",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/prefix_paths.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "source_sha256": "266f8f42ca8c95d7a9b9dda38025bed8be82a56d50afbd118d5c56d57d76e943",
+    "java_exit": 0,
+    "java_probe_exit": 0,
+    "xml_valid": true,
+    "reference_valid": true,
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "svg_match": false,
+        "source_equal": false,
+        "comparison_exit": 1,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "08e51cc4489a670fd59c5aa14a4484e41d01922a3aa6e43d045882d7b6018653",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "f91027dae19eb0b6eb8b1e07a367931d2f8f5625304f48ffa4a709996db392c3",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/prefix_paths/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/prefix_paths/before/rust.svg"
+        ]
+      },
+      "iteration2": {
+        "cli_exit": 0,
+        "svg_match": true,
+        "source_equal": true,
+        "comparison_exit": 0,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "022312e953605026098e35376df85001fff3c473036a411b4de154d74375b758",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "913407408cf2d140535707b943a0b08ea2c30eb2e288935c6e8aedc19fe0a742",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/prefix_paths/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/prefix_paths/iteration2/rust.svg"
+        ]
+      }
+    }
+  },
+  {
+    "reference_category": "valid_class",
+    "row": {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/removal_paths.puml",
+      "mechanism": "tim-memory-trie-text-lookup",
+      "negative": false,
+      "intended_validity": "intended_valid",
+      "cwd": "new",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/removal_paths.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "source_sha256": "62b5f68404c2dde46947de67859c5bad27ceb63159e0038e0d896b15a76947b2",
+    "java_exit": 0,
+    "java_probe_exit": 0,
+    "xml_valid": true,
+    "reference_valid": true,
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "svg_match": true,
+        "source_equal": true,
+        "comparison_exit": 0,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "bee244ac12503d1f677bde88fc946e30c149877829e4f39f657ea33ab7347ac7",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "6e426ee3104a931b17f587334db1a3baf2644df3c1cd76ef9b5c6c9d70f85a3c",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/removal_paths/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/removal_paths/before/rust.svg"
+        ]
+      },
+      "iteration2": {
+        "cli_exit": 0,
+        "svg_match": true,
+        "source_equal": true,
+        "comparison_exit": 0,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "bee244ac12503d1f677bde88fc946e30c149877829e4f39f657ea33ab7347ac7",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "6e426ee3104a931b17f587334db1a3baf2644df3c1cd76ef9b5c6c9d70f85a3c",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/removal_paths/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/removal_paths/iteration2/rust.svg"
+        ]
+      }
+    }
+  },
+  {
+    "reference_category": "valid_class",
+    "row": {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/scope_paths.puml",
+      "mechanism": "tim-memory-trie-text-lookup",
+      "negative": false,
+      "intended_validity": "intended_valid",
+      "cwd": "new",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/scope_paths.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "source_sha256": "65f68f33597e681d442b98e3239eb38a42fd899006eb14af435fb3d8d6631b18",
+    "java_exit": 0,
+    "java_probe_exit": 0,
+    "xml_valid": true,
+    "reference_valid": true,
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "svg_match": true,
+        "source_equal": true,
+        "comparison_exit": 0,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "92da1d2ee56b643d7e9f5b5a1feb4bc8742b1f6068c466f60a692de3e51a4cfd",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "71b03cb9676277d6ead103722ff80a0c7c75af9a65c3399a53bda56566cf831b",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/scope_paths/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/scope_paths/before/rust.svg"
+        ]
+      },
+      "iteration2": {
+        "cli_exit": 0,
+        "svg_match": true,
+        "source_equal": true,
+        "comparison_exit": 0,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "92da1d2ee56b643d7e9f5b5a1feb4bc8742b1f6068c466f60a692de3e51a4cfd",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "71b03cb9676277d6ead103722ff80a0c7c75af9a65c3399a53bda56566cf831b",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/scope_paths/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/scope_paths/iteration2/rust.svg"
+        ]
+      }
+    }
+  },
+  {
+    "reference_category": "valid_class",
+    "row": {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/original_boundaries.puml",
+      "mechanism": "tim-memory-trie-text-lookup",
+      "negative": false,
+      "intended_validity": "intended_valid",
+      "cwd": "new",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/original_boundaries.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "source_sha256": "27b3a85e201d5ee24ed7deaa6f1be244ce0c084626fcb966239a83bc85e16ece",
+    "java_exit": 0,
+    "java_probe_exit": 0,
+    "xml_valid": true,
+    "reference_valid": true,
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "svg_match": false,
+        "source_equal": false,
+        "comparison_exit": 1,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "0f112478ee0dfffcd644da7456ae394fcfa18305277d30e11bd503dde54d19f1",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "21d4a0ac9576a7b80bfda04a986113bbdfb06c5f793b3a0a43cf48d517c769ff",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/original_boundaries/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/original_boundaries/before/rust.svg"
+        ]
+      },
+      "iteration2": {
+        "cli_exit": 0,
+        "svg_match": true,
+        "source_equal": true,
+        "comparison_exit": 0,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "b231f63eee5777bac1471a07aa20f69c1c5591c531d2bf3bf6142c1aed5af221",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "cdc7a766c36902794a29be7d01bb23f707652fd9f2e395b458e4fff57c8352eb",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/original_boundaries/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/original_boundaries/iteration2/rust.svg"
+        ]
+      }
+    }
+  },
+  {
+    "reference_category": "valid_class",
+    "row": {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/surrogate_prefix.puml",
+      "mechanism": "tim-memory-trie-text-lookup",
+      "negative": false,
+      "intended_validity": "intended_valid",
+      "cwd": "new",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/surrogate_prefix.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "source_sha256": "a396d2fc85194ea53d3fd4d800362b025cba6a6064a0f8e3013532564b309eec",
+    "java_exit": 0,
+    "java_probe_exit": 0,
+    "xml_valid": true,
+    "reference_valid": true,
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "svg_match": false,
+        "source_equal": false,
+        "comparison_exit": 1,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "4c4ac384cd26554aaf0c962035bfcb9e815b82396fe970a67378a4dbc8b68ef4",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "154cdfa587f6e713776ae7ab7abd7d38522d107f2a2dda436eb06c8fb32d0e1e",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/surrogate_prefix/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/surrogate_prefix/before/rust.svg"
+        ]
+      },
+      "iteration2": {
+        "cli_exit": 0,
+        "svg_match": true,
+        "source_equal": true,
+        "comparison_exit": 0,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "578ca5d8d245c555da103e863ee848dc78f52a2b2a26ff36ebaafe325bbb3e49",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "de48bd6b27f7a3eba26c2202b8f2053d65ca143f07073f69ccc6a1df52f53466",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/surrogate_prefix/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/surrogate_prefix/iteration2/rust.svg"
+        ]
+      }
+    }
+  },
+  {
+    "reference_category": "valid_class",
+    "row": {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/duplicate_named.puml",
+      "mechanism": "tim-duplicate-formal-binding",
+      "negative": false,
+      "intended_validity": "intended_valid",
+      "cwd": "new",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/duplicate_named.puml",
+    "mechanism": "tim-duplicate-formal-binding",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "source_sha256": "3dde499c42d018ef605e09827df1b2c3d6679a6bb478332df837513230dd5add",
+    "java_exit": 0,
+    "java_probe_exit": 0,
+    "xml_valid": true,
+    "reference_valid": true,
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "svg_match": false,
+        "source_equal": false,
+        "comparison_exit": 1,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "f2a13780dde6af78da6d0e342f96785f7d66619cb3fe93a8eee28f46d38ccfe6",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "86ec7d4778a2b6fadc1fc038d4e5cae9607f41e227289b3a3d08d78185c5e251",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/duplicate_named/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/duplicate_named/before/rust.svg"
+        ]
+      },
+      "iteration2": {
+        "cli_exit": 0,
+        "svg_match": true,
+        "source_equal": true,
+        "comparison_exit": 0,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "34ac7f65ac22af5b410eaf561d2b493a8222c7bea247eee42b16d4218b9ad063",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "9fde9aa40f193a70d23aef6180a552178e6e08a0b112a12c5aec5eb03306c430",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/duplicate_named/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/duplicate_named/iteration2/rust.svg"
+        ]
+      }
+    }
+  },
+  {
+    "reference_category": "valid_class",
+    "row": {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/duplicate_defaults.puml",
+      "mechanism": "tim-duplicate-formal-binding",
+      "negative": false,
+      "intended_validity": "intended_valid",
+      "cwd": "new",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/duplicate_defaults.puml",
+    "mechanism": "tim-duplicate-formal-binding",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "source_sha256": "5c22d68a175d280869a1a77b037acd287b3627c126cfc68654c86597b371d6cb",
+    "java_exit": 0,
+    "java_probe_exit": 0,
+    "xml_valid": true,
+    "reference_valid": true,
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "svg_match": false,
+        "source_equal": false,
+        "comparison_exit": 1,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "56bf7947ab0137bc5493f49ed2160050aa8318153861158710c96084088ed52b",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "8f5abae130009cac138c97d12ad730d8d05dfb9a52b55e9b8232e4a5d71bc3db",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/duplicate_defaults/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/duplicate_defaults/before/rust.svg"
+        ]
+      },
+      "iteration2": {
+        "cli_exit": 0,
+        "svg_match": true,
+        "source_equal": true,
+        "comparison_exit": 0,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "32bc279a4b4496c9575db94a2aa7e4d4c9b4ca1349b64c7e114149b6000cebaa",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "fd6e62fca32dcc01e701253def17e90d06408810197540c0a9559d069d6417d7",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/duplicate_defaults/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/duplicate_defaults/iteration2/rust.svg"
+        ]
+      }
+    }
+  },
+  {
+    "reference_category": "valid_class",
+    "row": {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/duplicate_effects.puml",
+      "mechanism": "tim-duplicate-formal-binding",
+      "negative": false,
+      "intended_validity": "intended_valid",
+      "cwd": "new",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/duplicate_effects.puml",
+    "mechanism": "tim-duplicate-formal-binding",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "source_sha256": "452fb0daff4f394e5debbf3683a0d64908baeed23a43b15bc4833cb9fa893e8a",
+    "java_exit": 0,
+    "java_probe_exit": 0,
+    "xml_valid": true,
+    "reference_valid": true,
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "svg_match": false,
+        "source_equal": false,
+        "comparison_exit": 1,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "cd1e62bd9e2178985d5cfe077d4c6b13d75c3685ad5cc0d17b98bdf558747cd6",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "2fb4b789fc1f7720156303a16421214fe9b15d120eced03a331134ce53e8c5b6",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/duplicate_effects/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/duplicate_effects/before/rust.svg"
+        ]
+      },
+      "iteration2": {
+        "cli_exit": 0,
+        "svg_match": true,
+        "source_equal": true,
+        "comparison_exit": 0,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "f326a505b42362189b41c9d222d783c02e91173c14d42444af87d9af53853fbe",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "77d2ebc1e203ad0b35d3aebc7f3bef4f48e96771bfd6e43192c885ae7aa330db",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/duplicate_effects/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/duplicate_effects/iteration2/rust.svg"
+        ]
+      }
+    }
+  },
+  {
+    "reference_category": "welcome_or_other_nonpositive",
+    "row": {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/empty_comments.puml",
+      "mechanism": "tim-empty-sub-iterator-termination",
+      "negative": false,
+      "intended_validity": "valid_or_truncated_welcome",
+      "cwd": "new",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/empty_comments.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "negative": false,
+    "intended_validity": "valid_or_truncated_welcome",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "source_sha256": "72aacb4d7bf475661273707d6da9fdfd9bc30e0c9d8aa67489dc84e1a7ac9ab5",
+    "java_exit": 0,
+    "java_probe_exit": 0,
+    "xml_valid": true,
+    "reference_valid": false,
+    "measurements": {
+      "before": {
+        "cli_exit": 1,
+        "svg_match": false,
+        "source_equal": false,
+        "comparison_exit": 2,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 1,
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderr_sha256": "9b6563316092958a2000c41596bc3fbbf73e44fea4068f336fca32271b30a6f2"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 1,
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderr_sha256": "9b6563316092958a2000c41596bc3fbbf73e44fea4068f336fca32271b30a6f2"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/empty_comments/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/empty_comments/before/rust.svg"
+        ]
+      },
+      "iteration2": {
+        "cli_exit": 0,
+        "svg_match": false,
+        "source_equal": true,
+        "comparison_exit": 2,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "6237404ecaba9e83578ca19b9ec38b8075bd920f55c99008b67d58d051e67f55",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "790c05afefc3c028877901fc479c304a734b0e41aba4004b4889e468f33fc3c5",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/empty_comments/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/empty_comments/iteration2/rust.svg"
+        ]
+      }
+    }
+  },
+  {
+    "reference_category": "welcome_or_other_nonpositive",
+    "row": {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/empty_function.puml",
+      "mechanism": "tim-empty-sub-iterator-termination",
+      "negative": false,
+      "intended_validity": "valid_or_truncated_welcome",
+      "cwd": "new",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/empty_function.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "negative": false,
+    "intended_validity": "valid_or_truncated_welcome",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "source_sha256": "e6815c9beb0852e80c19a2dffe48488f45646328cd01985da158caea0af009d3",
+    "java_exit": 0,
+    "java_probe_exit": 0,
+    "xml_valid": true,
+    "reference_valid": false,
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "svg_match": false,
+        "source_equal": false,
+        "comparison_exit": 2,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "b0f53b3ebaa56c48338090016639d16ab6106e35eff33416d8a2b0d594b7e07c",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "e841a3fd0a0c59ce4be27fbf2377bfff88063da5f30e93c8089c6b461fcf357a",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/empty_function/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/empty_function/before/rust.svg"
+        ]
+      },
+      "iteration2": {
+        "cli_exit": 0,
+        "svg_match": false,
+        "source_equal": true,
+        "comparison_exit": 2,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "6237404ecaba9e83578ca19b9ec38b8075bd920f55c99008b67d58d051e67f55",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "790c05afefc3c028877901fc479c304a734b0e41aba4004b4889e468f33fc3c5",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/empty_function/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/empty_function/iteration2/rust.svg"
+        ]
+      }
+    }
+  },
+  {
+    "reference_category": "valid_class",
+    "row": {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/blank_sub.puml",
+      "mechanism": "tim-empty-sub-iterator-termination",
+      "negative": false,
+      "intended_validity": "intended_valid",
+      "cwd": "new",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/blank_sub.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "source_sha256": "9f2003526fb1a92820ce3f1993310c19a98084dfc606febfa230b5968d7e331c",
+    "java_exit": 0,
+    "java_probe_exit": 0,
+    "xml_valid": true,
+    "reference_valid": true,
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "svg_match": true,
+        "source_equal": true,
+        "comparison_exit": 0,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "5a4e0df4665680af15474a503a7d2b7cfa1d5e16cdb0841fda386c6d6fd5fdda",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "9e253b6442dc4f4a30501c77a539b214ed7b278ffb175310a2558eaf9056c1c3",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/blank_sub/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/blank_sub/before/rust.svg"
+        ]
+      },
+      "iteration2": {
+        "cli_exit": 0,
+        "svg_match": true,
+        "source_equal": true,
+        "comparison_exit": 0,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "5a4e0df4665680af15474a503a7d2b7cfa1d5e16cdb0841fda386c6d6fd5fdda",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "9e253b6442dc4f4a30501c77a539b214ed7b278ffb175310a2558eaf9056c1c3",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/blank_sub/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/blank_sub/iteration2/rust.svg"
+        ]
+      }
+    }
+  },
+  {
+    "reference_category": "valid_class",
+    "row": {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/empty_include.puml",
+      "mechanism": "tim-empty-sub-iterator-termination",
+      "negative": false,
+      "intended_validity": "valid_or_truncated_welcome",
+      "cwd": "new",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/empty_include.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "negative": false,
+    "intended_validity": "valid_or_truncated_welcome",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "source_sha256": "b13b687f8e6ee0d8f001901b96929cb5cd9725fb1612ee5931872145463b52d3",
+    "java_exit": 0,
+    "java_probe_exit": 0,
+    "xml_valid": true,
+    "reference_valid": true,
+    "measurements": {
+      "before": {
+        "cli_exit": 1,
+        "svg_match": false,
+        "source_equal": false,
+        "comparison_exit": 3,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 1,
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderr_sha256": "66809d3edccb344b6b2538bc83bd537645c0be7e6368f4818ce2101e738f762c"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 1,
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderr_sha256": "66809d3edccb344b6b2538bc83bd537645c0be7e6368f4818ce2101e738f762c"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/empty_include/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/empty_include/before/rust.svg"
+        ]
+      },
+      "iteration2": {
+        "cli_exit": 0,
+        "svg_match": false,
+        "source_equal": true,
+        "comparison_exit": 1,
+        "calls": [
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "517bf2621d6d8595a0fb3d895c2492b880e08cb9521fedc28bf46af76c2f9c42",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit_code": 0,
+            "stdout_sha256": "751ab91eaa421a1bec1de97e023005b2ae11ad6dda7c5e788ef62f107eb2aa7b",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/empty_include/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-maker/relay13-iteration2/empty_include/iteration2/rust.svg"
+        ]
+      }
+    }
+  }
+]

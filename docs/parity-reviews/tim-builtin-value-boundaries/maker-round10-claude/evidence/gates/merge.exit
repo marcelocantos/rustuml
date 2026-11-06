@@ -1,0 +1,7 @@
+golden_no_oracle exit 101
+golden_pairs exit 101
+parity_perturbations exit 101
+harness_guards exit 101
+lib exit 0
+pipe_mode exit 0
+doc_claims exit 0

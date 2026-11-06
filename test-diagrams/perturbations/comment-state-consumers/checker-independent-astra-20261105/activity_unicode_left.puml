@@ -1,0 +1,5 @@
+@startuml
+(*) --> "Étage Nord"
+-left-> "Übung Süd"
+--> (*)
+@enduml

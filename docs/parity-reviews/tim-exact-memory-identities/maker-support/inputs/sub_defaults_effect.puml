@@ -1,0 +1,11 @@
+@startuml
+!$n=0
+!procedure $tick()
+!startsub saved
+!$n=$n+1
+!endsub
+!endprocedure
+class "before $n" as Before
+$tick()
+class "after $n" as After
+@enduml

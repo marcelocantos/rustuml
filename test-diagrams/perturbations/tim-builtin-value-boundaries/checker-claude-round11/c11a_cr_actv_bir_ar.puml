@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Arial
+start
+:Wavy <b><i>Dog kim Vay</i></b> 9 ovo;
+stop
+@enduml

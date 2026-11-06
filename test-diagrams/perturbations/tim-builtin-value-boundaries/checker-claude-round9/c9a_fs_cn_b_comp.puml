@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Courier New
+component "<b>Wharf q𝅧r</b>" as C1
+@enduml

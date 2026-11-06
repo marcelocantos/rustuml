@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Arial
+participant "Dawn Vow gym kit" as E1
+E1 -> E1 : ok
+@enduml

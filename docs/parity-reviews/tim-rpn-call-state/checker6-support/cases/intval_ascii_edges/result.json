@@ -1,0 +1,147 @@
+{
+  "source": "/tmp/rustuml-checker6/new/intval_ascii_edges.puml",
+  "mechanism": "tim-intval-conversion",
+  "axes": [
+    "signed boundary",
+    "typed display"
+  ],
+  "negative": false,
+  "cwd": "/tmp/rustuml-checker6/new",
+  "zone": "GMT+11:00",
+  "debug": "date=1774210426000,tz=AEDT+1100",
+  "env": {},
+  "golden": "/tmp/rustuml-checker6/relay25/intval_ascii_edges/java.svg.stdout",
+  "reference_source": "/tmp/rustuml-checker6/relay25/intval_ascii_edges/java.source.stdout",
+  "java_exit": 0,
+  "java_probe_exit": 0,
+  "source_sha256": "e082a3f040e09bce1b070e13e59ffb359e1880b11845e18653448be07e7aeb14",
+  "golden_sha256": "51c483930a8f2326e47b4156050deee983942a330a1d55f88fa223e9bac888af",
+  "suite": "fresh25",
+  "capture_id": "0016-intval_ascii_edges",
+  "reference_valid": true,
+  "reference_xml_valid": true,
+  "phases": {
+    "before": {
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "panic": false,
+      "calls": [
+        {
+          "mode": "svg",
+          "argv": [
+            "/tmp/rustuml-checker6/before-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 0,
+          "stdout_sha256": "9e248923e59e86e453a40a3a93f2f29b118371a6a66c00fad675e1000908200c",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "mode": "yaml",
+          "argv": [
+            "/tmp/rustuml-checker6/before-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 0,
+          "stdout_sha256": "9a5ef4cd45d0b3cb832ef0bf29eb1561fcc662bdccba80e2953f9a262ca250b2",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-checker6/probe",
+        "compare",
+        "/tmp/rustuml-checker6/relay25/intval_ascii_edges/java.svg.stdout",
+        "/tmp/rustuml-checker6/replay/fresh25/0016-intval_ascii_edges/before/rust.svg"
+      ],
+      "first_diagnostic": [],
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass \"0/2147483647/-2147483648\" as Edges\n@enduml\n"
+      },
+      "source_equal": true,
+      "reference_source_sha256": "29d8f7f8bea21b2823b13ccbed9e03a0a29afe1dbe2c770ea5ff45f758e1aadb"
+    },
+    "after": {
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "panic": false,
+      "calls": [
+        {
+          "mode": "svg",
+          "argv": [
+            "/tmp/rustuml-checker6/after-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 0,
+          "stdout_sha256": "9e248923e59e86e453a40a3a93f2f29b118371a6a66c00fad675e1000908200c",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "mode": "yaml",
+          "argv": [
+            "/tmp/rustuml-checker6/after-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 0,
+          "stdout_sha256": "9a5ef4cd45d0b3cb832ef0bf29eb1561fcc662bdccba80e2953f9a262ca250b2",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-checker6/probe",
+        "compare",
+        "/tmp/rustuml-checker6/relay25/intval_ascii_edges/java.svg.stdout",
+        "/tmp/rustuml-checker6/replay/fresh25/0016-intval_ascii_edges/after/rust.svg"
+      ],
+      "first_diagnostic": [],
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass \"0/2147483647/-2147483648\" as Edges\n@enduml\n"
+      },
+      "source_equal": true,
+      "reference_source_sha256": "29d8f7f8bea21b2823b13ccbed9e03a0a29afe1dbe2c770ea5ff45f758e1aadb"
+    }
+  },
+  "actual_source": "/tmp/rustuml-checker6/new/intval_ascii_edges.puml",
+  "actual_golden": "/tmp/rustuml-checker6/relay25/intval_ascii_edges/java.svg.stdout",
+  "committed_source": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_ascii_edges.puml",
+  "committed_golden": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_ascii_edges.svg",
+  "committed_evidence": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges",
+  "java_svg_text": [
+    "0/2147483647/-2147483648"
+  ]
+}

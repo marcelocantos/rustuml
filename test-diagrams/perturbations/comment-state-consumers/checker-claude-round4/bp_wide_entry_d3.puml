@@ -1,0 +1,15 @@
+@startuml
+state Campus {
+  state Block {
+    state Wing {
+      state Lab {
+        state "Visitor Reception" as reception <<entryPoint>>
+        reception --> Bench
+      }
+      Corridor --> reception
+    }
+    Lobby --> Corridor
+  }
+  Gate --> Lobby
+}
+@enduml

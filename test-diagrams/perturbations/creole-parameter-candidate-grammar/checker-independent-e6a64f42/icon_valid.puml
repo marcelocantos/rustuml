@@ -1,0 +1,3 @@
+@startuml
+Alder -> Birch : a<&home>z\na<#blue&home{scale=1.5,color=red}>z\na<&home*2>z
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+!$u = %substr("🚀", 0, 1)
+state "Shown" as S$u
+@enduml

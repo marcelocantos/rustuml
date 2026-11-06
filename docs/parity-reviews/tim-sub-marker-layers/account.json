@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-sub-marker-layers",
+  "rust_revision": "47a723b6fd424a2584dc3d89ac0dc0328eeb0ae7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "text/TLineType.java:simpleKeyword,ENDSUB",
+    "tim/iterator/CodeIteratorSub.java:peek",
+    "preproc/Sub.java:fromFile",
+    "preproc/UncommentReadLine.java:readLine",
+    "tim/TContext.java:buildCodeIterator"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Local and external markers share keyword boundaries; external raw structural validation precedes selected TIM comment execution.",
+  "causal_divergence": "Local endsub requires exact equality and can swallow remaining model; external selection prematurely strips TIM block comments and skips malformed markers.",
+  "planned_change": "Use the existing source-derived directive boundary for local end markers. Scan raw external marker lines without TIM comment removal; retain raw selected lines and their origins for subsequent execution. Preserve existing selection/repeated-block behavior and error propagation.",
+  "perturbation_axes": [
+    "End marker whitespace/punctuation suffix versus identifier continuation",
+    "Malformed markers inside raw comments versus harmless selected-body comments"
+  ],
+  "oracle_plan": [
+    "Preserved checker4 31 controls, full restored1516, exact source/model and unchanged actual CLI SVG comparator.",
+    "Compact new maker cases via parent checksummed T3 relay only; all outputs/errors retained.",
+    "Main release tiers once stabilized; parser/CLI/guards/touched formatting. No baselines, old records, renderer/date/reader changes or acceptance claim."
+  ]
+}

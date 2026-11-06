@@ -1,0 +1,29 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "sub_mechanism": "CR in SVG character data serialized as &#13; (round-7 obligation 5)",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-7.json (findings[5]: j8_decoded_cr serialization; bounded_next_obligations[5])",
+ "sources": [
+  "OpenJDK jdk21u tag jdk-21.0.5-ga (https://github.com/openjdk/jdk21u; the reference JVM is Homebrew openjdk@21 21.0.5): sha256 GlyphLayout.java cb95ae86, FontRunIterator.java 1cb09161, ScriptRun.java ae8c4d2f, CCompositeGlyphMapper.java 33a73e47, CoreTextSupport.m 9bb54645, hb-jdk-font.cc 8027d83a, HBShaper.c 2fbbde51, scriptMapping.c 0a329fea, ToStream.java 55794276, CharInfo.java 8743d68a"
+ ],
+ "java_locations": [
+  "CharInfo.java 201/302: set(S_CARRIAGERETURN) after loading the XML entities; 326-334: a character set in the table is not text-clean ASCII.",
+  "ToStream.java 1438-1520 outputCharacters: a non-clean character goes to processDirty; 1619-1650 processDirty: LF in a text node writes the line separator, any other dirty character goes to accumDefaultEscape; 1696-1776: CR is neither C0/C1-range (1589) nor needing an entity, but isSpecialTextChar(CR) holds in a text node (1758), so writeCharRef writes '&#13;' (1781-1788). Attribute values already follow writeAttrString (svg.rs escape_attribute)."
+ ],
+ "rust_locations": [
+  "crates/rustuml-render/src/svg_export.rs serialize: the shared ToStream boundary; it rewrites unpaired surrogates only. Family escapers (json_diagram.rs escape_text and others) leave a raw CR in text."
+ ],
+ "planned_change": [
+  "svg_export::serialize: a raw CR in a text node or attribute value (not a comment or processing instruction) is written '&#13;'; the fast path also checks for a CR."
+ ],
+ "precommitted_measurement": {
+  "oracle": "BJ j8_decoded_cr",
+  "expect": [
+   "BJ j8_decoded_cr matches whole-output.",
+   "No other output changes in the sweep except documents with a raw CR in text."
+  ]
+ }
+}

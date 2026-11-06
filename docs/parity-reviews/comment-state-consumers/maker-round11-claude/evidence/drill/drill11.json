@@ -1,0 +1,158 @@
+{
+ "D0_unmodified": {
+  "mutant": null,
+  "exit": 0,
+  "counts": [
+   "862",
+   "0"
+  ],
+  "failed": [],
+  "caught": null,
+  "build_error": false
+ },
+ "D1_verdana_router_drops_italic": {
+  "mutant": {
+   "file": "crates/rustuml-render/src/text_render.rs",
+   "old": "            italic,\n            ChainFamily::Verdana,\n",
+   "new": "            false,\n            ChainFamily::Verdana,\n"
+  },
+  "exit": 101,
+  "counts": [
+   "860",
+   "2"
+  ],
+  "failed": [
+   "text_render::tests::every_italic_slot_measures_in_its_own_face",
+   "text_render::tests::verdana_faces_measure_java_widths"
+  ],
+  "caught": true,
+  "build_error": false
+ },
+ "D2_slot_italic_reads_plain": {
+  "mutant": {
+   "file": "crates/rustuml-render/src/text_render.rs",
+   "old": "            (false, true) => self.italic,",
+   "new": "            (false, true) => self.plain,"
+  },
+  "exit": 101,
+  "counts": [
+   "859",
+   "3"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces",
+   "text_render::tests::every_italic_slot_measures_in_its_own_face",
+   "text_render::tests::verdana_faces_measure_java_widths"
+  ],
+  "caught": true,
+  "build_error": false
+ },
+ "D3_slot_bold_italic_reads_bold": {
+  "mutant": {
+   "file": "crates/rustuml-render/src/text_render.rs",
+   "old": "            (true, true) => self.bold_italic,",
+   "new": "            (true, true) => self.bold,"
+  },
+  "exit": 101,
+  "counts": [
+   "859",
+   "3"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces",
+   "text_render::tests::every_italic_slot_measures_in_its_own_face",
+   "text_render::tests::verdana_faces_measure_java_widths"
+  ],
+  "caught": true,
+  "build_error": false
+ },
+ "D4_verdana_italic_table_is_regular": {
+  "mutant": {
+   "file": "crates/rustuml-render/src/text_render.rs",
+   "old": "    italic: &VERDANA_ITALIC_ASCII,",
+   "new": "    italic: &VERDANA_ASCII,"
+  },
+  "exit": 101,
+  "counts": [
+   "859",
+   "3"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces",
+   "text_render::tests::every_italic_slot_measures_in_its_own_face",
+   "text_render::tests::verdana_faces_measure_java_widths"
+  ],
+  "caught": true,
+  "build_error": false
+ },
+ "D5_verdana_bold_italic_table_is_bold": {
+  "mutant": {
+   "file": "crates/rustuml-render/src/text_render.rs",
+   "old": "    bold_italic: &VERDANA_BOLD_ITALIC_ASCII,",
+   "new": "    bold_italic: &VERDANA_BOLD_ASCII,"
+  },
+  "exit": 101,
+  "counts": [
+   "859",
+   "3"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces",
+   "text_render::tests::every_italic_slot_measures_in_its_own_face",
+   "text_render::tests::verdana_faces_measure_java_widths"
+  ],
+  "caught": true,
+  "build_error": false
+ },
+ "D6_arial_router_drops_italic": {
+  "mutant": {
+   "file": "crates/rustuml-render/src/text_render.rs",
+   "old": "            italic,\n            ChainFamily::Arial,\n",
+   "new": "            false,\n            ChainFamily::Arial,\n"
+  },
+  "exit": 101,
+  "counts": [
+   "861",
+   "1"
+  ],
+  "failed": [
+   "text_render::tests::every_italic_slot_measures_in_its_own_face"
+  ],
+  "caught": true,
+  "build_error": false
+ },
+ "D7_one_verdana_italic_unit_off": {
+  "mutant": {
+   "file": "crates/rustuml-render/src/text_render.rs",
+   "old": "const VERDANA_ITALIC_ASCII: [u16; 95] = [\n    720,",
+   "new": "const VERDANA_ITALIC_ASCII: [u16; 95] = [\n    721,"
+  },
+  "exit": 101,
+  "counts": [
+   "861",
+   "1"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces"
+  ],
+  "caught": true,
+  "build_error": false
+ },
+ "D8_extraction_file_edited": {
+  "mutant": {
+   "file": "tools/font-chain-reference/ascii-advances-round11/Verdana-Italic.italic.ascii.tsv",
+   "old": "A\t41\t36\t1398.0",
+   "new": "A\t41\t36\t1400.0"
+  },
+  "exit": 101,
+  "counts": [
+   "861",
+   "1"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces"
+  ],
+  "caught": true,
+  "build_error": false
+ }
+}

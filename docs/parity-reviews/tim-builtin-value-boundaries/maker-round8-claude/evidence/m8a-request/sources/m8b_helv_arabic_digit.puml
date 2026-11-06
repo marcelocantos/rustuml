@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Helvetica
+class "Pier س5𝅧" as K
+@enduml

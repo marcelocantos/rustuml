@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "mechanism": "creole-parameter-candidate-grammar",
+  "base_revision": "2608469dace1f680a7e90c0895e44e657f8aaf7f",
+  "imported_rejection": "4e2918c608c9845751c937088dd1a68631657316",
+  "import_commit": "05683a971037e7e9eced8c78d1e11dc198f81cca",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "klimt/creole/command/Splitter.java:51-74 fontSizePattern,fontColorPattern,fontFamilyPattern,imgPatternNoSrcColon,openiconPattern,spritePattern",
+    "klimt/creole/command/CommandCreoleColorAndSizeChange.java:fontPattern (actual command grammar differs from Splitter.fontPattern); matchingSize/executeAndGetRemaining",
+    "klimt/creole/command/CommandCreoleSizeChange/CommandCreoleColorChange/CommandCreoleFontFamilyChange::matchingSize and executeAndGetRemaining (bounded before EOL)",
+    "klimt/creole/legacy/CommandCreoleBuilder.java:constructor orders combined font attributes before broad font family",
+    "klimt/font/FontStyle.java:getUbrexActivationPattern BACKCOLOR, getUbrexDeactivationPattern",
+    "com/plantuml/ubrex/CharClassRaw.java:WORD is ASCII letters/digits/underscore",
+    "regex/Pattern2.java:57-59,108-114 %s adds NBSP, %g quotes, ASCII CASE_INSENSITIVE; jaws/Jaws.java:56 invisible quote E121",
+    "klimt/creole/legacy/StripeSimple.java:modifyStripe/searchCommand/addPending; utils/CharHidder.java:hide; klimt/creole/legacy/AtomText.java:80 unhide"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/creole.rs::handle_tag permissive size/color/font/back/img/icon prefix branches",
+    "crates/rustuml-render/src/creole.rs::walk_segments candidate clone and literal one-character fallback",
+    "crates/rustuml-render/src/creole.rs::hide_characters/parse_segments_inner private barriers (preserved)",
+    "crates/rustuml-render/src/creole.rs::is_sprite_tag already anchored source-derived grammar"
+  ],
+  "invariant": "Parameter command selection occurs on the hidden stream and must satisfy the complete family grammar before consuming any body or mutating style. Numeric size and color grammars reject hidden markers and invalid punctuation; a failed candidate leaves the iterator for one literal-character consumption. Family/image payload grammars intentionally admit more than size/color; no blanket private-use-character ban or URL rewrite. Combined font attributes have priority over broad family fallback. Selected commands preserve flush boundaries and recursive hiding.",
+  "causal_divergence": "Prefix-only guards select malformed sizes even when integer conversion fails and copy invalid hidden colors into Style.fill. The same permissive recognition exists for other parameter families. Font branches also confuse combined attributes with family fallback, and font: forces monospace although Java changeFamily only selects a family. Existing closing collectors do not honor Java case-insensitive parameter closers.",
+  "planned_change": "In creole.rs only, introduce private typed parameter candidates backed by the named anchored Java grammars for size, color, combined font attributes, font family, parameterized background, image and icon. Preserve existing strict sprite grammar. Dispatch parameter semantics from captured fields; preserve Java combined-font-before-family priority, last repeated attribute capture, and source-defined bounded/EOL case-insensitive closes. Reuse private flush barriers and hidden recursion. Do not modify URL handling, legacy tspan, public Style/TextBase APIs, WBS/model/geometry, negative serialization or font assets/metrics. Image loading and icon resolution remain their existing owners. Plain/code are explicitly deferred: changing registry/reset semantics is a separate mechanism and base-style reset cannot be generally represented by the current public boolean inheritance without coordinated API scope.",
+  "perturbation_axes": [
+    "hidden versus ordinary digits/colors, empty and malformed parameters, punctuation and whitespace/case",
+    "size/color versus font attribute/family fallback, background/image/icon/sprite neighboring grammars",
+    "closed/EOL/empty bodies and inner recognized commands beneath rejected outer candidates",
+    "sequence/note/WBS and class-member consumers without generic label rewriting"
+  ],
+  "verification": "Private before/after CLI SVG + full YAML for all prior1948 and checker28 exact memberships, duplicates/nonpositives retained; compact fresh source-guided relay via parent existing Monkey Man only. Unchanged strict comparator. Lost passes, errors and panics separate. Broad gates once stable, no self-review or acceptance."
+}

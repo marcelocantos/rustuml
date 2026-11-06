@@ -1,0 +1,100 @@
+{
+  "row": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/missing_styled.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "bold",
+      "nested command"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  "classification": "positive_reference",
+  "reference_valid": true,
+  "java_svg_exit": 0,
+  "java_probe_exit": 0,
+  "xml_valid": true,
+  "factory": "CLASS",
+  "reference_comparator_exit": 0,
+  "source_sha256": "561ace54e5ccd84780c536a860f92a533089310f235d514aaf4c65eb891aa9b8",
+  "golden_sha256": "266d59976a5a6920e9667b81e60f14c3f070d522d068efc13a47880b2a577b95",
+  "java_source_sha256": "561ace54e5ccd84780c536a860f92a533089310f235d514aaf4c65eb891aa9b8",
+  "phases": {
+    "after": {
+      "id": "fresh18/missing_styled",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new",
+        "exit": 0,
+        "seconds": 0.011676915994030423,
+        "stdout_sha256": "d7e3f2df384f951bb80566e8023b45063b70428dd377b2c7fc504a1450b733d0",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new",
+        "exit": 0,
+        "seconds": 0.01282583299325779,
+        "stdout_sha256": "e02f7b51b0cc980a039fb1784e84f4a435d52e265fddb4f33fa915c2eaa5199e",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/missing_styled/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/missing_styled/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.00781325000571087,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "CLASS",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass \"**Cedar <$absent> Grove** end\" as A\n@enduml\n"
+      },
+      "exact_source": true
+    }
+  },
+  "direct_source": {
+    "argv": [
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/source-probe",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/missing_styled.puml",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new"
+    ],
+    "cwd": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new",
+    "exit": 0,
+    "seconds": 0.006815583998104557,
+    "stdout_sha256": "561ace54e5ccd84780c536a860f92a533089310f235d514aaf4c65eb891aa9b8",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "direct_source_equal": true
+}

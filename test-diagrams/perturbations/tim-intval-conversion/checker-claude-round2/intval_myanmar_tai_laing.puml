@@ -1,0 +1,4 @@
+@startuml
+!$a = %intval("꧱꧲")
+class "$a" as Laing
+@enduml

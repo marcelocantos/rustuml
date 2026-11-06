@@ -1,0 +1,8 @@
+@startuml
+state Mint {
+  Die --> Coin
+}
+note left of Mint : press
+note right of Mint : stamp
+note left of Mint : polish
+@enduml

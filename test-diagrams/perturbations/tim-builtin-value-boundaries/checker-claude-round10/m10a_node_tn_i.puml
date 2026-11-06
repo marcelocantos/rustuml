@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam nodeFontStyle italic
+node "Pylon vk" as E1
+@enduml

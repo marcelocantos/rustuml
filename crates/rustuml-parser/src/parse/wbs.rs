@@ -21,7 +21,7 @@
 
 use super::ParseError;
 use crate::diagram::DiagramMeta;
-use crate::diagram::wbs::{WbsDiagram, WbsNode, WbsSide};
+use crate::diagram::wbs::{WbsDiagram, WbsNode, WbsShape, WbsSide};
 
 /// Parse preprocessed lines from a `@startwbs` block into a [`WbsDiagram`].
 pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
@@ -64,7 +64,19 @@ pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
             continue;
         };
 
-        let rest = trimmed[prefix_len..].trim_start();
+        let prefix_rest = &trimmed[prefix_len..];
+        // CommandWBSItemNew/Old capture SHAPE adjacent to the prefix, on
+        // either side of the optional color token. Whitespace starts LABEL.
+        let adjacent = !prefix_rest.starts_with(char::is_whitespace);
+        let (mut shape, rest) = if let Some(rest) = prefix_rest
+            .strip_prefix('_')
+            .filter(|tail| tail.starts_with(char::is_whitespace) || tail.starts_with("[#"))
+        {
+            (WbsShape::None, rest)
+        } else {
+            (WbsShape::Box, prefix_rest)
+        };
+        let rest = rest.trim_start();
 
         // Optional leading `[#color]` fill token, e.g. `**[#blue] Subtask`.
         let (color, after_color) = if let Some(stripped) = rest.strip_prefix("[#") {
@@ -76,7 +88,17 @@ pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
             (None, rest)
         };
 
-        let label = after_color.trim().to_string();
+        let after_shape = if adjacent && color.is_some() && shape == WbsShape::Box {
+            if let Some(rest) = after_color.strip_prefix('_') {
+                shape = WbsShape::None;
+                rest
+            } else {
+                after_color
+            }
+        } else {
+            after_color
+        };
+        let label = after_shape.trim().to_string();
         if label.is_empty() {
             return Err(ParseError {
                 line: source_line,
@@ -87,6 +109,7 @@ pub fn parse_wbs(lines: &[String]) -> Result<WbsDiagram, ParseError> {
         let depth = prefix_len;
         let node = WbsNode {
             label,
+            shape,
             color,
             depth,
             side,
@@ -156,6 +179,38 @@ mod tests {
 
     fn parse(s: &str) -> WbsDiagram {
         parse_wbs(&lines(s)).expect("parse failed")
+    }
+
+    #[test]
+    fn shape_markers_are_command_fields_not_label_text() {
+        let d = parse("* Root\n**_[#pink] East\n***[#yellow]_ Leaf\\nTwig\n--_ West\n** _ Literal");
+        let root = &d.nodes[0];
+        assert_eq!(root.shape, WbsShape::Box);
+        assert_eq!(root.children[0].shape, WbsShape::None);
+        assert_eq!(root.children[0].color.as_deref(), Some("#pink"));
+        assert_eq!(root.children[0].label, "East");
+        let leaf = &root.children[0].children[0];
+        assert_eq!(leaf.shape, WbsShape::None);
+        assert_eq!(leaf.label, "Leaf\\nTwig");
+        assert_eq!(leaf.depth, 3);
+        assert_eq!(root.children[1].side, WbsSide::Left);
+        assert_eq!(root.children[2].shape, WbsShape::Box);
+        assert_eq!(root.children[2].label, "_ Literal");
+    }
+
+    #[test]
+    fn omitted_shape_models_remain_backward_compatible() {
+        let old =
+            serde_json::json!({"label":"Root","color":null,"depth":1,"side":"Right","children":[]});
+        let node: WbsNode = serde_json::from_value(old.clone()).unwrap();
+        assert_eq!(node.shape, WbsShape::Box);
+        assert_eq!(serde_json::to_value(&node).unwrap(), old);
+        let d = parse("*_ Root");
+        let encoded = serde_json::to_value(&d.nodes[0]).unwrap();
+        assert_eq!(encoded["shape"], "None");
+        let decoded: WbsNode = serde_json::from_value(encoded).unwrap();
+        assert_eq!(decoded.shape, WbsShape::None);
+        assert_eq!(decoded.label, "Root");
     }
 
     #[test]

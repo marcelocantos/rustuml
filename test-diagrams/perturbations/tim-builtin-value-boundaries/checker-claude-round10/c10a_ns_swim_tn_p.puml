@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Times New Roman
+|Dock|
+start
+:Kiln wq vista;
+|Yard|
+:Ok;
+@enduml

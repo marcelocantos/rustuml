@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam componentFontSize 9
+skinparam componentFontStyle italic
+component "Avid Dawky Vow 4.7, gym kayak ovo!" as E1
+@enduml

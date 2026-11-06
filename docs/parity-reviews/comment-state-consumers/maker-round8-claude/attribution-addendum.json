@@ -1,0 +1,18 @@
+{
+ "schema_version": 1,
+ "status": "maker addendum (round 8); independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "corrects": [
+  {
+   "record": "docs/parity-reviews/tim-builtin-value-boundaries/maker-round7-claude/results.json (and the comment-state-consumers copy)",
+   "statement": "declared residue 'Courier New and Monospaced family-name handling (mk8_couriernew_*, mk8_mono_*)'",
+   "correction": "Wrong for mk8_couriernew_*. Java zeroes both unmapped Mn in BJ mk8_couriernew_9 and mk8_couriernew_23 ('Vault \\U0001D17Bq\\U0001E5EE': Java 37.8062 at size 9 = 7 Courier New cells for 9 characters) because HarfBuzz 15.0.0 blocklists the reference host's Courier New GDEF (hb-ot-layout.cc 251-252, ENCODE3(588, 5078, 14418)) and synthesizes glyph classes (GDEF.hh 974-985, hb-ot-shape.cc 856-879); the default shaper then zeroes the MARK glyphs. Courier New's family name is not involved. The mk8_mono_* residue (Monospaced -> Menlo) is unaffected by this correction.",
+   "found_by": "review 98ddcfc9d (round-7 checker) bounded_next_obligations[1]"
+  },
+  {
+   "record": "maker-round8-claude/gdef-blocklist-account.json",
+   "statement": "'switch ... over 45 entries'",
+   "correction": "OT::GDEF::is_blocklisted lists 40 (GDEF, GSUB, GPOS) triples in HarfBuzz 15.0.0 (two Cantarell and two Padauk comments share a case each); tools/font_chain_unicode.py parses 40 and the gate re-derives 40 from the stored file. Found while generating, before any measurement."
+  }
+ ]
+}

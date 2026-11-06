@@ -1,0 +1,325 @@
+{
+  "role": "maker continuation; no review or acceptance claim",
+  "candidate_commit": "0dd2de894fea40d5e9ed81efb6a54d837f80fa4c",
+  "account_commit": "819485f4001a94056a192e4e8688729d4c9de3e8",
+  "prior_checker_commit": "a8c96282f4ed55cb638f3a3e4d6440ee5f1aebf7",
+  "policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+  "policy_local_commit": "dca63ab542450b553ab070a8f325f4620f9f0643",
+  "checker_local_commit": "b02ea9cba8e5724790eb767f8e7fa2052bc393a7",
+  "root_changes_preserved": [
+    "0530072a62919c4008278e84e5def3fbd11ec098",
+    "b384bc315f31b890abb3cbd91197b6f6666ca1ad",
+    "136ee057e0ffc3347ecdfafc9cf46e0bafa50197"
+  ],
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "golden_gitlink": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "rust_binary_sha256": "88724e73991d1c87d0d576dfcc5b8307eded28affe65d0e3bde189f1f7bc0447",
+  "committed_release_binary_sha256": "88724e73991d1c87d0d576dfcc5b8307eded28affe65d0e3bde189f1f7bc0447",
+  "comparator_binary_sha256": "3d82b44ba5b72ecc505576625570849d2ba1f3653efdbc77ce3528af3b2c7d9b",
+  "comparator_source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+  "environment": {
+    "cargo_target": "/tmp/rustuml-tim-repair-target",
+    "cargo_build_jobs": 4,
+    "rayon_threads": 4,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "stdlib": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+    "named_zone_cases": "Each row records matching TZ and debug without fixed timezone; see case results.",
+    "java": "All local launches disabled. New Java runs exclusively SSH remote headless wrapper; runtime differences retained in remote-environment.json."
+  },
+  "cohorts": {
+    "prepared_parent949": {
+      "total": 949,
+      "svg_matches": 425,
+      "invalid_references": 10,
+      "cli_errors": 4,
+      "source_equal": 0
+    },
+    "checker_additions89": {
+      "total": 89,
+      "svg_matches": 64,
+      "invalid_references": 22,
+      "cli_errors": 19,
+      "source_equal": 67
+    },
+    "combined1038": {
+      "total": 1038,
+      "svg_matches": 489,
+      "invalid_references": 32,
+      "cli_errors": 23,
+      "source_equal": 67
+    },
+    "new_maker17": {
+      "total": 17,
+      "svg_matches": 13,
+      "invalid_references": 3,
+      "cli_errors": 3,
+      "source_equal": 14
+    },
+    "scope": "949 prepared parent sources plus 89 checker additions, not frozen parent955/checker1044 nor parent1449. Six cleanup controls absent. New17 are maker controls, not heldouts.",
+    "missing_parent_controls": [
+      "test-diagrams/perturbations/render-registry-unwind-scope/checker_activity_background.puml",
+      "test-diagrams/perturbations/render-registry-unwind-scope/checker_activity_plain.puml",
+      "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_background.puml",
+      "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_plain.puml",
+      "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_reused_color.puml",
+      "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_reverse.puml"
+    ]
+  },
+  "deltas": {
+    "parent949": {
+      "gains": 0,
+      "lost_passes": 0,
+      "new_cli_errors": 0
+    },
+    "checker89": {
+      "old_matches": 53,
+      "gains": 11,
+      "lost_passes": 0,
+      "new_valid_errors": 0,
+      "new_negative_rejection": "checker2_short_circuit_error now exit1, matching eager evaluation of invalid date. Previously accepted by host short circuit.",
+      "repaired_valid_errors": [
+        "checker2_sum_wrap",
+        "checker2_difference_wrap"
+      ]
+    },
+    "discarded_iteration2": "checker_outline_state lost a pass due to string-valued %not; corrected through typed LogicalNot and preserved in intermediate results/raw output."
+  },
+  "source_checks": {
+    "original33": {
+      "equal": 33,
+      "total": 33
+    },
+    "prior42": {
+      "equal": 40,
+      "total": 42,
+      "remaining": "Two preserved invalid date cases reject; neither is positive source evidence."
+    },
+    "new17": {
+      "equal": 14,
+      "valid": 14,
+      "negative": 3
+    }
+  },
+  "class_tim_controls": [
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+      "svg_match": true,
+      "source_equal": true
+    }
+  ],
+  "raw_reader_files": [
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml",
+      "cli_exit": 0,
+      "svg_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml",
+      "cli_exit": 0,
+      "svg_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml",
+      "cli_exit": 0,
+      "svg_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml",
+      "cli_exit": 0,
+      "svg_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml",
+      "cli_exit": 0,
+      "svg_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml",
+      "cli_exit": 0,
+      "svg_match": true
+    }
+  ],
+  "selected_invalid_block": {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_multi_block_error.puml",
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "stderr": "parse error: line 5: Bad date pattern: unsupported letter Q\n"
+  },
+  "main_tiers": {
+    "product_matches": 11179,
+    "eligible": 11251,
+    "assisted_matches": 10497,
+    "assisted_failures": 754,
+    "skipped": 1299,
+    "guards_pass": 4,
+    "guards_total": 6,
+    "doc_claims_pass": 2,
+    "baseline_changes": false,
+    "historical_conflict": "Two activity and one edge-case reference retain historical GET outer-blank trimming. Owner approved raw semantics; original references unchanged. No new main-tier losses."
+  },
+  "builtin_suite": {
+    "total": 1038,
+    "matches": 483,
+    "failures": 555,
+    "panics": [
+      "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_2.puml",
+      "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_3.puml"
+    ],
+    "isolated_pass_builtin_fail": [
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+      "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.puml",
+      "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+      "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+      "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml"
+    ],
+    "builtin_pass_isolated_fail": []
+  },
+  "tests": {
+    "parser_pass": 581,
+    "parser_fail": 1,
+    "cli_pass": 15,
+    "commands": [
+      {
+        "check": "fmt",
+        "command": [
+          "cargo",
+          "fmt",
+          "--check"
+        ],
+        "exit": 1,
+        "seconds": 1.4261150360107422
+      },
+      {
+        "check": "clippy",
+        "command": [
+          "cargo",
+          "clippy",
+          "--workspace",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "exit": 101,
+        "seconds": 3.313148021697998
+      },
+      {
+        "check": "parser",
+        "command": [
+          "cargo",
+          "test",
+          "-p",
+          "rustuml-parser",
+          "--lib"
+        ],
+        "exit": 101,
+        "seconds": 6.778525114059448
+      },
+      {
+        "check": "cli",
+        "command": [
+          "cargo",
+          "test",
+          "-p",
+          "rustuml",
+          "--test",
+          "pipe_mode"
+        ],
+        "exit": 0,
+        "seconds": 26.76695704460144
+      },
+      {
+        "check": "tiers",
+        "command": [
+          "cargo",
+          "test",
+          "--workspace",
+          "--release",
+          "--no-fail-fast",
+          "--test",
+          "golden_no_oracle",
+          "--test",
+          "golden_pairs",
+          "--test",
+          "harness_guards",
+          "--test",
+          "doc_claims",
+          "--test",
+          "parity_perturbations",
+          "--",
+          "--nocapture"
+        ],
+        "exit": 101,
+        "seconds": 28.564125061035156
+      },
+      {
+        "check": "owned-format",
+        "command": [
+          "rustfmt",
+          "--edition",
+          "2024",
+          "--check",
+          "crates/rustuml-parser/src/preprocess/mod.rs",
+          "crates/rustuml-parser/src/preprocess/debug.rs",
+          "crates/rustuml-parser/src/preprocess/date_format.rs"
+        ],
+        "exit": 0
+      },
+      {
+        "check": "release-build",
+        "command": [
+          "cargo",
+          "build",
+          "--release",
+          "-p",
+          "rustuml"
+        ],
+        "exit": 0
+      }
+    ],
+    "parser_dependency": "Root-owned parse::tests::fatal_preprocessing_errors_preserve_origin expects Date seconds outside signed 32-bit range; generic typed integer literal now reports Integer literal outside signed 32-bit range at unchanged line2. Both error.take handoffs preserved. Root must update only that assertion message.",
+    "format_dependency": "Unowned parse/class.rs and render/class.rs formatting; owned preprocess formatting passes.",
+    "clippy_dependency": "Existing unused parse/component.rs:72 looks_like_description_bracket_command. No allowance added."
+  },
+  "pending_dependencies": [
+    "New independent checker; all ten prior claims remain rejected.",
+    "Repeated-theme palette/style: checker2_theme_comment_origin has exact source and SVG mismatch; class maker owns.",
+    "Class opposite-quote label parsing: checker2_unicode_opposite_quotes exact source and SVG mismatch; class maker owns.",
+    "Retained AWS activity seed geometry/style: exact source and SVG mismatch, unowned activity renderer.",
+    "New sub_caller_relative parser model preserves Child source_line0, but render/class.rs:1253 substitutes entity_index+1=2. Entity emission order also differs. Exact source and entity source locations otherwise agree. Class maker owns.",
+    "Existing handwritten shapes and sequence continued-line geometry; two preserved live-stack sequence renderer panics. No renderer changes.",
+    "Built-in fixed-timezone suite cannot measure fractional/named-zone rows under their declared environment; isolated matching-environment results are recorded separately.",
+    "Built-in crate-cwd include failures retain T14.6.2 behavior and related theme/subblock include controls; source hierarchy and references unchanged.",
+    "Complete locale data derived on remote OpenJDK21.0.5 versus origin Temurin21.0.13; global runtime equivalence unproven. Unknown zone IDs retain abbreviation fallback; existing libc supplies zone rules.",
+    "Existing Rust no-return function and floating-expression extensions remain; complete TIM grammar equivalence is not claimed.",
+    "Parent must measure combined class/sequence integration. This checkout is not parent1449."
+  ],
+  "model_observations": {
+    "fresh_source": "All valid diagram source diagnostics agree; one helper-only row has no source diagnostic. Invalid/multiple-block controls remain separate.",
+    "new_class_counts": "All 14 valid new controls have the same Java/Rust class entity count; full source and negative statuses preserved.",
+    "remaining_alias_drop": "checker2_unicode_opposite_quotes evaluates the same source but Java entity Unicode becomes Rust entity vert . a. This is a class parser alias/quoted-label defect; no parser class edit made.",
+    "scope_limit": "No whole-model equivalence claim for hundreds of pre-existing failing diagrams; zero new lost SVG passes or valid runtime errors in measured949+89."
+  }
+}

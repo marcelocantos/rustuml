@@ -1,0 +1,35 @@
+{
+  "replay": {
+    "entries": 1948,
+    "valid": 1814,
+    "before": 870,
+    "after": 888,
+    "lost_passes": [],
+    "new_errors": [],
+    "new_panics": [],
+    "svg_panics": 32,
+    "yaml_byte_equal": 1948
+  },
+  "fresh": {
+    "entries": 28,
+    "valid": 28,
+    "before": 2,
+    "after": 21,
+    "lost_passes": [],
+    "new_errors": [],
+    "new_panics": [],
+    "svg_panics": 0,
+    "yaml_byte_equal": 28
+  },
+  "combined": {
+    "entries": 1976,
+    "valid": 1842,
+    "before": 872,
+    "after": 909,
+    "lost_passes": [],
+    "new_errors": [],
+    "new_panics": [],
+    "svg_panics": 32,
+    "yaml_byte_equal": 1976
+  }
+}

@@ -1,0 +1,6 @@
+@startuml
+skinparam stateStartBorderColor RebeccaPurple
+skinparam stateEndBorderColor RebeccaPurple
+[*] --> Harbor
+Harbor --> [*]
+@enduml

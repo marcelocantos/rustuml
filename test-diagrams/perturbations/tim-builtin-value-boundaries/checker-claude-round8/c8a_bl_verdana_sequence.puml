@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+participant "Pier א(ב)𝅧 x" as P
+P -> P : Quay א1𝅧
+@enduml

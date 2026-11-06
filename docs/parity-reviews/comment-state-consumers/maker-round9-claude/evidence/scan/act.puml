@@ -1,0 +1,13 @@
+@startuml
+skinparam defaultFontName Courier New
+start
+:<i>Pier x𝅧</i>;
+note right: <i>Reef z𝅧</i>
+if (<i>Cond c𝅧</i>) then (<i>yes y𝅧</i>)
+:<b><i>Bold b𝅧</i></b>;
+endif
+partition "<i>Part p𝅧</i>" {
+:plain;
+}
+stop
+@enduml

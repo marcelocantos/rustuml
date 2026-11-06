@@ -1,0 +1,7 @@
+[package]
+name = "maker-cmp"
+version = "0.1.0"
+edition = "2024"
+[dependencies]
+rustuml-oracle = { path = "/Users/marcelo/Library/Caches/rustuml-shared-svg-round7-claude-maker/src/base/crates/rustuml-oracle" }
+[workspace]

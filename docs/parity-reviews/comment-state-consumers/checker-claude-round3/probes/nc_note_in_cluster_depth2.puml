@@ -1,0 +1,13 @@
+@startuml
+state Depot {
+  state Wing {
+    state Bay {
+      state dock <<entryPoint>>
+      dock --> Lift
+      note right of Lift : slow
+    }
+    Lift --> Rack
+  }
+  Rack --> Tray
+}
+@enduml

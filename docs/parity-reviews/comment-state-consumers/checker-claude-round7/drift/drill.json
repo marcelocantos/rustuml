@@ -1,0 +1,219 @@
+{
+ "mutations": 17,
+ "caught": 14,
+ "as_expected": 16,
+ "restored": true,
+ "rows": [
+  {
+   "mutation": "D0_unmodified",
+   "expect": "passed",
+   "exit": 0,
+   "result": "test result: ok. 9 passed; 0 failed",
+   "failed_tests": [],
+   "first_assertion": null,
+   "outcome": "passed",
+   "as_expected": true
+  },
+  {
+   "mutation": "D1_lucida_own_run_sums_untouched",
+   "expect": "caught",
+   "exit": 101,
+   "result": "test result: FAILED. 8 passed; 1 failed",
+   "failed_tests": [
+    "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+   ],
+   "first_assertion": "assertion `left == right` failed: LucidaGrande.own.tsv",
+   "outcome": "caught",
+   "as_expected": true
+  },
+  {
+   "mutation": "D2_lucida_own_run_and_sums",
+   "expect": "caught",
+   "exit": 101,
+   "result": "test result: FAILED. 8 passed; 1 failed",
+   "failed_tests": [
+    "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+   ],
+   "first_assertion": "assertion `left == right` failed: tools/font-chain-reference/colossus-primary-faces",
+   "outcome": "caught",
+   "as_expected": true
+  },
+  {
+   "mutation": "D3_lucida_own_run_sums_constant",
+   "expect": "caught",
+   "exit": 101,
+   "result": "test result: FAILED. 8 passed; 1 failed",
+   "failed_tests": [
+    "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+   ],
+   "first_assertion": "assertion `left == right` failed: LucidaGrande own cmap",
+   "outcome": "caught",
+   "as_expected": true
+  },
+  {
+   "mutation": "D4_generated_menlo_primary_run_dropped",
+   "expect": "caught",
+   "exit": 101,
+   "result": "test result: FAILED. 8 passed; 1 failed",
+   "failed_tests": [
+    "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+   ],
+   "first_assertion": "assertion `left == right` failed: Menlo-Regular own cmap",
+   "outcome": "caught",
+   "as_expected": true
+  },
+  {
+   "mutation": "D5_generated_couriernew_hebr_fact",
+   "expect": "caught",
+   "exit": 101,
+   "result": "test result: FAILED. 7 passed; 2 failed",
+   "failed_tests": [
+    "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction",
+    "font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer"
+   ],
+   "first_assertion": "assertion `left == right` failed",
+   "outcome": "caught",
+   "as_expected": true
+  },
+  {
+   "mutation": "D6_extraction_arial_gpos_hebr_dropped_sums_constant",
+   "expect": "caught",
+   "exit": 101,
+   "result": "test result: FAILED. 8 passed; 1 failed",
+   "failed_tests": [
+    "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+   ],
+   "first_assertion": "assertion `left == right` failed: ArialMT plan facts",
+   "outcome": "caught",
+   "as_expected": true
+  },
+  {
+   "mutation": "D7_generated_verdana_bold_kern_bit",
+   "expect": "caught",
+   "exit": 101,
+   "result": "test result: FAILED. 8 passed; 1 failed",
+   "failed_tests": [
+    "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+   ],
+   "first_assertion": "assertion `left == right` failed: Verdana-Bold plan facts",
+   "outcome": "caught",
+   "as_expected": true
+  },
+  {
+   "mutation": "D8_reference_verdana_hash_changed",
+   "expect": "caught",
+   "exit": 101,
+   "result": "test result: FAILED. 8 passed; 1 failed",
+   "failed_tests": [
+    "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+   ],
+   "first_assertion": "assertion `left == right` failed: Verdana: /System/Library/Fonts/Supplemental/Verdana.ttf",
+   "outcome": "caught",
+   "as_expected": true
+  },
+  {
+   "mutation": "D9_colossus_menlo_hash_changed",
+   "expect": "caught",
+   "exit": 101,
+   "result": "test result: FAILED. 8 passed; 1 failed",
+   "failed_tests": [
+    "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+   ],
+   "first_assertion": "assertion `left == right` failed: Menlo-Regular: /System/Library/Fonts/Menlo.ttc",
+   "outcome": "caught",
+   "as_expected": true
+  },
+  {
+   "mutation": "D10_reference_helvetica_line_removed",
+   "expect": "caught",
+   "exit": 101,
+   "result": "test result: FAILED. 8 passed; 1 failed",
+   "failed_tests": [
+    "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+   ],
+   "first_assertion": "assertion `left == right` failed: faces awaiting reference hashes",
+   "outcome": "caught",
+   "as_expected": true
+  },
+  {
+   "mutation": "D11_pending_list_extended",
+   "expect": "caught",
+   "exit": 101,
+   "result": "test result: FAILED. 8 passed; 1 failed",
+   "failed_tests": [
+    "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+   ],
+   "first_assertion": "assertion `left == right` failed: faces awaiting reference hashes",
+   "outcome": "caught",
+   "as_expected": true
+  },
+  {
+   "mutation": "D12_extraction_lucida_trak_and_stat",
+   "expect": "caught",
+   "exit": 101,
+   "result": "test result: FAILED. 8 passed; 1 failed",
+   "failed_tests": [
+    "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+   ],
+   "first_assertion": "LucidaGrande: trak applies",
+   "outcome": "caught",
+   "as_expected": true
+  },
+  {
+   "mutation": "D13_generated_arial_notdef_class_mark",
+   "expect": "caught",
+   "exit": 101,
+   "result": "test result: FAILED. 6 passed; 3 failed",
+   "failed_tests": [
+    "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction",
+    "font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef",
+    "font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer"
+   ],
+   "first_assertion": "assertion `left == right` failed: Arial",
+   "outcome": "caught",
+   "as_expected": true
+  },
+  {
+   "mutation": "D14_unicode18_mn_run_1D25B_removed",
+   "expect": "unknown",
+   "exit": 0,
+   "result": "test result: ok. 9 passed; 0 failed",
+   "failed_tests": [],
+   "first_assertion": null,
+   "outcome": "passed",
+   "as_expected": false
+  },
+  {
+   "mutation": "D15_hangul_shaper_mapped_to_indic",
+   "expect": "unknown",
+   "exit": 0,
+   "result": "test result: ok. 9 passed; 0 failed",
+   "failed_tests": [],
+   "first_assertion": null,
+   "outcome": "passed",
+   "as_expected": false
+  },
+  {
+   "mutation": "D16_u180f_not_default_ignorable",
+   "expect": "caught",
+   "exit": 101,
+   "result": "test result: FAILED. 8 passed; 1 failed",
+   "failed_tests": [
+    "font_chain::tests::harfbuzz_hides_unmapped_default_ignorables"
+   ],
+   "first_assertion": "assertion `left == right` failed: '\\u{180f}'",
+   "outcome": "caught",
+   "as_expected": true
+  },
+  {
+   "mutation": "D17_positive_verdana_bold_hash_from_mm_relay_pending_emptied",
+   "expect": "passed",
+   "exit": 0,
+   "result": "test result: ok. 9 passed; 0 failed",
+   "failed_tests": [],
+   "first_assertion": null,
+   "outcome": "passed",
+   "as_expected": true
+  }
+ ]
+}

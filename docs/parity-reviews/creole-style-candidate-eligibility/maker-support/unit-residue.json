@@ -1,0 +1,116 @@
+[
+  {
+    "name": "plain_theme",
+    "observations": {
+      "before": {
+        "svg": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/before-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+          "exit": 0,
+          "seconds": 0.029898207998485304,
+          "stdout_sha256": "3fc9f373dbe422edae8f5387b396ba5adcacc392aca65acd71e4807e927f5a6e",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "yaml": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/before-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+          "exit": 0,
+          "seconds": 0.012661333996220492,
+          "stdout_sha256": "141ff78182c3722dcb037cf02fd8f413a564dcd62c30a11566b514b62c03fdf7",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "after": {
+        "svg": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/after-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+          "exit": 0,
+          "seconds": 0.031563625001581386,
+          "stdout_sha256": "3fc9f373dbe422edae8f5387b396ba5adcacc392aca65acd71e4807e927f5a6e",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "yaml": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/after-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+          "exit": 0,
+          "seconds": 0.013058540993370116,
+          "stdout_sha256": "141ff78182c3722dcb037cf02fd8f413a564dcd62c30a11566b514b62c03fdf7",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    "svg_byte_identical": true,
+    "yaml_byte_identical": true
+  },
+  {
+    "name": "source_identity",
+    "observations": {
+      "before": {
+        "svg": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/before-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+          "exit": 0,
+          "seconds": 0.014992041993536986,
+          "stdout_sha256": "af1e019ace73845fe0a779417f1a8bb1de3368dc48a9e0184cb250c4d0bf53eb",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "yaml": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/before-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+          "exit": 0,
+          "seconds": 0.010251166007947177,
+          "stdout_sha256": "af85e25a58b00e15984818f4c03e45d089e0ced8dc852d049514bc587898916c",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "after": {
+        "svg": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/after-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+          "exit": 0,
+          "seconds": 0.012826499994844198,
+          "stdout_sha256": "af1e019ace73845fe0a779417f1a8bb1de3368dc48a9e0184cb250c4d0bf53eb",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "yaml": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/after-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+          "exit": 0,
+          "seconds": 0.011630083012278192,
+          "stdout_sha256": "af85e25a58b00e15984818f4c03e45d089e0ced8dc852d049514bc587898916c",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    "svg_byte_identical": true,
+    "yaml_byte_identical": true
+  }
+]

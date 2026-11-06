@@ -1,0 +1,4 @@
+@startuml
+skinparam nodeFontStyle italic
+node "Pylon vk" as E1
+@enduml

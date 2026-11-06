@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Verdana
+state Quay
+note right of Quay
+quay
+אב‬‬ 𝅧
+end note
+@enduml

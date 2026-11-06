@@ -1,0 +1,5 @@
+colossus.lan
+ProductName:		macOS
+ProductVersion:		27.2
+BuildVersion:		26B123
+Thu Nov  5 22:23:05 UTC 2026

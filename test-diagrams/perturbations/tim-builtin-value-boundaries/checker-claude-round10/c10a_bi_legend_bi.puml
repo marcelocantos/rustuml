@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam legendFontStyle bold italic
+component "Ok" as E1
+legend
+Kiln wq vista
+endlegend
+@enduml

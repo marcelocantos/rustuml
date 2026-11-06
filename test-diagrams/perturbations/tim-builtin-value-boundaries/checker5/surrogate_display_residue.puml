@@ -1,0 +1,4 @@
+@startuml
+!$a=%lower(%substr("🚀",1,1))
+class "$a" as Residue
+@enduml

@@ -1,0 +1,40 @@
+{
+  "initial_candidate": "3d92268c4aae5f8bfd3a0e271758b6a8e5442e47",
+  "corrected": "8ca73318f584dc29d7d8ab1c91f25a21718ca713",
+  "initial_actual_cli_lost_passes": [
+    "golden-regressions/activity/act_creole_monospace",
+    "golden-regressions/creole/creole_font_name_in_activity",
+    "golden-regressions/creole/creole_font_name_in_class",
+    "golden-regressions/creole/creole_font_name_in_note",
+    "golden-regressions/creole/creole_font_name_in_sequence",
+    "golden-regressions/creole/creole_font_name_in_title"
+  ],
+  "initial_product_library_losses": 6,
+  "initial_assisted_library_losses": 5,
+  "corrected_actual_cli_restored": 6,
+  "corrected_lost_passes": [],
+  "new_errors": [],
+  "new_panics": [],
+  "models_byte_equal": 6,
+  "diagnostic_failure_name_sets": [
+    {
+      "kind": "product",
+      "baseline_sha256": "7fe3bf366cbf6b4baa85b02e4a3bd7d42cfa0c514e0be05e619353930169710a",
+      "corrected_sha256": "7fe3bf366cbf6b4baa85b02e4a3bd7d42cfa0c514e0be05e619353930169710a",
+      "byte_equal": true,
+      "failure_names": 72,
+      "lost_passes": [],
+      "gains": []
+    },
+    {
+      "kind": "assisted",
+      "baseline_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+      "corrected_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+      "byte_equal": true,
+      "failure_names": 754,
+      "lost_passes": [],
+      "gains": []
+    }
+  ],
+  "claim_scope": "The immutable1992 observations have zero losses throughout; separate six affected golden CLI controls lose all six initially and regain all six after correction. Both full-library failure-name sets are identical to baseline. No unmeasured universal CLI equivalence claim."
+}

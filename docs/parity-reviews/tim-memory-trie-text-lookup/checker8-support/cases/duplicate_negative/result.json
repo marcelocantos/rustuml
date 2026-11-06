@@ -1,0 +1,149 @@
+{
+  "row": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_negative.puml",
+    "mechanism": "tim-duplicate-formal-binding",
+    "axes": [
+      "RPN distinct named-map cardinality",
+      "required formals without positional coverage"
+    ],
+    "negative": true,
+    "intended_validity": "intended_syntax_negative",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  "classification": "syntax_negative",
+  "reference_valid": false,
+  "java_svg_exit": 200,
+  "java_probe_exit": 0,
+  "xml_valid": true,
+  "factory": null,
+  "reference_comparator_exit": 2,
+  "source_sha256": "040a0322783955035010b3d719dce22fde341ecc53c67c3af0e6aab33f536847",
+  "golden_sha256": "547b99379a266fd1a73301a05a30674b86cc5d9fc04106c5d0dfcf27f75f98be",
+  "java_source_sha256": "9c032c2aa53cdc134a07014daccb24793da0a83566255b09332413ef01411ff2",
+  "phases": {
+    "before": {
+      "id": "fresh20/duplicate_negative",
+      "phase": "before",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 1,
+        "seconds": 0.005767333990661427,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e451c07416872db8c2632fc26961b8fbfc9b57590686167bde52541e8c7ece39"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 1,
+        "seconds": 0.005400624999310821,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e451c07416872db8c2632fc26961b8fbfc9b57590686167bde52541e8c7ece39"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/duplicate_negative/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/replay/before/fresh20/duplicate_negative/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf",
+        "exit": 2,
+        "seconds": 0.003092625003773719,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": true,
+      "reference_factory": null,
+      "reference_valid": false,
+      "membership_valid_agrees": true,
+      "svg_match": false,
+      "panic": false,
+      "model": null
+    },
+    "after": {
+      "id": "fresh20/duplicate_negative",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 1,
+        "seconds": 0.005267125001410022,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e451c07416872db8c2632fc26961b8fbfc9b57590686167bde52541e8c7ece39"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 1,
+        "seconds": 0.006458874995587394,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e451c07416872db8c2632fc26961b8fbfc9b57590686167bde52541e8c7ece39"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/duplicate_negative/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/replay/after/fresh20/duplicate_negative/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf",
+        "exit": 2,
+        "seconds": 0.002905957997427322,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": true,
+      "reference_factory": null,
+      "reference_valid": false,
+      "membership_valid_agrees": true,
+      "svg_match": false,
+      "panic": false,
+      "model": null
+    }
+  },
+  "direct_source": {
+    "argv": [
+      "/Users/marcelo/Library/Caches/rustuml-tim8-checker/source-probe",
+      "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_negative.puml",
+      "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new"
+    ],
+    "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+    "exit": 1,
+    "seconds": 0.005203749999054708,
+    "stdout_sha256": "cf3b664fb35281ccb4bfd1d810a5951bd234b69ec3515ec2cd004ddab156d3fd",
+    "stderr_sha256": "b45cd353c427b93fad8191ab6c7d4a01a6fa9ceee75d20098c56d8e0cff42873"
+  },
+  "direct_source_equal": false
+}

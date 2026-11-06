@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam arrowFontStyle bold
+component "A" as E1
+component "B" as E2
+E1 --> E2 : Avid Dawky Vow 4.7, gym kayak ovo!
+@enduml

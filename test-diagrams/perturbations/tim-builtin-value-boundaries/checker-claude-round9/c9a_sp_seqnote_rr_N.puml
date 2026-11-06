@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Courier New
+participant Ann
+note over Ann
+quay
+אבגד𝅧
+end note
+@enduml

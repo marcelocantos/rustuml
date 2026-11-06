@@ -1,0 +1,23 @@
+{
+  "candidate": "1703a2727fa364ee8004ba59a22b4c6934ee5d3d",
+  "production": "92647b126f6dc1c83ebdc6213d0c2c0a5b3211b6",
+  "before": "ee0e4c72fb222f1312d1aaf7d5a152cc97f12781",
+  "accounts": "6d46a483aad389d4535e1ba24822fdd116baf517",
+  "fresh_total": 29,
+  "fresh_valid": 14,
+  "fresh_source_matches": 11,
+  "fresh_svg_matches": 11,
+  "fresh_negative_rejected": 7,
+  "fresh_valid_failures": [
+    "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_exact_spelling.puml",
+    "test-diagrams/perturbations/tim-original-macro-scanning/checker5/macro_original_prefix.puml",
+    "test-diagrams/perturbations/tim-call-resolution-arity/checker5/adjacent_hsl_alpha.puml"
+  ],
+  "fresh_lost_passes": [
+    "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_exact_spelling.puml"
+  ],
+  "artifact_sha256": "b5b6cd394a7e7c7cabbd2566a7c14fe45a22e378686751949ec57737593dc559",
+  "local_java_launches": 0,
+  "ssh_attempts": 0,
+  "child_agents": 0
+}

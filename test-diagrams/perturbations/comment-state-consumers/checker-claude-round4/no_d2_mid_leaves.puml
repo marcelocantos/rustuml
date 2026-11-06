@@ -1,0 +1,13 @@
+@startuml
+state Port {
+  state Dock {
+    state Berth {
+      state lane <<entryPoint>>
+      lane --> Hoist
+      note right of Hoist : slow
+    }
+    Hoist --> Pallet
+  }
+  Pallet --> Lorry
+}
+@enduml

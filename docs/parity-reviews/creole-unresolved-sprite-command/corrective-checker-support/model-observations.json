@@ -1,0 +1,2088 @@
+[
+  {
+    "id": "maker2/0001-markup_scan",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"<$label> / <space key> / <$missing>\" as Markup\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"<$label> / <space key> / <$missing>\" as Markup\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker8/markup_literal",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"<label> / <$tag> / <$unknown>\" as MarkupFresh\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"<label> / <$tag> / <$unknown>\" as MarkupFresh\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/missing_lead",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"<$absent> Cedar\" as A\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"<$absent> Cedar\" as A\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/missing_mid",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"Cedar<$absent>Grove\" as A\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"Cedar<$absent>Grove\" as A\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/missing_runs",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"Cedar <$absent> Grove <$other> end\" as A\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"Cedar <$absent> Grove <$other> end\" as A\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/missing_styled",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"**Cedar <$absent> Grove** end\" as A\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"**Cedar <$absent> Grove** end\" as A\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/missing_size",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"<size:20>Cedar <$absent> Grove</size> end\" as A\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"<size:20>Cedar <$absent> Grove</size> end\" as A\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/missing_lines",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"Cedar\\n<$absent>\\nGrove\" as A\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"Cedar\\n<$absent>\\nGrove\" as A\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/missing_note",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass Anchor\nnote right\nCedar<$absent>Grove\nend note\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass Anchor\nnote right\nCedar<$absent>Grove\nend note\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/missing_seq",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nAlice -> Bob : Cedar<$absent>Grove\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nAlice -> Bob : Cedar<$absent>Grove\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/empty_seq",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nAlice -> Bob : <$absent>\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nAlice -> Bob : <$absent>\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/empty_styled",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nAlice -> Bob : <size:20><$absent></size>\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nAlice -> Bob : <size:20><$absent></size>\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/empty_open_style",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nAlice -> Bob : <size:20><$absent>\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nAlice -> Bob : <size:20><$absent>\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/grammar_valid",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"a <$oak/leaf-2> b <#red$ghost{scale=2,color=blue}> c <$ghost,color:red> end\" as A\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"a <$oak/leaf-2> b <#red$ghost{scale=2,color=blue}> c <$ghost,color:red> end\" as A\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/grammar_invalid",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"a <$bad.name> b <$bad name> c <$> d <$ghost*bad> end\" as A\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"a <$bad.name> b <$bad name> c <$> d <$ghost*bad> end\" as A\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/escape_url",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"~<$ghost> / <space key> / http://example.test/a / [[https://example.test/ path]] end\" as A\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"~<$ghost> / <space key> / http://example.test/a / [[https://example.test/ path]] end\" as A\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/defined_note",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $gem [2x2/16] {\nF0\n0F\n}\nclass Anchor\nnote right\n<$gem> Cedar\nend note\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $gem [2x2/16] {\nF0\n0F\n}\nclass Anchor\nnote right\n<$gem> Cedar\nend note\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/defined_scale_color",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $gem [2x2/16] {\nF0\n0F\n}\nclass Anchor\nnote right\n<#red$gem{scale=2}> Cedar <$gem{color=blue}> end\nend note\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $gem [2x2/16] {\nF0\n0F\n}\nclass Anchor\nnote right\n<#red$gem{scale=2}> Cedar <$gem{color=blue}> end\nend note\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/defined_class",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $gem [2x2/16] {\nF0\n0F\n}\nclass \"<$gem> Cedar\" as A\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $gem [2x2/16] {\nF0\n0F\n}\nclass \"<$gem> Cedar\" as A\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "maker18/invalid_source",
+    "before": {
+      "type": "Class",
+      "entities": 0,
+      "source": "@startuml\nclass \"unterminated\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 0,
+      "source": "@startuml\nclass \"unterminated\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_basic_def",
+    "before": {
+      "type": "Component",
+      "entities": null,
+      "source": "@startuml\nsprite $cloud [15x15/16] {\n000000000000000\n000001110000000\n000111111100000\n001111111110000\n011111111111000\n111111111111100\n111111111111110\n111111111111110\n111111111111110\n111111111111110\n111111111111100\n011111111111000\n001111111110000\n000111111100000\n000000000000000\n}\n\n[App] as app\ncloud $cloud : \"Cloud\"\n\napp --> cloud\n@enduml\n"
+    },
+    "after": {
+      "type": "Component",
+      "entities": null,
+      "source": "@startuml\nsprite $cloud [15x15/16] {\n000000000000000\n000001110000000\n000111111100000\n001111111110000\n011111111111000\n111111111111100\n111111111111110\n111111111111110\n111111111111110\n111111111111110\n111111111111100\n011111111111000\n001111111110000\n000111111100000\n000000000000000\n}\n\n[App] as app\ncloud $cloud : \"Cloud\"\n\napp --> cloud\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_in_class",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $db [16x16/16] {\n0000000000000000\n0011111111110000\n0111111111111000\n1111111111111100\n1111111111111100\n1111111111111100\n0111111111111000\n0011111111110000\n0000000000000000\n1111111111111100\n1111111111111100\n1111111111111100\n0111111111111000\n0011111111110000\n0000000000000000\n0000000000000000\n}\n\nclass Database <<$db>> {\n  + connect()\n  + query()\n  + close()\n}\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $db [16x16/16] {\n0000000000000000\n0011111111110000\n0111111111111000\n1111111111111100\n1111111111111100\n1111111111111100\n0111111111111000\n0011111111110000\n0000000000000000\n1111111111111100\n1111111111111100\n1111111111111100\n0111111111111000\n0011111111110000\n0000000000000000\n0000000000000000\n}\n\nclass Database <<$db>> {\n  + connect()\n  + query()\n  + close()\n}\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_in_note",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $warning [11x11/16] {\n00000000000\n00001100000\n00011110000\n00110011000\n01100001100\n11000000110\n11000000110\n11111111110\n11111111110\n00000000000\n00000000000\n}\n\nclass Service {\n  + process()\n}\n\nnote right of Service\n  <$warning> This service has known issues\nend note\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $warning [11x11/16] {\n00000000000\n00001100000\n00011110000\n00110011000\n01100001100\n11000000110\n11000000110\n11111111110\n11111111110\n00000000000\n00000000000\n}\n\nclass Service {\n  + process()\n}\n\nnote right of Service\n  <$warning> This service has known issues\nend note\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_multiple",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $user [8x8/16] {\n00011000\n00111100\n00111100\n00011000\n01111110\n11111111\n11111111\n01111110\n}\n\nsprite $server [8x8/16] {\n11111111\n11111111\n10000001\n10111101\n10111101\n10000001\n11111111\n11111111\n}\n\nactor \"<$user> User\" as user\nnode \"<$server> Server\" as server\n\nuser -> server : request\nserver -> user : response\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $user [8x8/16] {\n00011000\n00111100\n00111100\n00011000\n01111110\n11111111\n11111111\n01111110\n}\n\nsprite $server [8x8/16] {\n11111111\n11111111\n10000001\n10111101\n10111101\n10000001\n11111111\n11111111\n}\n\nactor \"<$user> User\" as user\nnode \"<$server> Server\" as server\n\nuser -> server : request\nserver -> user : response\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_005",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon5 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon5>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon5 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon5>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_006",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon6 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon6>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon6 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon6>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_007",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon7 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon7>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon7 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon7>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_008",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon8 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon8>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon8 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon8>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_009",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon9 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon9>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon9 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon9>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_010",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon10 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon10>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon10 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon10>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_011",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon11 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon11>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon11 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon11>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_012",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon12 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon12>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon12 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon12>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_013",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon13 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon13>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon13 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon13>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_014",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon14 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon14>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon14 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon14>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_015",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon15 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon15>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon15 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon15>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_016",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon16 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon16>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon16 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon16>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_017",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon17 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon17>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon17 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon17>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_018",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon18 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon18>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon18 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon18>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_019",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon19 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon19>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon19 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon19>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_020",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon20 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon20>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon20 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon20>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_021",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon21 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon21>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon21 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon21>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_022",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon22 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon22>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon22 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon22>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_023",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon23 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon23>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon23 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon23>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_024",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon24 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon24>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon24 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon24>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_025",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon25 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon25>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon25 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon25>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_026",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon26 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon26>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon26 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon26>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_027",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon27 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon27>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon27 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon27>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_028",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon28 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon28>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon28 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon28>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_029",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon29 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon29>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon29 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon29>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_030",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon30 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon30>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon30 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon30>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_031",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon31 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon31>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon31 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon31>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_032",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon32 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon32>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon32 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon32>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_033",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon33 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon33>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon33 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon33>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_034",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon34 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon34>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon34 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon34>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_035",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon35 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon35>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon35 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon35>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_036",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon36 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon36>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon36 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon36>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_037",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon37 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon37>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon37 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon37>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_038",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon38 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon38>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon38 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon38>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_039",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon39 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon39>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon39 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon39>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_040",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon40 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon40>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon40 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon40>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_041",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon41 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon41>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon41 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon41>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_042",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon42 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon42>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon42 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon42>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_043",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon43 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon43>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon43 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon43>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_044",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon44 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon44>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon44 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon44>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_045",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon45 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon45>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon45 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon45>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_046",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon46 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon46>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon46 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon46>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_047",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon47 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon47>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon47 [16x16/16] {\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n1101101101101101\n1011011011011011\n0110110110110110\n}\n\nrectangle \"Element <$icon47>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_048",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon48 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon48>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon48 [4x4/16] {\n0110\n1101\n1011\n0110\n}\n\nrectangle \"Element <$icon48>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_049",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon49 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon49>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon49 [8x8/16] {\n01101101\n11011011\n10110110\n01101101\n11011011\n10110110\n01101101\n11011011\n}\n\nrectangle \"Element <$icon49>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "sprites/sprite_variant_050",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon50 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon50>\" as elem\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $icon50 [12x12/16] {\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n011011011011\n110110110110\n101101101101\n}\n\nrectangle \"Element <$icon50>\" as elem\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/run_edges",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"<$north>Fir<$south><$east>Elm<$west>!\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"<$north>Fir<$south><$east>Elm<$west>!\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/run_spaces",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \" Fir <$north> Elm <$south>  !\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \" Fir <$north> Elm <$south>  !\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/style_same",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"<b>Fir<$north></b><b>Elm</b>!\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"<b>Fir<$north></b><b>Elm</b>!\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/style_nested",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"<color:green><b>Fir<$north><size:19>Elm<$south>Yew</size></b></color>!\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"<color:green><b>Fir<$north><size:19>Elm<$south>Yew</size></b></color>!\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/empty_closed",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nBirch -> Larch : <size:31><color:red><b><$north></b></color></size>\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nBirch -> Larch : <size:31><color:red><b><$north></b></color></size>\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/empty_eol",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nBirch -> Larch : <size:31><color:red><b><$north>\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nBirch -> Larch : <size:31><color:red><b><$north>\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/empty_adjacent",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nBirch -> Larch : <$north><$south><size:27><$east></size>\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nBirch -> Larch : <$north><$south><size:27><$east></size>\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/empty_lines",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nBirch -> Larch : first\\n<$north>\\n\\n<size:29><$south></size>\\nlast\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nBirch -> Larch : first\\n<$north>\\n\\n<size:29><$south></size>\\nlast\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/case_keywords",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$path/name-2{ScAlE=2,CoLoR=#11223344}>B\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$path/name-2{ScAlE=2,CoLoR=#11223344}>B\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/optional_braces",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$north{>B<$south}>C<$east,>D\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$north{>B<$south}>C<$east,>D\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/color_separator",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<#BLUE$north> B<$southcolor red> C<$east{color:green}>!\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<#BLUE$north> B<$southcolor red> C<$east{color:green}>!\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/unicode_name",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$\u679d/\u03a9-7> B<$e\u0301> C<$\ud801\udc00>!\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$\u679d/\u03a9-7> B<$e\u0301> C<$\ud801\udc00>!\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/unicode_color",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<#\u00e9$north>B<$north{color=\u00e9}>!\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<#\u00e9$north>B<$north{color=\u00e9}>!\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/malformed_names",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$bad.name> B<$bad name> C<$> D<$north*bad>!\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$bad.name> B<$bad name> C<$> D<$north*bad>!\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/nested_angle",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<<$north>>B<bad<$south>>C\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<<$north>>B<bad<$south>>C\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/missing_close",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$north B\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$north B\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/escaped",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A~<$north>B~<$south{scale=2}>C\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A~<$north>B~<$south{scale=2}>C\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/double_escape",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A~~<$north>~~B\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A~~<$north>~~B\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/entity_escape",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A&lt;$north&gt;B\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A&lt;$north&gt;B\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/scale_dot",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$north*.>B\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$north*.>B\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/scale_doubledot",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$north{scale=1..2}>B\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$north{scale=1..2}>B\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/scale_zero",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$north*0>B\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$north*0>B\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/scale_negative",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$north{scale=-1}>B\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$north{scale=-1}>B\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/scale_overflow",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$north*99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999>B\" as Review\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass \"A<$north*99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999>B\" as Review\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/url_label",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nBirch -> Larch : [[https://example.test/review Fir<$north>Elm]]\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nBirch -> Larch : [[https://example.test/review Fir<$north>Elm]]\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/url_after",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nBirch -> Larch : https://example.test/review <$north> //italic//\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nBirch -> Larch : https://example.test/review <$north> //italic//\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/empty_link",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nBirch -> Larch : [[https://example.test/review <$north>]]\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nBirch -> Larch : [[https://example.test/review <$north>]]\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/note_undefined",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass Birch\nnote right of Birch\nA<$north>B\n<$south>\nend note\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nclass Birch\nnote right of Birch\nA<$north>B\n<$south>\nend note\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/note_defined",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $checker [2x2/16] {\nF0\n0F\n}\nclass Birch\nnote right of Birch\nA<$checker>B<$north>C\nend note\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $checker [2x2/16] {\nF0\n0F\n}\nclass Birch\nnote right of Birch\nA<$checker>B<$north>C\nend note\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/note_defined_scale",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $checker [2x2/16] {\nF0\n0F\n}\nclass Birch\nnote right of Birch\nA<$checker{scale=2,color=red}>B\nend note\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $checker [2x2/16] {\nF0\n0F\n}\nclass Birch\nnote right of Birch\nA<$checker{scale=2,color=red}>B\nend note\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/deploy_defined",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $checker [2x2/16] {\nF0\n0F\n}\nrectangle \"A<$checker>B<$north>C\" as Birch\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $checker [2x2/16] {\nF0\n0F\n}\nrectangle \"A<$checker>B<$north>C\" as Birch\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/class_defined",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $checker [2x2/16] {\nF0\n0F\n}\nclass \"A<$checker>B<$north>C\" as Birch\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $checker [2x2/16] {\nF0\n0F\n}\nclass \"A<$checker>B<$north>C\" as Birch\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/seq_defined",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nsprite $checker [2x2/16] {\nF0\n0F\n}\nBirch -> Larch : A<$checker>B<$north>C\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nsprite $checker [2x2/16] {\nF0\n0F\n}\nBirch -> Larch : A<$checker>B<$north>C\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/legacy_title",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\ntitle A<$north>B\nclass Birch\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\ntitle A<$north>B\nclass Birch\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/legacy_wbs",
+    "before": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startuml\n* A<$north>B\n** C<$south>D\n@endwbs\n"
+    },
+    "after": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startuml\n* A<$north>B\n** C<$south>D\n@endwbs\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/wbs",
+    "before": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* A<$north>B\n** C<$south>D\n@endwbs\n"
+    },
+    "after": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* A<$north>B\n** C<$south>D\n@endwbs\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/empty_diagram",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\n\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\n\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "checker38/syntax_negative",
+    "before": {
+      "type": "Class",
+      "entities": 0,
+      "source": "@startuml\nclass {\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 0,
+      "source": "@startuml\nclass {\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh15/nested_unknown",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nCedar -> Hazel : X<outer<$twig>>Y<<$\u679d>>Z\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nCedar -> Hazel : X<outer<$twig>>Y<<$\u679d>>Z\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh15/nested_escaped",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nCedar -> Hazel : X<outer~<$twig>>Y ~<$\u679d> Z\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nCedar -> Hazel : X<outer~<$twig>>Y ~<$\u679d> Z\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh15/nested_unicode",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nCedar -> Hazel : \u03a9<\u03b2<$\u679d/\u8449-2>>\ud83d\ude42<plain>\u7d42\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nCedar -> Hazel : \u03a9<\u03b2<$\u679d/\u8449-2>>\ud83d\ude42<plain>\u7d42\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh15/nested_styles",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nCedar -> Hazel : <b>X<outer<$twig>>Y</b><color:blue>Z<$leaf>Q</color>\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nCedar -> Hazel : <b>X<outer<$twig>>Y</b><color:blue>Z<$leaf>Q</color>\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh15/blank_restored",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nCedar -> Hazel : top\\n\\n<size:30><color:red><$twig></color></size>\\n<size:24></size>\\nbottom\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nCedar -> Hazel : top\\n\\n<size:30><color:red><$twig></color></size>\\n<size:24></size>\\nbottom\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh15/blank_small_base",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nskinparam sequenceMessageFontSize 8\nCedar -> Hazel : top\\n\\n<$twig>\\nend\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nskinparam sequenceMessageFontSize 8\nCedar -> Hazel : top\\n\\n<$twig>\\nend\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh15/absent_labels",
+    "before": {
+      "type": "Class",
+      "entities": 3,
+      "source": "@startuml\nCedar -> Hazel\nHazel --> Cedar\nclass Missing\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 3,
+      "source": "@startuml\nCedar -> Hazel\nHazel --> Cedar\nclass Missing\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh15/absent_message",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nCedar -> Hazel\nHazel --> Cedar\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nCedar -> Hazel\nHazel --> Cedar\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh15/blank_message",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nCedar -> Hazel :\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nCedar -> Hazel :\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh15/wbs_missing",
+    "before": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Root<outer<$twig>>!\n** Left<$leaf>End\n*** <$bud>\n** Plain\n@endwbs\n"
+    },
+    "after": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Root<outer<$twig>>!\n** Left<$leaf>End\n*** <$bud>\n** Plain\n@endwbs\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh15/wbs_styles",
+    "before": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* <b>Canopy<$twig>Top</b>\n** <size:20>Branch<$leaf>End</size>\n*** Small\n** Plain\n@endwbs\n"
+    },
+    "after": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* <b>Canopy<$twig>Top</b>\n** <size:20>Branch<$leaf>End</size>\n*** Small\n** Plain\n@endwbs\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh15/wbs_plain",
+    "before": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Canopy\n** Branch\n*** Leaf\n** Twig\n@endwbs\n"
+    },
+    "after": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Canopy\n** Branch\n*** Leaf\n** Twig\n@endwbs\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh15/wbs_left",
+    "before": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Root<$twig>End\n** Right\n*** RightLeaf\n-- <size:18>Left<$leaf>End</size>\n@endwbs\n"
+    },
+    "after": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Root<$twig>End\n** Right\n*** RightLeaf\n-- <size:18>Left<$leaf>End</size>\n@endwbs\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh15/note_defined",
+    "before": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $sprig [2x2/16] {\nF0\n0F\n}\nclass Cedar\nnote right of Cedar\nX<$sprig>Y<$twig>Z\nend note\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 1,
+      "source": "@startuml\nsprite $sprig [2x2/16] {\nF0\n0F\n}\nclass Cedar\nnote right of Cedar\nX<$sprig>Y<$twig>Z\nend note\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh15/deploy_defined",
+    "before": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $sprig [2x2/16] {\nF0\n0F\n}\nrectangle \"X<$sprig>Y<$twig>Z\" as Cedar\n@enduml\n"
+    },
+    "after": {
+      "type": "Deployment",
+      "entities": null,
+      "source": "@startuml\nsprite $sprig [2x2/16] {\nF0\n0F\n}\nrectangle \"X<$sprig>Y<$twig>Z\" as Cedar\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/unknown_repeated",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : A<alien<$seed>>B<bogus<$twig>>C\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : A<alien<$seed>>B<bogus<$twig>>C\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/unknown_known",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : A<alien<b>Bold</b>>B<bogus<color:red>Red</color>>C\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : A<alien<b>Bold</b>>B<bogus<color:red>Red</color>>C\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/unknown_escaped",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : A<alien~<$seed>>B<bogus~<b>Literal</b>>C\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : A<alien~<$seed>>B<bogus~<b>Literal</b>>C\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/no_close_inner",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : A<alien **bold** and <$seed\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : A<alien **bold** and <$seed\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/unicode_edges",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : \u00e9<outer<$\u00e1rbol>>\u00df<other<$\u8449>>\u00f8\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : \u00e9<outer<$\u00e1rbol>>\u00df<other<$\u8449>>\u00f8\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/empty_bold_recognition",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : A<outer<b></b>>B<$seed>C\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : A<outer<b></b>>B<$seed>C\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/style_restore",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : <size:19>A<outer<$seed>>B</size>C<color:red>D<bogus<$bud>>E</color>F\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : <size:19>A<outer<$seed>>B</size>C<color:red>D<bogus<$bud>>E</color>F\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/malformed_controls",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : A<outer<$seed*no>>B<$seed*>C<$seed*0>D\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : A<outer<$seed*no>>B<$seed*>C<$seed*0>D\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/malformed_dot",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : A<outer<$seed*.>>B\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : A<outer<$seed*.>>B\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/present_positions",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : \\nAlpha\\n\\nOmega\\n\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : \\nAlpha\\n\\nOmega\\n\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/present_style_restore",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : <size:29><color:blue><$seed></color></size>\\n<size:21></size>\\nLast\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : <size:29><color:blue><$seed></color></size>\\n<size:21></size>\\nLast\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/present_bold_empty",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : <b></b>\\n<i></i>\\n<size:26><b></b></size>\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow : <b></b>\\n<i></i>\\n<size:26><b></b></size>\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/present_small",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nskinparam sequenceMessageFontSize 7\nJuniper -> Willow : \\n<$seed>\\n<size:30></size>\\nZ\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nskinparam sequenceMessageFontSize 7\nJuniper -> Willow : \\n<$seed>\\n<size:30></size>\\nZ\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/absent_class",
+    "before": {
+      "type": "Class",
+      "entities": 2,
+      "source": "@startuml\nclass Juniper\nclass Willow\nJuniper --> Willow\n@enduml\n"
+    },
+    "after": {
+      "type": "Class",
+      "entities": 2,
+      "source": "@startuml\nclass Juniper\nclass Willow\nJuniper --> Willow\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/absent_state",
+    "before": {
+      "type": "State",
+      "entities": null,
+      "source": "@startuml\nstate Juniper\nstate Willow\nJuniper --> Willow\n@enduml\n"
+    },
+    "after": {
+      "type": "State",
+      "entities": null,
+      "source": "@startuml\nstate Juniper\nstate Willow\nJuniper --> Willow\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/absent_activity",
+    "before": {
+      "type": "Activity",
+      "entities": null,
+      "source": "@startuml\nstart\n:Juniper;\n:Willow;\nstop\n@enduml\n"
+    },
+    "after": {
+      "type": "Activity",
+      "entities": null,
+      "source": "@startuml\nstart\n:Juniper;\n:Willow;\nstop\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/absent_sequence",
+    "before": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow\nWillow --> Juniper :\n@enduml\n"
+    },
+    "after": {
+      "type": "Sequence",
+      "entities": null,
+      "source": "@startuml\nJuniper -> Willow\nWillow --> Juniper :\n@enduml\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/wbs_plain_depth",
+    "before": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Grove\n** East\n*** Twig\n**** Leaf\n-- West\n--- Bud\n@endwbs\n"
+    },
+    "after": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Grove\n** East\n*** Twig\n**** Leaf\n-- West\n--- Bud\n@endwbs\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/wbs_mixed_depth",
+    "before": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* <size:22>Grove</size>\n** <b>East</b>\n*** <size:17>Twig<$seed></size>\n**** Leaf\n-- <size:8>West</size>\n--- Bud\n@endwbs\n"
+    },
+    "after": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* <size:22>Grove</size>\n** <b>East</b>\n*** <size:17>Twig<$seed></size>\n**** Leaf\n-- <size:8>West</size>\n--- Bud\n@endwbs\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/wbs_multiline_root",
+    "before": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Grove\\nCanopy\n** East\n-- West\n@endwbs\n"
+    },
+    "after": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Grove\\nCanopy\n** East\n-- West\n@endwbs\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/wbs_multiline_child",
+    "before": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Grove\n** East\\n<size:20>Branch</size>\n*** Leaf\n-- West\n@endwbs\n"
+    },
+    "after": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Grove\n** East\\n<size:20>Branch</size>\n*** Leaf\n-- West\n@endwbs\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/wbs_empty_root",
+    "before": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* <$seed>\n** East\n-- West\n@endwbs\n"
+    },
+    "after": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* <$seed>\n** East\n-- West\n@endwbs\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/wbs_empty_children",
+    "before": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Grove\n** <size:24></size>\n*** <$seed>\n-- <color:red><$twig></color>\n@endwbs\n"
+    },
+    "after": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Grove\n** <size:24></size>\n*** <$seed>\n-- <color:red><$twig></color>\n@endwbs\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/wbs_boxless",
+    "before": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Grove\n**_ East<$seed>End\n*** <size:18>Leaf</size>\n--_ West\n@endwbs\n"
+    },
+    "after": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* Grove\n**_ East<$seed>End\n*** <size:18>Leaf</size>\n--_ West\n@endwbs\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/wbs_mixed_baseline",
+    "before": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* x<size:25>G</size>y\n** a<sub>b</sub>c\n-- <b>Wide</b>tiny\n@endwbs\n"
+    },
+    "after": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* x<size:25>G</size>y\n** a<sub>b</sub>c\n-- <b>Wide</b>tiny\n@endwbs\n"
+    },
+    "full_yaml_tree_equal": true
+  },
+  {
+    "id": "fresh26/wbs_newline_empty",
+    "before": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* \\nGrove\\n\n** East\\n\\nWest\n@endwbs\n"
+    },
+    "after": {
+      "type": "Wbs",
+      "entities": null,
+      "source": "@startwbs\n* \\nGrove\\n\n** East\\n\\nWest\n@endwbs\n"
+    },
+    "full_yaml_tree_equal": true
+  }
+]

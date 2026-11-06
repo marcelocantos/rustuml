@@ -1,0 +1,3041 @@
+{
+ "schema_version": 1,
+ "reviewer": {
+  "task_id": "t3-2bb601af-independent-shared-svg-round5-checker-claude",
+  "model": "claude-opus-5-5 / Claude Code in T3 Code; no children; did not implement the candidate; no Java run locally (Java references BG and BH run by the parent on Monkey Man)"
+ },
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "base_revision": "fbb2e59edc4beaccda72c30fe19e8a38ca8e1632",
+ "base_code_identical_to": "9834a719455308120c3289b59a260567f141b724",
+ "merge": "d6f63a8aa912d9652a6986de427da10209c73ec6",
+ "merge_code_identical_to": "7ec2e5af8a37ace145b37b78951ce217c0bab51a",
+ "tested_revision": "8dda18b1bf819f379c0c13d1cadd158400eed147",
+ "answers_rejection": "6caf4984570cf5ed87f21ac32572bc47ae93363c",
+ "commands": [
+  "git switch -c review/shared-svg-round5-claude 8dda18b1bf819f379c0c13d1cadd158400eed147; git -c protocol.file.allow=always submodule update --init --reference /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden test-diagrams/golden  # 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "~/Library/Caches/rustuml-shared-svg-round5-claude-checker/build.sh  # git archive of fbb2e59ed, d6f63a8aa, 8dda18b1b; CARGO_TARGET_DIR private; cargo build --release -j 6 -p rustuml",
+  "python3 -I tools/batch.py ~/Library/Caches/rustuml-shared-svg-round5-claude-checker/work <batch dir> <label> bin/rustuml-fbb2e59ed=base bin/rustuml-d6f63a8aa=merge bin/rustuml-8dda18b1b=tip [bin/rustuml-tip-ev=ev]  # BH BG BF BE BC BB AW AU AR",
+  "python3 -I tools/sweep.py <bin> <out> <repo> work/cwd_map.json test-diagrams/golden test-diagrams/perturbations  # 16,508 sources x 3 trees (+ tip-ev); checker-cmp; tools/cohorts.py",
+  "bash tools/gates.sh <tip export> tip ...; base/merge exports: golden_no_oracle, parity_perturbations, harness_guards; tools/gatelists.py",
+  "python3 -I tools/c5a_sources.py; tools/predict.py (Rust predictions before Java); tools/stage.py -> parent relay BH on Monkey Man",
+  "font-chain: swiftc FontChainExtract.swift (maker copy) and the CFLocaleCopyISOLanguageCodes variant on colossus; parent ran font-chain/request/run.sh on Monkey Man; host-coverage-diff.json",
+  "python3 -I tools/register.py <repo> pairs.json BG=... BF=... BH=...; python3 -I tools/write_reviews.py <repo> evidence"
+ ],
+ "no_production_changes": true,
+ "no_shipping": true,
+ "account_chronology": {
+  "accounts (docs only)": "f5442f4e5ef7c6f440226a25281ae9bf2339039c",
+  "outer origin draft": "f3ebc92f3468b039ea2093fd54f36a1bcb9f6a81",
+  "note names draft": "3ebcb763ebcdbaa3286d2fdf4e320ee0ae699858",
+  "missing glyph + width decoding draft": "4a16eaffd159e886fec31db0af3517b2eff6f25f",
+  "decode-site escape draft": "673548fb95a4520ca4af669d09cd64c9abcd153e",
+  "YAML addendum -> draft": [
+   "a4e895aaf5f4cc826fe2b3fc19e54a2ec1bfc989",
+   "a18a76980321ba0aef86dee963d426af06d88d89"
+  ],
+  "m5a request (before any Java result)": "02fa4159febdfb43a0627417d6d654195bf79bde",
+  "pass-three addendum -> draft": [
+   "d80bee422ab3c7c7a4d1b2a65218990f6b554e95",
+   "ce1e52e30956dc4593dfcc915a34be908cf66029"
+  ],
+  "clippy only": "5149e8ecbdc149bc1b7bf4cb4043d38626154d72",
+  "every account and addendum precedes its draft in linear ancestry; account commits are docs-only": true
+ },
+ "frozen_items": "unchanged fbb2e59ed..8dda18b1b: crates/rustuml-oracle (comparator slack GEOM_EPS and canvas +-1, syntax markers, park list, error census, guard allow-lists, strict-XML list), decimal_literal_baseline.txt, no_oracle_baseline.txt, docs/reference-bootstrap.md; round 5 touches no docs or test-diagrams outside its maker-round5-claude directories",
+ "evidence": {
+  "dir": "checker-claude-round5 (byte-identical copy in docs/parity-reviews/comment-state-consumers/ and docs/parity-reviews/tim-builtin-value-boundaries/; SHA256SUMS.json)",
+  "measurements": "checker-claude-round5/measurements.json",
+  "batches": "checker-claude-round5/batches/batch-*.json, checker-claude-round5/batch-summary.json",
+  "cohorts": "checker-claude-round5/cohorts.json",
+  "pairs": "checker-claude-round5/pairs.json",
+  "gates": "checker-claude-round5/gates",
+  "font_chain": "checker-claude-round5/font-chain (host-coverage-diff.json, monkeyman/, request/, jdk-native/ copies of JDK 21.0.5 GA AWTFont.m, CoreTextSupport.m, CCharToGlyphMapper.m, bundled hb-unicode.hh)",
+  "canvas": "checker-claude-round5/canvas (evidence-build.diff, changed-output lists)",
+  "references": "checker-claude-round5/references/bh (c5a relay BH), references/bg (m5a results, maker predictions)",
+  "probes": "checker-claude-round5/probes (c5a sources, yaml-minimal)",
+  "tools": "checker-claude-round5/tools"
+ },
+ "do_not_regress_check": "BB/BC/AW/AU/AR/BE outcomes identical merge->tip (0 lost, 0 gained except BE 5 named by review-5): note paint order and border points (BE bp_*/no_*), Graphviz stderr discard (sweep stderr only differs by panic thread ids), node creation order, leaf corners and nested-cluster x (BB), surrogate serializer rule, %intval, bracket declarations, strokes, X[H], seed and __theme (AW/AU/AR), %strlen/%substr/%upper (perturbation dirs: 0 new failures vs merge)",
+ "counts": {
+  "BH_c5a_held_out": "99 cases, 96 Java exit 0; strict+comments base/merge/tip 3/14/67 (strict only 12/14/67); 0 lost vs base or merge",
+  "BG_m5a_held_out": "53 cases, 52 Java exit 0; 0/8/41 (strict only 12/8/41); 0 lost; maker predictions equal tip output on 53/53",
+  "BF": "46 cases; 1/17/32; 0 lost",
+  "BE": "0/17/22",
+  "BC": "0/18/18",
+  "BB": "2/25/25",
+  "AW": "6/30/30",
+  "AU": "6/21/21",
+  "AR": "6/17/17",
+  "goldens": "12,550 sources, 11,351 Java-valid: strict 11181/11181/11181; tip exit 0 x12474, 1 x76; 0 panics, 0 timeouts",
+  "sweep_all": "16,508 sources: strict 12911/13547/13555; merge->tip 8 gained, 0 lost, 0 lost rejections, 0 new valid-input errors, 0 new panics/timeouts, 0 comments lost, 298 outputs changed, 4 stderr changed (thread ids of 4 pre-existing panics)",
+  "GET_goldens": "act_skinparam2_shadowing_true, act_skinparam_shadowing, edge_whitespace_multiple_blank_lines: MATCH at base, DIFF at merge and tip (raw-reader contract; not round 5)",
+  "gates": "no-oracle 11181/11251 base and tip (failure-name diff: -3 GET goldens, +3 gained); golden_pairs 10497/12550; parity_perturbations 0 new vs merge, 8 fixed; harness_guards categories and decimal ratchet identical to merge; T14.6.7 196/98/98 unchanged; lib 1584/1584; pipe_mode 17/17"
+ },
+ "mechanism": "tim-builtin-value-boundaries",
+ "account_commit": "f5442f4e5ef7c6f440226a25281ae9bf2339039c",
+ "implementation_commit": "5149e8ecbdc149bc1b7bf4cb4043d38626154d72",
+ "other_commits_reviewed": {
+  "missing_glyph_and_width_decoding_draft": "4a16eaffd159e886fec31db0af3517b2eff6f25f",
+  "decode_site_escape_draft": "673548fb95a4520ca4af669d09cd64c9abcd153e",
+  "yaml_addendum": "a4e895aaf5f4cc826fe2b3fc19e54a2ec1bfc989",
+  "yaml_draft": "a18a76980321ba0aef86dee963d426af06d88d89",
+  "clippy": "5149e8ecbdc149bc1b7bf4cb4043d38626154d72",
+  "m5a_request": "02fa4159febdfb43a0627417d6d654195bf79bde"
+ },
+ "scope": "round-5 TIM/text obligations: missing-glyph advance from the macOS font chain, width paths decode carrier tokens, decode-site escaping (YAML/JSON/TIM JSON), YAML literal escapes, '?' for a unit in a comment",
+ "verdict": "rejected",
+ "packet_verdict": "Packet 8dda18b1b rejected. On held-out BH (Java exit 0) dc6_yaml_nested fails whole-output only because of a18a76980: Java keeps YAML escapes literal at parse time but Display.getWithNewlines then turns '\\\\' into '\\'; merge drew Java's 'a\\b', the tip draws 'a\\\\b'. The missing-glyph table holds on most held-out probes on the reference host but is falsified for unmapped nonspacing marks in complex text (3 BH cases, not regressions) and is host-dependent: generated on colossus, it differs from the reference host on 256 scalars (PingFang MobileAsset) and ignores user fonts that Java uses.",
+ "per_mechanism_verdicts": {
+  "YAML literal escapes (a4e895aaf -> a18a76980)": "rejected: held-out BH dc6_yaml_nested lost to the packet (Display.getWithNewlines not ported)",
+  "missing-glyph advance (f5442f4e5 -> 4a16eaffd)": "not accepted: falsified for unmapped Mn marks in complex text (BH 3 cases) and host-dependent (PingFang asset, user fonts); constants confirmed as font metrics",
+  "width-token decoding (f5442f4e5 -> 4a16eaffd)": "confirmed",
+  "decode-site escaping JSON / TIM JSON (f5442f4e5 -> 673548fb9)": "confirmed",
+  "'?' for a unit in an SVG comment (comment-unit addendum)": "confirmed by 4 successful Java outputs; keep; the addendum's observability claim is false (UGroup.fix)"
+ },
+ "findings": [
+  "REJECT. YAML literal escapes (a4e895aaf -> a18a76980) cause a fresh held-out whole-output failure: BH dc6_yaml_nested (Java exit 0). Java's YAML parser keeps escapes literal (YamlLine.unquote 189-198, as the addendum says), but TextBlockJson.getTextBlock (342) then builds every key and value through Display.getWithNewlines (Display.java 284-305), which turns '\\\\' into '\\', '\\t' into a tab and '\\n'/'\\r'/'\\l' into line breaks and leaves other pairs ('\\u', '\\U', '\\\"') literal. For inner: \"a\\\\b\" Java draws 'a\\b' (textLength 23.8848); merge drew the same; the tip draws 'a\\\\b' (31.2266), and every other difference of the output (canvas 325 vs 317, box widths, the list node's x) follows from that element. Rust-only corroboration probes/yaml-minimal: base and merge 23.8848, tip 31.2266.",
+  "The same Display rule explains the pre-existing BH failures dc6_yaml_plain, dc6_yaml_key_newline, dc6_yaml_apostrophe, dc6_yaml_comment, dc6_yaml_hash_in_quotes, dc6_yaml_single, dc6_yaml_block (Java splits at \\n and expands \\t; Rust draws one line). The YAML literal rule itself is confirmed where Display keeps the pair: BG dc5_yaml_key_escape, dc5_yaml_list_escape, BF cr_yaml_u_escape, BH dc6_yaml_escaped_quote, dc6_yaml_trailing_backslash, dc6_yaml_colon_key, dc6_yaml_listonly match. Flow-sequence residue (BG dc5_yaml_flow_escape) confirmed: YamlLine.toList makes the next character literal.",
+  "Missing glyph (4a16eaffd), reference-host coverage: on Monkey Man (Java's host) 76 of 93 held-out BG/BH width probes match whole-output; the 17 failures are 7 Monospaced family-name/NBSP cases whose widths match, 5 declared mapped-advance residue, 2 default-ignorable residue and the 3 nonspacing marks below. Out of sample the model matches unmapped BMP scalars in new blocks (U+0870, U+1C80, U+2E5E, U+1AB0, U+0D80, U+A69E), BMP default-ignorables in simple text (missing) and complex text (hidden: U+2065, U+FFF0), supplementary CJK Ext-G/H, Adlam (cascade lacks it), tags-block and VS-supplement unassigned (hidden), Egyptian format controls (Cf, missing), combining/RTL/Thai complex text with unassigned scalars, sizes 9/11/23, bold, Arial, Verdana, Helvetica, Courier New, and sequence/activity/state/mindmap renderers.",
+  "Missing glyph, falsified on held-out data: an unmapped nonspacing mark (gc=Mn) in complex text has zero advance in Java, not the primary .notdef. BH w6_sans_180f_complex (U+180F, Java 0, tip 10.5), w6_sans_1d17b (U+1D17B, Java 0, tip 10.5), w6_sans_16fe4 (U+16FE4, Java 0, tip 10.5). The maker's default-ignorable list equals HarfBuzz 8.2.2 bundled in JDK 21.0.5 exactly (hb-unicode.hh is_default_ignorable 167-197: 180B..180E, 1D173..1D17A), so the zero comes from another rule, consistent with HarfBuzz giving mark-class glyph props from the Unicode category and zeroing mark advances. These fail at base and merge too (different wrong values), so they are not regressions, but the account's 'Missing -> .notdef' is not Java's rule for marks. Not yet traced to a HarfBuzz source line: next obligation.",
+  "Missing glyph, host dependence (font-chain/host-coverage-diff.json): Monkey Man and the maker's Mac run the same macOS 27.2 build 26B123, yet every per-face TSV differs. The cause is one asset family. On Monkey Man the PingFang slots of the cascade resolve to a downloaded MobileAsset (/System/Library/AssetsV2/com_apple_MobileAsset_Font8/.../PingFang.ttc); on colossus they resolve to the reserved UI copy (FontServices.framework/Resources/Reserved/PingFangUI.ttc). Identical across all 13 faces: 37 BMP scalars the simple path maps only on Monkey Man (U+31BC-31BF, 327E, F817-F81D, F828-F83B, F83F, F880-F881, FA2E-FA2F), 188 complex-path scalars mapped only on colossus (U+31D0-31E5 CJK strokes, 117 CJK Ext-B and 49 CJK Ext-C..H scalars), 31 mapped only on Monkey Man (U+31B8-31BF, 3248-324F, FE20-FE23 except Courier/Menlo/Arial, 1F101-1F10A, 1F10C). Times New Roman differs only in the 37 simple-path scalars. The table generated on colossus is therefore wrong on the reference host for those 256 scalars. Notdef advances are identical on both hosts (font-chain/monkeyman/notdef.txt).",
+  "Missing glyph, user fonts: the extraction tool deliberately treats a user font (~/Library/Fonts) as missing, but Java uses user fonts. Both hosts have MesloLGS NF and Hack in ~/Library/Fonts (census). On both, CoreText substitutes MesloLGS NF for U+F8B7..F8FE and Hack for U+20B7 (font-chain/monkeyman/whofb-lucida.txt, colossus-whofb-*.txt), and the July Java Times New Roman table (times_new_roman_unicode.rs) gives exactly those scalars real advances. That is 46 of the 52 'Java advance, model missing' disagreements the maker attributed to 'fonts changed by later OS updates'; U+F880 is the downloaded LiHeiPro asset on Monkey Man. The model calls these Missing (0.75 em in SansSerif) where Java substitutes a glyph.",
+  "Missing glyph, JDK fidelity: CFont.getCascadeList (AWTFont.m 547-567, JDK 21.0.5 GA) passes CFLocaleCopyISOLanguageCodes(), not nil; the checker re-ran the tool both ways on colossus for LucidaGrande and TimesNewRomanPSMT: slot order differs, coverage is identical. The simple path's substitution is JRSFontCreateFallbackFontForCharacters (CoreTextSupport.m CTS_GetGlyphsAsIntsForCharacters), not CTFontCreateForString; 'LastResort counts as missing' is supported by measurement (TNR table, BG/BH unassigned BMP probes), not traced. Simple-path substitution itself is confirmed: BH w6_sans_211a and w6_sans_22ad have Java advance 10.8897 (substituted glyph), not .notdef; they and w6_sans_a8fb, BG w5_sans_a500 fail only through the declared mapped-advance residue.",
+  "Missing glyph constants: the per-face .notdef advances are font metrics, measured by CTFontGetAdvancesForGlyphs on glyph 0 on both hosts: Lucida Grande 1536, Lucida Grande Bold 1536, Arial 1536, Helvetica 1298, Helvetica Bold 1479, Verdana 2048, Menlo 1233 (= MONO_WIDTH_PER_SIZE 0.60205078125 x 2048), Courier New 1229 (= COURIER_NEW_WIDTH_PER_SIZE), Times New Roman 1593. The generated table carries a provenance header; the maker's TSVs regenerate byte-identically on colossus; no new 3+ decimal literal (ratchet identical).",
+  "Residue observed out of sample (pre-existing, not caused): emoji tag flag (BH w6_sans_tag_flag: Java 19.0 for the whole sequence, tip 103: supplementary default-ignorables that the cascade maps are not hidden; the account declares this only for BMP); Times New Roman unassigned default-ignorable (BH w6_times_e0080: Java hides U+E0080, the Java Times table lists only defined scalars); Hebrew mapped advance (BH w6_sans_hebrew_missing); Monospaced 'monospace' family name and Java's NBSP in mono/courier text (BG w5_mono_*, BF w_courier_pua_b, w_monospaced_pua_b, BH w6_mono_*): widths match.",
+  "Width-token decoding (4a16eaffd): confirmed. BG w5_{helvetica,verdana,couriernew,arial,times}_{10fffd,10f800}, w5_arial_10f7ff, w5_helvetica_bold_10fffd and BF w_arial_pua_b, w_times_pua_b match; controls unchanged. BF w_courier_pua_b and w_monospaced_pua_b, precommitted as fixed, now have Java's width but still fail on the pre-existing NBSP/family-name difference.",
+  "Decode-site escaping for JSON and TIM JSON (673548fb9): confirmed. BG dc5_json_nested, dc5_tim_json_member, dc5_tim_json_array, BF cr_json_u_escape, BH dc6_json_control match; sweep: no golden YAML/JSON output changed merge -> tip.",
+  "The '?'-in-comment rule: keep it. Java's successful outputs write the unit in a comment as '?': BG cm_unit_class_code '<!--class Q?-->', cm_unit_package_code '<!--cluster P?-->', BH cm6_class_bare and cm6_class_low (low surrogate) '<!--class Q?-->'. The maker's observability claim is false: Java does not crash on the unit in data-qualified-name, because UGroup.put applies fix (UGroup.java 69-72: NON_WORD -> '.'), giving 'Q.' and 'P..C'. Rust never reaches the rule: its code grammar drops the unit (comment 'class Q', name 'Q') and drops the package, state and object entities; pre-existing at base. Classification of the intent disagreements: cm_unit_class_code, cm_unit_package_code, cm6_class_bare Java-valid; cm6_component_code, cm6_state_code, cm6_usecase_code Java syntax errors (exit 200, 'Assumed diagram type: sequence', line 2) that Rust renders (lost rejections, pre-existing, T14.17/T14.21); cm_unit_link_code a Java export crash (Invalid UTF-16 surrogate d83d d83d) that Rust renders normally (T14.20); cm6_object_code Java-valid, Rust output nearly empty (pre-existing).",
+  "Canvas rounding (f3ebc92f3 exposes it): Java sets the SVG size through SvgGraphics.ensureVisible (SvgGraphics.java:142-147), maxX/maxY = (int)(x + 1) of the image dimension. The outer image path rounds with ceil (state.rs:5097-5098, build of the image-path SVG), although state.rs already defines svg_ensure_visible_dimension for Java's rule. The two agree for fractional extents and differ by 1 px on integral ones, which the exact LimitFinder bounds now produce. checker_history_font_state_channel (end ellipse cy 395.0, extent 419.0) lost Java's 420 height for 419; held-out BH no6_integer_canvas has Java width 108, tip 107. A private evidence build with only that line changed (canvas/evidence-build.diff) gains Java's exact canvas on 98 more sweep outputs (12,845 -> 12,943 exact viewBox of 16,508), loses none, and restores both cases. Every such case still passes the strict tier because the frozen comparator allows +-1 on the canvas, so no strict match was lost. A second, opposite +1 width exists on the root/flat path (BH pt6_note_outer_anchor_later_inner 172 vs 171, rp6_root_and_group 260 vs 259) and is not touched by the evidence build."
+ ],
+ "attributed_regressions": [
+  {
+   "case": "BH dc6_yaml_nested",
+   "commit": "a18a76980321ba0aef86dee963d426af06d88d89",
+   "java_exit": 0,
+   "merge": "DIFF7 (inner 'a\\b' matched; the list item '\\u0041' was decoded)",
+   "tip": "DIFF14, all from inner 'a\\\\b'",
+   "java_mechanism": "TextBlockJson.getTextBlock 342 -> Display.getWithNewlines 284-305"
+  }
+ ],
+ "held_out_failures": {
+  "dc6_yaml_nested": "caused by a18a76980",
+  "w6_sans_180f_complex, w6_sans_1d17b, w6_sans_16fe4": "Mn mark zero advance not modelled; pre-existing wrong values",
+  "dc6_yaml_plain, key_newline, apostrophe, comment, hash_in_quotes, single, block": "Display.getWithNewlines not ported; pre-existing",
+  "w6_sans_211a, w6_sans_22ad, w6_sans_a8fb, w5_sans_a500, w6_sans_hebrew_missing": "mapped-advance residue (declared)",
+  "w6_sans_tag_flag, w6_times_e0080": "default-ignorable residue outside the declared scope; pre-existing",
+  "w5_mono_*, w6_mono_*": "family name 'monospace' and NBSP; widths match; pre-existing",
+  "dc5_yaml_flow_escape": "declared flow residue",
+  "cm_unit_class_code, cm_unit_package_code, cm6_class_bare, cm6_class_low, cm6_object_code": "Rust code grammar drops the unit / entity; pre-existing"
+ },
+ "bounded_next_obligations": [
+  "Blocking: port Display.getWithNewlines for YAML/JSON keys and values (TextBlockJson.getTextBlock) on top of YamlLine's literal parse: '\\\\' -> '\\', '\\t' -> tab, '\\n'/'\\r'/'\\l' -> line break, other pairs literal. Acceptance: BH dc6_yaml_nested, dc6_yaml_plain, dc6_yaml_key_newline, dc6_yaml_apostrophe, dc6_yaml_comment, dc6_yaml_hash_in_quotes, dc6_yaml_single, dc6_yaml_block and the BG/BF/BH YAML pairs that already match, plus fresh renamed variants; JSON values must be checked too, since the same TextBlockJson path receives decoded JSON strings.",
+  "Blocking: trace Java's zero advance for an unmapped nonspacing mark in complex text to a HarfBuzz 8.2.2 source line (mark glyph props from the Unicode general category and mark-advance zeroing) and port it; acceptance BH w6_sans_180f_complex, w6_sans_1d17b, w6_sans_16fe4 plus fresh Mn/Me scalars in other blocks and in simple text (where Java keeps .notdef, BH w6_sans_1ab0).",
+  "Blocking: make the coverage table a declared environment input of the reference host. Generate it on Monkey Man (the Java host), including user fonts and downloaded MobileAsset fonts as Java's CoreText sees them, or validate the committed table against a Monkey Man extraction with a hash gate; record host, build and the font-asset census in the table header. Acceptance: per-face TSV equality with the reference host, and Java probes for at least the PingFang-asset scalars (e.g. U+31BC, U+F817, U+31D0, U+FE20, U+1F101) and the user-font scalars (U+F8B7, U+20B7) in simple and complex text.",
+  "Align the extraction tool's cascade call with JDK 21.0.5 (CFLocaleCopyISOLanguageCodes()) and its simple-path fallback with JRSFontCreateFallbackFontForCharacters, or record measured equivalence on the reference host.",
+  "Supplementary default-ignorables mapped by a cascade font (emoji tag sequences, BH w6_sans_tag_flag) and Times New Roman unassigned default-ignorables (BH w6_times_e0080) need a declared rule or a port.",
+  "Rust code grammars must keep an unpaired unit in entity codes (class/package/object Java-valid; component/state/usecase Java syntax errors) before the '?' comment rule can be exercised; cm_unit_* and cm6_* pairs gate it."
+ ],
+ "staged_java_requests_answered": {
+  "BH": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round5-c5a/",
+   "reference_results_sha256": "6c78b9e8c64738b57313f7df6043a099a3d538e6c75a6c26744aa8fd3cf2cb55",
+   "manifest_sha256": "54000fedd4d74a42dc4a5b912cf31a5403f06e104cb9206d3c2bb071496ff504",
+   "bundle_sha256": "805e4671b500c05a820b11beaf51af96d7e6cd137f1da835d0a4fabc9ea09afd",
+   "rust_predictions_sha256": "1e6882f8139468fa8d75a3270d5b1e4d39dab655826b12166536cad1f066c3e9"
+  },
+  "monkeyman_font_chain": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round5-monkeyman-fontchain/out/",
+   "SHA256SUMS_sha256": "810633ca2bf2d76acf2d03e35023bd765037cd17c4d4fb5a5615bae801532f5d",
+   "request_sha256": "077b900b1cd6140ed5ffa69c5a21b7afeac7460554d46bca000eaac90b70a89b"
+  }
+ },
+ "evidence_only_cases": [
+  {
+   "name": "cm_unit_link_code",
+   "batch": "BG",
+   "java_exit": 200,
+   "java_crash_text": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83d d83d ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83d d83d ?",
+   "reason_not_registered": "Java export-crash page (parity_perturbations fails every preserved Java error page); evidence only",
+   "tip_outcome_vs_java": "renders normally where Java crashes",
+   "source_sha256": "1512b49a861b387269de5eff6f8f288842762a48e5fd693924281c26276cd0b2"
+  },
+  {
+   "name": "cr_id_code_pua",
+   "batch": "BF",
+   "java_exit": 200,
+   "java_crash_text": null,
+   "reason_not_registered": "Java export-crash page (parity_perturbations fails every preserved Java error page); evidence only",
+   "tip_outcome_vs_java": "renders normally where Java crashes",
+   "source_sha256": "26ed80bf4900b8f52b61dc54811dd50449cff40624dd15729011065d1f0f96f7"
+  },
+  {
+   "name": "cm6_component_code",
+   "batch": "BH",
+   "java_exit": 200,
+   "java_crash_text": null,
+   "reason_not_registered": "Java export-crash page (parity_perturbations fails every preserved Java error page); evidence only",
+   "tip_outcome_vs_java": "renders normally where Java crashes",
+   "source_sha256": "aa20ae4ee558cf59bc37cb4557beb4188b782ce518c230eab7078c3a294b03c8"
+  },
+  {
+   "name": "cm6_state_code",
+   "batch": "BH",
+   "java_exit": 200,
+   "java_crash_text": null,
+   "reason_not_registered": "Java export-crash page (parity_perturbations fails every preserved Java error page); evidence only",
+   "tip_outcome_vs_java": "renders normally where Java crashes",
+   "source_sha256": "1f40ddd28e56e2a70ca35686f4e2126f01c6b5bbeb525d6ce0e6b452df60212c"
+  },
+  {
+   "name": "cm6_usecase_code",
+   "batch": "BH",
+   "java_exit": 200,
+   "java_crash_text": null,
+   "reason_not_registered": "Java export-crash page (parity_perturbations fails every preserved Java error page); evidence only",
+   "tip_outcome_vs_java": "renders normally where Java crashes",
+   "source_sha256": "67f773f824934268441bf5c447495cd4c53f79397b8fdb6adac8aa1d57f8cfa9"
+  }
+ ],
+ "perturbations": [
+  {
+   "name": "cm_unit_class_code",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "unpaired unit in a class code only"
+   ],
+   "intended_valid": false,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cm_unit_class_code.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cm_unit_class_code.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "bd393a7e6851914286239fc038c494aabbf10d5ee0617d15678945da94f66bc9",
+   "golden_sha256": "a0de0a754b0b7a21ad9bcc6b7e9188ec7830cb72eb980bb0759a7288aa281d4c",
+   "base_fbb2e59ed": "0/DIFF/1/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/1/comments=False",
+   "tip_8dda18b1b": "0/DIFF/1/comments=False",
+   "result": "fail"
+  },
+  {
+   "name": "cm_unit_package_code",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "unpaired unit in a package code"
+   ],
+   "intended_valid": false,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cm_unit_package_code.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cm_unit_package_code.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "c4831c0fd5d9c84a9005e7b85742641f72adb3762d0e79b11a14723438d4bd54",
+   "golden_sha256": "38210f0e61feeada54eb854bafe807ba5aec68a08fafc9140c497d7d220574f9",
+   "base_fbb2e59ed": "0/DIFF/9/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/9/comments=False",
+   "tip_8dda18b1b": "0/DIFF/9/comments=False",
+   "result": "fail"
+  },
+  {
+   "name": "dc5_json_nested",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "JSON surrogate-pair escapes nested in arrays and as a key"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_json_nested.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_json_nested.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "030cfbe36dbd338b2f93360501d64bd80c0f49a5ea2260dcc887ffa3369e0345",
+   "golden_sha256": "ab594b8e3949f2268e503f71b934c1aa69009dddb2a79b88700619fff5bf269e",
+   "base_fbb2e59ed": "0/DIFF/15/comments=True",
+   "merge_d6f63a8aa": "1/ERR/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "dc5_tim_json_array",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "TIM JSON array index with a pair escape"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_tim_json_array.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_tim_json_array.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "697c5936683711e7b66792e9ef00b12be71fb08c5ca591509f469c00d0b11764",
+   "golden_sha256": "7919465cd4b8518486f378a143e6e681d2f1c60d91f22d5aecb9c1bea74a49d2",
+   "base_fbb2e59ed": "0/DIFF/7/comments=False",
+   "merge_d6f63a8aa": "1/ERR/0/comments=False",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "dc5_tim_json_member",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "TIM JSON nested member with a pair escape"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_tim_json_member.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_tim_json_member.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "5c8e6d73ed001f5a0105a1af224fe95c5fd35d92df579c882184a82542544caf",
+   "golden_sha256": "858115ab66176f82ad8854b4fdcee51ee42435533b6954df9f6bc6e26d59f63c",
+   "base_fbb2e59ed": "0/DIFF/7/comments=False",
+   "merge_d6f63a8aa": "1/ERR/0/comments=False",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "dc5_yaml_flow_escape",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "YAML flow sequence with \\U escape (residue)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_flow_escape.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_flow_escape.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "e2126f5319dc467ccc8f81c7dea0fd136ef14b5d52ab18b2320be573b99c9fbd",
+   "golden_sha256": "30273589e954b4739125b801e16398b7c910aa8dc42dcadf64607db5b90ccf17",
+   "base_fbb2e59ed": "0/DIFF/8/comments=True",
+   "merge_d6f63a8aa": "1/ERR/0/comments=True",
+   "tip_8dda18b1b": "0/DIFF/8/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "dc5_yaml_key_escape",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "YAML double-quoted key and value with \\U escapes"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_key_escape.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_key_escape.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "cc6958e54554786a89ed87b84f44d28461e0b40ad2555f7909311412ab755571",
+   "golden_sha256": "8972b484ba3f24abaa17e88370de257d4c2f2444dc0806d09fcf940351c5c082",
+   "base_fbb2e59ed": "0/DIFF/8/comments=True",
+   "merge_d6f63a8aa": "1/ERR/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "dc5_yaml_list_escape",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "YAML list item with \\U escape"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_list_escape.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_list_escape.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "9321d750505b8a678b9610c796cc67147360aede6a04c42f847199d328a18faf",
+   "golden_sha256": "a0108b4c0ddf164031eb463e46eefb6be36ddf45070fa26eecaff17796688188",
+   "base_fbb2e59ed": "0/DIFF/8/comments=True",
+   "merge_d6f63a8aa": "1/ERR/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_arial_10f7ff",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+10F7FF (escape scalar) Arial"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_arial_10f7ff.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_arial_10f7ff.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "8dfff27cf191709d87f7641c483e5e1acdadb55d13e13017d92d766338190ad5",
+   "golden_sha256": "423dc78d6661aadaa2e953f54c1747b43fd4eeb3cb725fd81a4f408474675436",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_arial_10f800",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+10F800 (carrier range, escaped) Arial"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_arial_10f800.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_arial_10f800.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "d69fb6cd1a0392fac52991593382b00c7f26e16266c58e7189ddb9278a2ec90e",
+   "golden_sha256": "9b4442783dedc5247991890260f48cfe6f5d991d72d4345067e3249d4359ab4e",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_arial_10fffd",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+10FFFD Arial"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_arial_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_arial_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "4aab3034b4de41024d8407c7a09b6bcb7d1f7df6eafa201f80d449c6ceb08882",
+   "golden_sha256": "dc447aa14f189bf2b5756e16a861f3d1061e0fee239a094df3ed298d85cafa4a",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_arial_ctl",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "control 'Ledger ' Arial"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_arial_ctl.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_arial_ctl.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "f1ab37dedddea34880583b1265d793b4e1518fd89e2ae94d6bf2c29dc476d2f2",
+   "golden_sha256": "31019a4876693f173ade5517a1377cbe8bd3c348ff87d5ce2eb8deab3663a130",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_couriernew_10f800",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+10F800 (carrier range, escaped) Courier New"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_couriernew_10f800.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_couriernew_10f800.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "102d7719e4e37644c3e6b28d761757018d802637befdf447138613b1334b7929",
+   "golden_sha256": "7e5bf6b25e73ebccd0f976f14a235a72511a6abeded50f01f3bbc4747ce16302",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_couriernew_10fffd",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+10FFFD Courier New"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_couriernew_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_couriernew_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "cda2cc7f41f9c9c0022a8c6343a24d81823a2affae3f21460d7c94e5c779ab56",
+   "golden_sha256": "0471493280bac5305893cda464dbc586fbc64e3edcc3bd409a696fc59636d802",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_couriernew_ctl",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "control 'Ledger ' Courier New"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_couriernew_ctl.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_couriernew_ctl.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "4e6b55f8145fbc3f2baf70ea3a0f3711a49f7bebe262a0be4fe4063a4aca69f0",
+   "golden_sha256": "43369b48507a6000bd0c4d01f98c771df0098affc45ddeab0d4bb6af59a97b64",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_helvetica_10f800",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+10F800 (carrier range, escaped) Helvetica"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_helvetica_10f800.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_helvetica_10f800.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "1de5a20aefe189b993bd2efd145e1c9ff12917a197308b9a4823798f53a85693",
+   "golden_sha256": "486e04d7cc38d37d90721c383566dd40caaee44ee3ef5ad23631ad791bcacbef",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_helvetica_10fffd",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+10FFFD Helvetica"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_helvetica_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_helvetica_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "2fbcdee95c6fa53fd91b491857536333cc7098bb6347fb0d2b9aed07f41f6a91",
+   "golden_sha256": "e0c4003f17a39f70207868ff2a7afd1c648e4693a089049de1d60762e32c297b",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_helvetica_bold_10fffd",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+10FFFD Helvetica bold"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_helvetica_bold_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_helvetica_bold_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "52fad7a0ecabc65535da3d01322b814317a9c416026d8473c58581494f0b8940",
+   "golden_sha256": "057fb2f299daf96884c7525cef6d4550187323182207564a85747ac3ecf6c992",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_helvetica_ctl",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "control 'Ledger ' Helvetica"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_helvetica_ctl.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_helvetica_ctl.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "ecd787321e9d2849c188aa52cbbb4c5817137f1453ffd58ed08dffd4569558aa",
+   "golden_sha256": "eb43813561435f9fce0eca8d60ae26faf02f61ba4c941000161f149b94e2da57",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_mono_10f800",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+10F800 (carrier range, escaped) Monospaced"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_mono_10f800.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_mono_10f800.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "5de90600b23eabbee82034ea4a6c2624aaea181f5c7ae91dab65cc1764461ae8",
+   "golden_sha256": "82607126baff1148a25c76448d887c26ab38736709f99d0f1758712dd28da58a",
+   "base_fbb2e59ed": "0/DIFF/2/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/6/comments=True",
+   "tip_8dda18b1b": "0/DIFF/2/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w5_mono_10fffd",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+10FFFD Monospaced"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_mono_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_mono_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "cc293a5ef1159019691e34e5c5c07c726203a7f52948410d7dcf747c4b6a2ab2",
+   "golden_sha256": "305a825e4d9e11b7654f77661b1b2b4afbd9234b0f97cd3a125ffbbb5fafed3a",
+   "base_fbb2e59ed": "0/DIFF/2/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/6/comments=True",
+   "tip_8dda18b1b": "0/DIFF/2/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w5_mono_ctl",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "control 'Ledger ' Monospaced"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_mono_ctl.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_mono_ctl.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "ab5bc3dea1cf3dce5c1f4cd60d8db44de92a7516e94178edd8f17a779e8b6ce1",
+   "golden_sha256": "c182fcd0fe2faf4c53e20ddb91fbfe198796dcddb3f71b16d81a379d72cec412",
+   "base_fbb2e59ed": "0/DIFF/1/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/1/comments=True",
+   "tip_8dda18b1b": "0/DIFF/1/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w5_mono_e0041",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+E0041 tag, Monospaced (hidden)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_mono_e0041.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_mono_e0041.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "1a58de21aa9f8159bb0fca8c3884eb2573160a7f06bcb01cc55cbd7f977f5f4e",
+   "golden_sha256": "52ced12629cf432c5bb89eeed0e2436f3abd34a049932867b388c968d5fc435b",
+   "base_fbb2e59ed": "0/DIFF/6/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/6/comments=True",
+   "tip_8dda18b1b": "0/DIFF/2/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w5_sans_0378",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+0378 BMP unassigned (Greek block)",
+    "SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_0378.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_0378.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "aa5e1fe0c50f2d3207bbcd97eb3bf159f0c7d2eb3fc8631bf6ced49e0fc6cdc0",
+   "golden_sha256": "39b58ab8b50716915ddae6669c1aaf4aa79003acd44c0543a104eb97c179e6e5",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_sans_12000",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+12000 Cuneiform, outside the cascade",
+    "SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_12000.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_12000.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "9812cafd401de840d6e6359c550d5779cc53483d0db4161180e44d7fad47e653",
+   "golden_sha256": "24c09e133a0353fcbd6b2f36cb6e64725fe8b434b9362ac39d6c4c6f79c55fbc",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_sans_1bca0",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+1BCA0 shorthand format control, not hidden",
+    "SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_1bca0.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_1bca0.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "c41b8e217ad24a2d0e7a6dcc36d8e40142a8ab80cf4dac07a6d6728bf7edec37",
+   "golden_sha256": "ebf33115b70a70b878775aaa246b0fc033648a3966f2124338298ffd0cfc5c48",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_sans_1d173",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+1D173 musical formatting (hidden)",
+    "SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_1d173.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_1d173.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "48799914f78342ffddf03f0d86b97ae1fd2b8ce2a1cb64379b783afe4df4a04a",
+   "golden_sha256": "56b5cb2a0f9cbcd69446662766c9996251ac15ad0b6f12a464a23d95ebfd679c",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_sans_20000",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+20000 CJK Ext B, outside the Lucida cascade",
+    "SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_20000.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_20000.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "79c8f6da782e0d8c8e6ba52a739264175139f66098131c0f860408b18f48e0f3",
+   "golden_sha256": "4091431ccc90904b03e4d06312ffd024e6672693542158d5b500d2f7949b4cf0",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_sans_2fffd",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+2FFFD plane-2 unassigned",
+    "SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_2fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_2fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "2f50f6bbd4ed8523ace25e73181a7b501866a8483f136b4cf099461c02ad4ee7",
+   "golden_sha256": "ae92e3d5b14a9f0e1452f58412ef1bca9d1b225a1b3b85afdfac53ea229556c3",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_sans_a500",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+A500 Vai, CoreText substitution only",
+    "SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_a500.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_a500.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "6a0ae6855e4c0cee7130a0080afd090fa3cf58e025098911a3759a5c66cad2e4",
+   "golden_sha256": "ce685dc98098175dc07c826f2e7b206600a540b40dedc13d1851b4bdcbfd74fc",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w5_sans_a500_complex",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+A500 next to U+10FFFD (complex text)",
+    "SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_a500_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_a500_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "a4af2809bad469dea8773b75dfd29d164eef2c190b7fd123ddb8742c90ec2500",
+   "golden_sha256": "671341f70c5adb03d1ceabab2967488f8d9818425a5ef102c689985e3c6d4f01",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_sans_bold18_10fffe",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+10FFFE",
+    "SansSerif bold 18"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_bold18_10fffe.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_bold18_10fffe.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "e9092ddb4552d29205ece21da3285605c358d37c045cfe5cc55f249ccefbd3e1",
+   "golden_sha256": "0386aa859918d4f3de4ba49a693f33b32a45ce42106e78ff63973fb67d2ec259",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_sans_e0100",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+E0100 variation selector 17 (hidden)",
+    "SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_e0100.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_e0100.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "3f24d29262100c066e2f2edb156251818be699c8eba0ca18eee29772887a45f5",
+   "golden_sha256": "0e2a23b3178bee8d3f4b79631fefdaa1e8631fde19b91ede00c59c37111f6f33",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_sans_e123",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+E123 BMP private use",
+    "SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_e123.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_e123.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "45b440b820c2159377c1528d659c30ecec322a8be9fe318beaecd4b9ff8ee578",
+   "golden_sha256": "d401e181a366a17661383f899dd8494e05888f4ad6c20e74c9baed520fed9e99",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_sans_fdd0",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+FDD0 BMP noncharacter",
+    "SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_fdd0.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_sans_fdd0.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "5b6af563a58ac8efb37b18965a788d16be14f34cbcb7d539e02583535d855a4b",
+   "golden_sha256": "89699633cf3ca661f63832528cf6136919cbddefac707fb4aaffe67bf350ffa1",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_times_10f800",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+10F800 (carrier range, escaped) Times New Roman"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_times_10f800.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_times_10f800.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "47ceb0f86cafd3caa3267622f435619fd85c6d1870cc62cdaa764afbf11a6ff5",
+   "golden_sha256": "3337ce34d258d1246d6a80ed79302eafd30104893491d096b275f58993b260dc",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_times_10fffd",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+10FFFD Times New Roman"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_times_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_times_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "90cf83d0b4d3b26e7541a1cd6636c4a92fd0117aec5eb760c359ee20ee212aef",
+   "golden_sha256": "7fb50d7118942a3f067c4748a83ba47e18b02d5ed09febbbfb81dff24ddec2fb",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_times_12000",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+12000 Times New Roman"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_times_12000.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_times_12000.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "f75ce440eeb8d55e6cd03f0d8a0356b8f49cda6654689589598a5b1bf5744f8c",
+   "golden_sha256": "e3ef36bcf786df318816fcbb97e020a5c17343930666bba189f2e3bc58cb437c",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_times_ctl",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "control 'Ledger ' Times New Roman"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_times_ctl.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_times_ctl.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "01cb5953bb1f8118f40281d9ec208277334f0f5ef428b4a1c8a6f62b6a9d3117",
+   "golden_sha256": "16de43a8a6a364dac019abfc6e1cdb635f22abfd3e2567cdba46e40b5c55ac7e",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_verdana_10f800",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+10F800 (carrier range, escaped) Verdana"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_verdana_10f800.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_verdana_10f800.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "90e00868b8936b1f8b8e23de1a5dc4fc2c408ad57e9d4b581d7bd9e0378bf70d",
+   "golden_sha256": "9b5a866e3b4b7b26b9f524c168f19f48d501c0c061e1efcee6517c2826548eaf",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_verdana_10fffd",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "U+10FFFD Verdana"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_verdana_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_verdana_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "7b12fba136de66462b6d2a3ba83edc9e401a35e1a93905b417ca4a6ac8e3bcba",
+   "golden_sha256": "5c0c930fc81eb93537b7ebc0b985fdbee18d3f6d204df9f4c253496839df36f1",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w5_verdana_ctl",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "control 'Ledger ' Verdana"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_verdana_ctl.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w5_verdana_ctl.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "8cd821c72399327fd4e934336a7a5bf20125a911611439c6e637b9b21f971bae",
+   "golden_sha256": "71d3ec37f51a1c2074d0e31017c7f69a5849bbc5391abfbf0e6975ee439ccd5f",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cr_chr_10fffd",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "%chr(1114109)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_chr_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_chr_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "764af6d4ef189e73bc46daa92f7ee0840095a0a1e31cae2ba4ff290e80c7da92",
+   "golden_sha256": "0fd397ec135699cc8427937fae4c2fed51e042a2f9659b992e74344e4fb3c503",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cr_creole_bold_pua",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "PUA-B inside creole bold/underline"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_creole_bold_pua.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_creole_bold_pua.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "7a049c40855119836d6de1d5cd6b3c333e4a7fd276d01d65e001e022eaab214c",
+   "golden_sha256": "1e8721910c48110936193e572b44826b6daa7f8d79025e8c10cf9f948ece8198",
+   "base_fbb2e59ed": "0/DIFF/6/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cr_ent_dec_10fffd",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "&#1114109; entity in a class label"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_ent_dec_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_ent_dec_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "12f6faf70f435f7655e410b5e0022c357633b8f6f293e64b019545e9fe388ab0",
+   "golden_sha256": "f6391a536e97e91c4901772e8ddd1cf293c683afa4956d2abd5e8f1416d24f98",
+   "base_fbb2e59ed": "0/DIFF/6/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/6/comments=True",
+   "tip_8dda18b1b": "0/DIFF/6/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "cr_json_u_escape",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "@startjson \\uDBFF\\uDFFD pair escape decodes to U+10FFFD after the entry escape"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_json_u_escape.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_json_u_escape.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "705b1f654dd41b933476d13472af156a618a00409b36fad0300ed31279957d9c",
+   "golden_sha256": "30bd18a0489e0f016077f484b148cd583eb5605a5a20200a7084e5c6fdb1bba4",
+   "base_fbb2e59ed": "0/DIFF/4/comments=True",
+   "merge_d6f63a8aa": "1/ERR/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cr_json_var_pua",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "PUA-B in a TIM JSON variable"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_json_var_pua.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_json_var_pua.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "8e8ec5484724493bd0f147cf1d31d18dd4130952f04071ffd7582920c8cc8438",
+   "golden_sha256": "87140aca28237097d1aa91b89c9f3b6797c3b865f49a9f1ce8afb03682f01538",
+   "base_fbb2e59ed": "0/DIFF/7/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cr_stereotype_pua",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "PUA-B stereotype"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_stereotype_pua.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_stereotype_pua.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "e73cc2b813b6187e3237d30fb9cd50a7d2df8213b83ec0691381968c297bd69f",
+   "golden_sha256": "984b6f1218a8c3a368db109dd17b6db85ad325c90267c9214e32807a54728f94",
+   "base_fbb2e59ed": "0/DIFF/5/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/6/comments=True",
+   "tip_8dda18b1b": "0/DIFF/6/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "cr_tilde_10fffd",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "creole ~ before legitimate U+10FFFD"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_tilde_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_tilde_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "933e2260a65a57b26d6c0b31c00bdc6e3ba06db296aadd2eef52692ad4905f8e",
+   "golden_sha256": "bd1169c7d7c1f2285f2c0b2cb099c9c833ad6d649b18f6219089b67fb87787d6",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cr_uplus_10fffd",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "<U+10FFFD> creole code point"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_uplus_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_uplus_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "7a19bea369cad072a900314888d69c71f1cb55935e063caeff4e780d569bc5d6",
+   "golden_sha256": "3fa144084914d58b8db23a91ba1870f336ceac555b01f04b22f7fd8faca944bb",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cr_url_tooltip_pua",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "PUA-B in URL and tooltip attribute"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_url_tooltip_pua.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_url_tooltip_pua.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "75e72f9587707be2ab6a187886d043ae24daf8a7693288580a11d91d725998af",
+   "golden_sha256": "99780c3bda5a2c7ca6acbfeebd72e935faa311e33dc3979a4c7133dd7dc286df",
+   "base_fbb2e59ed": "0/match/0/comments=True",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cr_wrap_seq_pua",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "maxMessageSize wrapping across PUA-B scalars"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_wrap_seq_pua.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_wrap_seq_pua.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "3f1b71931ed1a357bcd65aba564bf4cffa00e5d67569a23af2d020b5eea79bd3",
+   "golden_sha256": "db7715169068f2fdf46773eb3df12409bdcb1bcc16d89b180873f3962181d766",
+   "base_fbb2e59ed": "0/DIFF/16/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/16/comments=True",
+   "tip_8dda18b1b": "0/DIFF/16/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "cr_yaml_u_escape",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "@startyaml \\U0010FFFD escape decodes to U+10FFFD after the entry escape"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_yaml_u_escape.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cr_yaml_u_escape.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "352689f872c9dc611634287003ff4df1f0029d9ec6556ffad047dae34f9cd33a",
+   "golden_sha256": "afde5d36b5dd1d6cba366da52ae77fae9d25fea9e794de516a719e757def2cec",
+   "base_fbb2e59ed": "0/DIFF/5/comments=True",
+   "merge_d6f63a8aa": "1/ERR/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w_arial_nonchar_10ffff",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "U+10FFFF advance, Arial"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_arial_nonchar_10ffff.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_arial_nonchar_10ffff.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "185d5a09ba5a9da9f41e91240b9efde939c3d1f9561d6d23e2ba7b741e4937ed",
+   "golden_sha256": "3326ae7a465ecb8c000be5e7fe3472d820550f6346185c99b2e9d59965e68098",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w_arial_pua_b",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "U+10FFFD advance, defaultFontName Arial"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_arial_pua_b.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_arial_pua_b.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "d8140a466ff17a116bfc8772f1b20983c9ac07ea0def8a83b4675de60aa1921a",
+   "golden_sha256": "1902f55cfa68d7b5f4594057f82f73029f3c2fb24d20b4b7325147fb3cb9a344",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w_arial_pua_b_ctl",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "control: 'Vault ' Arial"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_arial_pua_b_ctl.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_arial_pua_b_ctl.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "5e61757ce0c5ec773b651e213cbbabdac3a5c426caf22e02857de70afa98ee6a",
+   "golden_sha256": "d3c95e68e31d695b3424babe09c4104c5d3256113ffe70725567f2bf48681a62",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w_courier_pua_b",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "U+10FFFD advance, Courier"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_courier_pua_b.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_courier_pua_b.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "1ac0b057b1ea859a366b8e1e4412ab08c07da3af17392faedb9c623f81f5bcf8",
+   "golden_sha256": "d74f67d373030540015f85ff56c6de54dfbb7da9c6b7c05f40c1611e0320937c",
+   "base_fbb2e59ed": "0/DIFF/1/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/6/comments=True",
+   "tip_8dda18b1b": "0/DIFF/1/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w_courier_pua_b_ctl",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "control Courier"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_courier_pua_b_ctl.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_courier_pua_b_ctl.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "9831288c34f2592d52b5f71416e6f2eae7a18d611498fbd3f7d043c6a17a94a2",
+   "golden_sha256": "7b88715ee1f5292f6bf062cd76ce76fa50f410140567b987213aaa7d2f48ff55",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w_monospaced_pua_b",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "U+10FFFD advance, Monospaced"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_monospaced_pua_b.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_monospaced_pua_b.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "6b3e2c7f4177e57ae0f9e03e05c711409d823831b739d67824d64b6899a5522b",
+   "golden_sha256": "982e48a68da0a2821f7bc086531d07092d21dcd58872cb19af6e1e9b00d691fa",
+   "base_fbb2e59ed": "0/DIFF/2/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/6/comments=True",
+   "tip_8dda18b1b": "0/DIFF/2/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w_sans_bmp_pua_f000",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "BMP PUA U+F000 advance, SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_sans_bmp_pua_f000.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_sans_bmp_pua_f000.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "e19af354a4e2c24da7b21f2616166358f5134e83a20cfc563217811bacb3ae99",
+   "golden_sha256": "00a9d3c85729098cf310ca2463d980f6844bac8c130cbf04aa35a3e613a5ab23",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w_sans_escape_10f7ff",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "U+10F7FF (escape scalar) advance alone, SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_sans_escape_10f7ff.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_sans_escape_10f7ff.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "13d5443d8202a4ae9ec015eacba94a0949f37e19de83f071c9c8b2dfbafbe186",
+   "golden_sha256": "964961a911a088de800a3da51db9ce7b48e3455b535161ab7d14cbc5b01706f9",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w_sans_nonchar_10fffe",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "U+10FFFE advance, SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_sans_nonchar_10fffe.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_sans_nonchar_10fffe.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "f9c75f503a1c48566369f540e55948b054a2cc8bc1e20e23db5fc71a37161ebe",
+   "golden_sha256": "2cd5b8fdcd5b013c567c6c2f36bd4af05c8f208773459f11c09741f5cbf3874c",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w_sans_nonchar_10ffff",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "U+10FFFF advance alone, SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_sans_nonchar_10ffff.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_sans_nonchar_10ffff.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "ee9190295da363aa1a52b51383e8735c3bf31f0d98a9e777ae061089a356c646",
+   "golden_sha256": "0cea856449a578fa0aa7ff2050ace908e16727eedcdec4f2d71e96ebb202e9fb",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w_sans_tag_e0041",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "plane-14 tag U+E0041 advance, SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_sans_tag_e0041.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_sans_tag_e0041.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "9a4407c70ed9a43d0a621a19d2e7bb1f2e187dea897a657f495d991ce9781922",
+   "golden_sha256": "29b81c1247613c71902a422be39e57392b0487b3f62845439b45dc7a12cb1376",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w_sans_unassigned_3fffd",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "unassigned U+3FFFD advance, SansSerif"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_sans_unassigned_3fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_sans_unassigned_3fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "328ad22bd2861489a5d26a69f1d8ada54c83563e6c0182b736883c0d90b9d044",
+   "golden_sha256": "778d5429fa106467bf9988159a003631bd81dec2721c51a86f31d834acac3983",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w_times_pua_b",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "U+10FFFD advance, Times New Roman"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_times_pua_b.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_times_pua_b.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "776d1eaf8cedcc4aa1332b6e69737f4d0f0c89621106658cff30b56b2b1db78e",
+   "golden_sha256": "d5f35f5e8fface16dc38625010ba19bf162a4852d4b97ab76f7c9af953e75e74",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w_times_pua_b_ctl",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "control Times New Roman"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_times_pua_b_ctl.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_times_pua_b_ctl.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "41fa91aa83f25240e983b32c0fc6497c9bfec742a52dbd1f4810610fa19178a3",
+   "golden_sha256": "b63e1b84c7f5d1846e2185a56711f2086595e804314b677d4cbddde8964e907c",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cm6_class_bare",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "comment-unit",
+    "class bare code, display has the unit"
+   ],
+   "intended_valid": false,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cm6_class_bare.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cm6_class_bare.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "cc926f6dbd18b3575325c3c36ca3b195fe73072b810f87d2a59829d39a38b57e",
+   "golden_sha256": "0d6e3be26be58d85bd48489843956fd8acca4ec8ab525990b456943c1186ca9d",
+   "base_fbb2e59ed": "0/DIFF/6/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/6/comments=False",
+   "tip_8dda18b1b": "0/DIFF/6/comments=False",
+   "result": "fail"
+  },
+  {
+   "name": "cm6_class_low",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "comment-unit",
+    "low surrogate"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cm6_class_low.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cm6_class_low.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "b0a636984559a5e6f20eac843f6c7504707264c023a306ae420160be9c00b9e3",
+   "golden_sha256": "76ad890180199efb35fbcc0392a9f92415254f1b4989b39f601d58ecaa5ece31",
+   "base_fbb2e59ed": "0/DIFF/1/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/1/comments=False",
+   "tip_8dda18b1b": "0/DIFF/1/comments=False",
+   "result": "fail"
+  },
+  {
+   "name": "cm6_object_code",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "comment-unit",
+    "object"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cm6_object_code.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/cm6_object_code.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "6da340969777e878bfcbd85bd11035e12cb2752a298a59008cfa008cd8b8b368",
+   "golden_sha256": "2c16bff357a28de1a8b2e9c358b23f0505fa521c9de08b9873f526171e4d1f68",
+   "base_fbb2e59ed": "0/DIFF/2/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/2/comments=True",
+   "tip_8dda18b1b": "0/DIFF/2/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "dc6_json_control",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "json decodes",
+    "control"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_json_control.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_json_control.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "ab8524e09639fc088d64deaf452b54001ce86a8cc56ccf0b4c37e566dca6d059",
+   "golden_sha256": "816e72e07f7ad8ffae22a43933bdd8b26163485ae5177ec6d04a9acadc48d51d",
+   "base_fbb2e59ed": "0/match/0/comments=True",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "dc6_yaml_apostrophe",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "yaml-unquote",
+    "single quote inside double quotes"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_apostrophe.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_apostrophe.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "097073a56672583ecfbf1fee91337abfa371a1c2ec4c0dc44c8b42204c991c38",
+   "golden_sha256": "bc14ddf60413202108864a32accf500fb0e5931c2531a0dac21d7d0e0cd11f4c",
+   "base_fbb2e59ed": "0/DIFF/7/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/7/comments=True",
+   "tip_8dda18b1b": "0/DIFF/6/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "dc6_yaml_block",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "yaml-unquote",
+    "block scalar line"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_block.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_block.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "bac5603ea2cc44d19d4d96754ab51256afc513ec259faf4b77757a07bfbe44db",
+   "golden_sha256": "e6724264e79d63300b29597bb57f3bb16c1602ec584a2388fe9c09f569b9155c",
+   "base_fbb2e59ed": "0/DIFF/7/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/7/comments=True",
+   "tip_8dda18b1b": "0/DIFF/7/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "dc6_yaml_colon_key",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "yaml-unquote",
+    "colon inside quoted key"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_colon_key.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_colon_key.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "8db2e4cf3ea30b0995f5b565b540ef8fa39f25b399afbcbcf20cf8f50faefaa1",
+   "golden_sha256": "cecc054efee6213758b609cb4bbe31adfc36551c44b3652acb836c5fba8dd019",
+   "base_fbb2e59ed": "1/ERR/0/comments=True",
+   "merge_d6f63a8aa": "1/ERR/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "dc6_yaml_comment",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "yaml-unquote",
+    "comment after quoted value"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_comment.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_comment.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "06ed47d5377dff7a099fce179f75858d65bd2909af9d10462805f035995cd3e8",
+   "golden_sha256": "3809b19e8e009be3d3eca75f62347a3767f52f0c11259442a05e3f36421c4eb2",
+   "base_fbb2e59ed": "0/DIFF/7/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/7/comments=True",
+   "tip_8dda18b1b": "0/DIFF/7/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "dc6_yaml_escaped_quote",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "yaml-unquote",
+    "escaped quote inside double quotes"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_escaped_quote.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_escaped_quote.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "b7b688ea30337e169e6cd801d9fa9f211fc72a5cf6b16fba366cebdb4adbe0f3",
+   "golden_sha256": "c41cc3b065ef39fc1a10c296feef6b51e832e95d22ca36b0f8e3a8d2aa617ef0",
+   "base_fbb2e59ed": "0/DIFF/5/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "dc6_yaml_hash_in_quotes",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "yaml-unquote",
+    "hash inside quotes"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_hash_in_quotes.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_hash_in_quotes.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "4b944fc77e9c4efa4ab5c9bbc6b401598cf527da512e0e3266f2865f895e6832",
+   "golden_sha256": "87df64c9a4aee351ab5db36a5143bea968f75dec9d9d3eea2429b74c11635f92",
+   "base_fbb2e59ed": "0/DIFF/7/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/7/comments=True",
+   "tip_8dda18b1b": "0/DIFF/7/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "dc6_yaml_key_newline",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "yaml-unquote",
+    "quoted key with \\n"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_key_newline.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_key_newline.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "e283f0a58c46f8b6ee91fb4c9e35ff9c30461e490ba7b9e3a652298d2bb6f191",
+   "golden_sha256": "17f879b1ab2ffe2f28c212cae74ebb9ae24ec25616c3f42186c41f642a0b27e7",
+   "base_fbb2e59ed": "0/DIFF/9/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/9/comments=True",
+   "tip_8dda18b1b": "0/DIFF/9/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "dc6_yaml_listonly",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "yaml-unquote",
+    "list item with \\U escape"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_listonly.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_listonly.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "df00f02141c4f6d4d6c06c1156025f0a65eddb6053546645954053e2f6b5898d",
+   "golden_sha256": "a425fd13cc4631e8a7ff63af72aa7e1afbf429bab318172deeec675db74c1d1e",
+   "base_fbb2e59ed": "0/DIFF/6/comments=True",
+   "merge_d6f63a8aa": "1/ERR/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "dc6_yaml_nested",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "yaml-unquote",
+    "nested map and list"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_nested.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_nested.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "407f93ebe36486eeecc0eb751ee83503f2fbb071bc2f3c4fa91c7c7595808e17",
+   "golden_sha256": "0b956f06cf61d54ebdc7d3af5beef4343ca2d210eb2a570ecf6b9cdca487c0aa",
+   "base_fbb2e59ed": "0/DIFF/7/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/7/comments=True",
+   "tip_8dda18b1b": "0/DIFF/14/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "dc6_yaml_plain",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "yaml-unquote",
+    "plain scalar control"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_plain.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_plain.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "0aae23f916f1eca5d491b009d7c79810b2fe7c225a2a561045d77770625ebedb",
+   "golden_sha256": "73bc77f3f734f8daa763d3334558448a5cdf10ee7a9db64243db70926d1b6c70",
+   "base_fbb2e59ed": "0/DIFF/7/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/7/comments=True",
+   "tip_8dda18b1b": "0/DIFF/7/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "dc6_yaml_single",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "yaml-unquote",
+    "single-quoted control"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_single.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_single.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "efd6f8d1b68be68ba56893cb58b4176e0355e33f97b64ae6aad8e24ea42d3217",
+   "golden_sha256": "57e86883785cd6ce6577a2972930aed70288d72f3fc63c98b2f23bbf68595ddd",
+   "base_fbb2e59ed": "0/DIFF/7/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/7/comments=True",
+   "tip_8dda18b1b": "0/DIFF/7/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "dc6_yaml_trailing_backslash",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "yaml-unquote",
+    "value ends with backslash-quote"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_trailing_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_trailing_backslash.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "8d90d8d054ad420e62b00e94623ed07a3aa831f06523dc0b25a9ef3faa932658",
+   "golden_sha256": "b13424eb572174d73bb93af8d4f51a724114591a049ffcc5f0ac7e55260753ed",
+   "base_fbb2e59ed": "1/ERR/0/comments=True",
+   "merge_d6f63a8aa": "1/ERR/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_activity_10fffd",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "activity"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_activity_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_activity_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "88ac41b35a5a940e6db534eddb7d419e1da6776283d4acaa4622ba17151a6b2e",
+   "golden_sha256": "0d88210ac5ff397a0455b99075eeb03b1738fdad7ad93b885f467d0895d0fecd",
+   "base_fbb2e59ed": "0/DIFF/7/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/2/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_arial_0870",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Arial",
+    "simple"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_arial_0870.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_arial_0870.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "56affb778f094f0fd8e574c3478851dc18bb31944a466108345259dd8ef048cb",
+   "golden_sha256": "24548c62ff05246c9508c44747caf16402094b8f6b7fdf85004a8e4a5356ea9d",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_arial_1e900",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Arial",
+    "complex cascade"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_arial_1e900.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_arial_1e900.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "c8eb092170e01dbc1e68704d7a219a913989db83f4932529e54896038b0ebbe3",
+   "golden_sha256": "1e26c8d0b693c0ad9f96e5c31cdda3fd27e74654a30cebac2b956a36cc8a42ea",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_arial_e0080",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Arial",
+    "hidden"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_arial_e0080.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_arial_e0080.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "a4ce3869cd92b84780053da7afd859388960ffd8d811f1cdc3096358ba845985",
+   "golden_sha256": "cd36acc4fc4b39ee5d4efcf8311adefd00f4cb08a5bd74af8a8ae35ebdab1333",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_arial_size11_10fffd",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Arial size 11"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_arial_size11_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_arial_size11_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "af62f713f2e86c8dda5cb69e59421a9293bc30ae268844074deeb70bd4084a84",
+   "golden_sha256": "8fd58764c694f4e54de5da8d2ef528a48a2da1056a1bea237d83cbea66063dfa",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_couriernew_0870",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Courier New",
+    "simple"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_couriernew_0870.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_couriernew_0870.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "cb19c8be1b9362590df059410cf2060d2d6dccf7903b0d6ff242ed00ea460244",
+   "golden_sha256": "6ac9ccf7b5c7c287bf3821b7909e709ef0335df88633c5ab170dddd0ac082c32",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_couriernew_1e900",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Courier New",
+    "complex cascade"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_couriernew_1e900.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_couriernew_1e900.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "cfb855189be60c45e0991637e160cf301c3d55e5cafd8f0bc6e03ed4c9ffbcb9",
+   "golden_sha256": "37eea586525f70d020f872cabf117a7599693c234a5ae6a2b272d04198f7456e",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_couriernew_e0080",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Courier New",
+    "hidden"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_couriernew_e0080.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_couriernew_e0080.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "e3ad24df6fdb9d0670cbf544956ff40d9fcf87fc2c4db822da6f39d3f591d6e0",
+   "golden_sha256": "2a54fe2598adf6fc77d17241c8c04e485ecf8d63d58716a0670cdee2f6f1190f",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_helvetica_0870",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Helvetica",
+    "simple"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_helvetica_0870.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_helvetica_0870.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "cdf4aece96236b8475096a5b4bac345515e66fc2ee7f1148785dcd717e1d89f5",
+   "golden_sha256": "95cf48108ba35762855b301f9668d7c5b194f539eced481195a112a0f3f8309d",
+   "base_fbb2e59ed": "0/DIFF/4/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/4/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_helvetica_1e900",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Helvetica",
+    "complex cascade"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_helvetica_1e900.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_helvetica_1e900.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "f9e74f7f9ae584b2761dd0db5d6cc346e02c5bf1ebb863fe75db37d18414347f",
+   "golden_sha256": "940ded5738edbb442f7f571790c68534e1d04d673d8179745eea6e78fc41ed24",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_helvetica_e0080",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Helvetica",
+    "hidden"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_helvetica_e0080.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_helvetica_e0080.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "751c2d29b46dfa79ec3dac6f58c45093a4af55ab9fe090e2b71e70e66ce2afb7",
+   "golden_sha256": "6e1514350e96118d9ca7f26583ce70b902314f6086f89805b086c1484f5717ea",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_mindmap_0378",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "mindmap"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_mindmap_0378.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_mindmap_0378.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "8a42e0eddc25b3f1da47ec433702225f2dc919c1a4daf593977a184ccf8ac2e2",
+   "golden_sha256": "baa6f87e607cd224e656d66711476feabddac7e5cfef44549c90a82d6262c0ae",
+   "base_fbb2e59ed": "0/DIFF/5/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/6/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_mono_0870",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Monospaced",
+    "simple"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_mono_0870.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_mono_0870.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "742fd5835725d95d3071eba0d62d75216687538c68de23d6f6b96b3b6065c073",
+   "golden_sha256": "1ac8d67a89ba4948ccbe246a72f975b9c3fcce39b66321dfe0e6379c7fa43987",
+   "base_fbb2e59ed": "0/DIFF/2/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/2/comments=True",
+   "tip_8dda18b1b": "0/DIFF/2/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w6_mono_1e900",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Monospaced",
+    "complex cascade"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_mono_1e900.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_mono_1e900.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "41b9589ab4bf88566b1efff11e2db0e59b6b2aacad047a598fa0eab5b11365a9",
+   "golden_sha256": "2ea98d75a730761504254ef40f90b159ab3598330846b6c6920d530ee555cbb0",
+   "base_fbb2e59ed": "0/DIFF/2/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/2/comments=True",
+   "tip_8dda18b1b": "0/DIFF/2/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w6_mono_e0080",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Monospaced",
+    "hidden"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_mono_e0080.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_mono_e0080.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "f23982c6425b3c8ad4b77a3728a549dd0a0fe2db35d764c6946f7cd6fd777621",
+   "golden_sha256": "e32bc0cccdb5af056e8e1b0e087a3d4c17d8886b17449ed7f14b53cde4587aad",
+   "base_fbb2e59ed": "0/DIFF/6/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/6/comments=True",
+   "tip_8dda18b1b": "0/DIFF/2/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w6_sans_0870",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "Arabic Ext-B, simple path, LastResort"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_0870.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_0870.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "6ee862c64915c8ebb5575844b88f8c413f657ce9f00f9d65d763603cbf38ed2e",
+   "golden_sha256": "0dd785c9be983a0ad5ac60987fb74887c34c47ed1b09aa9f145e659f89ddf0f0",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_0d80",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "Sinhala unassigned"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_0d80.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_0d80.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "5927e1441426124ec7e3850088a24ca810f5db62c22858ab96ffb6c7708dd592",
+   "golden_sha256": "68e297cd9b1e53a1d83c6d82d7f04196cd5832516d65fa8ed20f873f68d8af5c",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_13430",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "Egyptian format control"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_13430.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_13430.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "966aae5cf28925e1238325ba23cd112e2a24c49d08c3274cc7936f9fd7807b06",
+   "golden_sha256": "d3cf297a02e0f16d96f92d1d71c4b66bb6221ca5dba281e2b0d59025e69079c4",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_16fe4",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "Khitan filler"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_16fe4.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_16fe4.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "4d63628910d2a3d318db0254270f2c6d72310bbe5a36212066487d8b97fab8da",
+   "golden_sha256": "8e41ffdfaf123b65ea1fea2e29c35792231903bb674e76d86004ceaeece2f59c",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w6_sans_180f_complex",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "default-ignorable"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_180f_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_180f_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "6bc7df51d00cdaeeea1eb5755496b380750f72e60dc0e056c16ff69a5f7464a3",
+   "golden_sha256": "1cd91e0683c5878eddcf103854c58fd7689f62a930983676694ca055871e341c",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w6_sans_1ab0",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "combining ext, not a complex char"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_1ab0.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_1ab0.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "dc8aa7c62348bead487da27197ea9e6b094aeee1561b12308a09735d8c192af6",
+   "golden_sha256": "0a209d9f88d33563a081e3256b77b9b46edf7b5f382e8797288a859ffcebf1ab",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_1c80",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "Cyrillic Ext-C"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_1c80.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_1c80.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "6430edb4ec5e8d56a0fcaba0d2b1592db812a0804edd7e092011efe819423ef3",
+   "golden_sha256": "981c4dfba0e0a975350531a6eef96f237f9901ffcd8e28b08d262f67988532be",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_1d17b",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "after HarfBuzz hidden run U+1D173..1D17A"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_1d17b.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_1d17b.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "171bdf2784709af7686abd42b9396104744267e1482d89a3e0f28e0163d22a56",
+   "golden_sha256": "f66798e0f325c91ed5acf654d176ebe00dbc32853060b862a884bc0582711f1a",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w6_sans_1e900",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "Adlam; CoreText substitutes NotoSansAdlam, cascade?"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_1e900.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_1e900.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "007f9cbdd28c6a461552dc5e7c02f826742b684000ec158e2a3d9e6fc3da8ba0",
+   "golden_sha256": "a022a7b07769a45e23eab9a65a3646bafb01fc83b8b868e271e556ad55749fb5",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_1f600",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "emoji, Apple Color Emoji in cascade"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_1f600.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_1f600.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "8e343d5dbfed82534f320bad1cb7867b00393ee101003ba002d8357dd82f462f",
+   "golden_sha256": "6693d7e21edd5d079f21ca3847c5681af78155ad90a3e4ed9952d679a77261ad",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_1fae8",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "emoji 15"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_1fae8.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_1fae8.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "0b7a63d0748e30e16d33daa3f88053c70e24561bb4e452f167be6a9ac006c916",
+   "golden_sha256": "52bea18812a53e47ab93b5c7d58a0a387e0fccd054e6892d135360df583b6d2e",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_2065",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "BMP default-ignorable unassigned, simple text"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_2065.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_2065.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "c7882bab64d8e96cbec8ca333ecbf85808befdb0585c3ec672b4e7437ff6605b",
+   "golden_sha256": "08712e1ae42ccd13e446d040f119dfbef9e61e047241272460fb84ab941f1e2c",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_2065_complex",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "default-ignorable"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_2065_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_2065_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "9807b72280488f18999be8b24c4da4d219b65f209c3137f4ed22591ffaaba007",
+   "golden_sha256": "00afa58c91685900a46f760f1dcfb8ceddce5b9b651f308fd1174584d572ee8e",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_211a",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "substitution",
+    "Helvetica substitutes; Java TNR table says missing"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_211a.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_211a.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "76d7c1ae1e6c95980f3ef2c946d3a9527695dca0e70fc0c2ee4da8ec33024e42",
+   "golden_sha256": "c7bcdff22ffdeb72c9d34ed2fc227d80189f341ccf6f5b404dbc55d3df29f47d",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w6_sans_22ad",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "substitution",
+    "Apple Symbols substitutes; TNR says missing"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_22ad.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_22ad.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "9adc7bb7064ec38405bd2805d95abbf8a12bb7e7280c94ca70b6cc77f2caa4b7",
+   "golden_sha256": "114cf84c15c257fa9658ae55a73072e16d9bf00a9359d47f4514c4bcdb15a7fe",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w6_sans_2e5e",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "Supplemental Punctuation, Unicode 14"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_2e5e.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_2e5e.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "cce18021ebc830744c2cae1d38c8e4be0ed6c2f7d7af97cc083f69b676c6fd6c",
+   "golden_sha256": "b0838e924f7f43b021e3ec49118d36f040b9be4ec4f3ecdf64f1af07e2c7f71b",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_30000",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "CJK Ext-G"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_30000.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_30000.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "a5e3f0e215a1a4fff60b11049015b97a5b37c0ed239460375145e800f62eaa0d",
+   "golden_sha256": "6f1983d48b66326b7a0d37b754cb64427085a145c4c8a382d2a4bd603dab25b6",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_31350",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "CJK Ext-H"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_31350.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_31350.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "39ade7105661bb23e7ec31bc2662889147561ed2451b8a2f930db8d84bae65a1",
+   "golden_sha256": "afef87fb65d64c5c94b0c5195860400c9e0b24c3e3fde4db1d34558b1e4593eb",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_a69e",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "Cyrillic Ext-B, Java TNR zero"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_a69e.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_a69e.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "8f0386d03348508a05c33d14d9ffd1c57bd5423a254f48a60b554590b9fa6490",
+   "golden_sha256": "165aed7edeb02ff5c072d627d0888dc0bc783c4a562081fdc3063c7057f719ab",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_a8fb",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "substitution",
+    "dot-prefixed .SFDevanagari substitutes; TNR says missing"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_a8fb.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_a8fb.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "3caf178a24f4299b26aa9409ced15b051703266b7f4483ce552b3caece033a60",
+   "golden_sha256": "e8b8447dbdb69acb0d21c13a74f5ee167e982a4d06f7fe026727b71b59a3080e",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w6_sans_arabic_missing",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "RTL",
+    "complex text, U+0870 via cascade"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_arabic_missing.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_arabic_missing.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "651a5b224866d12d6eef241bc2650fdddf6044d69868dc8c84abb42dc8fcc003",
+   "golden_sha256": "c74bf7344c25beb310a0293efa4905db0e02dcbadd062f471de545d5eb333264",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_bold_0870",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "bold creole",
+    "simple"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_bold_0870.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_bold_0870.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "d965d90b50592b6536d0c96bf1bab1e1b125421fcfe087e1f675e5370a27eaf5",
+   "golden_sha256": "13d162d45d6e1746e28aa0374bf64cb12ae5a8c807da779e0fb1ac5ef87af75f",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_combining",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "combining makes complex",
+    "unassigned in complex text"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_combining.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_combining.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "3c86404348a5629bbe7ff841cf199fcc4ff803a66e266f4909619e678476de99",
+   "golden_sha256": "739767fea20c37d340fc714ad2211ea1f282d93615cf9eb557962e64cf3b1921",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_e0080",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "tags block unassigned, hidden"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_e0080.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_e0080.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "f706ae8d6c2b0bebc9ea5db90a43f21233570c3ef729988d4eb3a3586c2b3f59",
+   "golden_sha256": "11763d4b0d5c9ac90b2aa41164feb8cdf7530ec775c803e40c588be2f2ae40ff",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_e01f0",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "VS supplement unassigned, hidden"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_e01f0.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_e01f0.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "f61c0d4e0db3a55b52a8a7c3c17ffe1f36a0a078147e3276d3329de3c6a05745",
+   "golden_sha256": "a8e6c7457966a68d38c4dd68f79fd7a96e9b5cdc94b289d0d8f01ad408c5bc3f",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_fff0",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "specials unassigned, simple text"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_fff0.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_fff0.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "91c278615b06b4134475fa3bd1289da7b17c0a400c97dc68edaf391f99816e16",
+   "golden_sha256": "8f03221732cd42edb1969f963a85d70f3862e40794da50d633e76ee94bad8693",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_fff0_complex",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "default-ignorable"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_fff0_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_fff0_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "9cbc9dca4f38385501a4a54cd814651baef6fddd289bafd71c7b01c5372cee7f",
+   "golden_sha256": "66d7f7d81d49f45d21394cae8ae86ba5052d1c95d44b3df0eb39784c9e796075",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_hebrew_missing",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "RTL",
+    "U+05EB unassigned inside complex range"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_hebrew_missing.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_hebrew_missing.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "fed56a57c3d504ecdab72bd2cf76e3a9c25c460d0154b12b27da930183743224",
+   "golden_sha256": "95ff98b392aec8aa6638198216c3fc09eb10b727827b8ad6287d216d68b1ec1f",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/DIFF/4/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w6_sans_size23_0378",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "size 23"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_size23_0378.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_size23_0378.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "015149bb4f9d632c2e09e5d1557342e803159dba7b8ff9bfdcc964592a74d2e4",
+   "golden_sha256": "753847c8edb163684fa93d5bc9a4d6231f94a0f2f50d5904bcda026847ce7936",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_size23_10fffd",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "size 23",
+    "complex"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_size23_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_size23_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "50f6b2e7f7d4fb3b431ebdbc42c429223265b2fc728ca847feb3c323adb54168",
+   "golden_sha256": "c609333153bf85fb4efd184121c3295a192425ca35efe9744c2315f69d3a0479",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_size9_0378",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "size 9"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_size9_0378.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_size9_0378.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "c15e6f6b9f1b2f5127e589fedff3833a5f3f730ddcd2678489b472c777aa2ad4",
+   "golden_sha256": "3e78548e54dc50c64bc88ab8f7bf0c7f409953292ff1b4e046b2be650e654a4d",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_size9_10fffd",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "size 9",
+    "complex"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_size9_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_size9_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "edc4b75b0291bd3177cafccfe30fea024d64acbe1945c85137e005787c079e35",
+   "golden_sha256": "e23acc3bf7da72b3e0bdd2fc4104a0d7d7016d04eba0f6888f47cc7ab468a96d",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_tag_flag",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "tag-sequence",
+    "hidden tags"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_tag_flag.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_tag_flag.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "64d581cfd191db5dcc61a2d487b211a84540e24a3c788c8b6fa125d158339637",
+   "golden_sha256": "c5304ad6ffb283ad65cc044841b6fcf3606133cf804e39e68d41eea5797b181b",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w6_sans_thai_missing",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "complex",
+    "Thai unassigned U+0E3B"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_thai_missing.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_thai_missing.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "cc6d8990bdb647962d66300b9e479a1f4ad852cc18c31dba3ec28c9805fa81ac",
+   "golden_sha256": "0cbb3079ac65374f271f9cecd2e409cf6a4335e092382c7134a1d98f892202d2",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_sans_zwj_family",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "zwj",
+    "complex"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_zwj_family.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_zwj_family.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "140d482b258056d1bbb37bfa67abf29f4bc5d7b701ab66370616eb147f298abd",
+   "golden_sha256": "c76b8235eeab682fd4b085d2b6291b9a7723e697a57486b6193a725b81f80bdb",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_seq_0870",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "sequence"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_seq_0870.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_seq_0870.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "ab9520010d90793b6c50133bc8a2a74fcb19ea651cfb337fd235ecb37f10faa1",
+   "golden_sha256": "97d18db350c7acccd85a0a14d32127eab2b6acfab86b807d090cfef4baccf8f8",
+   "base_fbb2e59ed": "0/DIFF/11/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/11/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_state_e0080",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "state"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_state_e0080.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_state_e0080.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "df2239abecd4c6b93ffdbdecf81f6a3112195c26c3addc38888b0eba052d1566",
+   "golden_sha256": "25ca2c9e911a9db8ff93f1a54396de6930fbe79f67651f7d43ef14a767a316f1",
+   "base_fbb2e59ed": "0/DIFF/4/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/4/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_times_0870",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Times New Roman",
+    "simple"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_times_0870.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_times_0870.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "a9c69ff51a784c77c6ef9f3beff7800de1aad34512e071b663c84f551eea2b38",
+   "golden_sha256": "db4e60270942000866eaffc0d1f4e3ca9719aca59d3ebebe2bc802be3b190b85",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_times_1e900",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Times New Roman",
+    "complex cascade"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_times_1e900.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_times_1e900.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "0d38c201812ac81272b0fd52d18754f9714b9ec190fac44e0d622aba8c0d7aa9",
+   "golden_sha256": "ed916ee7e82f06571b48e93cfb79b4f56d09e94675e465cc7fb2cd095fc0e9da",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_times_e0080",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Times New Roman",
+    "hidden"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_times_e0080.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_times_e0080.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "5d6cbbe3f43545c6aa5a42e6c9001cf29b54ed6c72681b865db1031e1e4cb1c6",
+   "golden_sha256": "3f1c76d576e6a62abd52d8977e06188299cc22a720939ffb9fd1b7ac08be4111",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "w6_verdana_0870",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Verdana",
+    "simple"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_verdana_0870.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_verdana_0870.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "d97a18a7e318e25b9d990fa40bac0f9ad7e496c1fa171c9eb95c7b3cf1961169",
+   "golden_sha256": "2b35fef6b5d8ecafd69dab42fbb608e26a3ab4662d6b44a250fe2b10dfbcaafa",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_verdana_1e900",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Verdana",
+    "complex cascade"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_verdana_1e900.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_verdana_1e900.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "b02823a4caed0c601f0a7dbdabc66365d1d36663a7aa4356048a0198d25323d1",
+   "golden_sha256": "7ef9fa5693f58acc26fcd7ea2305259f8db56018dd20d9572df85d69ae853820",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_verdana_bold_10fffd",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Verdana bold"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_verdana_bold_10fffd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_verdana_bold_10fffd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "f027a4bd87c966751e54180774432df76b0be9b344334a09a6e84e8af27b0880",
+   "golden_sha256": "7c20315adfcd03c590586f9a01fb339eb6284cd1236257b5201f34d86d3a9c80",
+   "base_fbb2e59ed": "0/match/0/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "w6_verdana_e0080",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "missing-glyph",
+    "Verdana",
+    "hidden"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_verdana_e0080.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_verdana_e0080.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5",
+   "source_sha256": "1606d4a5dab5d2aa573dfe5c157669d3ee34516e90a1eb97630c09960253309d",
+   "golden_sha256": "51ad0e9ff04d75fe3f15070c343a30a46b1ddc3942a0eee5eb4feeebc001c279",
+   "base_fbb2e59ed": "0/DIFF/5/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/5/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  }
+ ]
+}

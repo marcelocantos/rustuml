@@ -1,0 +1,14 @@
+@startuml
+state R3
+state O3 {
+  state R3 {
+    [*] --> A3
+    A3 --> B3
+    A3 --> C3
+    B3 --> [*]
+    C3 --> [*]
+  }
+}
+R3 --> T3
+state T3
+@enduml

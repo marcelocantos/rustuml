@@ -1,0 +1,7 @@
+@startuml
+participant Alder
+note right of Alder
+a<font:Courier New>Wi mi</font>z
+a<b><size:14><color:navy><font:Courier New>Wi mi</font></color></size></b>z
+end note
+@enduml

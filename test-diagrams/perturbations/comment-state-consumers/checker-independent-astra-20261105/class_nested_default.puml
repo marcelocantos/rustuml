@@ -1,0 +1,9 @@
+@startuml
+package "Upper Place" as Upper {
+package "Middle Place" as Middle {
+class "Hidden Leaf" as Leaf
+}
+class "Visible Branch" as Branch
+Middle.Leaf --> Branch
+}
+@enduml

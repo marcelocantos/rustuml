@@ -1,0 +1,7 @@
+@startuml
+class "Pine%substr("🦉",0,1)" as Pine
+class Oak
+class Fir
+Pine --> Oak
+Oak --> Fir
+@enduml

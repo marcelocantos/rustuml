@@ -1,0 +1,1100 @@
+[
+  {
+    "id": "golden-regressions/activity/act_creole_monospace",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/activity/act_creole_monospace.puml",
+    "reference": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/activity/act_creole_monospace.svg",
+    "before": {
+      "id": "golden-regressions/activity/act_creole_monospace",
+      "phase": "before",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.04562512499978766,
+        "stdout_sha256": "0b1d2591d2e1c39bb2eed4620146be3510f7f4a9258cfa3914122ca99689303d",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.012170665999292396,
+        "stdout_sha256": "216af8bd983f8165faa2ae7173b688cdc183dcb0b7b97b8a14de6c69ae7d1f7f",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/activity/act_creole_monospace.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/before/golden-regressions/activity/act_creole_monospace/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.014679499989142641,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "ACTIVITY",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Activity",
+        "entities": null,
+        "source": "@startuml\nstart\n:<font:monospace>code here</font>;\nstop\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "initial_candidate": {
+      "id": "golden-regressions/activity/act_creole_monospace",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.018283457990037277,
+        "stdout_sha256": "a4824971c50bda6858bda75308ae58adeef105a1e675adce288eb32dbdd88fdc",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.01133404100255575,
+        "stdout_sha256": "216af8bd983f8165faa2ae7173b688cdc183dcb0b7b97b8a14de6c69ae7d1f7f",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/activity/act_creole_monospace.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/after/golden-regressions/activity/act_creole_monospace/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 1,
+        "seconds": 0.0036888330068904907,
+        "stdout_sha256": "8953fcd793fedfa747ea798f7e7a81777abc64686569725fcc3739d3d8d93677",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "ACTIVITY",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": false,
+      "panic": false,
+      "model": {
+        "type": "Activity",
+        "entities": null,
+        "source": "@startuml\nstart\n:<font:monospace>code here</font>;\nstop\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "corrected": {
+      "id": "golden-regressions/activity/act_creole_monospace",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.47591966700565536,
+        "stdout_sha256": "0b1d2591d2e1c39bb2eed4620146be3510f7f4a9258cfa3914122ca99689303d",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.011537832993781194,
+        "stdout_sha256": "216af8bd983f8165faa2ae7173b688cdc183dcb0b7b97b8a14de6c69ae7d1f7f",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/activity/act_creole_monospace.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/after/golden-regressions/activity/act_creole_monospace/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.00466141699871514,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "ACTIVITY",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Activity",
+        "entities": null,
+        "source": "@startuml\nstart\n:<font:monospace>code here</font>;\nstop\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "all_model_bytes_equal": true
+  },
+  {
+    "id": "golden-regressions/creole/creole_font_name_in_activity",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_activity.puml",
+    "reference": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_activity.svg",
+    "before": {
+      "id": "golden-regressions/creole/creole_font_name_in_activity",
+      "phase": "before",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.04552299999340903,
+        "stdout_sha256": "32f27938c417a1dd9c8eb34f378202aad1eeb34a2b46d82f73bd9601f50960bc",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.013772207996225916,
+        "stdout_sha256": "16b775d725ef88d010727b16c969a58761a14a6a3437fd9d84b3ef2f1abf83fa",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_activity.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/before/golden-regressions/creole/creole_font_name_in_activity/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.013066958999843337,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "ACTIVITY",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Activity",
+        "entities": null,
+        "source": "@startuml\n:<font:Courier>courier font</font>;\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "initial_candidate": {
+      "id": "golden-regressions/creole/creole_font_name_in_activity",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.01988766599970404,
+        "stdout_sha256": "78ac426c30b52410faa013722ae4715749a6320c0974be2b2966aa3fb033281c",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.01083666700287722,
+        "stdout_sha256": "16b775d725ef88d010727b16c969a58761a14a6a3437fd9d84b3ef2f1abf83fa",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_activity.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/after/golden-regressions/creole/creole_font_name_in_activity/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 1,
+        "seconds": 0.004278084001271054,
+        "stdout_sha256": "fd6d4f87e491afb61ced710d95ede2265ef1939ea7aa88d303bfe991057ba43c",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "ACTIVITY",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": false,
+      "panic": false,
+      "model": {
+        "type": "Activity",
+        "entities": null,
+        "source": "@startuml\n:<font:Courier>courier font</font>;\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "corrected": {
+      "id": "golden-regressions/creole/creole_font_name_in_activity",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.4732320000039181,
+        "stdout_sha256": "32f27938c417a1dd9c8eb34f378202aad1eeb34a2b46d82f73bd9601f50960bc",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.009654875000705943,
+        "stdout_sha256": "16b775d725ef88d010727b16c969a58761a14a6a3437fd9d84b3ef2f1abf83fa",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_activity.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/after/golden-regressions/creole/creole_font_name_in_activity/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.007820500002708286,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "ACTIVITY",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Activity",
+        "entities": null,
+        "source": "@startuml\n:<font:Courier>courier font</font>;\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "all_model_bytes_equal": true
+  },
+  {
+    "id": "golden-regressions/creole/creole_font_name_in_class",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_class.puml",
+    "reference": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_class.svg",
+    "before": {
+      "id": "golden-regressions/creole/creole_font_name_in_class",
+      "phase": "before",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.04705395799828693,
+        "stdout_sha256": "abc1bc22002e8d4a8069fc171be5fb3a0f9f5452355cd53039e2cb749ea03fcb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.01172716700239107,
+        "stdout_sha256": "b1901d9dcacb24f3f8a8606aac09e37afc277802dcec59abf19cc8733de462a9",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_class.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/before/golden-regressions/creole/creole_font_name_in_class/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.011208666997845285,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "CLASS",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass MyClass {\n  <font:Courier>courier font</font>: field\n}\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "initial_candidate": {
+      "id": "golden-regressions/creole/creole_font_name_in_class",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.02210704199387692,
+        "stdout_sha256": "291f0bd4486d4d73b84a3750f1f9626f366b8f5ce5631ec4bacf6970ff6295c3",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.01124212499416899,
+        "stdout_sha256": "b1901d9dcacb24f3f8a8606aac09e37afc277802dcec59abf19cc8733de462a9",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_class.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/after/golden-regressions/creole/creole_font_name_in_class/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 1,
+        "seconds": 0.0056507080007577315,
+        "stdout_sha256": "289b2e10790a18571e78ae549ac6884d916a9cc9a25728581be0a8a252f1b77a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "CLASS",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": false,
+      "panic": false,
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass MyClass {\n  <font:Courier>courier font</font>: field\n}\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "corrected": {
+      "id": "golden-regressions/creole/creole_font_name_in_class",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.4760005410062149,
+        "stdout_sha256": "abc1bc22002e8d4a8069fc171be5fb3a0f9f5452355cd53039e2cb749ea03fcb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.00971404199663084,
+        "stdout_sha256": "b1901d9dcacb24f3f8a8606aac09e37afc277802dcec59abf19cc8733de462a9",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_class.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/after/golden-regressions/creole/creole_font_name_in_class/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.007744749993435107,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "CLASS",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass MyClass {\n  <font:Courier>courier font</font>: field\n}\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "all_model_bytes_equal": true
+  },
+  {
+    "id": "golden-regressions/creole/creole_font_name_in_note",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_note.puml",
+    "reference": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_note.svg",
+    "before": {
+      "id": "golden-regressions/creole/creole_font_name_in_note",
+      "phase": "before",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.04701083299005404,
+        "stdout_sha256": "fd9e57d6a46ab5c63841f6c847fb683975c7bfb9e86a4f94124e6fbe85815e40",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.01450216599914711,
+        "stdout_sha256": "3bc9e593eb01b2bf38dd56981327a298eb06841dcafc40fcb230bb5fe6bd3321",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_note.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/before/golden-regressions/creole/creole_font_name_in_note/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.009942000004230067,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "CLASS",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Class",
+        "entities": 0,
+        "source": "@startuml\nnote as N\n  <font:Courier>courier font</font>\nend note\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "initial_candidate": {
+      "id": "golden-regressions/creole/creole_font_name_in_note",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.022230458998819813,
+        "stdout_sha256": "0eddad4a649578d12f1a988b4a77f47565f4ab328ae886ab939a1f6ce470af58",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.014586040997528471,
+        "stdout_sha256": "3bc9e593eb01b2bf38dd56981327a298eb06841dcafc40fcb230bb5fe6bd3321",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_note.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/after/golden-regressions/creole/creole_font_name_in_note/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 1,
+        "seconds": 0.0035754580021603033,
+        "stdout_sha256": "218b02d8178263639a712ec55f348b0f307f6e9bcea4014f80559f8e68f486e0",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "CLASS",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": false,
+      "panic": false,
+      "model": {
+        "type": "Class",
+        "entities": 0,
+        "source": "@startuml\nnote as N\n  <font:Courier>courier font</font>\nend note\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "corrected": {
+      "id": "golden-regressions/creole/creole_font_name_in_note",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.47743095899932086,
+        "stdout_sha256": "fd9e57d6a46ab5c63841f6c847fb683975c7bfb9e86a4f94124e6fbe85815e40",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.013277208010549657,
+        "stdout_sha256": "3bc9e593eb01b2bf38dd56981327a298eb06841dcafc40fcb230bb5fe6bd3321",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_note.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/after/golden-regressions/creole/creole_font_name_in_note/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.004521875001955777,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "CLASS",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Class",
+        "entities": 0,
+        "source": "@startuml\nnote as N\n  <font:Courier>courier font</font>\nend note\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "all_model_bytes_equal": true
+  },
+  {
+    "id": "golden-regressions/creole/creole_font_name_in_sequence",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_sequence.puml",
+    "reference": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_sequence.svg",
+    "before": {
+      "id": "golden-regressions/creole/creole_font_name_in_sequence",
+      "phase": "before",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.013610291003715247,
+        "stdout_sha256": "80b554c71cf5ae4bab8b16f7e09c758af26b922931d6636797036f70c709eb14",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.01078991599206347,
+        "stdout_sha256": "8e4db1cab52785e25d857e071b5606d621c462a2e0ef9aa8dffa2ee0f31613e4",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_sequence.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/before/golden-regressions/creole/creole_font_name_in_sequence/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.0033345829870086163,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "SEQUENCE",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Sequence",
+        "entities": null,
+        "source": "@startuml\nAlice -> Bob : <font:Courier>courier font</font>\nnote right : <font:Courier>courier font</font>\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "initial_candidate": {
+      "id": "golden-regressions/creole/creole_font_name_in_sequence",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.01369824999710545,
+        "stdout_sha256": "19f90428df8a4db1fb361d69f46cfd32b10a1a1381e198d3bf37e473c35f9fbf",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.011543541011633351,
+        "stdout_sha256": "8e4db1cab52785e25d857e071b5606d621c462a2e0ef9aa8dffa2ee0f31613e4",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_sequence.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/after/golden-regressions/creole/creole_font_name_in_sequence/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 1,
+        "seconds": 0.0035717499995371327,
+        "stdout_sha256": "2a937c08b71f2bf8d9aad45b71fbdc5aabdbdb11b3001e823db50e6145f64d8a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "SEQUENCE",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": false,
+      "panic": false,
+      "model": {
+        "type": "Sequence",
+        "entities": null,
+        "source": "@startuml\nAlice -> Bob : <font:Courier>courier font</font>\nnote right : <font:Courier>courier font</font>\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "corrected": {
+      "id": "golden-regressions/creole/creole_font_name_in_sequence",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.01182899999548681,
+        "stdout_sha256": "80b554c71cf5ae4bab8b16f7e09c758af26b922931d6636797036f70c709eb14",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.011652125002001412,
+        "stdout_sha256": "8e4db1cab52785e25d857e071b5606d621c462a2e0ef9aa8dffa2ee0f31613e4",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_sequence.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/after/golden-regressions/creole/creole_font_name_in_sequence/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.00498645800689701,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "SEQUENCE",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Sequence",
+        "entities": null,
+        "source": "@startuml\nAlice -> Bob : <font:Courier>courier font</font>\nnote right : <font:Courier>courier font</font>\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "all_model_bytes_equal": true
+  },
+  {
+    "id": "golden-regressions/creole/creole_font_name_in_title",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_title.puml",
+    "reference": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_title.svg",
+    "before": {
+      "id": "golden-regressions/creole/creole_font_name_in_title",
+      "phase": "before",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.011498000007122755,
+        "stdout_sha256": "e14689b741d399365519fa45b22a3bd52d6a18478a22307b9dbe6ade74f53974",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.009978124988265336,
+        "stdout_sha256": "14d6881b287feeefebd8789b8d7b490990913ecb615353cd5c8f0e1d6c233123",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_title.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/before/golden-regressions/creole/creole_font_name_in_title/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.003528583998559043,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "SEQUENCE",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Sequence",
+        "entities": null,
+        "source": "@startuml\ntitle <font:Courier>courier font</font>\nAlice -> Bob : hello\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "initial_candidate": {
+      "id": "golden-regressions/creole/creole_font_name_in_title",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.011106542006018572,
+        "stdout_sha256": "6de03a83197daf691663ddc6bcdad54b32c254b21a064c849e79b3de5142a13c",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.010109666996868327,
+        "stdout_sha256": "14d6881b287feeefebd8789b8d7b490990913ecb615353cd5c8f0e1d6c233123",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_title.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/after/golden-regressions/creole/creole_font_name_in_title/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 1,
+        "seconds": 0.004880874999798834,
+        "stdout_sha256": "fd6d4f87e491afb61ced710d95ede2265ef1939ea7aa88d303bfe991057ba43c",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "SEQUENCE",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": false,
+      "panic": false,
+      "model": {
+        "type": "Sequence",
+        "entities": null,
+        "source": "@startuml\ntitle <font:Courier>courier font</font>\nAlice -> Bob : hello\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "corrected": {
+      "id": "golden-regressions/creole/creole_font_name_in_title",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.011852791998535395,
+        "stdout_sha256": "e14689b741d399365519fa45b22a3bd52d6a18478a22307b9dbe6ade74f53974",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.012643541995203122,
+        "stdout_sha256": "14d6881b287feeefebd8789b8d7b490990913ecb615353cd5c8f0e1d6c233123",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_title.svg",
+          "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/replay/after/golden-regressions/creole/creole_font_name_in_title/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.004161415999988094,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "SEQUENCE",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Sequence",
+        "entities": null,
+        "source": "@startuml\ntitle <font:Courier>courier font</font>\nAlice -> Bob : hello\n@enduml\n"
+      },
+      "helper_reference_valid": true
+    },
+    "all_model_bytes_equal": true
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "archive": "before.tar.gz",
+    "sha256": "344d4bed78661a43d55262fc19262a9376b439a558966cb601c2cf4e732af84e",
+    "bytes": 19836784,
+    "entries": 118133,
+    "entry_manifest": "before.entries.json.gz",
+    "entry_manifest_sha256": "1128de48bfe19aa558fc97669f0377e1cc44ce59f093c75c905665b745a0768a",
+    "readback_verified": true
+  },
+  {
+    "archive": "after.tar.gz",
+    "sha256": "59f33c968e44e42944e140a4599b61a0b42d3f960a3c74407ce0d5cf0778caeb",
+    "bytes": 19833920,
+    "entries": 118133,
+    "entry_manifest": "after.entries.json.gz",
+    "entry_manifest_sha256": "6830d599a6574dc1a3e46904e203066306f9da8764f585b17a7221ed418ab964",
+    "readback_verified": true
+  },
+  {
+    "archive": "registered.tar.gz",
+    "sha256": "24b6e7f90440fc0bf57280ddabaa105c947b7d7e56f29e5bfb3be4c53a2dea8f",
+    "bytes": 2434636,
+    "entries": 8276,
+    "entry_manifest": "registered.entries.json.gz",
+    "entry_manifest_sha256": "f6231f6528b94630cf0080695d83534c8b34799c3c8b777c070b9e55ed02c831",
+    "readback_verified": true
+  },
+  {
+    "archive": "metadata.tar.gz",
+    "sha256": "be9d02d1159d3d5852e2cf1f074a87a8e3b384af1b4504407f4755ed4c8fd980",
+    "bytes": 8226212,
+    "entries": 333,
+    "entry_manifest": "metadata.entries.json.gz",
+    "entry_manifest_sha256": "7bf2fa30134d32a5637b15a901ddb2428811d7c2f2dfbdffbfd56e89d424b6a8",
+    "readback_verified": true
+  }
+]

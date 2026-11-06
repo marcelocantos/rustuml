@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-intval-conversion",
+  "sub_mechanism": "Integer.parseInt digit set, sign and overflow",
+  "status": "maker results; independent review required",
+  "account_commit": "a15b09dde",
+  "implementation_commit": "441452686",
+  "java_trace": "IntVal.executeReturnFunction -> Integer.parseInt(s) (JDK 21): optional single sign, Character.digit(char, 10) per UTF-16 unit, negative accumulation with multmin and limit+digit. Character.digit accepts BMP Nd only; the 37 Unicode 15.0 BMP Nd zero points are BMP_DECIMAL_DIGIT_ZEROS (370 digits, checked against Python unicodedata 15.1, which adds no Nd).",
+  "runtime_note": "reference-environment.json records Temurin 21.0.13; relay batch AU ran openjdk 21.0.5. Both are JDK 21 (Unicode 15.0).",
+  "measured": {
+    "checker6": "intval_unicode_digits and intval_unicode_json exit 0 and match Java strictly; intval_ascii_edges stays a match; intval_invalid_sign and intval_underflow_bound stay rejections",
+    "unit_tests": "intval_parses_complete_signed_display_and_preserves_first_error (extended with +, -, +-1, superscript two, Roman numeral, U+1D7CE) and intval_follows_integer_parse_int_unicode_digits pass",
+    "status_sweep": "versus 55c92692d the only status changes in this directory are the two error_now_renders_valid_ref cases above; zero new errors"
+  },
+  "held_out_probes": "relay batch r2a (pending): intval_arabic_indic_signed, intval_extended_arabic_bengali, intval_fullwidth_bounds, intval_myanmar_tai_laing (valid); intval_fullwidth_overflow, intval_supplementary_digit, intval_superscript_digit, intval_double_sign (intended invalid)"
+}

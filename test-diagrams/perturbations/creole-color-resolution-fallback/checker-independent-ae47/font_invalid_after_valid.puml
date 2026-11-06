@@ -1,0 +1,6 @@
+@startuml
+participant Oriole
+note right of Oriole
+<color:teal>a<font color=NoTint77>b</font>c</color>
+end note
+@enduml

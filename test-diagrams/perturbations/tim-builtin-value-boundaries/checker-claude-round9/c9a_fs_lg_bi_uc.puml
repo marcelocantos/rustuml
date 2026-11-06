@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Lucida Grande
+usecase "<b><i>Wharf q𝅧r</i></b>" as U1
+@enduml

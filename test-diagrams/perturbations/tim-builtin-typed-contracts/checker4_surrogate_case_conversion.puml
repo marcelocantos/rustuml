@@ -1,0 +1,7 @@
+@startuml
+!$high=%substr("🦊",0,1)
+!$low=%substr("🦊",1,1)
+!$a=%strpos(%upper($high)+$low,"🦊")
+!$b=%strpos($high+%lower($low),"🦊")
+class "$a / $b" as Surrogates
+@enduml

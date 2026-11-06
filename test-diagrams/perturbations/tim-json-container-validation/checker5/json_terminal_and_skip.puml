@@ -1,0 +1,16 @@
+@startuml
+!$d={"row":{"value":"008"}}
+!$v=$d.row.value+2
+!$m=$d.absent
+!$n=0
+!foreach $x in "[1,2]"
+!$n=90
+!endfor
+!foreach $x in %str2json("broken")
+!$n=80
+!endfor
+!foreach $x in [3,4]
+!$n=$n+1
+!endfor
+class "$v/$m/$n/$x" as Json
+@enduml

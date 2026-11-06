@@ -1,0 +1,3 @@
+@startuml
+class "%hsl_color(180,100,50,ignored=20)/%hsl_color(180,100,50,%str2json("50"))" as Alpha
+@enduml

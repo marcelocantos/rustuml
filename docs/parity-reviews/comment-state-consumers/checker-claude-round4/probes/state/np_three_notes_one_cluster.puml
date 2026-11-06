@@ -1,0 +1,13 @@
+@startuml
+state Dock {
+  state Crane {
+    state hook <<entryPoint>>
+    hook --> Lift
+    note right of Lift : one
+    note left of Lift : two
+    note bottom of Lift : three
+  }
+  Lift --> Barge
+  Barge --> Sea
+}
+@enduml

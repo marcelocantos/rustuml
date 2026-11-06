@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "base_revision": "a84856637adcd8e8d4e78fd2ee00658c9c612feb",
+  "imported_rejection": "521fe226d428c01128f4379bb7342584772924d7",
+  "import_commit": "dc796484a0a1ef723b8030ef0fd767da2708533d",
+  "verification": "Private before/after CLI -pipe plus --yaml -pipe, unchanged strict comparator, exact six retained memberships1730+18+50+38+15+26, including all nonpositives and32panics. Fresh reference via parent existing runner only; all raw outcomes preserved. Broad gates once stable. No self-review, baseline/contract changes or old evidence edits.",
+  "mechanism": "wbs-leaf-component-origin",
+  "java_locations": [
+    "wbs/ITFLeaf#drawU (79-85) draws box at supplied local origin; getF1/getF2/getT1 derive leaf dimension",
+    "wbs/ITFComposed#getw1 (91), drawU (135-147) applies trunk/collection offset only to composed nodes"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/wbs.rs::draw_itf currently uses node.w1 for both leaf/composed",
+    "crates/rustuml-render/src/wbs.rs::Itf::w1/f1_x/f2_x/t1_x"
+  ],
+  "invariant": "A leaf text component paints at the caller-supplied origin; only composed nodes offset their own block relative to left/right collections and trunk. Component width may be smaller than twice the inter-node spacing when unboxed.",
+  "causal_divergence": "Box padding previously guaranteed minimum width20. Newly modeled unboxed space has width6.7969 including Java margins; Rust incorrectly applies the composed w1 minimum10 to that leaf, shifting its paint by6.60155 while preserving preferred width. Java ITFLeaf draws without that offset. This is component-type dispatch, not a coordinate target.",
+  "planned_change": "In draw_itf select own-block center main_w/2 for leaf and retain node.w1 for composed. Keep all spacing/attachment formulas/constants and raw source/label bytes. No numeric compensation; no structural or topology changes. Preserve first after replay and new valid failed input before correction.",
+  "perturbation_axes": [
+    "unboxed empty/short versus longer leaf text and boxed leaf control",
+    "root-child/deeper and left/right component placement"
+  ]
+}

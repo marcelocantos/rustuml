@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-call-resolution-arity",
+  "reviewer": {
+    "task_id": "t3-04b6729a-independent-TIM-checker5",
+    "thread_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3Ad979fae3-777e-4583-b22b-5ed91f03f235",
+    "model": "gpt-6-astra / high; Codex harness through T3 Code",
+    "role": "independent adversarial checker; no production edits; no children"
+  },
+  "account_commit": "6d46a483aad389d4535e1ba24822fdd116baf517",
+  "implementation_commit": "92647b126f6dc1c83ebdc6213d0c2c0a5b3211b6",
+  "tested_revision": "1703a2727fa364ee8004ba59a22b4c6934ee5d3d",
+  "baseline_revision": "ee0e4c72fb222f1312d1aaf7d5a152cc97f12781",
+  "prior_rejection": "0d30ae99e85195f595e21ca0a80be85f26473ee9",
+  "evidence_import": "47a723b6fd424a2584dc3d89ac0dc0328eeb0ae7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "java_locations": [
+    "tim/FunctionsSet.java:getFunctionSmart",
+    "tim/TFunctionImpl.java:canCover,getNewMemory",
+    "tim/expression/ReversePolishInterpretor.java:constructor",
+    "tim/EaterFunctionCall.java:analyze",
+    "tim/builtin/*:canCover"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "commands": [
+    "CARGO_TARGET_DIR=<private-cache>/target-before CARGO_BUILD_JOBS=4 cargo build -p rustuml --release at exact before",
+    "CARGO_TARGET_DIR=<private-cache>/target-after CARGO_BUILD_JOBS=4 cargo build -p rustuml --release at exact candidate",
+    "uv run --no-project python <private-cache>/replay.py <fixed cohort>; before and after -pipe and --yaml -pipe; unchanged compare_svg_strict",
+    "Parent relay: /Users/marcelo/rustuml-reference/bin/reference --cwd <worker>/<new|supplement> --timezone GMT+11:00 -- -pipe -tsvg; unchanged SourceProbe.java; exact argv/streams captured per case",
+    "uv run --no-project python <private-cache>/gates.py; exact candidate main tiers once; full command/status manifest in checker5-support/gates.json"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_valid_defaults.puml",
+      "golden": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_valid_defaults.svg",
+      "axes": [
+        "plain/expression",
+        "default/positional count"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": true,
+      "comparison_exit": 0,
+      "source_sha256": "ac13fb1a9c0a53e0a8eb51829979e24797c1fce15a1eb6b8056bc057ff088e61",
+      "golden_sha256": "12cdf78821601615d27a602def5534f81d6aa590c4900065b99095a76cae37ac",
+      "evidence": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/evidence/arity_valid_defaults",
+      "classification": "valid source/SVG",
+      "standing_oracle_result": "pass",
+      "scope": "claimed mechanism",
+      "java_exit": 0,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_argument_first.puml",
+      "golden": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_argument_first.svg",
+      "axes": [
+        "nested argument failure",
+        "excess arity"
+      ],
+      "result": "pass",
+      "reference_valid": false,
+      "reference_xml_valid": false,
+      "rust_cli_exit": 1,
+      "source_equal": false,
+      "comparison_exit": 3,
+      "source_sha256": "7f04021bf55a1f3b14f4996cd5386f811ad27e0ca38a667dc8e3279b5cec9331",
+      "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/evidence/arity_argument_first",
+      "classification": "negative; rejection and first-error assessed separately from SVG",
+      "standing_oracle_result": "fail",
+      "scope": "claimed mechanism",
+      "java_exit": 1,
+      "java_probe_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_procedure_first.puml",
+      "golden": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_procedure_first.svg",
+      "axes": [
+        "call kind",
+        "missing arity"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 1,
+      "source_equal": false,
+      "comparison_exit": 2,
+      "source_sha256": "ad88e6d3b954a795c5c9f3289d55119097eb75c05c3ffe86d02db58cc33b1cd8",
+      "golden_sha256": "81e7b2ec538f83d8349f79e22804bcb9fd4cf2ba3e05c5c32001ddb5ec8c210a",
+      "evidence": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/evidence/arity_procedure_first",
+      "classification": "negative; rejection and first-error assessed separately from SVG",
+      "standing_oracle_result": "fail",
+      "scope": "claimed mechanism",
+      "java_exit": 200,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_plain_named_builtin.puml",
+      "golden": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_plain_named_builtin.svg",
+      "axes": [
+        "plain builtin named key",
+        "positional coverage"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": false,
+      "comparison_exit": 2,
+      "source_sha256": "89f88c9aeb4a88326b675a78f2db19801be7fd4314ab330acc05783279566ed1",
+      "golden_sha256": "ad6e5df352c5fbd9d85a1dd578eb2dd219f3f778c2a480f4218cd9f5d1590825",
+      "evidence": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/evidence/arity_plain_named_builtin",
+      "classification": "negative; rejection and first-error assessed separately from SVG",
+      "standing_oracle_result": "fail",
+      "scope": "claimed mechanism",
+      "java_exit": 200,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/adjacent_dispatch.puml",
+      "golden": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/adjacent_dispatch.svg",
+      "axes": [
+        "implemented variable arity",
+        "typed numeric conversions"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": false,
+      "comparison_exit": 2,
+      "source_sha256": "8f9a052fa4d026dc1071a05027f711b6a93241452225df865e19ff82b5c266d5",
+      "golden_sha256": "7a1bcf98ef269e9503ffc19c2b24c94d3f510ba1c6305a5d2ec7ac4ed4b07dce",
+      "evidence": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/evidence/adjacent_dispatch",
+      "classification": "negative; rejection and first-error assessed separately from SVG",
+      "standing_oracle_result": "fail",
+      "scope": "adjacent implemented dispatch",
+      "java_exit": 200,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/adjacent_hsl_alpha.puml",
+      "golden": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/adjacent_hsl_alpha.svg",
+      "axes": [
+        "three versus four argument dispatch",
+        "typed string versus integer"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": false,
+      "comparison_exit": 1,
+      "source_sha256": "98d25bca4dcf757f1867b367fea5ae8f9baf8abc9f3abb5b3b1dfb551dd19766",
+      "golden_sha256": "f2c2198d8e4f0d702d2f3d651114195980dedcfe616b7a849bb72ba081b60bae",
+      "evidence": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/evidence/adjacent_hsl_alpha",
+      "classification": "valid source/SVG",
+      "standing_oracle_result": "fail",
+      "scope": "adjacent implemented dispatch",
+      "java_exit": 0,
+      "java_probe_exit": 0
+    }
+  ],
+  "findings": [
+    "REJECT: arity_plain_named_builtin is Java-negative (Function not found %strlen) but Rust exits0 and renders class16. Java TContext.applyFunctionsAndVariables routes builtin plain calls through EaterFunctionCall: named keys enter a separate map, leaving zero positional arguments. Rust eval_builtin_with_expr_args treats the whole $ignored=\"cedar\" token as one ordinary argument, then builtin_arity sees1 and strlen counts its literal text. Route named parsing and positional resolution through the same context-specific call contract, before builtin execution.",
+    "REJECT FIRST ERROR: arity_procedure_first calls a one-argument procedure with zero arguments in an expression. Java FunctionsSet/ReversePolishInterpretor reports Unknown built-in function $emit before any call-kind/body check. Rust execute_expression checks Procedure first and reports Illegal call here. Resolve signature/coverage first, then reject return use of the resolved procedure. Both nonzero exits do not establish first-error parity.",
+    "arity_argument_first correctly rejects division by zero in an argument before excess-arity handling or later BoolVal; Java exits1 with empty non-XML output, not an error-page match. arity_valid_defaults agrees across plain named required arguments, expression defaults and a three-argument builtin.",
+    "Adjacent implemented dispatch remains incomplete: adjacent_dispatch shows Java IntVal rejects12.5 while Rust returns12; adjacent_hsl_alpha shows Java #FF0000/#80ff0000/#FF0000 versus Rust #FF0000/#FF0000/#00FF00. HslColor consumes TValue.toInt and the fourth alpha argument, whereas Rust parses display floats and ignores alpha. These are pre-existing neighboring body contracts, not claims that the new arity table is numerically wrong. All33 table entries match their named Java canCover methods. The41 registered but unimplemented names were not expanded or treated as passes."
+  ],
+  "next_causal_repair": "Separate named/plain operands for builtins and perform signature coverage before call-kind rejection. Preserve the first nested argument failure. Keep IntVal and HslColor body-contract repairs separate from arity.",
+  "verdict": "rejected",
+  "bounded_mechanism_observation": "falsified by fresh in-scope counterexample",
+  "evidence": "docs/parity-reviews/tim-builtin-value-boundaries/checker5-support/README.md",
+  "scope": "Only exact1703a272 versus exactee0e4c72. No whole-TIM or combined candidate acceptance. Earlier rejected records and every old reference remain immutable. The mandatory standing perturbation gate is red; negative error references remain failures there, even when rejection behavior is correct. No comparator, baseline, skip rule, reader, date, parser, renderer, target or shipping change."
+}

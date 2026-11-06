@@ -1,0 +1,35 @@
+{
+ "before": "r3",
+ "after": "d5",
+ "sources": 16467,
+ "strict_valid_matches": {
+  "r3": 13508,
+  "d5": 13512
+ },
+ "comment_exact": {
+  "r3": 15077,
+  "d5": 15077
+ },
+ "events": {
+  "gained_match": [
+   "test-diagrams/golden/state/state_note_composite.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/note_link_only_to_group.puml"
+  ],
+  "outputs_changed": [
+   "test-diagrams/golden/state/state_note_composite.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/note_link_only_to_group.puml",
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_class.puml",
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_component.puml",
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_deployment.puml",
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_description.puml",
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_state.puml",
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_usecase.puml"
+  ]
+ },
+ "comments": {}
+}

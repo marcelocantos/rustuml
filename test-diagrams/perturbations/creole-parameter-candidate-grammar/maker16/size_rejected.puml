@@ -1,0 +1,8 @@
+@startuml
+participant Juniper
+note right of Juniper
+L<size:~13>oak</size>R
+L<size:1\~3>oak</size>R
+L<size:13~>oak</size>R
+end note
+@enduml

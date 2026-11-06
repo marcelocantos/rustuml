@@ -1,0 +1,15 @@
+@startuml
+state Campus {
+  state Block {
+    state Wing {
+      state Lab {
+        Bench --> ex
+        state ex <<exitPoint>>
+      }
+      ex --> Corridor
+    }
+    Corridor --> Lobby
+  }
+  Lobby --> Gate
+}
+@enduml

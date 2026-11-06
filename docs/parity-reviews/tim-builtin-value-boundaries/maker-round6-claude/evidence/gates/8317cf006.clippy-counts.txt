@@ -1,0 +1,6 @@
+rustuml-render 22
+rustuml-parser 3
+rustuml-oracle 3
+rustuml 0
+rustuml-layout 0
+rustuml-math 0

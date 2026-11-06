@@ -1,0 +1,4 @@
+@startuml
+!define V 􏿽
+class "V V" as D
+@enduml

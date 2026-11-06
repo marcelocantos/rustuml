@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam participantFontStyle italic
+queue "Dawky Vow\nsecond gym line" as Q
+participant A
+A -> Q : go
+@enduml

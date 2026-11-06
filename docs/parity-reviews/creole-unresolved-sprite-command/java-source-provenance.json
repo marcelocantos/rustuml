@@ -1,0 +1,57 @@
+{
+  "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "files": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/command/Splitter.java",
+      "sha256": "66f7c4901532da772c4d3a8915a0eff8c29d0fbde378bd95f1a18a159830bbe4"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/sprite/SpriteUtils.java",
+      "sha256": "c1825f0e8a92e0a1a331a1e0c66d5ae9198b1d07c3b9902d643a3e40394b5043"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "sha256": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleSprite.java",
+      "sha256": "c5572f8d5ef5ac350aaae127a8a32ae5282aaa01cc653e3068b9f511cca52d9a"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/StripeSimple.java",
+      "sha256": "5da5e0b2ec483a26ee58e63a58e79ab37f7a881f465701bfddac9ba1d8967eec"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+      "sha256": "f28ef36b9b56933f91052c51bc90cd03bb462be1797ed3d5ef9f2208953d6dd4"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleSizeChange.java",
+      "sha256": "afb698b1551b955f49066666d66934ab6bd22a5ae390af93ceab5b4eaee52ca2"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/AtomTextUtils.java",
+      "sha256": "b4ab0a3222a55203349b08723538874aa5d93c9838b9aefbd3a5aa18efc27d89"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/AtomText.java",
+      "sha256": "90e62fb331a47aab282ba79c672c65e9386ac31024049d00f93ddcd8df3b9642"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java",
+      "sha256": "c92f38502c07378f84ab91283eb27ea3e763e8d935cab5cb8d051fb2d12f3986"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/NameAndCodeParser.java",
+      "sha256": "fc54ae0fee21d32b68b2a3c920427d3e04066769eeb7db80f66ffd819d3147b3"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java",
+      "sha256": "742fc602d073e06b494e24b4d932db4cfded4c6ae98bf463648854e7a2c0a19d"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/GenericRegexProducer.java",
+      "sha256": "59f3bde6eef7a61a514f22e30544ba6fa01b4bf724bdc3e85d84a778cfe933b7"
+    }
+  ]
+}

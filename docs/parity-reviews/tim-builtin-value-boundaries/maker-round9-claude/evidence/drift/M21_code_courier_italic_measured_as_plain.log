@@ -1,0 +1,52 @@
+ crates/rustuml-render/src/font_chain.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+
+running 17 tests
+test font_chain::tests::planner_ports_harfbuzz_15 ... ok
+test java_bidi::tests::conformance_bidi_character_test ... ignored
+test font_chain::tests::fallback_port_follows_position_cluster ... ok
+test font_chain::tests::unmapped_scalars_take_the_primary_notdef_on_both_paths ... ok
+test font_chain::tests::complexity_follows_java_units ... ok
+test font_chain::tests::script_runs_follow_jdk_script_run ... ok
+test font_chain::tests::harfbuzz_hides_unmapped_default_ignorables ... ok
+test font_chain::tests::gsub_chosen_script_categorizes_the_shaper ... ok
+test font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer ... ok
+test font_chain::tests::harfbuzz_buffers_split_at_bidi_level_changes ... ok
+test font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef ... ok
+test font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15 ... ok
+test java_bidi::tests::conformance_sample ... ok
+test java_bidi::tests::bidi_tables_are_jdk_ubidi_icu ... ok
+test font_chain::tests::coverage_table_is_the_stored_reference_host_extraction ... FAILED
+test font_chain::tests::unicode_mark_tables_are_ucd_18 ... ok
+test java_bidi::tests::java_bidi_oracle ... ok
+
+failures:
+
+---- font_chain::tests::coverage_table_is_the_stored_reference_host_extraction stdout ----
+
+thread 'font_chain::tests::coverage_table_is_the_stored_reference_host_extraction' (58925466) panicked at crates/rustuml-render/src/font_chain.rs:1390:13:
+assertion `left == right` failed: CourierNewPS-ItalicMT style 2
+  left: CourierNew
+ right: CourierNewItalic
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    font_chain::tests::coverage_table_is_the_stored_reference_host_extraction
+
+test result: FAILED. 15 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.28s
+
+warning: function `looks_like_description_bracket_command` is never used
+  --> crates/rustuml-parser/src/parse/component.rs:74:15
+   |
+74 | pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rustuml-parser` (lib) generated 1 warning
+   Compiling rustuml-render v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/src/drill/crates/rustuml-render)
+    Finished `release` profile [optimized] target(s) in 18.95s
+     Running unittests src/lib.rs (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/target/release/deps/rustuml_render-64ddbe2e1fa0ea9b)
+error: test failed, to rerun pass `-p rustuml-render --lib`

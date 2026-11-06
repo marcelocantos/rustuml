@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam activityFontStyle bold italic
+start
+:Dawn Vow gym kit;
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+!$seed="05"
+!function $join($x=$seed,$tail="end",$x=7)
+!return $x+2+"/"+$tail
+!endfunction
+!$seed="99"
+!$v=$join()+" / "+$join("one","mid",4)
+class "$v / $join($x="08")" as Positions
+@enduml

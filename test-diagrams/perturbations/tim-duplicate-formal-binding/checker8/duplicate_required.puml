@@ -1,0 +1,6 @@
+@startuml
+!procedure $show($x,$middle,$x)
+class "$x / $middle" as RequiredFresh
+!endprocedure
+$show($x="named","position")
+@enduml

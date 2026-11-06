@@ -1,0 +1,258 @@
+[
+  {
+    "id": "fallback16/color_invalid_runs",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/color_invalid_runs.puml",
+        "sha256": "2143730f6030cbd12245ddad0c989de4fadf4a2b37bf50a90c06e32d5ef81c6b",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/color_invalid_runs.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/color_invalid_runs.svg",
+        "sha256": "de6130783cc50ba373ecaa57fcd64ef57b3a90694edd8f23b7d5605c9134068d",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/color_invalid_runs/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fallback16/color_nested_current",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/color_nested_current.puml",
+        "sha256": "7b812eb675702c14e6144283ef263ef4f9da29b5c7b6b8ee3364b4ab93f8caf6",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/color_nested_current.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/color_nested_current.svg",
+        "sha256": "b89b3b41fa8180efb1b0eb75e5f4738f04bc4a216c5abebd9c53e5f916eaf264",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/color_nested_current/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fallback16/color_eol_activity",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/color_eol_activity.puml",
+        "sha256": "04711ae667d7935179cdd8d3a0864b7d4e0c8f4e6dfe8a0064bff9d7e6af1e33",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/color_eol_activity.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/color_eol_activity.svg",
+        "sha256": "16d8614d5c1347710b61b3ac38e1302460729807056e1694add76533e0f841a8",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/color_eol_activity/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fallback16/color_valid_neighbors",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/color_valid_neighbors.puml",
+        "sha256": "421a0faceb89dfb07d58b80f091e1e550bb645ad843fa41ff8b9f5f9853657a4",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/color_valid_neighbors.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/color_valid_neighbors.svg",
+        "sha256": "47b68b32295de661fa4c17bed8503bf87db8f43828319ed2e0087a1ffdfea8a1",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/color_valid_neighbors/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fallback16/color_registry_boundary",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/color_registry_boundary.puml",
+        "sha256": "1cff812996a41b6945b9bc5bd06ae914dee2270e5d97495444d16f2121f1f911",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/color_registry_boundary.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/color_registry_boundary.svg",
+        "sha256": "424e07d0f89beaf7aae7b6ef57a7e3e856a8e27808e02aa18de72564e629ac42",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/color_registry_boundary/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fallback16/back_invalid",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/back_invalid.puml",
+        "sha256": "21887fac8b81b85bf0cca7aacd2e4ab856d38f09014b499299a366dbdd4e997f",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/back_invalid.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/back_invalid.svg",
+        "sha256": "72502b329798066fa6290056ed21e83745cac32731652cd53441d18b10650635",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/back_invalid/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fallback16/back_nested",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/back_nested.puml",
+        "sha256": "831774e0acaa0f5acafb20c44d57f677d8f02e8bf70736331c8540780aa528fd",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/back_nested.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/back_nested.svg",
+        "sha256": "2d85191f48e890c14ef084b80528036ff4f2868858ec00f60cd09e926d1b86e9",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/back_nested/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fallback16/back_invalid_gradient",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/back_invalid_gradient.puml",
+        "sha256": "218c71d081f18eda90fe81d385de7104fb604ce25cfbc1af6515173fb85c19f8",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/back_invalid_gradient.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/back_invalid_gradient.svg",
+        "sha256": "e77b22464168475da39c1e400abcb91b16f50764eeda2c5ff35cd592f3ec4278",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/back_invalid_gradient/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fallback16/font_invalid_color",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/font_invalid_color.puml",
+        "sha256": "6fd68452d8b684a3e680323ba23e419a19aba40e6a68fb5787312a9468c6f0e8",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/font_invalid_color.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/font_invalid_color.svg",
+        "sha256": "ae69f636ecba8d30c74dc6dcd2bb76e88416bfc8be1d7b44cf77b7e4e2bb6337",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/font_invalid_color/java.svg.stdout"
+      }
+    },
+    "reference_valid": false
+  },
+  {
+    "id": "fallback16/font_invalid_with_size",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/font_invalid_with_size.puml",
+        "sha256": "8786a87137aae476a636d08ab0d4d32b7ef2584b1596e7d18227570067efa1af",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/font_invalid_with_size.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/font_invalid_with_size.svg",
+        "sha256": "01150a24adbc2425b8e132543870ff8a31232beaf45a417652124e5e016a66fd",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/font_invalid_with_size/java.svg.stdout"
+      }
+    },
+    "reference_valid": false
+  },
+  {
+    "id": "fallback16/image_markup_faces",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_markup_faces.puml",
+        "sha256": "a8a6039e04ecf49723c23499b9ee81d94659242a5339358219e0eaaaaafee943",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/image_markup_faces.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_markup_faces.svg",
+        "sha256": "ee7c129cad942f5334dac191c6ee6d787e7954859ac1cefe5833c65d0139bdc0",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/image_markup_faces/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fallback16/image_markup_config",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_markup_config.puml",
+        "sha256": "3d4f0c5f06e2ae25fc6bc498576df0376dfd37464a4aad439c4201918343c65f",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/image_markup_config.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_markup_config.svg",
+        "sha256": "40ba008959e3010ecfd79b5bcd46f79f34e0d586b08f16c1fe6b257b9e9c2003",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/image_markup_config/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fallback16/image_plain_scale",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_plain_scale.puml",
+        "sha256": "886a2bf358b2cd6a50f70302f3c5ae30e8f0a12b83c307a30eed7ac4452c5117",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/image_plain_scale.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_plain_scale.svg",
+        "sha256": "e9596720c5a6b243e386cfc29582c839018e72d03ad9bfaea929b9642cd32b96",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/image_plain_scale/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fallback16/image_base_bold",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_base_bold.puml",
+        "sha256": "270fca6287a1f4716d4929c38f823a0639479a480bca851cfd22fe79a156e65f",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/image_base_bold.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_base_bold.svg",
+        "sha256": "c7435ce305b268ab1a919f5df6370f2b601934e080c354d02c1d93c426ed2f10",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/image_base_bold/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fallback16/color_wbs_member",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/color_wbs_member.puml",
+        "sha256": "6111608de895584b77e0da1ad0e27fbcc32db9aa884caff096f91bb90aa17a51",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/color_wbs_member.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/color_wbs_member.svg",
+        "sha256": "6ee82fcb3a2d0c7893b833681b98e11d74f6021221f51bebb71c46fc4e7a8348",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/color_wbs_member/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fallback16/grammar_neighbors",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/grammar_neighbors.puml",
+        "sha256": "4a72a2e9040e6a65f3c867de568f00f12bf00152a7cfc5ccd3ca893249f343c1",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/new/grammar_neighbors.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-color-resolution-fallback/maker16/grammar_neighbors.svg",
+        "sha256": "1b687405b54605470abb1e97203037dbff0e406e2dc95ba2b84bb104cb917107",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/fresh-reference/grammar_neighbors/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  }
+]

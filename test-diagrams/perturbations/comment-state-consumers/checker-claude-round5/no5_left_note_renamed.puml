@@ -1,0 +1,6 @@
+@startuml
+state Forge {
+  Ore --> Ingot
+}
+note left of Forge : glowing hot
+@enduml

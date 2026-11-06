@@ -1,0 +1,6 @@
+@startuml
+skinparam ArrowFontName Verdana
+actor A
+usecase B
+A --> B : Pier quay
+@enduml

@@ -1,0 +1,40 @@
+{
+  "base": "bb550b42bf7bc3bd23774df31e9b137493cb6743",
+  "total_dynamic_sites": 3584,
+  "proposed_user_string_attribute_sites": 901,
+  "files": {
+    "crates/rustuml-render/src/activity.rs": 151,
+    "crates/rustuml-render/src/archimate.rs": 21,
+    "crates/rustuml-render/src/class.rs": 214,
+    "crates/rustuml-render/src/component.rs": 50,
+    "crates/rustuml-render/src/creole.rs": 2,
+    "crates/rustuml-render/src/deployment.rs": 116,
+    "crates/rustuml-render/src/ditaa.rs": 1,
+    "crates/rustuml-render/src/dot_diagram.rs": 2,
+    "crates/rustuml-render/src/ebnf.rs": 1,
+    "crates/rustuml-render/src/filter_registry.rs": 1,
+    "crates/rustuml-render/src/gantt.rs": 11,
+    "crates/rustuml-render/src/json_diagram.rs": 2,
+    "crates/rustuml-render/src/layout_oracle.rs": 60,
+    "crates/rustuml-render/src/mindmap.rs": 1,
+    "crates/rustuml-render/src/nwdiag.rs": 2,
+    "crates/rustuml-render/src/object.rs": 33,
+    "crates/rustuml-render/src/regex_diagram.rs": 3,
+    "crates/rustuml-render/src/salt.rs": 4,
+    "crates/rustuml-render/src/state.rs": 149,
+    "crates/rustuml-render/src/svg.rs": 24,
+    "crates/rustuml-render/src/text_render.rs": 6,
+    "crates/rustuml-render/src/timing.rs": 7,
+    "crates/rustuml-render/src/usecase.rs": 39,
+    "crates/rustuml-render/src/wbs.rs": 1
+  },
+  "expected_failure_proposal": [],
+  "notes": [
+    "Sequence excluded; local escaper differs for LF/CR/TAB preservation.",
+    "Numeric geometry, constants and generated SVG identifiers remain unchanged.",
+    "Font-family routes original names through Java double-to-single quote normalization then XML escaping. Other attributes use XML escaping only.",
+    "Existing preescaped bindings are changed at their producer; no second escaping.",
+    "Color and CSS attributes include source skinparam/style/model and externally supplied oracle model strings; routing changes XML encoding only.",
+    "This is a proposed routing inventory for parent approval, not production or attestation."
+  ]
+}

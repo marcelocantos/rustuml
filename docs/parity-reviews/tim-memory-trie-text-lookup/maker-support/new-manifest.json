@@ -1,0 +1,132 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/stored_names.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/prefix_paths.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/removal_paths.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/scope_paths.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/original_boundaries.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/surrogate_prefix.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/duplicate_named.puml",
+    "mechanism": "tim-duplicate-formal-binding",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/duplicate_defaults.puml",
+    "mechanism": "tim-duplicate-formal-binding",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/duplicate_effects.puml",
+    "mechanism": "tim-duplicate-formal-binding",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/empty_comments.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "negative": false,
+    "intended_validity": "valid_or_truncated_welcome",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/empty_function.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "negative": false,
+    "intended_validity": "valid_or_truncated_welcome",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/blank_sub.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/empty_include.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "negative": false,
+    "intended_validity": "valid_or_truncated_welcome",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  }
+]

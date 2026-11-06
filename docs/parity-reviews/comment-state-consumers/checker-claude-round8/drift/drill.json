@@ -1,0 +1,157 @@
+{
+ "M00_unmodified": {
+  "exit": 0,
+  "failing_tests": [],
+  "result": "test result: ok. 15 passed; 0 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.03s",
+  "caught": false
+ },
+ "M01_bidi_class_nsm_run_to_on": {
+  "exit": 101,
+  "failing_tests": [
+   "java_bidi::tests::bidi_tables_are_jdk_ubidi_icu"
+  ],
+  "result": "test result: FAILED. 14 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": true
+ },
+ "M02_bracket_pair_changed": {
+  "exit": 101,
+  "failing_tests": [
+   "java_bidi::tests::bidi_tables_are_jdk_ubidi_icu",
+   "java_bidi::tests::conformance_sample"
+  ],
+  "result": "test result: FAILED. 13 passed; 2 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": true
+ },
+ "M03_mongolian_use_to_arabic": {
+  "exit": 101,
+  "failing_tests": [
+   "font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15"
+  ],
+  "result": "test result: FAILED. 14 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": true
+ },
+ "M04_tahoma_blocklist_triple_changed": {
+  "exit": 101,
+  "failing_tests": [
+   "font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15"
+  ],
+  "result": "test result: FAILED. 14 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": true
+ },
+ "M05_generated_courier_gsub_arab_dropped": {
+  "exit": 101,
+  "failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ],
+  "result": "test result: FAILED. 14 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": true
+ },
+ "M06_extraction_courier_gdef_length_sums_untouched": {
+  "exit": 101,
+  "failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ],
+  "result": "test result: FAILED. 14 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": true
+ },
+ "M07_pinned_hb_layout_appended_sums_untouched": {
+  "exit": 101,
+  "failing_tests": [
+   "font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15"
+  ],
+  "result": "test result: FAILED. 14 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": true
+ },
+ "M08_pinned_hb_layout_tahoma_case_removed_sums_and_constant_forged": {
+  "exit": 101,
+  "failing_tests": [
+   "font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15"
+  ],
+  "result": "test result: FAILED. 14 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": true
+ },
+ "M09_ucd18_u1d167_removed_sums_and_constant_forged": {
+  "exit": 101,
+  "failing_tests": [
+   "font_chain::tests::unicode_mark_tables_are_ucd_18"
+  ],
+  "result": "test result: FAILED. 14 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.01s",
+  "caught": true
+ },
+ "M10_ubidi_icu_byte_flipped_sums_and_constant_forged": {
+  "exit": 101,
+  "failing_tests": [
+   "java_bidi::tests::bidi_tables_are_jdk_ubidi_icu"
+  ],
+  "result": "test result: FAILED. 14 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": true
+ },
+ "M11_monkeyman_record_courier_hash_changed": {
+  "exit": 101,
+  "failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ],
+  "result": "test result: FAILED. 14 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": true
+ },
+ "M12_code_requires_bidi_without_AN": {
+  "exit": 0,
+  "failing_tests": [],
+  "result": "test result: ok. 15 passed; 0 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": false
+ },
+ "M13_code_no_bracket_pairing": {
+  "exit": 101,
+  "failing_tests": [
+   "java_bidi::tests::conformance_sample"
+  ],
+  "result": "test result: FAILED. 14 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": true
+ },
+ "M14_code_adjust_ws_levels_noop": {
+  "exit": 0,
+  "failing_tests": [],
+  "result": "test result: ok. 15 passed; 0 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": false
+ },
+ "M15_code_component_split_disabled": {
+  "exit": 101,
+  "failing_tests": [
+   "font_chain::tests::harfbuzz_buffers_split_at_bidi_level_changes"
+  ],
+  "result": "test result: FAILED. 14 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": true
+ },
+ "M16_code_max_explicit_level_61": {
+  "exit": 0,
+  "failing_tests": [],
+  "result": "test result: ok. 15 passed; 0 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": false
+ },
+ "M17_test_const_bold_courier_unlisted": {
+  "exit": 101,
+  "failing_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ],
+  "result": "test result: FAILED. 14 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.03s",
+  "caught": true
+ },
+ "M18_code_no_latn_fallback": {
+  "exit": 101,
+  "failing_tests": [
+   "font_chain::tests::gsub_chosen_script_categorizes_the_shaper"
+  ],
+  "result": "test result: FAILED. 14 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.03s",
+  "caught": true
+ },
+ "M19_code_blocklist_ignored": {
+  "exit": 101,
+  "failing_tests": [
+   "font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef",
+   "font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer",
+   "font_chain::tests::gsub_chosen_script_categorizes_the_shaper"
+  ],
+  "result": "test result: FAILED. 12 passed; 3 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.02s",
+  "caught": true
+ }
+}

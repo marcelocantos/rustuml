@@ -1,0 +1,3243 @@
+{
+ "schema_version": 1,
+ "reviewer": {
+  "task_id": "t3-661d4578 independent shared-SVG round-6 checker (claude)",
+  "model": "claude-opus-5-5 / Claude Code in T3 Code; no children; did not implement the candidate; no Java run locally"
+ },
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "base_revision": "8317cf006a18ba626a75824b13456934dbe8ce6c",
+ "base_code_identical_to": "9834a719455308120c3289b59a260567f141b724",
+ "merge": "fc44ee58cb74817e37bc1af843f2ba549ab63610",
+ "merge_code_identical_to": "8dda18b1bf819f379c0c13d1cadd158400eed147",
+ "tested_revision": "7e9b16f52ab20a00eba367ce5d572025318325fd",
+ "answers_rejection": "50cacfe23402f66536753aec052b93df07fde4a1",
+ "no_production_changes": true,
+ "no_shipping": true,
+ "account_chronology": {
+  "accounts (docs only)": "56a67759b0904ba7bf56b521e1ace5ab5ba1a3bc",
+  "outer canvas draft": "0861a51af70aecad1661610043b5646820bd3a70",
+  "extraction tool": "9267aa10551028c6498578ac97c057886c0aac86",
+  "marks + interim table + drift gate": "5ceb530dbec1f45762390745954182cd44deec5b",
+  "YAML/JSON Display draft": "85968418f764e8962900ab3af79ccaea13aa1418",
+  "CR/LF addendum -> draft": [
+   "51687f9ad7dbd237a5e7efd07610516e60f59343",
+   "11a9b1d0a6bba0bccdb06e7983dc25342b1c4baf"
+  ],
+  "YAML | addendum -> draft": [
+   "bd0f31ce1360bbb1f551392480134c600ae885d5",
+   "9aead23f0b80af4f33e3d57bd600873597762926"
+  ],
+  "root canvas addendum -> draft": [
+   "c19eeac56f510b100e8d18f25691d1968f94beb6",
+   "ef2f8c39e729fedd582c795c9c76b91728a78413"
+  ],
+  "relay request r6a (predictions sha256 38bc8cc7..., before results)": "cbc69571567d06aede3bc920e9df5a20260feb56",
+  "post-result addenda (HarfBuzz 10.0.1, StyleExtractor)": "9bca8ab35d22727cd7dc3395bc630a69295fb638",
+  "final table + HarfBuzz 10.0.1 rules": "41bf6019690f1e88589a85c066b84186f915f62c",
+  "blank-line drop": "ad554600c035b23d33d337f26c9fc2a5f47b94ab",
+  "test only": "6838ac4ea5cdb432f60f927122ebfe34800c31b5",
+  "every account and addendum precedes its change in linear ancestry; account and addendum commits are docs-only": true,
+  "post-BI output changes disclosed (results.json final_tip_changed_from_prediction: yd7_block_mid_document, mk7_0897_u16, mk7_1e5ee_u16, mk7_after_hebrew, fe7_f8b7_simple, fe7_20b7_simple)": true
+ },
+ "frozen_items": "unchanged 8317cf006..7e9b16f52: crates/rustuml-oracle (comparator slack, syntax markers, park list, error census, guard allow-lists, 14-entry strict-XML list), test-diagrams/no_oracle_baseline.txt, decimal_literal_baseline.txt, docs/reference-bootstrap.md; round 6 adds no 3+-decimal literal (ratchet lines identical merge -> tip)",
+ "do_not_regress_check": "BH/BG/BF/BE/BC/BB/AW/AU/AR: 0 lost vs merge, 0 comments lost, 0 new errors, panics or stderr changes; sweep merge->tip 0 lost matches, 0 lost rejections, 0 new valid-input errors, 0 new panics or timeouts, 0 comments lost (4 stderr changes are thread ids of pre-existing panics dash_01/03/06/07). Outer image origin, root-path note names, pass-three anchors, routing guard, width-token decoding, decode-site escaping, '?' comment rule, .notdef constants, note paint order, border points, stderr discard, node order, leaf corners, nested x, surrogate serializer, %intval, bracket declaration, strokes, X[H], seed, __theme, %strlen/%substr/%upper: unchanged outcomes in their batches and perturbation directories (parity_perturbations: 0 new failures on files existing at base or at merge).",
+ "commands": [
+  "git switch -c review/shared-svg-round6-claude 7e9b16f52ab20a00eba367ce5d572025318325fd; git -c protocol.file.allow=always submodule update --init --reference /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden test-diagrams/golden  # 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "git archive 8317cf006 | fc44ee58c | 7e9b16f52 -> ~/Library/Caches/rustuml-shared-svg-round6-claude-checker/src/<rev>; CARGO_TARGET_DIR=~/Library/Caches/rustuml-shared-svg-round6-claude-checker/target/<rev> cargo build --release -j 6 -p rustuml  # binaries sha256 00094ef5.. (base) 15b48398.. (merge) 8cb25352.. (tip)",
+  "checker-cmp (tools/checker-cmp-main.rs) built against the base export's rustuml-oracle (unchanged base->tip): compare::compare_svg_strict",
+  "python3 -I tools/sweep.py <bin> <out> <repo> work/cwd_map.json test-diagrams/golden test-diagrams/perturbations  # 16,701 sources x 3, recorded cwd; tools/sweep3.sh; tools/cohorts.py",
+  "python3 -I tools/batch.py ~/Library/Caches/rustuml-shared-svg-round6-claude-checker/work <relay dir> <label> bin/rustuml-8317cf006=base bin/rustuml-fc44ee58c=merge bin/rustuml-7e9b16f52=tip  # BI BH BG BF BE BC BB AW AU AR; tools/batchsum.py",
+  "bash tools/gates_all.sh  # gates.sh per tree (lib, pipe_mode, golden_no_oracle, golden_pairs, parity_perturbations, harness_guards, doc_claims) for tip and base; merge: parity_perturbations, harness_guards; tools/gatelists.py",
+  "bash tools/clippy_json.sh; python3 -I tools/clippy_list.py  # cargo clippy -p <crate> --no-deps --message-format=json -- -D warnings, crate root touched first",
+  "harfbuzz: git clone --filter=blob:none https://github.com/harfbuzz/harfbuzz; git show <tag>:src/<file>; tools/hbdiff.sh",
+  "font table: tools/font_chain_coverage.py and tools/font_chain_unicode.py regenerated (+ rustfmt) from the stored extraction and official UCD files; tools/drift_drill.sh (7 mutations, restored)",
+  "held-out batch K6A: python3 -I tools/k6a_sources.py; tools/canvas_pool.py (integral-extent selection); tools/predict.py base/merge/tip; tools/stage.py; chmod a-w",
+  "python3 -I tools/register.py <repo> pairs-BI.json BI=...; python3 -I tools/write_reviews6.py <repo> evidence",
+  "python3 -I tools/batch.py work /Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round6-k6a BJ bin/rustuml-8317cf006=base bin/rustuml-fc44ee58c=merge bin/rustuml-7e9b16f52=tip; tools/batchsum.py; tools/bj_texts.py (text/viewBox decomposition); exact viewBox census",
+  "python3 -I tools/register.py <repo> pairs.json BI=...=432b4184... BJ=...=1ba3bf60...  # error-page markers now include YAML/JSON 'does not sound like'",
+  "HarfBuzz 15.0.0: git show 15.0.0:src/{hb-ot-shape.cc,hb-ot-shape-fallback.cc,hb-unicode.hh,hb-ot-shaper*.{hh,cc},hb-ot-shape-normalize.cc} vs 10.0.1; UnicodeData 16.0.0 vs 18.0.0; font tables of Lucida Grande, Helvetica, Menlo .ttc checked for trak/STAT/kern",
+  "python3 -I tools/write_reviews6b.py <repo> evidence"
+ ],
+ "supersedes_pending_records": {
+  "commit": "409c512ebac284703eed577196a235580b8bd2c3",
+  "records": [
+   "tim-builtin-value-boundaries/review-6.json",
+   "comment-state-consumers/review-7.json"
+  ]
+ },
+ "relays_answered": {
+  "BJ (K6A, held out from the maker)": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round6-k6a/",
+   "reference_manifest_sha256": "d8010b01957ffb7e2302fc111b4267f0ead659143be056cd86ece45ef32e59d6",
+   "reference_input_bundle_sha256": "a2170453d1b9239a15b7c67378d57104a0a9bfcabaa50844f1318585be62db95",
+   "reference_results_sha256": "1ba3bf60163841bd6a6e4540aa762e09e2587f4f8af431e9a1657afe8b9077cd",
+   "reference_transport_sha256": "e247d6886292a3bfc677b5ada8690e5c38f334902d64038b8bd83740546b4588",
+   "parent_relay_validation_sha256": "d76ee71b4d78ab2cdd7b27a0c78a8904da62211652a09ec967f29f5b34b6f4f3",
+   "rust_predictions_sha256_registered_before_results": "31b7fcf5693f788ebc2d56530979e8edfbd94a0bce3334a4328ce834a6122264"
+  },
+  "Monkey Man HarfBuzz diagnostic": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round6-monkeyman-hb/out/",
+   "SHA256SUMS_sha256": "c5d00e3cd71cd98cfb546c940ac747ef1a9281fc33cf0a10d1c010a63314adc8",
+   "run_sh_sha256": "f013f976055c62d938a26ca2cbf5b0503c7ead0297dcc889592016d0e52455da",
+   "loaded": "/opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib (current_version 61500 = 15.0.0, sha256 b04ab259a343ba51a50db8d1df637160f31d342a66c4192e18dba63ea42ed04a), FreeType 2.15.0; DYLD_PRINT_LIBRARIES and lsof/vmmap of a live reference JVM agree; receipt stable 15.0.0 poured 2026-10-28 10:37 UTC (opt symlink Oct 28 21:37 local); kegs 10.1.0 and 13.2.1 also installed",
+   "methodA_output": "byte-identical to BJ mk8_lucida_arabic's Java output (textLength 53.8811): the BJ run used the same library",
+   "font_files": "Helvetica.ttc, LucidaGrande.ttc, Menlo.ttc, GeezaPro.ttc, Times New Roman.ttf, Verdana.ttf, Arial.ttf, Courier New.ttf: sha256 identical on Monkey Man and colossus"
+  }
+ },
+ "evidence": {
+  "dir": "checker-claude-round6 (byte-identical copy in docs/parity-reviews/comment-state-consumers/ and docs/parity-reviews/tim-builtin-value-boundaries/; SHA256SUMS.json)",
+  "measurements": "checker-claude-round6/measurements.json",
+  "batches": "checker-claude-round6/batches, checker-claude-round6/batch-summary.json",
+  "cohorts": "checker-claude-round6/cohorts.json",
+  "pairs": "checker-claude-round6/pairs.json (BI + BJ; pairs-BI.json kept)",
+  "gates": "checker-claude-round6/gates (guard categories, perturbation summary, decimal ratchet, no-oracle families, clippy-diags.json, clippy-introduced.json)",
+  "harfbuzz": "checker-claude-round6/harfbuzz (+ planner-15.0.0.txt, default-ignorable-and-mn-15.0.0.txt, diff-10.0.1-vs-15.0.0.txt)",
+  "font_table": "checker-claude-round6/font-table (regeneration, cmap, drift drill M0-M7)",
+  "held_out_request": "checker-claude-round6/k6a-request (sources, cases, manifest, bundle, Rust predictions, prediction-summary.json, generator)",
+  "monkeyman_request": "checker-claude-round6/monkeyman-hb-request",
+  "tools": "checker-claude-round6/tools",
+  "relay_results": "checker-claude-round6/relay-results (bj: batch-BJ.json, batch-summary-BJ.json, bj-viewbox.json, tip-failures-texts.txt, java-error-pages/; monkeyman-hb: static.txt, methodA.*, methodB.*, SHA256SUMS)"
+ },
+ "counts": {
+  "BI_r6a_given_to_maker": "48 cases, Java exit 0 x48; strict base/merge/tip 5/9/39, strict+comments 1/9/39; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "BH": "99 cases, Java exit 0 x96; strict base/merge/tip 12/67/78, strict+comments 3/67/78; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "BG": "53 cases, Java exit 0 x52; strict base/merge/tip 12/41/41, strict+comments 0/41/41; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "BF": "46 cases, Java exit 0 x45; strict base/merge/tip 6/32/32, strict+comments 1/32/32; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "BE": "34 cases, Java exit 0 x32; strict base/merge/tip 0/22/22, strict+comments 0/22/22; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "BC": "19 cases, Java exit 0 x19; strict base/merge/tip 0/18/18, strict+comments 0/18/18; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "BB": "36 cases, Java exit 0 x36; strict base/merge/tip 2/25/25, strict+comments 2/25/25; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "AW": "45 cases, Java exit 0 x41; strict base/merge/tip 6/30/30, strict+comments 6/30/30; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "AU": "32 cases, Java exit 0 x29; strict base/merge/tip 6/21/21, strict+comments 6/21/21; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "AR": "20 cases, Java exit 0 x20; strict base/merge/tip 6/17/17, strict+comments 6/17/17; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "goldens": "12550 sources, 11351 Java-valid: strict 11181/11181/11181; tip exits {'1': 76, '0': 12474}; 0 panics, 0 timeouts; merge->tip 91 outputs changed, 0 match changes",
+  "sweep_all": "16701 sources, 15189 Java-valid: strict 12941/13695/13706; merge->tip {'gained_match': 11, 'outputs_changed': 192, 'stderr_changed': 4}; base->tip {'comments_gained': 927, 'comments_lost': 2, 'error_now_renders_valid_ref': 7, 'gained_match': 768, 'lost_match_GET_provenance': 3, 'outputs_changed': 1856, 'panic_removed': 6, 'rejection_gained': 71, 'stderr_changed': 132}",
+  "GET_goldens": "act_skinparam2_shadowing_true, act_skinparam_shadowing, edge_whitespace_multiple_blank_lines: MATCH at base, DIFF at merge and tip (raw-reader contract, not round 6)",
+  "gates": "golden_no_oracle 11181/11251 at base and tip; per family base->tip activity 1299->1297, edge-cases 760->759 (the 3 GET goldens), preprocessing 285->286, state 895->897 (CLI sweep names: lost = the 3 GET goldens; gained preproc_complex_theme_override, state_history_shallow, state_note_composite); golden_pairs 12550 total, 10497 passed, 754 failed, 1299 skipped at base and tip; parity_perturbations failing base/merge/tip 1365/1667/1656, 0 new failures on files that exist at base, 0 vs merge, 11 fixed merge->tip; harness_guards categories identical merge->tip, T14.6.7 categories 98+98 escapes / 98 / 98 unchanged base->tip; decimal ratchet lines identical merge->tip; pipe_mode 17/17 (base 13/13); workspace lib 1591/1591 (base 1468/1468); doc_claims 2/2",
+  "clippy": "cargo clippy -p <crate> --no-deps -- -D warnings, distinct error diagnostics base/merge/tip: rustuml-render 19/32/32, rustuml-parser 1/1/1 (dead_code), rustuml-oracle 1/1/1 (useless_format), rustuml-layout 0/0/0, rustuml 0, rustuml-math 0. Introduced by the packet line: 13 in rustuml-render, all before round 6 (merge == tip). The maker's '2 layout errors' does not reproduce (layout re-linted from a touched crate root: 0 at all three trees); its 22/35 render counts include summary lines.",
+  "BJ_K6A_held_out": "120 cases; Java exit 0 x117, exit 200 x3 (s8_chr10_seq, s8_chr13_seq, s8_chr13_class: Java syntax error 'Assumed diagram type: sequence', line 1); 2 more are Java error pages with exit 0 (y8_folded: UnsupportedOperationException wip4, y8_list_key_block: wip3, 'Your data does not sound like YAML data'); 115 Java-valid registered. Strict base/merge/tip 25/42/80 of 120 (strict+comments 15/42/80); registered pass at tip 80/115. Lost vs merge: mk8_lucida_arabic, mk8_seq_arabic; lost vs base: none; 40 gained vs merge; 0 new valid-input errors, 0 lost rejections, 0 panics, 0 comments lost; stderr changed vs merge only y8_blank_lines_everywhere, y8_block_whitespace_lines (merge errored, tip renders). Exact viewBox over the 117 exit-0 cases 24/36/84; lost exact viewBox merge->tip: mk8_lucida_arabic, mk8_seq_arabic, mk8_menlo_hebrew; 51 gained.",
+  "intent_disagreements_classified": "y8_folded, y8_list_key_block: intended invalid, Java exit 0 but an error page (YamlParser wip4/wip3): invalid, as intended; Rust renders at base, merge and tip (pre-existing lost rejection). s8_chr10_seq, s8_chr13_seq, s8_chr13_class: intended valid, Java syntax error at line 1 (exit 200): invalid; Rust renders at all three (pre-existing lost rejection). All five are evidence only."
+ },
+ "mechanism": "tim-builtin-value-boundaries",
+ "account_commit": "56a67759b0904ba7bf56b521e1ace5ab5ba1a3bc",
+ "implementation_commit": "ad554600c035b23d33d337f26c9fc2a5f47b94ab",
+ "other_commits_reviewed": {
+  "display_draft": "85968418f764e8962900ab3af79ccaea13aa1418",
+  "crlf_addendum": "51687f9ad7dbd237a5e7efd07610516e60f59343",
+  "crlf_draft": "11a9b1d0a6bba0bccdb06e7983dc25342b1c4baf",
+  "block_addendum": "bd0f31ce1360bbb1f551392480134c600ae885d5",
+  "block_draft": "9aead23f0b80af4f33e3d57bd600873597762926",
+  "extraction_tool": "9267aa10551028c6498578ac97c057886c0aac86",
+  "marks_interim": "5ceb530dbec1f45762390745954182cd44deec5b",
+  "post_result_addenda": "9bca8ab35d22727cd7dc3395bc630a69295fb638",
+  "marks_final": "41bf6019690f1e88589a85c066b84186f915f62c",
+  "test_only": "6838ac4ea5cdb432f60f927122ebfe34800c31b5",
+  "relay_request": "cbc69571567d06aede3bc920e9df5a20260feb56"
+ },
+ "scope": "round-6 text obligations: YAML/JSON display escapes (Display.getWithNewlines, AtomText tabs), YAML | blocks, StyleExtractor blank lines, CR/LF advance, unmapped nonspacing marks (HarfBuzz 10.0.1), reference-host font table and drift gate",
+ "verdict": "rejected",
+ "packet_verdict": "Packet 7e9b16f52 rejected on fresh held-out Java evidence (BJ = K6A). (1) The YAML '|' rewrite (9aead23f0) draws 'example: |+' where Java draws 'example: |' (y8_block_inner_pipe, _end, _nested). (2) The mark rule (41bf60196) zeroes marks whose base is in another font slot: mk8_lucida_arabic and mk8_seq_arabic matched at merge and fail at the tip; mk8_helv_hebrew and mk8_menlo_hebrew gain the same error. (3) Its premise is wrong for the reference host: the JVM loads HarfBuzz 15.0.0 (Unicode 18), confirmed by the diagnostic and by mk8_u17_*/mk8_u18_* zero advances. Confirmed and accept-ready on their own: outer and root canvas (exact on 10 fresh cases), StyleExtractor blank lines, CR/LF advance, Display escapes and AtomText tabs (with two scoping obligations). Broad gates and the ten earlier batches show 0 losses vs merge.",
+ "per_mechanism_verdicts": {
+  "YAML | block line breaks (bd0f31ce1 -> 9aead23f0)": "rejected: '+' injected into block bodies; Java-confirmed on BJ y8_block_inner_pipe, _end, _nested",
+  "unmapped marks, HarfBuzz rules (56a67759b -> 5ceb530db, 9bca8ab35 -> 41bf60196)": "rejected: buffer is the script run only; BJ mk8_lucida_arabic and mk8_seq_arabic lost vs merge, mk8_helv_hebrew and mk8_menlo_hebrew worsened; loaded HarfBuzz is 15.0.0 (UCD 18), not 10.0.1",
+  "StyleExtractor blank-line drop (9bca8ab35 -> ad554600c)": "confirmed (BJ y8_block_whitespace_lines, y8_blank_lines_everywhere)",
+  "Display.getWithNewlines + AtomText tabs (56a67759b -> 85968418f)": "confirmed on 25 fresh cases; obligations: YAML literal TAB and flow-sequence backslash happen before Display in Java; tab size from skinparam",
+  "CR/LF advance (51687f9ad -> 11a9b1d0a)": "confirmed (BJ j8_decoded_cr width 20.9727 = Java; same Lucida Grande file on both hosts); CR serialization residue",
+  "font table + drift gate (9267aa105, 5ceb530db, 41bf60196)": "table consistent and regenerable; fresh complex-path scalars 11/12 match; gate misses the Helvetica kern bit; HarfBuzz provenance wrong"
+ },
+ "findings": [
+  "REJECT (fresh held-out, packet-caused, Java-confirmed). The YAML '|' rewrite (bd0f31ce1 -> 9aead23f0, keep_block_line_breaks) appends '+' to every line ending in ': |', block bodies included. Java (YamlParser.getBlockStyleString 133-149, cleanBlockStyle 151-154) copies those lines trimmed: BJ y8_block_inner_pipe Java 'example: |\\nplain line' (138.7012), tip 'example: |+\\nplain line'; y8_block_inner_pipe_end Java 'Moss\\nratio: |' 84.793, tip 'Moss\\nratio: |+' 95.9219 (without the '+', the tip's LF metric would give Java's text and width; base and merge drew 'ratio: |' at 88.0947, the old LF advance); y8_block_inner_pipe_nested Java 'a: |\\nb', tip 'a: |+\\nb'. Difference counts rise at the tip (5->6, 4->6, 7->8).",
+  "Correction to review-6: 'note:   |' and 'note: | # tail' are not missed. serde_yml's default clip keeps the final line break, as Java's block does; BJ y8_block_spaced_pipe and y8_block_comment_pipe match at the tip. The '+' is needed only where serde would not end the body with a break; the rewrite's defect is its scope (any line, body lines included), not the header forms.",
+  "cleanBlockStyle's per-line trim is not ported: BJ y8_block_relative_indent Java 'Moss\\nFern\\nReed' (106.7773), tip 'Moss\\n  Fern\\nReed' (pre-existing; base and merge also kept the indentation).",
+  "StyleExtractor blank-line drop (ad554600c): confirmed. BJ y8_block_whitespace_lines (base and merge exit 1) and y8_blank_lines_everywhere (merge exit 1) match at the tip; y8_block_two_blocks_end matches.",
+  "Display.getWithNewlines and AtomText tabs (85968418f): confirmed on 25 fresh cases (y8 escapes, alignment, nesting, whitespace, CRLF; j8 decoded TAB/LF/CR LF, backslash pairs, bold tab keys, arrays, uneven nested boxes, highlighted rows). Two scoping defects where Java transforms the text before Display: YamlLine.build replaces a literal TAB with four spaces (BJ y8_real_tab_value: Java 'a    b' 34.2617; tip draws AtomText tab stops, DIFF6 -> DIFF12) and YamlLine.toList makes the character after a backslash literal in flow sequences (y8_flow_seq_escapes: Java 'anb', 'etf'; tip splits 'a'/'b' and tabs 'e'/'f', DIFF11 -> DIFF18). Both failed at base and merge too (not lost matches), but the packet moved them further from Java. Java honours 'skinparam tabSize 4' in @startyaml/@startjson (y8_tabsize4, j8_tabsize4 Java exit 0); Rust exits 1 at all three trees (pre-existing valid-input error), so the fixed eight-space TAB_STRING cannot yet be tested against it. y8_escape_trailing is a Java line continuation (trailing backslash joins the next line: 'abcm: \\'), outside this packet.",
+  "CR/LF advance (11a9b1d0a): confirmed on the reference host. BJ j8_decoded_cr Java textLength 20.9727 = tip (a + CR as Lucida Grande glyph 2, 648/2048 em + b); j8_unicode_lf, j8_decoded_crlf_tail and y8_crlf match; LucidaGrande.ttc has the same sha256 on Monkey Man and colossus, so the CoreText glyph-2 measurement on colossus is the reference font's. j8_decoded_cr still fails on serialization only: Java writes 'a&#13;b', the tip a raw CR (pre-existing). The non-YAML probes (s8_chr10_seq, s8_chr13_seq, s8_chr13_class) are Java syntax errors, so the rule's effect on other families is not measured; it changes their widths (sequence 67.2153 -> 64.1494, class 72.3857 -> 69.084) where Java rejects the input.",
+  "REJECT (fresh held-out, packet-caused). The mark rule's after_base walks the script run; JDK shapes one HarfBuzz buffer per script run x font-slot run (FontRunIterator.next splits at every slot change; CCompositeGlyphMapper puts a scalar no slot maps in slot 0). BJ, decomposed against controls: mk8_lucida_arabic Java 53.8811 = control 43.3811 + 10.5 (Lucida Grande .notdef 1536/2048 x 14): the mark keeps its .notdef because alef U+0627 is in the Geeza Pro slot; merge 53.8811 MATCH, tip 43.3811 DIFF5. mk8_seq_arabic (sequence): Java 50.0324, merge MATCH, tip 40.2824 DIFF10. mk8_helv_hebrew: Java 53.7031 - control 44.8301 = 8.873 = Helvetica .notdef 1298/2048 x 14 (alef from the Lucida Grande slot); tip zeroes it (43.5313; merge 52.4043 differed only by the alef advance), DIFF4 -> DIFF5. mk8_menlo_hebrew: Menlo does not map U+05D0 (CoreText cmap), Java 67.4023 keeps the mark's 8.4287 cell; tip 59.001; exact viewBox lost (119 -> 111). Same-buffer cases match: mk8_lucida_syriac (Syriac unmapped everywhere, zero), mk8_helv_hebrew_pres (U+FB1D unmapped everywhere, zero), mk8_cjk_base (default shaper), BI mk7_after_hebrew (mark zero; alef residue).",
+  "Marks, confirmed parts: unmapped Unicode-16 Mn in new blocks (mk8_u16_113bb, mk8_u16_10d69, mk8_u16_1612d), Me and Mc not zeroed (mk8_me_1abe, mk8_mc_11f03), leading/indic/Arial/Verdana .notdef kept (mk8_lucida_devanagari, mk8_arial_9/23, mk8_verdana_9/23), and the zero rule at sizes 9 and 23 for SansSerif, Helvetica and Lucida Grande Bold (mk8_sans_9/23, mk8_helv_9/23, mk8_sans_bold_23) match whole-output. Monospaced widths match (mk8_mono_9/23, family name and NBSP differ, pre-existing). Serif: Java keeps both marks (Times New Roman has GPOS; 40.7461), Rust measures Serif with Lucida Grande and now zeroes them (44.4199 -> 30.9199); pre-existing family mapping, failing at merge too. Courier New unchanged and failing (pre-existing). mk8_hebrew_lead_mark fails identically at merge and tip.",
+  "HarfBuzz 15.0.0 is what the reference JVM loads; 10.0.1 is only libfontmanager's link-time compatibility version. Consequences (official tag 15.0.0 vs 10.0.1; harfbuzz/): (1) Unicode data 18.0.0, not 16.0.0: 70 more Mn scalars (39 from 17.0, 31 from 18.0; none reclassified). Java zeroes them (BJ mk8_u17_1ad0 Java 49.7861 = 'Vault ' + U+10FFFD only; mk8_u17_1e6e3 39.2861; mk8_u18_05c8 39.2861); the tip's NONSPACING_MARKS (16.0.0) draws .notdef: 3 fresh failures, pre-existing outputs (tip = merge) but the packet's declared provenance ('HarfBuzz 10.0.1's UCD') is falsified. (2) Planner: the rules the port uses are unchanged in effect: script_zero_marks and script_fallback_position (renamed from script_fallback_mark_positioning) are still taken before the morx swap to dumber; zero_marks, adjust_mark_positioning_when_zeroing and fallback_mark_positioning keep the same form; hb_synthesize_glyph_classes, zero_mark_widths_by_gdef, hb_ot_position and hb_ot_hide_default_ignorables are identical; default/arabic/hebrew keep BY_GDEF_LATE and fallback_position true, dumber NONE/false. (3) Changed in 15.0.0 and not modelled: legacy kern (and fallback kern) applies only for fallback-position shapers (affects kerning in other runs on kern faces such as Helvetica, not mark advances); trak applies by default when a font has trak and STAT (Lucida Grande, Helvetica and Menlo .ttc have neither, so no effect on these faces); position_cluster skips hidden and default-ignorable glyphs when looking for a base (a mark after such a glyph in a Hebrew/Arabic run); is_default_ignorable adds U+180F; hb_ot_shaper_categorize adds Unicode 17/18 scripts (unreachable here: ScriptRun maps them to Common); normalization switches to normalizer_glyph_index and a variation-selector flag (no advance effect found). (4) The oracle itself moved: the opt/harfbuzz link changed on 2026-10-28 with 10.1.0 and 13.2.1 still installed, so relay batches run before that date were shaped by an older library than BH, BI and BJ. That is a T14.6.8 environment fact, not a packet defect.",
+  "Font table and drift gate: fresh PingFang-asset and user-font scalars on the complex path match at the tip for 11 of 12 (fe8_31b8, 324a, 1f105, 327e, f830, fa2e, f881, 218a, f851, f8c0, f8fe complex); fe8_fe22_complex is the declared mapped-mark residue (Java zero; tip 63.7861). Simple path: fe8_31b8, 324a, fe22, f830, f881 simple match; fe8_327e, fa2e, 218a, f851, f8c0, f8fe simple fail on the declared substituted-glyph advance (e.g. f851 Java 47.7148, tip 53.2861). The Helvetica font file is identical on both hosts, so the colossus cross-stream kern bit is the reference host's; the gate still does not check it (drill M5). The table is regenerable and consistent; it records HarfBuzz 10.0.1 as provenance, which is wrong for the reference host.",
+  "BI (given to the maker): unchanged, 39/48 at the tip; the 9 failures are as recorded in review-6 and none is lost.",
+  "Clippy (bounded obligation, not a parity rejection): 13 rustuml-render diagnostics introduced by the packet line before round 6 (gates/clippy-introduced.json): clippy::useless_borrows_in_formatting activity.rs:27402 (x2), 28762, 28815, 28869, archimate.rs:629, class.rs:13916 (x2), object.rs:1102; clippy::too_many_arguments deployment.rs:3310; clippy::needless_borrow state.rs:7644, 7836, 7878. Round 6 adds none. Layout: 0 (the maker's 2 do not reproduce)."
+ ],
+ "attributed_regressions": [
+  {
+   "case": "BJ mk8_lucida_arabic",
+   "commit": "41bf6019690f1e88589a85c066b84186f915f62c",
+   "java_exit": 0,
+   "merge": "match",
+   "tip": "DIFF5 (mark zeroed; Java keeps .notdef 10.5)"
+  },
+  {
+   "case": "BJ mk8_seq_arabic",
+   "commit": "41bf6019690f1e88589a85c066b84186f915f62c",
+   "java_exit": 0,
+   "merge": "match",
+   "tip": "DIFF10 (mark zeroed)"
+  },
+  {
+   "case": "BJ mk8_helv_hebrew",
+   "commit": "41bf6019690f1e88589a85c066b84186f915f62c",
+   "java_exit": 0,
+   "merge": "DIFF4 (alef advance)",
+   "tip": "DIFF5 (alef advance + mark zeroed; Java keeps 8.873)"
+  },
+  {
+   "case": "BJ mk8_menlo_hebrew",
+   "commit": "41bf6019690f1e88589a85c066b84186f915f62c",
+   "java_exit": 0,
+   "merge": "DIFF5, exact viewBox 119",
+   "tip": "DIFF6, viewBox 111 (mark zeroed)"
+  },
+  {
+   "case": "BJ y8_block_inner_pipe",
+   "commit": "9aead23f0b80af4f33e3d57bd600873597762926",
+   "java_exit": 0,
+   "merge": "DIFF5",
+   "tip": "DIFF6 ('example: |+')"
+  },
+  {
+   "case": "BJ y8_block_inner_pipe_end",
+   "commit": "9aead23f0b80af4f33e3d57bd600873597762926",
+   "java_exit": 0,
+   "merge": "DIFF4 (old LF advance)",
+   "tip": "DIFF6 ('ratio: |+'; only error)"
+  },
+  {
+   "case": "BJ y8_block_inner_pipe_nested",
+   "commit": "9aead23f0b80af4f33e3d57bd600873597762926",
+   "java_exit": 0,
+   "merge": "DIFF7",
+   "tip": "DIFF8 ('a: |+')"
+  }
+ ],
+ "held_out_failures": {
+  "packet-changed, still failing (pre-existing cause)": [
+   "y8_real_tab_value",
+   "y8_flow_seq_escapes",
+   "mk8_serif_9",
+   "mk8_serif_23"
+  ],
+  "HarfBuzz 15.0.0 UCD (tip = merge)": [
+   "mk8_u17_1ad0",
+   "mk8_u17_1e6e3",
+   "mk8_u18_05c8"
+  ],
+  "pre-existing, unchanged by round 6": [
+   "y8_block_relative_indent",
+   "y8_escape_trailing",
+   "y8_tabsize4",
+   "j8_tabsize4",
+   "j8_decoded_cr (serialization only)",
+   "m8_json_class",
+   "m8_json_crlf",
+   "m8_json_usecase",
+   "mk8_couriernew_9",
+   "mk8_couriernew_23",
+   "mk8_mono_9",
+   "mk8_mono_23",
+   "mk8_hebrew_lead_mark",
+   "mk8_helv_hebrew_ctrl"
+  ],
+  "declared residue (substituted-glyph advance, mapped mark)": [
+   "fe8_327e_simple",
+   "fe8_fa2e_simple",
+   "fe8_218a_simple",
+   "fe8_f851_simple",
+   "fe8_f8c0_simple",
+   "fe8_f8fe_simple",
+   "fe8_fe22_complex"
+  ]
+ },
+ "bounded_next_obligations": [
+  "Blocking: port YamlParser.getBlockStyleString instead of rewriting text (header from YamlLine.build: trimmed value '|' after comment removal; body until a non-text, non-empty line at indent <= the key's; each line trimmed; '\\n' after each). Acceptance: BJ y8_block_inner_pipe, y8_block_inner_pipe_end, y8_block_inner_pipe_nested, y8_block_relative_indent, the block pairs that match now (y8_block_spaced_pipe, y8_block_comment_pipe, y8_block_two_blocks_end, y8_block_dash_body, y8_block_nested_key, y8_block_whitespace_lines, BI yd7_block_mid_document, BH dc6_yaml_block), plus a renamed variant with a body line ending ': |' at depth 3.",
+  "Blocking: shape marks per HarfBuzz buffer = ScriptRun run x font-slot run (FontRunIterator), so a base from another slot does not count. Acceptance: BJ mk8_lucida_arabic, mk8_seq_arabic, mk8_helv_hebrew (its width minus mk8_helv_hebrew_ctrl's), mk8_menlo_hebrew exact viewBox, and the same-buffer cases mk8_lucida_syriac, mk8_helv_hebrew_pres, mk8_cjk_base, BI mk7_after_hebrew; plus a fresh Thai- or Devanagari-slot base before a mark in a default run.",
+  "Re-base the mark model on HarfBuzz 15.0.0: NONSPACING_MARKS/UNICODE_MARKS from UnicodeData 18.0.0 (BJ mk8_u17_1ad0, mk8_u17_1e6e3, mk8_u18_05c8), U+180F default-ignorable, position_cluster's hidden/default-ignorable skip; correct the provenance in tools/font_chain_unicode.py, font_chain.rs and font_chain_coverage.py.",
+  "T14.6.8: declare HarfBuzz 15.0.0 (and FreeType 2.15.0) as part of the reference environment in docs/reference-bootstrap.md, with the date the link moved (2026-10-28) and its effect on earlier relay batches; gate the Helvetica / Helvetica-Bold kern bit (drill M5).",
+  "Apply YamlLine.build's TAB -> four spaces and YamlLine.toList's backslash rule before Display (BJ y8_real_tab_value, y8_flow_seq_escapes); accept 'skinparam' in @startyaml/@startjson and take the tab stop from skinParam.getTabSize() (BJ y8_tabsize4, j8_tabsize4).",
+  "Serialize CR in SVG text as &#13; (BJ j8_decoded_cr).",
+  "Clippy -D warnings: the 13 rustuml-render diagnostics introduced by the packet line (gates/clippy-introduced.json)."
+ ],
+ "evidence_only_cases": [
+  {
+   "name": "s8_chr10_seq",
+   "batch": "BJ",
+   "java_exit": 200,
+   "reason_not_registered": "Java error page (exit 200); parity_perturbations fails every preserved Java error page; evidence only",
+   "tip_outcome_vs_java": "renders normally where Java crashes",
+   "source_sha256": "aa3959ae9eeea2efc1765b3329a7d6cc4ffd3fc3de69b0d9d9380d0dc1a228b9"
+  },
+  {
+   "name": "s8_chr13_class",
+   "batch": "BJ",
+   "java_exit": 200,
+   "reason_not_registered": "Java error page (exit 200); parity_perturbations fails every preserved Java error page; evidence only",
+   "tip_outcome_vs_java": "renders normally where Java crashes",
+   "source_sha256": "bd2c4fbe5742d23af7e94c8e929fbf37026919aa2d328c9d4b30eefc084f589d"
+  },
+  {
+   "name": "s8_chr13_seq",
+   "batch": "BJ",
+   "java_exit": 200,
+   "reason_not_registered": "Java error page (exit 200); parity_perturbations fails every preserved Java error page; evidence only",
+   "tip_outcome_vs_java": "renders normally where Java crashes",
+   "source_sha256": "4a7db26f3d1dae0e6c84ea933f28cef85c8e3b0660c787d5c11774a94d64e35d"
+  },
+  {
+   "name": "y8_folded",
+   "batch": "BJ",
+   "java_exit": 0,
+   "reason_not_registered": "Java error page (exit 0; Your&#160;data&#160;does&#160;not&#160;sound&#160;like&#160;); parity_perturbations fails every preserved Java error page; evidence only",
+   "tip_outcome_vs_java": "renders normally where Java crashes",
+   "source_sha256": "df9f6831ab02146f4af9f2592a9ede50acd55d6445dd0445e8e735ccdc194cc8"
+  },
+  {
+   "name": "y8_list_key_block",
+   "batch": "BJ",
+   "java_exit": 0,
+   "reason_not_registered": "Java error page (exit 0; Your&#160;data&#160;does&#160;not&#160;sound&#160;like&#160;); parity_perturbations fails every preserved Java error page; evidence only",
+   "tip_outcome_vs_java": "renders normally where Java crashes",
+   "source_sha256": "7b1bfaa8853b0c992bd00033ef3b9b99815d32fd2ec6a73af9a7297f773ec07e"
+  }
+ ],
+ "perturbations": [
+  {
+   "name": "fe7_1f101",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "font environment",
+    "U+1F101 complex path (PingFang asset)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_1f101.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_1f101.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "12963d815f3b53b97a3c55346c0eca90a894c1c1696c10307425dd7c53352ffa",
+   "golden_sha256": "8a5e1daba259be924ec48852ab557ab9c7db03f44716e11df36938792c969e04",
+   "base_8317cf006": "0/match/0/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe7_20b7_complex",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "font environment",
+    "U+20B7 complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_20b7_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_20b7_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "dbd075033a9fb5934228af10a12584518819bf3c6d187d0c67b7096e04060cbc",
+   "golden_sha256": "a6c8aca8f3f8f7c24202e4b3c6b3783d95b0232730164a67883a1a67c47758cb",
+   "base_8317cf006": "0/DIFF/4/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe7_20b7_simple",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "font environment",
+    "U+20B7 simple path (user font / asset)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_20b7_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_20b7_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "912b54a81fbed305c98450c78d9e4b12a91bec0112ce1f0f110a49762be8f528",
+   "golden_sha256": "bd4d79179be56825dc256af08fb7bf4c611a208a2336b6ab9e4850b6b3f2f9d8",
+   "base_8317cf006": "0/DIFF/4/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/4/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "fe7_31bc_complex",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "font environment",
+    "U+31BC complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_31bc_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_31bc_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "f8b4a81388bbd59edbffced2dffb238017a80665709a391682459992b3ccac38",
+   "golden_sha256": "1add0655c662e26660055291eaa2af971545155445121b596af4b42c0b042580",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe7_31bc_simple",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "font environment",
+    "U+31BC simple path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_31bc_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_31bc_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "b027fca97ab1289e3054a04ed367e53e9605d60ba8a978830cbfe9830d87540d",
+   "golden_sha256": "af50412e66843bb84a7fff20585dc04ac06efc1f89773c0c95ba86765c8a609a",
+   "base_8317cf006": "0/match/0/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe7_31d0_complex",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "font environment",
+    "U+31D0 complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_31d0_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_31d0_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "89329e7b5e4ad373231bee71d6f80f81282c801a6741f39442205e04feb3e760",
+   "golden_sha256": "11100a2a40c21c3e09381b1166c117835f9e1dabc7c5a52e4c7cc2477a9b7f47",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe7_31d0_simple",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "font environment",
+    "U+31D0 simple path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_31d0_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_31d0_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "3980c81c93ced08dfd6cc1978b4f1c95d3eefedee1220b7c815baf667e63d0bd",
+   "golden_sha256": "54ea1a6ee22ba78e64b477028fb3b2e89e9384c4b85b2a0395e25a4fe10c670f",
+   "base_8317cf006": "0/DIFF/4/comments=False",
+   "merge_fc44ee58c": "0/DIFF/4/comments=True",
+   "tip_7e9b16f52": "0/DIFF/4/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "fe7_f817_complex",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "font environment",
+    "U+F817 complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_f817_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_f817_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "7b892ba9ee56df5d1908ef533b5d196b47dced921b51e5ee33bfa12d22554ce6",
+   "golden_sha256": "063626c2c18a86de8c0ffb8c5e3180a20c55fb1d8d2e7e3efed3a38be7439201",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe7_f817_simple",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "font environment",
+    "U+F817 simple path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_f817_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_f817_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "de080789cb2d63e323b9e720d86143064e1bd4f12d6f0330d9b1b2b7d9b7b459",
+   "golden_sha256": "012800b52dbccc58f64bcdbd1e07a8eea7491a12e7267a1c21ecff63e8885beb",
+   "base_8317cf006": "0/match/0/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe7_f880_complex",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "font environment",
+    "U+F880 complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_f880_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_f880_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "eac8dc54ca462d8521bda7db09fa5436fa30e4777e888e38e6460448fbfbeeca",
+   "golden_sha256": "c1cd16e20bbda091c9bf45bf97e838e318a5423e58b4a3795e5a8581793c74e4",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe7_f880_simple",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "font environment",
+    "U+F880 simple path (user font / asset)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_f880_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_f880_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "ab37d4f8d2af59216944815b24564795f22f615e35cd0844983d4d9cf6f18855",
+   "golden_sha256": "b2a2542557b5c42085ddadf898baf674b4e064a33ae971b5b125843a8d2c2531",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "fe7_f8b7_complex",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "font environment",
+    "U+F8B7 complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_f8b7_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_f8b7_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "bc150a47024ddcc5f69bd50414a485fa594153edc315bc259feb674b56f46ae0",
+   "golden_sha256": "b49b4d1dd9e0887d2834280dce8a83c7e8eef3ac450e387be5142cb40935b6e6",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe7_f8b7_simple",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "font environment",
+    "U+F8B7 simple path (user font / asset)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_f8b7_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_f8b7_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "c3aa48d689a963dae97be34f9fd81d23d1f511956f58b51aa2e4b82043b1f0db",
+   "golden_sha256": "6d3df244dd6d3cdf6709f1f7becf7b68f7917d92fa7df88af41a6280d2f23834",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "fe7_fe20_complex",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "font environment",
+    "U+FE20 complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_fe20_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_fe20_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "8822344f43e28e797ee5894a7128983c1dbe08000013f126dc8f8da613d42745",
+   "golden_sha256": "db0691f9d72fef2719929ab07f2f5906fe29960f86c159d8ddb2c5dd602bef35",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "fe7_fe20_simple",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "font environment",
+    "U+FE20 simple path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_fe20_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe7_fe20_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "333029e6ccb481ff7f34b5352531f51aaece0a235dc184c7aad6756169e8738b",
+   "golden_sha256": "093f6848dc31426f8344ed7f22eb0c2870ea0e2626879592d797279c6f41a9db",
+   "base_8317cf006": "0/match/0/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "jd7_array_multiline_nested",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "json",
+    "nested array box with uneven row heights"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/jd7_array_multiline_nested.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/jd7_array_multiline_nested.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "931d099eec0d4115014199030d9617637715c08ba68221904d7189b2d3fb9cc0",
+   "golden_sha256": "8ee22ee584836cdafd8219c6e6ddf4e3209fc5f568c92eec73d3e241ef0f9983",
+   "base_8317cf006": "0/DIFF/20/comments=True",
+   "merge_fc44ee58c": "0/DIFF/20/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "jd7_decoded_newline",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "json",
+    "decoded newline (real LF) inside a line"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/jd7_decoded_newline.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/jd7_decoded_newline.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "93c1fbdc70791f34eb7e63db50aabddf7d161611f07fecd7dfbb69bd1e6f41d3",
+   "golden_sha256": "deddef2dfaf20a22e42185d62a97d1ba7be8bf2fea38ca7629b5d49f6bb17d78",
+   "base_8317cf006": "0/DIFF/5/comments=True",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "jd7_highlight_multiline",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "json",
+    "highlighted multi-line row"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/jd7_highlight_multiline.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/jd7_highlight_multiline.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "c6f542d030d24f32f36d484d87a1f299103656ead744a19c7ac523bf9bdb04f8",
+   "golden_sha256": "539681b0abd5e37437f50e9bb0de910321988c759e51050dfab1766e555974ea",
+   "base_8317cf006": "0/DIFF/12/comments=True",
+   "merge_fc44ee58c": "0/DIFF/12/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "jd7_nested_encoded_newline",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "json",
+    "encoded backslash-n in key",
+    "encoded backslash-t",
+    "nested"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/jd7_nested_encoded_newline.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/jd7_nested_encoded_newline.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "5ffa5b549ea989a53a84987b27dba081298a76c6723f9f259a565bf9d6d3e9e1",
+   "golden_sha256": "19ced1737b6e6e3eb11ac07f619e0faf76bdd59fc7aa4e80445852fdf2ce5905",
+   "base_8317cf006": "0/DIFF/21/comments=True",
+   "merge_fc44ee58c": "0/DIFF/21/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk7_0897_u16",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "U+0897 Mn only from Unicode 16 (Cn in HarfBuzz 8.2.2): .notdef"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_0897_u16.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_0897_u16.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "bb129d7f6da267f839208e0cecd2f8ae5b58cbb839689dc2be672cfd83ce2769",
+   "golden_sha256": "d5f26a85bc97543c996f767dc32cc0a282a78436786a0ae389e6e270866be25e",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk7_10efd",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "U+10EFD Arabic Extended-C Mn (Unicode 15)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_10efd.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_10efd.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "4fa4e41825ee948f98baeec0cbcd13ef2cb8a1c5bc880df7af6b28c8f14c19b9",
+   "golden_sha256": "2145ebe81570f1b4e2847f1092dc04818912efd7bbb344b6a4b5c09736ecd840",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk7_11f00",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "U+11F00 Kawi Mn (Unicode 15), weak in Unicode 3.2"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_11f00.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_11f00.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "34af9131c23e18bc0514c6a86ea1f4a56414143805ab5e6b80af191ea38feb97",
+   "golden_sha256": "ec3ade02a89e11505012f6e4fe36abd8248439f4c4faa45ad0fbf77eb85dfc3e",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk7_1ace_complex",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "U+1ACE Mn (Unicode 14), complex"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_1ace_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_1ace_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "cea02b699724609de0e4cd7f70cae6571c0cc2a158644cf32e4d297e7a37e9fb",
+   "golden_sha256": "03fc25d1a144a52b0685ee7d81c8cf8639840d16674fa01749fbfc16e848cafd",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk7_1df6_complex",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "U+1DF6 Mn BMP, complex"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_1df6_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_1df6_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "de17ab7c790c0930cf10d09d7cae933c2eb16122f4ded848429b6cb74f4a7ca3",
+   "golden_sha256": "7eb70353004f9a42945f757efa6e76b3abfee5d485242c99824d09fa7865d0e3",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk7_1dfa_complex",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "U+1DFA Mn (Unicode 14) BMP, complex via U+10FFFD"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_1dfa_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_1dfa_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "74a439091bba35ca61db5f390dc69d289f46da7bbe7e6f3d27d4621225fc2372",
+   "golden_sha256": "5d9d2ef0e335690ee8f75051cd3037c9ff9c15d1c3f3a278ddef19f973926d18",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk7_1e08f",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "U+1E08F Cyrillic Extended-D Mn (Unicode 15)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_1e08f.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_1e08f.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "8536c802a4f621b6d9ede49be07731f101ccbb002507ad79274f67802b0ad76f",
+   "golden_sha256": "cdd47387c529ace5f6b7ddd0e66b3338cf33ba0963c2115b908d20a579710089",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk7_1e4ec",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "U+1E4EC Nag Mundari Mn (Unicode 15)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_1e4ec.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_1e4ec.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "9516c53a1c9d2bdd9283675dea6ea373d244982ab6824f60166cf5c62c4c9bdb",
+   "golden_sha256": "6de97dc6061a009ad57c69dd3af425a8c428368d8ae435ce69c5a80181ff3710",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk7_1e5ee_u16",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "U+1E5EE Mn only from Unicode 16: .notdef"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_1e5ee_u16.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_1e5ee_u16.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "c085fee694ce04025b2cd6e0ead0cbc82d851df9d9867065b9702dff9837c8b3",
+   "golden_sha256": "95fcf07327f8cb86516b83ce81d31b01ef54523bc055eba0a1e33ca72666d54b",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk7_after_bracket",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "after a closing bracket that ends the Hebrew run (ScriptRun stack)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_after_bracket.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_after_bracket.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "536d4d2669ea5c63e976372474005ea8c256af057ab1c81c5302a3759231e90b",
+   "golden_sha256": "89ea54be70ede21b9796c7c422b880e9c72f60f64a14cba885ddc0e526b99e99",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk7_after_hebrew",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "after a Hebrew letter: hebrew shaper -> dumber (morx): .notdef"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_after_hebrew.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_after_hebrew.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "9cf0583a94afa026d2ab7f2144bea933ed5c583879ca5bf26afd2356680da620",
+   "golden_sha256": "c2b392aa2c45025ed005b8c8adf47fec4a218600d42a3598b702b534ebb96ef6",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/4/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk7_arial",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "Arial (GDEF: glyph 0 base): .notdef"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_arial.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_arial.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "10823abc3c20e6b497b27249dbbce0133477599d00b82f5a0550100562d3148f",
+   "golden_sha256": "d1f19a227fc2bf34c7c6bb75f46f09dd0e6b7a4efdb10d615f5a0ec6e7114e20",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk7_bold",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "Lucida Grande Bold"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_bold.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_bold.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "834e542672ec6689c3aa8b17f99aa8d7cf7765506f9bf91d9277e73d730ec5af",
+   "golden_sha256": "443654be3387257ae956c535cd40226b79752c59d6c68f541244e48ff438204d",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk7_helvetica",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "Helvetica (no GDEF, morx, OT kern)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_helvetica.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_helvetica.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "c817122c0695c8bef2e3306bf9471640346e37f09bf9baa18e8d085538496c0d",
+   "golden_sha256": "15c8ec8604c2d805dffc05999536350501c901ed4342d1222c20a9b860f51090",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk7_lead_mark",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "mark at the start of the text"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_lead_mark.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_lead_mark.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "40e1dad79c74efb4001d72a192305452e38215a6b35bd19e4f55c16cad1e4fd6",
+   "golden_sha256": "219b0c030b26d447a8737afd0ff47dffa17281b255517a0b71dd0d6f4fc82445",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk7_mono",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "Monospaced (Menlo, no GDEF)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_mono.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_mono.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "fe8728996ee234737fb4b0b37fede5346b2f0bf3b6b02bb03f66dbed8906b2eb",
+   "golden_sha256": "59b2dee00799672c84916e2b9b5ed38aedd56429b87b0f41e9b79007c44fb733",
+   "base_8317cf006": "0/DIFF/6/comments=False",
+   "merge_fc44ee58c": "0/DIFF/6/comments=True",
+   "tip_7e9b16f52": "0/DIFF/2/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk7_seq",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "mark",
+    "sequence message"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_seq.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk7_seq.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "06ffeebc2df6eb0cf02a79b10b499a45487bcf8596a39e0a87567b871479af7e",
+   "golden_sha256": "0d56723522de1e6d2b02dd7ea1c559c35d03512a9002591baad8eff7dbf62524",
+   "base_8317cf006": "0/DIFF/10/comments=True",
+   "merge_fc44ee58c": "0/DIFF/10/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "yd7_block_mid_document",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "yaml",
+    "block scalar mid-document",
+    "blank line inside block"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_block_mid_document.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_block_mid_document.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "9e639c7e6556a7d7abc71b63b34d89639b6d3a74938bbb1bebbfc4e1fc46aff8",
+   "golden_sha256": "8ed5475306c2e37ecf353396beb3b9a6bbf4581ded21140db4ebd649f0954ac3",
+   "base_8317cf006": "0/DIFF/6/comments=True",
+   "merge_fc44ee58c": "0/DIFF/6/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "yd7_left_align",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "yaml",
+    "backslash-l natural LEFT alignment"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_left_align.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_left_align.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "17ffd4075a37d48d3dae7566e18a17ed8167e38ce2e6c8b6a344196e7109affd",
+   "golden_sha256": "8ca58eb504136c55415999d8d11515346d3f22171f47845787fcf4ac81d037c0",
+   "base_8317cf006": "1/ERR/0/comments=True",
+   "merge_fc44ee58c": "0/DIFF/7/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "yd7_list_newline",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "yaml",
+    "list item backslash-n"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_list_newline.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_list_newline.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "6a6c16b8db52cf00ba60d17413e19e95be9434c52da82777e9fe234a9b4a95cd",
+   "golden_sha256": "d7d5aa3ba0dac955a5624abf81d83da6b34d1dbf03fc12c31b717c557da7fa20",
+   "base_8317cf006": "0/DIFF/8/comments=True",
+   "merge_fc44ee58c": "0/DIFF/8/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "yd7_nested_key_value",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "yaml",
+    "depth 2",
+    "backslash-n in key",
+    "doubled backslash in value"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_nested_key_value.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_nested_key_value.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "e8e2830f8a6cc826d5ef0d80cadc4b6e5bd3848529eb23a6cdde6266f7261ed9",
+   "golden_sha256": "aedb868af0af6e82755cdeac31d39702f21dac5962a78cf0010a840e881e270d",
+   "base_8317cf006": "0/DIFF/22/comments=True",
+   "merge_fc44ee58c": "0/DIFF/22/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "yd7_padded_value",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "yaml",
+    "leading and trailing spaces"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_padded_value.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_padded_value.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "19957e859178dd3a5dc25a987a126cd0a3538a1436e8e9f12b23e7618186c5b6",
+   "golden_sha256": "2224ed48b557b83ffda6c990f51398f105008c90c5841bf0530632316afa1f15",
+   "base_8317cf006": "0/DIFF/1/comments=True",
+   "merge_fc44ee58c": "0/DIFF/1/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "yd7_raw_brackets",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "yaml",
+    "raw mode [[ ]] keeps backslash-n"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_raw_brackets.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_raw_brackets.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "b4668dfaf1b5ee439a14732b13275917546a1b0a5c93ffd9c00d7c4accf36ff3",
+   "golden_sha256": "b6645d856429deb071e79aeff6ee8e3656af9d1db62afa7a74ea67352a4e44c8",
+   "base_8317cf006": "0/DIFF/6/comments=True",
+   "merge_fc44ee58c": "0/DIFF/6/comments=True",
+   "tip_7e9b16f52": "0/DIFF/6/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "yd7_right_align",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "yaml",
+    "backslash-r natural RIGHT alignment"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_right_align.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_right_align.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "5370454cedb17738518adc1cc78c3470d7203b1a37ebe916cd1ee0608fdb8aaa",
+   "golden_sha256": "27a119017b7af58b25264786b699152eea819ac504663c80e0484725fe540f8b",
+   "base_8317cf006": "0/DIFF/7/comments=True",
+   "merge_fc44ee58c": "0/DIFF/7/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "yd7_two_tabs",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "yaml",
+    "two tabs",
+    "tab past the first stop"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_two_tabs.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_two_tabs.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "de8fc45bd0d629ec8117ad89edd4360aef2a8d36174cecee7e03b3867c5549a9",
+   "golden_sha256": "1363540c886834601f702e0c8f9ef822dbcc4534a3462532621267ecb7009b6e",
+   "base_8317cf006": "0/DIFF/11/comments=True",
+   "merge_fc44ee58c": "0/DIFF/11/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "yd7_unknown_pair_escaped_tab",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "yaml",
+    "unknown pair kept",
+    "doubled backslash then t -> manageEscapedTabs"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_unknown_pair_escaped_tab.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_unknown_pair_escaped_tab.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "35a18073119b8be7d8ed96362b958034ff8c10e775131da2b218004c5b5ee4c5",
+   "golden_sha256": "e9919a3d26490f8286284ee920fdc804c56775c938d610c70f4df57fb431446f",
+   "base_8317cf006": "1/ERR/0/comments=True",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_1f105_complex",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "PingFang asset 1F101-1F10A",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_1f105_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_1f105_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "d8cee490cbae8117dee4b2e6272f095af2fa2cd84df881dca0fa34f470b0b3c8",
+   "golden_sha256": "1b10873318db74f48f3624d426a07269c46506bf5e5d1c9ad38000d4eabf304e",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_218a_complex",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "user font 218A",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_218a_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_218a_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "a816b1094e3b01cbfc023b5d803c1d861350a9b4be1a932cd58ce60deccb0fa9",
+   "golden_sha256": "7a778798145cd16225bcefbd7ee834eb2c4a8958c1f53f354487021bebdb47ff",
+   "base_8317cf006": "0/DIFF/4/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_218a_simple",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "user font 218A",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_218a_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_218a_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "ec4a234ee5bc95297923e642b6faf0a01603a81c560b2211595c3550b7697a78",
+   "golden_sha256": "48ed8f83101c7f3352f46219e9dd2083cfb904a4c5b62824d9669fee6aec3de7",
+   "base_8317cf006": "0/DIFF/4/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/4/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "fe8_31b8_complex",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only 31B8-31BF",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_31b8_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_31b8_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "92755da581a3d44cd6ee8a595ab1a4fe83302420c7cbd8b7c2b5c35040ce74e3",
+   "golden_sha256": "39e906492276a9b221031d6710f4f5a58b71cfcf414d50851343320c58d3379a",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_31b8_simple",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only 31B8-31BF",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_31b8_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_31b8_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "db2b291a2006b90c3dfa4c5f5aace31420b85cee180a1884f0c7107c936ad2c0",
+   "golden_sha256": "f14fcfc01d7abe5d0c3b659379a5791cd744724a1e4721e534c67830df9f282d",
+   "base_8317cf006": "0/match/0/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_324a_complex",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only 3248-324F",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_324a_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_324a_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "707c2f8d392f745c470c9010cf2d0de996631afd30f8deab8d44c5feac8f1e50",
+   "golden_sha256": "14788bd59d6c22b00e148aca2548e9e91ed7cbda2cef211cdd078659268f1e82",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_324a_simple",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only 3248-324F",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_324a_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_324a_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "eb9cb3e1e38ed542b9f2730a63c37a4025029e9f40b7876613747ba9869d5850",
+   "golden_sha256": "8700cf95401fe3bb449de003da60870c9cfe04a20c63a67ce4d5d26c05913880",
+   "base_8317cf006": "0/match/0/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_327e_complex",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "simple-path only on Monkey Man 327E",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_327e_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_327e_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "931f6a7ccbf22159665d15a29c148891a7b5088b7d6b1605aa4417eae76b80e8",
+   "golden_sha256": "539044cb07871b59fd0b81a6aba3951d27afe7ed1d3efa52edac7dd1dc0b8592",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_327e_simple",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "simple-path only on Monkey Man 327E",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_327e_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_327e_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "003441e92e338fbedae9477e55112d0ea5e6955671f1f8ae38c63c7eb2feb659",
+   "golden_sha256": "56a9ee1f212be22b9b31eadecabe67572db362150fe327ce30ce732311cd1872",
+   "base_8317cf006": "0/DIFF/4/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/4/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "fe8_f830_complex",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "simple-path F828-F83B",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f830_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f830_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "24010fb30ce67383bee06e38f6d7c61c0921f61d4950458da403e3aa9259dd70",
+   "golden_sha256": "49fd981670837462e1880169d359dd2b8fba694d91ac56597bdde089d0fc0adf",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_f830_simple",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "simple-path F828-F83B",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f830_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f830_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "57b7f01ad51850b3326a84562578cfc80c205db8ebd862100b3a8ee0d3ca1b95",
+   "golden_sha256": "3c0c4a80c932d247c1c07e534dbb854318cb0a4452bb4ebb7b2769e44fe78221",
+   "base_8317cf006": "0/match/0/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_f851_complex",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "user font F851-F85E",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f851_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f851_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "3149d44ca82b7df4e3597ed169267d22d0a52408900f213d7f2f9c81b4a10a58",
+   "golden_sha256": "bdecf91137396328b0cb0f26b2dc2015d09f2c6c9258aeaa330040169e87267c",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_f851_simple",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "user font F851-F85E",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f851_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f851_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "0e538a89da3880ec0bfe697f639d44dc85e9e647f1045c6acf512235590a7cb9",
+   "golden_sha256": "9e511ba3a5131764781c8bb04798d1b5cff4407a4c0c427a77d6ed2a7aad64b2",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "fe8_f881_complex",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "simple-path F880-F881 (LiHeiPro)",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f881_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f881_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "5187ca88d4e09a00ef0159b5926d4d263a6283b170d5d99f70f9a58ae841c0cc",
+   "golden_sha256": "56d5a2628a117b63bfc98628bd072d08c3eed63c20f39669f473ae76b4d17820",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_f881_simple",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "simple-path F880-F881 (LiHeiPro)",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f881_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f881_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "87f531396a0b1405f4244fa3e97bb63d7afc892da0f5b997d4200e7bf58659f2",
+   "golden_sha256": "db23a1b59d69e4b2b7c33976eeaa1e640f77fba6bbfca1a9e0087ae896ff4498",
+   "base_8317cf006": "0/match/0/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_f8c0_complex",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "user font F8B7-F8FE",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f8c0_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f8c0_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "7dafc027c9741b9d6c598839894bc3813fcccac725d7bd77ca15c689467d7798",
+   "golden_sha256": "a8932eb0da619bd3738e28bc0fc36d43245ea0c69ab98174acc81e149acc81db",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_f8c0_simple",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "user font F8B7-F8FE",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f8c0_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f8c0_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "4541f5b5d6e41bfbf10c599ea21c7d8928f59e79a4835d77741b218dda441d71",
+   "golden_sha256": "5c41e773a2d7d4b620b1cd304cc35f89fe91c408bb446e7d42e1e9b57faa8ce0",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "fe8_f8fe_complex",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "user font F8FE",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f8fe_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f8fe_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "eeba1399d946fd400b7646bb230bb9ab4754e15d44802b69e36448474801991d",
+   "golden_sha256": "294c1be1feb3b0ec132a356151d43fd26cb7a29b6beefbdd02a8444248685ac3",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_f8fe_simple",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "user font F8FE",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f8fe_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_f8fe_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "87e4f8f7bc23ed939e8777b6bf6cca3019fd71c1189f4b587cee5945d0750683",
+   "golden_sha256": "fe77c3bdb907de96d22014a23c5ae1838a803d68e8e24f86cf6376b859360018",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "fe8_fa2e_complex",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "simple-path FA2E-FA2F",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_fa2e_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_fa2e_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "d5ae544e4e0c8388529869415146995f89e89271641dec11059179c4186b931c",
+   "golden_sha256": "460df42ec6d391079b427bf3d6689c1f21ff816db803f5c2076d45598fe90d6a",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "fe8_fa2e_simple",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "simple-path FA2E-FA2F",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_fa2e_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_fa2e_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "0bf043a9f0f86c1e386dbc1f7464b712e752dabdedf8ed7d9fb3314d453f74e1",
+   "golden_sha256": "5add5b66a1dc864b09ce0a2ae0a0ded2693e0d77afc77d7b2b5c1fafff7f6e0f",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "fe8_fe22_complex",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only FE20-FE23",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_fe22_complex.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_fe22_complex.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "42a0cbd750a643bc5fc61ac5244ae3f5ea232a15579b442fc498b81f181b7e81",
+   "golden_sha256": "b9815a487b8a2b57bdc28f12d3090099791b4c30a15f12d9c2ef7d2fd166250c",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "fe8_fe22_simple",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only FE20-FE23",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_fe22_simple.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/fe8_fe22_simple.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "a3b252a53801a19a46e4d445b1b0544af6c6ad30019aa04eb7df5886dfff095d",
+   "golden_sha256": "f81871172937ad2e2f6b6741b3f565c2b82eaf011734e24b919e1a17e92b2f3b",
+   "base_8317cf006": "0/match/0/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "j8_array_escapes",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "json",
+    "top-level array with escapes, nested array"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_array_escapes.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_array_escapes.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "d44bdd80ec98e8be35a3eeaf9e250cfe7bedd97e055e86a79568a051519567c3",
+   "golden_sha256": "c6d3961080f72049b4757ec209c471e4e924178af2ee839e6e2768491b3b99ed",
+   "base_8317cf006": "0/DIFF/20/comments=True",
+   "merge_fc44ee58c": "0/DIFF/20/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "j8_crlf",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "json",
+    "CRLF line ends"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_crlf.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_crlf.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "7a599c5f56919cfe65c8f412bfc139a881a91af3ccc827462592b07437e1282e",
+   "golden_sha256": "3fbb97e0adae32471506201067aa12e1b4a2b24abb360e7fcd57f7c2231fa9df",
+   "base_8317cf006": "0/DIFF/20/comments=True",
+   "merge_fc44ee58c": "0/DIFF/20/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "j8_decoded_backslash",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "json",
+    "decoded backslash pairs: \\b unknown, \\n newline, doubled backslash then n"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_backslash.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "f4cfd262ad60626fd283f490677de494e3f8f4330059be7ff7cfa7a3bf573a23",
+   "golden_sha256": "edf24580ce9e772204d0b28284de12659d3b9c44de7a42b8ea0ba9d1458e5d3b",
+   "base_8317cf006": "0/DIFF/13/comments=True",
+   "merge_fc44ee58c": "0/DIFF/13/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "j8_decoded_cr",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "json",
+    "decoded CR (real U+000D) mid-line"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_cr.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_cr.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "90225241feb4bf3573c69901ab1281015f0ab6080c79d975a36ece46aab0a862",
+   "golden_sha256": "046b16b0cf30b5518edc55e53d0f7e915d529c896a33ba6b632c5bd988db2a3f",
+   "base_8317cf006": "0/DIFF/6/comments=True",
+   "merge_fc44ee58c": "0/DIFF/6/comments=True",
+   "tip_7e9b16f52": "0/DIFF/1/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "j8_decoded_crlf_tail",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "json",
+    "decoded CR LF at the end of a value"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_crlf_tail.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_crlf_tail.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "47b4389167f71467f90e83c889a982e69eb3b9847083434e20abd72838fe84cd",
+   "golden_sha256": "7df0f6a2501bfb6132960617bb8edab0fbbeead5f59380120affc4bf64bbc377",
+   "base_8317cf006": "0/DIFF/5/comments=True",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "j8_decoded_tab",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "json",
+    "decoded TAB (real U+0009), tab after a token wider than one stop"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_tab.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_tab.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "d2358158a44b8c140ffd74ad8b9fa64c8dc0108c2782ad43b2f5e38f8ac7a603",
+   "golden_sha256": "c94e531a08fc25fd785581606ce2e35564dde7c087f4d692db5de6f7dda6117d",
+   "base_8317cf006": "0/DIFF/12/comments=True",
+   "merge_fc44ee58c": "0/DIFF/12/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "j8_empty_space",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "json",
+    "empty, space-only, padded values"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_empty_space.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_empty_space.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "fd2943ed885a46aadf05f03a0f063b16d9fa643ef7fd9a01ff65109d1db2ac7c",
+   "golden_sha256": "40c097f3ccc91745a31588149ef964980e75206688dde0b74e4d6d8357aba0b8",
+   "base_8317cf006": "0/DIFF/1/comments=True",
+   "merge_fc44ee58c": "0/DIFF/1/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "j8_highlight_tab_key",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "json",
+    "highlighted row whose key has a TAB and value two lines"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_highlight_tab_key.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_highlight_tab_key.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "0806194dc2358b25a5c5e5c939f5136de11720ed80b06cbbaa57bdfebaa5e852",
+   "golden_sha256": "d6b5f6e2a00521abc11056a4897e45cb3f54aca3279b6fd15d76c5a7754e7722",
+   "base_8317cf006": "0/DIFF/13/comments=True",
+   "merge_fc44ee58c": "0/DIFF/13/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "j8_nested_uneven",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "json",
+    "nested boxes with uneven multi-line rows"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_nested_uneven.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_nested_uneven.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "b8637c5041a579f7ffce5b62abb601329cc3dba5014b04df45c6e5ee8cef0928",
+   "golden_sha256": "86716d5765056953059a22f4d4eb6f8238b514f94d48974b6ccfd8257d7d681f",
+   "base_8317cf006": "0/DIFF/36/comments=True",
+   "merge_fc44ee58c": "0/DIFF/36/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "j8_tab_bold_key",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "json",
+    "decoded TAB in keys (bold)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tab_bold_key.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tab_bold_key.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "2aa9884b88f70f208bed38e2fd1a5616ec3e6ed4820d5fbf1f2f56759c7a7d97",
+   "golden_sha256": "aa7576cfebeabd04250d033543a72dba89877d7d038ab07f25364bba5b8c6229",
+   "base_8317cf006": "0/DIFF/13/comments=True",
+   "merge_fc44ee58c": "0/DIFF/13/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "j8_tabsize4",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "json",
+    "skinparam tabSize 4 with decoded TAB"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "a3dc707f3ec9bab7fd00ddea07a917d7a09e60b715b8c6fd685a254315cb914a",
+   "golden_sha256": "738dc719871af41884a70f97aab777e74821214b0207b9ffdc96ecac05cf1694",
+   "base_8317cf006": "1/ERR/0/comments=True",
+   "merge_fc44ee58c": "1/ERR/0/comments=True",
+   "tip_7e9b16f52": "1/ERR/0/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "j8_unicode_lf",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "json",
+    "\\u000A and \\u0009 escapes"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_unicode_lf.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_unicode_lf.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "04526fc3e9ff94ff0728d9ed9fbf9907d69ba3a0551a8249471ca31d65334a3f",
+   "golden_sha256": "61d4c3abf6f2c32605d62fed6de0371d2d0bee442362b8578e44e54be462b1d3",
+   "base_8317cf006": "0/DIFF/9/comments=True",
+   "merge_fc44ee58c": "0/DIFF/9/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "m8_class_crlf_label",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "crlf",
+    "class diagram with CRLF line ends (real CR never measured)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/m8_class_crlf_label.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/m8_class_crlf_label.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "0fd8f98bfe585cf2f284ae8201a17034a8a709045c4f2ab15b424c60c3d38ff8",
+   "golden_sha256": "a83f044309f6c2e576d56988a55dc34ce0f710d948ff923f5537ef2a0ba052e8",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "m8_json_class",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "model json",
+    "json element in a class diagram: escapes"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/m8_json_class.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/m8_json_class.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "46f02100e9f36f83c19d92b5659a74f7af2b3657f89529d7896f09ed38e52b88",
+   "golden_sha256": "9fe716f942a9b9a7006c6c1ecc3eb515cbb512d1bc81775b1c6d5ae887be1b7f",
+   "base_8317cf006": "0/DIFF/28/comments=True",
+   "merge_fc44ee58c": "0/DIFF/28/comments=True",
+   "tip_7e9b16f52": "0/DIFF/28/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "m8_json_crlf",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "model json",
+    "CRLF, doubled backslash"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/m8_json_crlf.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/m8_json_crlf.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "70769c9a3b88f0b8a7589226b2a1ddb89a6155750c37b4e99f7b8904d0895b12",
+   "golden_sha256": "772d582852ef72ac5328a168dd55163bf927b10faf41473b6cb8003c28bf4099",
+   "base_8317cf006": "0/DIFF/15/comments=True",
+   "merge_fc44ee58c": "0/DIFF/15/comments=True",
+   "tip_7e9b16f52": "0/DIFF/15/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "m8_json_usecase",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "model json",
+    "json element mixed into a usecase diagram"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/m8_json_usecase.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/m8_json_usecase.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "c9a5ec201977874ea00012f935c7d1be2d5e8b4c755cb452a06547bad00b5344",
+   "golden_sha256": "1e8cab94a922c5a50230700642dd691aac956a35a071d529136cf2cdf50802d6",
+   "base_8317cf006": "0/DIFF/8/comments=False",
+   "merge_fc44ee58c": "0/DIFF/8/comments=False",
+   "tip_7e9b16f52": "0/DIFF/8/comments=False",
+   "result": "fail"
+  },
+  {
+   "name": "m8_seq_crlf",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "crlf",
+    "sequence with CRLF line ends"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/m8_seq_crlf.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/m8_seq_crlf.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "59245260827667b51b15b9059b61beabf034d3031c7f7854e843e0b7880d47e8",
+   "golden_sha256": "ca545cda761a05d811384500bff96b8f89fb643121d788087cb3949746638497",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_arial_23",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "family arial",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_arial_23.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_arial_23.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "874b335cef251c4eb4e38861d82867ef3b704a8cb0457ca3dc1fa886f94791de",
+   "golden_sha256": "6b4cff8da3499feb80cd4a7c5cec2e15d921ff809bec31d25188b8f51c8f066d",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_arial_9",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "family arial",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_arial_9.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_arial_9.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "95aec4f7f5ac75eed431e2102335182d62ac1bb9ec6117e698641f25d72c791f",
+   "golden_sha256": "284c140001d9a9710e4818cae85f039e1832b1a6e3d3c45303e3559697e43e27",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_cjk_base",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "Han base (PingFang slot): default shaper zeroes regardless"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_cjk_base.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_cjk_base.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "fef4a4aee4ea8822877fc1fbe8146b3b9342bd34b0d985efc51773ee1b391b6d",
+   "golden_sha256": "e821bd9db83e3e7ff379f3df3a85b96c5cb0e8685e7f8a68146959d3db495647",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_cjk_base_ctrl",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "control for mk8_cjk_base"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_cjk_base_ctrl.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_cjk_base_ctrl.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "f07e0c4b7ce807eb617e245e07f00d8c599a6e1a85529330ee21a172c3ae1140",
+   "golden_sha256": "676e18dbcdd8f2d9594eecde63654f864161d7316286f189fc22291ccae40670",
+   "base_8317cf006": "0/match/0/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_couriernew_23",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "family couriernew",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_couriernew_23.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_couriernew_23.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "91461ef5db805831fcf44a2833fbf8aa99162d9e942a768dd78ae189195d454b",
+   "golden_sha256": "0c0bbba7e19a1ac61a58aa3e86eb3a04eeb5b739adc9da6a8ac343524506b02b",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk8_couriernew_9",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "family couriernew",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_couriernew_9.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_couriernew_9.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "bc1cdce60ebc0871ac0c0055c52a8528d8ddb946b1466f397e1274561758e4ca",
+   "golden_sha256": "743c58cfd7df65b8d57429fa7b49f25af31d7419b4f3491df9f80fb937a5b2cd",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk8_hebrew_lead_mark",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "leading mark in a Hebrew run, no base"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_hebrew_lead_mark.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_hebrew_lead_mark.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "057fc69bed2ae2717337370261260776756c1260f25fb639e1a8f81236b714b4",
+   "golden_sha256": "e3063953d2891f838b633c7b799a50705af563066f763d1d596dd6467f17e9a9",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk8_helv_23",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "family helv",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_helv_23.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_helv_23.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "56719b6a2dcbe14d9bf67230bb8f06e2c2ff455c40fd2c8790f211ff79372b3f",
+   "golden_sha256": "b4b5f8befec6aed0a016b8f6042b922587830d0806327bbb2da8db8f0ab9f7e2",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_helv_9",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "family helv",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_helv_9.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_helv_9.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "0d36a56c56f2b5fb254e08d613b1d08687a050b822ef835e45a0efeb5ccaf66a",
+   "golden_sha256": "1c1c055582da92c8efefe4ec139aa98eba986ddc4b30135b3247e9345edee13d",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_helv_hebrew",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "Helvetica primary; Hebrew base from the Lucida Grande slot; mark alone in the Helvetica buffer"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_helv_hebrew.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_helv_hebrew.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "4571d65a76c9e755e547be940c074fc8c0898323f7a338ec22d5608bbdeb263b",
+   "golden_sha256": "118a6d99872528dacf86c6eae0b1a9bad30a6c4738b4fd45b4e535878159eb87",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/4/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk8_helv_hebrew_ctrl",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "control for mk8_helv_hebrew without the mark"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_helv_hebrew_ctrl.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_helv_hebrew_ctrl.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "75df8e2956345ad7f0e1d7d62838ad9a8ee5466a53b0d94be5d6981b1c369b5b",
+   "golden_sha256": "c1ad9eb3ddbad70a99fd7cb13785470c99afebaf929cb1f80e18fecbfdec0d82",
+   "base_8317cf006": "0/DIFF/4/comments=False",
+   "merge_fc44ee58c": "0/DIFF/4/comments=True",
+   "tip_7e9b16f52": "0/DIFF/4/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk8_helv_hebrew_pres",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "Helvetica; Hebrew FB1D unmapped everywhere (same buffer)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_helv_hebrew_pres.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_helv_hebrew_pres.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "8924be6ae6cc005b05db050d40ea72d408510495c052cbb955304b24b54d91df",
+   "golden_sha256": "dfed6deb1f2ad0c428493cde0f25c6d0ee980fbb64d3b24fce01ded5663f4624",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_lucida_arabic",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "Lucida Grande primary; Arabic base from the Geeza Pro slot; mark alone in its buffer"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_arabic.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_arabic.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "f47193bb49e6a5f0845b1598c8799ef18e2e0ccd4f0413b8c25796ae03e9cf7e",
+   "golden_sha256": "d1e4bfb395302ef153859b92b2cf44bf025f76d650f74bb371425748a5b5fa58",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk8_lucida_arabic_ctrl",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "control for mk8_lucida_arabic"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_arabic_ctrl.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_arabic_ctrl.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "cf0b23608101b4d54b8506b897b300e4d71a821e71ce02db516e4697ebf4ce54",
+   "golden_sha256": "73bad5a9ca255b0d6cbb91a2977f4a6f17d2e0464ec292ad329d5812f237d790",
+   "base_8317cf006": "0/match/0/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_lucida_devanagari",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "Devanagari base (Kohinoor slot): indic shaper, never zeroed"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_devanagari.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_devanagari.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "f128918f861b0ca01b6a52359fc4aa95c5b13690ecec5492298a8f2b5f105ddc",
+   "golden_sha256": "9620a08479dc3dfd7862d8ff56d0a84e84b75509ca95dd34603cf1972c2142db",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_lucida_devanagari_ctrl",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "control for mk8_lucida_devanagari"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_devanagari_ctrl.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_devanagari_ctrl.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "8a7f0d2eeadc21c38a6fe330c77d104f54f4ed44486b8db79d0ddb1863269d34",
+   "golden_sha256": "ac87917c42f855ef6700bffc13063c72de69dd288c3ac45f7ad45aea51176a4a",
+   "base_8317cf006": "0/match/0/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_lucida_syriac",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "Syriac base unmapped everywhere (slot 0, same buffer): arabic shaper fallback zeroes"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_syriac.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_syriac.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "f7978707b586781e064e96ecb9f799aae5b89bb128fdcf3c99e2cd1e5e540b11",
+   "golden_sha256": "f945c251e4262dbd3aa15332598e63f36efcdb7da9f6f6e874327fae5156dcba",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_mc_11f03",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "U+11F03 Kawi Mc: not zeroed"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_mc_11f03.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_mc_11f03.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "cca18388d0c4743d687ffecd55007cb4b046ce8325246f317835cb31a2e2fe85",
+   "golden_sha256": "e1cd548c78187480916647f60d2ef59fcb620ce4dbec4f2e82c8eae15ba6b8e3",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_me_1abe",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "U+1ABE Me (enclosing): not synthesized as MARK"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_me_1abe.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_me_1abe.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "95c025416520b2811cda122c223f4f38fb373a412ea7b574fcfab9739a9a6d8c",
+   "golden_sha256": "c8bb8b33cc2115211160605bf588d9d52a09f86ea3bffe1c882baa9387b36b01",
+   "base_8317cf006": "0/DIFF/4/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_menlo_hebrew",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "Monospaced (Menlo) maps Hebrew itself: same buffer"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_menlo_hebrew.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_menlo_hebrew.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "e3506a6abaf016b5e5d1f51baf81f541b6e431a091ae0418f9c13c4c067d1307",
+   "golden_sha256": "e4330f20de9b1b06b1fec1a6b2544a8450d27c7ec00cfbda71afef50b1bd162f",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/6/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk8_mono_23",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "family mono",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_mono_23.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_mono_23.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "0cdd7e38175f0660f9f18a8085e9fa548e449eeffc3203e04adf72f2450e4b93",
+   "golden_sha256": "4e1b2336578b7bcafa64b0476b8523f184b7c7db0661b58078f59951535846bf",
+   "base_8317cf006": "0/DIFF/6/comments=False",
+   "merge_fc44ee58c": "0/DIFF/6/comments=True",
+   "tip_7e9b16f52": "0/DIFF/2/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk8_mono_9",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "family mono",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_mono_9.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_mono_9.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "bd831fbdb7473435b202078e6e7abe9ca8bfca1a90069ad3e97b39839818e0cb",
+   "golden_sha256": "7caa22eff6811d258e1c8149fbd14cec681f287dba70d6fb88131f6bf72a7b90",
+   "base_8317cf006": "0/DIFF/6/comments=False",
+   "merge_fc44ee58c": "0/DIFF/6/comments=True",
+   "tip_7e9b16f52": "0/DIFF/2/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk8_sans_23",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "family sans",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_sans_23.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_sans_23.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "17617933b03969b0ee29fdeabe3f92f0d3c19c6f36d1897a03b6abda597fcb56",
+   "golden_sha256": "9381fdb71633b0ac590edfb51f1733278ece6377ba43ddfdc9d1fb1fc596737a",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_sans_9",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "family sans",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_sans_9.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_sans_9.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "84867e8fbf83c58055bb16e143f48f375a26d43cd3d334b96a942a97d69c669a",
+   "golden_sha256": "2d3254dfa4036ff4be2204e90f23fe148f10a2ea42a89669554630bd851cea27",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_sans_bold_23",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "Lucida Grande Bold",
+    "size 23"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_sans_bold_23.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_sans_bold_23.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "59d55ecc3e2934b972a7ec55a5aac8be3acd533f0dc1e330aa47a5f0030d0aa1",
+   "golden_sha256": "bc576216cfbb8aae8cae101d8cefaed41c1aa4ee469c2185aa798839cf5db34a",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_seq_arabic",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "sequence message, Arabic base from another slot"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_seq_arabic.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_seq_arabic.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "badca0c36e0f34a269796a5a8ecb9aadac39b6a57be3b5299495b0a2d0dc6f0e",
+   "golden_sha256": "ed3e259b8df1c58f10e59711b22ade9dcfb0512ad5212c1944e06c8707f7a0e9",
+   "base_8317cf006": "0/DIFF/10/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/DIFF/10/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk8_serif_23",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "family serif",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_serif_23.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_serif_23.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "9977a06fc2ddcf1c8a4c622e5720ffc58a3e32c9609a29637d76085534be5ebf",
+   "golden_sha256": "7ca9058f11a4a6319aa737a893ac3bc78c34591f9bc4ea6923f63b520cd1472e",
+   "base_8317cf006": "0/DIFF/7/comments=False",
+   "merge_fc44ee58c": "0/DIFF/7/comments=True",
+   "tip_7e9b16f52": "0/DIFF/7/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk8_serif_9",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "family serif",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_serif_9.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_serif_9.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "6a1fe2e4ba1cb0190daee314fb8cc8534d82f7d5fe49f54453fcb9d48952033d",
+   "golden_sha256": "31ac3b343e8020cc216ae05e0f681c1b4a2df2dab049818344fe11439c56ccc6",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk8_u16_10d69",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "U+10D69 Garay Mn (Unicode 16)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u16_10d69.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u16_10d69.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "0e0dece1d30dfbc0a79227a12292f27031d35a2568f4268b4982bdbb03fede5f",
+   "golden_sha256": "e287cbc26058a1d2dad8571daf3bb79907a50af50aa08682903d96aa246100d9",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_u16_113bb",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "U+113BB Tulu-Tigalari Mn (Unicode 16), new block"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u16_113bb.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u16_113bb.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "5504598a528ad416c080b206b7a2cea132741957b75f614bff19c17915955b54",
+   "golden_sha256": "38b22799f3d24c5ec1a4e234904c808de8ad0c5e46d220774d8eb529b2e1b9fb",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_u16_1612d",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "U+1612D Gurung Khema Mn (Unicode 16)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u16_1612d.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u16_1612d.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "a3af6934fe6ff9a7b81711ca7941988be7789fccc140d9b22bb7e097271e5e44",
+   "golden_sha256": "1e77a0e977ee173d27d050439383ba357f8cbc2406ce0b305a41148ec4fbc73f",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_u17_1ad0",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "U+1AD0 Mn only from Unicode 17 (Cn in HarfBuzz 10.0.1's UCD 16): discriminates the loaded HarfBuzz"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1ad0.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1ad0.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "50266c7810c07387877184ccdf5ad8bf1cd14d1162153029f29417734115a6b8",
+   "golden_sha256": "af65732290a68166fd40d268ca88222ec935fe594fd14175563ca8089783403e",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk8_u17_1e6e3",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "U+1E6E3 Mn only from Unicode 17, supplementary"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1e6e3.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1e6e3.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "77f5d118b9bb7efd0560032e6caeae639ac22322cf170ed0821fb588adc184ba",
+   "golden_sha256": "aed3143324318d6580ef290086606d5cf319926101336acdbbd7ca0efc76c0a3",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk8_u18_05c8",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "U+05C8 Mn only from Unicode 18 (HarfBuzz 14.6+), Hebrew block (complex)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u18_05c8.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u18_05c8.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "dd249db59581d11c1f1396e8515472818f6b682149cb6a5bc71661f7940e0a69",
+   "golden_sha256": "b783a292723e92643ebd86abe9350a856b0f8629e4e80487cca9c85a7a7db8ba",
+   "base_8317cf006": "0/DIFF/5/comments=False",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/5/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "mk8_verdana_23",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "family verdana",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_verdana_23.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_verdana_23.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "d6595070692aececafbfd1e379cbfaba90d87e3d342ff9d5db6065fbe18f723e",
+   "golden_sha256": "e03a7ebcd9aca6db14a32e487e8706d30c4a4ff489d34cb7cc9e5e0421d34b1d",
+   "base_8317cf006": "0/match/0/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "mk8_verdana_9",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "mark",
+    "family verdana",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_verdana_9.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_verdana_9.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "79fe21bf93b7c75ad701397c75393964437096b17ccc8bc8b23421f8da219221",
+   "golden_sha256": "a36c09ca9719551ffcc71a745a8dedb2e92cdb8d70fba04fb529dffb98b39bef",
+   "base_8317cf006": "0/match/0/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "y8_align_mixed",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "mixed \\l and \\r natural alignment, last wins"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_align_mixed.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_align_mixed.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "d5211127a8f5fddbb6ace9079408742dd0623ef55d2e73d856d688240380a453",
+   "golden_sha256": "a642497b7cf1ea69f84071b93f781e6027242da2224d92616d7446bd5d46efd1",
+   "base_8317cf006": "0/DIFF/11/comments=True",
+   "merge_fc44ee58c": "0/DIFF/11/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "y8_blank_lines_everywhere",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "leading, interleaved and nested blank and whitespace-only lines"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_blank_lines_everywhere.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_blank_lines_everywhere.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "0e2add10f21a0df2056a70e1ed1961910b9c622e774f58ccb1d2e23c6791e35e",
+   "golden_sha256": "2af6b3fd69f23205480809aa153b1c2de16b6a730fa12d0b0df62bee3d86625d",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "1/ERR/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "y8_block_comment_pipe",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "| block header followed by a YAML comment"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_comment_pipe.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_comment_pipe.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "e1970dffdbd3aa6c3e3e0166a9f05c5a1c80bba14f3eadf52e7e1af4ec07de10",
+   "golden_sha256": "3cf368265bdbb15e056d8f9ea80efd05b25b316bd232a56db485c13f827fda90",
+   "base_8317cf006": "0/DIFF/5/comments=True",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "y8_block_dash_body",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "| block whose body lines start with '- '"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_dash_body.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_dash_body.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "a622c2939df346a24726547269e700a6dc62cbe4b9d3543f0e367a1610369d6e",
+   "golden_sha256": "c8ed030029e41e75f37602460173b5cb7f63d6dcc7bc6fc35caf0c8862cea6c5",
+   "base_8317cf006": "0/DIFF/5/comments=True",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "y8_block_inner_pipe",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "| block whose body has a line ending in ': |'"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "2dce5c3ea86d46a5af286a391e91e7942032e3caf35e11b49a11cf057669c164",
+   "golden_sha256": "ae82bff4a6442a8bc5e7ba41ec3991f276c1b0610b470691b6d2a8e0bb574773",
+   "base_8317cf006": "0/DIFF/5/comments=True",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/DIFF/6/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "y8_block_inner_pipe_end",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "| block whose last body line ends in ': |', end of document"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_end.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_end.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "de455206b23def65c94e8a1b07c4baea053e18ddb70cfc3ac2ff722026ddc07f",
+   "golden_sha256": "e0ef859313c712050862cd7c0726ee00dd63f43378eb066faac4725370077be0",
+   "base_8317cf006": "0/DIFF/4/comments=True",
+   "merge_fc44ee58c": "0/DIFF/4/comments=True",
+   "tip_7e9b16f52": "0/DIFF/6/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "y8_block_inner_pipe_nested",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "nested | block whose body has a line ending in ': |'"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_nested.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_nested.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "78724a614ec5e73a18b513f39a0606c8114ec06f97b35c4e26e0a659b2914b1c",
+   "golden_sha256": "9ae6d739ae4cfbdd65afc797a164d34c44a085be9c078a749434dd629dbfa5af",
+   "base_8317cf006": "0/DIFF/7/comments=True",
+   "merge_fc44ee58c": "0/DIFF/7/comments=True",
+   "tip_7e9b16f52": "0/DIFF/8/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "y8_block_nested_key",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "| block under a nested key (depth 2)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_nested_key.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_nested_key.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "c60621464955e470caf64270aad5eb0387cb695950db69d2cbeedc083ab4af58",
+   "golden_sha256": "ee2974036f8c13c918b9637d59ed190d6aefea76caf8538a79973ff8a478ec7a",
+   "base_8317cf006": "0/DIFF/7/comments=True",
+   "merge_fc44ee58c": "0/DIFF/7/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "y8_block_relative_indent",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "| block, deeper-indented body line (cleanBlockStyle trims)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_relative_indent.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_relative_indent.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "7c2fb4bb8e36823506eadef4d0cb8832832781450ddb9ce20cce74de81b77f06",
+   "golden_sha256": "39a90aa8bc8a147b9e6a3d780c908a0cd424f1e3274a5bc6ba5af937d7ecdb81",
+   "base_8317cf006": "0/DIFF/6/comments=True",
+   "merge_fc44ee58c": "0/DIFF/6/comments=True",
+   "tip_7e9b16f52": "0/DIFF/6/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "y8_block_spaced_pipe",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "| block header with several spaces after the colon"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_spaced_pipe.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_spaced_pipe.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "6196b58161d30017fd6a11de00118d01a107f60dae8ab04c8ce8181ffafc4d1c",
+   "golden_sha256": "2238f9214a03d1a336928d2bbc5c90fadea2f2f1fee794656acb0531c9ced4f3",
+   "base_8317cf006": "0/DIFF/5/comments=True",
+   "merge_fc44ee58c": "0/DIFF/5/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "y8_block_two_blocks_end",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "two | blocks, the second at the end of the document, trailing blank lines"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_two_blocks_end.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_two_blocks_end.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "01356cb5f76e47d07e342b8619323feeab422be73de06559d6f1fb0d4a0ab9f9",
+   "golden_sha256": "2aa5e5353f2fe95fe1366a8a8f7e1872f11863b0106edfe2062981553688d825",
+   "base_8317cf006": "0/DIFF/6/comments=True",
+   "merge_fc44ee58c": "0/DIFF/6/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "y8_block_whitespace_lines",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "| block with space-only and tab-only lines (StyleExtractor drop)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_whitespace_lines.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_whitespace_lines.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "f16b9d23388509966882cab217c31917ff04a594079d6910ff9970ff6c89edb7",
+   "golden_sha256": "dd7eff992d251678963f18fa98c9433c809d5f815d7f77655c1d54e63b34a773",
+   "base_8317cf006": "1/ERR/0/comments=True",
+   "merge_fc44ee58c": "1/ERR/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "y8_crlf",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "CRLF line ends throughout"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_crlf.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_crlf.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "016829be17f2b2eacb4b214b1d192a304004c8af19adb38bf94f3ae20aae4ff1",
+   "golden_sha256": "7a1f46a79892e9d8a998feb7502de0e58660626c472112ff2a7ca1f39b8ff934",
+   "base_8317cf006": "0/DIFF/17/comments=True",
+   "merge_fc44ee58c": "0/DIFF/17/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "y8_deep_nested_escape",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "depth 3, \\n in key, \\t in value"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_deep_nested_escape.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_deep_nested_escape.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "e4acbaf98541e062c0d023936e44076d0259b6358d275dd6f2602662cd084cdd",
+   "golden_sha256": "325086db5ea71c715fcf0f4a3973c44801561e255fd5f9a2151082b8ccaf933f",
+   "base_8317cf006": "0/DIFF/29/comments=True",
+   "merge_fc44ee58c": "0/DIFF/29/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "y8_escape_backslash_pairs",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "doubled backslashes quoted and plain; \\\\ before n"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_escape_backslash_pairs.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_escape_backslash_pairs.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "becb24f5eb1f85342b96a25161268ba3c5d651e7f5e8af1d1b79e6bcb204ee2f",
+   "golden_sha256": "439f5014a63d79e352e8e51aa133e2d210fa424a04f3dbfbca61ecd71c724667",
+   "base_8317cf006": "0/DIFF/2/comments=True",
+   "merge_fc44ee58c": "0/DIFF/8/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "y8_escape_key_tab",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "\\t in keys (bold tab stops)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_escape_key_tab.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_escape_key_tab.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "592635f54a7afd35d912aa2d089dc2698f999accaba32fc62dc8e653f571928c",
+   "golden_sha256": "724c77c25df17b17131bbd2b5549435460f612c2bafb42eba2d01351354c57cc",
+   "base_8317cf006": "0/DIFF/14/comments=True",
+   "merge_fc44ee58c": "0/DIFF/14/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "y8_escape_n_then_t",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "\\t at line starts after \\n"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_escape_n_then_t.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_escape_n_then_t.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "770c3ec8d7a28da7ab7358d4d6f4e775b06fea3e1a4bed351c2c2be6cc206e3c",
+   "golden_sha256": "33d7a13ce45e62e3c10db3821d170eb9e5cd56d67c1e575ad62e86c5503c0eaf",
+   "base_8317cf006": "0/DIFF/7/comments=True",
+   "merge_fc44ee58c": "0/DIFF/7/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "y8_escape_trailing",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "trailing single backslash; value of one doubled backslash"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_escape_trailing.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_escape_trailing.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "943446ba65ec3993999a45d1e8555d3025a29abcb8d821267e11d2a2028334ea",
+   "golden_sha256": "c1658456ae1652068e4ac04fbcc97b534c4e2d319eb90bfd24b3d9bd3a4a3898",
+   "base_8317cf006": "0/DIFF/7/comments=True",
+   "merge_fc44ee58c": "0/DIFF/7/comments=True",
+   "tip_7e9b16f52": "0/DIFF/7/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "y8_escape_unknown_pairs",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "unknown escape pairs kept"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_escape_unknown_pairs.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_escape_unknown_pairs.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "969f09018513a4d6723d2eb043c9e7d42759efd783ef062511ebd3d719027821",
+   "golden_sha256": "dc6fa0967c31fd857e294658c5e46f60421c8c3ba0c10f1d05028e29794b8e59",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "y8_flow_seq_escapes",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "flow sequence items with escapes"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_flow_seq_escapes.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_flow_seq_escapes.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "6c2cfab0d02b262f07bbb80df79e8e01f7da1270c2424f1eb7fa81152e638317",
+   "golden_sha256": "5ee8db833e8eedd6bc0ea5d6791344788c8d49343b53d42e224fcd79170b4635",
+   "base_8317cf006": "0/DIFF/11/comments=True",
+   "merge_fc44ee58c": "0/DIFF/11/comments=True",
+   "tip_7e9b16f52": "0/DIFF/18/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "y8_real_tab_value",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "literal TAB inside values (YamlLine replaces TAB by four spaces)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_real_tab_value.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_real_tab_value.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "d2bf4cc679211ba1f83c0ef43d33d565d93fabcdbe2bd348dd2600316b056ad1",
+   "golden_sha256": "374926a38092c701752c81f424e1dccd89419c10cbb90bb6e30cc82aba4ffe4e",
+   "base_8317cf006": "0/DIFF/6/comments=True",
+   "merge_fc44ee58c": "0/DIFF/6/comments=True",
+   "tip_7e9b16f52": "0/DIFF/12/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "y8_tabsize4",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "skinparam tabSize 4 (AtomText tab stop from FontConfiguration.tabSize)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "d511b68cad0af7851c58f436dfc0c73d30511cd4c5e7f058c1225d784e999d03",
+   "golden_sha256": "a02c9647d00fbd7a429c2f4ac0a38c6fecbfb233d000a56ebe84aca3772e80f4",
+   "base_8317cf006": "1/ERR/0/comments=True",
+   "merge_fc44ee58c": "1/ERR/0/comments=True",
+   "tip_7e9b16f52": "1/ERR/0/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "y8_whitespace_values",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "yaml",
+    "space-only, tab-escape-only and padded values"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_whitespace_values.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_whitespace_values.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6",
+   "source_sha256": "2f31dd28ffedd31667ea364efcde81dcd14bb4e36d521ce12b9fa4241c44b7f8",
+   "golden_sha256": "aa91162ce708f3b78cda22fed862087e0dd7d82bab660f0bf13d7ce5aaf9771b",
+   "base_8317cf006": "0/DIFF/11/comments=True",
+   "merge_fc44ee58c": "0/DIFF/11/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  }
+ ]
+}

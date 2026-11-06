@@ -1,0 +1,29 @@
+{
+  "total": 23,
+  "valid": 19,
+  "before": 14,
+  "current": {
+    "svg": 17,
+    "source": 19,
+    "source_oracles": 19,
+    "negative_rejected": 2,
+    "panics": 0
+  },
+  "lost_passes": [],
+  "gains": [
+    "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/key_dollar.puml",
+    "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/key_combining.puml",
+    "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/parameter_duplicate.puml"
+  ],
+  "new_valid_errors": [],
+  "model_drops": [
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/sub_empty_0.puml",
+      "valid": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/sub_empty_1.puml",
+      "valid": false
+    }
+  ]
+}

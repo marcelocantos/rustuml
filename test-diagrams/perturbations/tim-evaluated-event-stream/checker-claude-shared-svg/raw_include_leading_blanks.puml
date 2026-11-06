@@ -1,0 +1,6 @@
+@startuml
+skinparam shadowing true
+!include inc_leading_blank.iuml
+class Egret
+Heron --> Egret
+@enduml

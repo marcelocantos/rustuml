@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "mechanism": "creole-present-empty-stripe",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7cbc0aef-f6c2-4036-bc37-086ae22f4e23%3Adelegate-task%3Ad376f038-2e3d-4585-a2e6-77089a4483d8",
+    "model": "gpt-6-astra / Codex harness in T3 Code / high reasoning",
+    "independence": "Separate review task; no maker implementation, account, comparator, baseline, target, or allowlist edits; same model family is disclosed, not presented as cross-family review."
+  },
+  "account_commit": "ee02618929097265e3e48508bdb078242d2f50d4",
+  "account_location_correction_commit": "e25a4a20b4df62f9347afb292fda5940941e8bc7",
+  "implementation_commit": "59dc60604792260c342f6e6ab96829f10b0a59f5",
+  "reviewed_packet": "a84856637adcd8e8d4e78fd2ee00658c9c612feb",
+  "clean_before": "246ff6396b538843143ee9d2cc9a569b67f614dd",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.zu5h6zuK/new --timezone GMT+11:00 -- -pipe -tsvg",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/validate_fresh.py",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/run_replay.py before retained maker18 sprites50 checker38 fresh15",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/run_replay.py after retained maker18 sprites50 checker38 fresh15",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/run_replay.py before fresh26",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/run_replay.py after fresh26",
+    "cargo test --workspace --lib --release",
+    "cargo test -p rustuml --test pipe_mode --release",
+    "cargo test -p rustuml-oracle --release --test golden_no_oracle -- --nocapture",
+    "cargo test -p rustuml-oracle --release --test golden_pairs -- --nocapture",
+    "cargo test -p rustuml-oracle --release --test parity_perturbations -- --nocapture",
+    "cargo test -p rustuml-oracle --release --test harness_guards -- --nocapture",
+    "cargo clippy --workspace --all-targets -- -D warnings",
+    "cargo fmt --all -- --check",
+    "rustfmt --edition 2024 --check --config skip_children=true crates/rustuml-render/src/creole.rs crates/rustuml-render/src/text_render.rs crates/rustuml-render/src/wbs.rs",
+    "git diff --check"
+  ],
+  "command_records": "docs/parity-reviews/creole-unresolved-sprite-command/corrective-checker-support/gates.json",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/creole-present-empty-stripe/present_positions.puml",
+      "golden": "test-diagrams/perturbations/creole-present-empty-stripe/present_positions.svg",
+      "axes": [
+        "command/line content",
+        "style and boundary position"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "3dab778ee8e39758a5c9dba9a32d9aae5a71d9d23cb683ee05c5393de18be9dc",
+      "golden_sha256": "b5455c87adfc8822013342befb21450d2a41bd67410bcc75f7b6d828a538676e",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/present_positions"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-present-empty-stripe/present_style_restore.puml",
+      "golden": "test-diagrams/perturbations/creole-present-empty-stripe/present_style_restore.svg",
+      "axes": [
+        "command/line content",
+        "style and boundary position"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "07f29366895af3b4a7b7178982e0248c72170f7f27386c224cda1625d92b2d0b",
+      "golden_sha256": "25ba5f689f06514919699a2370c2746531848ccabfa84981d6f8b7b49d70806f",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/present_style_restore"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-present-empty-stripe/present_bold_empty.puml",
+      "golden": "test-diagrams/perturbations/creole-present-empty-stripe/present_bold_empty.svg",
+      "axes": [
+        "command/line content",
+        "style and boundary position"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "be999203114828ad000786dd2ddbd590700dabe617cbd7422c8614ec18cfc7c3",
+      "golden_sha256": "d7a577f5518dd89de285d657a5584dfdea212a5440393ae19a48e352fc2294af",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/present_bold_empty"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-present-empty-stripe/present_small.puml",
+      "golden": "test-diagrams/perturbations/creole-present-empty-stripe/present_small.svg",
+      "axes": [
+        "command/line content",
+        "style and boundary position"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "b70a11ece37a3c582c5d6403b91df493f75dda3f9a0fd7d2738162c7faf22eff",
+      "golden_sha256": "c4f93e310c8df17a20e077b930a1ff571e58fdb9722f987008c1b57afa47b97f",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/present_small"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-present-empty-stripe/absent_class.puml",
+      "golden": "test-diagrams/perturbations/creole-present-empty-stripe/absent_class.svg",
+      "axes": [
+        "absent edge label",
+        "class consumer"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "78a00dde6ebb05c05cd8b8c96b61982da6650d7310f9ffe6add252c1bab29b0c",
+      "golden_sha256": "e213564db49dcfbc113da0942001b015f3c7ff1141ba436cc5334d9e77dc6739",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/absent_class"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-present-empty-stripe/absent_state.puml",
+      "golden": "test-diagrams/perturbations/creole-present-empty-stripe/absent_state.svg",
+      "axes": [
+        "absent edge label",
+        "state consumer"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "cca1e7961ac5597ec060ca07461987c1c76e0dc86673d1065099a23805c11b50",
+      "golden_sha256": "1c05843001f71b6d528c4d15cc7b4706d10828ea8ae2eda896928aa19f6ddfd5",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/absent_state"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-present-empty-stripe/absent_activity.puml",
+      "golden": "test-diagrams/perturbations/creole-present-empty-stripe/absent_activity.svg",
+      "axes": [
+        "absent edge label",
+        "activity consumer"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "5b3c1e8be4dd5aabfcc1d9e7ba58218ef5d12d9a99f267ff6dc030be1d62f45c",
+      "golden_sha256": "ed9c64c0bd9c13b4cc213bc8ed8fe5ec0b1dd80729920cd21209f381f81d96f7",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/absent_activity"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-present-empty-stripe/absent_sequence.puml",
+      "golden": "test-diagrams/perturbations/creole-present-empty-stripe/absent_sequence.svg",
+      "axes": [
+        "absent versus empty",
+        "sequence consumer"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "a94ec36f76a50b0fe0512f98874455dd515fe78e16f78f06c9028aed43f06a68",
+      "golden_sha256": "550536df8c1a2e7dfda0882886b81e530ca41a37e81fa78713addeb756762ee9",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/absent_sequence"
+    }
+  ],
+  "findings": [
+    "Bounded support: fresh leading/middle/trailing empty message stripes, sprite-only and size/color-restored blanks, base font7, and absent class/state/activity/sequence labels pass. Fresh membership is7/8 after versus4/8 before. A separate private public-API diagnostic confirms parse_segments(\"\") stays lexical-empty while width/paint/ascent/first-baseline/counts consistently project an actual base-style space at sizes7,13,26; font7 retains the existing minimum atom height10.",
+    "Counterexample present_bold_empty: Java does not consider <b></b> or <i></i> atomless. CommandCreoleStyle.matchingSize rejects a zero-body closed match, then its EOL alternative paints the closing tag. Java paints </b>, </i>, and size26 </b> across three lines; Rust emits three base-size13 spaces. Java canvas173x169 versus Rust145x153. The empty-stripe projection is internally consistent but inherits an incorrect upstream zero-atom classification from handle_tag/walk_with.",
+    "The new line_segments space is justified by StripeSimple.getAtoms only after equivalent command recognition. Empty size commands use a different matchingSize (digit count) and do produce the intended base-style space; treating every syntactically empty style span alike is not valid.",
+    "Absent-display caller guards remained intact in all four fresh consumers, with full YAML models unchanged. This bounded evidence does not waive the retained note_undefined resolver failure, which discards the sprite-only line before shared text.",
+    "The existing parser/theme source-identity unit failures remain byte-identical through the actual before/after CLI. No parser/model/optional-label guard changed in this packet."
+  ],
+  "causal_locations": {
+    "java": [
+      "klimt/creole/Display.java:258-353",
+      "klimt/creole/legacy/StripeSimple.java:124-128",
+      "klimt/creole/command/CommandCreoleStyle.java::matchingSize",
+      "klimt/creole/command/CommandCreoleSizeChange.java::matchingSize/executeAndGetRemaining"
+    ],
+    "rust": [
+      "crates/rustuml-render/src/text_render.rs::line_segments",
+      "crates/rustuml-render/src/creole.rs::parse_segments_inner/handle_tag/walk_with"
+    ]
+  },
+  "verdict": "rejected",
+  "reason": "Fresh valid whole-SVG counterexamples remain executable. Bounded gains do not waive whole-output failures or standing red gates.",
+  "evidence": "docs/parity-reviews/creole-unresolved-sprite-command/corrective-checker-support",
+  "reference_limitations": [
+    "Fresh Java argv derived from pinned wrapper construction, not process-traced.",
+    "Historical font/Graphviz environment equivalence remains unproved.",
+    "No Java SourceProbe exists for checker38, corrective15 or fresh26."
+  ],
+  "reviewed_at": "2026-11-04T13:19:39.944241+00:00",
+  "reference_command_records": "measurements.tar.gz: fresh-reference/*/reference-command.json",
+  "reference_stdin_contract": "26 exact original manifest sources, hashes and bytes retained in request.json, manifest.json and input-bundle.json.gz."
+}

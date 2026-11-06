@@ -1,0 +1,51 @@
+rpn_spelling_body java 0 valid True rust 0 svg True source True
+rpn_dual_parameters java 0 valid True rust 0 svg False source False
+  java-source '@startuml\nclass "plain/dollar / cedar/larch" as Exact\n@enduml\n'
+  rust-source '@startuml\nclass "/dollar / /larch" as Exact\n@enduml\n'
+rpn_nested_consumption java 0 valid True rust 0 svg True source True
+rpn_duplicate_underflow java 1 valid False rust 1 svg False source False
+  java-source ''
+  rust-source ''
+rpn_neighbor_calls java 0 valid True rust 0 svg True source True
+operand_duplicate_effects java 0 valid True rust 0 svg True source True
+operand_rhs_first_error java 200 valid False rust 1 svg False source False
+  java-source '@startuml\n%strlen($unused=%intval("4.5"))" as Lost\n'
+  rust-source ''
+operand_procedure_missing java 200 valid False rust 1 svg False source False
+  java-source '@startuml\n!$x=$emit()\n'
+  rust-source ''
+operand_procedure_covered java 200 valid False rust 1 svg False source False
+  java-source '@startuml\n!$x=$emit($tick(3))\n'
+  rust-source ''
+operand_plain_exact_shortcut java 0 valid True rust 0 svg True source True
+legacy_repeated_raw java 0 valid True rust 0 svg True source True
+legacy_procedure_control java 0 valid True rust 0 svg True source True
+legacy_prefix_failure java 200 valid False rust 1 svg False source False
+  java-source '@startuml\nnote as Memo\n%intval("x") STRIP("oak") suffix\n'
+  rust-source ''
+sub_collect_error_precedence java 200 valid False rust 1 svg False source False
+  java-source '@startuml\n!startsub outer\n'
+  rust-source ''
+sub_uncalled_function java 200 valid False rust 0 svg False source False
+  java-source '@startuml\n!startsub outer\n'
+  rust-source '@startuml\nclass Survivor\n@enduml\n'
+sub_comment_replay java 0 valid True rust 0 svg True source True
+intval_ascii_edges java 0 valid True rust 0 svg True source True
+intval_unicode_digits java 0 valid True rust 1 svg False source False
+  java-source '@startuml\nclass "123/-42" as Unicode\n@enduml\n'
+  rust-source ''
+intval_unicode_json java 0 valid True rust 1 svg False source False
+  java-source '@startuml\nclass "123" as Mixed\n@enduml\n'
+  rust-source ''
+intval_invalid_sign java 200 valid False rust 1 svg False source False
+  java-source '@startuml\n!$a=%intval("+-3")+%strlen()\n'
+  rust-source ''
+intval_underflow_bound java 200 valid False rust 1 svg False source False
+  java-source '@startuml\n!$a=%intval("-2147483649")\n'
+  rust-source ''
+hsl_rounding_extremes java 0 valid True rust 0 svg True source True
+hsl_typed_channels java 0 valid True rust 0 svg True source True
+hsl_named_alpha java 0 valid True rust 0 svg True source True
+hsl_bad_arity java 200 valid False rust 1 svg False source False
+  java-source '@startuml\n!$a=%hsl_color(12,%intval("bad"))\n'
+  rust-source ''

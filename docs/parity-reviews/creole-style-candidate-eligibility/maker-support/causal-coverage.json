@@ -1,0 +1,59 @@
+[
+  {
+    "mechanism": "HTML style candidate eligibility",
+    "accounts": [
+      "829154e5b:creole-style-candidate-eligibility/account.json"
+    ],
+    "java": "CommandCreoleBuilder -> CommandCreoleStyle.matchingSize/body capture -> StripeSimple searchCommand -> execute recursive body restore",
+    "rust": "creole.rs::handle_tag/walk_style_tag selects nonempty bounded body first; EOL body otherwise; untouched size/color use parameter eligibility",
+    "controls": [
+      "fresh26/empty_bold_recognition",
+      "fresh26/present_bold_empty",
+      "new15/style_empty_families",
+      "new15/style_parameter_contrast"
+    ],
+    "observations": "Closing </b> and sibling tags are visible styled text after EOL fallback, not empty atoms; size/color empty bodies still consume and restore. Whole baseline failures retained separately."
+  },
+  {
+    "mechanism": "Delimiter style candidate eligibility",
+    "accounts": [
+      "3da745665:creole-delimited-style-candidate-eligibility/account.json"
+    ],
+    "java": "CommandCreoleStyle.createCreole requires nonempty content; no EOL alternative. CharHidder hides escaped candidates.",
+    "rust": "creole.rs::take_style_delimiter; each existing delimiter arm commits iterator only after eligible body; unrecognized characters leave nested sprite candidates reachable",
+    "controls": [
+      "delimiters4/empty",
+      "delimiters4/nonempty",
+      "delimiters4/unclosed",
+      "delimiters4/escaped",
+      "focused2/positioned_captures",
+      "focused2/positioned_fallbacks"
+    ],
+    "observations": "Mid-line empty, five-character bounded, unclosed inner-sprite and escaped controls pass2/2after0/2before. Four whole line-stripe failures remain0/4."
+  },
+  {
+    "mechanism": "WBS Display line sequence",
+    "accounts": [
+      "829154e5b:wbs-display-line-projection/account.json"
+    ],
+    "java": "WBSDiagram.addIdea -> Display.getWithNewlines -> same SheetBlock1 preferred max width/summed stripe heights and paint",
+    "rust": "wbs.rs::display_lines/measure caches TextLine content,height,baseline; emit_box paints cached sequence",
+    "observations": "Three original multiline failures now pass, including blank lines. New escaped-backslash and root/child/mixed-size controls retain raw model labels. No global normalization."
+  },
+  {
+    "mechanism": "WBS shape and text component",
+    "accounts": [
+      "829154e5b:wbs-idea-shape-block-selection/account.json",
+      "52203dbe7:wbs-leaf-component-origin/account.json"
+    ],
+    "java": "CommandWBSItemNew/Old -> IdeaShape -> WBSTextBlock.buildMain/ITFLeaf constructor -> Box padding10 or None margins0,3,1,1; leaf draws directly, composed offsets by getw1",
+    "rust": "parser WbsShape defaultBox skipBox; existing sole constructor extracts adjacent syntax; wbs measure and emit select same shape block; leaf origin separates component from composed collection",
+    "observations": "Old wbs_boxless and new boxless tree/empty/underscore controls pass. Legacy-order warning remains a whole failure. 12nodes in5models change shape+label; one color correction. No node order/depth/side/UID/source identity/factory changes."
+  },
+  {
+    "mechanism": "Unchanged shared blank projection/flush and absent Display",
+    "java": "StripeSimple.getAtoms returns base-style space only if atom list empty; null Display omits component",
+    "rust": "text_render.rs line_segments remains byte-identical; style command barriers still distinguish command flushes from ordinary text",
+    "observations": "Actual blank/consumed-empty controls in fresh15/fresh26 pass; style closing text is nonempty and no longer collapsed into space. No blanket padding of absent labels; text_render public APIs unchanged."
+  }
+]

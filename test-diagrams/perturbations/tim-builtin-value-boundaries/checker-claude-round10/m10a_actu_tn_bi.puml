@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam actorFontStyle bold italic
+actor "Pylon vk" as E1
+usecase "Ok" as E2
+E1 --> E2
+@enduml

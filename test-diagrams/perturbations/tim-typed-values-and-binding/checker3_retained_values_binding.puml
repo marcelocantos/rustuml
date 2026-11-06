@@ -1,0 +1,10 @@
+@startuml
+!$seed = "007"
+!procedure $emit($a=$seed, $b=7, $c="c")
+!$x = $a + 2
+!$y = $b + 2
+class "$x / $y / $c" as Values
+!endprocedure
+!$seed = "changed"
+$emit($c="éλ", $b=8)
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam defaultFontSize 17
+participant "Mew Ghyll AVW" as E1
+E1 -> E1 : ok
+@enduml

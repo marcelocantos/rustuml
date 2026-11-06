@@ -1,0 +1,49 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "sub_mechanism": "Unmapped nonspacing marks shaped per HarfBuzz buffer (script run x font-slot run) under HarfBuzz 15.0.0 (round-7 obligations 2, 3 and 7, BLOCKING)",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-7.json (attributed_regressions mk8_lucida_arabic, mk8_seq_arabic, mk8_helv_hebrew, mk8_menlo_hebrew; findings[7..9]; held_out_failures mk8_u17_1ad0, mk8_u17_1e6e3, mk8_u18_05c8; bounded_next_obligations[1..3])",
+ "sources": [
+  "OpenJDK jdk21u tag jdk-21.0.5-ga (https://github.com/openjdk/jdk21u; the reference JVM is Homebrew openjdk@21 21.0.5): sha256 GlyphLayout.java cb95ae86, FontRunIterator.java 1cb09161, ScriptRun.java ae8c4d2f, CCompositeGlyphMapper.java 33a73e47, CoreTextSupport.m 9bb54645, hb-jdk-font.cc 8027d83a, HBShaper.c 2fbbde51, scriptMapping.c 0a329fea, ToStream.java 55794276, CharInfo.java 8743d68a",
+  "HarfBuzz tag 15.0.0 (https://github.com/harfbuzz/harfbuzz, commit 35f656a1a2bab548ea7f54a6dd3fba2b09680d14; the library the reference JVM loads: /opt/homebrew/Cellar/harfbuzz/15.0.0_1, T14.6.8): sha256 hb-ot-shape.cc c50cabe8, hb-ot-shape-fallback.cc ba8af8e7, hb-unicode.hh 8c15f338, hb-ot-layout.hh aaa549c0, hb-ot-shaper.hh 3eb84b0a, hb-ucd-table.hh 4bcf2ec3 ('Unicode 18.0.0'); UnicodeData.txt 18.0.0 sha256 0736451de439ae7baf1425136617da495e09ee5afbe6e394374db7009ea08950 (https://www.unicode.org/Public/18.0.0/ucd/)"
+ ],
+ "java_locations": [
+  "GlyphLayout.java 408-431: a composite font's text is split by ScriptRun, then each script run by FontRunIterator.next(script, limit); nextEngineRecord shapes each piece with its slot's physical font: one HarfBuzz buffer per script run x slot run.",
+  "FontRunIterator.java 115-126: a run continues while charToGlyph(ch) & SLOTMASK equals the first character's slot.",
+  "CCompositeGlyphMapper.java 54-67: the first slot whose mapper returns a code > 0, else missingGlyph (0, slot 0). Slot 0 is the CFont itself; CoreTextSupport.m 99-133 CTS_GetGlyphsAsIntsForCharacters gives > 0 only for the font's own glyph (CTFontGetGlyphsForCharacters); a cascade substitution is negative. So a character is in slot 0 when the primary face's own cmap maps it or when no slot maps it.",
+  "hb-jdk-font.cc 199-207: hb_jdk_get_glyph_extents returns false.",
+  "hb-ot-shape.cc 85-103 (15.0.0): the shaper is hb_ot_shaper_categorize(script); script_zero_marks and script_fallback_position are read from it before morx swaps any non-default shaper for _hb_ot_shaper_dumber (zero_width_marks NONE, fallback_position false).",
+  "hb-ot-shape.cc 152-221 (15.0.0) compile: apply_kerx/apply_gpos as before; legacy kern now applies only when script_fallback_position (182: 'Not all shapers apply legacy kern'); apply_fallback_kern needs script_fallback_position (187); zero_marks = script_zero_marks && !apply_kerx && (!apply_kern || !machine kerning) (189-195); adjust_mark_positioning_when_zeroing = !apply_gpos && !apply_kerx && (!apply_kern || !cross kerning) (198-204); fallback_mark_positioning = adjust && script_fallback_position (206-207); trak applies when trak and STAT exist (218).",
+  "Shapers (15.0.0): default BY_GDEF_LATE/fallback true; dumber NONE/false; arabic BY_GDEF_LATE/true (Arabic and, with no GSUB script, Syriac); hebrew BY_GDEF_LATE/true; hangul NONE/true (true since 12.2.0, commit 63e8c13e1 '[hangul] Enable fallback position / kern table'); thai BY_GDEF_LATE/false; indic, khmer NONE/false; myanmar, use BY_GDEF_EARLY/false.",
+  "hb-ot-shape.cc 856-879 hb_synthesize_glyph_classes: without GDEF glyph classes, a glyph is MARK when its character is Mn and not default-ignorable; zero_mark_widths_by_gdef zeroes MARK glyphs when zero_marks and the plan's shaper zeroes by GDEF.",
+  "hb-ot-shape-fallback.cc 470-497 _hb_ot_shape_fallback_mark_position (15.0.0): cluster boundaries at characters that are not Unicode marks (Mn, Mc, Me) and not hidden or default-ignorable; 426-467 position_cluster(_impl): in a cluster of two or more, the first non-mark is the base and its marks run up to the next non-mark, skipping hidden and default-ignorable glyphs; 324-342 position_around_base: extents fail (JDK), so zero_mark_advances (189-208) zeroes every Mn after the base in that span.",
+  "hb-ot-layout.hh 216-260: hidden is set only on default-ignorables (Mongolian FVS, TAG characters, CGJ), so 'hidden or default-ignorable' is the default-ignorable set; hb-unicode.hh 167-197 is_default_ignorable (15.0.0) adds U+180F; hb-ot-shape.cc 1193-1194 positions before hb_ot_substitute_post hides default-ignorables, so they are in the buffer during fallback positioning.",
+  "hb-ucd-table.hh (15.0.0): Unicode 18.0.0 general categories: 70 Mn more than 16.0.0 (39 from 17.0, 31 from 18.0)."
+ ],
+ "rust_locations": [
+  "crates/rustuml-render/src/font_chain.rs complexity_per_token: after_base walks the script run only; resolve zeroes by precomputed per-face booleans; NONSPACING_MARKS/UNICODE_MARKS from Unicode 16; U+180F not default-ignorable; hangul not fallback-positioned."
+ ],
+ "environment": "The primary faces' own cmaps are not in the Monkey Man extraction. tools/PrimaryFaceExtract.swift reads them (and the kern cross-stream bit, trak and STAT) on colossus. The six font files the zeroing plan can reach (LucidaGrande.ttc, Helvetica.ttc, Menlo.ttc, Arial.ttf, Verdana.ttf, Courier New.ttf) hash identically on Monkey Man (checker monkeyman-hb static.txt) and colossus; the drift gate checks those hashes against a byte-identical copy of the Monkey Man record. Arial Bold and Verdana Bold are not hashed on Monkey Man; the gate asserts their plan never zeroes, so their own cmap cannot affect output.",
+ "planned_change": [
+  "tools/PrimaryFaceExtract.swift; output stored at tools/font-chain-reference/colossus-primary-faces/ with SHA256SUMS, the colossus font-file hashes and the copied Monkey Man record.",
+  "tools/font_chain_coverage.py: per face the own-cmap runs (primary_mapped) and the raw plan facts (GDEF glyph classes, class of glyph 0, GSUB, GPOS, morx, kerx, kern, machine kern, cross kern, trak, STAT) instead of two precomputed booleans.",
+  "tools/font_chain_unicode.py: Mn and Mn/Mc/Me from UnicodeData 18.0.0; the per-script shaper choice (no generated complex/fallback lists).",
+  "font_chain.rs: ChainFace::complexity_per_token(text) splits complex text into buffers (ScriptRun run x slot run, slot 0 = own glyph or unmapped everywhere), ports the 15.0.0 planner per buffer and _hb_ot_shape_fallback_mark_position over the buffer, and marks each unmapped Mn token zeroed or not; is_default_ignorable gains U+180F; provenance comments name 15.0.0.",
+  "Drift gate (obligation 7): the generated table equals the stored primary-face extraction (runs and every plan fact, the Helvetica and Helvetica-Bold kern bit included); stored file hashes; the Monkey Man font hashes equal the colossus ones for every face whose plan can zero a mark; mutation drill including the Helvetica kern bit."
+ ],
+ "precommitted_measurement": {
+  "oracle": "BJ (K6A) Java references (shaped with HarfBuzz 15.0.0); BI/BH where shaping-dependent; goldens",
+  "expect": [
+   "BJ mk8_lucida_arabic and mk8_seq_arabic match whole-output (mark keeps Lucida Grande .notdef 10.5: alef is in the Geeza Pro slot).",
+   "BJ mk8_helv_hebrew: text width 52.4043 = the Rust control's 43.5313 + Helvetica .notdef 8.873 (Java 53.7031 - 44.8301); whole-output stays DIFF only by the pre-existing alef advance that mk8_helv_hebrew_ctrl also fails on.",
+   "BJ mk8_menlo_hebrew: mark keeps its 8.4287 cell, width 67.4297, exact viewBox 119 x 68 (Java 119); NBSP/family-name/alef-advance residue stays (pre-existing, as mk8_mono_9/23).",
+   "Same-buffer controls keep matching: BJ mk8_lucida_syriac, mk8_helv_hebrew_pres, mk8_cjk_base; BI mk7_after_hebrew unchanged.",
+   "BJ mk8_u17_1ad0, mk8_u17_1e6e3, mk8_u18_05c8 match whole-output.",
+   "Every other BJ/BI/BH/BG/BF/BE/BC/BB/AW/AU/AR case and every golden keeps its result.",
+   "Fresh probes (staged for relay): Unicode 17/18 marks not in BJ; U+180F after a Thai base (default-ignorable now: zero); marks after slot-0 and other-slot bases in Hebrew, Arabic, Syriac, Thai and Devanagari runs in Lucida Grande and Helvetica."
+  ]
+ }
+}

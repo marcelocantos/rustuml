@@ -1,0 +1,8 @@
+@startuml
+state Yard {
+  state Dock {
+    Load --> Ship
+  }
+}
+note left of Ship : crate
+@enduml

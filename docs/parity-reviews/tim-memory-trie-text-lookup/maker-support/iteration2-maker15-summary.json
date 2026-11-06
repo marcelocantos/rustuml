@@ -1,0 +1,16 @@
+{
+  "total": 15,
+  "valid": 9,
+  "before": 9,
+  "current": {
+    "svg": 9,
+    "source": 9,
+    "source_oracles": 9,
+    "negative_rejected": 6,
+    "panics": 0
+  },
+  "lost_passes": [],
+  "gains": [],
+  "new_valid_errors": [],
+  "model_drops": []
+}

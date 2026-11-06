@@ -1,0 +1,13 @@
+{
+ "schema_version": 1,
+ "status": "maker addendum before the C5 change (round 11), written after measuring",
+ "answers": "account.json obligation_2 C5 decision procedure",
+ "measured": {
+  "mutant": "C5: state.rs StateNodeFont `italic: state_font_italic` -> `italic: false`, on the git archive of cb3d36bb1 (private release build rustuml-C5mut)",
+  "cohort": "whole CLI output of all 18,263 golden and perturbation sources (12,550 goldens; registered pairs incl. BS/BT under checker-claude-round10), each from its recorded cwd",
+  "result": "stdout byte-identical to cb3d36bb1 for 18,263/18,263; exit status identical; stderr differs only on the 4 shared-svg-corrective dash_* sources, where it is the thread id of the pre-existing class.rs:285 panic (it differs between any two runs, merge -> f7c382ff4 too)",
+  "matches_structural_proof": "yes: in the CLI the italic is true only with a stateFontStyle skinparam, which always adds a style declaration, so state_node_size takes autonomous_layout_node_size"
+ },
+ "decision": "Remove StateNodeFont.italic (the CLI-unreachable face slot): layout_node_size_with_font is reached only with an oracle or an empty style program, and an empty program has no stateFontStyle; it measures the upright face it can actually receive. Oracle tier: golden_pairs at the final tip is the C5-equivalent run and is compared name by name with the merge tree; any difference is reported.",
+ "not_changed": "StateNodeFont.bold has the same reachability (stateFontStyle bold also yields a declaration) but is outside this obligation; it is left as is and reported (proposed target)."
+}

@@ -1,0 +1,4 @@
+@startyaml
+a\tb: v
+wide key\tz: w
+@endyaml

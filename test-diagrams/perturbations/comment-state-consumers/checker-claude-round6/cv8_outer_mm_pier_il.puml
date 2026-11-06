@@ -1,0 +1,9 @@
+@startuml
+[*] --> Mm
+state Mm {
+  [*] --> Pier
+  Pier --> Il
+  Il --> [*]
+}
+Mm --> [*]
+@enduml

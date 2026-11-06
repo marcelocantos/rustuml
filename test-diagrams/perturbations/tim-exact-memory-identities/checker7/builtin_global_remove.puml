@@ -1,0 +1,12 @@
+@startuml
+!leaf="global"
+!$leaf="cash"
+!function $edit(leaf="param")
+!$discard=%set_variable_value("leaf","new")
+!undef leaf
+!return leaf+"/"+$leaf+"/"+%variable_exists("leaf")
+!endfunction
+!$answer=$edit()
+!undef $leaf
+class "$answer/%variable_exists("$leaf")/leaf" as Node
+@enduml

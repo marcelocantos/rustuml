@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Helvetica
+abstract class "Wharf q𝅧r" as K
+@enduml

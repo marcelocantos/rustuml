@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam usecaseFontStyle bold
+usecase "Wavy <i>Dog kim Vay</i> 9 ovo" as E1
+@enduml

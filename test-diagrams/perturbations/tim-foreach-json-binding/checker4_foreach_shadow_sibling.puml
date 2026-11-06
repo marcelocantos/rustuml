@@ -1,0 +1,15 @@
+@startuml
+!$item="root"
+!function $read()
+!return $item+1
+!endfunction
+!function $walk($item="local")
+!$out=""
+!foreach $item in ["03",4]
+!$out=$out+":"+$item+":"+$read()
+!endfor
+!return $out
+!endfunction
+!$v=$walk()
+class "$v / $item" as Scope
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+state Plant {
+  state Cell {
+    Press --> finished_parts_exit
+    state finished_parts_exit <<exitPoint>>
+  }
+  finished_parts_exit --> Trim
+}
+@enduml

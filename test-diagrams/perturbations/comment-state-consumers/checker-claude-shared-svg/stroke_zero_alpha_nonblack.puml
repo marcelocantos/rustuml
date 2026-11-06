@@ -1,0 +1,12 @@
+@startuml
+<style>
+stateDiagram {
+  state {
+    LineColor #FF000000
+  }
+}
+</style>
+state Boil
+state Calm
+Boil --> Calm
+@enduml

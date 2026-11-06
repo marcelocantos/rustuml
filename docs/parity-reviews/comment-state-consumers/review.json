@@ -1,0 +1,2018 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A76d88857-1ec0-408c-8c06-0b37eda8395a",
+    "model": "gpt-6-astra",
+    "tool": "Codex harness in T3 Code",
+    "reasoning_effort": "high",
+    "independent": true,
+    "prior_implementation_involvement": false,
+    "branch": "review/comment-state-independent-20261105",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-2f87fc19"
+  },
+  "account_commit": "42344228ed430c5678b46ec8f42f7f9018124247",
+  "implementation_commit": "523a2d89226d764b818b7af2472593d2690e9c4b",
+  "evidence_revision": "2a791353c998e4c34bbf0f16699c7ffd21d50cea",
+  "base_revision": "3875fee3b164d63d4b39df4bc6c13ca8ace89169",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/comment-state-independent-20261105 2a791353c998e4c34bbf0f16699c7ffd21d50cea",
+    "git archive 3875fee3b164d63d4b39df4bc6c13ca8ace89169 | tar -x -C /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/before-source",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/target-before cargo build --release -j 4 -p rustuml (cwd /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/before-source)",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/target-after cargo build --release -j 4 -p rustuml",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/replay_checker.py before",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/replay_checker.py after",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/validate_fresh.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/supplement/validate_fresh.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/replay_fresh.py checker94",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/replay_fresh.py checker6",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/run_assisted.py",
+    "Parent existing Monkey Man runner only: reference --cwd <worker>/new --timezone GMT+11:00 -- -pipe -tsvg; exact per-case invocations and streams archived; Java argv derived, not process-traced."
+  ],
+  "verdict": "rejected",
+  "no_production_changes": true,
+  "no_shipping": true,
+  "mechanism": "comment-state-consumers",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_alias_bidirectional.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_alias_bidirectional.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "pass",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "fd35c20d2a57d5d292954f69d6e0aa6e4262cf608c3e54989c1eaddd5e71c04d",
+      "java_svg_sha256": "c13ed87f4d0adf17b1e7ecd70c034038a6c8d3ebda7883fdb086bac7a91c3948"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_quoted_spaces.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_quoted_spaces.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "pass",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "de646399e763eb08a187444a171bfb169f970f2733807c3f87bbc602d94955b2",
+      "java_svg_sha256": "58a06803f66da9ca1ee48e851353108ad8168550a04d904ca6c39ed33fc50ffd"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_namespace_default.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_namespace_default.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "fb4a330309ac4a589f6ad4f8fa0ed24284c277d5cf6abbeb53aaf55e33e1275b",
+      "java_svg_sha256": "b795749eed51237fea0e6c0916ada0083a16063045e69a7895251855ca958e5e"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_groups_bidirectional.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_groups_bidirectional.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "d3778d331245153080e02871d106d63dae40b603108f2383b664b5a2bc9e4f48",
+      "java_svg_sha256": "fb042bef647bb5e3200a2594862210868ae1b27da20983c26d91162de25253c1"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_nested_default.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_nested_default.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "d9ecfa4a2036836291396fbfb2300e274ef92e53a8e1425765fd5dad0ac45279",
+      "java_svg_sha256": "aba04173981114a5e2bf8c9d73c0fd3ad9de8a5b30ffa36750b3188d90aad3a0"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_custom_separator_residue.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_custom_separator_residue.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "76fd054fb8eb6772dbbeed8a6f833cfa206d0ea22beeb63a4fd7df9fa67dfe73",
+      "java_svg_sha256": "9d37ed0a5548119b2cdedadcfe71a26d49b774d8927dba12a5cb86379cb3bcbb"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_object_mixed.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_object_mixed.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "1225dba8ddb60163b3932227ad8d347a0389f3e785f137f045bb1bf443c63236",
+      "java_svg_sha256": "70b36a14e3a9f7da11227fc17b2310585c0e8fffe118c1c80030dcd7f5dc0490"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/object_quoted_admission.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/object_quoted_admission.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "612ca1ac69b5d2174f103b4bffb70d5100bd0041f7a691c83eca4ae73835c326",
+      "java_svg_sha256": "8f95e74f4d0a38c78c08117485ce304131026950d8d04eb8808f1767d1bfde85"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/deploy_alias_collision.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/deploy_alias_collision.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "f2ed4437529e49622c173d8dea22a18d53ea0db06d07fbafcc29c872bd5105de",
+      "java_svg_sha256": "a5640f9acec18549bb63e1f4fea88221ed900c99e5a509becf30c845b3cc2fba"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/deploy_raw_spaces.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/deploy_raw_spaces.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "pass",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "d22a0d619cde52bfe83da26da7d89684de37062bf107f2f072ee391d052fe333",
+      "java_svg_sha256": "e99f107191120cac7e04e64e142bdd89abc078eb02901baca51fa0644bdf207d"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/deploy_nested_groups.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/deploy_nested_groups.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "537df21d7662700d43d614e58b40e4331b34cc45f7fba596e1cb8d635345cffa",
+      "java_svg_sha256": "9ba548e199b02aa72e86d9ee6b7c7ba5634ec4de3485dd3d729691e9159072a1"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/description_kinds.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/description_kinds.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "5e42895b33a62fd0538f0d910faca6cb5c2d773b0b9328042a15d772c3979cbb",
+      "java_svg_sha256": "78afbd16beb618ca1292616a7e98f4d015068a8f87ea008ea7a15fd22863b261"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/description_namespace.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/description_namespace.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "82c0b4faf4d66a6ad274e51382a2f46d4562f6495a08299a7c2cd5dbc0c1b408",
+      "java_svg_sha256": "cf514025a273eaa758ab0b8803c505dc8ce5d61ad3b159f4dddde0858b147bc8"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/state_root_nested_identity.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/state_root_nested_identity.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "pass",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "a7569154e21342e43da92ef1cd029a88213721987797c1af98758d54121a39fe",
+      "java_svg_sha256": "5c81b057f4f773f5d2fff8c0e7d45a05a52bf9f196b82981162f2fb215638d72"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/state_history_nested_identity.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/state_history_nested_identity.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "850a0a50db81e4985ab5d97b166807d2debac50e906f13dc6159345a208ebe30",
+      "java_svg_sha256": "8878b11ce0474bfa6d6edb5695c0116a804f25cab4204f311afe89a08b973559"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_alias_linear.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_alias_linear.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "99c9f92292ce49acc40e5e098ecaca654ad5fd4c378ed6b0b2da716fc75b72ef",
+      "java_svg_sha256": "551d555463f5e78c6e2d7d4722298035f20fad19e0375963d26d79f1f7107b13"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_unicode_right.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_unicode_right.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "7306ac6dae33bcd001006d6a155099416f1fdec7e516d84b05449d8066a1cead",
+      "java_svg_sha256": "f1e105f037c03f37ba89feefcbf694800544cde04d9973ac01b5c2d30aeaaabf"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_unicode_left.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_unicode_left.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "271aa9ba4a78a31304c1e379eff4c075289854523c156bd7ed7b5eb3e223c848",
+      "java_svg_sha256": "27de6474096a49d2f9fdc8cb23b8e39e1307e56f8c054e7faf47abb222233603"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_unicode_up.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_unicode_up.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "6efbb355518f348856a4cb0f2b38604503bf4dda7b255bee819fb1f728e5ab8f",
+      "java_svg_sha256": "3851071f09b2b5f6db7022b761d772e64a3ca065af276f5fae38222b36b9158b"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_partition.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_partition.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "1bc17e6f1e20b239a8dfbf86fa1afe51d4e187e98382b598cd7b22e19c6406c9",
+      "java_svg_sha256": "67bd831a418a188f61d7af77e88d36b8e5b0f64089bdb7ca7060b55b83f55184"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_named_end.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_named_end.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "syntax_error_svg",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": true,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "e3a635f40edfd4196abd4c64eef6b498bfbe3daf470c6d2d1caaff69a99d865f",
+      "java_svg_sha256": "785a4d76604e782996b07a21bf506db9a4f24430565e0a0793aee2a7519ecbb9"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_groups.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_groups.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "db778e15be381d647b9e971da59496440cfb2f035ceef3eb6e4771954f7c2fd0",
+      "java_svg_sha256": "5ad97cceaac07f9f07f3bff71394ec20407f97a9cf2b7824476c63740f19143b"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_transparent.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_transparent.svg",
+      "axes": [
+        "fill transparent across state kind simple",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "840882fb254134aaa1eec26ca52e818751102613f09f6eebfe4a83da31f949b8",
+      "java_svg_sha256": "20ca54b422a2659d45fedad36a47e8580862214a3e4ae5164bb8a69296230115"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_transparent.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_transparent.svg",
+      "axes": [
+        "fill transparent across state kind composite",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "9b84b3908c3f99c8d982c8beb1758e092425e1193d5257e60d3114dc8d05e4a3",
+      "java_svg_sha256": "d78c7d04b33ff5d4504effcd1b6e70b894253d33b89299a9a5a99f0d618e5498"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_transparent.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_transparent.svg",
+      "axes": [
+        "fill transparent across state kind concurrent",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "ba1b49262298f82fd0d7f70a2d48f5d1305e97bf534109ae768bbb96d71bd628",
+      "java_svg_sha256": "37fc1914cf301b8ecaa48375be0cc889073bd7fbdf9c73c7d3a233d5ef41172d"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_transparent.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_transparent.svg",
+      "axes": [
+        "fill transparent across state kind choice",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "1ec0feea6881e9fd29417d77ae862a9c826e8d90718949107c438d9be33e6ce8",
+      "java_svg_sha256": "19466b6f13276c655e1029b14a27d5e56d3e96ac18f35d4192ce932a4bf66714"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_transparent.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_transparent.svg",
+      "axes": [
+        "fill transparent across state kind fork",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "06cdb8b46d1b42d480114fd36d45825916a4c7e009f1e098adbe02255cb81b79",
+      "java_svg_sha256": "90c00f8b293e7101612e3c834c87d470e93147c7c7ad13bb53a8b28a0096e688"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_transparent.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_transparent.svg",
+      "axes": [
+        "fill transparent across state kind join",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "8abbbe80c49d178635814fa26a42593e4f2244713d07c510199a2f789d2c81be",
+      "java_svg_sha256": "588f51ce1e925d8fe5345b0efdc63ea4cfbcf72744c5c0c527f1b5510582454f"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_transparent.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_transparent.svg",
+      "axes": [
+        "fill transparent across state kind history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "1564fdbd299d4f1c1fe0c7f93dff57ebe9722ecd8c47805726c6b55b6363a0a7",
+      "java_svg_sha256": "37684caae128e36548553e83c1fca58fa1e12c43e11785fb58ec5a239fb81d87"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_transparent.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_transparent.svg",
+      "axes": [
+        "fill transparent across state kind deep_history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "a160e5f7a00ba4244e8c77127e105d1255b120fd4f7d5201b0f711c648c2da11",
+      "java_svg_sha256": "8ab31435cd165e3ff8c5ed3d930efd5e22919ebc28dd3f5189c8777c62709806"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_named.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_named.svg",
+      "axes": [
+        "fill named across state kind simple",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "1c232d00129ff1c069d89c41b4b79644c761adbd85e7c6e825cfc23983a4d19c",
+      "java_svg_sha256": "8c123461548dd4dfc61d84f7f5b5ac0d63c7be62fe45b0c558ede62f133ecdba"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_named.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_named.svg",
+      "axes": [
+        "fill named across state kind composite",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "bd4d69d0a9ed1c0de99f6e0a422bc689c78bb70993bcd441e2e4f72fef81ed03",
+      "java_svg_sha256": "7097d3d2d704c98eee7b6fa53be4154723503aea5273132cc0c28af13313181e"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_named.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_named.svg",
+      "axes": [
+        "fill named across state kind concurrent",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "ab1a70cdfc7d218ef2372aa4c8e3fa4d0ff8756ee8695ee7af527116be08b274",
+      "java_svg_sha256": "4b8d3028d93d7e2ce5b9e21922ff95cfcab6fbc800dbbd26791aec4d9f584549"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_named.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_named.svg",
+      "axes": [
+        "fill named across state kind choice",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "4f528c2312d365135d30d99c4a275b16633a6195f6245c2574064d935b0fd646",
+      "java_svg_sha256": "96b4e63f67ff402e0327fe1b3d5a1522fc77556a0ca521408ed0d89d6cfa6141"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_named.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_named.svg",
+      "axes": [
+        "fill named across state kind fork",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "db8098bf904984ee21a6889b51d278c41c0a78d589ad6d870e9add910e3a3984",
+      "java_svg_sha256": "7bd890bc44d2ef65455e45da07ac3fb5e03579afd7044f20a85371f6f2f4273e"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_named.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_named.svg",
+      "axes": [
+        "fill named across state kind join",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "3facf76875903bd4630958dbd5cf52fce47c67b96f80428e3a166bd6f5e052de",
+      "java_svg_sha256": "2bf23911c5f0ef0ac890ec6a3408cddb98f3a5e5fa3535e59eb0dca04a43cce4"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_named.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_named.svg",
+      "axes": [
+        "fill named across state kind history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "ea2a18ea6a580962b6808c293616e5cca346ccac7fd3735cceb0fc94c8d5bd62",
+      "java_svg_sha256": "21f105cdc97a3126186073c5334c221d316ddfc018aafc42ac8b43b41a062084"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_named.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_named.svg",
+      "axes": [
+        "fill named across state kind deep_history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "3c8ae5ca91786dc41c4eaa011cdafda1cdabd0df27642d45fe51b9848ac629d7",
+      "java_svg_sha256": "77555ba6746fcd13b3b0a2fd9a5a409a15b5a324af162315aed1fde67702a78e"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_unknown.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_unknown.svg",
+      "axes": [
+        "fill unknown across state kind simple",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "58f4733da519453ac4f5b41d9be2e36537fa1a1839543cab85fa9cffe71f4758",
+      "java_svg_sha256": "ab7c214bfa8244e53b2ca50fb268295fbbfb02cd5ead53d677c0ded2b8484ac9"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_unknown.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_unknown.svg",
+      "axes": [
+        "fill unknown across state kind composite",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "5d06655f78a6cc41347e8b2ce566df3ab656b61a6b8fc0bbbba01324f0a4451c",
+      "java_svg_sha256": "108f181cb9b4f7401795a04aa6a736fbd0b04bd4cd4d93bd3e4a975cba7d0aff"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_unknown.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_unknown.svg",
+      "axes": [
+        "fill unknown across state kind concurrent",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "156e13da84e3c0831f7eb8868d531aa88a6f4df98120530f8e3d12f1ad645409",
+      "java_svg_sha256": "bab1e0381c8bcaf195a41dffa2b336ed0ec7ff6c067a0aea62c8b9c75a1f9ddd"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_unknown.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_unknown.svg",
+      "axes": [
+        "fill unknown across state kind choice",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "7ae8d8aee38ad800657d77b6d5a2075a821e94c3912ec1ca825a314c94747be2",
+      "java_svg_sha256": "b1f3bace84563b2f573663b098e88b1d5b18d7d188a93a48d5126fcd10f18ce0"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_unknown.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_unknown.svg",
+      "axes": [
+        "fill unknown across state kind fork",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "7c586137e653be58175dba31ff383fe54b821f17e9acccfc9482eefe15214dcf",
+      "java_svg_sha256": "9d1fd7de293258de51ae71a6472aba324d27d08f0119cd97a3a7d7964da95379"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_unknown.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_unknown.svg",
+      "axes": [
+        "fill unknown across state kind join",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "592ad2dc0015ebe2e76c65fe1ed24159c299173de7b118e4263589c1a4a06616",
+      "java_svg_sha256": "41b690d1fd75fcdfcc9f3d44e66cba27533fa97ca233190228fbd700018958e6"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_unknown.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_unknown.svg",
+      "axes": [
+        "fill unknown across state kind history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "684cd3bfabee15f66d3f559f13352f97380e09f44d882818da682a100f10dd4a",
+      "java_svg_sha256": "425b5a3a6b4691c5d6ebca198b68766550d2b2e5e6fb5ad2c0886d459fc1295c"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_unknown.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_unknown.svg",
+      "axes": [
+        "fill unknown across state kind deep_history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "1978c48646d07215ec6381f32bc57cfaaeee66fe20e8169c95a05d92e4f044cf",
+      "java_svg_sha256": "e32ce2f360264133cb71f49483d6d95e15a8b67411346c3e5605bf1a2f891286"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_a00.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_a00.svg",
+      "axes": [
+        "fill a00 across state kind simple",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "2e9bdde7c18788b979262df53e702ba3ddf0542203ce6052ae6aca2972ee7cdd",
+      "java_svg_sha256": "fce16c6df9eb8f1d3acefa39becb114347290d550efa738283aa14e72f8494e2"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_a00.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_a00.svg",
+      "axes": [
+        "fill a00 across state kind composite",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "151bd941eab1bba5304553bc57d045ec08bdf3d814c6b11e4309a072f83fbfb6",
+      "java_svg_sha256": "d7f4077f19782ba0ce2e4ef9fced0652bdcd44c087b8e79a9cf53dadb38d0325"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_a00.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_a00.svg",
+      "axes": [
+        "fill a00 across state kind concurrent",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "407e55489f92ec7bb1f207589c3ac9eaec3780bc37c9991868d4b9d1a8c3e74a",
+      "java_svg_sha256": "fbd54472b130be6784620ec08e18da9b7de27d0d71ee5e1d1b6928687908b20f"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_a00.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_a00.svg",
+      "axes": [
+        "fill a00 across state kind choice",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "cd4f638ef5bfd9f47a0546aeeeae42eb73366cf8b58af05e173f6bfab7a0fc25",
+      "java_svg_sha256": "577afc20aaf34623a2cdb7361b2ac70e46ff72940811f059a4ea5660bde08587"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_a00.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_a00.svg",
+      "axes": [
+        "fill a00 across state kind fork",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "23d819ea8038ce99869cb6204818be5a29e80360351ac66ad49713e679758d7e",
+      "java_svg_sha256": "82cb814c4dec327719cbebbf9d10b5bd060d05ab49dc3019f649933e03088314"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_a00.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_a00.svg",
+      "axes": [
+        "fill a00 across state kind join",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "125ccf97cf1c5680fe1604cb013a0adda3ff8e1e21af3fc032586d697aaf4400",
+      "java_svg_sha256": "a2be83c06be7618c65d0ae078c8098be545267195a66a2f6d8553b76cdab9e7b"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_a00.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_a00.svg",
+      "axes": [
+        "fill a00 across state kind history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "88f3c4abf45f0305e0245edf75fe0b6670346c9e8d38d54323f45d5b53725dd3",
+      "java_svg_sha256": "be79bb840ae88d66bed70e137797db909026d1d746cdd9eeaa9ce7fc8a4c6cb2"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_a00.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_a00.svg",
+      "axes": [
+        "fill a00 across state kind deep_history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "162cda6f2bc1c72d366f0d49e9785f944896c297dd8f364ad8fd4d43823f7119",
+      "java_svg_sha256": "6f354d551de6088412659a71a3159ecef29fb46d72fe194a7860d04b8f9dfa5b"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_a01.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_a01.svg",
+      "axes": [
+        "fill a01 across state kind simple",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "d69714f4d596bcceed2db67c1f84cfdcb32667fa3a91c41add6ec554b3493b46",
+      "java_svg_sha256": "bc7ea893724fe3f633cec06caff1cb64b5a1ad3333b65d32416dc77e6de4c115"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_a01.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_a01.svg",
+      "axes": [
+        "fill a01 across state kind composite",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "c6a73c171312dc5ce4adbfe77916784a36ee221d8f4e9424424b9723c04bbc2e",
+      "java_svg_sha256": "3282f733de6eb19e2d5ccd07e31a6784934613e6f78b58ea88dbb06e923027c3"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_a01.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_a01.svg",
+      "axes": [
+        "fill a01 across state kind concurrent",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "774408e8603e57e293994f4d4b6bc10e51850586495dd296e2a3b97ad3a4ca76",
+      "java_svg_sha256": "982400526a5ab96baca8959e81cb440059f5a12d27a235cf5724bff33057f05d"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_a01.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_a01.svg",
+      "axes": [
+        "fill a01 across state kind choice",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "60eccf955d2c412c3e79374c38f831195d9fcf88d0143ac610810357850afc09",
+      "java_svg_sha256": "e5414af079a2fb435ef842d1259dd27ccd2db13ac2cb729561d7f85ccc0950c0"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_a01.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_a01.svg",
+      "axes": [
+        "fill a01 across state kind fork",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "368b94ab16d693e9183a366f2f623d10860efcec27e9c6336abe443cb7bc1bf9",
+      "java_svg_sha256": "35222ed29a4a470893335c2ffa2abf36de8d2daea65d63b2f75acf2ea2fa73f1"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_a01.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_a01.svg",
+      "axes": [
+        "fill a01 across state kind join",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "2e57ec1f6a65142ca1eb8767895d5b7fe7c820e13c9a485908aab87e378e2029",
+      "java_svg_sha256": "18406f9bb328b940d04056a4d304f64c9fc18505d6f894d4cae3b030fc5017bd"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_a01.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_a01.svg",
+      "axes": [
+        "fill a01 across state kind history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "bbb972fd68b3f415359b9e45bea1951e49ea93ed723a9058daa084603726ad2c",
+      "java_svg_sha256": "1a51aea2a2800434b5771098cf4afbdbcd5ebf4d016649b2fa76744974e62a7d"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_a01.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_a01.svg",
+      "axes": [
+        "fill a01 across state kind deep_history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "0997fe613d0e8fed26c78203de07ae8af4a8bf2c1af0eba6a31f664298c764f1",
+      "java_svg_sha256": "dcb5278fe458db46c1f90e540ead50857ddc4ea422447e8c518fac024b9e640e"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_a7f.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_a7f.svg",
+      "axes": [
+        "fill a7f across state kind simple",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "14f880b49a4757f0ef315c9137713fa83d3f4ddd7bcabd2cbbb3e1750e20b6aa",
+      "java_svg_sha256": "8a12118c0e4653e2fabcac633d766ad1d2eb2da83cf674ffb02bb28046364229"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_a7f.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_a7f.svg",
+      "axes": [
+        "fill a7f across state kind composite",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "8c604b8365a64034e9ae2abb190c451b3e8665ceced12c95184645ec483e3049",
+      "java_svg_sha256": "b42f4516c845da817e08bd68b79f6959b3a2c636054e79ddc61f7ad04ad836ab"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_a7f.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_a7f.svg",
+      "axes": [
+        "fill a7f across state kind concurrent",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "4c415e873350ddce95b2c4bf3ec04058b618ee0afda8fec751ae157158760f45",
+      "java_svg_sha256": "277f3f769479514ec03cdcaaeaad39734897a2e6b0f78fbada677e8ac98b49a9"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_a7f.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_a7f.svg",
+      "axes": [
+        "fill a7f across state kind choice",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "42bdc3f1f145a5281e20dd89e0e48a9df73da52df55f71ac9777e91d905f3a6c",
+      "java_svg_sha256": "e9957aa616e142abe94a9412e688c188432f389d7d84a8dc712f2cd5a7f8b272"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_a7f.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_a7f.svg",
+      "axes": [
+        "fill a7f across state kind fork",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "67485b3eb308a572bd042f9de5dff30c1fa052810cdc04ed59add2f90da264f1",
+      "java_svg_sha256": "3606aff0f3d209d2edf8313bd7599a840e2d05f5f9c8fe18aca5277c53693fd3"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_a7f.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_a7f.svg",
+      "axes": [
+        "fill a7f across state kind join",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "cb58b3bfb711f9a523ddaa6a8ee3f3faaad1642fc86000416394462d04333727",
+      "java_svg_sha256": "0766c9980b710b1441b605d57ee1183308549daf8c05e60a531537e957ab4dcb"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_a7f.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_a7f.svg",
+      "axes": [
+        "fill a7f across state kind history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "ab2e8566b0894ec962cc1e4cdb9078f4b5680570a28000265c94d47bbf323195",
+      "java_svg_sha256": "4d04d8ca3b65c12acd42efdc408cc3e55d78e67c0efd7f6317014e56b81cf524"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_a7f.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_a7f.svg",
+      "axes": [
+        "fill a7f across state kind deep_history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "575a63d2731bcbfc0b35e36cbbcdd38f640078f8b16bbea037e6089d83d9162c",
+      "java_svg_sha256": "c7659ace1e6fc2d644d85a0e0890cfc56c17983f492bcb4a17036d499d2cbdad"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_afe.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_afe.svg",
+      "axes": [
+        "fill afe across state kind simple",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "f1b5224db243c558cf2bc187595b6f907a00cd3c207309d1e323f60934dc3b2f",
+      "java_svg_sha256": "91dabd4c1d2e86d91795b7a8e47660af5481673d79f46d85c002a2f4e16f3734"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_afe.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_afe.svg",
+      "axes": [
+        "fill afe across state kind composite",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "8e7ab6862adde6100637d7ef68e51c9eec0d5e12c58b4483a4ca4024d3ba9cc8",
+      "java_svg_sha256": "fa9d8bf678f0aecfe33a0a160c2442f32549c43750a4cc1c21618f1c99f51775"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_afe.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_afe.svg",
+      "axes": [
+        "fill afe across state kind concurrent",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "a29cd1b36cb0835935ec0a67190c4c1122bafc5154d32f5b0dd58c442c605dfd",
+      "java_svg_sha256": "67daeb4ed04c9b1b29974bc461c786361d06138a83d88d5ac49b101756b3a61b"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_afe.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_afe.svg",
+      "axes": [
+        "fill afe across state kind choice",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "7b3ae74101d915b8f4ccd92246e7868b5fa2f619c113fed5c1d49f3d2b47bc31",
+      "java_svg_sha256": "06e62e76aeac94427e7797f26fad61df77c202783ce1a21f05194d30adddc479"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_afe.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_afe.svg",
+      "axes": [
+        "fill afe across state kind fork",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "1f83329cb3cfeb3a934bd51aab7a25319449d50f2299a00f7fd6ae1f61f615cf",
+      "java_svg_sha256": "e387b0e455daf111e04252afe8f1d8bf1078367ac49afeef7d26a0a8176b99e4"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_afe.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_afe.svg",
+      "axes": [
+        "fill afe across state kind join",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "b5134e180371a42d3b40f0ec16f2613a0e24ad9b9f520a7182eddf1eb0fb2889",
+      "java_svg_sha256": "bd7ff8a37371ba35ad67615840479faf4559f6f7ad5dacffe8b4bda73e8d0c5f"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_afe.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_afe.svg",
+      "axes": [
+        "fill afe across state kind history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "cf77628aad4ea8f28976ee711038c18808ca619c84fd1bf88f95cba7c6ce604c",
+      "java_svg_sha256": "1d1a707424edf4ddce98bf9eebe149e22ba49b91c074df1906c831b3da1a6456"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_afe.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_afe.svg",
+      "axes": [
+        "fill afe across state kind deep_history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "1f7a72c43aac472d869b2ec77a1c28aa2a28e53239914d7dd5fb95eb5bef0465",
+      "java_svg_sha256": "219b5c96cecd1b43404546f182b506746b69a06fa681439874c73fe12060fa70"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_aff.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_aff.svg",
+      "axes": [
+        "fill aff across state kind simple",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "fa5f61ff9da45d362ee5427212a36852b76ca4f248c60f1bd9246165aab9f5b0",
+      "java_svg_sha256": "2b3fdf57cd48b6c3069afb30712d53b8a39d4b315559b4e3a2de2142e8a5fab0"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_aff.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_aff.svg",
+      "axes": [
+        "fill aff across state kind composite",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "44a4261647f7988fce2dcb3916a8e8dd448e5bb1e5301fa1b86deb5efaa096c9",
+      "java_svg_sha256": "92e7fe20ae22f9199c240843b7e89278eb59a2a6743cd1f837a0115e8aa941f3"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_aff.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_aff.svg",
+      "axes": [
+        "fill aff across state kind concurrent",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "99cf76fe1478986e124dc9187805d4fc4219d06a3a24a5db43d5a4a1ab3b1d02",
+      "java_svg_sha256": "5f109ff40f2026f5c9fb48e31d9a4e8dc95f7b796d06dba3354415f4bf05730f"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_aff.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_aff.svg",
+      "axes": [
+        "fill aff across state kind choice",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "2bde844757338e28f7206f63735ecc9bc2456e8c663bf63d077409bd61ff007d",
+      "java_svg_sha256": "7756fc3e335e5bd7906885c9a3dda35144474fcb730de547a67c4a32eb68e649"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_aff.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_aff.svg",
+      "axes": [
+        "fill aff across state kind fork",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "7b92758984ff5f83f8e43a0885484016f020e56525ecf8f2bd1457db69335aa9",
+      "java_svg_sha256": "fffbfd5c9ac6e6c4d3649a4d94dc72a93ef4f69ab22e9f68fb67a2a7e549bf1a"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_aff.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_aff.svg",
+      "axes": [
+        "fill aff across state kind join",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "522886e1a4edf932aa9af1b5a613e5d7303656688396a1934acb9c4e158e21c6",
+      "java_svg_sha256": "22e085772db0b962bb0068563f873417dea903ea7c4a59bbe062badbeede6140"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_aff.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_aff.svg",
+      "axes": [
+        "fill aff across state kind history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "5915fd37fbf6cd4d7b6c2b4ff17c4ce427ae2653f88a753e7f38e7d7fc613559",
+      "java_svg_sha256": "da54bba278d2fe41829bc33e5b58cf73c4fea09a74b847ff446421308134c8d3"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_aff.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_aff.svg",
+      "axes": [
+        "fill aff across state kind deep_history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "e1f971ef7b400f0a0188a49ed570e6971ca0879f3d5497ea5f9e31d38d705de9",
+      "java_svg_sha256": "94fc5068aa760c2e16c6fe877f415f7514eb0e976efdc38b17e72b81d4800939"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_short.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_simple_short.svg",
+      "axes": [
+        "fill short across state kind simple",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "3cfb0e71168667f94ed257aaa511e2464d0c38ea56c042d0f653e14a34157f33",
+      "java_svg_sha256": "4e817fdc7e0e8b17a84be776d69c991e2c43da9ac6bee37329925133e27660ab"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_short.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_composite_short.svg",
+      "axes": [
+        "fill short across state kind composite",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "2e7d80f065c483caed8e3207eee732923ad1339fef07f11162df4832c8610c28",
+      "java_svg_sha256": "32aec983d395882252925f2b3b13918000cf5415b6edfd0cbb0b33d2c187e527"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_short.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_concurrent_short.svg",
+      "axes": [
+        "fill short across state kind concurrent",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "6183f9822837e5f3295ee20009ff5e6c4108b86f5f21d2fb7eb809dbbb652a4c",
+      "java_svg_sha256": "ec16f16daa78de58b4f955a3a6bff4110aa930da1bf55b8361e530e01b8d539f"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_short.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_choice_short.svg",
+      "axes": [
+        "fill short across state kind choice",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "8d462d5b5068b335041919745e67a6fa6cf43a180c351b64ad8db775396a0237",
+      "java_svg_sha256": "0a35769091a4ae93c9d5c057d807bdfdf9d43e5a744c9b4863de8aeb1e9c70be"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_short.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_fork_short.svg",
+      "axes": [
+        "fill short across state kind fork",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "fcfbefcbb7a0f72bb1b9a4f8a38ee583047f7eddde78b9a65576668614e4ccd5",
+      "java_svg_sha256": "a3e415c6e18df1c3d1983bf606ce0b71d551f1ce8c6d9fa6dd10fd9d3021340a"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_short.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_join_short.svg",
+      "axes": [
+        "fill short across state kind join",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "4f71edc3dada52f77fc890cc4578ba242c8e911bb51014b80f463f09bab0c5aa",
+      "java_svg_sha256": "e5f9d8bc7c45bb4e73de4d508bb6d1c2724dc86858dc6eb35aa39d9e1dc45e3d"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_short.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_history_short.svg",
+      "axes": [
+        "fill short across state kind history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "12cd1f0a1b70f3f1749f01eb446d38941fae134941aca68f45e62d8d67ce39a4",
+      "java_svg_sha256": "34a43d1195360ec6d1f8fc6aadf6d9123fd418afd8f8c273fa877fd4f6965b5d"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_short.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/paint_deep_history_short.svg",
+      "axes": [
+        "fill short across state kind deep_history",
+        "paired description presence and alias/display mismatch"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "cf671e5c5e18f5820a8c630d8c9c068a04fbee8c39ea7a42d0710d348d936df4",
+      "java_svg_sha256": "e26938a11bdae470430129190a90c6892b9752669cd8f57ad0189f9aa59dbc56"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/circle_root_rebecca.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/circle_root_rebecca.svg",
+      "axes": [
+        "line versus fill roles / explicit-alias collision",
+        "style inheritance / container topology / end identity"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "ab1ca01a9c2eb42dbfa12fec9aaed920ba73abd1ed0378a8c8282d269556c519",
+      "java_svg_sha256": "832285d21e18440a902812ec3111d6d16433e87908090cd377595b1bc2461650"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/circle_root_unknown.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/circle_root_unknown.svg",
+      "axes": [
+        "line versus fill roles / explicit-alias collision",
+        "style inheritance / container topology / end identity"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "bfea78b822854ab5ca919bc984a041206b06cdf8678575d63c0b7ec441fc5c1e",
+      "java_svg_sha256": "bf3a655f7207864ada2fa9d764a8fd1fb8ad3ee077cd0eaedfb19d87d1fba3ff"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/circle_ineffective_legacy_keys.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/circle_ineffective_legacy_keys.svg",
+      "axes": [
+        "line versus fill roles / explicit-alias collision",
+        "style inheritance / container topology / end identity"
+      ],
+      "result": "pass",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "7c87c5e704778cb773e8d7ebe4b3ee3415bf800c22c12d4ad52257521b796339",
+      "java_svg_sha256": "c114d35a0d24e384ad28cdc68cb24c52ee1ccbc1450f3e53975f652b630ddcfe"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/circle_root_alpha.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/circle_root_alpha.svg",
+      "axes": [
+        "line versus fill roles / explicit-alias collision",
+        "style inheritance / container topology / end identity"
+      ],
+      "result": "fail",
+      "mechanism": "state-paint",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "632e4f8249e4b43251a66ac86c85de26cce3a135262b50e1a433f7c3e7413652",
+      "java_svg_sha256": "5531fd61ddaec20b94d1eaba0aa9997abcbee8abe0d321cb96cb570459be9abd"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_named_end_corrected.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_named_end_corrected.svg",
+      "axes": [
+        "line versus fill roles / explicit-alias collision",
+        "style inheritance / container topology / end identity"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "syntax_error_svg",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": true,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "ec6053f39211dd5460789e3fb73aa0c63b20131b451899c1893920bfa3957f98",
+      "java_svg_sha256": "f4a1651a1ff1067ebe88d950c4e1d9d4bb33d06cf8c714f49984f653406ee0ff"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/group_identity_collision.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/group_identity_collision.svg",
+      "axes": [
+        "line versus fill roles / explicit-alias collision",
+        "style inheritance / container topology / end identity"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "96349866730006231405bc1a5f211b7f9b2cd5ea74104df383238e71a4c5ed95",
+      "java_svg_sha256": "07754538778b1b3f0cc4e24c17087e2fa781bdce4295543dbc65fb0a4380e04b"
+    }
+  ],
+  "findings": [
+    "REJECTED: deployment_comment_name at deployment.rs:791 tests label_to_id(label)==id to infer an unaliased identity. Explicit aliases Copper_Bay and Metal_Case collide with that transformation: fresh deploy_alias_collision and group_identity_collision emit Copper Bay/Metal Case where pinned EntityImageDescription/Cluster use Copper_Bay/Metal_Case. The link comments newly lose previously correct underscore identities. This is identity inference, not a lossless model projection. T14.23 explicitly records the missing alias/derived-id data but does not make these outputs correct.",
+    "Class aliases and bare quoted names improve: class_alias_bidirectional and class_quoted_spaces match both whole-output comparator and exact producer lists. Root package recovery is bounded; default nested namespaces still emit Observatory.Dome/Upper.Middle instead of Dome/Middle, and custom separator emits West..Bay instead of Bay. These three sources PASS the shipped strict comparator because it ignores comments. T14.23 residue is explicit, but acceptance remains rejected.",
+    "Nested state history projection is ineffective in emit_autonomous_scope_links: transition endpoints are first shortened through autonomous_endpoint_svg_name at state.rs:4141\u20134142, losing the [H]/[H*] prefix on nested IDs, then state_comment_endpoint is called at :4154\u20134155/:4165\u20134166. Fresh state_history_nested_identity emits Lower instead of *historical*Lower / *deephistory*Lower. Pinned StateDiagram.getHistorical/getDeepHistory constructs the synthetic name from the local group name.",
+    "Reverse deployment/group links and mixed description-family ordering remain wrong on deploy_alias_collision, deploy_nested_groups, and description_kinds. These are retained whole-output failures, not newly lost comparator passes.",
+    "Object-kind comment omission is supported by GeneralImageBuilder.java:180\u2013181 selecting EntityImageObject, whose drawU has no UComment. Fresh class_object_mixed has the exact Java comment list and omits only the Object comment; its whole output still fails geometry. Golden combo_class_vs_object also has the exact Java list after removal. Quoted object admission remains T14.17 and emits an empty model; it is not repaired by comment selection.",
+    "REJECTED: two Java-valid retained inputs LOSE exact comment-list parity: collateral/1162-review_root_quark_no_reparent and collateral/1164-root_quark_nested_reuse_control. Before lists match Java; after lists prepend cluster R3/O3 and SharedGate593/OuterShell593. Both were whole-output failures before and after, so zero lost strict-comparator passes does not describe this comment regression. Exact source/reference hashes and lists are in comment-list-regressions.json.",
+    "Fresh state_history_nested_identity independently adds cluster Top/Lower although Java emits only link comments. Adding Cluster.drawU comments at a Rust wrapper is insufficient when the Rust wrapper does not correspond to a Java Cluster consumer. Fresh state_root_nested_identity is a bounded positive: comments and document positions match in both CLI and assisted paths.",
+    "Fresh activity aliases, directional Unicode labels, implicit continuation links, partitions, and partition-to-partition links remain whole failures and omit Java producer comments; activity_alias_linear even has steps=[]. These sources expose parser/layout admission limits, not evidence that all eleven added linear emitters were reached. Keep those failures executable and require admitted fresh controls for each linear direction in a later account. Both attempted named-end forms are Java syntax-error SVGs (exit 200), kept as intended-versus-observed disagreements and excluded from positive denominators.",
+    "Of the 194 changed goldens, 188 now match both Java comment lists AND the following sibling producer position (tag/class/qualified-name); the exact six recorded exceptions remain. All 194 decode to unchanged non-comment XML and all stripped byte streams are identical. The 456 existing element macros remain unchanged after isolating comment and fill arguments. This supports bounded placement, not global missing-producer completeness.",
+    "Assisted fresh rendering remains diagnostic only: 32/98 strict-comparator passes, not CLI truth. It retains cluster and missing-link differences; exact producer lists and positions are separately archived.",
+    "REJECTED: bounded serialization gains reproduce, but the fresh matrix has whole-output failures. All nine simple paired empty/body color cases pass after the change. Seven of nine composite cases pass; transparent and alpha 00 still emit an extra transparent path and incorrect divider positions. All nine concurrent cases fail (for example West UID ent0004 instead of Java ent0003) despite correct fill/opacity.",
+    "The 45 paired choice/fork/join/history/deep-history cases (nine colors each) are valid STATE Java diagrams but the shipped Rust CLI dispatches them as SEQUENCE. They are explicit T14.21 failures and cannot certify state-paint paths. This packet claims no correctness for the concurrent sequence packet. Earlier retained choice/history and empty-state failures remain failures.",
+    "OUT-OF-CLAIMED-SCOPE BEHAVIOR: resolve_pseudo_state_color delegates to the new fill resolver, but StateSkin::from_diagram still calls it for start_stroke and end_stroke at state.rs:2154/:2157. Fresh circle_root_rebecca changes circle strokes #663399 -> #FFFFFF; fresh circle_root_alpha also changes stroke hex casing. Pinned Java emits #FFFFFF for RebeccaPurple, so this improves the circle attributes rather than regressing them. The ordinary state/arrow stroke still disagrees and the whole output fails. Predraft state-paint invariant explicitly says Stroke unchanged.",
+    "Pinned Java flow is EntityImageStateCommon.applyColor -> ValueImpl.asColor -> HColorSet.getColorOrWhite, and Cluster.drawUState/ConcurrentStates -> shape drivers -> SvgGraphics.fillMe. Shared fill_attributes correctly serializes RGB with opacity on measured simple/composite/concurrent paints; no unexplained numeric constant or fixture-keyed branch was added.",
+    "Exact bypass census: 19 direct dynamic-looking fill template sites remain: 15 fixed NOTE_FILL/PSEUDO_COLOR/BAR_COLOR shape sites and four TEXT_COLOR sites in render_with_oracle (macro lines 6833 warning, 7083 scoped history marker, 7278 history, 7316 deep-history). TEXT_COLOR is derived from skin.text_color, so these are real text paint bypasses. Fixed literals/none and gradient stop-color are separately outside the variable shape-fill inventory. No remaining user-variable SHAPE fill bypass was found; upstream role selection/dispatch is not repaired by serialization.",
+    "Automatic background, gradients, logical font names and alias/metric coupling, warning chrome, stripes, plain/code, base-style composition, and sequence escaping remain explicitly failed dependencies. None is waived.",
+    "All four original causal accounts are byte-identical to their predraft commits, and each is an ancestor of production 523a2d892. The source-boundary addendum at 27bb1c3ff also precedes production and corrects two non-existent/misnamed Java source paths; original inaccurate names remain in the record rather than being rewritten.",
+    "Canonical account.json is a post-production index, not a pre-draft account. Its causal fields only point to the preserved predraft content and introduce no new causal claim. Literal canonical-filename chronology is a process deviation; ancestral predraft causal content is established.",
+    "missing-comments-account.json and follow-on-producers-account.json retain object-shaped rust_locations arrays instead of the documented string-array schema. Both format deviations are recorded and neither file was rewritten.",
+    "Only five accounted production files changed: activity.rs, class.rs, creole.rs, deployment.rs, state.rs. No sequence, parser/model, baseline/comparator/skip/allow-list/target change was made by this checker. No new fixture-shaped logic found in implementation diff; identity heuristics and stroke-scope leak are separate substantive findings.",
+    "29 real cited/adjacent Java files were byte-checked against pin 71806a23780b04a5ccde2f8ceb5121edad5eb711 and the read-only checkout; every supplied source SHA256 matched. The source addendum, not the original two wrong class names, supplies those corrected locations.",
+    "All 11,553 historical review/account/perturbation files at the imported rejection 138ca3e5f (and original 075f5095) remain byte-exact; all nine maker support archives and every archive entry hash verified. Target context is read-only from integration revision 9874a537e3bf18628377f525692103815f429982, not the evidence-tip ledger, which predates these targets.",
+    "Broad candidate gates ran ONCE before adding the new reviewer pairs. Fresh cases were individually run through actual before/after CLI plus the unchanged strict comparator and independent XML/comment checks. No baseline writes or acceptance changes occurred; no second broad rerun is claimed. Acceptance is rejected.",
+    "Initial submodule hydration failed on disallowed local file transport; command-scoped protocol.file.allow=always hydrated exact 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a. Setup failures (optional reference_source absent from frozen map, incomplete older target revision, YAML date JSON encoding, ambiguous rlib selection) are retained as setup residue; corrected complete runs alone supply measurements."
+  ],
+  "process_residue": [
+    "All four original causal accounts are byte-identical to their predraft commits, and each is an ancestor of production 523a2d892. The source-boundary addendum at 27bb1c3ff also precedes production and corrects two non-existent/misnamed Java source paths; original inaccurate names remain in the record rather than being rewritten.",
+    "Canonical account.json is a post-production index, not a pre-draft account. Its causal fields only point to the preserved predraft content and introduce no new causal claim. Literal canonical-filename chronology is a process deviation; ancestral predraft causal content is established.",
+    "missing-comments-account.json and follow-on-producers-account.json retain object-shaped rust_locations arrays instead of the documented string-array schema. Both format deviations are recorded and neither file was rewritten.",
+    "Only five accounted production files changed: activity.rs, class.rs, creole.rs, deployment.rs, state.rs. No sequence, parser/model, baseline/comparator/skip/allow-list/target change was made by this checker. No new fixture-shaped logic found in implementation diff; identity heuristics and stroke-scope leak are separate substantive findings.",
+    "29 real cited/adjacent Java files were byte-checked against pin 71806a23780b04a5ccde2f8ceb5121edad5eb711 and the read-only checkout; every supplied source SHA256 matched. The source addendum, not the original two wrong class names, supplies those corrected locations.",
+    "All 11,553 historical review/account/perturbation files at the imported rejection 138ca3e5f (and original 075f5095) remain byte-exact; all nine maker support archives and every archive entry hash verified. Target context is read-only from integration revision 9874a537e3bf18628377f525692103815f429982, not the evidence-tip ledger, which predates these targets.",
+    "Broad candidate gates ran ONCE before adding the new reviewer pairs. Fresh cases were individually run through actual before/after CLI plus the unchanged strict comparator and independent XML/comment checks. No baseline writes or acceptance changes occurred; no second broad rerun is claimed. Acceptance is rejected.",
+    "Initial submodule hydration failed on disallowed local file transport; command-scoped protocol.file.allow=always hydrated exact 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a. Setup failures (optional reference_source absent from frozen map, incomplete older target revision, YAML date JSON encoding, ambiguous rlib selection) are retained as setup residue; corrected complete runs alone supply measurements."
+  ],
+  "per_mechanism_verdicts": {
+    "comment-identity": "rejected",
+    "missing-comments": "rejected",
+    "state-paint": "rejected"
+  },
+  "measurements": {
+    "full_golden": {
+      "entries": 12550,
+      "valid": 11251,
+      "before_pass": 11179,
+      "after_pass": 11179,
+      "errors": 80,
+      "panics": 0,
+      "malformed": 0,
+      "new_errors": 0,
+      "new_panics": 0,
+      "lost_comparator_passes": 0
+    },
+    "cohorts": {
+      "entries": 2277,
+      "valid": 2119,
+      "before_pass": 1065,
+      "after_pass": 1072,
+      "errors": 131,
+      "panics": 36,
+      "malformed": 14,
+      "new_errors": 0,
+      "new_panics": 0,
+      "lost_comparator_passes": 0
+    },
+    "golden_bytes": {
+      "changed": 194,
+      "all_comment_only": true,
+      "decoded_equal": true,
+      "exact_java_comment_lists": 188,
+      "remaining_comment_differences": [
+        "full-golden/combo/combo_embedded_state_machine",
+        "full-golden/combo/combo_microservice_arch",
+        "full-golden/combo/combo_state_everything",
+        "full-golden/edge-cases/edge_misc_kitchen_sink_state",
+        "full-golden/state/state_composite_entry_exit_concurrent",
+        "full-golden/type-detection/ambiguous_allowmixing_sequence_component"
+      ],
+      "changed_passing": 184,
+      "changed_nonpassing": 10
+    },
+    "new_comment_list_regressions": 2,
+    "fresh": {
+      "checker94": {
+        "entries": 94,
+        "valid": 93,
+        "before_pass": 18,
+        "after_pass": 23,
+        "comment_and_comparator_pass": 20,
+        "losses": [],
+        "gains": [
+          "checker94/paint_simple_transparent",
+          "checker94/paint_composite_a01",
+          "checker94/paint_composite_a7f",
+          "checker94/paint_composite_afe",
+          "checker94/paint_composite_aff"
+        ],
+        "new_errors": [],
+        "new_panics": [],
+        "errors": 0,
+        "panics": 0,
+        "malformed": 0
+      },
+      "checker6": {
+        "entries": 6,
+        "valid": 5,
+        "before_pass": 2,
+        "after_pass": 2,
+        "comment_and_comparator_pass": 2,
+        "losses": [],
+        "gains": [],
+        "new_errors": [],
+        "new_panics": [],
+        "errors": 0,
+        "panics": 0,
+        "malformed": 0
+      }
+    },
+    "library_diagnostics": {
+      "product_pass": 11179,
+      "assisted_pass": 10497,
+      "eligible": 11251,
+      "failure_names_exact": [
+        72,
+        754
+      ],
+      "standing_pass": 930,
+      "standing_total": 2139,
+      "guards_pass": 4,
+      "guards_total": 6,
+      "parser_lib_pass": 624,
+      "renderer_lib_pass": 799,
+      "renderer_lib_total": 801,
+      "cli_gate_pass": 17,
+      "cli_gate_total": 17
+    },
+    "xml_registered": {
+      "entries": 2139,
+      "emitted": 2024,
+      "malformed": 14,
+      "errors": 115,
+      "panics": 36
+    },
+    "yaml": {
+      "memberships": 14827,
+      "byte_equal": 14818,
+      "order_only_changes": 9,
+      "semantic_differences": 0,
+      "owner": "T14.6.6",
+      "maker_order_only_changes": 8
+    }
+  },
+  "account_chronology_record": "checker-support/source-process-audit.json",
+  "review_records": [
+    "comment-identity/review.json",
+    "missing-comments/review.json",
+    "state-paint/review.json"
+  ],
+  "bounded_next_obligations": [
+    "Account and remove the stroke-scope leak or explicitly include a source-traced stroke-role change before implementation.",
+    "Carry lossless Quark local identities/alias provenance through the model (T14.23); do not infer identity from sanitized labels.",
+    "Preserve raw history endpoints until the comment projection; match real Java consumer selection before adding state cluster comments, including the two retained regressions.",
+    "Repair admission/dispatch and model topology for fresh legacy activity, object and pseudostate cases; then exercise each affected producer and serializer on fresh admitted inputs.",
+    "Resolve whole-output empty-state/composite/concurrent geometry and UID failures; keep all failed pairs and the 14 malformed cases executable."
+  ],
+  "explicit_failed_dependencies": [
+    "14 malformed outputs: T14.20/T14.21 (T14.17 admission co-dependency)",
+    "T14.23 missing local identity/alias/separator model data",
+    "T14.17 object admission",
+    "empty-state geometry",
+    "four pre-existing class parser panics at parse/class.rs:285",
+    "T14.15 automatic colors, font names, alias/metric coupling",
+    "T14.18 gradients",
+    "T14.19 base style",
+    "warning chrome, stripes, plain/code",
+    "sequence escaping; no combined correctness with sibling packet"
+  ]
+}

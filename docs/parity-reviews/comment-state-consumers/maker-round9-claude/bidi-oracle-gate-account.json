@@ -1,0 +1,23 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-9.json and comment-state-consumers/review-10.json (8089ef150) bounded_next_obligations",
+ "base": "merge of parity-recovery-2026-11-03 dcf6d9076 (code identical to 9834a7194) into 8089ef150 (code identical to c3116f0b0): 9d6af0a0e",
+ "sub_mechanism": "obligation 4 (gate): Java's own java.text.Bidi results as a committed test oracle for java_bidi",
+ "sources": [
+  "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round8-bidi-probe/bidi-java-levels.txt (sha256 e09425f49fb9f02fe2647c8bcd554ca7f6108d33586f0ed5b04cd7d1494bbf26; header: OpenJDK 64-Bit Server VM 21.0.5, the reference JVM on Monkey Man) over the checker's bidi-input.txt (fb7cd937973956246a1b34bdb9784ee7cf36422d1b8dd398fe47e97c1254d2e2), BidiProbe.java 7e0632e7"
+ ],
+ "planned_change": [
+  "tools/font-chain-reference/java-bidi-oracle/: a deterministic subset of (input, Java output) lines, gzipped, with SHA256SUMS, README (provenance, the full-file hashes, selection rule) and the selection script; selection rule fixed before any mutation run: all 801 stack/overflow lines (part C), every multi-paragraph DEFAULT_LTR line, every line whose only RTL-triggering class is AN, every line ending in whitespace/segment separators, and every 8th remaining line.",
+  "java_bidi.rs test: for every stored line, requires_bidi, is_left_to_right, base level, getLevelAt levels and the run levels (text_line_levels for DEFAULT_LTR; the run model for 0/1) equal Java's; the stored SHA256SUMS hash is pinned."
+ ],
+ "precommitted_measurement": {
+  "oracle": "mutation drill on a private copy",
+  "expect": [
+   "M12 (requires_bidi mask without AN), M14 (adjust_ws_levels no-op), M16 (MAX_EXPLICIT_LEVEL 61) each fail the new test; the unmutated tree passes; the earlier 19 drill mutations stay caught."
+  ]
+ }
+}

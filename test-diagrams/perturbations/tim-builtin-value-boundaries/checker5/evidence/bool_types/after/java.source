@@ -1,0 +1,3 @@
+@startuml
+class "9/9/1" as Truth
+@enduml

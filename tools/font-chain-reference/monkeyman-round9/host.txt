@@ -1,0 +1,5 @@
+MacBookPro
+ProductName:		macOS
+ProductVersion:		27.2
+BuildVersion:		26B123
+Thu Nov  5 19:09:20 UTC 2026

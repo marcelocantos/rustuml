@@ -1,0 +1,121 @@
+[
+  {
+    "source": "inputs/builtin_window.puml",
+    "mechanism": "tim-builtin-typed-contracts",
+    "negative": false,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/builtin_surrogate_roundtrip.puml",
+    "mechanism": "tim-builtin-typed-contracts",
+    "negative": false,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/builtin_negative_length.puml",
+    "mechanism": "tim-builtin-typed-contracts",
+    "negative": true,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/snapshot_nested.puml",
+    "mechanism": "tim-expression-value-snapshot",
+    "negative": false,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/snapshot_json.puml",
+    "mechanism": "tim-expression-value-snapshot",
+    "negative": false,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/literal_define_order.puml",
+    "mechanism": "tim-literal-substitution-boundary",
+    "negative": false,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/literal_define_capture.puml",
+    "mechanism": "tim-literal-substitution-boundary",
+    "negative": false,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/return_nested.puml",
+    "mechanism": "tim-return-unwind",
+    "negative": false,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/return_while_nested.puml",
+    "mechanism": "tim-return-unwind",
+    "negative": false,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/procedure_value_error.puml",
+    "mechanism": "tim-return-unwind",
+    "negative": true,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/foreach_json_global.puml",
+    "mechanism": "tim-foreach-json-binding",
+    "negative": false,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/foreach_object_order.puml",
+    "mechanism": "tim-foreach-json-binding",
+    "negative": false,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/sub_dynamic_twice.puml",
+    "mechanism": "tim-sub-directive-selection",
+    "negative": false,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/sub_bad_unselected.puml",
+    "mechanism": "tim-sub-directive-selection",
+    "negative": true,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/sub_local_selector.puml",
+    "mechanism": "tim-sub-directive-selection",
+    "negative": false,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/registry_literal.puml",
+    "mechanism": "tim-builtin-registration",
+    "negative": false,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  },
+  {
+    "source": "inputs/registry_environment.puml",
+    "mechanism": "tim-builtin-registration",
+    "negative": false,
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100"
+  }
+]

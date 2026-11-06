@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Verdana
+component "Tidy Wavy kingdom end" as E1
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+state Plant {
+  state Line {
+    state "Raw Material Intake" as intake <<entryPoint>>
+    intake --> Cutter
+  }
+  Supply --> intake
+  Cutter --> Packer
+}
+@enduml

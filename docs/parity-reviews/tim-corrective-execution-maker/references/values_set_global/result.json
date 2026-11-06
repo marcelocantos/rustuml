@@ -1,0 +1,21 @@
+{
+  "source": "/tmp/rustuml-tim3/new/values_set_global.puml",
+  "mechanism": "tim-typed-values-and-binding",
+  "negative": false,
+  "java_exit": 0,
+  "source_exit": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.Bab5N6zr/new",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "source_sha256": "e0bbecd2026112aa2bcd3a270b29a77363e9852e78e506ab60f7be8aa4481c53",
+  "runtime": "Monkey Man OpenJDK21.0.5 Graphviz12.2.0 en_AU; exact campaign JAR; headless forced",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "java_tool_options": "-Djava.awt.headless=true"
+}

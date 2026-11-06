@@ -1,0 +1,1481 @@
+[
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_activity.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_activity.svg",
+    "axes": [
+      "activity",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "bf2d2dfe8de8569bf3bb340abf9359e3462dc6f71275695683c205f4ec23297a",
+    "golden_sha256": "94f24b13c772b9951573b4bad193b4199bfcc5cf7143fbe640569fd3aff1995c",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_activity.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_activity.svg",
+    "axes": [
+      "activity",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "b3a8463d82f7796877d63c7fa1f6be67bfdc7d2a6c0310df209025de3dbaf394",
+    "golden_sha256": "efb2ebc96519776f585933bcb7cf5956428cb1577581098f92a875348c633fbb",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_activity.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_activity.svg",
+    "axes": [
+      "activity",
+      "transparent background with opaque foreground"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "0e037580eb668ea85905cdb5ee7958c137bc1a8ed1ef47590abf6dea7469facd",
+    "golden_sha256": "4798c658e85501be0e0378acdf822ef66639bda1669c714449cb0e399390b7ce",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_class.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_class.svg",
+    "axes": [
+      "class",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "76145810a2a185e415bebb6e4efbefd11e8d4ecfdc37fb943c8394452e1a22d8",
+    "golden_sha256": "bccb007c068916f266f40f232dbecea76dbf69fec2438bb641876237a4ab15a9",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_class.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_class.svg",
+    "axes": [
+      "class",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "0bcc52ccc079f548548ecb42ef7007f46ce24edce25264c1aa7a9586818b2d44",
+    "golden_sha256": "1697e4495342338fcd2d3c39933799a0e0a13f97c306a953edabd626986d0c2e",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_class.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_class.svg",
+    "axes": [
+      "class",
+      "transparent background with opaque foreground"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "c68a6cdb38d48a5065a4615a4d11c4f9afd842d0a9ee5825feb39273b56c7e0f",
+    "golden_sha256": "7c4f17392cffe2e133d6c47d4792776a7a434646079634eced26622b71c8c3e1",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_state.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_state.svg",
+    "axes": [
+      "state",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "81dbd08f4359502312e4644b71f408c15520ecfc7432b0fab22bc1ad727bdefc",
+    "golden_sha256": "7be237c7282e04240ad8f96a694e00524b1d7ceda54c740d3aa795a4dd890f19",
+    "before_pass": true,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_state.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_state.svg",
+    "axes": [
+      "state",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "e4136e2eca34d76f787df0036b4c46f3d86dfcbe0a8969944eb7a1a705833e5e",
+    "golden_sha256": "2df45c0107f78f29c8e861a451ce4258ffb9c9ac25becdf78bbe25399b953e1c",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_state.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_state.svg",
+    "axes": [
+      "state",
+      "transparent background with opaque foreground"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "fa3d9ee105b34afce56ce4a625cb47f69c913d862dd88dce8bdc61c2c1704bca",
+    "golden_sha256": "986ab4eef2560453e2b77b654968fc6b6adbaa93b72196939a929ae7b06a0574",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_deployment.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_deployment.svg",
+    "axes": [
+      "deployment",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "f751d03886095f728573d261fe0293929e2f8ea5795658e9d64702ecca4c81e5",
+    "golden_sha256": "58db55deb55988c606e1b233b5c6c2d4f0668a05f74e7ec2207c9d4a3690376f",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_deployment.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_deployment.svg",
+    "axes": [
+      "deployment",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "cad39611732fb82e91a5277098ccf363ff59370088efce72f3b3e1859a0da59d",
+    "golden_sha256": "b2bbe76a0f118c8b5c63af0d8fb9999307070f3902dd2bbdc6b1f61e01b213bc",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_deployment.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_deployment.svg",
+    "axes": [
+      "deployment",
+      "transparent background with opaque foreground"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "3c9ca2be4f3a52c73fcd580ace3cc348c0df973f7f40a43713c7c3003708c2a0",
+    "golden_sha256": "2b032711f721703a8c1a78585c135a0153804722504967fa6eb504007617cda3",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_component.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_component.svg",
+    "axes": [
+      "component",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "f139ce5b01cfdb534d755601434b2d913078534818518c1fc8f9924ded351d2b",
+    "golden_sha256": "42f4acbecff39201dfb401d9dbd6a086782e42099827b37133a576cfdf910bc4",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_component.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_component.svg",
+    "axes": [
+      "component",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "972e1928eec8e0716ca2fdb2da6e6d1f929ad6fb24bcd0cccf109818ba748f0b",
+    "golden_sha256": "35107014ade9288007bfe912adb82a8dfb740de6b847283cead7fa27142ce17f",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_component.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_component.svg",
+    "axes": [
+      "component",
+      "transparent background with opaque foreground"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "3c0fa6665addaabfc476665c4636238293701224f8599eaa364588b2f0a0d098",
+    "golden_sha256": "ba117640a059cacb6d2067572a1310a310a63e24d71be970de2941b7d20cbbef",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_usecase.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_usecase.svg",
+    "axes": [
+      "usecase",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "9f29789d64157c7ce94bcfb3aaf2b0692d7ca9b9e6b807654120b811826e37fa",
+    "golden_sha256": "23cb0a13e04ae7250f42ee8ec7e829e212c998ddfae393e93580982c597b9135",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_usecase.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_usecase.svg",
+    "axes": [
+      "usecase",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "119cea0613f981bec3ee45a0026af756638da8578b7098a352121aa4b09bd24f",
+    "golden_sha256": "5169daa2796a5f9d2ffcd4568fd324f4a9380a18e0bdd50f71dfbe9e7db5d505",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_usecase.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_usecase.svg",
+    "axes": [
+      "usecase",
+      "transparent background with opaque foreground"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "08ded610570e55c038673c553e9d0564dd94f2f677c6f204866e9899028850b5",
+    "golden_sha256": "ed4474571961187f11b9d581f5486def62af20c4296cd9f20499bdf47f6721ab",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_object.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_object.svg",
+    "axes": [
+      "object",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "f475d2f86bc1f4f79e71218f35d016ca60bd49f0e3c88b252b976fff769cb166",
+    "golden_sha256": "5513787f37bdf829b88435e3ae68a6c998954d013ff008aeb15a5309d2df52b7",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_object.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_object.svg",
+    "axes": [
+      "object",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "fe6d6891f97cf35808c00c17a259e56de6845739a18f7795cd3b41585f77db8e",
+    "golden_sha256": "44d4c7697a6ebc50e38e78cf9be5b8de3a60e549a798edcb57f57c2ab4377402",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_object.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_object.svg",
+    "axes": [
+      "object",
+      "transparent background with opaque foreground"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "53d9bfd299108f28ea2c7c36111eeaa7bbf0c26f997f52eb6ebbfe44d58ebba3",
+    "golden_sha256": "4dfb17dbf5a7bde721893b0aa8329491e769c38b39fb07cac3e80e696f37cdda",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_archimate.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_archimate.svg",
+    "axes": [
+      "archimate",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "b15a7b1dd250c471fe53d999123413e9e8e911c02fc605be574868e429c9ba26",
+    "golden_sha256": "5b5a736307fb49eeb162ac9bb222135a16dd4c8055e245da222108055116b0a8",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_archimate.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_archimate.svg",
+    "axes": [
+      "archimate",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "f81458702c1d1b988e067fd35eec393f5f6c9760b27c3421f1d78756d71e909f",
+    "golden_sha256": "1d2cfe0a87de31147e396996ba04abd5c4a50596b3a142923283537a7b412527",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_archimate.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_archimate.svg",
+    "axes": [
+      "archimate",
+      "transparent background with opaque foreground"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "a1e93e0934fb079d33c98d241ed8862a284e6cf5dbe74e5b358465505f20702e",
+    "golden_sha256": "91bb42d11d04879b673a6f19a3c2ffb55d0edcc65dd6de81d5a88cb15f5118f7",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_gantt.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_gantt.svg",
+    "axes": [
+      "gantt",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "896f7aca29180fee14750b014d4b39c442d7e36c1a3c93f22209db019c880b67",
+    "golden_sha256": "0a65479fa98b982dcca1290256dec0801b33c06666825b6de94340dc73bbf90f",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_gantt.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_gantt.svg",
+    "axes": [
+      "gantt",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "7f64a7391c7a2715e8928c5614d7e28ebaacb2da4b83316a907802265cdf6bdf",
+    "golden_sha256": "03b9fba254465679ba681257d54a6454c32bbce89c3581e436a3cd1e20e21bf2",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_gantt.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_gantt.svg",
+    "axes": [
+      "gantt",
+      "transparent background with opaque foreground"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "9c55a0e4876b0776be395d659494b7a38091c94b04bb48804fa5da542ca67fe4",
+    "golden_sha256": "20b804d892bf315aa891e81793f16904fb14490e3c921e35e8203c8b7e3f11e8",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_timing.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_timing.svg",
+    "axes": [
+      "timing",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "895d81fa968f861305395c0be6eaaf0b9936fb51a37abc7ba379a1bcafc50614",
+    "golden_sha256": "30d54fa412304ee1f68ca7fd0d8336df33c77f7b79dd1a99119541e7e743f56a",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_timing.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_timing.svg",
+    "axes": [
+      "timing",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "514899841e23b43dd3de4b2c42c371253bc0e5f92c9bdcb1e9a7e1d1d9377056",
+    "golden_sha256": "467a21e81b5d5c894983f63c414f1be6e46508a1ffb15a377e31cad6d73c1042",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_timing.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_timing.svg",
+    "axes": [
+      "timing",
+      "transparent background with opaque foreground"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "1e2b9f3902651a0db9dd7e63bb765c28230217d36d6f9d07d1673297460b00e7",
+    "golden_sha256": "3c5909502b8877464599108be80bd089535a53c1c20b4727b3975def35de7a88",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_mindmap.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_mindmap.svg",
+    "axes": [
+      "mindmap",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "5255da8fe5bddb8a51233f17a9259e04c630163e1c713713105a5443800c9e84",
+    "golden_sha256": "a8765a715981da3b58cfeb82538b1a2208bb50fae4715b08643adf6f69b032ac",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_mindmap.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_mindmap.svg",
+    "axes": [
+      "mindmap",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "aaec5927378112c72c4f1f8fba0dbe9c6bfb2a7d34e16737679ec3672615229d",
+    "golden_sha256": "7569edcbf293300b04e989af8441e8608b6660f038391c2c9ed4dc7a46583316",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_mindmap.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_mindmap.svg",
+    "axes": [
+      "mindmap",
+      "transparent background with opaque foreground"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "d1c13cc3551d25c651aefd7c965f9bda9f77a202f33f0751289738307a5f11b5",
+    "golden_sha256": "6fed5ae2c29ed57a89d6439a7a8df08703f33b79d0405f3ae922fe088825637a",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_wbs.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_wbs.svg",
+    "axes": [
+      "wbs",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "ec0b9bbde53a797fec6f27f94fae5ad65d2a0c4609aba77db78ae5aaf1206738",
+    "golden_sha256": "2b13fc4b2cdbc6a2b0b7a7bcf102f560834e8f91215d9e407bfcf96fdd578d02",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_wbs.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_wbs.svg",
+    "axes": [
+      "wbs",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "b3468a41c52754f0b5437cbaf906a63fb47e3fcc38008e93c36ab8ed81ffd7de",
+    "golden_sha256": "accedeec2f62d278ce613bc8805e6933eb9154d0ae30f7d9fef580f6f0ce41c0",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_wbs.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_wbs.svg",
+    "axes": [
+      "wbs",
+      "transparent background with opaque foreground"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "c9c8c5064bbdf8e334d4c0fd2be8c1a7655f5356c12e7bcebeef40689d7e3187",
+    "golden_sha256": "9926c5f52a7906fe876ac09d972fcb8b6a83c66b0a48be84ab7d424d8f445e70",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_salt.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_salt.svg",
+    "axes": [
+      "salt",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "11cd8bb504b0a3c6d9fbec2b9a18ba4c6dcf4a12550497e0dd6a7d653ddce92b",
+    "golden_sha256": "20d9d6505a03c3eb0357aaa72a45313887494a3e35a5116930628cd2b53bb885",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 1,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_salt.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_salt.svg",
+    "axes": [
+      "salt",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "30b5c96a03a30daa99ec9463f2aef706e33a9aa2057af6a0ddb6cd07a60ceee2",
+    "golden_sha256": "fad3c68a87f83f9fd10c1ef54dfb229b31324133093f35c58ef2a44531d0dd90",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_salt.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_salt.svg",
+    "axes": [
+      "salt",
+      "transparent background with opaque foreground"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "41566e9e5b4737cd7749d4b9c92c6a321a0b2b22ce11375d3706c0c5c95c817f",
+    "golden_sha256": "2f7797875290aea0f2c43ab0bd3f418602a6235f09b394c532bad0259d500e45",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.svg",
+    "axes": [
+      "json",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "9488b3718e68d764af1b9edf5308575669126e3e42ce2de820e5bf4af33491d2",
+    "golden_sha256": "21f7f338fb23efa3d33c49fbc29bf94f3dc7bb0718ecc2481bd5fff8c67e51b1",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 1,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_json.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_json.svg",
+    "axes": [
+      "json",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "06d8ba675593b413933b31a5c8e49be5085be2dcd489eeaf7bf8f99f53e1f7db",
+    "golden_sha256": "08ed46b59b0ca152c561e8982aac2ed293e03e29356a169705b3ec99f47fbe4e",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_json.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_json.svg",
+    "axes": [
+      "json",
+      "transparent background with opaque foreground"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "20c17de1fc05e8d306f2df48d80d25981683e64d09ed945713747eb48dd8e5ec",
+    "golden_sha256": "e860223617663ae25530d2791211b977ac1b5d0476a30f4dda8b96e0af178fbc",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_nwdiag.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_nwdiag.svg",
+    "axes": [
+      "nwdiag",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "869c91d4f262f51594a3acfdd512ecb63487f5766a0a3625b0bfbfd16d4f39f3",
+    "golden_sha256": "183f366745dbf257ea0ffe66a6d3cdcee2d90fc2fb281c130e9e5478d8ac74ac",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_nwdiag.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_nwdiag.svg",
+    "axes": [
+      "nwdiag",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "ee9022fee6695cbcbba495a125bbe514faf5364440a590395466f078baa7fb0d",
+    "golden_sha256": "f42baef39aecc576e4e68c78ef248cac3608c2981c9244cce1fb9667a63e21bd",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_nwdiag.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_nwdiag.svg",
+    "axes": [
+      "nwdiag",
+      "transparent background with opaque foreground"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "a6e43f87f3f5ab645dabad58c3f4106567605b6fbd265837d3d09d448ed1ccd5",
+    "golden_sha256": "bf5706cf5854b9a7da64ecff4d7911f3c552de942027cc7042b20ff1a2e38bfa",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_regex.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_regex.svg",
+    "axes": [
+      "regex",
+      "skinparam font-family quoting/padding/non-ASCII"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "932e55ac6da2b0ac33523bea8811a07830497550152ddd8fc4a14829eba1564a",
+    "golden_sha256": "685429a0c8eb3520069cb96b17e5e38467cf38d45726c049feee8e632117c1ae",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_regex.puml",
+    "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_regex.svg",
+    "axes": [
+      "regex",
+      "zero alpha inside mixed runs with background"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "36dcb34fd7311fb41c684c71787dbd7c3d89762098c9fe4eac3e29f230b870fd",
+    "golden_sha256": "6f0c84fb59dad3e6121bfbcc3603e55fb17d898fdeb0484616f8af4ade4db1f0",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_regex.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_regex.svg",
+    "axes": [
+      "regex",
+      "transparent background with opaque foreground"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "ad69b4d082b9f90f17bb1df473b568f88f77c5d1dee09beb16dd492e19ef9ec9",
+    "golden_sha256": "ec210a7e2874508a49f8e1a277c79d995ab55c57035cb3554d2eb03b9febf1ae",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_ascii.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_ascii.svg",
+    "axes": [
+      "activity",
+      "tooltip ascii"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "89ad90a4b3808ae55eb7635759b8bfca8a31d1ed8671d9836cc40e42acaff840",
+    "golden_sha256": "0763649f552216ceabf47236a2141a4319404684d378e41661cea26bdbac10b1",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_tab.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_tab.svg",
+    "axes": [
+      "class",
+      "tooltip tab"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "8a7db952a94974990040013cb6a597bf13429ba436b8a207fe23a5398691d192",
+    "golden_sha256": "5036e8d53018177519b7e1da0a88e0a17486b34fe82b3f17bd39bfda5073410a",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_cr.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_cr.svg",
+    "axes": [
+      "state",
+      "tooltip cr"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "c919f038c7d8024d9080469510424ea4e59be1e2c141ed0c67865d111290c5bb",
+    "golden_sha256": "da938558d9752e9a856c0b71aedb7088db3896b484474168314a5cf1ec412da3",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_lf.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_lf.svg",
+    "axes": [
+      "object",
+      "tooltip lf"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "30b63e441bf20c1c23052eaab48d062ee21a1fae5e53977c78068a9cc6c2ec43",
+    "golden_sha256": "0e5c3bb4bd787357211a40d0ea7d2815d48d9e53cbf1d80bd3d178a5be7b911e",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_nbsp.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_nbsp.svg",
+    "axes": [
+      "mindmap",
+      "tooltip nbsp"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "6941339c18193d2ce2093bcde2d820836ba69e85e606dad874a5778ebb367f48",
+    "golden_sha256": "ab18390bb29b0d49a5af80a29cdbfac138f5aa79fe6427ab71402434b6c944c5",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_bmp.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_bmp.svg",
+    "axes": [
+      "wbs",
+      "tooltip bmp"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "455d1eba4d11303b62d978f494d63dc9dd9fc9be07c36e435f32dd9ce4fc2134",
+    "golden_sha256": "55cdc40ce602d2c2dc03db6aa75f3c9e846d042e0df349a766380c9550e0d8ae",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_scalar.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_scalar.svg",
+    "axes": [
+      "salt",
+      "tooltip scalar"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "60f459c0c7ad2d5d30519282b8200175c92d3e998b08f409560283125fedf337",
+    "golden_sha256": "a657e88fb29f3df7f7f5de48b5588b61608868a888b745b09519c5f1154f7915",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_entity.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/link_entity.svg",
+    "axes": [
+      "usecase",
+      "tooltip entity"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "448364598ead18ffa7a1104905fabdc9ca9d9ca9e1d0e29c5e2786b0e5324de4",
+    "golden_sha256": "07ff660914252d91ced0b0e37a3731454ec7eb318768a0b4b55cfc78fd076e38",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_amp.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_amp.svg",
+    "axes": [
+      "activity",
+      "URL amp"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "f6874425b36ec5b1b7bab9af68ae5b35ca83e0326a44adcfe39eb2019a067294",
+    "golden_sha256": "46423c94f331a454682fe88a9bcc9a5b10ebf5415257157937f903f174526c8c",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_angles.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_angles.svg",
+    "axes": [
+      "activity",
+      "URL angles"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "546e8aa477f481b34d6974864fb904db4a0ebd314e04f05180d4a2149388f5f1",
+    "golden_sha256": "62254ad9736bce046fbd093a6c8619f247ff1503be7078f5f9412e48e65bfc5e",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_quote.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_quote.svg",
+    "axes": [
+      "activity",
+      "URL quote"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "46db19af4c95170eeab7d8524d2e1747b842d4d27a86e1c29ec52ae8a0ffdd1c",
+    "golden_sha256": "6032d622d96b64213649f5e73b0f66cbe838b7ce30f9def5a8c8342dcbcc5ee9",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_tab.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_tab.svg",
+    "axes": [
+      "activity",
+      "URL tab"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "d2b77202445ed65ef579fc9b2cbfe53a409869628182a73159f78e2fe33ddae8",
+    "golden_sha256": "f2f2fe51927e0babd2839f5d0267673a7b7d7b4a3b5e984beaf16d7df09b2551",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_c0.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_c0.svg",
+    "axes": [
+      "activity",
+      "URL c0"
+    ],
+    "result": "fail",
+    "java_classification": "SAXException crash SVG",
+    "source_sha256": "f8e49aa31c65047de872fe145933815200748337bf7a7a155bfe218a49288d68",
+    "golden_sha256": "d0250977a943c0767be957bb48549dbef9460b9cccf349cde984691c126df75d",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": "not well-formed (invalid token): line 1, column 583",
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_unicode.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_unicode.svg",
+    "axes": [
+      "activity",
+      "URL unicode"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "ed903ef6bdfc078656473d251233f95faf129be09fdbb54d80af67868077a8f9",
+    "golden_sha256": "a88bf13c74e22d2115689917f8a65fb76b64ecaa8aa86a8648f4dda152cdd66f",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/identity_class.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/identity_class.svg",
+    "axes": [
+      "class",
+      "unaliased entity name to IDs/data-qualified-name/comments"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "64786259d5e03ff1ac675e5685e73b57ff3ee24f72915558f422691378d36cd8",
+    "golden_sha256": "3c5b16af202e2500937ef5b45c56f1de3f9b7995dbcf915c3986e52cd7ee011a",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/identity_state.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/identity_state.svg",
+    "axes": [
+      "state",
+      "unaliased entity name to IDs/data-qualified-name/comments"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "2352d18d25cdabe0b274e90837438fd7c43ee69ca20c2a8535515ddd0f2daa90",
+    "golden_sha256": "f676a1836f990b4e91d46b4c8b2886bc8cf1645749179a9d898da2ac5c706768",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/identity_component.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/identity_component.svg",
+    "axes": [
+      "component",
+      "unaliased entity name to IDs/data-qualified-name/comments"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "33b86b841ed2f8c49dc49116bf9af02420a87042164be03629d62b1e35c85a06",
+    "golden_sha256": "1ed7f79e047a4ebb74f4f0d000177bf4a52aa5b1afe031579df3f09fa9505ade",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/identity_deployment.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/identity_deployment.svg",
+    "axes": [
+      "deployment",
+      "unaliased entity name to IDs/data-qualified-name/comments"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "0f066942268e1afe26e1f36dc366117c42aabf7ceb2fbfd56d422d40c69c5e52",
+    "golden_sha256": "83420b16b4e4b956f32bebc637647e676c84be035e50123f1a9a1ac23a605850",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/identity_usecase.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/identity_usecase.svg",
+    "axes": [
+      "usecase",
+      "unaliased entity name to IDs/data-qualified-name/comments"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "e3be75eaf55803e60f7d923c0e762ec2282d261c1e992efdbaa686659dd8cd5a",
+    "golden_sha256": "8879ee753d87b5abf6f31c6baa2bab7aedd4922767053a5f42f0d92e5b5c8025",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/identity_object.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/identity_object.svg",
+    "axes": [
+      "object",
+      "unaliased entity name to IDs/data-qualified-name/comments"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "84ee93094ab3835a3974769dc756abed7747c4429af3e72a0c532c66bc55a3bf",
+    "golden_sha256": "00b96ad3f9bb929f8de5ad0d4e6318812671130daeb5d0f30526a87b1c9325b8",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/comment_double_hyphen.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/comment_double_hyphen.svg",
+    "axes": [
+      "class",
+      "comment delimiter inside entity name"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "bcdb3d62f0d90a27a11a444e5df2d77c6aa56cc96b83794e7feffc0fa1ca7acb",
+    "golden_sha256": "57fabe953715d3d78be2db0b336f9083f2aec3d352f65fe2487bfbce912f0b77",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": "not well-formed (invalid token): line 1, column 354",
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_nibble.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_nibble.svg",
+    "axes": [
+      "activity",
+      "foreground/background nibble"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "f9d6e32b542e783fc356a7818e48d8727507afc83aa8fca197d155d942db42c9",
+    "golden_sha256": "31d54c954cb3ce1f17af70e4acd295f84b915ff49381dbd25354c52c5f6af810",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_short.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_short.svg",
+    "axes": [
+      "activity",
+      "foreground/background short"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "304f32ddca37504925d04b3591ddc2a1ac4264c8dc726bf344316b4328619fb0",
+    "golden_sha256": "2c00aaf4cdef61b638d389f4a4052e5ffc6880bbba167046a9152ddd6ce61f79",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_full.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_full.svg",
+    "axes": [
+      "activity",
+      "foreground/background full"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "85b888554a1b00c09dee166b9128ab6a5a07c46481de8c9776fa579fe704543e",
+    "golden_sha256": "2cdcae4533e96f5ddb4ebcacbc7fcd8a928cafaf0aaa8457d5ddf3ca7a576816",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_named.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_named.svg",
+    "axes": [
+      "activity",
+      "foreground/background named"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "1636aca20879bcc47bd82841e18258343b6863ba4cf234d9f33ef5b15bdf0928",
+    "golden_sha256": "880b2c9e1e45e6b2dcfee0a81bf4d670175dbba4fde014a5427ee1d5ccefce73",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_hashnamed.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_hashnamed.svg",
+    "axes": [
+      "activity",
+      "foreground/background hashnamed"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "e971c4fee35db491931ac27ee575cd738821740537f0c8ba7d16a0a24ff64cc2",
+    "golden_sha256": "2b61b414f3e67e0874048995e9ac76895a9a9118beff22ca8a6262ce659fef59",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_alpha01.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_alpha01.svg",
+    "axes": [
+      "activity",
+      "foreground/background alpha01"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "e9844ec9512e48da49442bc5bba75547201f9b8fc90327a15623d62e545ec21e",
+    "golden_sha256": "14504742c7076f6ae6434a15d4ce0bebc15620eabda11bfbb7c4343dc8b81fd8",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_alpha80.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_alpha80.svg",
+    "axes": [
+      "activity",
+      "foreground/background alpha80"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "e3a2996621ff2755ae7c47885e3e691c842373b3bdf7c8125bba56dc902b773b",
+    "golden_sha256": "fa858f949721134e7ea9ef54e1e06d869209b8d420f5603c3c9ac194d427429d",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_alphaff.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_alphaff.svg",
+    "axes": [
+      "activity",
+      "foreground/background alphaff"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "331ed42fdcc47ba34b5a1eaf541c1987f700f65445411eb2e7f20579961f54b7",
+    "golden_sha256": "315fba4eda97674ab0c05cbb14269100f12c35f91e37c3ac8112fac4c2ed849e",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_background.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_background.svg",
+    "axes": [
+      "activity",
+      "foreground/background background"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "4c86c4f3310853acf2de7758a9ce58304e9f514daf97c1738ad41fe1225bbccd",
+    "golden_sha256": "8676c2298b91ad3c75d7bc4a971eed9099da1824583081b11af9acab173ed1e8",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_transparent.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_transparent.svg",
+    "axes": [
+      "activity",
+      "foreground/background transparent"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "3468eba21b25c11df0df5c99f70ce5b0b7862b9f1b599b8ddca9db0c02ce860b",
+    "golden_sha256": "b69946f0be60549c202ced5f10577e94b69768139dbdfb03b8c0cfcc4be04e4f",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_nested.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_nested.svg",
+    "axes": [
+      "class member",
+      "nested alpha restoration and combined font"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "59f4bf44ddd73f9bde4fbb636d0b7dee4654bb180808891de448d830615ba7c9",
+    "golden_sha256": "3ac1ffe05f06951b8e792d9366967238e149ef48641d8ad89631003d90a12099",
+    "before_pass": false,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/shape_alpha.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/shape_alpha.svg",
+    "axes": [
+      "state shape",
+      "alpha fill plus short stroke"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "08188e38fd854ccfc6e6818dc0305275db273311058cf6a61094f7d155a66867",
+    "golden_sha256": "07decd0bbfb43affad8386b62c388fe31aeeeddde3dd67706895eda68f84b074",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/shape_quoted.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/shape_quoted.svg",
+    "axes": [
+      "state shape",
+      "invalid raw skinparam attribute"
+    ],
+    "result": "pass",
+    "java_classification": "valid diagram",
+    "source_sha256": "2d183868868d45e8e9c7d0002d7cdb25daf8c8e20d71896f5bea2b097b6909be",
+    "golden_sha256": "8daa91f0183c5194c4256667c6cd3afbc35ce41e1f2891158724227023480405",
+    "before_pass": true,
+    "after_pass": true,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/automatic_000000.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/automatic_000000.svg",
+    "axes": [
+      "activity",
+      "automatic background inversion"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "e3b859487b1da0de5004b911af284bd745aef1bfaa99d026e9c5ef44ba1d610d",
+    "golden_sha256": "d7652b01e10435516d1fe0fb2803350af51dfa929db5c717dbd41dbd123242cb",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/automatic_ffffff.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/automatic_ffffff.svg",
+    "axes": [
+      "activity",
+      "automatic background inversion"
+    ],
+    "result": "fail",
+    "java_classification": "valid diagram",
+    "source_sha256": "be86cb0e318ab4542c8dd13bf74d89cb9b4599d37c84a1bd05d3c3bbe7b820f8",
+    "golden_sha256": "9dd9af22239a948010383416a96781192a0e2e38035e5ca74ee40fdcfa9ce0e3",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": null,
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_zero.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_zero.svg",
+    "axes": [
+      "activity",
+      "raw control tooltip zero"
+    ],
+    "result": "fail",
+    "java_classification": "SAXException crash SVG",
+    "source_sha256": "9db5169301ad8914aef80e6e181f446f978432ede32353a9ac004269ff93c462",
+    "golden_sha256": "8f3f4baa8c8e4dc890094d1cd83b681dc7774d2f5bb6e2e1b9f38de4a51e61c5",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": "not well-formed (invalid token): line 1, column 614",
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_escape.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_escape.svg",
+    "axes": [
+      "activity",
+      "raw control tooltip escape"
+    ],
+    "result": "fail",
+    "java_classification": "SAXException crash SVG",
+    "source_sha256": "0ad00c5109c7a76ed425ba4f2a545c34818c5020657c6165d130eb9a4a04e35c",
+    "golden_sha256": "da9c9df7722af678e173f6f85bcf3af9935eecaa7aed4faf133ab3d8afadfb36",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": "not well-formed (invalid token): line 1, column 614",
+    "process_exit": 0,
+    "panic": false
+  },
+  {
+    "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_one.puml",
+    "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_one.svg",
+    "axes": [
+      "activity",
+      "raw control tooltip one"
+    ],
+    "result": "fail",
+    "java_classification": "SAXException crash SVG",
+    "source_sha256": "e563876518e6b3ad61d820de64242456ee01aa8c9d2f53f1ab14570b91b180b0",
+    "golden_sha256": "5aedcd5ecf955a0652d8b691d3d646c0957a28aa3c7bf1ad14e916d5d9246141",
+    "before_pass": false,
+    "after_pass": false,
+    "malformed": "not well-formed (invalid token): line 1, column 614",
+    "process_exit": 0,
+    "panic": false
+  }
+]

@@ -1,0 +1,259 @@
+{
+  "tested_base": "2608469dace1f680a7e90c0895e44e657f8aaf7f",
+  "implementation": "8ca73318f584dc29d7d8ab1c91f25a21718ca713",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "class_generic": {
+    "tested_locations": [
+      "crates/rustuml-parser/src/parse/class.rs:731-739, label split only when label_was_id; quoted alias label not split",
+      "crates/rustuml-render/src/class.rs:1253, separate source-line-zero fallback"
+    ],
+    "java_locations": [
+      "src/main/java/net/sourceforge/plantuml/command/NameAndCodeParser.java:48-65 (DISPLAY_WITH_GENERIC and two alias orders)",
+      "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java:127-130 (DISPLAY group 1 wins over GENERIC)",
+      "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java:163-164 (entity.setGeneric)"
+    ],
+    "original_controls": [
+      {
+        "name": "markup_scan",
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/docs/parity-reviews/tim-memory-trie-text-lookup/maker-support/supplement/markup_scan.puml",
+        "reference": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/docs/parity-reviews/tim-memory-trie-text-lookup/maker-support/supplement/markup_scan.svg",
+        "source_sha256": "67aa925700a243ab0f25477d76ad760ddf05f56ee675d0c5af5a604dac654f21",
+        "reference_sha256": "b05676c6f2162081804d839c38a6de96a70e10219ce84ad42eac8853042b80a1"
+      },
+      {
+        "name": "markup_literal",
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/markup_literal.puml",
+        "reference": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/markup_literal.svg",
+        "source_sha256": "13fb51be7481e3f896b172ae1f279ce0a3d5c7c1f4d264765bdc3e0cf5397f30",
+        "reference_sha256": "19e486fa07b280da8ef3f30bdf1cce34f2bbd87775f84de483688e67566c9a7b"
+      }
+    ],
+    "unintegrated_candidate": "68ab512be964e243ae1943f7a9fefd3537091401",
+    "candidate_location": "crates/rustuml-parser/src/parse/class.rs:993 split_generic(&mut id).or_else(|| split_generic(&mut label)); positioned-stripe caller work separately owned",
+    "status": "Both original whole-output failures persist unchanged in this correction. Do not generalize tested-base parser trace to sibling candidate. No sibling production imported and no combined sprite/generic correctness measured."
+  },
+  "dependencies": [
+    {
+      "name": "class-positioned-stripe-and-source-line-zero",
+      "cases": [
+        "checker38/style_nested",
+        "maker18/missing_size",
+        "retained source-line-zero controls"
+      ],
+      "status": "Whole failures remain. Shared styles/atom handling do not fix class caller placement or source-line-zero renderer fallback; class-owned work unintegrated."
+    },
+    {
+      "name": "sequence-message-guillemet-normalization",
+      "cases": [
+        "fresh15/nested_unknown"
+      ],
+      "java_locations": [
+        "klimt/creole/legacy/CreoleParser.java:175 createSheetSlow invokes skinParam.guillemet().manageGuillemet before creating stripes",
+        "text/Guillemet.java:76-84 GUILLEMET_PATTERN/manageGuillemet"
+      ],
+      "rust_locations": [
+        "crates/rustuml-render/src/sequence.rs:2231 process_label does not manage guillemets",
+        "crates/rustuml-render/src/sequence.rs:6730 participant path does manage guillemets"
+      ],
+      "status": "First X<outer<$twig>> command is now consumed and flushed correctly. Java later text is >Y\u00ab$\u679d\u00bbZ; Rust later text is >Y< then >Z. Sequence/model configuration ownership required; no global guillemet pass added to shared parser."
+    },
+    {
+      "name": "plain-tag-and-unicode-metrics",
+      "cases": [
+        "fresh15/nested_unicode"
+      ],
+      "java_locations": [
+        "klimt/font/FontStyle.java:81-82 PLAIN activation",
+        "klimt/creole/command/CommandCreoleStyle.java::createLegacy/createLegacyEol/executeAndGetRemaining"
+      ],
+      "rust_locations": [
+        "crates/rustuml-render/src/creole.rs::handle_tag unknown plain tag",
+        "crates/rustuml-render/src/text_render.rs font metric dispatch (untouched)"
+      ],
+      "status": "Inner sprite is consumed at correct Unicode boundaries. Whole output remains different: Java \u03a9<\u03b2 width28.5073 vs Rust25.3462; Java consumes <plain> and flushes, Rust preserves it as before. This packet preserves existing supported non-sprite tags and does not add a general style reset implementation or alter metrics."
+    },
+    {
+      "name": "note-sprite-resolver-empty-line",
+      "cases": [
+        "checker38/note_undefined"
+      ],
+      "status": "Family resolver omits the sprite-only line before shared text; remains a failure and requires registry/consumer owner."
+    },
+    {
+      "name": "defined-sprite-registry-consumers",
+      "cases": [
+        "checker38/note_defined_scale",
+        "checker38/class_defined",
+        "checker38/seq_defined",
+        "maker18/defined_class",
+        "maker18/defined_scale_color"
+      ],
+      "status": "Defined sprites are not missing. Basic defined note/deployment controls and all49 valid existing sprite references pass; scale/color note resolver, class and sequence registry consumers remain failures. No registry edits."
+    },
+    {
+      "name": "URL-recursion-and-legacy-api",
+      "cases": [
+        "checker38/url_label",
+        "checker38/url_after",
+        "checker38/empty_link"
+      ],
+      "status": "URL atom recursion/italic parsing and legacy to_svg_tspans remain explicit dependencies; no legacy API repair claimed."
+    },
+    {
+      "name": "malformed-scale-errors",
+      "cases": [
+        "checker38/scale_dot",
+        "checker38/scale_doubledot"
+      ],
+      "java_locations": [
+        "klimt/creole/Parser.java:67-73 getScale invokes Double.parseDouble",
+        "klimt/creole/command/CommandCreoleSprite.java::executeAndGetRemaining parses scale before addSprite lookup"
+      ],
+      "status": "Both are nonpositive NumberFormatException Java error SVGs returned exit0, not valid diagrams. Rust remains nonpanicking; no new negative serialization/acceptance contract or deliberate panic."
+    },
+    {
+      "name": "standing-negative-and-other-TIM-dependencies",
+      "status": "All historical Unicode/property/surrogate, welcome factory, nested quoted class, negative diagnostics, source-line-zero and sequence panic failures persist with exact original memberships. No scope waiver or TIM acceptance; all9731 historical files and118 imported rejection files hash-verified unchanged."
+    },
+    {
+      "name": "sequence-message-mixed-size-baseline",
+      "cases": [
+        "fresh26/present_bold_empty",
+        "new15/style_parameter_contrast"
+      ],
+      "java_locations": [
+        "klimt/creole/SheetBlock1.java::initMap (per-stripe ascent/height)"
+      ],
+      "rust_locations": [
+        "crates/rustuml-render/src/sequence.rs:4208 emit_message_label; 4330-4348 emits current line at common y then increments height"
+      ],
+      "status": "Closing text is now retained in its recognized style. Remaining size26 text baseline is Rust93.6777 versus Java106.2461; size25 is93.6777 versus105.2793. Whole failures remain. Shared text supplies per-line ascent; sequence caller integration is outside ownership."
+    },
+    {
+      "name": "sequence-line-stripe-preprocessing",
+      "cases": [
+        "delimiters4/empty",
+        "delimiters4/nonempty",
+        "delimiters4/unclosed",
+        "delimiters4/escaped"
+      ],
+      "java_locations": [
+        "klimt/creole/legacy/CreoleStripeSimpleParser.java:67-75 SECTION_HEADER ^--([^-]*)--$ and ASTERISK_PREFIXED_LINE_PATTERN before command traversal"
+      ],
+      "rust_locations": [
+        "crates/rustuml-render/src/sequence.rs:2200 whole_strike_label_inner treats any nonempty --...-- as horizontal rule",
+        "crates/rustuml-render/src/sequence.rs::emit_message_label lacks Java asterisk-prefixed list-stripe processing"
+      ],
+      "status": "All four retained whole failures. ---- is a Java empty section stripe, five hyphens are inline struck hyphen; leading ** routes through Java list stripe before inline commands. Two separately created mid-line controls isolate existing shared command handling and now pass. No replacement, waiver, global preprocessing or new syntax added."
+    },
+    {
+      "name": "WBS-legacy-order-warning",
+      "cases": [
+        "new15/wbs_shape_color"
+      ],
+      "java_locations": [
+        "wbs/CommandWBSItemOld.java::executeArg adds Please define Direction/Shape before Color/Id. warning",
+        "wbs/CommandWBSItemNew.java shape before color; mindmap/IdeaShape.java::fromDesc"
+      ],
+      "rust_locations": [
+        "crates/rustuml-parser/src/parse/wbs.rs:64-111"
+      ],
+      "status": "Authorized parser models both existing optional-color orders; shape/color/label are correct. Java old-order warning decorates whole output. Warning metadata/serialization/renderer integration was not added and whole SVG remains a failure."
+    },
+    {
+      "name": "WBS-display-projection-residue",
+      "status": "Requested backslash-n line sequence, escaped backslash, tab and raw-region behavior are source-derived and tested. Forced-alignment backslash-r/backslash-l and unrelated Display commands are not implemented or claimed. Source raw label and identity remain unchanged except authorized shape syntax extraction."
+    },
+    {
+      "name": "additional-sequence-mixed-size-baseline",
+      "cases": [
+        "checker30/html_parameters"
+      ],
+      "status": "q/r/s command atoms now agree with Java. Remaining size31 italic baseline78.3672 versus95.7695 is sequence-owned, in addition to original size26/25 baseline failures."
+    },
+    {
+      "name": "fresh-Unicode-neighbor-width",
+      "cases": [
+        "fresh12/literal_neighbors"
+      ],
+      "status": "All text, styles and escape/overlap boundaries now match. P~a~\u03a9Q textLength remains48.0835 versus Java51.2446 atsize13. Original whole failure retained, no font changes."
+    },
+    {
+      "name": "extended-style-activation",
+      "cases": [
+        "checker30/html_extended"
+      ],
+      "status": "Existing extended activation forms remain unsupported. No syntax expansion."
+    },
+    {
+      "name": "forced-alignment",
+      "cases": [
+        "checker30/display_forced_alignment"
+      ],
+      "status": "Valid whole failure retained with no waiver; backslash-r/backslash-l alignment remains outside owned lexical fix."
+    },
+    {
+      "name": "math-reference-environment",
+      "cases": [
+        "checker30/html_url_math",
+        "checker30/display_raw_math",
+        "supplement8/s_display_latex_valid"
+      ],
+      "status": "Five checker nonpositives include these three missing-Batik reference fallbacks plus two shape_direction syntax errors. All original bytes/preliminary/final classifications retained. No positive math requirement or math correctness claim."
+    },
+    {
+      "name": "warning-scope-stop",
+      "cases": [
+        "new15/wbs_shape_color",
+        "checker30/shape_colors_old"
+      ],
+      "status": "Parent accepted separate shared warning target. Durable preimplementation proposal in docs/parity-reviews/creole-parameter-command-flush/wbs-warning-scope.json; no WBS model or geometry edits in this correction. Warning still causes whole failures."
+    },
+    {
+      "name": "parameter-shorthand-color-serialization",
+      "cases": [
+        "fresh16/color_forms"
+      ],
+      "status": "Whole failure before and after. Only differing comparator attribute is fill #123 versus Java #112233. Source eligibility and text geometry match; no output rewrite.",
+      "java": "klimt/color/HColorSet.java:118-143 parseSimpleColor expands one/three hex nibbles; downstream SVG color serializes expanded RGB",
+      "rust": "crates/rustuml-render/src/text_render.rs:1444 normalize_color preserves leading # verbatim; :1657-1658 emission calls it",
+      "ownership": "Shared color emission outside creole-only packet"
+    },
+    {
+      "name": "logical-font-SVG-name-canonicalization",
+      "cases": [
+        "fresh16/font_family"
+      ],
+      "status": "Whole failure before and after. Remaining attributes Monospaced versus monospace, SansSerif versus sans-serif. Initial candidate had matching text geometry, but final alias correction restores existing Monospaced surrounding-metric coupling: bud width22.5527 vs Java21.6738, baseline106.7344 vs106.4355; downstream WBS x coordinates differ. Text content matches; whole failure stays. No font asset/metric changes.",
+      "java": "klimt/font/UFontImpl.java:104-123 getFamily(SVG) replaces sansserif with sans-serif; klimt/drawing/svg/SvgGraphics.java:697-706 maps monospaced to monospace",
+      "rust": "crates/rustuml-render/src/text_render.rs:1620 chooses style.font_family verbatim; :1727 emits attribute",
+      "ownership": "Shared font-family emission and text_render.rs:760 alias metric coupling; parent assigned T14.15, no text_render edit"
+    },
+    {
+      "name": "plain-code-registry-reset",
+      "cases": [
+        "checker28/hide_raw_regions"
+      ],
+      "status": "Parent accepted deferral; whole failure retained. Plain is in Java FontStyle/CommandCreoleBuilder registry, code is not. Generic base-style reset requires a separately proven representation and consumer contract; no registry/reset draft in this packet."
+    },
+    {
+      "name": "sequence-folded-note-height-rounding",
+      "cases": [
+        "checker28/hide_closing_capture",
+        "checker28/flush_eol_nested"
+      ],
+      "status": "Both remain whole failures with Java-exact text atoms; separate sequence owner. Java floors total block height plus margins, Rust note_rendered_height floors later rows separately. Java floor(4*15.310546875+10)=71 versus Rust70.",
+      "java": "skin/AbstractTextualComponent.getTextHeight -> skin/rose/ComponentRoseNote.drawInternalU",
+      "rust": "crates/rustuml-render/src/sequence.rs::note_rendered_height"
+    },
+    {
+      "name": "checker-Omega-metrics",
+      "cases": [
+        "checker28/hide_unicode_sprite",
+        "checker28/residual_omega_only"
+      ],
+      "status": "Unchanged whole failures; Unicode/fallback metric dependency, not candidate eligibility."
+    }
+  ],
+  "scope": "New corrective implementation, not acceptance of TIM8 or any earlier rejection. No combined class/sequence candidate imported or measured; all dependencies remain failures without waiver."
+}

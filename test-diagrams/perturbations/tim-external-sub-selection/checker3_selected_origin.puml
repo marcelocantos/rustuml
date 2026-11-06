@@ -1,0 +1,5 @@
+@startuml
+class Before
+!includesub test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/fatal.inc!chosen
+class After
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+class "Fir--"
+class "Ash-"
+"Fir--" --> "Ash-"
+@enduml

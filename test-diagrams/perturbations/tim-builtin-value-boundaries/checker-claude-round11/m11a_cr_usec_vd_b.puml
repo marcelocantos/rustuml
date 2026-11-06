@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Verdana
+usecase "<b>Rook ovoid vow</b> end" as E1
+@enduml

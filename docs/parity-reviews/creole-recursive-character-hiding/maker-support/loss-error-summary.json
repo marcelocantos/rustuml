@@ -1,0 +1,10 @@
+{
+  "entries": 1948,
+  "valid": 1814,
+  "before": 870,
+  "after": 888,
+  "lost_passes": [],
+  "new_errors": [],
+  "new_panics": [],
+  "retained_svg_panics": 32
+}

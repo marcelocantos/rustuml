@@ -1,0 +1,119 @@
+{
+ "D0_unmodified": {
+  "applied": true,
+  "exit": 0,
+  "failed_tests": []
+ },
+ "D1_ucd18_mn_run_1ACF_1AF0_removed": {
+  "applied": true,
+  "exit": 101,
+  "failed_tests": [
+   "font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef",
+   "font_chain::tests::unicode_mark_tables_are_ucd_18"
+  ]
+ },
+ "D2_hangul_group_to_indic": {
+  "applied": true,
+  "exit": 101,
+  "failed_tests": [
+   "font_chain::tests::gsub_chosen_script_categorizes_the_shaper",
+   "font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15"
+  ]
+ },
+ "D3_blocklist_courier_triple_changed": {
+  "applied": true,
+  "exit": 101,
+  "failed_tests": [
+   "font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef",
+   "font_chain::tests::gsub_chosen_script_categorizes_the_shaper",
+   "font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer",
+   "font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15",
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ]
+ },
+ "D4_courier_gdef_length_changed": {
+  "applied": true,
+  "exit": 101,
+  "failed_tests": [
+   "font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef",
+   "font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer",
+   "font_chain::tests::gsub_chosen_script_categorizes_the_shaper",
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ]
+ },
+ "D5_bidi_class_run_changed": {
+  "applied": true,
+  "exit": 101,
+  "failed_tests": [
+   "java_bidi::tests::bidi_tables_are_jdk_ubidi_icu"
+  ]
+ },
+ "D6_pending_verdana_bold_readded": {
+  "applied": true,
+  "exit": 101,
+  "failed_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ]
+ },
+ "D7_stored_shaper_hh_edited": {
+  "applied": true,
+  "exit": 101,
+  "failed_tests": [
+   "font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15"
+  ]
+ },
+ "D8_stored_shaper_hh_and_sums_edited": {
+  "applied": true,
+  "exit": 101,
+  "failed_tests": [
+   "font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15",
+   "java_bidi::tests::conformance_sample",
+   "font_chain::tests::unicode_mark_tables_are_ucd_18",
+   "java_bidi::tests::bidi_tables_are_jdk_ubidi_icu"
+  ]
+ },
+ "D9_courier_blocklist_triples_removed": {
+  "applied": true,
+  "exit": 101,
+  "failed_tests": [
+   "font_chain::tests::gsub_chosen_script_categorizes_the_shaper",
+   "font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef",
+   "font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer",
+   "font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15",
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ]
+ },
+ "D10_mm_record_courier_hash_and_sums": {
+  "applied": true,
+  "exit": 101,
+  "failed_tests": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ]
+ },
+ "D11_ubidi_icu_byte_and_sums": {
+  "applied": true,
+  "exit": 101,
+  "failed_tests": [
+   "font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15",
+   "java_bidi::tests::bidi_tables_are_jdk_ubidi_icu",
+   "java_bidi::tests::conformance_sample",
+   "font_chain::tests::unicode_mark_tables_are_ucd_18"
+  ]
+ },
+ "D12_bracket_pair_changed": {
+  "applied": true,
+  "exit": 101,
+  "failed_tests": [
+   "java_bidi::tests::conformance_sample",
+   "java_bidi::tests::bidi_tables_are_jdk_ubidi_icu"
+  ]
+ },
+ "D13_courier_gsub_script_dropped": {
+  "applied": true,
+  "exit": 101,
+  "failed_tests": [
+   "font_chain::tests::gsub_chosen_script_categorizes_the_shaper",
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ]
+ }
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "input": "new/capacity_20.puml",
+    "signature_count": 96,
+    "capacity": 128,
+    "name": "$oak515",
+    "buckets": {
+      "2": 127,
+      "3": 0
+    },
+    "maximum_bin_occupancy": 4,
+    "java_source": "@startuml\nclass \"three\" as Node\n@enduml\n"
+  },
+  {
+    "input": "new/capacity_21.puml",
+    "signature_count": 97,
+    "capacity": 256,
+    "name": "$oak515",
+    "buckets": {
+      "2": 127,
+      "3": 128
+    },
+    "maximum_bin_occupancy": 3,
+    "java_source": "@startuml\nclass \"two\" as Node\n@enduml\n"
+  }
+]

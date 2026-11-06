@@ -1,0 +1,61 @@
+{
+ "branch": "crates/rustuml-render/src/state.rs arial_text_width: `if !bold && size == 14 { match text { \"A\" | \"B\" => return 9.3379 } }` then text_render::measure (SansSerif); base 95291dc6b line 1581, tip line 1653; introduced ceda8d9f2 (2026-06-05, 'state: honor custom state font names')",
+ "variants": {
+  "v1": "branch deleted, SansSerif fallback kept",
+  "v2": "arial_text_width = text_render::measure_with_family(text, size, bold, \"Arial\") (the Arial table; italic still dropped)"
+ },
+ "cli_whole_output_over_arial_selectable_sources": {
+  "selected": 481,
+  "selector": "arial|!theme|!include|!import",
+  "95291dc6b-v1": {
+   "outputs_changed": 1,
+   "lost": [
+    "test-diagrams/golden/state/state_skinparam_state_fontname.puml"
+   ],
+   "gained": []
+  },
+  "95291dc6b-v2": {
+   "outputs_changed": 11,
+   "lost": [],
+   "gained": [
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_ar_i.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_ar_i.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_ar_i.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_ar_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state_ctrl.puml"
+   ]
+  },
+  "e24240b35-v1": {
+   "outputs_changed": 1,
+   "lost": [
+    "test-diagrams/golden/state/state_skinparam_state_fontname.puml"
+   ],
+   "gained": []
+  },
+  "e24240b35-v2": {
+   "outputs_changed": 11,
+   "lost": [],
+   "gained": [
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_ar_i.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_ar_i.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_ar_i.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_ar_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state_ctrl.puml"
+   ]
+  }
+ },
+ "tiers_at_tip": {
+  "golden_no_oracle": {
+   "tip": "11181/11251 (state 897/901)",
+   "v1": "11180/11251 (state 896/901; +state/state_skinparam_state_fontname)",
+   "v2": "11181/11251, failure names identical to tip"
+  },
+  "golden_pairs": {
+   "tip": "10497 passed / 754 failed",
+   "v1": "10496 / 755 (+state/state_skinparam_state_fontname)",
+   "v2": "10497 / 754, failure names identical"
+  }
+ },
+ "answer": "Exactly one golden depends on the label-keyed branch (state/state_skinparam_state_fontname, `skinparam state { FontName Arial }`, states A and B): it is lost in both tiers when the branch is deleted, and no perturbation depends on it. The traced replacement (Arial advance table) keeps that golden in both tiers, loses nothing in 481 Arial-selectable goldens/perturbations, and gains 5 (base) / 6 (tip) held-out Arial state pairs. The branch inflates each tier by 1 only relative to the untraced SansSerif fallback."
+}

@@ -1,0 +1,9 @@
+@startuml
+skinparam stateBackgroundColor #7a3c91ff
+state "Twin Harbor" as Harbor {
+state West
+--
+state East : cargo manifest
+}
+Harbor : port authority
+@enduml

@@ -1,0 +1,534 @@
+{
+ "batch": "M9A",
+ "cases": [
+  {
+   "name": "m9a_ci_seq_message",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "sequence"
+   ]
+  },
+  {
+   "name": "m9a_ci_seq_message_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "sequence",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ci_seq_participant",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "sequence"
+   ]
+  },
+  {
+   "name": "m9a_ci_seq_participant_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "sequence",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ci_seq_note",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "sequence",
+    "note"
+   ]
+  },
+  {
+   "name": "m9a_ci_seq_note_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "sequence",
+    "note",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ci_seq_bolditalic",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "sequence"
+   ]
+  },
+  {
+   "name": "m9a_ci_seq_bolditalic_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "sequence",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ci_act_action",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "activity"
+   ]
+  },
+  {
+   "name": "m9a_ci_act_action_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "activity",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ci_act_note",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "activity",
+    "note"
+   ]
+  },
+  {
+   "name": "m9a_ci_act_note_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "activity",
+    "note",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ci_act_bolditalic",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "activity"
+   ]
+  },
+  {
+   "name": "m9a_ci_act_bolditalic_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "activity",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ci_class_note",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "class",
+    "note"
+   ]
+  },
+  {
+   "name": "m9a_ci_class_note_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "class",
+    "note",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ci_note_left",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "class",
+    "note"
+   ]
+  },
+  {
+   "name": "m9a_ci_note_left_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "class",
+    "note",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ci_interface",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "class"
+   ]
+  },
+  {
+   "name": "m9a_ci_interface_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "class",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ci_abstract_member",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "class"
+   ]
+  },
+  {
+   "name": "m9a_ci_abstract_member_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "class",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ci_abstract_bold",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "class",
+    "bolditalic"
+   ]
+  },
+  {
+   "name": "m9a_ci_abstract_bold_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "class",
+    "bolditalic",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_cb_bold_class",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "class",
+    "bold-blocklisted"
+   ]
+  },
+  {
+   "name": "m9a_cb_bold_class_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "class",
+    "bold-blocklisted",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ci_usecase_actor",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "usecase"
+   ]
+  },
+  {
+   "name": "m9a_ci_usecase_actor_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "usecase",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ci_state_desc",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "state"
+   ]
+  },
+  {
+   "name": "m9a_ci_state_desc_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "state",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ci_act_note_font",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "activity",
+    "note"
+   ]
+  },
+  {
+   "name": "m9a_ci_act_note_font_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "activity",
+    "note",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ci_class_note_font",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "class",
+    "note"
+   ]
+  },
+  {
+   "name": "m9a_ci_class_note_font_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "class",
+    "note",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_vi_hebrew_italic",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "verdana"
+   ]
+  },
+  {
+   "name": "m9a_vi_hebrew_italic_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "verdana",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_mi_menlo_italic",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "menlo"
+   ]
+  },
+  {
+   "name": "m9a_mi_menlo_italic_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "menlo",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_ai_arial_italic",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "arial"
+   ]
+  },
+  {
+   "name": "m9a_ai_arial_italic_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "italic-face",
+    "arial",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_bidi_p2029_pdf_verdana",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "verdana"
+   ]
+  },
+  {
+   "name": "m9a_bidi_p2029_pdf_verdana_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "verdana",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_bidi_p2029_pdf_space_verdana",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "verdana"
+   ]
+  },
+  {
+   "name": "m9a_bidi_p2029_pdf_space_verdana_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "verdana",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_bidi_nel_pdf_verdana",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "verdana"
+   ]
+  },
+  {
+   "name": "m9a_bidi_nel_pdf_verdana_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "verdana",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_bidi_nel_pdf_space_verdana",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "verdana"
+   ]
+  },
+  {
+   "name": "m9a_bidi_nel_pdf_space_verdana_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "verdana",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_bidi_p2029_mixed_verdana",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "verdana",
+    "mixed"
+   ]
+  },
+  {
+   "name": "m9a_bidi_p2029_mixed_verdana_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "verdana",
+    "mixed",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_lt_verdana_beng_link",
+   "intended_valid": true,
+   "axes": [
+    "link-font",
+    "verdana"
+   ]
+  },
+  {
+   "name": "m9a_lt_verdana_beng_link_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "link-font",
+    "verdana",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_lt_arial_guru_link",
+   "intended_valid": true,
+   "axes": [
+    "link-font",
+    "arial"
+   ]
+  },
+  {
+   "name": "m9a_lt_arial_guru_link_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "link-font",
+    "arial",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_lt_verdana_size_link",
+   "intended_valid": true,
+   "axes": [
+    "link-font",
+    "verdana",
+    "arrow-font-size"
+   ]
+  },
+  {
+   "name": "m9a_lt_verdana_size_link_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "link-font",
+    "verdana",
+    "arrow-font-size",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_lt_courier_telu_link",
+   "intended_valid": true,
+   "axes": [
+    "link-font",
+    "courier"
+   ]
+  },
+  {
+   "name": "m9a_lt_courier_telu_link_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "link-font",
+    "courier",
+    "control"
+   ]
+  },
+  {
+   "name": "m9a_lt_arrowfont_link",
+   "intended_valid": true,
+   "axes": [
+    "link-font",
+    "arrow-font-name"
+   ]
+  },
+  {
+   "name": "m9a_lt_arrowsize_link",
+   "intended_valid": true,
+   "axes": [
+    "link-font",
+    "arrow-font-size"
+   ]
+  }
+ ]
+}

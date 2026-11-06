@@ -1,0 +1,32 @@
+{
+  "compile_argv": [
+    "rustc",
+    "--edition=2024",
+    "--test",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/ratchet-scratch/crates/rustuml/tests/pipe_mode.rs",
+    "-L",
+    "dependency=/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/target-after/release/deps",
+    "--extern",
+    "roxmltree=/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/target-after/release/deps/libroxmltree-d396f0ab46122ad3.rlib",
+    "--extern",
+    "sha2=/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/target-after/release/deps/libsha2-7947d60afadbd894.rlib",
+    "-o",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/ratchet-scratch/test"
+  ],
+  "results": [
+    {
+      "mode": "control",
+      "exit": 0
+    },
+    {
+      "mode": "new",
+      "exit": 101
+    },
+    {
+      "mode": "repair",
+      "exit": 101
+    }
+  ],
+  "unchanged_test_source": true,
+  "scratch_removed": true
+}

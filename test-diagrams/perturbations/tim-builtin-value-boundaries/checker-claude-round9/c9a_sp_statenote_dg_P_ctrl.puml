@@ -1,0 +1,7 @@
+@startuml
+state Quay
+note right of Quay
+quay
+אב 12
+end note
+@enduml

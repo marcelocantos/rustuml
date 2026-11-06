@@ -1,0 +1,4 @@
+@startuml
+participant "Vault ࡰ" as V
+V -> V : ok 􏿽
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+!$n=4
+!function $step()
+!$n=$n+1
+!return 10
+!endfunction
+!function $join($a,$b)
+!return %string($a)+"/"+%string($b)
+!endfunction
+!$v=($step()>$n)&&($n==4)
+!if ($step()>$n)||($n==0)
+class "yes / $v / $n" as Conditional
+!else
+class "no / $v / $n" as Conditional
+!endif
+@enduml

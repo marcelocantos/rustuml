@@ -1,0 +1,11 @@
+test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/evidence/chr_types/before/comparison.stdout:20: new blank line at EOF.
+test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/evidence/units_rejoin/before/comparison.stdout:20: new blank line at EOF.
+test-diagrams/perturbations/tim-call-resolution-arity/checker5/evidence/adjacent_hsl_alpha/after/comparison.stdout:20: new blank line at EOF.
+test-diagrams/perturbations/tim-call-resolution-arity/checker5/evidence/adjacent_hsl_alpha/before/comparison.stdout:20: new blank line at EOF.
+test-diagrams/perturbations/tim-named-key-operands/checker5/evidence/keys_exact_spelling/after/comparison.stdout:20: new blank line at EOF.
+test-diagrams/perturbations/tim-named-key-operands/checker5/evidence/keys_local_snapshot/before/comparison.stdout:20: new blank line at EOF.
+test-diagrams/perturbations/tim-original-macro-scanning/checker5/evidence/macro_literals/before/comparison.stdout:17: new blank line at EOF.
+test-diagrams/perturbations/tim-original-macro-scanning/checker5/evidence/macro_multiline_suffix/before/comparison.stdout:5: new blank line at EOF.
+test-diagrams/perturbations/tim-original-macro-scanning/checker5/evidence/macro_original_prefix/after/comparison.stdout:17: new blank line at EOF.
+test-diagrams/perturbations/tim-original-macro-scanning/checker5/evidence/macro_original_prefix/before/comparison.stdout:14: new blank line at EOF.
+test-diagrams/perturbations/tim-sub-marker-layers/checker5/evidence/sub_suffix_valid/before/comparison.stdout:19: new blank line at EOF.

@@ -1,0 +1,5 @@
+thread 'font_chain::tests::coverage_table_is_the_stored_reference_host_extraction' (54044958) panicked at crates/rustuml-render/src/font_chain.rs:819:13:
+assertion `left == right` failed: tools/font-chain-reference/colossus-primary-faces
+  left: "daabd95a14c0b17992ad0354bd5b8a21ac1a4b2821fa6c15767fbc28d421d62d"
+ right: "483ba7caf170d024a750a75bb61ddd7c74475030dbdb71733601f77fb4e14ad8"
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 850 filtered out; finished in 0.04s

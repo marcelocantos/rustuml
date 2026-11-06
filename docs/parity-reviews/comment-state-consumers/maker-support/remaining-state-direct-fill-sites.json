@@ -1,0 +1,249 @@
+[
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 1342,
+    "attribute": "fill",
+    "template": "{NOTE_FILL}",
+    "expressions": [
+      "NOTE_FILL"
+    ],
+    "macro": "write!(\n            svg,\n            r#\"<path d=\"M{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;\"/>\"#,\n            fmt_f(x),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y + pointer_y),\n            fmt_f(target.0),\n            fmt_f(target.1),\n            fmt_f(x),\n            fmt_f(y + pointer_y + 8.0),\n            fmt_f(x),\n            fmt_f(y + height),\n            fmt_f(x),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + NOTE_EAR),\n            fmt_f(x + width - NOTE_EAR),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y),\n        )",
+    "context": "\n    } else {\n        (note_contact.1 - y - 4.0).clamp(NOTE_EAR, height - 8.0)\n    };\n    write!(\n        svg,\n        r#\"<g class=\"entity\" data-qualified-name=\"{}\" data-source-line=\"{}\" id=\"{}\">\"#,\n        crate::svg::escape_attribute(&position.id),\n        note.source_line,\n        position.entity_id,\n    )\n    .unwrap();\n\n    // Java provenance: `Opale.getPolygonLeft/getPolygonRight` splices the\n    // hidden edge's note-side and state-side endpoints into the note outline.\n    if position.right {\n        write!(\n            svg,\n            r#\"<path d=\"M{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;\"/>\"#,\n            fmt_f(x),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y + pointer_y),\n            fmt_f(target.0),\n            fmt_f(target.1),\n            fmt_f(x),\n            fmt_f(y + pointer_y + 8.0),\n            fmt_f(x),\n            fmt_f(y + height),\n            fmt_f(x),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + NOTE_EAR),\n            fmt_f(x + width - NOTE_EAR),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y),\n        )",
+    "sequence": false,
+    "scope": "Fixed-color constant; no user-derived alpha bypass"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 1372,
+    "attribute": "fill",
+    "template": "{NOTE_FILL}",
+    "expressions": [
+      "NOTE_FILL"
+    ],
+    "macro": "write!(\n            svg,\n            r#\"<path d=\"M{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;\"/>\"#,\n            fmt_f(x),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y + height),\n            fmt_f(x),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + pointer_y + 8.0),\n            fmt_f(target.0),\n            fmt_f(target.1),\n            fmt_f(x + width),\n            fmt_f(y + pointer_y),\n            fmt_f(x + width),\n            fmt_f(y + NOTE_EAR),\n            fmt_f(x + width - NOTE_EAR),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y),\n        )",
+    "context": "\n            fmt_f(y + pointer_y + 8.0),\n            fmt_f(x),\n            fmt_f(y + height),\n            fmt_f(x),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + NOTE_EAR),\n            fmt_f(x + width - NOTE_EAR),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y),\n        )\n        .unwrap();\n    } else {\n        write!(\n            svg,\n            r#\"<path d=\"M{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;\"/>\"#,\n            fmt_f(x),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y + height),\n            fmt_f(x),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + pointer_y + 8.0),\n            fmt_f(target.0),\n            fmt_f(target.1),\n            fmt_f(x + width),\n            fmt_f(y + pointer_y),\n            fmt_f(x + width),\n            fmt_f(y + NOTE_EAR),\n            fmt_f(x + width - NOTE_EAR),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y),\n        )",
+    "sequence": false,
+    "scope": "Fixed-color constant; no user-derived alpha bypass"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 1402,
+    "attribute": "fill",
+    "template": "{NOTE_FILL}",
+    "expressions": [
+      "NOTE_FILL"
+    ],
+    "macro": "write!(\n        svg,\n        r#\"<path d=\"M{},{} L{},{} L{},{} L{},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;\"/>\"#,\n        fmt_f(x + width - NOTE_EAR),\n        fmt_f(y),\n        fmt_f(x + width - NOTE_EAR),\n        fmt_f(y + NOTE_EAR),\n        fmt_f(x + width),\n        fmt_f(y + NOTE_EAR),\n        fmt_f(x + width - NOTE_EAR),\n        fmt_f(y),\n    )",
+    "context": "\n            fmt_f(x + width),\n            fmt_f(y + height),\n            fmt_f(x + width),\n            fmt_f(y + pointer_y + 8.0),\n            fmt_f(target.0),\n            fmt_f(target.1),\n            fmt_f(x + width),\n            fmt_f(y + pointer_y),\n            fmt_f(x + width),\n            fmt_f(y + NOTE_EAR),\n            fmt_f(x + width - NOTE_EAR),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y),\n            fmt_f(x),\n            fmt_f(y),\n        )\n        .unwrap();\n    }\n    write!(\n        svg,\n        r#\"<path d=\"M{},{} L{},{} L{},{} L{},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;\"/>\"#,\n        fmt_f(x + width - NOTE_EAR),\n        fmt_f(y),\n        fmt_f(x + width - NOTE_EAR),\n        fmt_f(y + NOTE_EAR),\n        fmt_f(x + width),\n        fmt_f(y + NOTE_EAR),\n        fmt_f(x + width - NOTE_EAR),\n        fmt_f(y),\n    )",
+    "sequence": false,
+    "scope": "Fixed-color constant; no user-derived alpha bypass"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 1452,
+    "attribute": "fill",
+    "template": "{NOTE_FILL}",
+    "expressions": [
+      "NOTE_FILL"
+    ],
+    "macro": "write!(\n        svg,\n        r#\"<path d=\"M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;\"/>\"#,\n        fmt_f(x),\n        fmt_f(y),\n        fmt_f(x),\n        fmt_f(y + height),\n        fmt_f(x + width),\n        fmt_f(y + height),\n        fmt_f(x + width),\n        fmt_f(y + NOTE_EAR),\n        fmt_f(x + width - NOTE_EAR),\n        fmt_f(y),\n        fmt_f(x),\n        fmt_f(y),\n    )",
+    "context": "\n                font_family: \"sans-serif\",\n                fill: DEFAULT_TEXT_COLOR,\n                bold: false,\n                italic: false,\n                underline: false,\n                skip_underline: false,\n            },\n        );\n        text_y += crate::plantuml_metrics::text_height(LINK_FONT_SIZE);\n    }\n    svg.push_str(\"</g>\");\n}\n\nfn emit_plain_note_body(\n    svg: &mut String,\n    note: &StateNote,\n    x: f64,\n    y: f64,\n    width: f64,\n    height: f64,\n    corner_stroke_width: f64,\n) {\n    write!(\n        svg,\n        r#\"<path d=\"M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;\"/>\"#,\n        fmt_f(x),\n        fmt_f(y),\n        fmt_f(x),\n        fmt_f(y + height),\n        fmt_f(x + width),\n        fmt_f(y + height),\n        fmt_f(x + width),\n        fmt_f(y + NOTE_EAR),\n        fmt_f(x + width - NOTE_EAR),\n        fmt_f(y),\n        fmt_f(x),\n        fmt_f(y),\n    )",
+    "sequence": false,
+    "scope": "Fixed-color constant; no user-derived alpha bypass"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 1469,
+    "attribute": "fill",
+    "template": "{NOTE_FILL}",
+    "expressions": [
+      "NOTE_FILL"
+    ],
+    "macro": "write!(\n        svg,\n        r#\"<path d=\"M{},{} L{},{} L{},{} L{},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:{};\"/>\"#,\n        fmt_f(x + width - NOTE_EAR),\n        fmt_f(y),\n        fmt_f(x + width - NOTE_EAR),\n        fmt_f(y + NOTE_EAR),\n        fmt_f(x + width),\n        fmt_f(y + NOTE_EAR),\n        fmt_f(x + width - NOTE_EAR),\n        fmt_f(y),\n        fmt_f(corner_stroke_width),\n    )",
+    "context": "\n    corner_stroke_width: f64,\n) {\n    write!(\n        svg,\n        r#\"<path d=\"M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;\"/>\"#,\n        fmt_f(x),\n        fmt_f(y),\n        fmt_f(x),\n        fmt_f(y + height),\n        fmt_f(x + width),\n        fmt_f(y + height),\n        fmt_f(x + width),\n        fmt_f(y + NOTE_EAR),\n        fmt_f(x + width - NOTE_EAR),\n        fmt_f(y),\n        fmt_f(x),\n        fmt_f(y),\n    )\n    .unwrap();\n    write!(\n        svg,\n        r#\"<path d=\"M{},{} L{},{} L{},{} L{},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:{};\"/>\"#,\n        fmt_f(x + width - NOTE_EAR),\n        fmt_f(y),\n        fmt_f(x + width - NOTE_EAR),\n        fmt_f(y + NOTE_EAR),\n        fmt_f(x + width),\n        fmt_f(y + NOTE_EAR),\n        fmt_f(x + width - NOTE_EAR),\n        fmt_f(y),\n        fmt_f(corner_stroke_width),\n    )",
+    "sequence": false,
+    "scope": "Fixed-color constant; no user-derived alpha bypass"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 3789,
+    "attribute": "fill",
+    "template": "{PSEUDO_COLOR}",
+    "expressions": [
+      "PSEUDO_COLOR"
+    ],
+    "macro": "write!(\n                    svg,\n                    r#\"<g class=\"start_entity\" data-qualified-name=\"{qualified_name}\" data-source-line=\"{source_line}\" id=\"{}\"><ellipse cx=\"{}\" cy=\"{}\" fill=\"{PSEUDO_COLOR}\"{default_shadow_attr} rx=\"{START_RADIUS}\" ry=\"{START_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/></g>\"#,\n                    autonomous_entity_id(context.entity_ids, id),\n                    fmt_f(cx),\n                    fmt_f(cy), qualified_name = crate::svg::escape_attribute(&qualified_name),\n)",
+    "context": "\n    let default_style = autonomous_state_style(context.diagram, context.skin, None);\n    let default_shadow_attr = autonomous_shadow_attr(context, default_style.shadow);\n    for (id, cx, cy, width, height) in &scope.positions {\n        let layout_cy = *cy;\n        let cx = cx + offset_x;\n        let cy = cy + offset_y;\n        if let Some(qualified_name) = autonomous_pseudo_name(id) {\n            let source_line = autonomous_pseudo_source_line(context.diagram, id);\n            if id.starts_with(\"__start__\") {\n                write!(\n                    svg,\n                    r#\"<g class=\"start_entity\" data-qualified-name=\"{qualified_name}\" data-source-line=\"{source_line}\" id=\"{}\"><ellipse cx=\"{}\" cy=\"{}\" fill=\"{PSEUDO_COLOR}\"{default_shadow_attr} rx=\"{START_RADIUS}\" ry=\"{START_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/></g>\"#,\n                    autonomous_entity_id(context.entity_ids, id),\n                    fmt_f(cx),\n                    fmt_f(cy), qualified_name = crate::svg::escape_attribute(&qualified_name),\n)",
+    "sequence": false,
+    "scope": "Fixed-color constant; no user-derived alpha bypass"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 3798,
+    "attribute": "fill",
+    "template": "{PSEUDO_COLOR}",
+    "expressions": [
+      "PSEUDO_COLOR"
+    ],
+    "macro": "write!(\n                    svg,\n                    r#\"<g class=\"end_entity\" data-qualified-name=\"{qualified_name}\" data-source-line=\"{source_line}\" id=\"{}\"><ellipse cx=\"{}\" cy=\"{}\" fill=\"none\"{default_shadow_attr} rx=\"{END_OUTER_RADIUS}\" ry=\"{END_OUTER_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/><ellipse cx=\"{}\" cy=\"{}\" fill=\"{PSEUDO_COLOR}\" rx=\"{END_INNER_RADIUS}\" ry=\"{END_INNER_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/></g>\"#,\n                    autonomous_entity_id(context.entity_ids, id),\n                    fmt_f(cx),\n                    fmt_f(cy),\n                    fmt_f(cx),\n                    fmt_f(cy), qualified_name = crate::svg::escape_attribute(&qualified_name),\n)",
+    "context": "\n                    r#\"<g class=\"start_entity\" data-qualified-name=\"{qualified_name}\" data-source-line=\"{source_line}\" id=\"{}\"><ellipse cx=\"{}\" cy=\"{}\" fill=\"{PSEUDO_COLOR}\"{default_shadow_attr} rx=\"{START_RADIUS}\" ry=\"{START_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/></g>\"#,\n                    autonomous_entity_id(context.entity_ids, id),\n                    fmt_f(cx),\n                    fmt_f(cy), qualified_name = crate::svg::escape_attribute(&qualified_name),\n)\n                .unwrap();\n            } else {\n                write!(\n                    svg,\n                    r#\"<g class=\"end_entity\" data-qualified-name=\"{qualified_name}\" data-source-line=\"{source_line}\" id=\"{}\"><ellipse cx=\"{}\" cy=\"{}\" fill=\"none\"{default_shadow_attr} rx=\"{END_OUTER_RADIUS}\" ry=\"{END_OUTER_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/><ellipse cx=\"{}\" cy=\"{}\" fill=\"{PSEUDO_COLOR}\" rx=\"{END_INNER_RADIUS}\" ry=\"{END_INNER_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/></g>\"#,\n                    autonomous_entity_id(context.entity_ids, id),\n                    fmt_f(cx),\n                    fmt_f(cy),\n                    fmt_f(cx),\n                    fmt_f(cy), qualified_name = crate::svg::escape_attribute(&qualified_name),\n)",
+    "sequence": false,
+    "scope": "Fixed-color constant; no user-derived alpha bypass"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 6833,
+    "attribute": "fill",
+    "template": "{TEXT_COLOR}",
+    "expressions": [
+      "TEXT_COLOR"
+    ],
+    "macro": "write!(\n            svg,\n            r#\"<text fill=\"{TEXT_COLOR}\" font-family=\"monospace\" font-size=\"10\" x=\"10\" y=\"13\">Please use &apos;!option handwritten true&apos; to enable handwritten</text>\"#,\n        )",
+    "context": "\n            r#\"<rect {bg_color} height=\"{h}\" style=\"stroke:none;stroke-width:1;\" width=\"{w}\" x=\"0\" y=\"0\"/>\"#,\n            bg_color = crate::svg::fill_attributes(&bg_color),\n        )\n        .unwrap();\n    }\n\n    // Handwritten compatibility notice.\n    let has_deprecated_handwritten = has_deprecated_handwritten_skinparam(&diagram.meta.skinparams);\n    if has_deprecated_handwritten\n        && let Some(warning) = oracle.and_then(|orc| orc.handwritten_warning.as_ref())\n    {\n        emit_handwritten_warning(&mut svg, warning);\n    } else if has_deprecated_handwritten {\n        write!(\n            svg,\n            r#\"<text fill=\"{TEXT_COLOR}\" font-family=\"monospace\" font-size=\"10\" x=\"10\" y=\"13\">Please use &apos;!option handwritten true&apos; to enable handwritten</text>\"#,\n        )",
+    "sequence": false,
+    "scope": "Remaining direct text fill consumer; shared shape routing does not alter text painting"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 7083,
+    "attribute": "fill",
+    "template": "{TEXT_COLOR}",
+    "expressions": [
+      "TEXT_COLOR"
+    ],
+    "macro": "write!(\n                svg,\n                r#\"<text fill=\"{TEXT_COLOR}\" font-family=\"sans-serif\" font-size=\"{STATE_FONT_SIZE}\" lengthAdjust=\"spacing\" textLength=\"{}\" x=\"{}\" y=\"{}\">{label}</text>\"#,\n                fmt_f(tw),\n                fmt_f(px - tw / 2.0),\n                fmt_f(text_y),\n            )",
+    "context": "\n                r#\"<ellipse cx=\"{}\" cy=\"{}\" {STATE_FILL} rx=\"{h_radius}\" ry=\"{h_radius}\" style=\"stroke:{STROKE_COLOR};stroke-width:0.5;\"/>\"#,\n                fmt_f(px),\n                fmt_f(py),\n                STATE_FILL = crate::svg::fill_attributes(&(STATE_FILL)),\n            )\n            .unwrap();\n            let label = history_marker_label(id);\n            let tw = text_render::measure(label, STATE_FONT_SIZE, false);\n            let text_y = py + HISTORY_LABEL_BASELINE_OFFSET;\n            write!(\n                svg,\n                r#\"<text fill=\"{TEXT_COLOR}\" font-family=\"sans-serif\" font-size=\"{STATE_FONT_SIZE}\" lengthAdjust=\"spacing\" textLength=\"{}\" x=\"{}\" y=\"{}\">{label}</text>\"#,\n                fmt_f(tw),\n                fmt_f(px - tw / 2.0),\n                fmt_f(text_y),\n            )",
+    "sequence": false,
+    "scope": "Remaining direct text fill consumer; shared shape routing does not alter text painting"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 7232,
+    "attribute": "fill",
+    "template": "{BAR_COLOR}",
+    "expressions": [
+      "BAR_COLOR"
+    ],
+    "macro": "write!(\n                        svg,\n                        r#\"<rect fill=\"{BAR_COLOR}\" height=\"{}\" style=\"stroke:none;stroke-width:1;\" width=\"{}\" x=\"{}\" y=\"{}\"/>\"#,\n                        fmt_f(bh_bar),\n                        fmt_f(bw_bar),\n                        fmt_f(bx),\n                        fmt_f(by),\n                    )",
+    "context": "\n                        oracle.and_then(|orc| orc.entities.get(&format!(\"__bar_{bar_index}__\")));\n                    let (bx, by, bw_bar, bh_bar) = if let Some(r) = bar_rect {\n                        (r.x, r.y, r.width, r.height)\n                    } else {\n                        (\n                            cx - BAR_WIDTH / 2.0,\n                            cy - BAR_HEIGHT / 2.0,\n                            BAR_WIDTH,\n                            BAR_HEIGHT,\n                        )\n                    };\n                    write!(\n                        svg,\n                        r#\"<rect fill=\"{BAR_COLOR}\" height=\"{}\" style=\"stroke:none;stroke-width:1;\" width=\"{}\" x=\"{}\" y=\"{}\"/>\"#,\n                        fmt_f(bh_bar),\n                        fmt_f(bw_bar),\n                        fmt_f(bx),\n                        fmt_f(by),\n                    )",
+    "sequence": false,
+    "scope": "Fixed-color constant; no user-derived alpha bypass"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 7278,
+    "attribute": "fill",
+    "template": "{TEXT_COLOR}",
+    "expressions": [
+      "TEXT_COLOR"
+    ],
+    "macro": "write!(\n                        svg,\n                        r#\"<text fill=\"{TEXT_COLOR}\" font-family=\"sans-serif\" font-size=\"{STATE_FONT_SIZE}\" lengthAdjust=\"spacing\" textLength=\"{}\" x=\"{}\" y=\"{}\">H</text>\"#,\n                        fmt_f(tw),\n                        fmt_f(px - tw / 2.0),\n                        fmt_f(text_y),\n                    )",
+    "context": "\n                        STATE_FILL = crate::svg::fill_attributes(&(STATE_FILL)),\n                    )\n                    .unwrap();\n                    let tw = text_render::measure(\"H\", STATE_FONT_SIZE, false);\n                    // PlantUML's actual text baseline is empirically at\n                    // py + HISTORY_LABEL_BASELINE_OFFSET for the 14pt\n                    // sans-serif \"H\" glyph; the\n                    // analytic \"py + font_size/3\" form misses by ~1px.\n                    let text_y = py + HISTORY_LABEL_BASELINE_OFFSET;\n                    write!(\n                        svg,\n                        r#\"<text fill=\"{TEXT_COLOR}\" font-family=\"sans-serif\" font-size=\"{STATE_FONT_SIZE}\" lengthAdjust=\"spacing\" textLength=\"{}\" x=\"{}\" y=\"{}\">H</text>\"#,\n                        fmt_f(tw),\n                        fmt_f(px - tw / 2.0),\n                        fmt_f(text_y),\n                    )",
+    "sequence": false,
+    "scope": "Remaining direct text fill consumer; shared shape routing does not alter text painting"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 7316,
+    "attribute": "fill",
+    "template": "{TEXT_COLOR}",
+    "expressions": [
+      "TEXT_COLOR"
+    ],
+    "macro": "write!(\n                        svg,\n                        r#\"<text fill=\"{TEXT_COLOR}\" font-family=\"sans-serif\" font-size=\"{STATE_FONT_SIZE}\" lengthAdjust=\"spacing\" textLength=\"{}\" x=\"{}\" y=\"{}\">H*</text>\"#,\n                        fmt_f(tw),\n                        fmt_f(px - tw / 2.0),\n                        fmt_f(text_y),\n                    )",
+    "context": "\n                        r#\"<ellipse cx=\"{}\" cy=\"{}\" {STATE_FILL} rx=\"{h_radius}\" ry=\"{h_radius}\" style=\"stroke:{STROKE_COLOR};stroke-width:0.5;\"/>\"#,\n                        fmt_f(px),\n                        fmt_f(py),\n                        STATE_FILL = crate::svg::fill_attributes(&(STATE_FILL)),\n                    )\n                    .unwrap();\n                    let tw = text_render::measure(\"H*\", STATE_FONT_SIZE, false);\n                    let text_y = py + HISTORY_LABEL_BASELINE_OFFSET;\n                    write!(\n                        svg,\n                        r#\"<text fill=\"{TEXT_COLOR}\" font-family=\"sans-serif\" font-size=\"{STATE_FONT_SIZE}\" lengthAdjust=\"spacing\" textLength=\"{}\" x=\"{}\" y=\"{}\">H*</text>\"#,\n                        fmt_f(tw),\n                        fmt_f(px - tw / 2.0),\n                        fmt_f(text_y),\n                    )",
+    "sequence": false,
+    "scope": "Remaining direct text fill consumer; shared shape routing does not alter text painting"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 7806,
+    "attribute": "fill",
+    "template": "{NOTE_FILL}",
+    "expressions": [
+      "NOTE_FILL"
+    ],
+    "macro": "write!(\n                        svg,\n                        r#\"<path d=\"{d}\" fill=\"{NOTE_FILL}\" style=\"{style}\"/>\"#,\n                        style = crate::svg::escape_attribute(style),\n                    )",
+    "context": "\n            // widths in PlantUML's output.\n            let mut first_d_for_left: Option<&str> = None;\n            if let Some(paths) = &rect.glyph_path_d {\n                for piece in paths.split('|') {\n                    let (d, style) = piece\n                        .split_once(\"#STYLE#\")\n                        .unwrap_or((piece, \"stroke:#181818;stroke-width:0.5;\"));\n                    if first_d_for_left.is_none() {\n                        first_d_for_left = Some(d);\n                    }\n                    write!(\n                        svg,\n                        r#\"<path d=\"{d}\" fill=\"{NOTE_FILL}\" style=\"{style}\"/>\"#,\n                        style = crate::svg::escape_attribute(style),\n                    )",
+    "sequence": false,
+    "scope": "Fixed-color constant; no user-derived alpha bypass"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 7974,
+    "attribute": "fill",
+    "template": "{NOTE_FILL}",
+    "expressions": [
+      "NOTE_FILL"
+    ],
+    "macro": "write!(\n            svg,\n            r#\"<path d=\"M{},{} L{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{STROKE_COLOR};stroke-width:0.5;\"/>\"#,\n            fmt_f(r), fmt_f(t + ear),\n            fmt_f(r), fmt_f(arrow_y),\n            fmt_f(r - NOTE_H_GAP + 2.0), fmt_f(arrow_y + 4.0),\n            fmt_f(r), fmt_f(arrow_y + 8.0),\n            fmt_f(r), fmt_f(t + nh),\n            fmt_f(r), fmt_f(t + nh),\n            fmt_f(r), fmt_f(t + nh),\n            fmt_f(r + nw), fmt_f(t + nh),\n            fmt_f(r + nw), fmt_f(t + nh),\n            fmt_f(r + nw), fmt_f(t + ear),\n            fmt_f(r + nw - ear), fmt_f(t),\n            fmt_f(r), fmt_f(t),\n            fmt_f(r), fmt_f(t + ear),\n        )",
+    "context": "\n        // Note box as PlantUML-style path (with dog-ear and pointer line).\n        // The note has a pointer line going from the left edge to the state.\n        let ear = NOTE_EAR;\n        let r = note_x;\n        let t = note_y;\n        let nw = note_w;\n        let nh = note_h;\n\n        // Compute the mid-y of the note for the pointer arrow.\n        let arrow_y = t + nh / 2.0;\n        let _arrow_target_x = r - NOTE_H_GAP;\n\n        // Note box path (matches PlantUML's note rendering).\n        // PlantUML uses <path> for the note body shape.\n        write!(\n            svg,\n            r#\"<path d=\"M{},{} L{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{STROKE_COLOR};stroke-width:0.5;\"/>\"#,\n            fmt_f(r), fmt_f(t + ear),\n            fmt_f(r), fmt_f(arrow_y),\n            fmt_f(r - NOTE_H_GAP + 2.0), fmt_f(arrow_y + 4.0),\n            fmt_f(r), fmt_f(arrow_y + 8.0),\n            fmt_f(r), fmt_f(t + nh),\n            fmt_f(r), fmt_f(t + nh),\n            fmt_f(r), fmt_f(t + nh),\n            fmt_f(r + nw), fmt_f(t + nh),\n            fmt_f(r + nw), fmt_f(t + nh),\n            fmt_f(r + nw), fmt_f(t + ear),\n            fmt_f(r + nw - ear), fmt_f(t),\n            fmt_f(r), fmt_f(t),\n            fmt_f(r), fmt_f(t + ear),\n        )",
+    "sequence": false,
+    "scope": "Fixed-color constant; no user-derived alpha bypass"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 7994,
+    "attribute": "fill",
+    "template": "{NOTE_FILL}",
+    "expressions": [
+      "NOTE_FILL"
+    ],
+    "macro": "write!(\n            svg,\n            r#\"<path d=\"M{},{} L{},{} L{},{} L{},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{STROKE_COLOR};stroke-width:0.5;\"/>\"#,\n            fmt_f(r + nw - ear), fmt_f(t),\n            fmt_f(r + nw - ear), fmt_f(t + ear),\n            fmt_f(r + nw), fmt_f(t + ear),\n            fmt_f(r + nw - ear), fmt_f(t),\n        )",
+    "context": "\n            fmt_f(r - NOTE_H_GAP + 2.0), fmt_f(arrow_y + 4.0),\n            fmt_f(r), fmt_f(arrow_y + 8.0),\n            fmt_f(r), fmt_f(t + nh),\n            fmt_f(r), fmt_f(t + nh),\n            fmt_f(r), fmt_f(t + nh),\n            fmt_f(r + nw), fmt_f(t + nh),\n            fmt_f(r + nw), fmt_f(t + nh),\n            fmt_f(r + nw), fmt_f(t + ear),\n            fmt_f(r + nw - ear), fmt_f(t),\n            fmt_f(r), fmt_f(t),\n            fmt_f(r), fmt_f(t + ear),\n        )\n        .unwrap();\n\n        // Dog-ear fold.\n        write!(\n            svg,\n            r#\"<path d=\"M{},{} L{},{} L{},{} L{},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{STROKE_COLOR};stroke-width:0.5;\"/>\"#,\n            fmt_f(r + nw - ear), fmt_f(t),\n            fmt_f(r + nw - ear), fmt_f(t + ear),\n            fmt_f(r + nw), fmt_f(t + ear),\n            fmt_f(r + nw - ear), fmt_f(t),\n        )",
+    "sequence": false,
+    "scope": "Fixed-color constant; no user-derived alpha bypass"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 8959,
+    "attribute": "fill",
+    "template": "{NOTE_FILL}",
+    "expressions": [
+      "NOTE_FILL"
+    ],
+    "macro": "write!(\n                    svg,\n                    r#\"<path d=\"{d}\" fill=\"{NOTE_FILL}\" style=\"{style}\"/>\"#,\n                    style = crate::svg::escape_attribute(style),\n                )",
+    "context": "\n                    bold: arrow_font_bold,\n                    italic: arrow_font_italic,\n                    underline: false,\n                    skip_underline: false,\n                },\n            );\n            svg.push_str(&text_buf);\n        };\n        let emit_extra_paths = |svg: &mut String| {\n            for (d, style) in &oracle_edge.extra_paths {\n                let style = style\n                    .as_deref()\n                    .unwrap_or(\"stroke:#181818;stroke-width:0.5;\");\n                write!(\n                    svg,\n                    r#\"<path d=\"{d}\" fill=\"{NOTE_FILL}\" style=\"{style}\"/>\"#,\n                    style = crate::svg::escape_attribute(style),\n                )",
+    "sequence": false,
+    "scope": "Fixed-color constant; no user-derived alpha bypass"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 9037,
+    "attribute": "fill",
+    "template": "{NOTE_FILL}",
+    "expressions": [
+      "NOTE_FILL"
+    ],
+    "macro": "write!(\n                svg,\n                r#\"<path d=\"{d}\" fill=\"{NOTE_FILL}\" style=\"{style}\"/>\"#,\n                style = crate::svg::escape_attribute(style),\n            )",
+    "context": "\n        r#\"<g class=\"entity\" data-qualified-name=\"{qualified_name}\" data-source-line=\"{source_line}\" id=\"{entity_id}\">\"#, qualified_name = crate::svg::escape_attribute(qualified_name), entity_id = crate::svg::escape_attribute(&entity_id),\n)\n    .unwrap();\n    let mut first_d_for_left: Option<&str> = None;\n    if let Some(paths) = &rect.glyph_path_d {\n        for piece in paths.split('|') {\n            let (d, style) = piece\n                .split_once(\"#STYLE#\")\n                .unwrap_or((piece, \"stroke:#181818;stroke-width:0.5;\"));\n            if first_d_for_left.is_none() {\n                first_d_for_left = Some(d);\n            }\n            write!(\n                svg,\n                r#\"<path d=\"{d}\" fill=\"{NOTE_FILL}\" style=\"{style}\"/>\"#,\n                style = crate::svg::escape_attribute(style),\n            )",
+    "sequence": false,
+    "scope": "Fixed-color constant; no user-derived alpha bypass"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 9280,
+    "attribute": "fill",
+    "template": "{PSEUDO_COLOR}",
+    "expressions": [
+      "PSEUDO_COLOR"
+    ],
+    "macro": "write!(\n                svg,\n                r#\"<g class=\"start_entity\" data-qualified-name=\"{qname}\" data-source-line=\"{source_line}\" id=\"{entity_id}\"><ellipse cx=\"{}\" cy=\"{}\" fill=\"{PSEUDO_COLOR}\" rx=\"{START_RADIUS}\" ry=\"{START_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/></g>\"#,\n                fmt_f(cx),\n                fmt_f(cy), qname = crate::svg::escape_attribute(qname), entity_id = crate::svg::escape_attribute(entity_id),\n)",
+    "context": "\n    let emitted_edge = std::cell::RefCell::new(vec![false; orc.edges.len()]);\n\n    // Helper: emit a start/end pseudo-state group from oracle geometry.\n    let emit_pseudo = |svg: &mut String, qname: &str, is_start: bool, source_line: &str| {\n        let Some(rect) = orc.entities.get(qname) else {\n            return false;\n        };\n        let cx = rect.x + rect.width / 2.0;\n        let cy = rect.y + rect.height / 2.0;\n        let entity_id = rect.entity_id.as_deref().unwrap_or(\"ent0000\");\n        if is_start {\n            write!(\n                svg,\n                r#\"<g class=\"start_entity\" data-qualified-name=\"{qname}\" data-source-line=\"{source_line}\" id=\"{entity_id}\"><ellipse cx=\"{}\" cy=\"{}\" fill=\"{PSEUDO_COLOR}\" rx=\"{START_RADIUS}\" ry=\"{START_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/></g>\"#,\n                fmt_f(cx),\n                fmt_f(cy), qname = crate::svg::escape_attribute(qname), entity_id = crate::svg::escape_attribute(entity_id),\n)",
+    "sequence": false,
+    "scope": "Fixed-color constant; no user-derived alpha bypass"
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "line": 9477,
+    "attribute": "fill",
+    "template": "{BAR_COLOR}",
+    "expressions": [
+      "BAR_COLOR"
+    ],
+    "macro": "write!(\n                svg,\n                r#\"<rect fill=\"{BAR_COLOR}\" height=\"{}\" style=\"stroke:none;stroke-width:1;\" width=\"{}\" x=\"{}\" y=\"{}\"/>\"#,\n                fmt_f(rect.height),\n                fmt_f(rect.width),\n                fmt_f(rect.x),\n                fmt_f(rect.y),\n            )",
+    "context": "\n            return;\n        }\n        if matches!(st.kind, StateKind::Fork | StateKind::Join) {\n            // Fork/join bar \u2014 a bare `<rect>` (no `<g>` wrapper). The oracle\n            // records the bar under `__bar_N__`; pair them in declaration\n            // order via `bar_idx`.\n            let key = format!(\"__bar_{}__\", bar_idx.get());\n            bar_idx.set(bar_idx.get() + 1);\n            let Some(rect) = orc.entities.get(key.as_str()) else {\n                return;\n            };\n            write!(\n                svg,\n                r#\"<rect fill=\"{BAR_COLOR}\" height=\"{}\" style=\"stroke:none;stroke-width:1;\" width=\"{}\" x=\"{}\" y=\"{}\"/>\"#,\n                fmt_f(rect.height),\n                fmt_f(rect.width),\n                fmt_f(rect.x),\n                fmt_f(rect.y),\n            )",
+    "sequence": false,
+    "scope": "Fixed-color constant; no user-derived alpha bypass"
+  }
+]

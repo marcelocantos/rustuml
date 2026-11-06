@@ -1,0 +1,11 @@
+@startuml
+
+
+
+skinparam shadowing true
+class Lantern {
+  +glow : int
+}
+class Wick
+Lantern --> Wick : feeds
+@enduml

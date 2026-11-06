@@ -1,0 +1,25 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      note as Memo
+      0 first oak
+      second oak
+      end note
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Note 0
+  entities: []
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - '0 first oak'
+    - second oak
+    target: null
+    position: null
+    alias: Memo
+    source_line: 3
+  hide_show: []

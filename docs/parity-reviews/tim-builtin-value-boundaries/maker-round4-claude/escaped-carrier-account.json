@@ -1,0 +1,48 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-builtin-value-boundaries",
+ "sub_mechanism": "collision-free carrier for unpaired UTF-16 units; per-format outcomes (round-4 obligation 3)",
+ "status": "maker causal account before draft; independent review required",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-3.json (carrier representation rejected; bounded_next_obligations 1-3)",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "java_locations": [
+  "Java String is a sequence of UTF-16 units, so legitimate supplementary text (for example U+10FFFD, units DBFF DFFD) and an unpaired unit coexist without ambiguity; String.length() counts units (%strlen(U+10FFFD) = 2, tim/builtin/Strlen).",
+  "ToStream.accumDefaultEscape (JDK 21 1693-1781): a legitimate pair in a text node or attribute is written as &#N; (writeCharRef 1735); only unpaired units fail. The round-3 rule for unpaired units is unchanged.",
+  "klimt/drawing/g2d/DriverTextG2d#drawU (119-158): PNG text is Graphics2D.drawString; klimt/drawing/eps/DriverTextEps (81-147): EPS text is TextLayout.getOutline. Neither serializes through ToStream, so an unpaired unit is drawn (missing glyph) and the export does not fail.",
+  "klimt/drawing/txt/UGraphicTxt#writeImage (117-118): -ttxt prints the char area through SecurityUtils.createPrintStream(os, true, UTF_8); asciiart/BasicCharAreaImpl stores one UTF-16 unit per cell (drawStringLR) and the UTF-8 StreamEncoder REPLACE writes '?' for an unpaired unit.",
+  "pdf/PdfConverter#convert (45-80): -tpdf needs Batik's SVGConverter by reflection; the pinned jar's outcome without it is requested from the relay (not assumed)."
+ ],
+ "rust_locations": [
+  "crates/rustuml-parser/src/java_utf16.rs: round 3 maps unit u to the single scalar U+10F800 + (u - 0xD800) and reads every literal scalar in U+10F800..U+10FFFF back as a unit, so legitimate text in that range errors, is dropped, joins into another scalar, or counts one unit (review-3 attributed regressions).",
+  "crates/rustuml/src/main.rs: --ast prints Debug of the model, --yaml serde_yml of the model, -ttxt render_ascii of the model, -tpng/-tpdf/-teps render_svg_with_theme (export rule, empty document on failure) into resvg.",
+  "crates/rustuml-render/src/plantuml_metrics.rs#char_width: measures every carrier-range scalar as one em; legitimate planes-15/16 private-use scalars fall into the 'code >= 0x3000 -> one em' fallback (BC Java gives 0.75 em at size 14, see width below)."
+ ],
+ "representation": "Keep the round-3 single-scalar carrier for an unpaired unit (U+10F800 + (u - 0xD800)), and make it unambiguous by escaping every legitimate scalar of the reserved set R = U+10F7FF..U+10FFFF as the two scalars ESCAPE (U+10F7FF) + itself. Decoding (java_utf16::tokens): ESCAPE x is the literal x; a carrier not consumed by ESCAPE is the unpaired unit; everything else is itself. Escaping happens exactly once where text enters: PreprocessContext::process (main source, !include, stdlib, !theme), !includesub file text, %getenv and %dirpath values, parse_yaml/parse_json/JSON-data input. java_utf16::text (units to text: Value::from_utf16, to_display, normalize) escapes decoded R scalars, so no internal producer creates an unescaped R scalar. Text without R scalars is byte-identical to before, and an unpaired unit is still one scalar, so every round-3 per-character rule (export, one-em width, TIM boundary letter: both ESCAPE and the carrier have len_utf16 2, like Java's surrogate units) is unchanged.",
+ "consumers": [
+  "java_utf16::units (TIM %strlen/%substr/%upper/compare, svg_id_seed_prefix, filter_registry::plantuml_seed): ESCAPE x contributes x's units.",
+  "svg_export::serialize: ESCAPE (raw or &#N;) is removed and the following scalar is ordinary character data; carriers keep the round-3 ToStream rule.",
+  "svg::comment_text: ESCAPE writes nothing; the escaped scalar writes one '?' (StreamEncoder REPLACE per code point).",
+  "plantuml_metrics::text_width: for text containing ESCAPE, measure tokens: unpaired unit one em (round 3), escaped literal by its own advance.",
+  "--ast/--yaml: when the model carries R scalars, render a decoded copy (serde_yml::Value round trip): escapes removed, unpaired units as U+FFFD (Rust's lossy UTF-16 convention; Java has no such output).",
+  "-ttxt: render_ascii over a decoded copy with unpaired units as '?' (one cell, UGraphicTxt/StreamEncoder).",
+  "-tpng/-tpdf/-teps: the document before export with escapes removed and unpaired units as U+FFFD, never the ToStream failure; outcome exit 0 for PNG/EPS (Java draws the text). PDF: decided from the relayed Java reference."
+ ],
+ "width": "BC Java references at size 14 plain: 'Vault U+10FFFD' 49.7861, 'Vault U+FFFFD' 49.7861, 'Rune U+10F83D U+10FE80' 59.459, 'Gate U+10F800 end' 75.5439. Against the ASCII advances in CHAR_WIDTHS_14 each planes-15/16 private-use scalar advances exactly 10.5 = 0.75 em (5 code points in two planes). Draft: planes-15/16 private-use scalars advance 0.75 em, cited to these references; other sizes and bold are relayed as held-out probes, not assumed.",
+ "declared_residue": [
+  "JSON \\u escapes that decode to a scalar in R (serde_json produces it unescaped) and text a renderer splits between ESCAPE and its scalar (character wrapping) are not covered.",
+  "-ttxt cell counts for legitimate astral text remain Rust's (one cell per scalar), as before.",
+  "PNG/PDF/EPS glyph appearance for an unpaired unit is not compared; only exit status and stderr."
+ ],
+ "perturbation_axes": [
+  "legitimate U+10F7FF..U+10FFFF text in class/sequence/state/activity/usecase labels and titles, first/last/adjacent positions, %strlen, %substr, %upper",
+  "pairs that look like carrier pairs (U+10F83D U+10FE80)",
+  "unpaired units in -tpng/-tpdf/-teps/-ttxt",
+  "PUA-B widths at sizes 12 and 18 and bold"
+ ],
+ "precommitted_measurement": {
+  "oracle": "BC/BB/AW Java references (strict compare, exit, stderr); Rust-only --ast/--yaml/-ttxt leak scan for carrier scalars, ESCAPE and \\u{10f7ff}..\\u{10ffff}; whole sweep against 3992971a7 and 71d16da4a",
+  "expect_fixed": ["BC pua_b_class_last, pua_b_class_first_carrier, pua_b_pair_lookalike, pua_b_sequence, pua_b_state, pua_b_activity, pua_b_strlen, pua_b_title, pua_b_usecase (other differences reported if present)", "BC pua_a_control (width)"],
+  "expect_kept": ["BB 9 of 10 crash pages exit 1 with Java's message; BB/AW surrogate matches"],
+  "expect": "sweep stdout unchanged except sources containing planes-15/16 private-use scalars; zero lost matches, zero new errors"
+ }
+}

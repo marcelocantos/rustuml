@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam sequenceDividerFontStyle bold
+participant A
+A -> A : ok
+== <i>Avid Dawky Vow 4.7, gym kayak ovo!</i> ==
+A -> A : ok
+@enduml

@@ -1,0 +1,289 @@
+{
+ "sur_activity_parser_error": {
+  "source_sha256": "a0c4954d90f769b3aa2faca0d230bfde332f0f49d827b1c9345d545a3245e6e9",
+  "source": "@startuml\nstart\n:x%substr(\"🚀\",1,1);\nendif\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "d57abfb89a2e66d857721a74cfe8915eff92718b7c9f612c9725bc6fedd68f2e",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  },
+  "6c52f2cfd": {
+   "exit": 1,
+   "stderr_head": "parse error: line 2: An invalid XML character (Unicode: 0xde80) was found in the node's character data content.",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ },
+ "sur_activity_parser_error_only": {
+  "source_sha256": "d76947cec8a05093ab344cdc5e08d02f920c356b0f35ea8ede08298ba38b1466",
+  "source": "@startuml\nstart\n:x;\nendif\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "ae1a1a6b00e4aee7a065e81c6bd3f4813ba3691082489b822954f6c275a6a580",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "ae1a1a6b00e4aee7a065e81c6bd3f4813ba3691082489b822954f6c275a6a580",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ },
+ "sur_hidden_member_text": {
+  "source_sha256": "d9625c135eab6131af6a83a1135648e5e9c7bff6ae2275062f05bdcedcf8342a",
+  "source": "@startuml\n!$a = %substr(\"🚀\",1,1)\nclass Kept {\n  field$a\n}\nhide members\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "ceba3d1c9887dfe3dd63f56f793cad577074db2c58214b46c8124398d845ace3",
+   "comments": [
+    "class Kept"
+   ],
+   "geometry_check": "OK |  | comments: ['class Kept']"
+  },
+  "6c52f2cfd": {
+   "exit": 1,
+   "stderr_head": "parse error: line 3: An invalid XML character (Unicode: 0xde80) was found in the node's character data content.",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ },
+ "sur_parser_error_after": {
+  "source_sha256": "69b987d64b94d4f2c2ba127173b09f9ac437bc91bb915d26bdaa553896ca5b27",
+  "source": "@startuml\nstart\n:x%substr(\"🚀\",1,1);\n:unterminated\nstop\n@enduml\n",
+  "50f4f5414": {
+   "exit": 1,
+   "stderr_head": "parse error: line 3: unterminated activity action; multiline actions must end with ';'",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  },
+  "6c52f2cfd": {
+   "exit": 1,
+   "stderr_head": "parse error: line 3: unterminated activity action; multiline actions must end with ';'",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ },
+ "sur_parser_error_before": {
+  "source_sha256": "507babb8e42742da89cc1a8cd1dfa8f0c2026d8d8d46ba0fa7e03a16f58ea97b",
+  "source": "@startuml\nstart\n:unterminated\n:x%substr(\"🚀\",1,1);\nstop\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "be6e7577274e0ade950f3754d2e5087384d8e7cce2e504d7fded97e6d45fe542",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  },
+  "6c52f2cfd": {
+   "exit": 1,
+   "stderr_head": "parse error: line 3: An invalid XML character (Unicode: 0xde80) was found in the node's character data content.",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ },
+ "sur_parser_error_precedence": {
+  "source_sha256": "2063ca890d7863c25113827bbc02ae33914af26918d85d8bf19c3de6ef03b930",
+  "source": "@startuml\nclass \"x%substr(\"🚀\",1,1)\" as Low\nthis is not a class line ((\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "0b381b3550270a5948b7f1048bfc1a17e32cd004fd57cccf864d4cffcb00f8d0",
+   "comments": [
+    "class x🚀,1)"
+   ],
+   "geometry_check": "OK |  | comments: ['class x🚀,1)']"
+  },
+  "6c52f2cfd": {
+   "exit": 1,
+   "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xde80) was found in the node's character data content.",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ },
+ "sur_removed_entity": {
+  "source_sha256": "fd9115d1322c5619e344d8724c8158c61b55f9f8b9a4e3502a6e8f24190f9dfa",
+  "source": "@startuml\n!$a = %substr(\"🚀\",1,1)\nclass \"x$a\" as Gone\nclass Kept\nremove Gone\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "0e14e8d74084cfe86941bdfe75039ceee3277d563af54788f87fc79639e0c43d",
+   "comments": [
+    "class Kept"
+   ],
+   "geometry_check": "OK |  | comments: ['class Kept']"
+  },
+  "6c52f2cfd": {
+   "exit": 1,
+   "stderr_head": "parse error: line 2: An invalid XML character (Unicode: 0xde80) was found in the node's character data content.",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ },
+ "sur_seq_parser_error": {
+  "source_sha256": "7942301b6c7a5314db5cf93538d6e4db62b9135d63066a450855289fbe75fa50",
+  "source": "@startuml\nAlice -> Bob : x%substr(\"🚀\",1,1)\nAlice -> \n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "ac2c105ddf5625f25342e96fb68c0a8c32755b8aa32d46e99c654ab91b6dd068",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  },
+  "6c52f2cfd": {
+   "exit": 1,
+   "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xde80) was found in the node's character data content.",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ },
+ "sur_seq_parser_error_only": {
+  "source_sha256": "6d69ef4cb56dc724d7f25f715dd38efdad3176eed84a86f6a0e97b5449a2cb12",
+  "source": "@startuml\nAlice -> Bob : x\nAlice -> \n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "8241a68c7693b94b33aa086621559ad938e9f7ceea81c977725680ef1a62a1fb",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "8241a68c7693b94b33aa086621559ad938e9f7ceea81c977725680ef1a62a1fb",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ },
+ "sur_skinparam_value": {
+  "source_sha256": "ee7e85f9028767da35847bedbd3e1745bccc2645cca0bddf1cf346ab12624907",
+  "source": "@startuml\n!$a = %substr(\"🚀\",1,1)\nskinparam classFontName Arial$a\nclass Kept\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "e175dda455537d37dd018389739173901c8331f48ba05492bfe71ed2eb80c4c2",
+   "comments": [
+    "class Kept"
+   ],
+   "geometry_check": "OK |  | comments: ['class Kept']"
+  },
+  "6c52f2cfd": {
+   "exit": 1,
+   "stderr_head": "parse error: line 2: An invalid XML character (Unicode: 0xde80) was found in the node's character data content.",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ },
+ "sur_tim_error_after": {
+  "source_sha256": "0cbd0e77e2b1340121f4c786a6ea1dda67fd1a405696a82f9e8526159dae61ba",
+  "source": "@startuml\nclass \"x%substr(\"🚀\",1,1)\" as Low\n!$n = %intval(\"nope\")\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "0b381b3550270a5948b7f1048bfc1a17e32cd004fd57cccf864d4cffcb00f8d0",
+   "comments": [
+    "class x🚀,1)"
+   ],
+   "geometry_check": "OK |  | comments: ['class x🚀,1)']"
+  },
+  "6c52f2cfd": {
+   "exit": 1,
+   "stderr_head": "parse error: line 2: Cannot convert nope to integer.",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ },
+ "sur_tim_error_before": {
+  "source_sha256": "02c1deb15e2f9a6a765583832bd36b0fb694741ca4eb3d8fed048e925b056ec3",
+  "source": "@startuml\n!$n = %intval(\"nope\")\nclass \"x%substr(\"🚀\",1,1)\" as Low\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "2c5c7fb9b4ff6936e8db8e26c2b103acfbaafcb6d13c84c85526733b2c06b2ba",
+   "comments": [
+    "class x🚀,1)"
+   ],
+   "geometry_check": "OK |  | comments: ['class x🚀,1)']"
+  },
+  "6c52f2cfd": {
+   "exit": 1,
+   "stderr_head": "parse error: line 1: Cannot convert nope to integer.",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ },
+ "sur_tim_error_precedence": {
+  "source_sha256": "8436c67173b06d93559acf1c7ad55b7de640c07034f8529217702a870c0ff486",
+  "source": "@startuml\nclass \"x%substr(\"🚀\",1,1)\" as Low\n!assert 1 == 2 : boom\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "0b381b3550270a5948b7f1048bfc1a17e32cd004fd57cccf864d4cffcb00f8d0",
+   "comments": [
+    "class x🚀,1)"
+   ],
+   "geometry_check": "OK |  | comments: ['class x🚀,1)']"
+  },
+  "6c52f2cfd": {
+   "exit": 1,
+   "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xde80) was found in the node's character data content.",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ },
+ "sur_trailing_high_sequence": {
+  "source_sha256": "569ac4014ced393acd9ae7acaa591cd27c9ab796fdfaa71141ed9bdf06629523",
+  "source": "@startuml\nAlice -> Bob : hi%substr(\"🚀\",0,1)\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "57707e289730457f4126f6c9415d6615d3c48dc3c8958409a8fca524c421e4c1",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  },
+  "6c52f2cfd": {
+   "exit": 1,
+   "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83d) was found in the node's character data content.",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ },
+ "sur_trailing_high_then_ascii_text": {
+  "source_sha256": "d386ed2d5045760cbc927f4d995d74928c15830bf94cc9e464c6f04bffe3c549",
+  "source": "@startuml\nclass \"x%substr(\"🚀\",0,1)\" as High\nclass Plain\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "6b0f323304bec95a9c047bf4f6593c23ad5dc8176aaf870c2d085e7d21c7977b",
+   "comments": [
+    "class x🚀,1)",
+    "class Plain"
+   ],
+   "geometry_check": "OK |  | comments: ['class x🚀,1)', 'class Plain']"
+  },
+  "6c52f2cfd": {
+   "exit": 1,
+   "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83d) was found in the node's character data content.",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ }
+}

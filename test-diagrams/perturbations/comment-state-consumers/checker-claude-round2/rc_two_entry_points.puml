@@ -1,0 +1,10 @@
+@startuml
+state Gatehouse {
+  state north <<entryPoint>>
+  state south <<entryPoint>>
+  north --> Hall
+  south --> Hall
+}
+[*] --> north
+[*] --> south
+@enduml

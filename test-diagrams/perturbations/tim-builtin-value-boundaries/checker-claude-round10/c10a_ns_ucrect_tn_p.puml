@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Times New Roman
+rectangle Yard {
+  usecase "Kiln wq vista" as E1
+}
+@enduml

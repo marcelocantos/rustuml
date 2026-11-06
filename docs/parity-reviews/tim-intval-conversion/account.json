@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-intval-conversion",
+  "rust_revision": "079c1bc1ffc325e8ebfa1719bc0ce2d3c71573c2",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/builtin/IntVal.java:executeReturnFunction",
+    "tim/expression/TValue.java:toString"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "IntVal converts the complete displayed TValue with signed integer parsing; decimal text, whitespace and overflow fail instead of truncating or defaulting.",
+  "causal_divergence": "Existing body parses f64 then casts to i64, accepting decimal and silently mapping invalid strings to zero.",
+  "planned_change": "Return typed i32 from complete signed decimal parsing and latch Cannot convert text to integer on failure. Preserve builtin arity/effect ordering. This bounded ASCII text conversion claim does not establish Java Character.digit equivalence for wider Unicode decimal digits.",
+  "perturbation_axes": [
+    "Signed and numeric-looking string inputs versus JSON displayed values",
+    "Decimal text, whitespace, and signed overflow failures"
+  ],
+  "prior_evidence": "5d37f60cbce90a3f3a9efb199c75285d6b7b859f (import 079c1bc1); prior accounts and rejected implementations remain immutable",
+  "oracle_plan": [
+    "Replay unchanged 1516/31/29 and maker15/prior17 memberships with overlap explicit; actual CLI, exact source/model, status/error/XML separate.",
+    "Compact source-guided remote relay controls; no local JVM or SSH. Preserve every failed iteration and negative reference.",
+    "Final main tiers, parser/CLI, guards/standing once stabilized. No acceptance claim; fresh independent checker required."
+  ]
+}

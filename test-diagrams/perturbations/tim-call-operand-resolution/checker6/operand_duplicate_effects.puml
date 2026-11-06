@@ -1,0 +1,8 @@
+@startuml
+!$n=0
+!function $tick($digit)
+!$n=$n*10+$digit
+!return "value"
+!endfunction
+class "%upper($unused=$tick(1),"moss",$unused=$tick(2))/$n" as Effects
+@enduml

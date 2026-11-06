@@ -1,0 +1,12 @@
+@startuml
+state Works {
+  state Oven {
+    state i <<entryPoint>>
+    state o <<exitPoint>>
+    i --> Bake
+    Bake --> o
+  }
+  Mix --> i
+  o --> Pack
+}
+@enduml

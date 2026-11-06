@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Times New Roman
+actor "Kiln wq\nlonger second line" as E1
+usecase "Ok" as E2
+E1 --> E2
+@enduml

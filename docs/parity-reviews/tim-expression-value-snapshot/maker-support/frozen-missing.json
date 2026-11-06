@@ -1,0 +1,2879 @@
+[
+  {
+    "source": "test-diagrams/perturbations/class-chrome-bordered-block-geometry/checker/center_False.puml",
+    "source_sha256": "5dfd8ec1a02a74747d7995adc0a5cfbcf47d39ab0634c0a096ce56fd91468238",
+    "golden_sha256": "cd227a6056b16c05d10597e97b16f60787354f2a4badabeaefd0c8e5c282b92b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-chrome-bordered-block-geometry/checker/center_True.puml",
+    "source_sha256": "8ab696f369a2e97b938331bf233c13df0d66b93fa19e7d408b32a7fdd0fbd469",
+    "golden_sha256": "de747efc3e5438275dc51828fbab31b9afcdcb3fbac7caf1ca9c844d5f83bd5a",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-chrome-bordered-block-geometry/checker/left_False.puml",
+    "source_sha256": "f12696f3d3a0a7a81a7f28f57e1c9abdee839c552b0237f1421c1ea6ccf3c28c",
+    "golden_sha256": "fddbe0c26516ce8e10d4f454c67ebe288d1682ce59a21a5b600e3741464b9190",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-chrome-bordered-block-geometry/checker/left_True.puml",
+    "source_sha256": "e5e6de599409f82754a79fad659ca9e4a67deed095274b6990d2d805b71edb9b",
+    "golden_sha256": "7a5b230234f0e5240339476c093e7d7a8852e5b3a28c274597d80c709864211b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-chrome-bordered-block-geometry/checker/right_False.puml",
+    "source_sha256": "e50124cc2111be24f726784cae0cd1e4b8fd1a21ae682b9dbb8694fa0fc95d33",
+    "golden_sha256": "f68c92f65b8ab86db67f1c713ecff99bc78c2feadf9ec988f074caae54fcec2c",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-chrome-bordered-block-geometry/checker/right_True.puml",
+    "source_sha256": "4f1bf32dbbc3c6740db4efdedc9404c2fc175737512f2d52535c373245757939",
+    "golden_sha256": "26d3378f7cfa079f267c0fc3c1808ba4531938b9335e4efa95c5509573890b46",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-chrome-bordered-block-geometry/checker/style_left.puml",
+    "source_sha256": "fd5d0c68b5034a0f5dac73c9033fc03d19e83072362097d446ad6b76deec5474",
+    "golden_sha256": "3cc031dea4297d5322ad41a3fa0cf1855cf3cb1f4c21adb9d39e979b9694e58d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-chrome-bordered-block-geometry/checker/style_right.puml",
+    "source_sha256": "19749ddf86b2a54545fa747be588f616bd58f629934dabe9d28e8a576fb2fb1d",
+    "golden_sha256": "f68b4796e7049953ef89233b15fd35f3f82d81edde4a9c8ec3937c73daa5476e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-cloud-child-coordinate-dependency/checker/dependency_origin_cloud.puml",
+    "source_sha256": "0403f02d8204b2474d709a733007c86792d61126633d4750e1245936fc99518b",
+    "golden_sha256": "2f9977887f2ed0ae635f3ffacce5ba08d043fc5a212ac5b9cb152e47159b9999",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-cloud-child-coordinate-dependency/checker/dependency_origin_node.puml",
+    "source_sha256": "7ddf039ae50de3930d6384fdd898184321221288c364fbe4606c3e8c93f65839",
+    "golden_sha256": "98e729a01ff184b1ed970bcc7386ca894a5428e3577edc0a47f805df979bb100",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-cloud-child-coordinate-dependency/dependencies/single-svek-envelope-origin__root_note_cloud.puml",
+    "source_sha256": "63a01f130bd47e9e941fc31f5b46ae24e3049e32823fc4b04f23329ca39022b4",
+    "golden_sha256": "c1eb32ac966f1dc0d64cc23f9014914e13c02878c2b7f5ac0769a627358e0280",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-cluster-header-shape-extent/checker/header_0.puml",
+    "source_sha256": "9893cf9f344f10405565612de64932c31db9f089078dc8b28e8d8f3a565f0156",
+    "golden_sha256": "148f92a9844a56fa91362e2fd9ccd3ad8b33e8b2d9e1ad7c55c42d7da6e69768",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-cluster-header-shape-extent/checker/header_1.puml",
+    "source_sha256": "a29dc18919873b6f4d64f855e3aeceac0665925b8bfa307682fae891390aadea",
+    "golden_sha256": "64ae9b79743472f794fbbcfa2d8c77eb9aa68c9905c1ab020d4807afe03c84a6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-cluster-header-shape-extent/checker/header_2.puml",
+    "source_sha256": "eaf70cd3dda5ca126354a3d195b50426cbf38920c395e5e6105b4907c76569da",
+    "golden_sha256": "969e4b425b24a8154b3411d63e5f612b99c1ca54dde5919a38a810d4c3752add",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-cluster-header-shape-extent/checker/header_3.puml",
+    "source_sha256": "21c5216ef980378c4e826ab1aafc62e4bc96bdb78c4dd98def89486001e8df0a",
+    "golden_sha256": "af4cb1d81aa32059798db8b110028020465523f440be45aa0da85cbea2548501",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/bare_native_record.puml",
+    "source_sha256": "9be8040d89b00133743360b9c42931cda2780039dbade81f28d381fac4792aeb",
+    "golden_sha256": "945318c15cbb5651d0386dddc4e8e180cca324d2f47e26247b499fbad355287f",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/bare_native_struct.puml",
+    "source_sha256": "04a58f849d5bf1302c4e100f4f3d4e1e6951c9905698c998bc7d8de3c3c435b0",
+    "golden_sha256": "8cf2d3dfb3217c3059b5bb1032a0591152241206c369960b353bfca844cc27fe",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/body_left.puml",
+    "source_sha256": "1478cf4114fa960714af5c4902b0926cd287919fa5cc2eaa977dc5efa96a086c",
+    "golden_sha256": "e0dba493034018c14601ae434cacc7f7a6d0cdd43a1dad48b7d63208ca88fd49",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/body_right.puml",
+    "source_sha256": "babe2176c6d00d90dca71dd5be8f82ec49146938518502f49459f85a4af22942",
+    "golden_sha256": "3fea7b7b4ef28bc97aead397a4b9e620e7586d88178defbc9101b5296c24e967",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/braced_note_class.puml",
+    "source_sha256": "be122b28cbcda5ce53d15b5ff4adfc5805b8c2de8fa1614dd70c08744ccf202c",
+    "golden_sha256": "ae7f18a11e25d7cdd191b7c2095b09398aedb10c558afbb06eac14728cbcc6af",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/braced_note_interface.puml",
+    "source_sha256": "c5593e935cf7dc0f4b9078acec4808a6578e1e9e015acbca4e15a11e4eb6b20a",
+    "golden_sha256": "aec79c53fd55a780407f558dd852f3a53f5981829edb563b486423e76fc61363",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/mixed_order_0.puml",
+    "source_sha256": "f1232a91f20281a6704f360f7fa0deecd6fd3890bdc73b2e7962771fb32dd5b5",
+    "golden_sha256": "42e0ae9a9305e7b3bed074417451fe47d1d4daa69e8966a05b393ed102bb410d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/mixed_order_1.puml",
+    "source_sha256": "cecdbc3c5992a9cea9c178ca88423da20d5d8aa99fbfa5f431be115d56497288",
+    "golden_sha256": "710fd0087490c89bf2245c81fa7a8c576c35fd308d75ccfcc9a75050f9993beb",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/negative_late_mixing.puml",
+    "source_sha256": "8e44920cb9044bf5946fd61ebd81bd21393b672e6eea1579cc40a219552b5c4f",
+    "golden_sha256": "a9cf1a281b384128c27b1150cb93ab31a2682b55efb13e9e0b88c812e013a447",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/opaque_root_0.puml",
+    "source_sha256": "3f926b7763b650cc80ed48924c68307ef6773848dcd1199b49f01c01e6d7a1f1",
+    "golden_sha256": "f1d4e3bf04c6d75b1781ba6eb2835560437715be49333fdb8e34a1b8ffabeaad",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/opaque_root_1.puml",
+    "source_sha256": "9fb1b6fc8c28fb044aa8a5653777f3c10944fb4eff6e68c0d389d79164f9f999",
+    "golden_sha256": "9eae6185893a05b57cf61476e83e033db010b8100019f39af6b2a39b3e369458",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/opaque_root_2.puml",
+    "source_sha256": "a2f4019b83bec5196669d0cedf5b6d61c71eae93ac404807314f8555080c81e2",
+    "golden_sha256": "9694d87f129ae5132e1b2692feff6be66b834f265f8f9f26d99124fd4e5fdf8d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-evaluated-event-stream__checker_comments_and_origins.puml",
+    "source_sha256": "f24e8da7277e5ddb223079152272860d20bb4c8b055466c1831f0c17c8e5d87d",
+    "golden_sha256": "38a52ea1065dad2ef0b4c4da54df82e106e1c194a39ae3b397e17a2e7d56fc02",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-procedure-global-fork-memory__checker_explicit_override_survives_global.puml",
+    "source_sha256": "8a4fe93537b541b001c2a7257ec05e1af333ef0b335985a11181e30022fd48ef",
+    "golden_sha256": "7489a8771e2141e6ccbad9ef5a68df9efbbf94a052100f817dc29b5d9f9384e8",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-procedure-global-fork-memory__checker_global_overtakes_auto_local.puml",
+    "source_sha256": "b48c5bf087b0d6124f4774ff63289e98b3eec5b1a32c0505ec642cf81592e258",
+    "golden_sha256": "ff791dc1f6b2f1c8203203bf3dc0c20507e5409d4eec89c2d9e98fe78ff850c7",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-theme-post-expansion-source-identity__checker_dump_memory.puml",
+    "source_sha256": "cfc154111736fe7a89d194c7c20b023d652c9d492b2df42fa73a17938671d836",
+    "golden_sha256": "1b570bda06c6e8ea9348fdf063b7e95ae75d3d94008a17fcd8447952c0844c17",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment.puml",
+    "source_sha256": "3a72b8b848f5a6c39bdab49660ceba08f85b69372269e9a4b5c4147d820287fb",
+    "golden_sha256": "670329c1746ebc27517b84f7d32178e8ea6df48448cf11134207077a355dae12",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_actor.puml",
+    "source_sha256": "e7155aade39eb9638a63c26bb4c5bcf8a80238c00e348fddc967ab85f3a1a365",
+    "golden_sha256": "5883a57d1b84ae83e6b62fc59f71592457fc938c40749d6e007813e9c6449b96",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_boundary.puml",
+    "source_sha256": "58c7b21f77ebf568c7dfaaa0a97c07d18ea401cdf820492372287a8ab49d67d3",
+    "golden_sha256": "629d7485e3e99e5df1be373231a35878bf8370b0abce6ac8153e89badc7cb95e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_component.puml",
+    "source_sha256": "267f598993f16cae54d5cb5fd65a29c73bc66ec031ac4e3bea0a3d1cf019f7d3",
+    "golden_sha256": "6506cef45621fa7612128177830cad2d92960b90723926077edc30a25eb2a192",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_database.puml",
+    "source_sha256": "010c6079abca5156db4d16e7500c4838ae1d9bfdc73641718957755c5dff134a",
+    "golden_sha256": "7b5d85d80b9b73796fef08a5ef30bb7721159783ad508eb943e9e46927276850",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_queue.puml",
+    "source_sha256": "fcc5991755bb94bd5d24750a296e58475c9331ad00f9699bd5de51846668fc5b",
+    "golden_sha256": "e53b2162b872be214daf320c2382aa59c63aa09be5d0ab98b6ead604d987ec18",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_rectangle.puml",
+    "source_sha256": "820b756582a4bea219e4bb4ae3c7ef0e525ebdb7621b60a744b1e32762517d69",
+    "golden_sha256": "3806f8426eeba86c51128ca29f1d841233e45c564bf0ae093ace445127613ebc",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/command-execution-ownership__bare_native_record.puml",
+    "source_sha256": "9be8040d89b00133743360b9c42931cda2780039dbade81f28d381fac4792aeb",
+    "golden_sha256": "945318c15cbb5651d0386dddc4e8e180cca324d2f47e26247b499fbad355287f",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/command-execution-ownership__braced_note_interface.puml",
+    "source_sha256": "c5593e935cf7dc0f4b9078acec4808a6578e1e9e015acbca4e15a11e4eb6b20a",
+    "golden_sha256": "aec79c53fd55a780407f558dd852f3a53f5981829edb563b486423e76fc61363",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/named-note-scoped-identity-closure__qualified_0.puml",
+    "source_sha256": "2c9adbc3cc443ea82bab68e55e84636861d518742a66b381613961ac690e2d91",
+    "golden_sha256": "fe337b30308f1daee732b1773901030dc7962cc49d537bed69d36cb7e55a0af1",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/note-target-quark__group_target_left.puml",
+    "source_sha256": "9f5a7148f6f9b90bff9340af136955ebcca4ae40763d01bc71a5b5bf1f5d11b4",
+    "golden_sha256": "84bc27be7d3b5673e57e9a521488aa4983a04fb34c6c77c8a5d6d63b126de3ce",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/package-command-precedence-closure__visibility_public.puml",
+    "source_sha256": "dea39482d5eb3039bd4d600216ab82453cad10853d84cbb767b8234c43e2fff7",
+    "golden_sha256": "40b8e6e14a7638c89c1cfbdb05594067eca8e74ec891033ae7575442c16cdf5d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-evaluated-event-stream__checker_comments_and_origins.puml",
+    "source_sha256": "f24e8da7277e5ddb223079152272860d20bb4c8b055466c1831f0c17c8e5d87d",
+    "golden_sha256": "38a52ea1065dad2ef0b4c4da54df82e106e1c194a39ae3b397e17a2e7d56fc02",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-procedure-global-fork-memory__checker_explicit_override_survives_global.puml",
+    "source_sha256": "8a4fe93537b541b001c2a7257ec05e1af333ef0b335985a11181e30022fd48ef",
+    "golden_sha256": "7489a8771e2141e6ccbad9ef5a68df9efbbf94a052100f817dc29b5d9f9384e8",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-procedure-global-fork-memory__checker_global_overtakes_auto_local.puml",
+    "source_sha256": "b48c5bf087b0d6124f4774ff63289e98b3eec5b1a32c0505ec642cf81592e258",
+    "golden_sha256": "ff791dc1f6b2f1c8203203bf3dc0c20507e5409d4eec89c2d9e98fe78ff850c7",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-theme-post-expansion-source-identity__checker_dump_memory.puml",
+    "source_sha256": "cfc154111736fe7a89d194c7c20b023d652c9d492b2df42fa73a17938671d836",
+    "golden_sha256": "1b570bda06c6e8ea9348fdf063b7e95ae75d3d94008a17fcd8447952c0844c17",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment.puml",
+    "source_sha256": "3a72b8b848f5a6c39bdab49660ceba08f85b69372269e9a4b5c4147d820287fb",
+    "golden_sha256": "670329c1746ebc27517b84f7d32178e8ea6df48448cf11134207077a355dae12",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/action_process.puml",
+    "source_sha256": "6f923948738eb955fb3bf21f1c0f079f51d38fcf9e38ac7c81bae594651cb9c8",
+    "golden_sha256": "0a0c3e9be6525f4691975eacaf5ff4ddc083d009073504d215be98703050a02d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/boundary_renamed.puml",
+    "source_sha256": "a10c0c3e760549238acf4dcf917afe2d04c2462eb203bc9b2f4ac6c6116d7eca",
+    "golden_sha256": "ef4bf1a573c17faca365b1861495df7ebe0720b8188fa41381328600b7c43230",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/chrome_center.puml",
+    "source_sha256": "b4c4d7b87cfd965eff9159bfeb13cab73c0f9f406b6415ce52af4442014a8d49",
+    "golden_sha256": "5189eeb0f450c88a603dcb95d9c380763d7db9bb573239a775813f360d96d007",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/chrome_left.puml",
+    "source_sha256": "055af62ca60318bc3652827125482657cb7386754eef1c82cf5673bd496312ed",
+    "golden_sha256": "e596e5922ed7b54f28b2007dd13aea6d989cb16a86bda9a17d2716596b5edfdf",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/chrome_right.puml",
+    "source_sha256": "178a5f16dc9072cae8de9805502a9d554f6c80bc5eaecb412c9ace7b37fc7591",
+    "golden_sha256": "0662243a34cc26ac8913947ef287765f24b658ff989ce0f1677b5404cd09903d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/cloud_long.puml",
+    "source_sha256": "73af931060c97b8c10e5c2584daf5d6ae050b8acfb595c3aa9cebc3b3d199bd7",
+    "golden_sha256": "fb30582f6a98bceb6f643108d3307f3a2c2b7357177f446ca7776b65908b3ca4",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/cloud_nested.puml",
+    "source_sha256": "f520181beada36797e5f242ba03df5757e86c99584ff46b5a6fa1503bc891382",
+    "golden_sha256": "e66f5f920433d34a547c8344e129594a824fde2182eb35a008eab54be6c19389",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/component_reverse.puml",
+    "source_sha256": "2ce0bd6486704122bcf64bc67a1138fa2f6becd0af32194e14ba0a1e26ab41b2",
+    "golden_sha256": "4d61ce753fba5cc646e3f14b6a27ba4fbe457753ddd435fd5363c77d300fb253",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/component_stereo.puml",
+    "source_sha256": "011fb429ff73ab4f4d06a562fbd4f5511c506fc2d30366fa75c18501bed7bcd1",
+    "golden_sha256": "48c57d727fc6a8fc74df2173d614260b14440bb529e242477181dc0fd2c93a6a",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/description_route.puml",
+    "source_sha256": "e91096b45ebc09bc89303d9f8052fed685d36d5ead01ab0ce806c2669829ada0",
+    "golden_sha256": "9fe4d749264d3bf422a5a40a5132bf817f888f16068403d364793d377945c82d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/empty_link.puml",
+    "source_sha256": "77cb545287dd24dc4eff8d609761af4a2e973e7c8bc43ada2f766f9612d65c6e",
+    "golden_sha256": "a0fcb2788ace6e727e0cc508b04f1302994325e6f743500a7bd8828a217854e8",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/empty_nested.puml",
+    "source_sha256": "769cdb9b53b9933f16db4b525580199bca81b254d1aa616bca207bdbaad5dccb",
+    "golden_sha256": "5d6daa61e3c1849fb271b5bbbcc7343616d82a03952c39888e6efdbe4f5bc6ce",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/endpoint_19.puml",
+    "source_sha256": "1381105a7c2422ba6e23c61f73b4674b4ec86d4c0547192efc20190862e88b7c",
+    "golden_sha256": "ea0d6ccf0df41b6ae4701ff68de8767622fe751b9c96cd783b6f7b9abe6d9ee4",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/endpoint_20.puml",
+    "source_sha256": "dc40808f54ee665b55ff0bb5937b8ed19b46eb196add457fba87f3ce713040a4",
+    "golden_sha256": "41bb3bb3f682911ac191304f0ad7d0dc299d1ad1889a0099d4a0935f929915af",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/endpoint_21.puml",
+    "source_sha256": "89bbecbf2162b6baaa4e751fc4ebd7d7dcd8aaf0e9dcac79a2a9c31f33b7e684",
+    "golden_sha256": "515920e979c93d9f9a89fcc5f005d350ad6522f0cca390c65df396f89f40f3ba",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/floating_note.puml",
+    "source_sha256": "c862cf4326443daba74e892a27292c180decf9367b9cefe8413fb7e68a249286",
+    "golden_sha256": "01db05b1aa905366818980e956b2de49c5d7dae55eddb74196fe6dd549c769f1",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/group_leaf.puml",
+    "source_sha256": "3f78e1d69ec9bb464172b94b6572cc953d15123df50e87c60dab7ee4af7ef7b9",
+    "golden_sha256": "c733a137e0a7f84faf8a6ea5307f94c6ead49e360c69226177de4e047c0898b1",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/group_link.puml",
+    "source_sha256": "e5c0cd8d8641ada8c673f62c70cd5e53c5bfd84257ec1b05762f471ff80d0e84",
+    "golden_sha256": "9ab2a2c94b477d6f57aa326819bcdc80ea7ebc0e6a03bdc172c76b7ee0dec34d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/group_lr.puml",
+    "source_sha256": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+    "golden_sha256": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_alias_duplicates.puml",
+    "source_sha256": "3bc8adcb77f571240c223a207ffb19bec08bf338c04a1a0f5d76563113283c8c",
+    "golden_sha256": "78e49221aaed0354784e3f5d0440e0799bb410fa892630632a974df5471dab95",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_namespace.puml",
+    "source_sha256": "0385a27050ac44f277fd7c02933438851ef44b02075b0ec56c85fe4cb95b6497",
+    "golden_sha256": "d0dabe22f057a3ce8b6771e92ee0810d1cf0a39b36fd7314771719518cc12c4f",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_outside_right.puml",
+    "source_sha256": "969e620ab7e3813bdecfcebc30c007f81fcd89ddb064e3d988da4e5c05cb9455",
+    "golden_sha256": "483b302934bc688f39aeaf964d76285c7606356b3cbc19469628d2150fcf85c8",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_scope_lr.puml",
+    "source_sha256": "199470ac922428d8ea0b2f8bbeb378cf80962f968568c06f602530ed64e14a33",
+    "golden_sha256": "f378671f39645a6b093e95054b08225f5f07ae16e84cf230cf00a8aeb45a48b2",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_top_scope.puml",
+    "source_sha256": "0dea9f7e83f59067c1370d482c5bc9ed58eb72f4e788e361aaf26eceef7c9e0e",
+    "golden_sha256": "6f919aa0bc4faec2abaec4785a5fde4e44b250e641264a6c902e74348286081a",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_two_links.puml",
+    "source_sha256": "a0989563e841fb051037197b95c9560a7dee41a22fd8fbb523aa62cae0a6d341",
+    "golden_sha256": "3a18e49081bfaa99e3a5c735a21eb428919e240ff401943c09a1e9c99a0df1e0",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/notes_cross_scope.puml",
+    "source_sha256": "e56c082e4c44d749237c86e1b9111535e4c3259fcd4b5f0b69e3de41c4820e90",
+    "golden_sha256": "aef2ea64db8e75ec385a778d00bfa3d01e4f8d33f79d951ff7bdd7e8665457b1",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/notes_nested.puml",
+    "source_sha256": "46e2bda839c567f92bf92c303d163170d3bf6529ea6f6c88ddf92fe37b4cf157",
+    "golden_sha256": "2c3c7c0747e58e86bbc3abbee24f3b4e151e7b5f4bc43985d8792f520f587a7b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/package_link.puml",
+    "source_sha256": "5bc5a26e4e9f299b08dbf8c2f345f645f3de22499418979574e77a55ecdc6e66",
+    "golden_sha256": "0d2b4583e580b882807379fc11541e075654c81bee575a35a16d0e029111c7e0",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/package_slots.puml",
+    "source_sha256": "9ad4e1ac09304d3dab9caf6c428d50010f45acde78b9e38fd27790d982710671",
+    "golden_sha256": "c8403e2508df1d16dfb23fbbcc49376e32d85022a12f8d6c96068ef183edd257",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/queue_alias.puml",
+    "source_sha256": "8b83e7919a85e6f8966b1ef9adce48d2d534dce8cb3702361623236969dc1ef4",
+    "golden_sha256": "b39bfe55b6ba319f486d80d647e6da5f9691dda7c15a772f4edfa546a087307e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/quote_modifiers.puml",
+    "source_sha256": "fbba99d6e2295380d30666a4fe6e58dce4a0582cc35f0cf7891b2c389c91a8dc",
+    "golden_sha256": "d1586161e82d89a6ff17f1e2d1418622a3781b40a8c450e098c91cab41ef84ad",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/actor_generalization.puml",
+    "source_sha256": "0189f66dc0579599280e1b6f562e1e43395d5a3fbdbfaa81439657d049d75117",
+    "golden_sha256": "08f05ed3fe33b948cf1182b4b5f366ba0d79169bbdc2d53826d07af2cc461fe6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/alias_reopen.puml",
+    "source_sha256": "bf3b7845bd3f0fe02f736dd7f8b2beffa126fdea7940ac3758e31c55f6a59f93",
+    "golden_sha256": "48112e962adc3c9197c406450b5629d29a4377dc5edc4587eaaa66f1f388e6bc",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/body_legend.puml",
+    "source_sha256": "61f1dcb652d7268898e7e92c85facb647b9d977c0e8233ab2543cf2c8a538791",
+    "golden_sha256": "6857e4e2395600fd45c3c1e27a7adafeac354b99429733975b748bee152c9000",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/body_ownership.puml",
+    "source_sha256": "5cfa42e57aeb98089167bacf3b62e13a33d0e17f9c117b77f769887a9744d37a",
+    "golden_sha256": "50366b42f0082cb2ded62dd575bc54ca3ea8190e81c529b5d675f03e75c74064",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/body_title.puml",
+    "source_sha256": "7fb887567f92697a749c139635ad16df0db4208a6bff59196652bdcb7f9d91e0",
+    "golden_sha256": "86c084cfbb3de0a3461ef4abb20f84349133138a5f39602582beb9824d7be9fe",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/generic_reverse.puml",
+    "source_sha256": "9b7ba1882fcbdf756c024e2b16a48faf9ef1fb402e42c92493beec5f29d5a73c",
+    "golden_sha256": "8ddce745b3db0ecea22ed8ab53895e42015f9e050a1fd5c649bcf0203fbe778c",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/header_center.puml",
+    "source_sha256": "496de8f8653cfe1c23312e5a71b15a036253cacd89b70e97ba110f1023e87216",
+    "golden_sha256": "728f456cbb4df7b989ce1db408da994a109f9c006b81d564ca1a98348c9cc7d5",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/header_left.puml",
+    "source_sha256": "29611956bc8749ee1045636d8e281cfd1a2203083a71f2879dc4a28ba0daf31d",
+    "golden_sha256": "a5a4a0ef7237516a1f72cac30c1873c47ef3738c2eeb80f9c3a072ffc4399338",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/header_right.puml",
+    "source_sha256": "d9441fc7d124a6d9a5d9919ea08f519f4b9c509743652acdad5f095615944849",
+    "golden_sha256": "1e2bc38c7acb70442238fdef0f06f0e1192ac95a6b552ecbb8a278b142f43e5a",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/mixing_early.puml",
+    "source_sha256": "9f798db50b06577390dc19f0f779f58bbcc954ab47c16c2dc4c35ab82934caef",
+    "golden_sha256": "8e4764e06931c65ee9a71f6f17bae2c155fa7c426a43c2f09eca08a30679590d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/mixing_prefix.puml",
+    "source_sha256": "25b6fcb1408d0b5d48b8d47133293fcaf6b2ef4be430c8e73d8f0d54a9e604cd",
+    "golden_sha256": "cbdd5c1cd591adb3379d6b09dac02f95ce2ae5abb6463dec01ccedfd50c96127",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/modifier_package.puml",
+    "source_sha256": "9f02fca5f86491836170088435ca33bd7005328c53bce753c628b31c6917c784",
+    "golden_sha256": "5523b26534a6b096583acafc85dea73537014b29f35c73a5efa5f0f46f372b6c",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/modifier_private.puml",
+    "source_sha256": "381dabd9e582b7380fb7080e4caec957aa4b5c658dfa925f61c28fd7ed10b058",
+    "golden_sha256": "021e4f66456e54955f3e78fd58370b83a605621631fbc96fbfc2dabf73c1c19b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/modifier_protected.puml",
+    "source_sha256": "d54db01004ce4a4a79f3a8166b1611825a03c9093f1dbc22d421f1bdd30d9db2",
+    "golden_sha256": "81cc042bd3a397a1c9cecee6aba8fa2944cd6678de22edda1ae0070dbcd3bbc8",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/modifier_public.puml",
+    "source_sha256": "5c002e7f49b0b1fa0123655681e3647438f5cebfb1eba45d4272b75c833a134c",
+    "golden_sha256": "5431efe6acd619e17cc8726a09bab19bbd78bc499e6d74037951ca4cf2908770",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/modifier_static.puml",
+    "source_sha256": "4ad6cc6016c1305b5224bc2d0d7c57b60be9b159948998d63defc5ca3815c82d",
+    "golden_sha256": "5bfe9b166aaffe5e082e671b3a33c3d8f3f0cdf1f61e8c3386a4d3e40a6ca751",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_dataclass.puml",
+    "source_sha256": "847abff7e44351240486e9b32bca5d36513813455b1655d0af1fbe1cb6a2df80",
+    "golden_sha256": "30179776d0b0921dac92b7ec3b314a9b19788a4377dc837528bcc9c0de627792",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_exception.puml",
+    "source_sha256": "8d24d2d6351d9508cf94540ccd47ba9042f077a31c389bf24d98070715aa1fc7",
+    "golden_sha256": "dddea4a8dd2f1fe9fda774df79cc0c12706138cb8759d9be9c9de964f2c02441",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_metaclass.puml",
+    "source_sha256": "903009d4c8776d5672ebea17eb8108ab19e2f032d108eae4fa695e04509c6f5a",
+    "golden_sha256": "4ef9c93a197c5162d29e7548922c4f06ce27fcd359aad5985f941a46dd0daa4c",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_protocol.puml",
+    "source_sha256": "36fd5a8467b86d64de42323999b2cd97fdeb2be9132624aec46debe2b7c3c80c",
+    "golden_sha256": "66e68052d37315b963f89667e4cf1bd2913ca4b9d08ed6b8652c17fecdf20f12",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_record.puml",
+    "source_sha256": "248fbaf111dc0c7618a50b197d854f6d28c5091b5193ff1ef022677be00eecfc",
+    "golden_sha256": "7276aee1215ac4fb40ce4a9fced29ffc5c41608c6620f2ef59e6fc1444409568",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_stereotype.puml",
+    "source_sha256": "0bae5fddf0d1f7a5e6dc51686ee781dbb8b9ec62eeaa99334ddaa20b6a57689a",
+    "golden_sha256": "8ab013c444c241d245729a4bc957f47e8da46db5ded42f33050feaeaff5cd368",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_struct.puml",
+    "source_sha256": "0a1e8e38882fac3fb8a03a9d8905027a72160c86277f8a5df7fe925e776a6127",
+    "golden_sha256": "00266385c08c974397eadc0b9f93ad314c661a95b23ab83a963f58979cc9d7f4",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/nested_alias_note.puml",
+    "source_sha256": "a55cc58ec45f32f12ff721a75dcce49b74482c46553bd7c40e71357bf5f332b0",
+    "golden_sha256": "53f42050b2fda1f2d66d76acc989468798d3e35113692947387d9f13bf02ce0c",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/note_quote.puml",
+    "source_sha256": "0e15da0a603c60b027c19242a21ef6380aab27415094be9fd2f2d4a7a88c5839",
+    "golden_sha256": "32bcad6a44334ed5af6f2cd5dd87131f2c0a4fea3c2c158471177bcebf49502c",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/quote_forward.puml",
+    "source_sha256": "0675d30e61263b9f32979ac6ec8b830ccbcc4ed07561fcdb7ca43083bb2e9896",
+    "golden_sha256": "1effedbc7ea17149aca419fcd991bb8aed93d67724457c4ba2d73e4fe976ea58",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/quote_reverse.puml",
+    "source_sha256": "92d1ced6ec7dd3da406d572a08e5817c94c00c411e3365529e1750b48fd02a51",
+    "golden_sha256": "fdcdddd78f1255f74a31872bf09d49a71583847eb2df472e072d9b175c205a54",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/quoted_code_collision.puml",
+    "source_sha256": "3502fec6f85d1a31e959a9ffc62ece81dfa2115de849a3c832d0a20f858a95ed",
+    "golden_sha256": "8c92dd496306c99981dbec5294c8f3efbd7343b895a166c4121a3663d7d2aa0b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/quoted_decorations.puml",
+    "source_sha256": "675a0143a98c86c6a1acbcaa07a165d4ad028524684ec1c2e17538f41d213cda",
+    "golden_sha256": "790b648eb6e4300d1d25920c37931d2eebb4ffea934586ece296e0145f1d154e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/visibility_sizes.puml",
+    "source_sha256": "cc7cf61eb98e17c138509d48a2f622d205c8f2528e9a2ee1b8c869e083062d1c",
+    "golden_sha256": "cc31c5c37e6194d4075b8d858f545941bef1a599063c8dfa7e04fb9829a222c9",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/visibility_stereotype.puml",
+    "source_sha256": "9cb34b77f1429c6dc16fa8b28092f1b3f15b9b2df8aa2f797792debe6a3dfe37",
+    "golden_sha256": "dc3205e3b3207ffff8b3fdd21c11dbdf4e0e604199eb01055115a3d6a20e09e2",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-container-only-factory-closure/checker/empty_cloud.puml",
+    "source_sha256": "272001eb1f51a61821a6b56585784904bdf6239e6081b14a7142475303de746b",
+    "golden_sha256": "3493cdd92b8029ea6320867eb76d1a8afc198c8b1fec8d9afbafd8fb48321015",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-container-only-factory-closure/checker/empty_node.puml",
+    "source_sha256": "2abaf48bc7a39c558af14afdee989d38acf7b71516f55d614c3e47f525212f36",
+    "golden_sha256": "e5c6583e990537887b7a795b6dc6cd4e0a710c997f608f88f0073e8d10869e3f",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-container-only-factory-closure/checker/empty_package.puml",
+    "source_sha256": "f2a498deddb1992b869097e47ec9fb21c553c2fca068a37f2c8eac8285b68cca",
+    "golden_sha256": "15a906b9a51ae27925eb7c089b1b74aa41c63325ab1de9147265d5f661747a55",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-container-only-factory-closure/checker/empty_queue.puml",
+    "source_sha256": "c9cf229cb1a35757141cd58ac46a2c66e759e7a0194a5be5b7b13da9c045e399",
+    "golden_sha256": "e9b3c63ef89b73bedebe95eb22113ae0d42e767add35abe06e81a56df047f61e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_class.puml",
+    "source_sha256": "fe2a998b1aa4cee36a60bc84f708582b3299cf5f2927acd1ca1e3e70e36a4a8a",
+    "golden_sha256": "b1fe7afe0e593d07d39e93e1fdb43c71c76add1a0713eb21abbc9a33f32f2c73",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_grouped_class.puml",
+    "source_sha256": "a55216becaf8664a7bb9c9e3f7270c3cc2983fc998db3ce4b538b9dbce2bd3c2",
+    "golden_sha256": "c275c1adf7728eba32a4cd6482561de0702a5544494957688921b97bb48cf2b0",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_grouped_record.puml",
+    "source_sha256": "5f3319c2cf09ebfb3eef34a40c211bd95386ac2b7cce0c8f927308a8413cfe9a",
+    "golden_sha256": "34bd7be87cf60767070b060fa481a55818eb2fc64a94ba7b94da7754614d671d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_record.puml",
+    "source_sha256": "0f8ca698788a3ab2aff0b39157aba1eb496b3d9eab6ff1f3c521847b107ab491",
+    "golden_sha256": "62bbe796347c25ff04d2b08d9627d92ccdd52e9be91f5628bb5b339d822f958f",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/grouped_record.puml",
+    "source_sha256": "7790b9944dea121fb8d4d2a55846216dab78d4466b50abed830cede63494a817",
+    "golden_sha256": "bc03905cab65a8a6e7e6c2cee1af8b5279a81eeaa65cb9ad743a2f09b38ede51",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/grouped_struct.puml",
+    "source_sha256": "dfba9980757edfd53a804e029e9f80c336a808bf739914a5d8586ba08df465af",
+    "golden_sha256": "905ea48500af2f25e9ddb52fc64925793facc5ca301bd437729e5cd1d6e142c0",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/override_after.puml",
+    "source_sha256": "f359c43ba41251b2e06eb6bb04b9e8956322d6f6ef71400f432b27e38f79a62c",
+    "golden_sha256": "c92181241613137ae9296c25816c08d3d8ea8ee66c87361f53254ef2b75c9cf8",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/override_before.puml",
+    "source_sha256": "f032cab8076dfb89dbefee3fe88891e2ba55ab892d0e0db51a0f40ee8a2a92b3",
+    "golden_sha256": "9a86c3de3ab61174d9baf4a7562476967b65f17d6e592803967dd1ef1e5ceab1",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_class.puml",
+    "source_sha256": "d524dec53c3d38c7a1a81d00e38881cdbd6480215c9383c8355c96af5148e678",
+    "golden_sha256": "b8862d2137233279edf7f8beef0c8054572bba6a1770cd6479d94bd8ad373d96",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_interface.puml",
+    "source_sha256": "11e949b275d32a335e8f839f1b6ac4b4f17fb32617c1a265caa8624838dd8c40",
+    "golden_sha256": "115c9a0cc7dcf9ab032b337c8f9b22a68119bbccd47a87522d1a84d5a69c4cca",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_record.puml",
+    "source_sha256": "042be2a624ee6914d5142d571e4797547501caf63167dd28428e6810f5a33921",
+    "golden_sha256": "05ccfec9b4332f9688d20168074a59832dab41ba429b44797b7b79f59ffe9269",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_struct.puml",
+    "source_sha256": "d5147eeae73832a32728e24ff7118172e3410dbba4a0de13dd75a7365b4140d1",
+    "golden_sha256": "7497c7f4c0a0f9709d3e2fa3e2d5b47376ef5ed1e91b2c5b14349f169e1555cd",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-description-leaf-image-dependency/checker/dependency_component_uml1.puml",
+    "source_sha256": "278630db916998ab8420afe441c453e71deecbbe12b5fb0878fa5c55d1a807fa",
+    "golden_sha256": "180e1ede9b580b38af514d9b2de569c1af0d4bbe39299765dcd7cc9882ce5a3e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-description-leaf-image-dependency/checker/dependency_component_uml2.puml",
+    "source_sha256": "553a04198f607f2bc29d1bac2f10000d36ddca95bd8dd43972538846c899f428",
+    "golden_sha256": "366fc8606758f3e1a11b5ef91102f55f820b4f840a6c15d5f5d24acb2ecc9fe8",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-description-symbol-images/checker/action_group.puml",
+    "source_sha256": "faf254bc820188e2e968e458c9e861399f26bb807bff355699696b9dbe5513c4",
+    "golden_sha256": "53f5fce6f3ef9be7329aeb752876a7c8073f949e3d56a23ea737f3854896b946",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-description-symbol-images/checker/boundary_uml1.puml",
+    "source_sha256": "2cb1392d1dc6df4a7c0fd30bc6096eb97db8e8d3fc5a6d1d7731ecaaa344ceeb",
+    "golden_sha256": "91355da1876b7d7fbcce8c403c262b52f8b72a7284361e379371dfabf5452060",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-description-symbol-images/checker/boundary_uml2.puml",
+    "source_sha256": "c8c98e83fbf521e0612c8e002dec8e2559d6961e7ba97f03e0cf55c8b9bf01bd",
+    "golden_sha256": "720d84cb3c81934abe38d48fb3a22b2781479c6983a4f57f24a7dbd45b3725d4",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-description-symbol-images/checker/component_uml1.puml",
+    "source_sha256": "278630db916998ab8420afe441c453e71deecbbe12b5fb0878fa5c55d1a807fa",
+    "golden_sha256": "180e1ede9b580b38af514d9b2de569c1af0d4bbe39299765dcd7cc9882ce5a3e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-description-symbol-images/checker/component_uml2.puml",
+    "source_sha256": "553a04198f607f2bc29d1bac2f10000d36ddca95bd8dd43972538846c899f428",
+    "golden_sha256": "366fc8606758f3e1a11b5ef91102f55f820b4f840a6c15d5f5d24acb2ecc9fe8",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-description-symbol-images/checker/plain_multiline_boundary.puml",
+    "source_sha256": "5c1684ac136af943bfe2bb8ceebd80930522ca0d4b0c6662f146b138efaeca5c",
+    "golden_sha256": "cabe0817824740839857249278d87196eaa9e18bd9d4c222a08ce73d8babc354",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-description-symbol-images/checker/plain_multiline_component.puml",
+    "source_sha256": "816d1f36d87fa00dbad38e8ced0a655264c18e5a5d2ef72e62ba9fccbbe34ad7",
+    "golden_sha256": "1d5150a118ba88a2a3c3e99e89db7894bd1d66e76e06dd27f02cfdec92041dc2",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-description-symbol-images/checker/process_group.puml",
+    "source_sha256": "9a4ca0b250d82452c6f1dffad4c347e9dd747050f1a58c68685bde8bec9074cd",
+    "golden_sha256": "5d21439cf43de178576f61175422ab4a3c493e5d98da33766b4343b20f994658",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-description-symbol-images/checker/queue_group.puml",
+    "source_sha256": "dc42b332bcb5333181971c72f6b8fcac0d07e39e693fce66fd8d79217a84be9e",
+    "golden_sha256": "de13948af7f9e8ed6a7141631e223315004baeb0117987ea233fe5123fe53d1a",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-endpoint-routing/checker/groups_0.puml",
+    "source_sha256": "d6984e72d55bfaa9c56ea00476a15a39c6d408419954474d9a7ea32bbb2f2304",
+    "golden_sha256": "33616c2841f1b63d9eb6e882eeb5b3d88dd21fdbe3d285564e9e1abe31f83652",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-endpoint-routing/checker/groups_1.puml",
+    "source_sha256": "0b25e3a4921b6940ecfec8e9fc5975da7fcda7ea1c934b7eb9353b1d85040efb",
+    "golden_sha256": "98f062fb1818ea82f0ad5386deb35db5d0db85cee868b8b44a0a92a786e85eeb",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-endpoint-routing/checker/groups_2.puml",
+    "source_sha256": "d2f7d03bf7fe3a2ea47312126a211ba47c7e0204a50e442c07bf3aa8db38bb14",
+    "golden_sha256": "f17e4ef84cfdf9469a062ce70033f6545b656de23563e2a75621d5a9eb5e0c05",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-endpoint-routing/checker/groups_3.puml",
+    "source_sha256": "f71c713246b67e4a1685397a0ab3303aec178b2656faa41b091cff5e1263f762",
+    "golden_sha256": "a9e42052751b089135f75f3981b3073668eef14543abefb8346d367df7adbea3",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-endpoint-routing/checker/groups_4.puml",
+    "source_sha256": "05aa1e55fab283434826b2f173e1e509dc1172dd3d49f2fef332bf8d09a18f8f",
+    "golden_sha256": "67065422ee591319e985115d5a7ad3a909f19d6a1e5142cdc24ff2711f4c586e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-endpoint-routing/checker/groups_5.puml",
+    "source_sha256": "83a6c0d7027117ba1157dda6eccbbed0ca06b7b30795a3f691b60f948052f31f",
+    "golden_sha256": "a0f1d8335ba8934dbf51d42358e2141aabe915b9184101b7f8004ea1e477f918",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-endpoint-routing/checker/shield_LR.puml",
+    "source_sha256": "9859748d4f79643cc12f9436fc7340b3e80908480944b42800408b7c4beeb6ab",
+    "golden_sha256": "66f85cf9d4ec0522df6b9d6de6e9650f4d1be648435db809ebdec831ffbb41b8",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-endpoint-routing/checker/shield_TB.puml",
+    "source_sha256": "0e4535ee1241eec435bdb1ae69af20f63d2ecb167dd57d54f94af596b7e37f5f",
+    "golden_sha256": "f691ec1623e6c5e51fa450dfcc2041c85fa6d099b096ab663851a3d3efb2b264",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-endpoint-routing/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+    "source_sha256": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+    "golden_sha256": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-endpoint-routing/retained-current/description-element-command-case__followup3__followup3_upper_interface_bare_lr.puml",
+    "source_sha256": "035a2e0cc53b9053ac97157cf4de58fe46a613f3a4c988d9f63c4c96995921dd",
+    "golden_sha256": "45789c12c51dadb82d802cfbd3f3116ee6f31fc321699c54ce0a8f8eb99107e3",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-endpoint-routing/retained-maker/group_lr.puml",
+    "source_sha256": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+    "golden_sha256": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-magnetic-extremities/checker/magnetic_0.puml",
+    "source_sha256": "416a0cd2ee8f246172d21e7a7f5bbebae1cf319068cacc1ce36fdb2dc966b7dd",
+    "golden_sha256": "35249a260d08cc1eca72e5d041558dd9f5b094cf6998448514230fa139a4fcf7",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-magnetic-extremities/checker/magnetic_1.puml",
+    "source_sha256": "13f5b53b8575027c9617f8a88362b216920e51cd730bf3965b2489fd90915d26",
+    "golden_sha256": "265dabbc0db4ac8801ea017e574577b797b22c66a6f62d45abb88bcf5fe7231a",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-magnetic-extremities/checker/magnetic_2.puml",
+    "source_sha256": "84e0ff4e210847b14a2a1f4740ab9bed133781de5268dd64db21ecd36007741b",
+    "golden_sha256": "1bb246348f33c0860d84dcdffde70579626b110934e6e93ea0365eb561e408bf",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-magnetic-extremities/checker/magnetic_3.puml",
+    "source_sha256": "5a1ceb076a942d80ac63912e7c1fa2b2e692790717549ee3b5a1f542cfd309aa",
+    "golden_sha256": "3b4dc8a7984c3a258d57b4407734f00c26551ad4da6fbf6fe591c533bad905b0",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-magnetic-extremities/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+    "source_sha256": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+    "golden_sha256": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-magnetic-extremities/retained-maker/group_lr.puml",
+    "source_sha256": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+    "golden_sha256": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-paint-ownership/checker/url_action.puml",
+    "source_sha256": "afe5a99f3b4802d0dc5aa6a65df913f6c51abeec4355f26086f9c2ef08dd558d",
+    "golden_sha256": "87880b84e9bb78e3a12b108dad51e3b15d2a9fd16297a0d87e5f1fe214d8bb37",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-paint-ownership/checker/url_frame.puml",
+    "source_sha256": "389b839585f2256b9570614510d2683e6a5390ef999adfd9e52a70d5952e8f5e",
+    "golden_sha256": "570fcfa8182d71cb0b367353ab14ae3d95876251a578b01685a3ed1b2b6f2dd5",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-paint-ownership/checker/url_node.puml",
+    "source_sha256": "cafefa88776a063c90d2415d2dafca73c598deb6512db1ffbf48f3c75aedd2cc",
+    "golden_sha256": "f0fc5fc18d31415708d1fbb6e15265d5c6a70202d919e85f6c91d596269efcf9",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-paint-ownership/checker/url_queue.puml",
+    "source_sha256": "c62970eddd8f84a9a5eaa0eb73001624305fc415d93e8061bc87e67c6d36f6c4",
+    "golden_sha256": "2d330e3af725fae112eaa1fe7a94030e7b142a839f1e5935fc70a5dd71082517",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-paint-ownership/dependencies/current-spot-cascade__grouped_record.puml",
+    "source_sha256": "7790b9944dea121fb8d4d2a55846216dab78d4466b50abed830cede63494a817",
+    "golden_sha256": "bc03905cab65a8a6e7e6c2cee1af8b5279a81eeaa65cb9ad743a2f09b38ede51",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-paint-ownership/dependencies/single-svek-envelope-origin__root_note_cloud.puml",
+    "source_sha256": "63a01f130bd47e9e941fc31f5b46ae24e3049e32823fc4b04f23329ca39022b4",
+    "golden_sha256": "c1eb32ac966f1dc0d64cc23f9014914e13c02878c2b7f5ac0769a627358e0280",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-paint-ownership/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+    "source_sha256": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+    "golden_sha256": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-group-paint-ownership/retained-maker/group_lr.puml",
+    "source_sha256": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+    "golden_sha256": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_0.puml",
+    "source_sha256": "27ade472fef6b77f48c6056002b57ab982dcbb281fad211aa99177a0aac301a2",
+    "golden_sha256": "92d1a4d749b05b56e3b9515aafb007d1455faec9a24a881a7be8a14ffeb5f8d5",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_1.puml",
+    "source_sha256": "80ba01d1bb8dbb776d0712ef58807ca68846bca65fc539417db1fbe60643580f",
+    "golden_sha256": "b990d5798ea89d70807ec3d0b219eacd2166d0af70ba99db411c907a129175d6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_2.puml",
+    "source_sha256": "45a5c89c078f8428c1147cd82ec9d3339423d29926a5daf88769396c96b44705",
+    "golden_sha256": "5eadc10d68317f0584b00afa512d7f51c7b0e76289e745aa29145c4932f30e6b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_3.puml",
+    "source_sha256": "da0c7a69cfdddd6a018aeb3768d6f716cfa59cf37033a0fac62ca755bfd56ec0",
+    "golden_sha256": "67f82fe3330668113264e5f971f106c724b9a6b3bc3b31fc21f287c0b5d0ef39",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/qualified_0.puml",
+    "source_sha256": "2c9adbc3cc443ea82bab68e55e84636861d518742a66b381613961ac690e2d91",
+    "golden_sha256": "fe337b30308f1daee732b1773901030dc7962cc49d537bed69d36cb7e55a0af1",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/qualified_1.puml",
+    "source_sha256": "9a670655d320a2ee7d26e363eca99dd85866d5d0087ca680ca5df63d77cf9abb",
+    "golden_sha256": "6c5149fc2552d3f3ffbdf3d3a3329c23a64a3f42351f1ce3fbaea2a002b9e0b1",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-leaf-presentation/checker/bodyless_icon_0.puml",
+    "source_sha256": "95e9aa67759a1947520117b072276830c0846ecff3e060aac7a638460faaf332",
+    "golden_sha256": "5543a1e398b1290abfe804590928151403f5aa99831c9b849d4edc0e322c7565",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-leaf-presentation/checker/bodyless_icon_14.puml",
+    "source_sha256": "4b98b00b9cdc18d0544dce0ab63420f0807793db04e2088e11284f217d3e7d51",
+    "golden_sha256": "48970027965a209e7f497ecb42012359afde0a5ed3779fbdd03a44069f4985f0",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-leaf-presentation/checker/bodyless_icon_9.puml",
+    "source_sha256": "5d7c354cc6eac49461e0abb0a87469ed2f1de271412649c268162c80d43d112e",
+    "golden_sha256": "83d83bf9745b4583f3977a6a555209fe71a904d38f9fa37c863a47a6e5c4d8f3",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-leaf-presentation/checker/native_dataclass.puml",
+    "source_sha256": "f64457a619f040c9e54609d1ade1d76663aee268074f7afc65fc27354b89067a",
+    "golden_sha256": "406328e0c933ab63bc2b8c84613f6220a45aa4a3565755834e382bb8dbff89ca",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-leaf-presentation/checker/native_exception.puml",
+    "source_sha256": "641a81a9b8029f88496033a8ddae1a85e663b7bc4741b9db705eb378ec713c95",
+    "golden_sha256": "72d084b976d0f83537cba33453b0368eee2cdd329ac3bb5ce134348bb70cdd23",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-leaf-presentation/checker/native_metaclass.puml",
+    "source_sha256": "cc650b8e903ee4205019c76c1fae9eb6c66607a4383a982cd9c203b267d6a188",
+    "golden_sha256": "ef27c9aa1625dbdc4b9d62279f657a1f4929b2e5ee6418294abb1f883d917803",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-leaf-presentation/checker/native_protocol.puml",
+    "source_sha256": "c0a26f852aaf2fa1454e17c40801da1be4a8ddb2c7b6437f778250968df38e50",
+    "golden_sha256": "1cb0ac3ddd42716cb8d28d165c7e58da0b069c425d0c8cd1257a11dda21292e7",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-leaf-presentation/checker/native_record.puml",
+    "source_sha256": "e2a3034837ab19887ec5524fe5ce45e28aafcbee8faa8910152635ccb2c39289",
+    "golden_sha256": "826a9e3b72f9e229e8f97f972f53549469edac41fbd85b2a7d32e9ee163aeb10",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-leaf-presentation/checker/native_struct.puml",
+    "source_sha256": "ede5bd6a132495176ca2473ef8579d3e87e5ea2509937ffcba0cd1ff84994af3",
+    "golden_sha256": "622285a21299d859077dbbcf10e679f4fa3bda51502969819e2a88de4cc22d37",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-leaf-presentation/checker/negative_mandatory_modifier.puml",
+    "source_sha256": "948daf4bba98719c628c9bb76ba9bd92caca02eee735345031805539a77ead3c",
+    "golden_sha256": "903af3ef4b688f80f58260c4313f6aa3b79029430d442a14c78c9e1d485f7f2d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-note-cluster-ownership-dependency/checker/dependency_scope_left.puml",
+    "source_sha256": "4e752ea7c755ca4e1b6f85ab500bc962f348717ad41ef599db6fd2f598236e66",
+    "golden_sha256": "2496cf33ef2c309e7add1a65e4061cd9470423badccb7f190d9a9337e1ce0a5e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-note-cluster-ownership-dependency/checker/dependency_scope_right.puml",
+    "source_sha256": "6e8d9111212b203bd3869d46ee8b8e85218067009407ec8948f9fb586e0979a6",
+    "golden_sha256": "7e64fa7f3adf242ced4574fc706b4f558eeeb1920610fa14406a5fbfd8800197",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-note-cluster-ownership-dependency/dependencies/single-svek-envelope-origin__single_root_note_top.puml",
+    "source_sha256": "0ceec73d1af41d25090cc7f683488bfc0dc1f8243643ad3acbdf42318ebb4978",
+    "golden_sha256": "e741818b0f0319043784669bac887a654f3ba4d3b574768d4a0b4f0bc30fa027",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-note-declaration-scope/checker/scope_bottom.puml",
+    "source_sha256": "18eb890c42df8bd216c34eaeaa04d07ecfb4b0077cc0945c5962ee64429cf6c5",
+    "golden_sha256": "fd3acfe0ad34041e46d952f4050edfb638060aaa11a3bbf301c4276ee7d52006",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-note-declaration-scope/checker/scope_left.puml",
+    "source_sha256": "4e752ea7c755ca4e1b6f85ab500bc962f348717ad41ef599db6fd2f598236e66",
+    "golden_sha256": "2496cf33ef2c309e7add1a65e4061cd9470423badccb7f190d9a9337e1ce0a5e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-note-declaration-scope/checker/scope_right.puml",
+    "source_sha256": "6e8d9111212b203bd3869d46ee8b8e85218067009407ec8948f9fb586e0979a6",
+    "golden_sha256": "7e64fa7f3adf242ced4574fc706b4f558eeeb1920610fa14406a5fbfd8800197",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-note-declaration-scope/checker/scope_top.puml",
+    "source_sha256": "715dffbcc96866723264cb693ae2585d92b630c3bf24ea58ff113e55f52e6aa0",
+    "golden_sha256": "08537893552ce86ef7a7ca7b60e61cbb96cddb7163b33aa4c8800bbe800fe4bb",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-note-declaration-scope/dependencies/single-svek-envelope-origin__single_root_note_top.puml",
+    "source_sha256": "0ceec73d1af41d25090cc7f683488bfc0dc1f8243643ad3acbdf42318ebb4978",
+    "golden_sha256": "e741818b0f0319043784669bac887a654f3ba4d3b574768d4a0b4f0bc30fa027",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-note-target-quark/checker/group_target_bottom.puml",
+    "source_sha256": "d3455224d1b57b418e40829a87c615e5fe2c6810a00d79320855645ba2f80aef",
+    "golden_sha256": "214df9f2b380c36f2321f5f58b50391b4e4f671eaceaf12c5ed16b2171d7c279",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-note-target-quark/checker/group_target_left.puml",
+    "source_sha256": "9f5a7148f6f9b90bff9340af136955ebcca4ae40763d01bc71a5b5bf1f5d11b4",
+    "golden_sha256": "84bc27be7d3b5673e57e9a521488aa4983a04fb34c6c77c8a5d6d63b126de3ce",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-note-target-quark/checker/target_bottom.puml",
+    "source_sha256": "9a0c9203c05dede45588c9bee4920d9a168520c38abd784d4804a7dca5921e2d",
+    "golden_sha256": "dad7dc187e1fbe7f81f8d52feba6ca9966d7e7815ee19402b3c8945dadddf319",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-note-target-quark/checker/target_left.puml",
+    "source_sha256": "a25a950af4bcd306e96be5cc6750db963392155954cb74e1112edfb443cd3145",
+    "golden_sha256": "4937b0731e209d5fb05e3892a99282392868f4c0aae991790d1693868682c7f0",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-note-target-quark/checker/target_right.puml",
+    "source_sha256": "1e8f4687138318f31d8a3440941d4eac93dc984484b8700e7ed6f415b7aff26c",
+    "golden_sha256": "a53235cdfd020746f59bc1108723849cf361d5535747338d419eb0144cccb5f3",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-note-target-quark/checker/target_top.puml",
+    "source_sha256": "b7d575d3097b5ef9194a3f132dc5bb8ee5166625863708fff923f8a3616ed6dd",
+    "golden_sha256": "3d6ec19c88fed4c8f92340be8bd30de6d894138595f265e4577cb660afdba6a5",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-command-precedence-closure/checker/slots_0.puml",
+    "source_sha256": "594b8a17345361ef4f86c4cf44e4f695e83672f6035a7d18057d7ea4ccc5b535",
+    "golden_sha256": "c76d6eadb83d8e8f2924ed401813256a71e48c06f079b5434b3ab09e58551909",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-command-precedence-closure/checker/slots_1.puml",
+    "source_sha256": "0e79cceeeb7f8f8f132bf8ba04fbe728ad6ae35d4ff3b51ba8af9b1d14ead69e",
+    "golden_sha256": "69fd0799b51924d43581fc5c2d638c2f2dc5f8bdc1d6a131145fe7b2c01254c5",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-command-precedence-closure/checker/slots_2.puml",
+    "source_sha256": "cf6694696064594fb819253675f6cd45f45b65e9e0e3dc9b2154a41dfd970ab8",
+    "golden_sha256": "fdf100c42e7822a7f7c2cd463c03750c386d8ba140a3a363c693886f2ccc4892",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-command-precedence-closure/checker/slots_3.puml",
+    "source_sha256": "0fcd66071bcb86306daf8b24cded574a22d22b6d38305c510f898edab58c6fab",
+    "golden_sha256": "e17597a8b82ca0515332e9ece3f0fa3f8d212622cd6c469d760b21bf23c78ff6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-command-precedence-closure/checker/visibility_private.puml",
+    "source_sha256": "6bb3ce215bdb23e392a5e16da605176ab1879188ca8c8b01c8949114ccee16f1",
+    "golden_sha256": "5760aee156f2bdabc3178483f93c654dfa31d87bc2f124b217f4148fe845b367",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-command-precedence-closure/checker/visibility_public.puml",
+    "source_sha256": "dea39482d5eb3039bd4d600216ab82453cad10853d84cbb767b8234c43e2fff7",
+    "golden_sha256": "40b8e6e14a7638c89c1cfbdb05594067eca8e74ec891033ae7575442c16cdf5d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-page-chrome-composition-dependency/checker/dependency_left_False.puml",
+    "source_sha256": "f12696f3d3a0a7a81a7f28f57e1c9abdee839c552b0237f1421c1ea6ccf3c28c",
+    "golden_sha256": "fddbe0c26516ce8e10d4f454c67ebe288d1682ce59a21a5b600e3741464b9190",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-page-chrome-composition-dependency/checker/dependency_left_True.puml",
+    "source_sha256": "e5e6de599409f82754a79fad659ca9e4a67deed095274b6990d2d805b71edb9b",
+    "golden_sha256": "7a5b230234f0e5240339476c093e7d7a8852e5b3a28c274597d80c709864211b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-page-chrome-composition-dependency/dependencies/chrome-bordered-block-geometry__style_left.puml",
+    "source_sha256": "fd5d0c68b5034a0f5dac73c9033fc03d19e83072362097d446ad6b76deec5474",
+    "golden_sha256": "3cc031dea4297d5322ad41a3fa0cf1855cf3cb1f4c21adb9d39e979b9694e58d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-page-chrome-composition-dependency/dependencies/chrome-bordered-block-geometry__style_right.puml",
+    "source_sha256": "19749ddf86b2a54545fa747be588f616bd58f629934dabe9d28e8a576fb2fb1d",
+    "golden_sha256": "f68b4796e7049953ef89233b15fd35f3f82d81edde4a9c8ec3937c73daa5476e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-link-identity/checker/endpoint_0.puml",
+    "source_sha256": "312ab70760971819e46dc7cd31277de4d7ae2c53b8e476661a8b2ab3e2ecc374",
+    "golden_sha256": "a389f5ca028220f09f5b843d9cc6e20584bf4a247395bd5b1dc9ff47ca182ffb",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-link-identity/checker/endpoint_1.puml",
+    "source_sha256": "1e249c80f4ccd32d8b98f09e2f9cbf09b89b0e73a5119848bdffbaf5af79dcce",
+    "golden_sha256": "b68dccb37387b7681c505031ae1bd3415ddfa642df7079d69507a2b0bb728cd1",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-link-identity/checker/endpoint_2.puml",
+    "source_sha256": "0e3407324e4a74650ec77bb584f24ed3009be98e4052850203669acf67bd2f12",
+    "golden_sha256": "0979583d7c3c8d3ecf7a1f3be5fd8e190c0c7a264d55e94c4b9d07610a0920c6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-link-identity/checker/endpoint_3.puml",
+    "source_sha256": "1ce5c76240e22b17cdae586dcf3774f3fb5c0b87a403be9abb9dd64118004296",
+    "golden_sha256": "d066dcccf32853013167efa50e6bb7d79f91201e93a5b09737ba1df6c57418c4",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-link-identity/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+    "source_sha256": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+    "golden_sha256": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-link-identity/retained-maker/group_lr.puml",
+    "source_sha256": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+    "golden_sha256": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_0.puml",
+    "source_sha256": "9dca5c56603f7788b9996071399a4fa76674dad4994a09663a1619978ff6e6b0",
+    "golden_sha256": "1ac57b90c721f96a688892a748963cb4b8bbb9b7708d00a07450ce75f22b0d57",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_1.puml",
+    "source_sha256": "55bdbd020c6803901f5917d7b940446eab4e717225cde9538937704f0ba5b47c",
+    "golden_sha256": "3aff71195d52f154a32fef4669f32cafdfc91188c9a62d2ac564de20fc99aa8a",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_2.puml",
+    "source_sha256": "2fd3cf8c51ee8e776062c8179a1ff1f942522e895fcfb9eda8749ed2188ef5eb",
+    "golden_sha256": "85c4583b632ace69c314c92bd715d68d688c61330b7681ac49e4da7c36eecb16",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_3.puml",
+    "source_sha256": "48c5a03b803fa1665b72e4c93902130d34b8b47804403e2e592b98a6d5d4da28",
+    "golden_sha256": "b30109bf6455aca39c76da2566416558a259edd4907372462049cd4e631ce057",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_dotted.puml",
+    "source_sha256": "f671e90fa42f1fb1d9455ac9be6f58611a18056ead877bcc4382ea50adc4bcbc",
+    "golden_sha256": "ff2d4c7918bd195ffc515eb42a9ea5c2afefcecab2808d87d5df6b2cefdaccef",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_lr_order.puml",
+    "source_sha256": "78d727526124e1f1c8145a09c36687bcdf3dba3efcc91a892910ce15790d22fe",
+    "golden_sha256": "cdec272c6a723589582621894ae97206537b563e3674a61ac1b72aa447366332",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-single-svek-envelope-origin/checker/root_note_action.puml",
+    "source_sha256": "ee32b78db2aa3402ac4c359d78641ff549fb03853a4494afcb5a6718a06ff065",
+    "golden_sha256": "cf8d509382dac3438d81e2bba6b41b789d6b5e01ea579ebc5a0a2b1576aa64b4",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-single-svek-envelope-origin/checker/root_note_cloud.puml",
+    "source_sha256": "63a01f130bd47e9e941fc31f5b46ae24e3049e32823fc4b04f23329ca39022b4",
+    "golden_sha256": "c1eb32ac966f1dc0d64cc23f9014914e13c02878c2b7f5ac0769a627358e0280",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-single-svek-envelope-origin/checker/root_note_node.puml",
+    "source_sha256": "71648ac810ea21c6f45cff0a690908ef5fefe5df275124ff76ddfebc49989cc8",
+    "golden_sha256": "bcab4f86a0a27b6599967dd57d60bcb74502eb8abab86e5dc6929995f0e7afbf",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-single-svek-envelope-origin/checker/root_note_rectangle.puml",
+    "source_sha256": "65632a63247e3a8c9a5bcf92e37d55b52b1b830783d629ef4ab96bcea8137dc0",
+    "golden_sha256": "7d68d60f1a895595ad9cc0f29d055f93fff9a03315da0bb81e9d69d0e5fef232",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-single-svek-envelope-origin/checker/single_root_note_left.puml",
+    "source_sha256": "0860a64b576aaf0177ca38cc1d37dd4eeba37a7ec2fde33fb088874ef4de610e",
+    "golden_sha256": "0b6dbd90d5577b2f5345f070d9731c6fe1bae4d7766f2433b233c87950505509",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-single-svek-envelope-origin/checker/single_root_note_top.puml",
+    "source_sha256": "0ceec73d1af41d25090cc7f683488bfc0dc1f8243643ad3acbdf42318ebb4978",
+    "golden_sha256": "e741818b0f0319043784669bac887a654f3ba4d3b574768d4a0b4f0bc30fa027",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-single-svek-envelope-origin/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+    "source_sha256": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+    "golden_sha256": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-single-svek-envelope-origin/retained-maker/group_lr.puml",
+    "source_sha256": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+    "golden_sha256": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-svek-painted-origin/checker/origin_cloud.puml",
+    "source_sha256": "0403f02d8204b2474d709a733007c86792d61126633d4750e1245936fc99518b",
+    "golden_sha256": "2f9977887f2ed0ae635f3ffacce5ba08d043fc5a212ac5b9cb152e47159b9999",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-svek-painted-origin/checker/origin_node.puml",
+    "source_sha256": "7ddf039ae50de3930d6384fdd898184321221288c364fbe4606c3e8c93f65839",
+    "golden_sha256": "98e729a01ff184b1ed970bcc7386ca894a5428e3577edc0a47f805df979bb100",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-svek-painted-origin/checker/origin_process.puml",
+    "source_sha256": "ff63387f3dd501ad04d0294e888613ca4d86d5e4f1267d25ab6b77221ab8247f",
+    "golden_sha256": "7238a4a1e7e0c34ce0ba3cbe328a86a231eacde0bda4b0e915c486ca1b6080da",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-svek-painted-origin/checker/origin_rectangle.puml",
+    "source_sha256": "dd45756f955ba1937838f7e5f795e90fedccef9b37679c963faa9f3cefb2e3f4",
+    "golden_sha256": "bf4864595df16488695f1349ef02c99debcab91e2aa32c777f9e027fdfbdbf47",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-svek-painted-origin/dependencies/single-svek-envelope-origin__root_note_cloud.puml",
+    "source_sha256": "63a01f130bd47e9e941fc31f5b46ae24e3049e32823fc4b04f23329ca39022b4",
+    "golden_sha256": "c1eb32ac966f1dc0d64cc23f9014914e13c02878c2b7f5ac0769a627358e0280",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-svek-painted-origin/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+    "source_sha256": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+    "golden_sha256": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-svek-painted-origin/retained-maker/group_lr.puml",
+    "source_sha256": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+    "golden_sha256": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/alias_cloud.puml",
+    "source_sha256": "66bce4164c9ef9a15f73ea761f7f7bf4c3efec3428202f519dc049443adb5a87",
+    "golden_sha256": "ac5df3f83a0d1e3cb11b75d224c6ddbe8f4151b3a865a9a32c993b54a2ed807d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/alias_folder.puml",
+    "source_sha256": "51e4f76e6c79b2c2bf6c3582a7557965608f66feb39b67f88d46d0f4272cd218",
+    "golden_sha256": "114e9a54149cce7ee1cb02643342ff674b980b43d68ee46ccbc07ca3960fd2ee",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/alias_frame.puml",
+    "source_sha256": "82275fcbcae34ddf16e7df8dec2adb356599042ad79824dd0307dc10d4eae0b0",
+    "golden_sha256": "f13bff6b72e31886405300e19a2c3b9128ed07c92cfcdfcc0271363407116a93",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/alias_node.puml",
+    "source_sha256": "e698c595e931f022f51ade7f2dea14d10f679a40d0044f8e1723568a5a2475eb",
+    "golden_sha256": "46eab635d12f60533dd0b8e01310a0acc7c6934a7d030a9e7f4dce13dcd11df4",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/dotted_alias.puml",
+    "source_sha256": "52426d709619cc305e3be59bf229dbd826e0f7fa08a6609dfb76d174c6c71206",
+    "golden_sha256": "eeb1126c7ea9856eddab6e9e8f0beb2f261ad87a745378a1268669aab913e452",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/nested_opaque.puml",
+    "source_sha256": "998772b43acd12caaa827e75a6784616be2009ad5ba65db2f3320a3cce29d03a",
+    "golden_sha256": "9e187e328539a775b75de7beee01ae501b8cc0f2c20567f747e12c01e11607cd",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/relabel_folder.puml",
+    "source_sha256": "36b6656cd405f1fd31d1d9b133d1143877dc8d2bb889b78e6a7a8349bd636d76",
+    "golden_sha256": "af6addc9da1151bf6765a55e0ee4cd281abc9215f8032436399996b48eea88e4",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/relabel_node.puml",
+    "source_sha256": "78606da37bedd72720ebf05b8a9acee2643868ff6a245a025a4b8a319e2eaf2c",
+    "golden_sha256": "4315f91380b75fa69abd45a4640d9b05e23f3f5cafbdcb53667d2aae88d48f73",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/render-registry-unwind-scope/checker_activity_background.puml",
+    "source_sha256": "5230b93720a87bc6cb7d1219e4045f542e8b193972f42e9c4c2f14f76556b4c3",
+    "golden_sha256": "15c3fbd382be2e40562f6d5dbed2eec74fceab38a0dda68e03db818ab9f888d8",
+    "cohort955": true,
+    "cohort1044": true
+  },
+  {
+    "source": "test-diagrams/perturbations/render-registry-unwind-scope/checker_activity_plain.puml",
+    "source_sha256": "35bf971bab4a37343a50e2d45344355158c9be9003afc8c8c9e6e117c0a6b95c",
+    "golden_sha256": "3a83e4dc6e51212f9291c06f9e659281f847b49add144d7ff3f1a80b156684f9",
+    "cohort955": true,
+    "cohort1044": true
+  },
+  {
+    "source": "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_background.puml",
+    "source_sha256": "c7f1b770afdc3775a49d4c330cd73a3cc70c8c1bef82798f0098ac741535d0ed",
+    "golden_sha256": "c36998b66d4a56dd85a62aab96e5e3ad40342fbde4686bd7ad1ab0655236c4c9",
+    "cohort955": true,
+    "cohort1044": true
+  },
+  {
+    "source": "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_plain.puml",
+    "source_sha256": "af1d39102562cc90612ec7ecf60cb83b8581abbdf99439371768df1a4c320507",
+    "golden_sha256": "ca6e16e7c97ec6a74b0e6a6bb7e44af04320d2e6023359af4b4f4aebf70a2157",
+    "cohort955": true,
+    "cohort1044": true
+  },
+  {
+    "source": "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_reused_color.puml",
+    "source_sha256": "64b0371617dc0905187be1da06f0f8c3c503e449b95c2075347d27fdd0f7a604",
+    "golden_sha256": "0e16b70c496183b8eda558bfca70555cd0e077339f86cc09aa9d558e987e935b",
+    "cohort955": true,
+    "cohort1044": true
+  },
+  {
+    "source": "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_reverse.puml",
+    "source_sha256": "a715552b37d1a7b2c9036f358066335679c4024bd25169ee8a2c822e612fc7ae",
+    "golden_sha256": "1428c9e5e89a1ba7892ee121d493fd589cad108455cef4e95764331d194a4549",
+    "cohort955": true,
+    "cohort1044": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w0.puml",
+    "source_sha256": "e00361cc0ad2f9bd6b6a56883c124284145453cadb02a4cc0eb18215c7253c47",
+    "golden_sha256": "b24bd305a3d44b0f8c140385f0704f8fdebedef2b505da9118a290c5e900e0a2",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w1.puml",
+    "source_sha256": "fd71eb2011197a148e6c3a2d77c45ec6f0c942134ecab6485c219df89fd102dd",
+    "golden_sha256": "49f8e92eafdf87dd3396a3f048817a80940086ec342498672499bee2065f998a",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w0.puml",
+    "source_sha256": "6537af2aa11af9358d2e6418041eeb1d293b90fbd5561fe648d15682167a6ddd",
+    "golden_sha256": "c4e0db38341688d9f6cce8e197ca827463a66ed0b7b3d199b66d137730dae12e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w1.puml",
+    "source_sha256": "df80c0b4f79dcbc030ffa64e34721b9beb9f3ba7dacac24cc637dbe0bda542a4",
+    "golden_sha256": "cb500503027654ad2ef52b6855e0538c779568491297303e0c695fdbc179965b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w0.puml",
+    "source_sha256": "ff89992fb3569bb43eb2455bcb858d6a4191fa1dc56874e4982518571c301c7b",
+    "golden_sha256": "c3adb119b82848ef5a4d6b79c1bc04a3ed34ad97026d0a450eaea67cb9f465fc",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w1.puml",
+    "source_sha256": "d6556da24ede15e491903051f93e4e9e4a29ead1892c57bb65e403f7a4d4eadf",
+    "golden_sha256": "7ce835e9323b08fb4a1d9a0d3b65818ec9bc81f3a2ea727f89901a6d7d7f7b48",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w0.puml",
+    "source_sha256": "ffc7d536e26a0c91b4819e9745f6cad0dc4b00503d193f40dcb3293a42464a63",
+    "golden_sha256": "ad94669ab8f674046454a50a8f55d8b04bcce421a41218bf27be6fb13cd9411f",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w1.puml",
+    "source_sha256": "eefbe088d864d36c52e036b2024748db2683e792f7a5ca49c1bd7a1d99f92b93",
+    "golden_sha256": "44ed16de87a7062fbd067508d7838697d31d5eb488bf5ec69e796bbef8d08cc4",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in0_teoz0.puml",
+    "source_sha256": "f3397a75c1a1609c12dd28caca3535e42d99d05cc2b2f977ae0231b92ecb8a7b",
+    "golden_sha256": "d71a47497829ebe3f62f92fe63f9a0e463bb2462c2c3d08b09f155b373088257",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in0_teoz1.puml",
+    "source_sha256": "abae795fde98143e87fdd1e2a2064c2506b98af80fdfded918fdbca0157988e3",
+    "golden_sha256": "f508e4beaa9c53b3f095416a23eda3a93536afdd105cac5c768e085b56f79bd4",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in1_teoz0.puml",
+    "source_sha256": "b5bc9a476c0f3683157e7f4a758b22b822220aa9310eeb52b93b5dfbafc707fe",
+    "golden_sha256": "66e902b63c040fa6f817bca3d86eb331eb937e592049a2581d0da3f782d88116",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in1_teoz1.puml",
+    "source_sha256": "330e9845f0f49dcbd54f2ea6657a96c4338c76dae68049a42bcb9d785966034c",
+    "golden_sha256": "a990ba8853f4d3beeed5d17f85f37f067bda7fe374d91d383fd5b62209672b3a",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in0_teoz0.puml",
+    "source_sha256": "3943c935d8c243777c6933ab13ca15a6189960a779b180ae090883850bf99d37",
+    "golden_sha256": "0d049ffd9a0414558f8da39814ddb3389b7d3387dd514a7123d1238925338862",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in0_teoz1.puml",
+    "source_sha256": "f598968b683ffd179a7d76778c6a94fa01fbd3bf1bc06a4fcf876f5d3c12bcd7",
+    "golden_sha256": "b8bf1b4fc4f6b01ea77c712d0e7a7184fda1494e498e0eb7c89b93bcaea70a5f",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in1_teoz0.puml",
+    "source_sha256": "8a8ac65713c4be21456847a3d4318f65a14ff7ac3055bfb03228ba0c7d84e9a2",
+    "golden_sha256": "8f7e5298fa13241650dd540bc1ca9ee9fce0678383ff374a63f85830234d4780",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in1_teoz1.puml",
+    "source_sha256": "f70364a9cb04bf58424298725fee53d904a06109f167cc4c3d7f53ef7d878dfd",
+    "golden_sha256": "5d351d64caca8b9a435274f1b938e300f3394d42095b687b04d29f11f883b87e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_left_e0.puml",
+    "source_sha256": "561f35c24f4b4781fd05c76c7f804568fac7d119dd6a7c75d50cd9fc56ba6dc1",
+    "golden_sha256": "b8bc9640522e090eb556ae93370908aea2030186b6c308c7336456efb2ee6e4c",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_left_e1.puml",
+    "source_sha256": "156c630f7cda03adbd7fc449e65bddcfb2ff8a14e403d55ba5d0422876ff6449",
+    "golden_sha256": "319afffe433e5d54824cd3eb0f279c0f1e01faff661fab646a32462d2bd8cca8",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_right_e0.puml",
+    "source_sha256": "cd2274ce0d6df174e66ffb39f9f407e44bdfa553437ee35495567ac205283aba",
+    "golden_sha256": "71230fe16b1dd09584c75fc1141593dba0b3b5bf0bf82be7b133d063c9b1a899",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_right_e1.puml",
+    "source_sha256": "290500edf0035a197d4f934c18bc3c6c3ade90cc58121da7194b7c7bc1938102",
+    "golden_sha256": "fc03cfa3b26a39b3a58cbe5696b71d1e358382709f3853a09eefaba4ba32c424",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w0.puml",
+    "source_sha256": "8a64e14ceab02a04d923dd4eb8775297dc4be76cbfe3e18f3686f59110584a34",
+    "golden_sha256": "3ab5998e100488f0b74404b87aaa1747582160462fe631d709f10fcf3c33ce5d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w1.puml",
+    "source_sha256": "0e7553fac10ca057a794140186be5506e22aae2f2529cdc800059abc55859249",
+    "golden_sha256": "94e0a66ee31280bb086902de02f91cac13f6cc085b7a722cbdf949611bd83a73",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r1_w0.puml",
+    "source_sha256": "52681d8c0ffc8f77219b8806e875eb76bf9ee123db42e9738bd86a3612f5a1b2",
+    "golden_sha256": "6eec811486f9c5bd98382144df35798bb151b00b5382c880c3a24c89c0f1ce61",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r1_w1.puml",
+    "source_sha256": "2207e0469f7996d71ee5f4f58846e6a0a47503bbb15927ea34bc931fa9c750f2",
+    "golden_sha256": "f10a03e0304787dd88d7278552ee60391bfaeecffa54ac38b6658da6d7e99983",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w0.puml",
+    "source_sha256": "f5ee3e9f3f8d694f58f9b804df5ceb3f97ebb65d65d5b14a9b90b3ffed030eaf",
+    "golden_sha256": "602c8ff81f219c1b3f6b2a386a663628a95316b7f94b96c24c399c593d4fbfb2",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w1.puml",
+    "source_sha256": "437e7854b8a5934a8553ca43962ae58d7f6ca36b09503d14f968dc6065fa3c21",
+    "golden_sha256": "d2f1fee199182bc369fa97d258138bd0f3567a67a2ec976f077ac4fb181af85a",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r1_w0.puml",
+    "source_sha256": "3e383e75fe109c0c48f4a595e0eea05f10e677ef064114362d9061b514579807",
+    "golden_sha256": "f31308586345d5db21f9fc88d929634af45e8962f646822f5c98c46328c71f69",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r1_w1.puml",
+    "source_sha256": "5134bc084aa7c9a68a0e4b2894b11b9afc43f4c937fac9d9e8d2d5fdfb55ef93",
+    "golden_sha256": "552c13a6602ad42dd755f508bb6fcd6f9cb1652f83dc4c9e0c88943f2b7af045",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e0.puml",
+    "source_sha256": "5cc8ed5d3b5c11ee74e01b6aad66a92f91bd581809a1eb185bc5ca8084109698",
+    "golden_sha256": "2a178ca00bd33dbbbfa61093a8454c5321e15a2ed828a657bc90f337a9d0f319",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e1.puml",
+    "source_sha256": "4b4cf1e196c25a649179689d817adb7c75d862d5d10a698730356e4078ed787f",
+    "golden_sha256": "5b90ad0ae07fd7a7a61bb5fa3a006ce30afb1ee527b7a4712ce3dc4fb8859227",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e0.puml",
+    "source_sha256": "4b8bbf395982fce6f4165f80dbe8d8c1f5136db5bc18e8c68c2f284095cee053",
+    "golden_sha256": "321f9b44f2693b7833cc192f08ed6e94ba60bf6d9b0920dae24eee9105037bf9",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e1.puml",
+    "source_sha256": "9b21cb8cbcb87039e9a4c653a8475ab20044b2367af66e90c617d40ff2fc20d2",
+    "golden_sha256": "e62ae79efd837ab2e0ebd964882cc53f205ef37e19544d9e397f978b81d75c69",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w0.puml",
+    "source_sha256": "eac705a19ee2b617769a60f30250243ded6475ba3075fba9759640744376f48d",
+    "golden_sha256": "803d1214e46e2776f295dda2945c9db94496688b02c60cc64f20a23d52bc1f1f",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w1.puml",
+    "source_sha256": "2f105172e6e5286477b2e91ee0a29efa2bacf8ca8a58e945dc856f29175a48f7",
+    "golden_sha256": "a338f7dde4459ffbb345fbb847e3d60d3b0d984248d00756f1535a74d0049330",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w0.puml",
+    "source_sha256": "52aca32320cf0f57e5bd99335a5e2de29863955e7dc72a32f297c6d3bb9b829a",
+    "golden_sha256": "870822c27f60b44dd61cf18cfa8520b9bc5227ae44f2de1309edd7040f1bd30a",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w1.puml",
+    "source_sha256": "efca7917c8b51dddaf8427caebc6b32e76c51c70c1eb08d2e385e0c56d9a3207",
+    "golden_sha256": "e6f52120e6be4bf61552e4c3ef05374a93eaa109f989ecdbf4cf5456d68b4812",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w0.puml",
+    "source_sha256": "91dacd406dcf7182c49dc6cf93b14d766cb25f4761188801bd17183e181a3d5a",
+    "golden_sha256": "4d4b25db3ce9171168c12e5311a5c4e6dac464370503ff8ff294279f8c86722d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w1.puml",
+    "source_sha256": "4913360533250c3d4ebc65032312bb0bdf1ef92026a48a76138fdbd481eb8c79",
+    "golden_sha256": "e1efe7d72b44f5c8e26984b84cc0ad278f7fad7dbe14a571c7cb630c6ecce658",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w0.puml",
+    "source_sha256": "1374e243385192cdabc7985708f5511ee2d8523f8ab79865e1d1af9a1c87a377",
+    "golden_sha256": "6f2a26332d95c4fbc158e53162571b7b9905c1b359cc5a856221c535e7267946",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w1.puml",
+    "source_sha256": "3f1094030d2c99513e5b01726f67aa4a4a80062406fa166191888ec2a54f9ede",
+    "golden_sha256": "d5637ddfa5ae68fc0926a4fad258adc2fd663b0306a43c33ced7318f8e5c1f31",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span0_e0.puml",
+    "source_sha256": "dccaa111ce4161b58af0dd5c349794554b73eefb3258c32dfae82d23d5e47d11",
+    "golden_sha256": "20ebad148194f22a9d4d5e2c240fd1412c0189818ecad5bc0abede5b60261965",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span0_e1.puml",
+    "source_sha256": "ebfc50673d8b8ada858e7a602aebfa115eb7d7102a69e994c34e21f8ea16d1d2",
+    "golden_sha256": "a725555be7bf1017313d9c338e27d7943d637be7a3ca33f6c62b501e765b61fb",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span1_e0.puml",
+    "source_sha256": "e01c2704c302d9822db5bb4747c14882f233acc6e648722890c3b5112d11909f",
+    "golden_sha256": "c5b00d0921e7aec897ac33afcb94c51225db523ff4d0f9aa605f1ffdfc1ee23e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span1_e1.puml",
+    "source_sha256": "3b1c460c5aca073ed30ed8dd49574c3301d62c2e36dbebf7711e84602023461c",
+    "golden_sha256": "9b0629b3acdeaedd39f68a3341c9fa5c273552d97b3ea0879441feb66344490b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r0_w0.puml",
+    "source_sha256": "84428fc4da1bc3813c45dfeedcf6ab3d64bc4661389605f6cc00d463c449947c",
+    "golden_sha256": "3be4ba93c46cdaeb45b0cbfe4ca09ca9a6d6399bf90ebc29845eb5fc008516bf",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r0_w1.puml",
+    "source_sha256": "ed352548bf037991209362dbdf2f8c6b8a0d3cc3654079b09467806bb8fb0288",
+    "golden_sha256": "d1c835bb5c13451b9ca0735db96167bb26556cf4cce8aa594c70c30544c6e67a",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r1_w0.puml",
+    "source_sha256": "570ec4897c57d2ac32c3447482da183860455350fbca705c7059222600828623",
+    "golden_sha256": "ca49ea502437edd5d4a3294d9add607dbf500989ed6acb2a499964f9cf3f90bf",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r1_w1.puml",
+    "source_sha256": "ba289c53de5502c86b1b1652d3d1909156e3bb16e2c4e151f557c82aba957a0c",
+    "golden_sha256": "ee9bff52cc5f5b721eca4e0ad13b295f62a6bc0b652b457fb7a5e0a95b1fd0bc",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r0_w0.puml",
+    "source_sha256": "e0705551d7b230915e1b235e321401e8610449da42e6710eced3bbd4f31df5f0",
+    "golden_sha256": "25ca6bdc2205d86c2491285437a250f1c6884bbe430ae8fd08180c4bbf1a1702",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r0_w1.puml",
+    "source_sha256": "c7414dd78af92437262990e2a7bb7ff3a0df5fc2a4992b5eb0314c1a84e66530",
+    "golden_sha256": "fcace9af8f85ad4e6972b104384faf27654cd3e867808b99a4f5d94f08219bbd",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r1_w0.puml",
+    "source_sha256": "1709f062cb2041a5bb15f2b5e4c0187cc0c59b053222a16f0d5dc3565b514bca",
+    "golden_sha256": "81852c4ce5a77c01310c3393d7e7080809495ec00d1d4b7cb0312e6ab2755f2c",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r1_w1.puml",
+    "source_sha256": "4205722a1374ebd6e2546ad3a91db866435638a4892f94d40ca8e196ceb5aa96",
+    "golden_sha256": "f6a9b235799f4c1e79e56c444b6312c369166188f7a7e85e5d5f01353fc255f3",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r0_w0.puml",
+    "source_sha256": "e43accd92927b32f36b57c4e95cf57d865450b77002ea4500faadfd7edd1b186",
+    "golden_sha256": "9b0a87b6745dec18c3b0593cca6666e91338dedf281881a2fd3d8586a7429124",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r0_w1.puml",
+    "source_sha256": "7a47f4927c88e4576154d5f2857d92d3bb0d6f9c9a92ee46cde01b10f2229181",
+    "golden_sha256": "2abc98676e08da6d7813dcf84491e63743633b853dfb5c1f9e497a5dd44c16d3",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r1_w0.puml",
+    "source_sha256": "e58e7c7579c9b5865cc9c8e6789beb558b058aade981cb432e8e5286c487fb39",
+    "golden_sha256": "fcd43991b25caa36aeb87efbf6f24845b2c155c8f8ce6f25f4edb02d5905bcd4",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r1_w1.puml",
+    "source_sha256": "c60c5066f64bf3071a19249c0b115624f433d1c4ecd27c078a20f63e6166af77",
+    "golden_sha256": "f8579aa94cb0c21dccccfd6e754cad78018df6813be4722782e6a315ccc38427",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r0_w0.puml",
+    "source_sha256": "d2e687615aeceda750ffdcfc884bb4c72fa547a3e1ca85b84c9b226cd0e76d6c",
+    "golden_sha256": "92c0d31f1f8eee79068e59ec3ba8e13a3f7e1c87ab0f43a5463864cf16f138d9",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r0_w1.puml",
+    "source_sha256": "79b521b56d497bc538d2542cdbfead50ebb24b0ae7aa53420383852a06b7d02a",
+    "golden_sha256": "60aa13e136a514bc061588a3d6cbadd0f1bc724adc2f12207c4c6570642aa915",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r1_w0.puml",
+    "source_sha256": "45a8b9663cbba1e2a65274690cb3f8c48b76130f7bb0d56863a187ca21b10c76",
+    "golden_sha256": "0d973d381ff8651b64d08803e9040de02e9f0817d48b9736ff723a5ebbeafba7",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r1_w1.puml",
+    "source_sha256": "7f722a34d2969e5e5b3e31d566600f02d699526c82e84006af772ef893ec5d3f",
+    "golden_sha256": "6a0e51e2370ae1bbad6b5ca0eb993e329673db294c31d3ba7dbeee51e764de9d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_colored_teoz0.puml",
+    "source_sha256": "f6a0ce77cc27f396e1ab8fa29812b5474c0af1561493fb6c7beeb87f5c4c7017",
+    "golden_sha256": "4720f6a4a19ded184b3ee08f1b6bf3f4b3785bc3b7bebe963618e8e70fdc3342",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_colored_teoz1.puml",
+    "source_sha256": "1ac2c9c961184f638450226b60f3d49c3692463bcc3260e01f5128937bf0a5eb",
+    "golden_sha256": "3b2f379953ddff46066f5189c0efbd33de746bec7d08b18d38eaed954bad0a62",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w0.puml",
+    "source_sha256": "fb52cc382e3d715c01e9a2a71d4a046df6de4325c78442c10fb1dcf33722b731",
+    "golden_sha256": "727fe51c4ae6441e762ffb2629dd3051880ccaf57254f712c7ddb3b18eb113c8",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w1.puml",
+    "source_sha256": "bc18f2524421cb98ccb491a36a053ea13c36e3ce94fbccf30b1be8756a2f8499",
+    "golden_sha256": "23ff300e2e8da5fbd17f020bbdf4986250276d232a769e7c818f7c1640beeae0",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r1_w0.puml",
+    "source_sha256": "e9928d60c505033b748247a743fb4112323478cf3a9c18856f1e63fb507d70da",
+    "golden_sha256": "de1828a9aeb309f62e0577366d43d647135d2052cfa86b081773cb49f7daae99",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r1_w1.puml",
+    "source_sha256": "883f7bb3905498b6a0ba54ce64cde06d81289e5c42cd60851547db631b21f385",
+    "golden_sha256": "4a6f20fc5f45afd466e8dbbfd09731a5fc604b2c17dab5692b71e9a3866158fe",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w0.puml",
+    "source_sha256": "80f0ab3ad2f410d7ddb02391658f9808b9cbe79cb38a5920a72258aeadebde97",
+    "golden_sha256": "7c86693cfbb74e85e1cc9d80fa0eec1202e92b993eecdf0f33da1eaa9a744545",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w1.puml",
+    "source_sha256": "257371f1c5d4ea6ba78dc9a3a41e5464a30feb5e362cf4ab1591b3f01a7a40be",
+    "golden_sha256": "6719f94cda0931ba2e382ed318ec6c8d71a9d8292ef130ea5f936a77f0666049",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r1_w0.puml",
+    "source_sha256": "4ab6a7bf182a8116b448de80c09632f68389409ad8ed983c5ba4759e851a3152",
+    "golden_sha256": "ea5c2612d4073871c4b68aede541cafc886b34d4e96b03d949535913fba2af59",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r1_w1.puml",
+    "source_sha256": "4bd2eee1a30a9417d86200444ce850be8b61069a9400c753ac92b08da1095a4e",
+    "golden_sha256": "00a98e4519b7c7fe09ebed8656766e1b5ff1b66f899f6bd90037a6acbe5f00bf",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r0_d0.puml",
+    "source_sha256": "9ee170cec51e9f9236152c2005660126e3be64b5edbae972e6eb0046df6996d9",
+    "golden_sha256": "bb55d03dd7b0b8d1873f50d25364ae7a8e0c1164900edd17656c9b3fe42de0e7",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r0_d2.puml",
+    "source_sha256": "196b0cace05d62ce04decf07f2ae44a02fa89979b25e5c5265a0e55462e66906",
+    "golden_sha256": "77e9115540938ce81bee9537ca4f4a4a99686a44340776e13ae93e748be3c793",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r1_d0.puml",
+    "source_sha256": "55d9ea737f71d35e9ced14b7323af2ddeca28415aa3ea884d9d664feeacabbd7",
+    "golden_sha256": "a3400bde55fa2f126dda9e3df26977448f38fcb8626bf05cdc23ccb6ed662728",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r1_d2.puml",
+    "source_sha256": "fb1c00977524da72c0b7f6cddaf15d2b94d1d7d44596e3f0516347502e904259",
+    "golden_sha256": "76df00340eb548d6b69a83fa40abee380e73d2359f5907bcd2cb6b6df4ad5daf",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r0_d0.puml",
+    "source_sha256": "591787e90d28224594607d03d26a2fc75148bbd496cebc1a66211c9dde3c0139",
+    "golden_sha256": "7cffb8a5532188f70101a02200efc4a1e514703911e839e1ea1c7c01ff9f928d",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r0_d2.puml",
+    "source_sha256": "09e87544dd902f3fc3c6f12bd17ba3cfdcd78ccb9478b7924959c5f54b709011",
+    "golden_sha256": "214b2cf73c3fc8cd871e4e9206474da2ea278b1ca43e6c5f9a5d8773ae6ceceb",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r1_d0.puml",
+    "source_sha256": "c847d3c64bd42cbae083a21369d0b582516e2dbb2ba3cb4dd3e665d8b2fbbe76",
+    "golden_sha256": "2c19d777b29483d45476ce844c7ddd453328584eef0c0b3b15ec5733642ebad9",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r1_d2.puml",
+    "source_sha256": "d50148223502e32f05f59732276b73e1d2bfe8e496a8a8429f7591df726c9733",
+    "golden_sha256": "1ee58f3271bb6763bb50a2da457832292f540bc8ee65355ddf9d10ba2d4201e6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e0.puml",
+    "source_sha256": "820bad1a9ed44319cd7960acaba55464f39a1243bbf749e8753a2c20888c5507",
+    "golden_sha256": "111d0ced290cadc3c5b2dfcc33986b5ca59dd73502714ed0d8b8e80662fd2ff7",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e1.puml",
+    "source_sha256": "ae7a930e7b2233a64f06255944584009ad7fec5da071dbf1760dbb6e61570f33",
+    "golden_sha256": "816592bb4f18e859a71f4ae63fbf446e90336f7acedd560d654d75196f00d28b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e0.puml",
+    "source_sha256": "db837c7327419234c9332d0b6f385f7d32f6d741267e965602ff185a85cbf8c3",
+    "golden_sha256": "2943ee62fe77316e9e0b492f6f907e7c9d8ac9d4fb855555e0a66af9339c1751",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e1.puml",
+    "source_sha256": "f6905da824601bdb68d812b0bbe4132b0ebb9fffeefac42322c9cb5ff851552f",
+    "golden_sha256": "208f2c2f3db07ca3b00200ef117a75d39e3481ba619d50311ee1e30f99211f55",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e0.puml",
+    "source_sha256": "83a0b91b1828aeed4551185912c379db289e6b5461b844a2f0a9b6b2e94ad09b",
+    "golden_sha256": "7135f21f3289eacf50c3639b65795607474f8119abac245d92e47af8fe8678e6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e1.puml",
+    "source_sha256": "75377a81d1138ad57a94ac2309eacee93c397b6385ece1cd4bfbab12610b5a54",
+    "golden_sha256": "e31894e2b42d7461d03d1b4f304e6bff6c67bd847336628774d2c283440910b5",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e0.puml",
+    "source_sha256": "f7709da36efbe5467a5cbcd286c62371c269cd92dcff23ee71f6a005be834145",
+    "golden_sha256": "ba95e4f26c9e3b00e22ffd291f7f07d680a14ee90e2c0e3941d3d43dda39ab24",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e1.puml",
+    "source_sha256": "985f03150eeb32dc650e3237171d685485607770fa726908fa87c40e95b8a419",
+    "golden_sha256": "4b87abb7597c967646cabbcfa04100a56e15cd1bcf92513e310818578bec9ff3",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w0.puml",
+    "source_sha256": "d9d2e4a47095ee718a4f39da210ce8209e1c34ef8c0f44a56f722b166e83cd53",
+    "golden_sha256": "3ec1212fbeea6dc9e5bbecb13ca0d687435a020aa66f12d17d397dbd3986b7e1",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w1.puml",
+    "source_sha256": "5d97de4028d67c2d270cccdac8152bd7ba387784075e7cdeab58aeab55d8f8f3",
+    "golden_sha256": "05dcd284b112ef7a77c92aa79b4e36328c6e772b8670476666fb850fc44da593",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r1_w0.puml",
+    "source_sha256": "e4c0a9e3515b411a519b41304b9303beb124d27e2f323f09cc053fbd21e7aa6f",
+    "golden_sha256": "d58c02856da2e3495b5e502f6e3d9fdda8f26c6b3d2b34bb737c23b584c5a8fb",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r1_w1.puml",
+    "source_sha256": "cf133d11e15eb1fade14c4080bcd8b2ecbcb772cca78cc44e03bdd94448674d2",
+    "golden_sha256": "d178abc1d157045853d9b46009ca27593c057ed16bca51ff6132300bead07bd5",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w0.puml",
+    "source_sha256": "3f71bff57fe09e436d60492954dd5c11f54c02aae6aaa7b13b7caf151f9d74a0",
+    "golden_sha256": "a29f07589a012b1f4bd5823e7ed35f7ee1adcdb4bd2a67745cac63efbc6b09ab",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w1.puml",
+    "source_sha256": "177ebd7ad5c18e0ed674db93986a6ee3b14f73f5cd3afbdbf16477995d4e8831",
+    "golden_sha256": "085f452c38a89c6487570a7d858eb3cdf1c653bfd758a471168e8430d47a9b21",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r1_w0.puml",
+    "source_sha256": "b127fc898189c346f19456e7e954b2da066f1a5958f8c303cf857518f94f8a5b",
+    "golden_sha256": "73f0d4a3bf0b36bb5eb3cc3481e4b57a5b4729ab5d63568df184df12da52b2a0",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r1_w1.puml",
+    "source_sha256": "6a6886ef88e0a42ed65f2ca491eed7e25797c7197dcb45ab8a14720df420e2fe",
+    "golden_sha256": "b23384ea87811b811bdf84eee2fdabef17823f2e56085118938956d3339829bf",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r0_w0.puml",
+    "source_sha256": "b117a23fedaea21eaedb13816669345eb436784321abc9d25fdaff9f0e50ea14",
+    "golden_sha256": "7e21b63d8e46d778d9a9c72e407afb45b9807657a44a4d6874475eaedf70b9cd",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r0_w1.puml",
+    "source_sha256": "1722fd876ed0aa718947139a5811976a450d5503d78057e5e296d6a2c0875a5d",
+    "golden_sha256": "e3839d6ed07de1f2e161aeef1ac5b6adb106e059211024b4a15676e8eabe1e25",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r1_w0.puml",
+    "source_sha256": "521a487e5dcfb1496c89aec5d239eaf25c077fa55e14c63619afb7cbe89c04bc",
+    "golden_sha256": "3fd94995e75e8b3d3c360a7335a9fe8ce286b38dbeb32bea3afe1b71f29e33fc",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r1_w1.puml",
+    "source_sha256": "ba77432bcc3f22d89a461893ef17c2c8154a7d0f668f07ff313db99a59e984c5",
+    "golden_sha256": "c669075cf98b12aeaaf45d2dbf2789fce6d59d75c8f8a495bda3e8e64ba95294",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r0_w0.puml",
+    "source_sha256": "4fe6c5446c077fa1eef2b0358d1a02e428d41678077f55c60ed8f39da224145b",
+    "golden_sha256": "31be5511500b583ce954637e79e13993a27365fcacb486451149a9eaf7d9b12b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r0_w1.puml",
+    "source_sha256": "e5381ba0cfdcf268897aa8bab681b493e31465fa00de4ff42d9d908722584a32",
+    "golden_sha256": "3b215df294dcf848bc88c77482fdc6ae990f4a28ca07cf296649edcdb765cbb6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r1_w0.puml",
+    "source_sha256": "6eeb96dc700f7eb5d21a0ada5b7067b7938cfbfb2d0352f1612665adb53ccd66",
+    "golden_sha256": "bc7e7715331545d8f0c3f630ee3e62b39c9a998c6d4303b29b9b1e749d87a1d6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r1_w1.puml",
+    "source_sha256": "aea39b55407a42249efe016c7db39a744248fec7969bfbd6751d360f84a43461",
+    "golden_sha256": "e585222fc256db5976808f23ef58b1096f33a04d518e4ab59354785591e561de",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r0_w0.puml",
+    "source_sha256": "2969f9355a963a100e724dcff831d4f18aebc6b93904172312063c1eccdea5b2",
+    "golden_sha256": "a1c0fa951af0a184ad81f51b4f2236fe0ecd84743db519b49b99511d7763580a",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r0_w1.puml",
+    "source_sha256": "dbd97ab8f9ff8346fa8369210c2d348383a6525e6ddbf599af7c80343b46aa5a",
+    "golden_sha256": "315d40ff62826f8612d87237e19872af637f2643259485dc7f18398952b725d5",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r1_w0.puml",
+    "source_sha256": "3c59e3dce2cc56114bbf1fae8b50ae17c3b3d7aa2188618d8d87234128fed3c7",
+    "golden_sha256": "10c001f9f2e615d5414cfef489ec31032d05be1653cb1b536a4e65fcc3dfebeb",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r1_w1.puml",
+    "source_sha256": "39e3f80fb17585e3ecffc5f9f10467b7167cf7a12b1a3b335c586d20c1ece356",
+    "golden_sha256": "b82add0774908920e07658aa01e431b8bc7440eb7b0a55e4f525ab970490c55b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r0_w0.puml",
+    "source_sha256": "f25e13cae035a3e7508f19956efc582cbb40f57dafacd2dc10311baa00b1c40f",
+    "golden_sha256": "2ddb90d6c115fcb2efae6362cc8acc203c9ec597b760fe5117183f5807fb772a",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r0_w1.puml",
+    "source_sha256": "02caa56c5d03ef010a3f0f8660c88d897c30a317d9b6d5f9b52f7f150bfec86e",
+    "golden_sha256": "0a3eccef1f844bbf3c50a0c63f2bb5dba280eaf40daa3a6cb63b4f45b59555df",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r1_w0.puml",
+    "source_sha256": "d24af5c9304564394028e8fa7a79feae3e8e7d2f112239515c790a6c81317079",
+    "golden_sha256": "2269663dbebfafa588b24090e70099c49050aaed6a9f90fc26f63f4ae6b13b47",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r1_w1.puml",
+    "source_sha256": "9bc84974c0447d32ec9f4e019c21ffd3757ba70430d69144bbc19963ab8fd6af",
+    "golden_sha256": "a155504bbbca37eb0d00e9db0425e5b28ea76dc523bfa2b7f51616e8da2c6f00",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz0.puml",
+    "source_sha256": "ab2fd4a8aeec73db870a8ceb65e46b10a6d46ce433df19999245984da88252df",
+    "golden_sha256": "fcbdbb6a3a6e81b7454e757d430009b13ee453478b48a493b433dd0078b75c66",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz1.puml",
+    "source_sha256": "8fd879038ab2d977efafe4e763da7da62e6bcdfc056b25d5a1acde0e71691471",
+    "golden_sha256": "346edeae416538c4852489c1bc9f7058ab1e06054b19402a6a5134547059ce84",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w0.puml",
+    "source_sha256": "243734b2cc37a6e23247861f82c2542bf1bb9721f9492ab71ad155e1c2652f71",
+    "golden_sha256": "0ff468071e89097951aca5ab743a16b952395a0ed9b5d42f3ebc6b26f5bac919",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w1.puml",
+    "source_sha256": "2459020ba9aeb130be0dc78c5b158931ae2c51ae1b307736e43664dba4bd5771",
+    "golden_sha256": "c2e6b81089c150c04810a4eb2bd586f6a8c7f0465b79ddd63b9afa062aa7dcb6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r1_w0.puml",
+    "source_sha256": "5c5ac59816397b4161d8cfa00370157fc6ec84f1fd14551a4395a43c5def20fa",
+    "golden_sha256": "f0a81d5f9a2885614e69585d31550e3c6e78baa617d7c91ea9aaaa102626794f",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r1_w1.puml",
+    "source_sha256": "d1cf0fdaf2d845018108e3d952b6a220c8218c22f6d67cecb941aba25dc173a8",
+    "golden_sha256": "43b5273d66a81f3bd74dfb8e7c83e2d2f4671e0943888645774bfab4fde75daf",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.puml",
+    "source_sha256": "912dc57c2bcc8b7758c1333a0aff748c367ff384d078763926c6d8f40bf1f92e",
+    "golden_sha256": "2b85f6343d1f3756f2a74ed5de20b024a2a1477748e15e8023d0cff79a53c035",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.puml",
+    "source_sha256": "82e0d1a8cba230ec2da2bf01d70aec66b148cfda3f0fe22a6b9c757d804ee7d3",
+    "golden_sha256": "de45b18e491222e9151f4748438f1bec1b5766d913094250b6cef73c6e6acfa8",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w0.puml",
+    "source_sha256": "01c3469fd09e3f0a4cd7152c4f99088ba546488cf2fe772c58be20845c0eacc6",
+    "golden_sha256": "67de82551e224819bb9e2b22327b01a39bc98456875fd3f04b3c9df4e6cf88a9",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w1.puml",
+    "source_sha256": "bd1af39791c09c2040d80dd39fcddc38d758443e66a90d0bcd66a4e30abb62df",
+    "golden_sha256": "1a48f620a7beaafe3d6dab27c6fe34d817f8a052ff57ce75de42cd7dc5096762",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r1_w0.puml",
+    "source_sha256": "0ffa0bd1e694705d9cf8e2b6bbbaa9487bdf012d56ea8a777851235f8a9050df",
+    "golden_sha256": "3d60cfca86390cbb3652798ddba6464bb180f39754e77222bf825c86bb827600",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r1_w1.puml",
+    "source_sha256": "8409f603f5fe1feed7daa36a3169731ff2cd7d5357fa6848afe9a6c164860d1d",
+    "golden_sha256": "e11690cd646250da56cfdf4ca7c4f152fb6881bed4ab5d9d2d752370b1a8e2d7",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_left.puml",
+    "source_sha256": "18f99da1eb9b9f9a79393b28594a529f0797ce47aa0517b411d1ae57b479187f",
+    "golden_sha256": "0cc08cd998db5f3ed92333712a1da45ec31601f5f995a1b729152fb7473353db",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_right.puml",
+    "source_sha256": "d1d45599a40d5c1b8986543c2285c3d21fb07b2164d3a19c29870b3fd063616f",
+    "golden_sha256": "50b08491506a14ee3bf55247c9acc49ae7622e8b86f49ce60dfc969d71ecb5e0",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_left.puml",
+    "source_sha256": "0a8807c5d4a055f79368c2f068d70fae4a92a9262c8a8aeb2ef98fcde296d7f1",
+    "golden_sha256": "c964b2fb9607fb1376cdc690804788d50ed79c60b3bb12382a30c16804961c76",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_right.puml",
+    "source_sha256": "c8078420a7a278dddc54147728dc8b67ef32513b56f412d1a24bf3bd3c9cc55f",
+    "golden_sha256": "7d766a1c7bd6c580e9c5e4f500a9d4e66040d6fdaf8cc97b963c461fed24fac8",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_left.puml",
+    "source_sha256": "39edf915d921ea1d873f08b925ab16fa6219f88ce1c6873fb212bd6dc6e2540d",
+    "golden_sha256": "bb9a93cc23904e3a14887168b67224c26d71c5b069c8dca0b472247152fc86d7",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_right.puml",
+    "source_sha256": "565e63cefc3a31342a978de8503c5949c145bd46076166898819b33de9edc89a",
+    "golden_sha256": "ab8142f5ee17da5b63bfdea3ef7a1fb65d6db979c145220901b536fb58549fd9",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_left.puml",
+    "source_sha256": "dc49f899050aee931a1029b541e84a82d47968be8b60f5e59ae1ba230dda9cae",
+    "golden_sha256": "bdba5565c2b0ca7ada9f82dbb480465d329f41dd6bd4de0cc7b8a160fa29cb0b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_right.puml",
+    "source_sha256": "4c6ae1951c6a1d02cc9e7313444b081ff4633136c1fab04f00f65c7f019dd161",
+    "golden_sha256": "f5a46bf33688244c59a21fc43220e72a9b999989683fdc5296c1e25a7208498e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_0.puml",
+    "source_sha256": "92185eb1aff3ecbcc885e691671afaf01857728581be3f542cb97f8a71f10d05",
+    "golden_sha256": "7defc3cf9559d0aea1d4fdca4e61eeae7b2ffb0fbad6d046ca571214b8555c5e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_1.puml",
+    "source_sha256": "f02f4fb1f8339fa1ad40d0390bf78256eff6882c69dab270d2d9aee3dbd07ca7",
+    "golden_sha256": "1009c9a5dfae70b80e48f913d60e3303088b07391c6bd836395591ff54607109",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_10.puml",
+    "source_sha256": "15a795ce707b9ee962ed691e4fdc5cfe5ac81452e19d4cef4649a1c488688395",
+    "golden_sha256": "8804d58731f69a045c9d8dcb3a7df4438a7603068dde8344dd17efb93aced56a",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_11.puml",
+    "source_sha256": "52b25f36a17230126e889aa88946709e5cf9c39ba87f2b87ca516fd1aa2f0529",
+    "golden_sha256": "419bf968dea751c932a3bacc8d760b02071b91f58837e36f266b8fe0a0e28e70",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_12.puml",
+    "source_sha256": "f6e0b708477ea9d8ff5b108d78b058b2871b5963e2c841e210990d1747819c36",
+    "golden_sha256": "0955f41c4c2e620606a471bdc3447f83f7f49e73dfffa67249bf66787e4b307e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_13.puml",
+    "source_sha256": "a57ea060ee9e5499b9e4dd72acb8965ab2f50ee17491f8f643110c6c32948902",
+    "golden_sha256": "e7cdb150038be577bbefc8d4ec94ad1278bcee6f3c0785cfa134d330f2c1651b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_14.puml",
+    "source_sha256": "1f0d71ab322bc17f14e249e16aae0d69f3800787d0c93170ef71fa76a5fb2464",
+    "golden_sha256": "6819e896ae5f00138391e3512bd700d4455995c4c92b4371ed374cdb20235e9e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_15.puml",
+    "source_sha256": "0a678127e08c421cf9b539875264b2afdf2bc21427d65151ccb2a2f38243915e",
+    "golden_sha256": "63e43306a443e3a7be29ee1c5bd9e5e0b9dfe9e9dc2e9e9dd00c40845c7c5542",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_16.puml",
+    "source_sha256": "1f006bd536ee4c9b2b7893c63a7eee7c327ab5981ea751759b1f0df61940b159",
+    "golden_sha256": "3f61d2acad7a0e3cda23708265c9c8a54ef230960b4d736cafec831568b28e16",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_18.puml",
+    "source_sha256": "a2df1a9bf02c75190faadc54f8954bdff26cb319a6ae51b9084bb07c5f1b0b82",
+    "golden_sha256": "199545a0d8198829d4b1c0d19a39d081593a159ff44a5bfc1b43e465c8f858ff",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_19.puml",
+    "source_sha256": "ab97c7ba4031e48cd5bb5466ef4c0205da8b90e687d6f3a8e1ab463525b746cf",
+    "golden_sha256": "e782150cb2a581b5ecd80c23a4e183469e7bc72ba917fdb5d4ba6cf76ef20b6b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_2.puml",
+    "source_sha256": "e3aa7b27df55e8cfae7d26948898224684e5e690a232ff146c397f8d8bc5a9a0",
+    "golden_sha256": "05503bfaa02fd614b8accbee82be79777fa9d421b57c80cefa4ca212deeb9750",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_20.puml",
+    "source_sha256": "b5bb58e09f238d1a3861509d9f5582a3040a3525e70673044e34725ab90672b5",
+    "golden_sha256": "b99536d290a0e4eb5b89a878503217d296981c8544050eda05e0239be92db2b9",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_21.puml",
+    "source_sha256": "3c55f88ac96f427c2269a5fead56386351078300d124d335cdd40aa2a6c0d29f",
+    "golden_sha256": "7c2a7ee5d42cdbc5543154d959b440ff57622ef85e0e6b4afe4ce230955cbce3",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_22.puml",
+    "source_sha256": "c9633969dcca1745305b22154e811b0a9479fea59e61ccc0b694297e96256e3f",
+    "golden_sha256": "c7d5ffe57befff40190725aadd4faaa8937b3fca0d55d1fef4c660b48b1efc47",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_23.puml",
+    "source_sha256": "650c0036bafae1c134846be71484030ba278e3afead751a823e5690760e97a4f",
+    "golden_sha256": "cbf2e25be1ddd80b43faeca093837bb4672905254a784cda68869e546d8cfa3f",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_3.puml",
+    "source_sha256": "886e41d3a17821f20d7498b201ce053c5fcedf4fcaf8a19876e9b3c5343e4b35",
+    "golden_sha256": "69ff12437d101eba7169b4d0f26ece8cd48c77de44513ac14620886a62c72f51",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_4.puml",
+    "source_sha256": "fda1788fbb2588d6221e3e8d1e37c8c5034fef0fc49fe84fcc116b45ee2f850c",
+    "golden_sha256": "b62b3cd8452341bef05fd1f2932cbd8673ce42cc60c3d7720f66c89b710981c1",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_6.puml",
+    "source_sha256": "4cfe2a11476240e81a56734bdd26f7825379e4fec53cae3aea7a671ed72c2e3a",
+    "golden_sha256": "441820e54904f68460c8b14f6385e2829d9a153795b537375a7f369f16f71e49",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_7.puml",
+    "source_sha256": "d3d0e7803bcc5a1fd3287cdf1b8284afd6b4d14070795659b4ba48930a74af74",
+    "golden_sha256": "ca684c3f7b369ee2869f2527a4ca4cfc08fbeabbe3292ebf23e6e1957602e5f6",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_8.puml",
+    "source_sha256": "8b4e7420cb099463a4ad56a6a167460c1e57c6199076b2d47d4b06532b8eb3e6",
+    "golden_sha256": "b30ae0f442557aa685965ef6ce8f867f09e83184dc80d480892de42ee5b9f1d1",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_9.puml",
+    "source_sha256": "396a6b3924a72d65f09df0c057cda286a01135c98bd990e4e1c9051e240bca23",
+    "golden_sha256": "1fbac616727417a6a76c421e2bd4d44d9348b496c07056dbc805e4b59ce369f1",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_left.puml",
+    "source_sha256": "18f99da1eb9b9f9a79393b28594a529f0797ce47aa0517b411d1ae57b479187f",
+    "golden_sha256": "0cc08cd998db5f3ed92333712a1da45ec31601f5f995a1b729152fb7473353db",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_right.puml",
+    "source_sha256": "d1d45599a40d5c1b8986543c2285c3d21fb07b2164d3a19c29870b3fd063616f",
+    "golden_sha256": "50b08491506a14ee3bf55247c9acc49ae7622e8b86f49ce60dfc969d71ecb5e0",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_left.puml",
+    "source_sha256": "0a8807c5d4a055f79368c2f068d70fae4a92a9262c8a8aeb2ef98fcde296d7f1",
+    "golden_sha256": "c964b2fb9607fb1376cdc690804788d50ed79c60b3bb12382a30c16804961c76",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_right.puml",
+    "source_sha256": "c8078420a7a278dddc54147728dc8b67ef32513b56f412d1a24bf3bd3c9cc55f",
+    "golden_sha256": "7d766a1c7bd6c580e9c5e4f500a9d4e66040d6fdaf8cc97b963c461fed24fac8",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_left.puml",
+    "source_sha256": "39edf915d921ea1d873f08b925ab16fa6219f88ce1c6873fb212bd6dc6e2540d",
+    "golden_sha256": "bb9a93cc23904e3a14887168b67224c26d71c5b069c8dca0b472247152fc86d7",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_right.puml",
+    "source_sha256": "565e63cefc3a31342a978de8503c5949c145bd46076166898819b33de9edc89a",
+    "golden_sha256": "ab8142f5ee17da5b63bfdea3ef7a1fb65d6db979c145220901b536fb58549fd9",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_left.puml",
+    "source_sha256": "dc49f899050aee931a1029b541e84a82d47968be8b60f5e59ae1ba230dda9cae",
+    "golden_sha256": "bdba5565c2b0ca7ada9f82dbb480465d329f41dd6bd4de0cc7b8a160fa29cb0b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_right.puml",
+    "source_sha256": "4c6ae1951c6a1d02cc9e7313444b081ff4633136c1fab04f00f65c7f019dd161",
+    "golden_sha256": "f5a46bf33688244c59a21fc43220e72a9b999989683fdc5296c1e25a7208498e",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d1_left.puml",
+    "source_sha256": "18f99da1eb9b9f9a79393b28594a529f0797ce47aa0517b411d1ae57b479187f",
+    "golden_sha256": "0cc08cd998db5f3ed92333712a1da45ec31601f5f995a1b729152fb7473353db",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d1_right.puml",
+    "source_sha256": "d1d45599a40d5c1b8986543c2285c3d21fb07b2164d3a19c29870b3fd063616f",
+    "golden_sha256": "50b08491506a14ee3bf55247c9acc49ae7622e8b86f49ce60dfc969d71ecb5e0",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d3_left.puml",
+    "source_sha256": "0a8807c5d4a055f79368c2f068d70fae4a92a9262c8a8aeb2ef98fcde296d7f1",
+    "golden_sha256": "c964b2fb9607fb1376cdc690804788d50ed79c60b3bb12382a30c16804961c76",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d3_right.puml",
+    "source_sha256": "c8078420a7a278dddc54147728dc8b67ef32513b56f412d1a24bf3bd3c9cc55f",
+    "golden_sha256": "7d766a1c7bd6c580e9c5e4f500a9d4e66040d6fdaf8cc97b963c461fed24fac8",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d1_left.puml",
+    "source_sha256": "39edf915d921ea1d873f08b925ab16fa6219f88ce1c6873fb212bd6dc6e2540d",
+    "golden_sha256": "bb9a93cc23904e3a14887168b67224c26d71c5b069c8dca0b472247152fc86d7",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d1_right.puml",
+    "source_sha256": "565e63cefc3a31342a978de8503c5949c145bd46076166898819b33de9edc89a",
+    "golden_sha256": "ab8142f5ee17da5b63bfdea3ef7a1fb65d6db979c145220901b536fb58549fd9",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d3_left.puml",
+    "source_sha256": "dc49f899050aee931a1029b541e84a82d47968be8b60f5e59ae1ba230dda9cae",
+    "golden_sha256": "bdba5565c2b0ca7ada9f82dbb480465d329f41dd6bd4de0cc7b8a160fa29cb0b",
+    "cohort955": false,
+    "cohort1044": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d3_right.puml",
+    "source_sha256": "4c6ae1951c6a1d02cc9e7313444b081ff4633136c1fab04f00f65c7f019dd161",
+    "golden_sha256": "f5a46bf33688244c59a21fc43220e72a9b999989683fdc5296c1e25a7208498e",
+    "cohort955": false,
+    "cohort1044": false
+  }
+]

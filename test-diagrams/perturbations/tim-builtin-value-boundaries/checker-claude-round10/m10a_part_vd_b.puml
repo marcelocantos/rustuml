@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam participantFontStyle bold
+participant "Pylon vk" as E1
+E1 -> E1 : ok
+@enduml

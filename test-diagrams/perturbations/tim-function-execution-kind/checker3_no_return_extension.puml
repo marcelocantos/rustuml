@@ -1,0 +1,6 @@
+@startuml
+!function $emit()
+class Extension
+!endfunction
+$emit()
+@enduml

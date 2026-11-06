@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Courier New
+component "<i>Pier x𝅧</i>" as C
+node "<i>Node n𝅧</i>" as N
+actor "<i>Act a𝅧</i>" as U
+C --> N : <i>Lbl l𝅧</i>
+note right of C : <i>Reef z𝅧</i>
+@enduml

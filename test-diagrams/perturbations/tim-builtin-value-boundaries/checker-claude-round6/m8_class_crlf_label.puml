@@ -1,0 +1,7 @@
+@startuml
+class Pier {
+  +moor()
+  -rope : int
+}
+note right of Pier : tidal
+@enduml

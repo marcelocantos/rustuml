@@ -1,0 +1,4 @@
+@startuml
+skinparam maxMessageSize 20
+Alice -> Bob : aaaa 􏿽􏿽􏿽􏿽􏿽􏿽􏿽􏿽􏿽􏿽
+@enduml

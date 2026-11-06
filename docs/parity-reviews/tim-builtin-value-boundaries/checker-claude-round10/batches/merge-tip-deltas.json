@@ -1,0 +1,322 @@
+[
+ {
+  "source": "test-diagrams/golden/skinparam/skin_usecase_fontStyle_bold.puml",
+  "merge": "DIFF",
+  "tip": "DIFF",
+  "exit": [
+   0,
+   0
+  ],
+  "out_changed": true,
+  "stderr_changed": false,
+  "stderr_merge": "",
+  "stderr_tip": "",
+  "viewBox": [
+   [
+    "0 0 549 226"
+   ],
+   [
+    "0 0 566 227"
+   ],
+   [
+    "0 0 460 170"
+   ]
+  ],
+  "comments_equal_java": [
+   false,
+   false
+  ]
+ },
+ {
+  "source": "test-diagrams/golden/skinparam/skin_usecase_fontStyle_italic.puml",
+  "merge": "DIFF",
+  "tip": "DIFF",
+  "exit": [
+   0,
+   0
+  ],
+  "out_changed": true,
+  "stderr_changed": false,
+  "stderr_merge": "",
+  "stderr_tip": "",
+  "viewBox": [
+   [
+    "0 0 549 226"
+   ],
+   [
+    "0 0 549 226"
+   ],
+   [
+    "0 0 460 170"
+   ]
+  ],
+  "comments_equal_java": [
+   false,
+   false
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+  "merge": "ERR",
+  "tip": "ERR",
+  "exit": [
+   101,
+   101
+  ],
+  "out_changed": false,
+  "stderr_changed": true,
+  "stderr_merge": "\nthread 'main' (61952214) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0",
+  "stderr_tip": "\nthread 'main' (62035234) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0",
+  "viewBox": [
+   [],
+   [],
+   [
+    "0 0 68 68"
+   ]
+  ],
+  "comments_equal_java": [
+   false,
+   false
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+  "merge": "ERR",
+  "tip": "ERR",
+  "exit": [
+   101,
+   101
+  ],
+  "out_changed": false,
+  "stderr_changed": true,
+  "stderr_merge": "\nthread 'main' (61952218) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0",
+  "stderr_tip": "\nthread 'main' (62035240) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0",
+  "viewBox": [
+   [],
+   [],
+   [
+    "0 0 62 68"
+   ]
+  ],
+  "comments_equal_java": [
+   false,
+   false
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+  "merge": "ERR",
+  "tip": "ERR",
+  "exit": [
+   101,
+   101
+  ],
+  "out_changed": false,
+  "stderr_changed": true,
+  "stderr_merge": "\nthread 'main' (61952225) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0",
+  "stderr_tip": "\nthread 'main' (62035246) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0",
+  "viewBox": [
+   [],
+   [],
+   [
+    "0 0 79 68"
+   ]
+  ],
+  "comments_equal_java": [
+   false,
+   false
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml",
+  "merge": "ERR",
+  "tip": "ERR",
+  "exit": [
+   101,
+   101
+  ],
+  "out_changed": false,
+  "stderr_changed": true,
+  "stderr_merge": "\nthread 'main' (61952227) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0",
+  "stderr_tip": "\nthread 'main' (62035253) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0",
+  "viewBox": [
+   [],
+   [],
+   [
+    "0 0 83 68"
+   ]
+  ],
+  "comments_equal_java": [
+   false,
+   false
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_cn_comp_italic.puml",
+  "merge": "DIFF",
+  "tip": "MATCH",
+  "exit": [
+   0,
+   0
+  ],
+  "out_changed": true,
+  "stderr_changed": false,
+  "stderr_merge": "",
+  "stderr_tip": "",
+  "viewBox": [
+   [
+    "0 0 128 66"
+   ],
+   [
+    "0 0 136 66"
+   ],
+   [
+    "0 0 135 65"
+   ]
+  ],
+  "comments_equal_java": [
+   true,
+   true
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_italic_lr_mixed_case.puml",
+  "merge": "DIFF",
+  "tip": "DIFF",
+  "exit": [
+   0,
+   0
+  ],
+  "out_changed": true,
+  "stderr_changed": false,
+  "stderr_merge": "",
+  "stderr_tip": "",
+  "viewBox": [
+   [
+    "0 0 429 137"
+   ],
+   [
+    "0 0 431 137"
+   ],
+   [
+    "0 0 432 137"
+   ]
+  ],
+  "comments_equal_java": [
+   true,
+   true
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_unicode_fallback_italic_tb.puml",
+  "merge": "DIFF",
+  "tip": "MATCH",
+  "exit": [
+   0,
+   0
+  ],
+  "out_changed": true,
+  "stderr_changed": false,
+  "stderr_merge": "",
+  "stderr_tip": "",
+  "viewBox": [
+   [
+    "0 0 231 197"
+   ],
+   [
+    "0 0 229 197"
+   ],
+   [
+    "0 0 230 197"
+   ]
+  ],
+  "comments_equal_java": [
+   true,
+   true
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/times-new-roman-unicode-advances/checker_cyrillic_italic_lr_nested.puml",
+  "merge": "DIFF",
+  "tip": "DIFF",
+  "exit": [
+   0,
+   0
+  ],
+  "out_changed": true,
+  "stderr_changed": false,
+  "stderr_merge": "",
+  "stderr_tip": "",
+  "viewBox": [
+   [
+    "0 0 751 167"
+   ],
+   [
+    "0 0 750 167"
+   ],
+   [
+    "0 0 745 170"
+   ]
+  ],
+  "comments_equal_java": [
+   true,
+   true
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_mixed_scripts_four_faces_tb.puml",
+  "merge": "DIFF",
+  "tip": "DIFF",
+  "exit": [
+   0,
+   0
+  ],
+  "out_changed": true,
+  "stderr_changed": false,
+  "stderr_merge": "",
+  "stderr_tip": "",
+  "viewBox": [
+   [
+    "0 0 368 220"
+   ],
+   [
+    "0 0 364 220"
+   ],
+   [
+    "0 0 344 220"
+   ]
+  ],
+  "comments_equal_java": [
+   true,
+   true
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_supplementary_math_face_sizes_tb.puml",
+  "merge": "DIFF",
+  "tip": "MATCH",
+  "exit": [
+   0,
+   0
+  ],
+  "out_changed": true,
+  "stderr_changed": false,
+  "stderr_merge": "",
+  "stderr_tip": "",
+  "viewBox": [
+   [
+    "0 0 597 204"
+   ],
+   [
+    "0 0 588 204"
+   ],
+   [
+    "0 0 588 204"
+   ]
+  ],
+  "comments_equal_java": [
+   true,
+   true
+  ]
+ }
+]

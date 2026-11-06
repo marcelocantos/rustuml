@@ -1,0 +1,30 @@
+tip1 rustuml-render exit 101
+tip1 rustuml-parser exit 101
+tip1 rustuml-layout exit 0
+tip1 rustuml-oracle exit 101
+tip1 rustuml exit 0
+tip1 rustuml-math exit 0
+merge rustuml-render exit 101
+merge rustuml-parser exit 101
+merge rustuml-layout exit 0
+merge rustuml-oracle exit 101
+merge rustuml exit 0
+merge rustuml-math exit 0
+base/rustuml-render 19 {'rustuml-render': 19}
+base/rustuml-parser 1 {'rustuml-parser': 1}
+base/rustuml-layout 0 {}
+base/rustuml-oracle 1 {'rustuml-oracle': 1}
+base/rustuml 0 {}
+base/rustuml-math 0 {}
+merge/rustuml-render 32 {'rustuml-render': 32}
+merge/rustuml-parser 1 {'rustuml-parser': 1}
+merge/rustuml-layout 0 {}
+merge/rustuml-oracle 1 {'rustuml-oracle': 1}
+merge/rustuml 0 {}
+merge/rustuml-math 0 {}
+tip1/rustuml-render 19 {'rustuml-render': 19}
+tip1/rustuml-parser 1 {'rustuml-parser': 1}
+tip1/rustuml-layout 0 {}
+tip1/rustuml-oracle 1 {'rustuml-oracle': 1}
+tip1/rustuml 0 {}
+tip1/rustuml-math 0 {}

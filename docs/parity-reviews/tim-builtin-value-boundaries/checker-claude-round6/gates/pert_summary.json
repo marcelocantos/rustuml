@@ -1,0 +1,23 @@
+{
+ "failing": {
+  "base": 1365,
+  "merge": 1667,
+  "tip": 1656
+ },
+ "new_vs_base_existing_at_base": [],
+ "new_vs_base_total": 406,
+ "new_vs_merge_existing_at_merge": [],
+ "fixed_merge_to_tip": [
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_apostrophe.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_block.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_comment.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_hash_in_quotes.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_key_newline.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_nested.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_plain.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_single.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_16fe4.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_180f_complex.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w6_sans_1d17b.puml"
+ ]
+}

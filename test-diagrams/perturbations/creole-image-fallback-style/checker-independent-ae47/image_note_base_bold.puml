@@ -1,0 +1,7 @@
+@startuml
+skinparam NoteFontStyle bold
+participant Oriole
+note right of Oriole
+a<b><color:green><img:checker-ae47-absent.png></color></b>b<i><size:19><img:checker-ae47-absent2.png></size></i>c
+end note
+@enduml

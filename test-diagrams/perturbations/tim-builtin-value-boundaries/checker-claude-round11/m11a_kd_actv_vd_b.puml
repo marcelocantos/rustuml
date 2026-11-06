@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+start
+:<b>Ovo vow cove</b>;
+@enduml

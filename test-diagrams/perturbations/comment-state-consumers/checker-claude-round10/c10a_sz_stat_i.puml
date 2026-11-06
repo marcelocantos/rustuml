@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam stateFontSize 19
+skinparam stateFontStyle italic
+state "Kiln wq vista" as E1
+@enduml

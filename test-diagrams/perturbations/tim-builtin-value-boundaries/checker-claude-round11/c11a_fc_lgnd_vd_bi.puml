@@ -1,0 +1,13 @@
+@startuml
+skinparam defaultFontName Verdana
+<style>
+legend {
+  FontStyle italic
+  FontWeight bold
+}
+</style>
+component "Ok" as E1
+legend
+Avid Dawky Vow 4.7, gym kayak ovo!
+endlegend
+@enduml

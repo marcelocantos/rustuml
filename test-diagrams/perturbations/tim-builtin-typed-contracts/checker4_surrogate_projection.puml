@@ -1,0 +1,4 @@
+@startuml
+!$half=%substr("🦊",0,1)
+class "left $half right" as Projection
+@enduml

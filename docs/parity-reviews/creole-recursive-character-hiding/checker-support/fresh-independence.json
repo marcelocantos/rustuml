@@ -1,0 +1,7 @@
+{
+  "cases": 28,
+  "different_from_all_1948_replay_sources": true,
+  "golden_source_files": 12550,
+  "different_from_golden_sources": true,
+  "golden_distinct_source_hashes": 12090
+}

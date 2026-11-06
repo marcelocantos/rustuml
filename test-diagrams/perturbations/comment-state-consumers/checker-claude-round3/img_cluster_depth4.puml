@@ -1,0 +1,15 @@
+@startuml
+state Tower {
+  state Floor {
+    state Room {
+      state Desk {
+        state slot <<entryPoint>>
+        slot --> Pen
+      }
+      Pen --> Ink
+    }
+    Ink --> Page
+  }
+  Page --> Book
+}
+@enduml

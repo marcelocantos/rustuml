@@ -1,0 +1,110 @@
+{
+  "source": "/tmp/rustuml-tim6/new/plain_named_error.puml",
+  "mechanism": "tim-call-operand-resolution",
+  "negative": true,
+  "cwd": "new",
+  "zone": "GMT+11:00",
+  "debug": "date=1774210426000,tz=AEDT+1100",
+  "env": {},
+  "source_sha256": "e0be8e6f09f339fb6cc9577f3fc864ec5febda81e42a4e072c34bf909c602f6a",
+  "java_exit": 200,
+  "java_probe_exit": 0,
+  "xml_valid": true,
+  "reference_valid": false,
+  "measurements": {
+    "before": {
+      "cli_exit": 0,
+      "svg_match": false,
+      "source_equal": false,
+      "comparison_exit": 2,
+      "calls": [
+        {
+          "argv": [
+            "/tmp/rustuml-tim6/before-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-tim6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit_code": 0,
+          "stdout_sha256": "ac461ab201594c1ebc63d9ecf62ea8478ee493afed53ddfb703c2b4da7d1debc",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "argv": [
+            "/tmp/rustuml-tim6/before-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-tim6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit_code": 0,
+          "stdout_sha256": "7c75248f5de4bcb1fff88008d7eacf0d66c9b407c1cd7da0f593a79f0afdbe06",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-tim6/probe",
+        "compare",
+        "/tmp/rustuml-tim6/relay18-final/plain_named_error/java.svg.stdout",
+        "/tmp/rustuml-tim6/relay18-final/plain_named_error/before/rust.svg"
+      ]
+    },
+    "final": {
+      "cli_exit": 1,
+      "svg_match": false,
+      "source_equal": false,
+      "comparison_exit": 2,
+      "calls": [
+        {
+          "argv": [
+            "/tmp/rustuml-tim6/final-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-tim6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit_code": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e8a1d66b46104c6c286e384436cbdada84cccaa1e5ff5d09d133789e737cae5f"
+        },
+        {
+          "argv": [
+            "/tmp/rustuml-tim6/final-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-tim6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit_code": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e8a1d66b46104c6c286e384436cbdada84cccaa1e5ff5d09d133789e737cae5f"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-tim6/probe",
+        "compare",
+        "/tmp/rustuml-tim6/relay18-final/plain_named_error/java.svg.stdout",
+        "/tmp/rustuml-tim6/relay18-final/plain_named_error/final/rust.svg"
+      ]
+    }
+  }
+}

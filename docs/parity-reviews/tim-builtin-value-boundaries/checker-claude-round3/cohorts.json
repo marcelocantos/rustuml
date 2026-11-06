@@ -1,0 +1,276 @@
+{
+ "goldens": {
+  "sources": 12550,
+  "6617e48b8_comments_exact": 11563,
+  "6c52f2cfd_comments_exact": 11781,
+  "e6f629944_comments_exact": 11781,
+  "java_valid": 11351,
+  "java_error": 1199,
+  "6617e48b8_valid_strict_match": 11181,
+  "6617e48b8_exit": {
+   "1": 76,
+   "0": 12474
+  },
+  "6617e48b8_panics": 0,
+  "6617e48b8_timeouts": 0,
+  "6617e48b8_java_error_rejected": 76,
+  "6c52f2cfd_valid_strict_match": 11179,
+  "6c52f2cfd_exit": {
+   "1": 76,
+   "0": 12474
+  },
+  "6c52f2cfd_panics": 0,
+  "6c52f2cfd_timeouts": 0,
+  "6c52f2cfd_java_error_rejected": 76,
+  "e6f629944_valid_strict_match": 11180,
+  "e6f629944_exit": {
+   "1": 76,
+   "0": 12474
+  },
+  "e6f629944_panics": 0,
+  "e6f629944_timeouts": 0,
+  "e6f629944_java_error_rejected": 76,
+  "6617e48b8_to_e6f629944": {
+   "comments_gained": 218,
+   "gained_match": [
+    "test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml",
+    "test-diagrams/golden/state/state_history_shallow.puml"
+   ],
+   "lost_match_GET_provenance": [
+    "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+   ],
+   "outputs_changed": 309
+  },
+  "6617e48b8_to_e6f629944_counts": {
+   "comments_gained": 218,
+   "gained_match": 2,
+   "lost_match_GET_provenance": 3,
+   "outputs_changed": 309
+  },
+  "6c52f2cfd_to_e6f629944": {
+   "gained_match": [
+    "test-diagrams/golden/state/state_history_shallow.puml"
+   ],
+   "outputs_changed": 65
+  },
+  "6c52f2cfd_to_e6f629944_counts": {
+   "gained_match": 1,
+   "outputs_changed": 65
+  }
+ },
+ "perturbations": {
+  "sources": 3891,
+  "6617e48b8_comments_exact": 2765,
+  "6c52f2cfd_comments_exact": 3269,
+  "e6f629944_comments_exact": 3270,
+  "java_valid": 3578,
+  "java_error": 313,
+  "6617e48b8_valid_strict_match": 1728,
+  "6617e48b8_exit": {
+   "0": 3795,
+   "1": 88,
+   "101": 8
+  },
+  "6617e48b8_panics": 8,
+  "6617e48b8_timeouts": 0,
+  "6617e48b8_java_error_rejected": 84,
+  "6c52f2cfd_valid_strict_match": 2300,
+  "6c52f2cfd_exit": {
+   "0": 3726,
+   "1": 161,
+   "101": 4
+  },
+  "6c52f2cfd_panics": 4,
+  "6c52f2cfd_timeouts": 0,
+  "6c52f2cfd_java_error_rejected": 155,
+  "e6f629944_valid_strict_match": 2306,
+  "e6f629944_exit": {
+   "0": 3727,
+   "1": 160,
+   "101": 4
+  },
+  "e6f629944_panics": 4,
+  "e6f629944_timeouts": 0,
+  "e6f629944_java_error_rejected": 155,
+  "6617e48b8_to_e6f629944": {
+   "comments_gained": 507,
+   "comments_lost": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+   ],
+   "error_now_renders_valid_ref": [
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "gained_match": 578,
+   "outputs_changed": 1199,
+   "rejection_gained": 71
+  },
+  "6617e48b8_to_e6f629944_counts": {
+   "comments_gained": 507,
+   "comments_lost": 2,
+   "error_now_renders_valid_ref": 3,
+   "gained_match": 578,
+   "outputs_changed": 1199,
+   "rejection_gained": 71
+  },
+  "6c52f2cfd_to_e6f629944": {
+   "comments_gained": [
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml"
+   ],
+   "error_now_renders_valid_ref": [
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml"
+   ],
+   "gained_match": [
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_entry_inside_autarkic_depth3.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_inner_note_autarkic.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rh_deep_depth3.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/history_depth2_crossing.puml",
+    "test-diagrams/perturbations/state-recursive-group-simplification/review3_nested_live_cluster_leaves_around_multiple_solved_images.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml"
+   ],
+   "outputs_changed": 112
+  },
+  "6c52f2cfd_to_e6f629944_counts": {
+   "comments_gained": 1,
+   "error_now_renders_valid_ref": 1,
+   "gained_match": 6,
+   "outputs_changed": 112
+  }
+ },
+ "all": {
+  "sources": 16441,
+  "6617e48b8_comments_exact": 14328,
+  "6c52f2cfd_comments_exact": 15050,
+  "e6f629944_comments_exact": 15051,
+  "java_valid": 14929,
+  "java_error": 1512,
+  "6617e48b8_valid_strict_match": 12909,
+  "6617e48b8_exit": {
+   "1": 164,
+   "0": 16269,
+   "101": 8
+  },
+  "6617e48b8_panics": 8,
+  "6617e48b8_timeouts": 0,
+  "6617e48b8_java_error_rejected": 160,
+  "6c52f2cfd_valid_strict_match": 13479,
+  "6c52f2cfd_exit": {
+   "1": 237,
+   "0": 16200,
+   "101": 4
+  },
+  "6c52f2cfd_panics": 4,
+  "6c52f2cfd_timeouts": 0,
+  "6c52f2cfd_java_error_rejected": 231,
+  "e6f629944_valid_strict_match": 13486,
+  "e6f629944_exit": {
+   "1": 236,
+   "0": 16201,
+   "101": 4
+  },
+  "e6f629944_panics": 4,
+  "e6f629944_timeouts": 0,
+  "e6f629944_java_error_rejected": 231,
+  "6617e48b8_to_e6f629944": {
+   "comments_gained": 725,
+   "comments_lost": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+   ],
+   "error_now_renders_valid_ref": [
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "gained_match": 580,
+   "lost_match_GET_provenance": [
+    "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+   ],
+   "outputs_changed": 1508,
+   "rejection_gained": 71
+  },
+  "6617e48b8_to_e6f629944_counts": {
+   "comments_gained": 725,
+   "comments_lost": 2,
+   "error_now_renders_valid_ref": 3,
+   "gained_match": 580,
+   "lost_match_GET_provenance": 3,
+   "outputs_changed": 1508,
+   "rejection_gained": 71
+  },
+  "6c52f2cfd_to_e6f629944": {
+   "comments_gained": [
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml"
+   ],
+   "error_now_renders_valid_ref": [
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml"
+   ],
+   "gained_match": [
+    "test-diagrams/golden/state/state_history_shallow.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_entry_inside_autarkic_depth3.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_inner_note_autarkic.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rh_deep_depth3.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/history_depth2_crossing.puml",
+    "test-diagrams/perturbations/state-recursive-group-simplification/review3_nested_live_cluster_leaves_around_multiple_solved_images.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml"
+   ],
+   "outputs_changed": 177
+  },
+  "6c52f2cfd_to_e6f629944_counts": {
+   "comments_gained": 1,
+   "error_now_renders_valid_ref": 1,
+   "gained_match": 7,
+   "outputs_changed": 177
+  }
+ },
+ "GET_goldens": {
+  "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml": {
+   "6617e48b8": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "6c52f2cfd": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "e6f629944": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  },
+  "test-diagrams/golden/activity/act_skinparam_shadowing.puml": {
+   "6617e48b8": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "6c52f2cfd": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "e6f629944": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  },
+  "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml": {
+   "6617e48b8": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "6c52f2cfd": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "e6f629944": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  }
+ }
+}

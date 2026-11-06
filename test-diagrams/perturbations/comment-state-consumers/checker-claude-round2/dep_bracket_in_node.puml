@@ -1,0 +1,6 @@
+@startuml
+node Barn {
+  [Hay Loft]
+}
+[Hay Loft] --> [Stable Door]
+@enduml

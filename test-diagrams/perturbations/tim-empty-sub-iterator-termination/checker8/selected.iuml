@@ -1,0 +1,4 @@
+!$bad=%intval("not selected")
+!startsub quiet
+!endsub
+!$bad=%intval("not selected")

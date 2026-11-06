@@ -1,0 +1,10 @@
+@startuml
+skinparam ArrowFontSize 15
+package P1 {
+  class A
+}
+package P2 {
+  class B
+}
+A --> B : Pier quay
+@enduml

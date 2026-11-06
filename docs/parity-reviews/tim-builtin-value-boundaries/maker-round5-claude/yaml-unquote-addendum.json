@@ -1,0 +1,24 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-builtin-value-boundaries",
+ "kind": "account addendum after measurement, before the change is committed",
+ "amends": "docs/parity-reviews/tim-builtin-value-boundaries/maker-round5-claude/decode-site-escape-account.json",
+ "measured_on": "673548fb9 (decode-site escaping)",
+ "finding": "BF cr_yaml_u_escape now renders (exit 0, no export error) but does not match: Java's text is 'Vault \\U0010FFFD end' (textLength 154.4717), the escape kept literally. The account assumed Java decodes the YAML escape; it does not. cr_json_u_escape matches (Java's JSON parser decodes \\uDBFF\\uDFFD).",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "java_trace": [
+  "yaml/YamlDiagramFactory.java (89-90): @startyaml uses yaml/parser/YamlParser (MonomorphToJson.convert(new YamlParser().parse(list))).",
+  "yaml/parser/YamlLine.java#build (51-94): a line's key and value are split at the first colon outside quotes (findColonSeparator 98-113) and passed through unquote (189-198), which only removes one pair of surrounding quotes. No escape sequence of a key, a value, a '- ' item or a key-less line is decoded; a backslash and what follows it stay as written.",
+  "Flow sequences ('[...]', toList 115-180) are the exception: there a backslash makes the next character literal."
+ ],
+ "rust_cause": "parse_yaml_diagram hands the body to serde_yml, whose double-quoted scalars decode YAML escapes (\\U, \\u, \\n, \\\", \\\\ ...).",
+ "planned_change": "Before serde_yml, a double-quoted key or value that Java's YamlLine.build would unquote (the whole key, the whole value, a '- ' item, or a key-less line, comments removed as removeYamlComment does) and that contains a backslash is handed to serde single-quoted with the same characters (a quote doubled per YAML single-quote rules), so serde returns them unchanged, as unquote does. Scalars without a backslash decode identically either way and are left alone; flow sequences are left to serde (declared residue).",
+ "declared_residue": [
+  "Flow-sequence items keep serde's double-quoted decoding where Java makes the next character literal.",
+  "Single-quoted scalars keep YAML's '' -> ' (Java's unquote keeps both quotes); multi-line quoted scalars keep serde's folding. Neither involves a backslash."
+ ],
+ "precommitted_measurement": {
+  "expect_fixed": ["BF cr_yaml_u_escape"],
+  "expect": "outputs change only for @startyaml sources with a backslash inside a double-quoted key or value (no golden has one); zero lost matches"
+ }
+}

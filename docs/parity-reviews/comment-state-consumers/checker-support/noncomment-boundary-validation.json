@@ -1,0 +1,575 @@
+{
+  "cases": [
+    {
+      "id": "checker54/fill_empty_rebeccapurple",
+      "cohort": "checker54",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker54/fill_empty_transparent",
+      "cohort": "checker54",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker54/fill_body_rebeccapurple",
+      "cohort": "checker54",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker54/fill_body_transparent",
+      "cohort": "checker54",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker54/shape_composite",
+      "cohort": "checker54",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker54/shape_concurrent",
+      "cohort": "checker54",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker54/shape_history",
+      "cohort": "checker54",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker54/shape_choice",
+      "cohort": "checker54",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker54/shape_deep_history",
+      "cohort": "checker54",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "consumer16/state_named_transparent",
+      "cohort": "consumer16",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "consumer16/state_named_unknown",
+      "cohort": "consumer16",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "consumer16/state_composite_alpha",
+      "cohort": "consumer16",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "consumer16/state_concurrent_alpha",
+      "cohort": "consumer16",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "consumer16/state_choice_alpha",
+      "cohort": "consumer16",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/class_alias_bidirectional",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/class_namespace_default",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/class_nested_default",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/class_custom_separator_residue",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/class_object_mixed",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/deploy_alias_collision",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/deploy_raw_spaces",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/deploy_nested_groups",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/state_history_nested_identity",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/paint_simple_transparent",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/paint_composite_transparent",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/paint_concurrent_transparent",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/paint_composite_a00",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/paint_concurrent_a00",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/paint_composite_a01",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/paint_concurrent_a01",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/paint_composite_a7f",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/paint_concurrent_a7f",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/paint_composite_afe",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/paint_concurrent_afe",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/paint_composite_aff",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker94/paint_concurrent_aff",
+      "cohort": "checker94",
+      "same_element_count": true,
+      "non_fill_differences": []
+    },
+    {
+      "id": "checker6/circle_root_rebecca",
+      "cohort": "checker6",
+      "same_element_count": true,
+      "non_fill_differences": [
+        {
+          "index": 4,
+          "before": [
+            "{http://www.w3.org/2000/svg}ellipse",
+            [
+              [
+                "cx",
+                "40.44"
+              ],
+              [
+                "cy",
+                "16"
+              ],
+              [
+                "rx",
+                "10"
+              ],
+              [
+                "ry",
+                "10"
+              ],
+              [
+                "style",
+                "stroke:#663399;stroke-width:1;"
+              ]
+            ],
+            ""
+          ],
+          "after": [
+            "{http://www.w3.org/2000/svg}ellipse",
+            [
+              [
+                "cx",
+                "40.44"
+              ],
+              [
+                "cy",
+                "16"
+              ],
+              [
+                "rx",
+                "10"
+              ],
+              [
+                "ry",
+                "10"
+              ],
+              [
+                "style",
+                "stroke:#FFFFFF;stroke-width:1;"
+              ]
+            ],
+            ""
+          ]
+        },
+        {
+          "index": 10,
+          "before": [
+            "{http://www.w3.org/2000/svg}ellipse",
+            [
+              [
+                "cx",
+                "40.44"
+              ],
+              [
+                "cy",
+                "207"
+              ],
+              [
+                "rx",
+                "11"
+              ],
+              [
+                "ry",
+                "11"
+              ],
+              [
+                "style",
+                "stroke:#663399;stroke-width:1;"
+              ]
+            ],
+            ""
+          ],
+          "after": [
+            "{http://www.w3.org/2000/svg}ellipse",
+            [
+              [
+                "cx",
+                "40.44"
+              ],
+              [
+                "cy",
+                "207"
+              ],
+              [
+                "rx",
+                "11"
+              ],
+              [
+                "ry",
+                "11"
+              ],
+              [
+                "style",
+                "stroke:#FFFFFF;stroke-width:1;"
+              ]
+            ],
+            ""
+          ]
+        },
+        {
+          "index": 11,
+          "before": [
+            "{http://www.w3.org/2000/svg}ellipse",
+            [
+              [
+                "cx",
+                "40.44"
+              ],
+              [
+                "cy",
+                "207"
+              ],
+              [
+                "rx",
+                "6"
+              ],
+              [
+                "ry",
+                "6"
+              ],
+              [
+                "style",
+                "stroke:#663399;stroke-width:1;"
+              ]
+            ],
+            ""
+          ],
+          "after": [
+            "{http://www.w3.org/2000/svg}ellipse",
+            [
+              [
+                "cx",
+                "40.44"
+              ],
+              [
+                "cy",
+                "207"
+              ],
+              [
+                "rx",
+                "6"
+              ],
+              [
+                "ry",
+                "6"
+              ],
+              [
+                "style",
+                "stroke:#FFFFFF;stroke-width:1;"
+              ]
+            ],
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "checker6/circle_root_alpha",
+      "cohort": "checker6",
+      "same_element_count": true,
+      "non_fill_differences": [
+        {
+          "index": 5,
+          "before": [
+            "{http://www.w3.org/2000/svg}ellipse",
+            [
+              [
+                "cx",
+                "40.44"
+              ],
+              [
+                "cy",
+                "16"
+              ],
+              [
+                "rx",
+                "10"
+              ],
+              [
+                "ry",
+                "10"
+              ],
+              [
+                "style",
+                "stroke:#7a3c917f;stroke-width:1;"
+              ]
+            ],
+            ""
+          ],
+          "after": [
+            "{http://www.w3.org/2000/svg}ellipse",
+            [
+              [
+                "cx",
+                "40.44"
+              ],
+              [
+                "cy",
+                "16"
+              ],
+              [
+                "rx",
+                "10"
+              ],
+              [
+                "ry",
+                "10"
+              ],
+              [
+                "style",
+                "stroke:#7A3C917F;stroke-width:1;"
+              ]
+            ],
+            ""
+          ]
+        },
+        {
+          "index": 11,
+          "before": [
+            "{http://www.w3.org/2000/svg}ellipse",
+            [
+              [
+                "cx",
+                "40.44"
+              ],
+              [
+                "cy",
+                "207"
+              ],
+              [
+                "rx",
+                "11"
+              ],
+              [
+                "ry",
+                "11"
+              ],
+              [
+                "style",
+                "stroke:#7a3c917f;stroke-width:1;"
+              ]
+            ],
+            ""
+          ],
+          "after": [
+            "{http://www.w3.org/2000/svg}ellipse",
+            [
+              [
+                "cx",
+                "40.44"
+              ],
+              [
+                "cy",
+                "207"
+              ],
+              [
+                "rx",
+                "11"
+              ],
+              [
+                "ry",
+                "11"
+              ],
+              [
+                "style",
+                "stroke:#7A3C917F;stroke-width:1;"
+              ]
+            ],
+            ""
+          ]
+        },
+        {
+          "index": 12,
+          "before": [
+            "{http://www.w3.org/2000/svg}ellipse",
+            [
+              [
+                "cx",
+                "40.44"
+              ],
+              [
+                "cy",
+                "207"
+              ],
+              [
+                "rx",
+                "6"
+              ],
+              [
+                "ry",
+                "6"
+              ],
+              [
+                "style",
+                "stroke:#7a3c917f;stroke-width:1;"
+              ]
+            ],
+            ""
+          ],
+          "after": [
+            "{http://www.w3.org/2000/svg}ellipse",
+            [
+              [
+                "cx",
+                "40.44"
+              ],
+              [
+                "cy",
+                "207"
+              ],
+              [
+                "rx",
+                "6"
+              ],
+              [
+                "ry",
+                "6"
+              ],
+              [
+                "style",
+                "stroke:#7A3C917F;stroke-width:1;"
+              ]
+            ],
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "checker6/group_identity_collision",
+      "cohort": "checker6",
+      "same_element_count": true,
+      "non_fill_differences": []
+    }
+  ],
+  "retained_nonfill_changes": 0,
+  "fresh_nonfill_changes": [
+    "checker6/circle_root_rebecca",
+    "checker6/circle_root_alpha"
+  ]
+}

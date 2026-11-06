@@ -1,0 +1,7 @@
+@startuml
+!$a=%strpos(%chr(90),"Z")
+!$b=%strpos(%chr("90"),%chr(0))
+!$c=%strpos(%chr(%str2json("90")),%chr(0))
+!$d=%strpos(%chr(1114112),%chr(-2))
+class "$a/$b/$c/$d" as Codes
+@enduml

@@ -324,8 +324,8 @@ pub fn render(diagram: &NwdiagDiagram, _theme: &Theme) -> String {
                 h = fmt_coord(y2 - y1),
                 w = fmt_coord(x2 - x1),
                 x = fmt_coord(x1),
-                y = fmt_coord(y1),
-            ));
+                y = fmt_coord(y1), fill = crate::svg::escape_attribute(fill),
+));
         }
     }
 
@@ -339,8 +339,8 @@ pub fn render(diagram: &NwdiagDiagram, _theme: &Theme) -> String {
             r#"<rect fill="{fill}" height="5" style="stroke:{LINE_COLOR};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
             w = fmt_coord(bar_w),
             x = fmt_coord(bar_x),
-            y = fmt_coord(bar_y),
-        ));
+            y = fmt_coord(bar_y), fill = crate::svg::escape_attribute(fill),
+));
     }
 
     // 3. Links: connectors + address labels (row-major, then column).

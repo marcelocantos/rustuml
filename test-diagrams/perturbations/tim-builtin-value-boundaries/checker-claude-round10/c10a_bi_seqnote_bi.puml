@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam noteFontStyle bold italic
+participant A
+note right of A : Kiln wq vista
+@enduml

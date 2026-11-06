@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "/dollar / /dollar" as Exact
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Exact
+  entities:
+  - id: Exact
+    label: /dollar / /dollar
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 5
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

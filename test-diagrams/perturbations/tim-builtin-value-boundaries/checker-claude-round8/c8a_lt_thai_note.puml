@@ -1,0 +1,4 @@
+@startuml
+class K
+note right of K : สวัสดี 𝅧x
+@enduml

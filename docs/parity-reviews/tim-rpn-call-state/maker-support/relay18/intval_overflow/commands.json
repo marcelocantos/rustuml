@@ -1,0 +1,73 @@
+{
+  "exit_code": 200,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.VQo5emLT/new",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "java_argv": [
+    "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "-Djava.awt.headless=true",
+    "-Dfile.encoding=UTF-8",
+    "-Duser.language=en",
+    "-Duser.country=AU",
+    "-Duser.timezone=GMT+11:00",
+    "-jar",
+    "/Users/marcelo/rustuml-reference/reference.jar",
+    "-pipe",
+    "-tsvg"
+  ],
+  "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.VQo5emLT/new",
+  "env_overrides": {},
+  "timed_out": false,
+  "elapsed_seconds": 1.1138471250014845,
+  "stdout_sha256": "bec61bf6e1186469cc9eee29bba58e584050ac689279a909cf633f5bff1304e1",
+  "stderr_sha256": "ad08949b20ba3b553c1a2098f8abd77ff65eb24c36f16396c7a83450a1c94004",
+  "id": "intval_overflow",
+  "timezone": "GMT+11:00",
+  "source": "/tmp/rustuml-tim6/new/intval_overflow.puml",
+  "source_sha256": "291e9d902b0054ec28d724d91a5a2346bac0b764f747a852821ad64bfccabac8",
+  "remote_source": "/Users/marcelo/rustuml-reference/scratch/worker.VQo5emLT/new/intval_overflow.puml",
+  "probe": {
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.VQo5emLT/new",
+      "--timezone",
+      "GMT+11:00",
+      "--probe",
+      "/Users/marcelo/rustuml-reference/scratch/worker.VQo5emLT/SourceProbe.java",
+      "--classpath",
+      "/Users/marcelo/rustuml-reference/scratch/worker.VQo5emLT",
+      "--",
+      "/Users/marcelo/rustuml-reference/scratch/worker.VQo5emLT/new/intval_overflow.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.VQo5emLT/new"
+    ],
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "--class-path",
+      "/Users/marcelo/rustuml-reference/reference.jar:/Users/marcelo/rustuml-reference/scratch/worker.VQo5emLT",
+      "/Users/marcelo/rustuml-reference/scratch/worker.VQo5emLT/SourceProbe.java",
+      "/Users/marcelo/rustuml-reference/scratch/worker.VQo5emLT/new/intval_overflow.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.VQo5emLT/new"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.VQo5emLT/new",
+    "env_overrides": {},
+    "timed_out": false,
+    "elapsed_seconds": 0.4566000409977278,
+    "stdout_sha256": "47a8a390a9bf84ada994e1d07c155cacdea6f9e66b8abafaf6bfed3192e6234a",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timezone": "GMT+11:00"
+  }
+}

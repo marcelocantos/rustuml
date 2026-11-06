@@ -1,0 +1,10 @@
+@startuml
+!$key="b"
+!function $join($a="oak",$b="pine")
+!return $a+"/"+$b
+!endfunction
+!$x=$join($key="amber")
+!$key="$b"
+!$y=$join($key="jade")
+class "$x/$y/$join($b="cobalt")" as Key
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam defaultFontSize 11
+start
+:Mew Ghyll AVW;
+@enduml

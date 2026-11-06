@@ -1,0 +1,29 @@
+{
+  "total": 29,
+  "valid": 19,
+  "before": 12,
+  "current": 17,
+  "source_matches": 17,
+  "negative_rejected": 10,
+  "panics": 0,
+  "losses": [],
+  "gains": [
+    "/tmp/rustuml-checker6/new/rpn_dual_parameters.puml",
+    "/tmp/rustuml-checker6/supplement/sub_defined_in_uncalled.puml",
+    "/tmp/rustuml-checker6/supplement/operand_overload_return.puml",
+    "/tmp/rustuml-checker6/supplement/operand_overload_procedure.puml",
+    "/tmp/rustuml-checker6/supplement/rpn_bare_read.puml"
+  ],
+  "new_valid_errors": [],
+  "model_drops": [
+    "/tmp/rustuml-checker6/new/sub_uncalled_function.puml"
+  ],
+  "cohort955": {
+    "total": 0,
+    "current": 0
+  },
+  "cohort1044": {
+    "total": 0,
+    "current": 0
+  }
+}

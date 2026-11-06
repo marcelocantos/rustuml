@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "0//0071" as Empty
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Empty
+  entities:
+  - id: Empty
+    label: '0//0071'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 11
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

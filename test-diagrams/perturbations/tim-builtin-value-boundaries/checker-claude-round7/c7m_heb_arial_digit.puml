@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Arial
+class "Quay א1𝅧" as Q
+@enduml

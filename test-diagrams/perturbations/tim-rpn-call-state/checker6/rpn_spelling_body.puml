@@ -1,0 +1,12 @@
+@startuml
+!function $braid($a="maple",$b="spruce")
+!return $a+"/"+$b
+!endfunction
+!function $outer($b="outer")
+!return $braid($b="inside")+"/"+$b
+!endfunction
+!$key="b"
+!$x=$braid($key="ignored")
+!$y=$outer($b="caller")
+class "$x/$y" as Rpn
+@enduml

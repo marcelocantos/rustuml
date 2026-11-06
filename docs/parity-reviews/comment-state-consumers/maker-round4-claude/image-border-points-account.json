@@ -1,0 +1,42 @@
+{
+ "schema_version": 1,
+ "mechanism": "comment-state-consumers",
+ "sub_mechanism": "entry/exit border points inside GroupMakerState images: drawn position of shielded (wide-label) port nodes, and Java's port P / Graphviz diagnostics (round-4 obligation 2)",
+ "status": "maker causal account before draft; independent review required",
+ "answers": "docs/parity-reviews/comment-state-consumers/review-4.json (img_cluster_exit_wide; bounded_next_obligations[1])",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "java_locations": [
+  "abel/Link.java#getEntityPort (227-231): every endpoint whose EntityPosition.usePortP() holds (abel/EntityPosition.java 186-188: ENTRY_POINT, EXIT_POINT, ports) is written as EntityPort.forPort(uid), i.e. 'uid:P' (cucadiagram/EntityPort.java 54-63); svek/SvekEdge.java (391-393) prints getFullString() for both ends. This holds for short and wide labels alike.",
+  "svek/SvekNode.java#appendLabelHtmlSpecialForPort (180-187): label width (int) > 40 gives the plaintext HTML table whose centre cell carries PORT=\"P\" (appendLabelHtmlSpecialForPortHtml 189-205); otherwise appendLabelHtmlSpecialForPortBasic (207-220) declares a plain shape=rect with no port, so dot reports 'node <uid>, port P unrecognized' for Java's own DOT.",
+  "dot/AbstractGraphviz.java#createFile3 (97-134): dot runs through ProcessRunner, whose error stream is captured and never written; the isCheckDotError reporting is commented out (123-133). Java's CLI stderr therefore never carries dot diagnostics.",
+  "svek/DotStringFactory.java#solve (363-369): a RECTANGLE_PORT node's corner is the minimum of the first points list after its <title>; svek/SvekNode.java#getRectangleArea/getPointCenter use that corner and the image dimension (EntityImageStateBorder, 2*EntityPosition.RADIUS square).",
+  "svek/Cluster.java#manageEntryExitPoint (411-433): the frontier passes through sh.getRectangleArea().getPointCenter() of each border node; svek/SvekResult.java#drawU (82-89) draws the EntityImageStateBorder at (minX, minY), so the circle centre is that same point; svek/image/EntityImageStateBorder.java#drawU (79-106) places the label from that corner (x = -(descWidth - 2*RADIUS)/2, above or below by upPosition).",
+  "The same GraphvizImageBuilder/DotStringFactory serves the root and every GroupMakerState image (svek/GroupMakerState.java 140-152), so image border points follow the root rule."
+ ],
+ "rust_locations": [
+  "crates/rustuml-render/src/state.rs#apply_state_border_frontiers and #render_non_autarkic_root_clusters: the root path already takes the border point's centre as the solved layout node centre plus state_position_image_offset_x (the shielded table's P-cell offset, svek_state_border_geometry), matching Java.",
+  "crates/rustuml-render/src/state.rs#layout_autonomous_scope (positions loop) and #autonomous_scope_painted_bounds: the image path takes the corner of the solved layout node plus half of node_sizes (12x12). For a shielded port the solved node is the table (layout_width x 36), so the circle lands at (6 - layout_width/2, 6 - 18) from the frontier: (-21, -12) for the 54-wide minimum table of img_cluster_exit_wide. Short labels have a 12x12 layout node and are unaffected.",
+  "vendor/graphviz/lib/cgraph/agerror.c#default_usererrf: the in-process Graphviz writes every agerr/agwarningf diagnostic to the CLI's stderr, where Java's ProcessRunner swallows dot's."
+ ],
+ "invariant": "Inside an image, a border point's circle centre is the solved node centre plus the P-cell offset (identical to the root path and to the frontier input), its painted bounds and label start from centre - RADIUS, and the CLI's stderr carries no Graphviz diagnostics, as Java's does not. The DOT keeps Java's 'uid:P' for every entry/exit point.",
+ "planned_change": [
+  "layout_autonomous_scope: for StateLayoutShape::Port nodes of entry/exit points, record the position centre as (x + position.width/2 + origin, y + position.height/2 + origin) from the solved node, not corner + node_sizes/2; emit_autonomous_scope_entities already adds the P-cell offset and rounds the centre.",
+  "autonomous_scope_painted_bounds: the circle corner and label anchor of a port node derive from the same centre (centre - RADIUS).",
+  "rustuml-layout: install a discarding agusererrf through agseterrf once per process before Graphviz is used, mirroring createFile3's captured-and-dropped error stream. No DOT text changes."
+ ],
+ "declared_residue": [
+  "The 2 of 48 Java references where an entry/exit circle is not on its cluster border (checker frontier invariant) are not addressed; they must stay identical between Java and Rust.",
+  "Graphviz diagnostics are discarded for every family, as in Java; a Rust-only DOT defect would no longer be visible on stderr."
+ ],
+ "perturbation_axes": [
+  "wide and short labels on entry and exit points at depths 1, 2 and 3 inside an image",
+  "renamed labels around the 40-pixel threshold",
+  "root-path controls (no autarkic group)"
+ ],
+ "precommitted_measurement": {
+  "oracle": "strict compare and comment lists; checker frontier invariant (tools/borderinv.py) over Java references and Rust outputs; stderr equality with Java (empty) on BB/BC border-point cases; whole sweep against 3992971a7 and 71d16da4a",
+  "expect_fixed": ["BB img_cluster_exit_wide", "BC ex_wide_d1_image, en_wide_d2_image, ex_d2_widelabel (position part; other differences reported)"],
+  "expect_kept": ["BC ex_d2_renamed, ex_d3, ex_wide_noimage", "BB img_cluster_depth2/3/4"],
+  "expect": "stdout changes only for state images containing wide-label entry/exit points; stderr loses only Graphviz 'Warning:'/'Error:' lines; zero lost strict matches, zero new errors"
+ }
+}

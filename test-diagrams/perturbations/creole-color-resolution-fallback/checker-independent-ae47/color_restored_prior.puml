@@ -1,0 +1,4 @@
+@startuml
+state Perch
+Perch : <color:teal>p</color><color:BadTone>q</color>r
+@enduml

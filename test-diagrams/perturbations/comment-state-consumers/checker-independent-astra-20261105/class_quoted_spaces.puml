@@ -1,0 +1,5 @@
+@startuml
+class "North Atrium"
+class "South Gallery"
+"North Atrium" --> "South Gallery"
+@enduml

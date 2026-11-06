@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam activityFontStyle lighter
+start
+:Kiln wq vista;
+@enduml

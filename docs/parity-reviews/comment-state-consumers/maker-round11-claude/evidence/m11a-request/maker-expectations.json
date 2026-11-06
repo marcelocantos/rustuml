@@ -1,0 +1,461 @@
+{
+ "batch": "M11A",
+ "maker": "round-11 maker (claude)",
+ "tip": "97830bd1e",
+ "merge": "879d166f4",
+ "expectations": {
+  "m11a_kd_comp_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_comp_vd_p"
+  },
+  "m11a_kd_comp_vd_bi": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_comp_vd_b"
+  },
+  "m11a_kd_comp_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_comp_vd_b": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_node_vd_i": {
+   "expect": "fail",
+   "why": "lone description element (deployment.rs hardcodes sans-serif plain): T14.46; control fails too",
+   "control": "m11a_kd_node_vd_p"
+  },
+  "m11a_kd_node_vd_bi": {
+   "expect": "fail",
+   "why": "lone description element (deployment.rs hardcodes sans-serif plain): T14.46; control fails too",
+   "control": "m11a_kd_node_vd_b"
+  },
+  "m11a_kd_node_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_node_vd_b": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_artf_vd_i": {
+   "expect": "fail",
+   "why": "lone description element (deployment.rs hardcodes sans-serif plain): T14.46; control fails too",
+   "control": "m11a_kd_artf_vd_p"
+  },
+  "m11a_kd_artf_vd_bi": {
+   "expect": "fail",
+   "why": "lone description element (deployment.rs hardcodes sans-serif plain): T14.46; control fails too",
+   "control": "m11a_kd_artf_vd_b"
+  },
+  "m11a_kd_artf_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_artf_vd_b": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_dbse_vd_i": {
+   "expect": "fail",
+   "why": "lone description element (deployment.rs hardcodes sans-serif plain): T14.46; control fails too",
+   "control": "m11a_kd_dbse_vd_p"
+  },
+  "m11a_kd_dbse_vd_bi": {
+   "expect": "fail",
+   "why": "lone description element (deployment.rs hardcodes sans-serif plain): T14.46; control fails too",
+   "control": "m11a_kd_dbse_vd_b"
+  },
+  "m11a_kd_dbse_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_dbse_vd_b": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_usec_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_usec_vd_p"
+  },
+  "m11a_kd_usec_vd_bi": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_usec_vd_b"
+  },
+  "m11a_kd_usec_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_usec_vd_b": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_actu_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_actu_vd_p"
+  },
+  "m11a_kd_actu_vd_bi": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_actu_vd_b"
+  },
+  "m11a_kd_actu_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_actu_vd_b": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_stat_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_stat_vd_p"
+  },
+  "m11a_kd_stat_vd_bi": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_stat_vd_b"
+  },
+  "m11a_kd_stat_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_stat_vd_b": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_part_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_part_vd_p"
+  },
+  "m11a_kd_part_vd_bi": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_part_vd_b"
+  },
+  "m11a_kd_part_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_part_vd_b": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_queu_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_queu_vd_p"
+  },
+  "m11a_kd_queu_vd_bi": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_queu_vd_b"
+  },
+  "m11a_kd_queu_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_queu_vd_b": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_clss_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_clss_vd_p"
+  },
+  "m11a_kd_clss_vd_bi": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_clss_vd_b"
+  },
+  "m11a_kd_clss_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_clss_vd_b": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_actv_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_actv_vd_p"
+  },
+  "m11a_kd_actv_vd_bi": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_kd_actv_vd_b"
+  },
+  "m11a_kd_actv_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_kd_actv_vd_b": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_sz11_comp_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_sz11_comp_vd_p"
+  },
+  "m11a_sz11_comp_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_sz11_part_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_sz11_part_vd_p"
+  },
+  "m11a_sz11_part_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_sz11_actv_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_sz11_actv_vd_p"
+  },
+  "m11a_sz11_actv_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_sz11_stat_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_sz11_stat_vd_p"
+  },
+  "m11a_sz11_stat_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_sz17_comp_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_sz17_comp_vd_p"
+  },
+  "m11a_sz17_comp_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_sz17_part_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_sz17_part_vd_p"
+  },
+  "m11a_sz17_part_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_sz17_actv_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_sz17_actv_vd_p"
+  },
+  "m11a_sz17_actv_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_sz17_stat_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_sz17_stat_vd_p"
+  },
+  "m11a_sz17_stat_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_cr_comp_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_cr_comp_vd_p"
+  },
+  "m11a_cr_comp_vd_bi": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_cr_comp_vd_b"
+  },
+  "m11a_cr_comp_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_cr_comp_vd_b": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_cr_part_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_cr_part_vd_p"
+  },
+  "m11a_cr_part_vd_bi": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_cr_part_vd_b"
+  },
+  "m11a_cr_part_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_cr_part_vd_b": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_cr_actv_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_cr_actv_vd_p"
+  },
+  "m11a_cr_actv_vd_bi": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_cr_actv_vd_b"
+  },
+  "m11a_cr_actv_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_cr_actv_vd_b": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_cr_usec_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_cr_usec_vd_p"
+  },
+  "m11a_cr_usec_vd_bi": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_cr_usec_vd_b"
+  },
+  "m11a_cr_usec_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_cr_usec_vd_b": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_cs_comp_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_cs_comp_vd_p"
+  },
+  "m11a_cs_comp_vd_bi": {
+   "expect": "fail",
+   "why": "<style> FontWeight not modelled (Rust draws italic, not bold italic): T14.46",
+   "control": "m11a_cs_comp_vd_p"
+  },
+  "m11a_cs_comp_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_cs_usec_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_cs_usec_vd_p"
+  },
+  "m11a_cs_usec_vd_bi": {
+   "expect": "fail",
+   "why": "<style> FontWeight not modelled (Rust draws italic, not bold italic): T14.46",
+   "control": "m11a_cs_usec_vd_p"
+  },
+  "m11a_cs_usec_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_cs_stat_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_cs_stat_vd_p"
+  },
+  "m11a_cs_stat_vd_bi": {
+   "expect": "fail",
+   "why": "<style> FontWeight not modelled (Rust draws italic, not bold italic): T14.46",
+   "control": "m11a_cs_stat_vd_p"
+  },
+  "m11a_cs_stat_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_ml_comp_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_ml_comp_vd_p"
+  },
+  "m11a_ml_comp_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_ml_part_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_ml_part_vd_p"
+  },
+  "m11a_ml_part_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_ml_stat_vd_i": {
+   "expect": "match iff control matches",
+   "why": "Verdana italic / bold-italic face advances (own tables)",
+   "control": "m11a_ml_stat_vd_p"
+  },
+  "m11a_ml_stat_vd_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_ar_comp_i": {
+   "expect": "match iff control matches",
+   "why": "Arial italics share the upright advances; output identical to merge",
+   "control": "m11a_ar_comp_p"
+  },
+  "m11a_ar_comp_bi": {
+   "expect": "match iff control matches",
+   "why": "Arial italics share the upright advances; output identical to merge",
+   "control": "m11a_ar_comp_p"
+  },
+  "m11a_ar_comp_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_ar_part_i": {
+   "expect": "match iff control matches",
+   "why": "Arial italics share the upright advances; output identical to merge",
+   "control": "m11a_ar_part_p"
+  },
+  "m11a_ar_part_bi": {
+   "expect": "match iff control matches",
+   "why": "Arial italics share the upright advances; output identical to merge",
+   "control": "m11a_ar_part_p"
+  },
+  "m11a_ar_part_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  },
+  "m11a_ar_actv_i": {
+   "expect": "match iff control matches",
+   "why": "Arial italics share the upright advances; output identical to merge",
+   "control": "m11a_ar_actv_p"
+  },
+  "m11a_ar_actv_bi": {
+   "expect": "match iff control matches",
+   "why": "Arial italics share the upright advances; output identical to merge",
+   "control": "m11a_ar_actv_p"
+  },
+  "m11a_ar_actv_p": {
+   "expect": "no claim (control); Java-valid",
+   "control": null
+  }
+ }
+}

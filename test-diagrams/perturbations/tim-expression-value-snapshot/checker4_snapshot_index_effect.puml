@@ -1,0 +1,14 @@
+@startuml
+!$n=2
+!$data=["013","021"]
+!function $index()
+!$n=$n+3
+!return 0
+!endfunction
+!function $tick()
+!$n=$n+1
+!return 8
+!endfunction
+!$v=$n+$data[$index()]+$tick()+$n
+class "$v / $n" as Indexed
+@enduml

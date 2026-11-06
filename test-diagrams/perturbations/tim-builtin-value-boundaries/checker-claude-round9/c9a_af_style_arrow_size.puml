@@ -1,0 +1,10 @@
+@startuml
+<style>
+arrow {
+  FontSize 18
+}
+</style>
+class A
+class B
+A --> B : Pier quay
+@enduml

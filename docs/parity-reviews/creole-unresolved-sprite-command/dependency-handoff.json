@@ -1,0 +1,113 @@
+{
+  "mechanism": "class-quoted-display-trailing-generic",
+  "tested_rust_revision": "0f00130a26b2f300996d0bd427f9e70b4ef10e30",
+  "tested_locations": [
+    "crates/rustuml-parser/src/parse/class.rs:731-739 (id-only split; alias/quoted display not split)",
+    "crates/rustuml-render/src/class.rs:1253 (separate source-line-zero fallback)"
+  ],
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/command/NameAndCodeParser.java:48-65 (DISPLAY_WITH_GENERIC and two alias orders)",
+    "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java:127-130 (DISPLAY group 1 wins over GENERIC)",
+    "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java:163-164 (entity.setGeneric)"
+  ],
+  "causal_account": "Java separates the optional terminal angle span from quoted display before Creole text rendering. The exact TIM8 Rust base does not split the quoted alias display, so trailing $missing/$unknown remains in display and no generic object exists. A shared-text omission cannot synthesize that generic object.",
+  "retained_cases": [
+    {
+      "name": "markup_scan",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/docs/parity-reviews/tim-memory-trie-text-lookup/maker-support/supplement/markup_scan.puml",
+      "reference": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/docs/parity-reviews/tim-memory-trie-text-lookup/maker-support/supplement/markup_scan.svg",
+      "source_sha256": "67aa925700a243ab0f25477d76ad760ddf05f56ee675d0c5af5a604dac654f21",
+      "reference_sha256": "b05676c6f2162081804d839c38a6de96a70e10219ce84ad42eac8853042b80a1",
+      "commands": [
+        {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/before-rustuml",
+            "-pipe"
+          ],
+          "exit": 0,
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+          "stdout_sha256": "7c960e48b1bca58d8cf00fe1d53ab1e80e69d84e0b3e93132eb5613be94f3971",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/before-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "exit": 0,
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+          "stdout_sha256": "087138b69d3cbdb4df2df5c52af6077bdf97818b30221888aace97e703679f8a",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/probe",
+            "compare",
+            "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/docs/parity-reviews/tim-memory-trie-text-lookup/maker-support/supplement/markup_scan.svg",
+            "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/retained-before/markup_scan/svg.stdout"
+          ],
+          "exit": 1,
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+          "stdout_sha256": "6ef898a1f95bd75906adee5805d39220d43204f30a6418bc2104c8319b9c550c",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "name": "markup_literal",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/markup_literal.puml",
+      "reference": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/markup_literal.svg",
+      "source_sha256": "13fb51be7481e3f896b172ae1f279ce0a3d5c7c1f4d264765bdc3e0cf5397f30",
+      "reference_sha256": "19e486fa07b280da8ef3f30bdf1cce34f2bbd87775f84de483688e67566c9a7b",
+      "commands": [
+        {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/before-rustuml",
+            "-pipe"
+          ],
+          "exit": 0,
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+          "stdout_sha256": "0d09ee286385ea8b01340d981f62c67272b6eadb34d363d414afcd61c1b5ff52",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/before-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "exit": 0,
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+          "stdout_sha256": "4589204049cad3b2139f1fddde33bd5da8e7321c724a4c1d27be27b952147ee2",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/probe",
+            "compare",
+            "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/markup_literal.svg",
+            "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/retained-before/markup_literal/svg.stdout"
+          ],
+          "exit": 1,
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+          "stdout_sha256": "c35ba2e727b960d5394ea4789d2c5de777a4c7eab62c4b3dcd29ef278d2b4a7f",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    }
+  ],
+  "other_candidate": {
+    "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+    "location": "crates/rustuml-parser/src/parse/class.rs:993",
+    "observed_source": "split_generic(&mut id).or_else(|| split_generic(&mut label))",
+    "status": "Read-only git-show observation of separate unintegrated class candidate, consistent with parent correction. Not imported, not accepted, no combined measurement."
+  },
+  "integration_obligation": "Retain both exact source/reference pairs, combine only accepted sibling changes later and measure actual source-only CLI SVG. Do not infer combined sprite/generic correctness from separate fixes. Source-line-zero renderer fallback is an additional distinct failure.",
+  "additional_boundaries": [
+    "Defined inline class label sprites have no resolver in shared TextBase/Segment APIs; fresh defined_class fails before and remains an explicit unresolved consumer dependency. Existing defined note sprites are positive preservation controls.",
+    "Sprite-aware note/deployment parsing, legacy tspan rendering and sprite-in-link label parsing retain their existing ownership. No universal equivalence claim for these independent consumers.",
+    "Unicode property version identity between Rust regex and pinned JVM is not established. Existing Unicode/property/surrogate failures remain."
+  ]
+}

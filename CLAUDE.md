@@ -77,6 +77,17 @@ The project metric is **no-oracle product parity**: `cargo test --test golden_no
 - The preprocessor (`preprocess/mod.rs`) is ~2900 lines — read it before editing.
 - Test with `cargo test --lib` for fast iteration; golden tests (`cargo test --test golden_pairs`) for full validation; product truth via `cargo test --test golden_no_oracle`.
 
+## Disk Hygiene for Parity Runs
+
+Maker/checker rounds build several release trees each (base, merge, tip, drill variants) and export whole source trees — golden corpus included — with `git archive`. Each export is 1–10 GB and each Cargo target several GB. On 2026-11-06 agent caches filled the disk twice and runs failed with ENOSPC. Every run, maker or checker, follows these rules:
+
+- **Preflight.** Before the first build, check free space (`df -h ~`). Below 50 GB free, run the cleaner (below) or stop and report — never start a multi-tree build onto a nearly full disk.
+- **During the run.** One private `CARGO_TARGET_DIR` per tree, inside your own cache (never shared across trees: shared targets have produced broken builds and stale binaries). As soon as a tree's binary is copied to your cache's `bin/`, delete that tree's target and its `git archive` export. Delete drill/mutant variant trees as soon as each verdict is recorded. Keep only what evidence needs: manifests, bundles, sources, predictions, results, binaries, compact outputs.
+- **After the run.** Before ending your final turn, clean your own cache:
+  `python3 scripts/clean_agent_caches.py --only ~/Library/Caches/<your-cache> --min-age 0 --apply`
+  It removes only regenerable directories (Cargo targets identified by `CACHEDIR.TAG`, and `git archive` exports: `Cargo.toml` + `crates/`, no `.git`). It never touches `rustuml-relay-parent` (the immutable Java references), evidence, relay bundles, predictions or binaries.
+- **Backstop.** The parent (or a scheduled job) runs `python3 scripts/clean_agent_caches.py --apply` across all caches; it skips anything modified within the last 120 minutes so running delegates are safe. Dry run by default.
+
 ## Code Style
 
 Standard Rust conventions. Use `cargo fmt` and `cargo clippy -- -D warnings`.

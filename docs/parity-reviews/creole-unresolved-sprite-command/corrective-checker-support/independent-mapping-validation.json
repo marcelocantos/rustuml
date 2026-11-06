@@ -1,0 +1,12 @@
+{
+  "all_checks_passed": true,
+  "hashes": {
+    "input-bundle.json.gz": "5a76331dd6f7f8759f19d0330b3a0eb2aa43142702fbb3fcd90311b1da5bc0c8",
+    "parent-relay-input.json.gz": "cbd90ddb2d68b5048bcfac3b44e59e321ff4cb6947394e08e1b06ece28eb967f",
+    "reference-results.json.gz": "275dcf6c83a99246c947016edafc7f92e4d8b9c4c154961f69e7f106dea78c45",
+    "reference-transport.json": "765d3014b68efc9baa5682527a0c8c4cccfb56ffeae33da559c268462c7396db"
+  },
+  "resources": 26,
+  "original_request_manifest_bytes_preserved": true,
+  "safe_unique_relative_paths": true
+}

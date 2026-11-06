@@ -1,0 +1,35 @@
+comparator_constants_frozen ok
+parity_review_paths_reject_traversal ok
+decimal_literal_ratchet FAILED
+no_golden_data_embedded_in_shipping_crates ok
+parity_review_records_are_complete FAILED
+error_golden_census_is_frozen ok
+
+  1420 latest accepted review cannot contain failing perturbations
+   306 perturbation is not named in any checker review
+   197 latest checker review must be accepted
+    98 source must be a .puml under <path>
+    98 golden must be the source's same-stem .svg under <path>
+    98 referenced source escapes the mechanism directory: <path>
+    98 referenced golden escapes the mechanism directory: <path>
+    98 checker source is outside the executable perturbation walk
+    27 account_commit must be a N-character Git commit
+    27 task_id must be a non-empty string
+    24 perturbation result must be "pass" or "fail"
+    21 implementation_commit must be a N-character Git commit
+    15 No such file or directory (os error N)
+    11 result must be a non-empty string
+    10 perturbations must contain at least two entries
+     9 planned_change must be a non-empty string
+     9 account has no independent checker review
+     8 findings must contain at least N non-empty strings
+     8 axes must contain at least N non-empty strings
+     7 reviewer must be an object
+     7 java_revision must be a N-character Git commit
+     6 N -> N
+     5 source must be a non-empty string
+     5 golden must be a non-empty string
+     2 model must be a non-empty string
+     1 `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+     1 review must exercise at least two distinct source files
+     1 commands must contain at least N non-empty strings

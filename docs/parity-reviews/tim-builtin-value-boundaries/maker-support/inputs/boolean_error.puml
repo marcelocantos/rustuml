@@ -1,0 +1,5 @@
+@startuml
+!$bad=%boolval("00")
+!$later=%date("Q",0)
+class Lost
+@enduml

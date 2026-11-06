@@ -1,0 +1,4 @@
+@startuml
+skinparam databaseFontStyle italic
+database "Pylon vk" as E1
+@enduml

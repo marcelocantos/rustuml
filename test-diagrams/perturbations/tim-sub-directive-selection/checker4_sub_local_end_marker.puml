@@ -1,0 +1,9 @@
+@startuml
+!$n=0
+!startsub chosen
+!$n=$n+2
+!endsub ' marker suffix
+!$which="chosen"
+!includesub $which
+class "n=$n" as Local
+@enduml

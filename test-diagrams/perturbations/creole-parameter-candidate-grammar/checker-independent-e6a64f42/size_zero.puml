@@ -1,0 +1,5 @@
+@startuml
+start
+:a<size:0>seed</size>z;
+stop
+@enduml

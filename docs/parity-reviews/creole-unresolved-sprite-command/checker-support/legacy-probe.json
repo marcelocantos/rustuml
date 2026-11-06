@@ -1,0 +1,19 @@
+{
+  "build_argv": [
+    "rustc",
+    "--edition=2024",
+    "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/legacy-probe.rs",
+    "-L",
+    "dependency=/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after/release/deps",
+    "--extern",
+    "rustuml_render=/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after/release/deps/librustuml_render-6cf93ea168f1c658.rlib",
+    "-o",
+    "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/legacy-probe"
+  ],
+  "build_exit": 0,
+  "source_sha256": "ab36153c85293551f46e12652d7165a5b24d295a3cfa85c5b6fc39f34c9e9413",
+  "argv": [
+    "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/legacy-probe"
+  ],
+  "exit": 0
+}

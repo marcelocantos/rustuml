@@ -1,0 +1,4 @@
+@startuml
+!$a = %substr("🚀",0,1) + %substr("🚀",1,1)
+class "$a" as Joined
+@enduml

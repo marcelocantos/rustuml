@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-expression-value-snapshot",
+  "rust_revision": "7bb210e9f7578705638c8f3b7c3b43d8b4b906c3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/expression/ShuntingYard.java:constructor",
+    "tim/expression/ReversePolishInterpretor.java:constructor",
+    "tim/TContext.java:asKnowledge/fromJson",
+    "tim/VariableManager.java:replaceJson"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Variable operands, including nested call arguments, are resolved while preparing one expression before its RPN calls run. Literal numbers are converted at evaluation. JSON members/indices use VariableManager replacement and fromJson conversion.",
+  "causal_divergence": "Recursive evaluation looks up the right operand after left-side calls mutate memory. JSON paths fall through as literal text.",
+  "planned_change": "Separate expression preparation from execution with captured value nodes and call/operator nodes. Pass already evaluated typed call arguments without string roundtrips. Resolve JSON path accesses with the same path logic for plain replacement and expression knowledge; indices use variable/function expansion, as Java does.",
+  "perturbation_axes": [
+    "Arithmetic/logical snapshots and nested or repeated calls",
+    "JSON object/array paths with computed indices and typed numeric-looking text"
+  ],
+  "oracle_plan": [
+    "Reuse checker3 exact references and unchanged shipped CLI comparator; source diagnostics supplementary.",
+    "Bounded new axes via remote headless Monkey Man only, preserving every success/failure.",
+    "Parser/CLI, guards, touched format and both main tiers once stabilized; report actual local cohort and all invalid/error/renderer dependencies."
+  ],
+  "constraints": [
+    "No renderer/parser handoff edits; timezone width implementation unchanged.",
+    "No fixture/reference/comparator/baseline/review/target changes; no self-review.",
+    "All prior evidence retained; new independent checker required."
+  ]
+}

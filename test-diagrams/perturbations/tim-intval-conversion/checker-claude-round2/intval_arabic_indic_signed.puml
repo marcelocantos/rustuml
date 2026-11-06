@@ -1,0 +1,5 @@
+@startuml
+!$a = %intval("-٣٢١")
+!$b = %intval("+٧")
+class "$a / $b" as Signed
+@enduml

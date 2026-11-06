@@ -1,0 +1,9 @@
+@startuml
+!theme plain
+start
+:Knead dough;
+if (risen?) then (yes)
+  :Bake;
+endif
+stop
+@enduml

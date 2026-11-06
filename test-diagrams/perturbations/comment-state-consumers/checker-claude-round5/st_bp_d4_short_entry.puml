@@ -1,0 +1,15 @@
+@startuml
+state Site {
+  state Block {
+    state Floor {
+      state Room {
+        state in1 <<entryPoint>>
+        in1 --> Desk
+      }
+      Corridor --> in1
+    }
+    Lift --> Corridor
+  }
+  Gate --> Lift
+}
+@enduml

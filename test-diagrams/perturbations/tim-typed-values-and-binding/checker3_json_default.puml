@@ -1,0 +1,9 @@
+@startuml
+!$data=%str2json('["009",4]')
+!function $read($a=$data, $b="008")
+!return %size($a)+" / "+$b+2
+!endfunction
+!$data=%str2json('[1]')
+!$result=$read($b="003")
+class "$result" as Result
+@enduml

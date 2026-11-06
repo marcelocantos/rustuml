@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-expression-value-snapshot",
+  "reviewer": {
+    "task_id": "t3-cb14b5f3-fresh-independent-TIM-checker4",
+    "model": "gpt-6-astra / high; Codex harness through T3 Code",
+    "role": "independent adversarial checker; no implementation/no children"
+  },
+  "account_commit": "8765ccc2ea4c2574fe90d25c2ba9921ad520682e",
+  "implementation_commit": "6c550246b458eb5f37539713510dc7d919843421",
+  "tested_revision": "ee0e4c72fb222f1312d1aaf7d5a152cc97f12781",
+  "baseline_revision": "7bb210e9f7578705638c8f3b7c3b43d8b4b906c3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd <private-worker>/<row.cwd> --timezone GMT+11:00 -- -pipe -tsvg (exact raw source on stdin; actual argv/env captured per row)",
+    "Pinned remote wrapper --probe <private-worker>/SourceProbe.java --classpath <private-worker> -- <source> <cwd> (supplemental; no local Java)",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/evaluate.py candidate",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/evaluate_supplement.py candidate",
+    "cargo test -p rustuml-oracle --release --test golden_no_oracle",
+    "cargo test -p rustuml-oracle --release --test golden_pairs",
+    "cargo test -p rustuml-oracle --release --test parity_perturbations",
+    "cargo test -p rustuml-oracle --release --test harness_guards"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_call_context.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_call_context.svg",
+      "axes": [
+        "expression versus plain call",
+        "argument mutation"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_index_effect.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_index_effect.svg",
+      "axes": [
+        "index preparation effects",
+        "left-to-right snapshot order"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "java_exit": 200,
+      "rust_cli_exit": 0,
+      "source_equal": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_condition.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_condition.svg",
+      "axes": [
+        "logical/comparison operators",
+        "conditional statement"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_json_missing_chain.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_json_missing_chain.svg",
+      "axes": [
+        "missing member",
+        "nested member access"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "java_exit": 1,
+      "rust_cli_exit": 0,
+      "source_equal": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_json_scalar_types.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_json_scalar_types.svg",
+      "axes": [
+        "JSON numbers versus literals",
+        "boolean/null member projection"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_named_global_snapshot.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_named_global_snapshot.svg",
+      "axes": [
+        "named argument symbol also global",
+        "expression versus plain-call parser"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "source_equal": false
+    }
+  ],
+  "java_locations": [
+    "tim/expression/ShuntingYard.java:constructor",
+    "tim/expression/ReversePolishInterpretor.java:constructor",
+    "tim/TContext.java:asKnowledge/fromJson",
+    "tim/VariableManager.java:replaceJson"
+  ],
+  "findings": [
+    "REJECT: checker4_named_global_snapshot is valid in Java but differs in source and SVG: Java seed/4 / elm/5 versus Rust oak/4 / elm/5. In expression RPN, the named-argument left token $a is resolved by ShuntingYard Knowledge to its global value outer; AFFECTATION stores that key, leaving default a=seed. EaterFunctionCall plain-text parsing keeps the name literally. Rust prepare_expression strips the named key before preparing its value in both contexts. The source-specific named-binding distinction is missing.",
+    "Supported: checker4_snapshot_call_context matches the expression snapshot versus sequential plain-call argument distinction; checker4_snapshot_condition matches eager relational/logical conditions. checker4_json_scalar_types matches JSON numeric-looking string/number/boolean/null member paths. No broad grammar parity follows.",
+    "checker4_snapshot_index_effect is Java-negative (Parsing syntax error about ]), despite Rust success; functions inside that bracket-expression grammar are not promoted to a valid snapshot test. checker4_json_missing_chain throws in Java VariableManager.replaceJson; Rust continues with [.name]. These are negative-status divergences, not SVG passes."
+  ],
+  "verdict": "rejected",
+  "evidence": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/README.md",
+  "scope": "This record does not overwrite or re-attest older reviews. Invalid/error reference outputs remain failing pairs in the unchanged standing oracle. Narrow supported observations are separate from packet acceptance."
+}

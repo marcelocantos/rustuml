@@ -1,0 +1,20 @@
+[
+  {
+    "argv": [
+      "rustc",
+      "--edition=2024",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/probe.rs",
+      "-L",
+      "dependency=/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after/release/deps",
+      "--extern",
+      "rustuml_parser=/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after/release/deps/librustuml_parser-69497e1bef91509b.rlib",
+      "--extern",
+      "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+      "-o",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/probe"
+    ],
+    "exit": 1,
+    "source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+    "binary_sha256": null
+  }
+]

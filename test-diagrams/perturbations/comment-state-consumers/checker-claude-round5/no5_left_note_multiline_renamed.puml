@@ -1,0 +1,10 @@
+@startuml
+state Loom {
+  Warp --> Weft
+}
+note left of Loom
+  woven
+  tight
+  and long
+end note
+@enduml

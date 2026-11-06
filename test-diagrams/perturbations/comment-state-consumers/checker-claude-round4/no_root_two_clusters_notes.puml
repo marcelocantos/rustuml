@@ -1,0 +1,13 @@
+@startuml
+state East {
+  Kiln --> Shelf
+  note left of Kiln : glowing
+}
+state West {
+  Wheel --> Bench
+  note right of Bench : clay
+}
+Start --> Kiln
+Shelf --> Wheel
+Bench --> Stop
+@enduml

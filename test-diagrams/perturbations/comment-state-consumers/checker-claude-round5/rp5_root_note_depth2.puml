@@ -1,0 +1,9 @@
+@startuml
+state Hall {
+  state Wing {
+    Larch --> Cedar
+    note right of Larch : resin
+  }
+}
+Gate --> Larch
+@enduml

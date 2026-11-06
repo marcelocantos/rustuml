@@ -1,0 +1,5 @@
+@startuml
+skinparam stateBackgroundColor #3579bd80
+skinparam stateBorderColor #9e2
+state Quartz
+@enduml

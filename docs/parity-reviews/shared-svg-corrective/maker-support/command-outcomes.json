@@ -1,0 +1,1032 @@
+[
+  {
+    "cohort": "retained",
+    "command": "svg",
+    "entries": 1730,
+    "counts": {
+      "before": {
+        "errors": 125,
+        "exit_codes": {
+          "0": 1605,
+          "1": 93,
+          "101": 32
+        },
+        "panics": 32
+      },
+      "after": {
+        "errors": 125,
+        "exit_codes": {
+          "0": 1605,
+          "1": 93,
+          "101": 32
+        },
+        "panics": 32
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "retained",
+    "command": "yaml",
+    "entries": 1730,
+    "counts": {
+      "before": {
+        "errors": 108,
+        "exit_codes": {
+          "0": 1622,
+          "1": 93,
+          "101": 15
+        },
+        "panics": 15
+      },
+      "after": {
+        "errors": 108,
+        "exit_codes": {
+          "0": 1622,
+          "1": 93,
+          "101": 15
+        },
+        "panics": 15
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "maker18",
+    "command": "svg",
+    "entries": 18,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 18
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 18
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "maker18",
+    "command": "yaml",
+    "entries": 18,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 18
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 18
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "sprites50",
+    "command": "svg",
+    "entries": 50,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 50
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 50
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "sprites50",
+    "command": "yaml",
+    "entries": 50,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 50
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 50
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "checker38",
+    "command": "svg",
+    "entries": 38,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 38
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 38
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "checker38",
+    "command": "yaml",
+    "entries": 38,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 38
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 38
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "fresh15",
+    "command": "svg",
+    "entries": 15,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 15
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 15
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "fresh15",
+    "command": "yaml",
+    "entries": 15,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 15
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 15
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "fresh26",
+    "command": "svg",
+    "entries": 26,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 26
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 26
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "fresh26",
+    "command": "yaml",
+    "entries": 26,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 26
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 26
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "new15",
+    "command": "svg",
+    "entries": 15,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 15
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 15
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "new15",
+    "command": "yaml",
+    "entries": 15,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 15
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 15
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "delimiters4",
+    "command": "svg",
+    "entries": 4,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 4
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 4
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "delimiters4",
+    "command": "yaml",
+    "entries": 4,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 4
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 4
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "focused2",
+    "command": "svg",
+    "entries": 2,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 2
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 2
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "focused2",
+    "command": "yaml",
+    "entries": 2,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 2
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 2
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "checker30",
+    "command": "svg",
+    "entries": 30,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 30
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 30
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "checker30",
+    "command": "yaml",
+    "entries": 30,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 30
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 30
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "supplement8",
+    "command": "svg",
+    "entries": 8,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 8
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 8
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "supplement8",
+    "command": "yaml",
+    "entries": 8,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 8
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 8
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "fresh12",
+    "command": "svg",
+    "entries": 12,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 12
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 12
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "fresh12",
+    "command": "yaml",
+    "entries": 12,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 12
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 12
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "checker28",
+    "command": "svg",
+    "entries": 28,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 28
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 28
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "checker28",
+    "command": "yaml",
+    "entries": 28,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 28
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 28
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "fresh16",
+    "command": "svg",
+    "entries": 16,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 16
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 16
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "fresh16",
+    "command": "yaml",
+    "entries": 16,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 16
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 16
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "golden-regressions",
+    "command": "svg",
+    "entries": 6,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 6
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 6
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "golden-regressions",
+    "command": "yaml",
+    "entries": 6,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 6
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 6
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "checker36",
+    "command": "svg",
+    "entries": 36,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 36
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 36
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "checker36",
+    "command": "yaml",
+    "entries": 36,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 36
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 36
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "fallback16",
+    "command": "svg",
+    "entries": 16,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 16
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 16
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "fallback16",
+    "command": "yaml",
+    "entries": 16,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 16
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 16
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "checker32",
+    "command": "svg",
+    "entries": 32,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 32
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 32
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "checker32",
+    "command": "yaml",
+    "entries": 32,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 32
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 32
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "shared22",
+    "command": "svg",
+    "entries": 22,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 22
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 22
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "shared22",
+    "command": "yaml",
+    "entries": 22,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 22
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 22
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "checker87",
+    "command": "svg",
+    "entries": 87,
+    "counts": {
+      "before": {
+        "errors": 2,
+        "exit_codes": {
+          "0": 85,
+          "1": 2
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 2,
+        "exit_codes": {
+          "0": 85,
+          "1": 2
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "checker87",
+    "command": "yaml",
+    "entries": 87,
+    "counts": {
+      "before": {
+        "errors": 2,
+        "exit_codes": {
+          "0": 85,
+          "1": 2
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 2,
+        "exit_codes": {
+          "0": 85,
+          "1": 2
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "corrective16",
+    "command": "svg",
+    "entries": 16,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 16
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 16
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "corrective16",
+    "command": "yaml",
+    "entries": 16,
+    "counts": {
+      "before": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 16
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 0,
+        "exit_codes": {
+          "0": 16
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "full-golden",
+    "command": "svg",
+    "entries": 12550,
+    "counts": {
+      "before": {
+        "errors": 80,
+        "exit_codes": {
+          "1": 80,
+          "0": 12470
+        },
+        "panics": 0
+      },
+      "after": {
+        "errors": 80,
+        "exit_codes": {
+          "1": 80,
+          "0": 12470
+        },
+        "panics": 0
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  },
+  {
+    "cohort": "full-golden",
+    "command": "yaml",
+    "entries": 12550,
+    "counts": {
+      "before": {
+        "errors": 240,
+        "exit_codes": {
+          "1": 80,
+          "0": 12310,
+          "101": 160
+        },
+        "panics": 160
+      },
+      "after": {
+        "errors": 240,
+        "exit_codes": {
+          "1": 80,
+          "0": 12310,
+          "101": 160
+        },
+        "panics": 160
+      }
+    },
+    "new_errors": [],
+    "new_panics": []
+  }
+]

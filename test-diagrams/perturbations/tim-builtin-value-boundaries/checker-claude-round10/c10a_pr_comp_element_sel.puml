@@ -1,0 +1,9 @@
+@startuml
+skinparam defaultFontName Times New Roman
+<style>
+element {
+  FontStyle italic
+}
+</style>
+component "Kiln wq vista" as E1 <<Dock>>
+@enduml

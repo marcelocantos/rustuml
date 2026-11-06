@@ -1,0 +1,13 @@
+@startuml
+
+skinparam shadowing true
+start
+:Harbor intake;
+if (tide high?) then (yes)
+  :Moor ferry;
+else (no)
+  :Wait offshore;
+endif
+:Log arrival;
+stop
+@enduml

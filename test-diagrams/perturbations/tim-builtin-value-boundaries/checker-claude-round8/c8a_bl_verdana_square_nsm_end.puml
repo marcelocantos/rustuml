@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Verdana
+class "Pier א [ב]𝅧" as K
+@enduml

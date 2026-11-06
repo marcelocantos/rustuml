@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Helvetica
+state Quay
+Quay : <i>Wharf q𝅧r</i>
+@enduml

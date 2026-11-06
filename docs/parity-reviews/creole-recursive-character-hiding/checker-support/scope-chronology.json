@@ -1,0 +1,37 @@
+{
+  "base": "a3afe487a66ae26c73e2f1853d6c26fc2d228875",
+  "tip": "2608469dace1f680a7e90c0895e44e657f8aaf7f",
+  "production": "a6e1718c4eb693aec99c3a107fd654afb8a4e4e3",
+  "account": "5d039c21c9374ee91904fe4da430c22ff6e2c4f3",
+  "production_paths": [
+    "crates/rustuml-render/src/creole.rs"
+  ],
+  "legacy_prefix_unchanged": true,
+  "public_signatures_unchanged": true,
+  "prod_tip_code_equal": true,
+  "import_patch_byte_equal": true,
+  "ancestry": [
+    {
+      "earlier": "a3afe487a66ae26c73e2f1853d6c26fc2d228875",
+      "later": "f75103e509a5c5cd61341d78421a436f7103603f",
+      "exit": 0
+    },
+    {
+      "earlier": "f75103e509a5c5cd61341d78421a436f7103603f",
+      "later": "5d039c21c9374ee91904fe4da430c22ff6e2c4f3",
+      "exit": 0
+    },
+    {
+      "earlier": "5d039c21c9374ee91904fe4da430c22ff6e2c4f3",
+      "later": "a6e1718c4eb693aec99c3a107fd654afb8a4e4e3",
+      "exit": 0
+    },
+    {
+      "earlier": "a6e1718c4eb693aec99c3a107fd654afb8a4e4e3",
+      "later": "2608469dace1f680a7e90c0895e44e657f8aaf7f",
+      "exit": 0
+    }
+  ],
+  "commit_records": "commit f75103e509a5c5cd61341d78421a436f7103603f\nAuthor:     Marcelo Cantos <marcelo.cantos@gmail.com>\nAuthorDate: Thu Nov 5 01:27:05 2026 +1100\nCommit:     Marcelo Cantos <marcelo.cantos@gmail.com>\nCommitDate: Thu Nov 5 01:28:43 2026 +1100\n\n    review: reject style and WBS packet with independent held-out evidence\n    \n    Reproduce all 1898 frozen CLI observations and the once-only broad gates.\n    Preserve 38 fresh reference pairs, raw models and streams, independent\n    source/integrity audits, and five mechanism-specific rejected reviews.\n    Separate supported origin/projection behavior from remaining shared-text\n    failures and the pinned reference runner's missing-Batik limitation.\n    \n    Co-Authored-By: GPT-6 Astra <noreply@openai.com>\n\ncommit 5d039c21c9374ee91904fe4da430c22ff6e2c4f3\nAuthor:     Marcelo Cantos <marcelo.cantos@gmail.com>\nAuthorDate: Thu Nov 5 01:31:44 2026 +1100\nCommit:     Marcelo Cantos <marcelo.cantos@gmail.com>\nCommitDate: Thu Nov 5 01:31:44 2026 +1100\n\n    Account for recursive character hiding and parameter command flush before drafts\n\ncommit a6e1718c4eb693aec99c3a107fd654afb8a4e4e3\nAuthor:     Marcelo Cantos <marcelo.cantos@gmail.com>\nAuthorDate: Thu Nov 5 01:36:47 2026 +1100\nCommit:     Marcelo Cantos <marcelo.cantos@gmail.com>\nCommitDate: Thu Nov 5 01:36:47 2026 +1100\n\n    Share recursive character hiding and preserve parameter command flushes\n    \n    Preimplementation accounts: 5d039c21c. Match CharHidder and StripeSimple entry/atom boundaries in the existing segment parser. Keep WBS geometry, models and shared APIs unchanged; leave warning composition and other consumer dependencies explicit for independent review.\n\ncommit 2608469dace1f680a7e90c0895e44e657f8aaf7f\nAuthor:     Marcelo Cantos <marcelo.cantos@gmail.com>\nAuthorDate: Thu Nov 5 01:44:39 2026 +1100\nCommit:     Marcelo Cantos <marcelo.cantos@gmail.com>\nCommitDate: Thu Nov 5 01:44:39 2026 +1100\n\n    Preserve hiding and flush maker evidence and unresolved warning scope\n    \n    Retain all 1948 before/after CLI observations, full models, original nonpositive memberships, fresh parent relay captures and once-only gates. Preserve every prior rejected record unchanged. Record zero lost passes, new errors or new panics without self-acceptance; retain all remaining sequence, Unicode, warning and reference-environment dependencies for a new independent checker.\n",
+  "limitation": "Git proves account-before-committed-draft ancestry, not absence of unrecorded pre-account drafts."
+}

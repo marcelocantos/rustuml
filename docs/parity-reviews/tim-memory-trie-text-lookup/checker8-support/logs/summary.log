@@ -1,0 +1,28 @@
+{
+  "entries": 1710,
+  "distinct_pairs": 1631,
+  "duplicate_entries": 79,
+  "retained": {
+    "entries": 1672,
+    "before": {
+      "valid": 1560,
+      "svg": 665,
+      "exact_source": 158,
+      "available_source": 160
+    },
+    "after": {
+      "valid": 1560,
+      "svg": 665,
+      "exact_source": 158,
+      "available_source": 160
+    }
+  },
+  "lost_valid_passes": [],
+  "new_valid_errors": [],
+  "valid_model_drops": [],
+  "valid_source_mismatches": [
+    "fresh6/0017-intval_unicode_digits",
+    "fresh6/0018-intval_unicode_json"
+  ]
+}
+standing 1628 609 CLI 636 discrepancies 27

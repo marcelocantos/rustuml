@@ -1,0 +1,8 @@
+@startuml
+state Lake {
+  Pike --> Perch
+  note right of Perch : quick
+}
+note left of Heron : patient
+Heron --> Pike
+@enduml

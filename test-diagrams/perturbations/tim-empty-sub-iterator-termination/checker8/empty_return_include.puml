@@ -1,0 +1,9 @@
+@startuml
+!$n=0
+!function $read()
+!include quiet.iuml
+!return $n+3
+!endfunction
+!$v=$read()
+class "$v / $n" as ReturnFresh
+@enduml

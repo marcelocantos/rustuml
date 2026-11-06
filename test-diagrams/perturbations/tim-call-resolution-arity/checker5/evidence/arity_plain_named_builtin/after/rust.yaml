@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "16" as Invalid
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Invalid
+  entities:
+  - id: Invalid
+    label: '16'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 1
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

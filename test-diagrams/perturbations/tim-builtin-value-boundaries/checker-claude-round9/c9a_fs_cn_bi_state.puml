@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Courier New
+state Quay
+Quay : <b><i>Wharf q𝅧r</i></b>
+@enduml

@@ -1,0 +1,33 @@
+{
+ "schema_version": 1,
+ "files": {
+  "measurements/base.no_oracle_failure_names.txt": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+  "measurements/base.parity_perturbations_failing.txt": "f6b9b73fdd6cdf235d3aa507d114eea4dc1696e5f47013f7fd54b57b19c33ceb",
+  "measurements/cli-events.base-to-tip.json": "5f219f98361c2d67dc7ac71f5f0601ce3b145979b0ca9a7b65ea110c8f33b94a",
+  "measurements/cli-events.round2-tip-to-tip.json": "8a2603ee4d8a6096f6e01b9f8f3468d385aa0665e64b83b218aa1bbfd166dbf5",
+  "measurements/cohort-AR.json": "a8f1629c93aaabed9f010153604d5faefa47181be5e8440a391956f0c61cc366",
+  "measurements/cohort-AU.json": "74fbc37947e5f585d31720484e0621a53de5da26ea47b09ba8e2dc48442e9c37",
+  "measurements/cohort-AW.json": "6d22f11fb9ebd1947c7246b0b1231f4bbaee68ebd2fc8b6b85449ec440b2fd10",
+  "measurements/comment-lists.base-to-tip.json": "fc22e1381f7e236d009bae54a9b7965ee3cecdd1df4dd328c1c0e96697dccdeb",
+  "measurements/comment-lists.round2-tip-to-tip.json": "553a02c1fbc68ae4e57253923b16e0f2d0fc6c9eb522aa40b8a50da02b401f52",
+  "measurements/position-agreement.prev-to-tip.txt": "5e9c174142649578c69370fdb605087a32d6bfacaf1d7a7e93ae761fea924218",
+  "measurements/pre-round3-merge.harness_guards_categories.txt": "afda3d7b671d41a5ea02cf50da3938c5a00ed4ca6e5599425f7fd1bc653c03d9",
+  "measurements/probe-predictions-r3a.json": "70f6f1c8bd2c0d7f7596cf7b41ae8ad3e249c443da2d137da47ed6a8c4c72eb9",
+  "measurements/recorded-cwd-map.json": "3a929a00e08e965922d88b3c8ede6636c01b18023a0e80c27769779a591f94ad",
+  "measurements/tip.harness_guards_categories.txt": "c7ba7c0c4006140575093c4cb5b75fd96587018521a87ecb0284093bdcaf543e",
+  "measurements/tip.no_oracle_failure_names.txt": "2294517babde7c307658186a234d732f39451fed59686df6cfaf066774bc8e67",
+  "measurements/tip.parity_perturbations_failing.txt": "fccbd447d7673452e63b63c126167a9a46fa7cd16dae03d8145f18d1dceb638b",
+  "relay-request-r3a.json": "5c83e95a920118de8ee9c4827bab3aeca349267bb5fe7ecc3912f94577d59901",
+  "results.json": "bafbf0a654bc644afcec31ca6059b68f2f9160648b9b3d819df8402989483cae",
+  "serializer-surrogate-account.json": "7539d778d0afcf8d4fa04b96b9b1a30d654ee0e70cb731743f0035ee84315137",
+  "tools/aw.sh": "5c3d976429e16321aec52829c92c4456fd46fe1eadaa812fb565de3a338423e7",
+  "tools/classify.py": "2efc703ef242179cb9e69680c180d3421456c95621117592cd315055bebc2f89",
+  "tools/cmp_run.sh": "f719174bbc3eaf134392186905decf75c32f2ef2bd74cd693d14eccdd84ffcfd",
+  "tools/cohort_direct.py": "7574fb60e42667299b992720f1187ff9422543011f788d5b136a11a8d77c7afd",
+  "tools/comments.py": "9d5576b137be5150ed4a1bb86a336423a1bb58a5ceabafa383979188ee44cd5d",
+  "tools/cwd_map.py": "1ec5d08675570768239e5d7811b8813aa23fd1064e80a76743bc148214331b15",
+  "tools/guard_categories.py": "91dcfad21e5f7d89485c130ab4f95cf272b34e74b39663274d880f8954679c3d",
+  "tools/position_agreement.py": "9ca107d406e21d00475b61cc8f51b23b9d4aace8bb861de797c1a8626cc59e88",
+  "tools/sweep.py": "9eeece27f066e26400ae2f485675a002b49bdccbff16dbe89601dca0e88e8666"
+ }
+}

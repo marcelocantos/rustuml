@@ -1,0 +1,212 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/new/nested_unknown.puml",
+    "mechanism": "sprite-corrective-shared-text",
+    "axes": [
+      "command traversal",
+      "sequence present line"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/new/nested_escaped.puml",
+    "mechanism": "sprite-corrective-shared-text",
+    "axes": [
+      "command traversal",
+      "sequence present line"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/new/nested_unicode.puml",
+    "mechanism": "sprite-corrective-shared-text",
+    "axes": [
+      "command traversal",
+      "sequence present line"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/new/nested_styles.puml",
+    "mechanism": "sprite-corrective-shared-text",
+    "axes": [
+      "command traversal",
+      "sequence present line"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/new/blank_restored.puml",
+    "mechanism": "sprite-corrective-shared-text",
+    "axes": [
+      "command traversal",
+      "sequence present line"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/new/blank_small_base.puml",
+    "mechanism": "sprite-corrective-shared-text",
+    "axes": [
+      "command traversal",
+      "sequence present line"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/new/absent_labels.puml",
+    "mechanism": "sprite-corrective-shared-text",
+    "axes": [
+      "absent labels",
+      "syntax negative retained"
+    ],
+    "negative": true,
+    "intended_validity": "intended_syntax_negative",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/new/absent_message.puml",
+    "mechanism": "sprite-corrective-shared-text",
+    "axes": [
+      "absent display",
+      "no synthetic stripe"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/new/blank_message.puml",
+    "mechanism": "sprite-corrective-shared-text",
+    "axes": [
+      "present empty display",
+      "blank versus absent"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/new/wbs_missing.puml",
+    "mechanism": "sprite-corrective-shared-text",
+    "axes": [
+      "command consumption",
+      "depth and empty node"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/new/wbs_styles.puml",
+    "mechanism": "sprite-corrective-shared-text",
+    "axes": [
+      "semantic style width/height",
+      "depth and sibling placement"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/new/wbs_plain.puml",
+    "mechanism": "sprite-corrective-shared-text",
+    "axes": [
+      "plain control",
+      "depth and sibling placement"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/new/wbs_left.puml",
+    "mechanism": "sprite-corrective-shared-text",
+    "axes": [
+      "measured height",
+      "left-right topology"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/new/note_defined.puml",
+    "mechanism": "sprite-corrective-shared-text",
+    "axes": [
+      "defined versus missing",
+      "existing resolver control"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/new/deploy_defined.puml",
+    "mechanism": "sprite-corrective-shared-text",
+    "axes": [
+      "defined versus missing",
+      "deployment resolver control"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  }
+]

@@ -1,0 +1,61 @@
+{
+  "memberships": 14827,
+  "byte_equal": 14818,
+  "byte_changes": [
+    {
+      "id": "sprites/sprite_multiple",
+      "semantic_equal": true,
+      "before_sha256": "650d4e5f8e6e5a620be453c4cfb5ee6a9f283b1bfca023f3399fbbb3e21a946a",
+      "after_sha256": "ea6f91843081156b4075ff19ab2c15fe4a3c42d4285366b0a8a0a538b84efbe5"
+    },
+    {
+      "id": "full-golden/dot/dot_graph_attributes",
+      "semantic_equal": true,
+      "before_sha256": "28fce19a900bdce109f5ac397164a36882079b684a507d07e479c3a301801b4b",
+      "after_sha256": "93c12e07b4a59981017565344d4bd843d5c625eef4edf92f0fd7ea23279fa838"
+    },
+    {
+      "id": "full-golden/dot/dot_multi_edge",
+      "semantic_equal": true,
+      "before_sha256": "9b84f6f5dc22da2f2084bdf372cf6e122c6cc8cad98727461f790577720c3aa5",
+      "after_sha256": "eb6fe59e8f9d834307ede62ae9d47c6aa0ef88f309358af16e82448a11d7fb44"
+    },
+    {
+      "id": "full-golden/dot/dot_node_colors",
+      "semantic_equal": true,
+      "before_sha256": "187f63e6517beb5a82a4d51150a0e75626bdea1b6ee130af1aa613b443de477d",
+      "after_sha256": "99f050009685f6f7ae761e533df8e2b4ffb416229eee5c4c0ddce2b86ff40da8"
+    },
+    {
+      "id": "full-golden/dot/dot_node_url",
+      "semantic_equal": true,
+      "before_sha256": "ee83b571e86d6172ffd9da6e496df43e35aa815b49ffb7d977779a18f34f72ff",
+      "after_sha256": "8896e55cb9369c96da4e0e390f3e9a032bab15381cff28a2f715c2ebe8566a93"
+    },
+    {
+      "id": "full-golden/dot/dot_record_ports",
+      "semantic_equal": true,
+      "before_sha256": "8b2de1f8f1ed38cee748206d8eb1da5144e1c636f99b5e6fce73142e4dd27b89",
+      "after_sha256": "70bbad5559a43eab9459a2b30ab6129bc676475538682b95ee50ae14d9e6cb76"
+    },
+    {
+      "id": "full-golden/dot/dot_record_simple",
+      "semantic_equal": true,
+      "before_sha256": "b2c6093c9532a322fe538be2578fc0d68bd85a03d639d289bf1da825ea37c8af",
+      "after_sha256": "70090792a847e3413fa2107c4ce8f481a0cd7da7a7d10969f7c915e49517e150"
+    },
+    {
+      "id": "full-golden/dot/dot_weighted_edges",
+      "semantic_equal": true,
+      "before_sha256": "2de10bac77bc956d9fa275aa1f36dba160fb88994ca9ee9db3ff2d44f46815e6",
+      "after_sha256": "71e327a8e7b56abf6523d5a58558bf05f60861831d34ad3ad322866157e88580"
+    },
+    {
+      "id": "full-golden/sprites/sprite_multiple",
+      "semantic_equal": true,
+      "before_sha256": "ea6f91843081156b4075ff19ab2c15fe4a3c42d4285366b0a8a0a538b84efbe5",
+      "after_sha256": "650d4e5f8e6e5a620be453c4cfb5ee6a9f283b1bfca023f3399fbbb3e21a946a"
+    }
+  ],
+  "all_semantically_equal": true
+}

@@ -1,0 +1,749 @@
+{
+ "stat": {
+  "cr/ctl_fail/fail": 6,
+  "cr/ctl_match/fail": 7,
+  "cr/ctl_match/match": 53,
+  "fc/ctl_fail/fail": 81,
+  "fc/ctl_match/fail": 38,
+  "fc/ctl_match/match": 61,
+  "of/ctl_fail/fail": 6,
+  "of/ctl_match/fail": 12,
+  "of/ctl_match/match": 18,
+  "qu/ctl_fail/fail": 4,
+  "qu/ctl_match/fail": 16,
+  "st/ctl_fail/fail": 16,
+  "sx/ctl_fail/fail": 22,
+  "sx/ctl_match/fail": 2,
+  "sx/ctl_match/match": 9,
+  "sz/ctl_match/fail": 14,
+  "sz/ctl_match/match": 22
+ },
+ "controlled_failures": {
+  "fc": [
+   {
+    "name": "c11a_fc_comp_vd_bi",
+    "control": "c11a_fc_comp_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 6,
+    "merge_ndiff": 6,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"67px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:354px;height:67px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 354 67\"), (\"width\", \"354p"
+   },
+   {
+    "name": "c11a_fc_comp_ar_bi",
+    "control": "c11a_fc_comp_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 6,
+    "merge_ndiff": 6,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"66px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:307px;height:66px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 307 66\"), (\"width\", \"307p"
+   },
+   {
+    "name": "c11a_fc_node_vd_bi",
+    "control": "c11a_fc_node_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 13,
+    "merge_ndiff": 13,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"174px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:375px;height:174px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 375 174\"), (\"width\", \"3"
+   },
+   {
+    "name": "c11a_fc_node_ar_bi",
+    "control": "c11a_fc_node_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 13,
+    "merge_ndiff": 13,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"172px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:328px;height:172px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 328 172\"), (\"width\", \"3"
+   },
+   {
+    "name": "c11a_fc_dbse_vd_bi",
+    "control": "c11a_fc_dbse_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 11,
+    "merge_ndiff": 11,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"173px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:345px;height:173px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 345 173\"), (\"width\", \"3"
+   },
+   {
+    "name": "c11a_fc_clou_vd_bi",
+    "control": "c11a_fc_clou_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 10,
+    "merge_ndiff": 10,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"183px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:358px;height:183px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 358 183\"), (\"width\", \"3"
+   },
+   {
+    "name": "c11a_fc_clou_ar_bi",
+    "control": "c11a_fc_clou_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 10,
+    "merge_ndiff": 10,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"179px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:296px;height:179px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 296 179\"), (\"width\", \"2"
+   },
+   {
+    "name": "c11a_fc_clss_vd_bi",
+    "control": "c11a_fc_clss_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 5,
+    "merge_ndiff": 5,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"68px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:346px;height:68px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 346 68\"), (\"width\", \"346px\"), ("
+   },
+   {
+    "name": "c11a_fc_clss_ar_bi",
+    "control": "c11a_fc_clss_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 5,
+    "merge_ndiff": 5,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"68px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:299px;height:68px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 299 68\"), (\"width\", \"299px\"), ("
+   },
+   {
+    "name": "c11a_fc_part_vd_bi",
+    "control": "c11a_fc_part_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 12,
+    "merge_ndiff": 12,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"137px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:324px;height:137px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 324 137\"), (\"width\", \"324p"
+   },
+   {
+    "name": "c11a_fc_part_ar_bi",
+    "control": "c11a_fc_part_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 12,
+    "merge_ndiff": 12,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"135px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:277px;height:135px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 277 135\"), (\"width\", \"277p"
+   },
+   {
+    "name": "c11a_fc_smsg_vd_i",
+    "control": "c11a_fc_smsg_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 8,
+    "merge_ndiff": 9,
+    "diff_head": "[AttrMismatch { index: 9, tag: \"rect\", expected_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"49.7993\"), (\"width\", \"8\"), (\"x\", \"285.0737\"), (\"y\", \"37.0146\")], actual_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"49.7993\"), (\"width\", \"8\"), (\"x\", \"285.42"
+   },
+   {
+    "name": "c11a_fc_smsg_vd_bi",
+    "control": "c11a_fc_smsg_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 10,
+    "merge_ndiff": 10,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"124px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:337px;height:124px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 337 124\"), (\"width\", \"337p"
+   },
+   {
+    "name": "c11a_fc_smsg_ar_bi",
+    "control": "c11a_fc_smsg_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 10,
+    "merge_ndiff": 10,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"122px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:293px;height:122px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 293 122\"), (\"width\", \"293p"
+   },
+   {
+    "name": "c11a_fc_snot_vd_i",
+    "control": "c11a_fc_snot_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 1,
+    "merge_ndiff": 1,
+    "diff_head": "[AttrMismatch { index: 15, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Verdana\"), (\"font-size\", \"13\"), (\"font-style\", \"italic\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"248.2886\"), (\"x\", \"27\"), (\"y\", \"70.0845\")], actual_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Verda"
+   },
+   {
+    "name": "c11a_fc_snot_vd_b",
+    "control": "c11a_fc_snot_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 4,
+    "merge_ndiff": 4,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"130px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:326px;height:130px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 326 130\"), (\"width\", \"326p"
+   },
+   {
+    "name": "c11a_fc_snot_vd_bi",
+    "control": "c11a_fc_snot_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 4,
+    "merge_ndiff": 4,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"130px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:326px;height:130px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 326 130\"), (\"width\", \"326p"
+   },
+   {
+    "name": "c11a_fc_snot_ar_i",
+    "control": "c11a_fc_snot_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 1,
+    "merge_ndiff": 1,
+    "diff_head": "[AttrMismatch { index: 15, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Arial\"), (\"font-size\", \"13\"), (\"font-style\", \"italic\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"216.0298\"), (\"x\", \"27\"), (\"y\", \"68.2925\")], actual_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Arial\")"
+   },
+   {
+    "name": "c11a_fc_snot_ar_b",
+    "control": "c11a_fc_snot_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 4,
+    "merge_ndiff": 4,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"128px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:282px;height:128px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 282 128\"), (\"width\", \"282p"
+   },
+   {
+    "name": "c11a_fc_snot_ar_bi",
+    "control": "c11a_fc_snot_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 4,
+    "merge_ndiff": 4,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"128px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:282px;height:128px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 282 128\"), (\"width\", \"282p"
+   },
+   {
+    "name": "c11a_fc_sgrp_vd_i",
+    "control": "c11a_fc_sgrp_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 5,
+    "merge_ndiff": 5,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"169px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:324px;height:169px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 324 169\"), (\"width\", \"324p"
+   },
+   {
+    "name": "c11a_fc_sgrp_ar_i",
+    "control": "c11a_fc_sgrp_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 5,
+    "merge_ndiff": 5,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"166px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:292px;height:166px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 292 166\"), (\"width\", \"292p"
+   },
+   {
+    "name": "c11a_fc_actv_vd_bi",
+    "control": "c11a_fc_actv_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 10,
+    "merge_ndiff": 10,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"ACTIVITY\"), (\"height\", \"151px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:308px;height:151px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 308 151\"), (\"width\", \"308p"
+   },
+   {
+    "name": "c11a_fc_actv_ar_bi",
+    "control": "c11a_fc_actv_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 10,
+    "merge_ndiff": 10,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"ACTIVITY\"), (\"height\", \"150px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:268px;height:150px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 268 150\"), (\"width\", \"268p"
+   },
+   {
+    "name": "c11a_fc_stat_vd_bi",
+    "control": "c11a_fc_stat_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 4,
+    "merge_ndiff": 4,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"STATE\"), (\"height\", \"71px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:336px;height:71px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 336 71\"), (\"width\", \"336px\"), ("
+   },
+   {
+    "name": "c11a_fc_sdsc_vd_bi",
+    "control": "c11a_fc_sdsc_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 2,
+    "merge_ndiff": 5,
+    "diff_head": "[AttrMismatch { index: 7, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Verdana\"), (\"font-size\", \"12\"), (\"font-style\", \"italic\"), (\"font-weight\", \"700\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"252.5859\"), (\"x\", \"12\"), (\"y\", \"51.0791\")], actual_attrs: [(\"fill\", \"#000000\"),"
+   },
+   {
+    "name": "c11a_fc_usec_vd_bi",
+    "control": "c11a_fc_usec_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 3,
+    "merge_ndiff": 3,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"87px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:332px;height:87px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 332 87\"), (\"width\", \"332p"
+   },
+   {
+    "name": "c11a_fc_usec_ar_bi",
+    "control": "c11a_fc_usec_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 3,
+    "merge_ndiff": 3,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"78px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:286px;height:78px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 286 78\"), (\"width\", \"286p"
+   },
+   {
+    "name": "c11a_fc_actu_vd_bi",
+    "control": "c11a_fc_actu_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 8,
+    "merge_ndiff": 8,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"185px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:315px;height:185px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 315 185\"), (\"width\", \"3"
+   },
+   {
+    "name": "c11a_fc_actu_ar_bi",
+    "control": "c11a_fc_actu_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 8,
+    "merge_ndiff": 8,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"183px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:268px;height:183px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 268 183\"), (\"width\", \"2"
+   },
+   {
+    "name": "c11a_fc_kcls_vd_i",
+    "control": "c11a_fc_kcls_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 1,
+    "merge_ndiff": 1,
+    "diff_head": "[AttrMismatch { index: 20, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Verdana\"), (\"font-size\", \"13\"), (\"font-style\", \"italic\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"248.2886\"), (\"x\", \"28.8\"), (\"y\", \"99.0698\")], actual_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Ver"
+   },
+   {
+    "name": "c11a_fc_kcls_vd_b",
+    "control": "c11a_fc_kcls_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 2,
+    "merge_ndiff": 2,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"195px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:318px;height:195px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 318 195\"), (\"width\", \"318px\")"
+   },
+   {
+    "name": "c11a_fc_kcls_vd_bi",
+    "control": "c11a_fc_kcls_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 2,
+    "merge_ndiff": 2,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"195px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:318px;height:195px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 318 195\"), (\"width\", \"318px\")"
+   },
+   {
+    "name": "c11a_fc_kcls_ar_i",
+    "control": "c11a_fc_kcls_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 1,
+    "merge_ndiff": 1,
+    "diff_head": "[AttrMismatch { index: 20, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Arial\"), (\"font-size\", \"13\"), (\"font-style\", \"italic\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"216.0298\"), (\"x\", \"28.67\"), (\"y\", \"98.1938\")], actual_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Aria"
+   },
+   {
+    "name": "c11a_fc_kcls_ar_b",
+    "control": "c11a_fc_kcls_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 2,
+    "merge_ndiff": 2,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"194px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:274px;height:194px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 274 194\"), (\"width\", \"274px\")"
+   },
+   {
+    "name": "c11a_fc_kcls_ar_bi",
+    "control": "c11a_fc_kcls_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 2,
+    "merge_ndiff": 2,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"194px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:274px;height:194px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 274 194\"), (\"width\", \"274px\")"
+   },
+   {
+    "name": "c11a_fc_tlnk_vd_bi",
+    "control": "c11a_fc_tlnk_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 2,
+    "merge_ndiff": 2,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"STATE\"), (\"height\", \"198px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:322px;height:198px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 322 198\"), (\"width\", \"322px\")"
+   },
+   {
+    "name": "c11a_fc_tlnk_ar_bi",
+    "control": "c11a_fc_tlnk_ar_p",
+    "merge": "DIFF",
+    "tip_ndiff": 2,
+    "merge_ndiff": 2,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"STATE\"), (\"height\", \"197px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:278px;height:197px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 278 197\"), (\"width\", \"278px\")"
+   }
+  ],
+  "sz9": [
+   {
+    "name": "c11a_sz9_comp_vd_bi",
+    "control": "c11a_sz9_comp_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 6,
+    "merge_ndiff": 6,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"60px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:249px;height:60px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 249 60\"), (\"width\", \"249p"
+   },
+   {
+    "name": "c11a_sz9_part_vd_bi",
+    "control": "c11a_sz9_part_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 12,
+    "merge_ndiff": 12,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"125px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:219px;height:125px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 219 125\"), (\"width\", \"219p"
+   },
+   {
+    "name": "c11a_sz9_clss_vd_bi",
+    "control": "c11a_sz9_clss_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 5,
+    "merge_ndiff": 5,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"68px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:241px;height:68px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 241 68\"), (\"width\", \"241px\"), ("
+   },
+   {
+    "name": "c11a_sz9_actv_vd_bi",
+    "control": "c11a_sz9_actv_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 10,
+    "merge_ndiff": 10,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"ACTIVITY\"), (\"height\", \"147px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:245px;height:147px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 245 147\"), (\"width\", \"245p"
+   },
+   {
+    "name": "c11a_sz9_stat_vd_bi",
+    "control": "c11a_sz9_stat_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 4,
+    "merge_ndiff": 4,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"STATE\"), (\"height\", \"71px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:231px;height:71px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 231 71\"), (\"width\", \"231px\"), ("
+   },
+   {
+    "name": "c11a_sz9_stat_ar_i",
+    "control": "c11a_sz9_stat_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 4,
+    "merge_ndiff": 4,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"STATE\"), (\"height\", \"71px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:191px;height:71px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 191 71\"), (\"width\", \"191px\"), ("
+   },
+   {
+    "name": "c11a_sz9_usec_vd_bi",
+    "control": "c11a_sz9_usec_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 3,
+    "merge_ndiff": 3,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"65px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:223px;height:65px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 223 65\"), (\"width\", \"223p"
+   }
+  ],
+  "sz23": [
+   {
+    "name": "c11a_sz23_comp_vd_bi",
+    "control": "c11a_sz23_comp_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 6,
+    "merge_ndiff": 6,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"77px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:544px;height:77px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 544 77\"), (\"width\", \"544p"
+   },
+   {
+    "name": "c11a_sz23_part_vd_bi",
+    "control": "c11a_sz23_part_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 12,
+    "merge_ndiff": 12,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"159px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:514px;height:159px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 514 159\"), (\"width\", \"514p"
+   },
+   {
+    "name": "c11a_sz23_clss_vd_bi",
+    "control": "c11a_sz23_clss_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 5,
+    "merge_ndiff": 5,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"73px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:536px;height:73px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 536 73\"), (\"width\", \"536px\"), ("
+   },
+   {
+    "name": "c11a_sz23_actv_vd_bi",
+    "control": "c11a_sz23_actv_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 10,
+    "merge_ndiff": 10,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"ACTIVITY\"), (\"height\", \"164px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:540px;height:164px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 540 164\"), (\"width\", \"540p"
+   },
+   {
+    "name": "c11a_sz23_stat_vd_bi",
+    "control": "c11a_sz23_stat_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 4,
+    "merge_ndiff": 4,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"STATE\"), (\"height\", \"71px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:526px;height:71px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 526 71\"), (\"width\", \"526px\"), ("
+   },
+   {
+    "name": "c11a_sz23_stat_ar_i",
+    "control": "c11a_sz23_stat_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 4,
+    "merge_ndiff": 4,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"STATE\"), (\"height\", \"71px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:424px;height:71px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 424 71\"), (\"width\", \"424px\"), ("
+   },
+   {
+    "name": "c11a_sz23_usec_vd_bi",
+    "control": "c11a_sz23_usec_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 3,
+    "merge_ndiff": 3,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"126px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:529px;height:126px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 529 126\"), (\"width\", \"5"
+   }
+  ],
+  "cr": [
+   {
+    "name": "c11a_cr_stat_ir_vd",
+    "control": "c11a_cr_stat_ctl_vd",
+    "merge": "DIFF",
+    "tip_ndiff": 3,
+    "merge_ndiff": 5,
+    "diff_head": "[ElementCount { expected: 9, actual: 7 }, AttrMismatch { index: 6, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Verdana\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"38.8213\"), (\"x\", \"17\"), (\"y\", \"26.0752\")], actual_attrs: [(\"fill\", \"#000000\"), (\"font-fa"
+   },
+   {
+    "name": "c11a_cr_stat_br_vd",
+    "control": "c11a_cr_stat_ctl_vd",
+    "merge": "DIFF",
+    "tip_ndiff": 3,
+    "merge_ndiff": 3,
+    "diff_head": "[ElementCount { expected: 9, actual: 7 }, AttrMismatch { index: 6, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Verdana\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"38.8213\"), (\"x\", \"17\"), (\"y\", \"26.0752\")], actual_attrs: [(\"fill\", \"#000000\"), (\"font-fa"
+   },
+   {
+    "name": "c11a_cr_stat_bir_vd",
+    "control": "c11a_cr_stat_ctl_vd",
+    "merge": "DIFF",
+    "tip_ndiff": 3,
+    "merge_ndiff": 3,
+    "diff_head": "[ElementCount { expected: 9, actual: 7 }, AttrMismatch { index: 6, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Verdana\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"38.8213\"), (\"x\", \"17\"), (\"y\", \"26.0752\")], actual_attrs: [(\"fill\", \"#000000\"), (\"font-fa"
+   },
+   {
+    "name": "c11a_cr_stat_md_vd",
+    "control": "c11a_cr_stat_ctl_vd",
+    "merge": "DIFF",
+    "tip_ndiff": 3,
+    "merge_ndiff": 3,
+    "diff_head": "[ElementCount { expected: 9, actual: 7 }, AttrMismatch { index: 6, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Verdana\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"38.8213\"), (\"x\", \"17\"), (\"y\", \"26.0752\")], actual_attrs: [(\"fill\", \"#000000\"), (\"font-fa"
+   },
+   {
+    "name": "c11a_cr_stat_bl_i_vd",
+    "control": "c11a_cr_stat_ctl_vd",
+    "merge": "DIFF",
+    "tip_ndiff": 3,
+    "merge_ndiff": 3,
+    "diff_head": "[ElementCount { expected: 9, actual: 7 }, AttrMismatch { index: 6, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Verdana\"), (\"font-size\", \"14\"), (\"font-weight\", \"700\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"43.3604\"), (\"x\", \"17\"), (\"y\", \"26.0752\")], actual_attrs: [(\"fill"
+   },
+   {
+    "name": "c11a_cr_stat_il_b_vd",
+    "control": "c11a_cr_stat_ctl_vd",
+    "merge": "DIFF",
+    "tip_ndiff": 3,
+    "merge_ndiff": 5,
+    "diff_head": "[ElementCount { expected: 9, actual: 7 }, AttrMismatch { index: 6, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Verdana\"), (\"font-size\", \"14\"), (\"font-style\", \"italic\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"38.8145\"), (\"x\", \"17\"), (\"y\", \"26.0752\")], actual_attrs: [(\"fi"
+   },
+   {
+    "name": "c11a_cr_smsg_il_b_vd",
+    "control": "c11a_cr_smsg_ctl_vd",
+    "merge": "DIFF",
+    "tip_ndiff": 8,
+    "merge_ndiff": 8,
+    "diff_head": "[AttrMismatch { index: 9, tag: \"rect\", expected_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"49.7993\"), (\"width\", \"8\"), (\"x\", \"209.9365\"), (\"y\", \"37.0146\")], actual_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"49.7993\"), (\"width\", \"8\"), (\"x\", \"209.96"
+   }
+  ],
+  "of": [
+   {
+    "name": "c11a_of_comp_tn_bi",
+    "control": "c11a_of_comp_tn_p",
+    "merge": "DIFF",
+    "tip_ndiff": 6,
+    "merge_ndiff": 6,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"66px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:277px;height:66px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 277 66\"), (\"width\", \"277p"
+   },
+   {
+    "name": "c11a_of_part_tn_bi",
+    "control": "c11a_of_part_tn_p",
+    "merge": "DIFF",
+    "tip_ndiff": 12,
+    "merge_ndiff": 12,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"135px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:247px;height:135px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 247 135\"), (\"width\", \"247p"
+   },
+   {
+    "name": "c11a_of_comp_cn_bi",
+    "control": "c11a_of_comp_cn_p",
+    "merge": "DIFF",
+    "tip_ndiff": 1,
+    "merge_ndiff": 1,
+    "diff_head": "[AttrMismatch { index: 8, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Courier New\"), (\"font-size\", \"14\"), (\"font-style\", \"italic\"), (\"font-weight\", \"700\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"285.6465\"), (\"x\", \"22\"), (\"y\", \"38.6553\")], actual_attrs: [(\"fill\", \"#00000"
+   },
+   {
+    "name": "c11a_of_part_cn_bi",
+    "control": "c11a_of_part_cn_p",
+    "merge": "DIFF",
+    "tip_ndiff": 2,
+    "merge_ndiff": 2,
+    "diff_head": "[AttrMismatch { index: 9, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Courier New\"), (\"font-size\", \"14\"), (\"font-style\", \"italic\"), (\"font-weight\", \"700\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"285.6465\"), (\"x\", \"12\"), (\"y\", \"23.6553\")], actual_attrs: [(\"fill\", \"#00000"
+   },
+   {
+    "name": "c11a_of_comp_hv_b",
+    "control": "c11a_of_comp_hv_p",
+    "merge": "DIFF",
+    "tip_ndiff": 6,
+    "merge_ndiff": 6,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"64px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:307px;height:64px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 307 64\"), (\"width\", \"307p"
+   },
+   {
+    "name": "c11a_of_comp_hv_bi",
+    "control": "c11a_of_comp_hv_p",
+    "merge": "DIFF",
+    "tip_ndiff": 6,
+    "merge_ndiff": 6,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"64px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:307px;height:64px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 307 64\"), (\"width\", \"307p"
+   },
+   {
+    "name": "c11a_of_part_hv_b",
+    "control": "c11a_of_part_hv_p",
+    "merge": "DIFF",
+    "tip_ndiff": 12,
+    "merge_ndiff": 12,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"129px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:277px;height:129px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 277 129\"), (\"width\", \"277p"
+   },
+   {
+    "name": "c11a_of_part_hv_bi",
+    "control": "c11a_of_part_hv_p",
+    "merge": "DIFF",
+    "tip_ndiff": 12,
+    "merge_ndiff": 12,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"129px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:277px;height:129px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 277 129\"), (\"width\", \"277p"
+   },
+   {
+    "name": "c11a_of_comp_ss_bi",
+    "control": "c11a_of_comp_ss_p",
+    "merge": "DIFF",
+    "tip_ndiff": 6,
+    "merge_ndiff": 6,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"66px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:328px;height:66px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 328 66\"), (\"width\", \"328p"
+   },
+   {
+    "name": "c11a_of_part_ss_bi",
+    "control": "c11a_of_part_ss_p",
+    "merge": "DIFF",
+    "tip_ndiff": 12,
+    "merge_ndiff": 12,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"136px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:298px;height:136px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 298 136\"), (\"width\", \"298p"
+   },
+   {
+    "name": "c11a_of_comp_lg_bi",
+    "control": "c11a_of_comp_lg_p",
+    "merge": "DIFF",
+    "tip_ndiff": 6,
+    "merge_ndiff": 6,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"66px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:328px;height:66px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 328 66\"), (\"width\", \"328p"
+   },
+   {
+    "name": "c11a_of_part_lg_bi",
+    "control": "c11a_of_part_lg_p",
+    "merge": "DIFF",
+    "tip_ndiff": 12,
+    "merge_ndiff": 12,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"136px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:298px;height:136px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 298 136\"), (\"width\", \"298p"
+   }
+  ],
+  "sx": [
+   {
+    "name": "c11a_sx_spmono_ss",
+    "control": "c11a_sx_ctl_ss",
+    "merge": "DIFF",
+    "tip_ndiff": 1,
+    "merge_ndiff": 1,
+    "diff_head": "[AttrMismatch { index: 8, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Courier New\"), (\"font-size\", \"12\"), (\"font-style\", \"italic\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"144.0234\"), (\"x\", \"12\"), (\"y\", \"61.4434\")], actual_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Co"
+   },
+   {
+    "name": "c11a_sx_spsize_ss",
+    "control": "c11a_sx_ctl_ss",
+    "merge": "DIFF",
+    "tip_ndiff": 1,
+    "merge_ndiff": 1,
+    "diff_head": "[AttrMismatch { index: 8, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"17\"), (\"font-style\", \"italic\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"174.5405\"), (\"x\", \"12\"), (\"y\", \"78.4785\")], actual_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"san"
+   }
+  ],
+  "qu": [
+   {
+    "name": "c11a_qu_plain_vd_i",
+    "control": "c11a_qu_plain_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 16,
+    "merge_ndiff": 2,
+    "diff_head": "[AttrMismatch { index: 5, tag: \"rect\", expected_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"49.7993\"), (\"width\", \"8\"), (\"x\", \"51.8345\"), (\"y\", \"37.0146\")], actual_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"49.7993\"), (\"width\", \"8\"), (\"x\", \"51.7524"
+   },
+   {
+    "name": "c11a_qu_plain_vd_b",
+    "control": "c11a_qu_plain_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 18,
+    "merge_ndiff": 18,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"124px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:152px;height:124px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 152 124\"), (\"width\", \"152p"
+   },
+   {
+    "name": "c11a_qu_plain_tn_i",
+    "control": "c11a_qu_plain_tn_p",
+    "merge": "DIFF",
+    "tip_ndiff": 18,
+    "merge_ndiff": 18,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"122px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:139px;height:122px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 139 122\"), (\"width\", \"139p"
+   },
+   {
+    "name": "c11a_qu_plain_tn_b",
+    "control": "c11a_qu_plain_tn_p",
+    "merge": "DIFF",
+    "tip_ndiff": 17,
+    "merge_ndiff": 17,
+    "diff_head": "[AttrMismatch { index: 5, tag: \"rect\", expected_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"48.9487\"), (\"width\", \"8\"), (\"x\", \"46.5776\"), (\"y\", \"36.0986\")], actual_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"48.9487\"), (\"width\", \"8\"), (\"x\", \"47.3638"
+   },
+   {
+    "name": "c11a_qu_stereo_tn_i",
+    "control": "c11a_qu_stereo_tn_p",
+    "merge": "DIFF",
+    "tip_ndiff": 2,
+    "merge_ndiff": 2,
+    "diff_head": "[AttrMismatch { index: 15, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.1553\"), (\"x\", \"14.2656\"), (\"y\", \"39.1689\")], actual_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), "
+   },
+   {
+    "name": "c11a_qu_stereo_tn_b",
+    "control": "c11a_qu_stereo_tn_p",
+    "merge": "DIFF",
+    "tip_ndiff": 2,
+    "merge_ndiff": 2,
+    "diff_head": "[AttrMismatch { index: 15, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.1553\"), (\"x\", \"14.2656\"), (\"y\", \"39.1689\")], actual_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), "
+   },
+   {
+    "name": "c11a_qu_multi_vd_i",
+    "control": "c11a_qu_multi_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 15,
+    "merge_ndiff": 4,
+    "diff_head": "[AttrMismatch { index: 9, tag: \"rect\", expected_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"49.7993\"), (\"width\", \"8\"), (\"x\", \"157.1367\"), (\"y\", \"49.0293\")], actual_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"49.7993\"), (\"width\", \"8\"), (\"x\", \"157.10"
+   },
+   {
+    "name": "c11a_qu_multi_vd_b",
+    "control": "c11a_qu_multi_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 20,
+    "merge_ndiff": 20,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"148px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:185px;height:148px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 185 148\"), (\"width\", \"185p"
+   },
+   {
+    "name": "c11a_qu_multi_tn_i",
+    "control": "c11a_qu_multi_tn_p",
+    "merge": "DIFF",
+    "tip_ndiff": 19,
+    "merge_ndiff": 19,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"144px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:160px;height:144px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 160 144\"), (\"width\", \"160p"
+   },
+   {
+    "name": "c11a_qu_multi_tn_b",
+    "control": "c11a_qu_multi_tn_p",
+    "merge": "DIFF",
+    "tip_ndiff": 20,
+    "merge_ndiff": 20,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"144px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:161px;height:144px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 161 144\"), (\"width\", \"161p"
+   },
+   {
+    "name": "c11a_qu_multist_tn_i",
+    "control": "c11a_qu_multist_tn_p",
+    "merge": "DIFF",
+    "tip_ndiff": 21,
+    "merge_ndiff": 21,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"176px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:160px;height:176px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 160 176\"), (\"width\", \"160p"
+   },
+   {
+    "name": "c11a_qu_multist_tn_b",
+    "control": "c11a_qu_multist_tn_p",
+    "merge": "DIFF",
+    "tip_ndiff": 22,
+    "merge_ndiff": 22,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"176px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:161px;height:176px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 161 176\"), (\"width\", \"161p"
+   },
+   {
+    "name": "c11a_qu_empty_vd_i",
+    "control": "c11a_qu_empty_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 20,
+    "merge_ndiff": 6,
+    "diff_head": "[AttrMismatch { index: 5, tag: \"rect\", expected_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"49.7993\"), (\"width\", \"8\"), (\"x\", \"51.8345\"), (\"y\", \"66.0439\")], actual_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"49.7993\"), (\"width\", \"8\"), (\"x\", \"51.7524"
+   },
+   {
+    "name": "c11a_qu_empty_vd_b",
+    "control": "c11a_qu_empty_vd_p",
+    "merge": "DIFF",
+    "tip_ndiff": 22,
+    "merge_ndiff": 22,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"182px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:152px;height:182px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 152 182\"), (\"width\", \"152p"
+   },
+   {
+    "name": "c11a_qu_empty_tn_i",
+    "control": "c11a_qu_empty_tn_p",
+    "merge": "DIFF",
+    "tip_ndiff": 22,
+    "merge_ndiff": 22,
+    "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"176px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:139px;height:176px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 139 176\"), (\"width\", \"139p"
+   },
+   {
+    "name": "c11a_qu_empty_tn_b",
+    "control": "c11a_qu_empty_tn_p",
+    "merge": "DIFF",
+    "tip_ndiff": 21,
+    "merge_ndiff": 21,
+    "diff_head": "[AttrMismatch { index: 5, tag: \"rect\", expected_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"48.9487\"), (\"width\", \"8\"), (\"x\", \"46.5776\"), (\"y\", \"63.2959\")], actual_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"48.9487\"), (\"width\", \"8\"), (\"x\", \"47.3638"
+   }
+  ]
+ }
+}

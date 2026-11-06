@@ -1,0 +1,1130 @@
+{
+ "schema_version": 1,
+ "reviewer": {
+  "task_id": "t3-2bb601af-independent-shared-svg-round5-checker-claude",
+  "model": "claude-opus-5-5 / Claude Code in T3 Code; no children; did not implement the candidate; no Java run locally (Java references BG and BH run by the parent on Monkey Man)"
+ },
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "base_revision": "fbb2e59edc4beaccda72c30fe19e8a38ca8e1632",
+ "base_code_identical_to": "9834a719455308120c3289b59a260567f141b724",
+ "merge": "d6f63a8aa912d9652a6986de427da10209c73ec6",
+ "merge_code_identical_to": "7ec2e5af8a37ace145b37b78951ce217c0bab51a",
+ "tested_revision": "8dda18b1bf819f379c0c13d1cadd158400eed147",
+ "answers_rejection": "6caf4984570cf5ed87f21ac32572bc47ae93363c",
+ "commands": [
+  "git switch -c review/shared-svg-round5-claude 8dda18b1bf819f379c0c13d1cadd158400eed147; git -c protocol.file.allow=always submodule update --init --reference /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden test-diagrams/golden  # 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "~/Library/Caches/rustuml-shared-svg-round5-claude-checker/build.sh  # git archive of fbb2e59ed, d6f63a8aa, 8dda18b1b; CARGO_TARGET_DIR private; cargo build --release -j 6 -p rustuml",
+  "python3 -I tools/batch.py ~/Library/Caches/rustuml-shared-svg-round5-claude-checker/work <batch dir> <label> bin/rustuml-fbb2e59ed=base bin/rustuml-d6f63a8aa=merge bin/rustuml-8dda18b1b=tip [bin/rustuml-tip-ev=ev]  # BH BG BF BE BC BB AW AU AR",
+  "python3 -I tools/sweep.py <bin> <out> <repo> work/cwd_map.json test-diagrams/golden test-diagrams/perturbations  # 16,508 sources x 3 trees (+ tip-ev); checker-cmp; tools/cohorts.py",
+  "bash tools/gates.sh <tip export> tip ...; base/merge exports: golden_no_oracle, parity_perturbations, harness_guards; tools/gatelists.py",
+  "python3 -I tools/c5a_sources.py; tools/predict.py (Rust predictions before Java); tools/stage.py -> parent relay BH on Monkey Man",
+  "font-chain: swiftc FontChainExtract.swift (maker copy) and the CFLocaleCopyISOLanguageCodes variant on colossus; parent ran font-chain/request/run.sh on Monkey Man; host-coverage-diff.json",
+  "python3 -I tools/register.py <repo> pairs.json BG=... BF=... BH=...; python3 -I tools/write_reviews.py <repo> evidence"
+ ],
+ "no_production_changes": true,
+ "no_shipping": true,
+ "account_chronology": {
+  "accounts (docs only)": "f5442f4e5ef7c6f440226a25281ae9bf2339039c",
+  "outer origin draft": "f3ebc92f3468b039ea2093fd54f36a1bcb9f6a81",
+  "note names draft": "3ebcb763ebcdbaa3286d2fdf4e320ee0ae699858",
+  "missing glyph + width decoding draft": "4a16eaffd159e886fec31db0af3517b2eff6f25f",
+  "decode-site escape draft": "673548fb95a4520ca4af669d09cd64c9abcd153e",
+  "YAML addendum -> draft": [
+   "a4e895aaf5f4cc826fe2b3fc19e54a2ec1bfc989",
+   "a18a76980321ba0aef86dee963d426af06d88d89"
+  ],
+  "m5a request (before any Java result)": "02fa4159febdfb43a0627417d6d654195bf79bde",
+  "pass-three addendum -> draft": [
+   "d80bee422ab3c7c7a4d1b2a65218990f6b554e95",
+   "ce1e52e30956dc4593dfcc915a34be908cf66029"
+  ],
+  "clippy only": "5149e8ecbdc149bc1b7bf4cb4043d38626154d72",
+  "every account and addendum precedes its draft in linear ancestry; account commits are docs-only": true
+ },
+ "frozen_items": "unchanged fbb2e59ed..8dda18b1b: crates/rustuml-oracle (comparator slack GEOM_EPS and canvas +-1, syntax markers, park list, error census, guard allow-lists, strict-XML list), decimal_literal_baseline.txt, no_oracle_baseline.txt, docs/reference-bootstrap.md; round 5 touches no docs or test-diagrams outside its maker-round5-claude directories",
+ "evidence": {
+  "dir": "checker-claude-round5 (byte-identical copy in docs/parity-reviews/comment-state-consumers/ and docs/parity-reviews/tim-builtin-value-boundaries/; SHA256SUMS.json)",
+  "measurements": "checker-claude-round5/measurements.json",
+  "batches": "checker-claude-round5/batches/batch-*.json, checker-claude-round5/batch-summary.json",
+  "cohorts": "checker-claude-round5/cohorts.json",
+  "pairs": "checker-claude-round5/pairs.json",
+  "gates": "checker-claude-round5/gates",
+  "font_chain": "checker-claude-round5/font-chain (host-coverage-diff.json, monkeyman/, request/, jdk-native/ copies of JDK 21.0.5 GA AWTFont.m, CoreTextSupport.m, CCharToGlyphMapper.m, bundled hb-unicode.hh)",
+  "canvas": "checker-claude-round5/canvas (evidence-build.diff, changed-output lists)",
+  "references": "checker-claude-round5/references/bh (c5a relay BH), references/bg (m5a results, maker predictions)",
+  "probes": "checker-claude-round5/probes (c5a sources, yaml-minimal)",
+  "tools": "checker-claude-round5/tools"
+ },
+ "do_not_regress_check": "BB/BC/AW/AU/AR/BE outcomes identical merge->tip (0 lost, 0 gained except BE 5 named by review-5): note paint order and border points (BE bp_*/no_*), Graphviz stderr discard (sweep stderr only differs by panic thread ids), node creation order, leaf corners and nested-cluster x (BB), surrogate serializer rule, %intval, bracket declarations, strokes, X[H], seed and __theme (AW/AU/AR), %strlen/%substr/%upper (perturbation dirs: 0 new failures vs merge)",
+ "counts": {
+  "BH_c5a_held_out": "99 cases, 96 Java exit 0; strict+comments base/merge/tip 3/14/67 (strict only 12/14/67); 0 lost vs base or merge",
+  "BG_m5a_held_out": "53 cases, 52 Java exit 0; 0/8/41 (strict only 12/8/41); 0 lost; maker predictions equal tip output on 53/53",
+  "BF": "46 cases; 1/17/32; 0 lost",
+  "BE": "0/17/22",
+  "BC": "0/18/18",
+  "BB": "2/25/25",
+  "AW": "6/30/30",
+  "AU": "6/21/21",
+  "AR": "6/17/17",
+  "goldens": "12,550 sources, 11,351 Java-valid: strict 11181/11181/11181; tip exit 0 x12474, 1 x76; 0 panics, 0 timeouts",
+  "sweep_all": "16,508 sources: strict 12911/13547/13555; merge->tip 8 gained, 0 lost, 0 lost rejections, 0 new valid-input errors, 0 new panics/timeouts, 0 comments lost, 298 outputs changed, 4 stderr changed (thread ids of 4 pre-existing panics)",
+  "GET_goldens": "act_skinparam2_shadowing_true, act_skinparam_shadowing, edge_whitespace_multiple_blank_lines: MATCH at base, DIFF at merge and tip (raw-reader contract; not round 5)",
+  "gates": "no-oracle 11181/11251 base and tip (failure-name diff: -3 GET goldens, +3 gained); golden_pairs 10497/12550; parity_perturbations 0 new vs merge, 8 fixed; harness_guards categories and decimal ratchet identical to merge; T14.6.7 196/98/98 unchanged; lib 1584/1584; pipe_mode 17/17"
+ },
+ "mechanism": "comment-state-consumers",
+ "account_commit": "f5442f4e5ef7c6f440226a25281ae9bf2339039c",
+ "implementation_commit": "ce1e52e30956dc4593dfcc915a34be908cf66029",
+ "other_commits_reviewed": {
+  "outer_origin_draft": "f3ebc92f3468b039ea2093fd54f36a1bcb9f6a81",
+  "note_names_draft": "3ebcb763ebcdbaa3286d2fdf4e320ee0ae699858",
+  "pass_three_addendum": "d80bee422ab3c7c7a4d1b2a65218990f6b554e95",
+  "pass_three_draft": "ce1e52e30956dc4593dfcc915a34be908cf66029",
+  "routing_guard_addendum_reviews": "f6b7f66f006108c8041bb5923d70a7d327f28053"
+ },
+ "scope": "round-5 state obligations: outer image origin and size (SvekResult/LimitFinder), root-path note quark names, pass-three note anchors, routing-guard addendum",
+ "verdict": "rejected",
+ "packet_verdict": "Packet 8dda18b1b rejected as a whole: the tim-builtin-value-boundaries YAML draft a18a76980 causes held-out BH dc6_yaml_nested to fail (see that mechanism's review-5). The state mechanisms of this record cause no held-out failure: BG 7/10 and BH 15/21 state pairs pass, every failure has the same or a higher difference count at merge, and 0 matches are lost in any cohort. Accept-ready once the canvas rounding obligation lands; the state verdicts below stand on their own.",
+ "per_mechanism_verdicts": {
+  "outer image origin and size (f5442f4e5 -> f3ebc92f3)": "confirmed on held-out BG and BH; canvas rounding at the outer path is not Java's (int)(x + 1) (bounded obligation 1; within the frozen +-1 slack, no strict loss)",
+  "root-path note names (f5442f4e5 -> 3ebcb763e)": "confirmed (depths 1-3, duplicate texts, root plus group)",
+  "pass-three note anchors (d80bee422 -> ce1e52e30)": "confirmed (state only in Java; nested, root, concurrent, two notes before anchors)",
+  "routing guard addendum (f6b7f66f0)": "accepted: structural routing condition",
+  "above/below/floating outer notes": "residual as declared, confirmed"
+ },
+ "findings": [
+  "Outer image origin (f3ebc92f3): confirmed. Held-out BG no5_left_note_renamed, no5_left_note_start_top, no5_left_note_depth2_region, no5_right_note_nested_image, no5_left_note_multiline_renamed and BH no6_left_depth2, no6_right_long, no6_left_and_start, no6_left_right_both, no6_left_multiline_depth1, no6_left_leaf_beside_image match whole-output; BE no_outer_note_left_of_image, no_outer_two_notes_on_image and BF st_np_outer_note_left_multiline now match. SvekResult.calculateDimension (6 - LimitFinder min, max - min + 15) and LimitFinder.drawUPath/drawRectangle/drawEllipse were checked against the Java source.",
+  "Canvas rounding (f3ebc92f3 exposes it): Java sets the SVG size through SvgGraphics.ensureVisible (SvgGraphics.java:142-147), maxX/maxY = (int)(x + 1) of the image dimension. The outer image path rounds with ceil (state.rs:5097-5098, build of the image-path SVG), although state.rs already defines svg_ensure_visible_dimension for Java's rule. The two agree for fractional extents and differ by 1 px on integral ones, which the exact LimitFinder bounds now produce. checker_history_font_state_channel (end ellipse cy 395.0, extent 419.0) lost Java's 420 height for 419; held-out BH no6_integer_canvas has Java width 108, tip 107. A private evidence build with only that line changed (canvas/evidence-build.diff) gains Java's exact canvas on 98 more sweep outputs (12,845 -> 12,943 exact viewBox of 16,508), loses none, and restores both cases. Every such case still passes the strict tier because the frozen comparator allows +-1 on the canvas, so no strict match was lost. A second, opposite +1 width exists on the root/flat path (BH pt6_note_outer_anchor_later_inner 172 vs 171, rp6_root_and_group 260 vs 259) and is not touched by the evidence build.",
+  "Notes above/below and floating notes keep the flat layout and are residual as declared: BG no5_note_top_image, no5_note_bottom_image, BH no6_top_depth2, no6_floating, rp6_named_floating_in_group, BF st_np_outer_note_top_of_image, st_np_outer_floating_with_image fail identically at merge and tip.",
+  "Two notes on one side of an image (BG no5_three_notes_image, BH no6_two_left_same, BF st_np_three_notes_one_cluster): Java draws the first such note as a real link (comment 'link GMN2 to Mint', all geometry shifted 42.06 px); Rust has no port of that mechanism. Pre-existing (merge fails with the same diff count); not caused by this packet, but it is an axis the account listed.",
+  "Root-path note names (3ebcb763e): confirmed. BG rp5_root_note_depth2, rp5_two_groups_sides, BH rp6_depth3 (depth 3), rp6_duplicate_text (duplicate note text), rp6_root_and_group match; BH rp6_group_note_outer_anchor now has Java's Toll.GMN2 and fails only on a pre-existing 3 px width.",
+  "Pass-three note anchors (d80bee422 -> ce1e52e30): confirmed. Java registers note-on-entity for ParserPass.THREE only in StateDiagramFactory (97-100), so no other family applies. BH pt6_note_before_nested_link, pt6_note_before_root_link_image, pt6_note_outer_anchor_later_inner, pt6_note_before_concurrent, pt6_two_notes_before and BF st_np_outer_note_left_on_leaf_with_image, st_np_note_before_target match.",
+  "Note on a link in an image diagram (BH no6_note_on_link_image): Java keeps the image path (no 'Mill' cluster), Rust takes the cluster path. Pre-existing (merge identical); outside the declared routing residue, which names only top/bottom notes and on-leaf notes.",
+  "Routing guard addendum (f6b7f66f0): structural (composites.is_empty()), not fixture-keyed; root-path diagrams with notes stay on the root cluster path (BE no_root_cluster_note, no_root_two_clusters_notes now match).",
+  "Sweep canvas census: 298 outputs changed merge -> tip; 176 now have Java's exact viewBox (the maker counted 154 under its own definition), 1 lost it (checker_history_font_state_channel, cause above), 119 neither, 2 unchanged-exact."
+ ],
+ "attributed_regressions": [],
+ "held_out_failures": {
+  "no5_three_notes_image / no6_two_left_same": "same-side second note is a Java link; pre-existing",
+  "no5_note_top_image, no5_note_bottom_image, no6_top_depth2": "declared residual",
+  "no6_floating, rp6_named_floating_in_group": "declared residual (floating notes)",
+  "no6_note_on_link_image": "routing of a note on a link; pre-existing",
+  "rp6_group_note_outer_anchor": "name now correct; pre-existing 3 px width"
+ },
+ "bounded_next_obligations": [
+  "Use Java's (int)(x + 1) (svg_ensure_visible_dimension, SvgGraphics.ensureVisible) for the outer image path canvas (state.rs:5097-5098); acceptance: BH no6_integer_canvas and checker_history_font_state_channel exact canvas, the 98-output sweep gain of the evidence build, 0 lost exact canvases, plus a fresh integral-extent perturbation. Trace the opposite +1 on the root/flat path (BH pt6_note_outer_anchor_later_inner, rp6_root_and_group) separately.",
+  "Port Java's second same-side note mechanism (the first note on a side drawn as a link, 'link GMN2 to Mint'): BG no5_three_notes_image, BH no6_two_left_same, BF st_np_three_notes_one_cluster, plus a renamed three-note variant.",
+  "Route a note on a link in an image diagram as Java does (BH no6_note_on_link_image).",
+  "Above/below and floating outer notes stay residual until ported; any draft names BG no5_note_top_image, no5_note_bottom_image, BH no6_top_depth2, no6_floating, rp6_named_floating_in_group."
+ ],
+ "staged_java_requests_answered": {
+  "BH": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round5-c5a/",
+   "reference_results_sha256": "6c78b9e8c64738b57313f7df6043a099a3d538e6c75a6c26744aa8fd3cf2cb55",
+   "manifest_sha256": "54000fedd4d74a42dc4a5b912cf31a5403f06e104cb9206d3c2bb071496ff504",
+   "bundle_sha256": "805e4671b500c05a820b11beaf51af96d7e6cd137f1da835d0a4fabc9ea09afd",
+   "rust_predictions_sha256": "1e6882f8139468fa8d75a3270d5b1e4d39dab655826b12166536cad1f066c3e9"
+  },
+  "monkeyman_font_chain": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round5-monkeyman-fontchain/out/",
+   "SHA256SUMS_sha256": "810633ca2bf2d76acf2d03e35023bd765037cd17c4d4fb5a5615bae801532f5d",
+   "request_sha256": "077b900b1cd6140ed5ffa69c5a21b7afeac7460554d46bca000eaac90b70a89b"
+  }
+ },
+ "evidence_only_cases": [],
+ "perturbations": [
+  {
+   "name": "no5_left_note_depth2_region",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "note left of a depth-2 image inside a region"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_left_note_depth2_region.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_left_note_depth2_region.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "cb5427486f354c19919a18f686ccd408cff28524a71782b97185094d8bd3721b",
+   "golden_sha256": "1c1068064b2fe570e413b3c32070a4027d5652efb546c86f3291681683a2a85b",
+   "base_fbb2e59ed": "0/DIFF/28/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "no5_left_note_multiline_renamed",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "multi-line note left of an image, three lines"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_left_note_multiline_renamed.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_left_note_multiline_renamed.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "3950269f6c72c15a52c7dd3531ffae95a7ba8e1ce4f5491aeb9940f1dd6405fe",
+   "golden_sha256": "b8cefd817d21ec7f1cd28ffbe7e81d9d857590b11833e3896e1fc068e2c1052f",
+   "base_fbb2e59ed": "0/DIFF/23/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/17/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "no5_left_note_renamed",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "note left of an image at root, renamed"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_left_note_renamed.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_left_note_renamed.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "6d54dc8cd7434d23cd2b23fafd07b9f2f1e1fbc8b0455af4ed33efe0349cdc55",
+   "golden_sha256": "73e3024a80b7f453ff2439daad3db6baf3a2e30265fbd744e002718bfd08c65a",
+   "base_fbb2e59ed": "0/DIFF/21/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/15/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "no5_left_note_start_top",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "note left of an image, start ellipse on the top rank"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_left_note_start_top.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_left_note_start_top.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "ec7cbc63c16afbd2b012148ad46290a5cc7772d2062575d4615ebfd02e0e9f0c",
+   "golden_sha256": "22d152251a282cf21d6e6bc02efc3992a9e14634039bdc3d6a8a37937a028985",
+   "base_fbb2e59ed": "0/DIFF/25/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/18/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "no5_note_bottom_image",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "note below an image"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_note_bottom_image.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_note_bottom_image.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "ddb7fa0e59c7cd992f5c19998b0aca21e5ee855138612a5b88867de1499b37ab",
+   "golden_sha256": "77a0be09f0fbfa370998ed97ef3421dc2c10922fa75cb61332e462d580a38f69",
+   "base_fbb2e59ed": "0/DIFF/2/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/2/comments=True",
+   "tip_8dda18b1b": "0/DIFF/2/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "no5_note_top_image",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "note above an image"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_note_top_image.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_note_top_image.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "feb5330b96ee1d29429ee41907ccdd7fdfd513e775119377102d478c2277f1cf",
+   "golden_sha256": "130e7a4d04324214d8a7ecfbb1795998b0ae17a96fc3abe751ae166756910ccc",
+   "base_fbb2e59ed": "0/DIFF/14/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/14/comments=True",
+   "tip_8dda18b1b": "0/DIFF/14/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "no5_right_note_nested_image",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "note right of an image holding an image"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_right_note_nested_image.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_right_note_nested_image.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "7bde2e61e930a724906c2aa7486a54a1409a5d107a87b003ab097271329671ba",
+   "golden_sha256": "9e5de1ed78140248dcb9f85819218771713e966e050e7d4eba56f6da6223aed8",
+   "base_fbb2e59ed": "0/DIFF/28/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "no5_three_notes_image",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "three notes on one image, two on the left"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_three_notes_image.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no5_three_notes_image.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "a89c9cbb862a6edd2551c1c13fd9317fe03180b0feeecab124ee313ddc837ce6",
+   "golden_sha256": "3180f6786d3871ec1fb0f0ee35f274e079078c51d9e872fa11bb597617e38aa6",
+   "base_fbb2e59ed": "0/DIFF/30/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/23/comments=False",
+   "tip_8dda18b1b": "0/DIFF/23/comments=False",
+   "result": "fail"
+  },
+  {
+   "name": "rp5_root_note_depth2",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "root cluster path, note at depth 2"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/rp5_root_note_depth2.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/rp5_root_note_depth2.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "bf5cb51fda6d316eccfdd39540b1fd02feff24273b43ff494dd80cf51a8c0aa6",
+   "golden_sha256": "e1eecd55b79c56d98797e61230c7bb628549a707726eb62d737d5d18ddf77623",
+   "base_fbb2e59ed": "0/DIFF/32/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/1/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "rp5_two_groups_sides",
+   "batch": "BG",
+   "reference_batch": "BG (relay batch m5a, held out from the maker)",
+   "axes": [
+    "root cluster path, notes in two groups and at root"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/rp5_two_groups_sides.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/rp5_two_groups_sides.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "3464abe4001e24a24b12f7a439131a1a9489e838c122d9fc364b72822e26cfda",
+   "golden_sha256": "f1e3349228615c28abbff5a97bf7881ede2f8e3a403d8466a98db5d27967ace9",
+   "base_fbb2e59ed": "0/DIFF/54/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/2/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "st_bp_d4_short_entry",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state bp d4 short entry"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_bp_d4_short_entry.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_bp_d4_short_entry.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "b288e4d5392d0b7073d66b96ad97de8600f2ca5a61e2ddc61fdf99e724999a7f",
+   "golden_sha256": "8b2fed6d3242f2cb3f8e1978b7ffbc08d06fb19601d9490df0e5569105d25f86",
+   "base_fbb2e59ed": "0/DIFF/55/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "st_bp_d4_wide_exit",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state bp d4 wide exit"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_bp_d4_wide_exit.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_bp_d4_wide_exit.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "d0393b93ab47ae5b8c870cfd89d44d843f37737ee6774fd145d8ef08c856bec9",
+   "golden_sha256": "8268dd094ae1c24008b12a2584fdc08d71a03346685b45a2902fb0490159ef63",
+   "base_fbb2e59ed": "0/DIFF/57/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "st_bp_entry_exit_same_cluster_short",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state bp entry exit same cluster short"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_bp_entry_exit_same_cluster_short.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_bp_entry_exit_same_cluster_short.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "d8906208993396cdd29c4cdd8e22ccccbd043a088f52d27ff59e70054c5d7402",
+   "golden_sha256": "806bee4d2b86298bd3e7c9f7e48e1d4504e63a0be4bdcd6e26b9b4107720f2af",
+   "base_fbb2e59ed": "0/DIFF/47/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "st_bp_entry_exit_same_cluster_wide",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state bp entry exit same cluster wide"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_bp_entry_exit_same_cluster_wide.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_bp_entry_exit_same_cluster_wide.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "1e311a88ab77b9df8fabc0addaab4d64d61386d742c96f046abc80d3719a8bd3",
+   "golden_sha256": "226cc5adc9319346284fff5bb8909cdc49645d95dd16b2c6581d04b38220f0c0",
+   "base_fbb2e59ed": "0/DIFF/47/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "st_bp_multiline_label",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state bp multiline label"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_bp_multiline_label.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_bp_multiline_label.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "eae80dccb8e960ed482544544156631a540aa36ff06eaeb273e627c67ab2e8b0",
+   "golden_sha256": "7e71a9c1bcd8fddf9221cddf044c4e7a5b8cbe0f9f191859df57e02b3308927a",
+   "base_fbb2e59ed": "0/DIFF/35/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/29/comments=True",
+   "tip_8dda18b1b": "0/DIFF/29/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "st_bp_root_wide_multiline",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state bp root wide multiline"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_bp_root_wide_multiline.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_bp_root_wide_multiline.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "5a8bd48a4ccbc7d571e5640449718d639bb6a39ae06d597175c821914c26a331",
+   "golden_sha256": "cbe782884a79d8d949f6d9667f49585dd93e4ef88b8c82931941533bfb73609c",
+   "base_fbb2e59ed": "0/DIFF/24/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/25/comments=True",
+   "tip_8dda18b1b": "0/DIFF/25/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "st_bp_wide_entry_with_note",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state bp wide entry with note"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_bp_wide_entry_with_note.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_bp_wide_entry_with_note.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "b6e6fa2431ef7b7d7bbc1a0c74bd873a27d99e05e38f1818509ac725b5fd0bbd",
+   "golden_sha256": "028b8836c6ed63db6b11205726a3945fd2cc07956dfc07c84b69d579a7db2982",
+   "base_fbb2e59ed": "0/DIFF/41/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "st_np_concurrent_regions",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state np concurrent regions"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_concurrent_regions.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_concurrent_regions.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "2b6c973f943c4357943e6019a63065cc377c117231d04f1eda7c0a05ed226fd3",
+   "golden_sha256": "67cacbfa7e0f02d5c51b211a398a6243327ddca57f0600d607cd3043ebc581e2",
+   "base_fbb2e59ed": "0/DIFF/48/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/48/comments=False",
+   "tip_8dda18b1b": "0/DIFF/48/comments=False",
+   "result": "fail"
+  },
+  {
+   "name": "st_np_link_note_in_cluster",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state np link note in cluster"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_link_note_in_cluster.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_link_note_in_cluster.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "80121a1dc951b43f30cdaae58b54901d19e9194bf532b338c9281e89b16728cb",
+   "golden_sha256": "417a3059f92eec6444609f6dd2be73eeddad41e650715c5d441b323fb7464167",
+   "base_fbb2e59ed": "0/DIFF/40/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/40/comments=False",
+   "tip_8dda18b1b": "0/DIFF/40/comments=False",
+   "result": "fail"
+  },
+  {
+   "name": "st_np_note_before_target",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state np note before target"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_note_before_target.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_note_before_target.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "fec0d97bb346602027ff4728f1d77fcd961c6b193df8fd940c99a55d5cebd4a8",
+   "golden_sha256": "c5ab1d89ad4f03c5d69c992381971ef0890758d4f4333eb2631d8ecae0ce5aa2",
+   "base_fbb2e59ed": "0/DIFF/34/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/34/comments=False",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "st_np_note_declared_outer_anchor_inner",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state np note declared outer anchor inner"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_note_declared_outer_anchor_inner.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_note_declared_outer_anchor_inner.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "1535b42807a039aa75b5306f856411a374c4930bf87b4592a609e0e464737059",
+   "golden_sha256": "6eaaa32f1f68116a58c5248b65d0728b06a454caac730562d195cf51d99a13d5",
+   "base_fbb2e59ed": "0/DIFF/34/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "st_np_outer_floating_with_image",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state np outer floating with image"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_outer_floating_with_image.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_outer_floating_with_image.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "ab304807f1f82bd9252afda31923bb1902b29d7366ada8a0f15ae34a9d45a09d",
+   "golden_sha256": "346c341d26e4701dd342a265d7a0abb75ad9cf69b49df7940e4da44e44c8546f",
+   "base_fbb2e59ed": "0/DIFF/31/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/31/comments=True",
+   "tip_8dda18b1b": "0/DIFF/31/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "st_np_outer_note_in_live_cluster_on_image",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state np outer note in live cluster on image"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_outer_note_in_live_cluster_on_image.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_outer_note_in_live_cluster_on_image.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "83c81b80fb86a5a0a5970b5f0fb478bcea6ffa92edce583c1a504303cb6f8765",
+   "golden_sha256": "b45871cf75a13db73088fe0359581401bb870e291c941a3cfc14aac8117d3e9c",
+   "base_fbb2e59ed": "0/DIFF/38/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/38/comments=False",
+   "tip_8dda18b1b": "0/DIFF/38/comments=False",
+   "result": "fail"
+  },
+  {
+   "name": "st_np_outer_note_left_multiline",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state np outer note left multiline"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_outer_note_left_multiline.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_outer_note_left_multiline.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "45b32feaceb12423d0719aa2438befa9990915d2302bbe9f2583b607dc80c3ee",
+   "golden_sha256": "c591ef7b1a39edbf0abca0d6a58c0cb91718479fc2a97227ba373f7f081d852f",
+   "base_fbb2e59ed": "0/DIFF/22/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/16/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "st_np_outer_note_left_on_leaf_with_image",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state np outer note left on leaf with image"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_outer_note_left_on_leaf_with_image.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_outer_note_left_on_leaf_with_image.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "4cbcf77deca3a62f1fe11e8968d4de423bb435fc4c615e3f3c56d1dce4b8ec64",
+   "golden_sha256": "6ddc26eeb853eb7be93f598373266d49782c0d91aa55fca6b48a9b8dd1891778",
+   "base_fbb2e59ed": "0/DIFF/26/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/26/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "st_np_outer_note_right_renamed",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state np outer note right renamed"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_outer_note_right_renamed.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_outer_note_right_renamed.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "0f6ccb6b9cb733788cc78a25b865e002124c48721029605b5952fa839d67a810",
+   "golden_sha256": "a347d191485f42c1df5d2ff312eb6b4aa3406b2ebe53b65f045977f2a7e770ce",
+   "base_fbb2e59ed": "0/DIFF/21/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "st_np_outer_note_top_of_image",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state np outer note top of image"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_outer_note_top_of_image.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_outer_note_top_of_image.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "c613f3be4c3896d610a038f9e1ea29f3a7e0af3e03af6a69bd6d0a173e0ee521",
+   "golden_sha256": "457f75c448fd10dbfdb00f11dd9b3bbc6dba832e5dc17d8bd138f4d14fa768f8",
+   "base_fbb2e59ed": "0/DIFF/14/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/14/comments=True",
+   "tip_8dda18b1b": "0/DIFF/14/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "st_np_root_note_before_states",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state np root note before states"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_root_note_before_states.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_root_note_before_states.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "272741122a2432492d821c37640d2f6b009ac8a4b6545461d0543d712d2894b4",
+   "golden_sha256": "0ee446b78a002c26607704cbd6b1300c5bebd7e7169ffc4fbbaa2432f2cf6bdc",
+   "base_fbb2e59ed": "0/DIFF/26/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/26/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "st_np_root_three_clusters",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state np root three clusters"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_root_three_clusters.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_root_three_clusters.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "2c554d827a35cd3695d5dfb17596f412f1022c37839537bcfbc7e565ef34af45",
+   "golden_sha256": "31cc4d4cdb4282baf92b0310bb4eaebf7b9689747723d8c3e98908ac48df3305",
+   "base_fbb2e59ed": "0/DIFF/75/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/2/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "st_np_three_notes_one_cluster",
+   "batch": "BF",
+   "reference_batch": "BF (relay batch c4a, staged by the round-4 checker and given to the maker; not held out)",
+   "axes": [
+    "state np three notes one cluster"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_three_notes_one_cluster.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/st_np_three_notes_one_cluster.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "37138354660f1e4bd9c04c3f244271e15af471abe9147492ea3ace9384d17909",
+   "golden_sha256": "eac03d6d71a66ce79332eef602311c3921ff624b9b2a2d35b589ee1c1bf723b7",
+   "base_fbb2e59ed": "0/DIFF/46/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/26/comments=True",
+   "tip_8dda18b1b": "0/DIFF/26/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "no6_floating",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "outer-origin",
+    "floating note (declared residual)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_floating.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_floating.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "99094259b355dba8e02802a7e7c3bd2a65c1f77bf1337151fe78d24d1fe294fc",
+   "golden_sha256": "6fdd1b3c01e3ca6edef2f952916843570b6d651c57dc2f690950507412343d39",
+   "base_fbb2e59ed": "0/DIFF/25/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/25/comments=True",
+   "tip_8dda18b1b": "0/DIFF/25/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "no6_integer_canvas",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "outer-origin",
+    "canvas rounding (int)(x+1)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_integer_canvas.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_integer_canvas.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "a24ac440ddc446a36e879aa77df252a5504bfe7bca3b8d59296ba7967f27dede",
+   "golden_sha256": "fd294c9e9e3cd1d61fd0c6f3f7f52211bbd5323cf37b7a6762fc6171726a3973",
+   "base_fbb2e59ed": "0/match/0/comments=True",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "no6_left_and_start",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "outer-origin",
+    "note left",
+    "start/end on outer"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_left_and_start.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_left_and_start.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "1b49557082d0c5ebeef76157e408832e6ad586781b087795d046f9bf3ab6fe88",
+   "golden_sha256": "73428e2a5598b4729212a21eb86c3bdb65938dbc915802a11b578d737fa00ce1",
+   "base_fbb2e59ed": "0/DIFF/30/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/22/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "no6_left_depth2",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "outer-origin",
+    "note left",
+    "depth 2 image"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_left_depth2.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_left_depth2.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "680b6f492c6b51a8afe58efd9103bbd93c7b1840e42ec38c09af3d378fd36d99",
+   "golden_sha256": "ba9bfa69c49b926b3ce9b6e8412f48c0972a44a030c854ccec577c7f6088ae78",
+   "base_fbb2e59ed": "0/DIFF/28/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/19/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "no6_left_leaf_beside_image",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "outer-origin",
+    "note on outer leaf beside image"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_left_leaf_beside_image.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_left_leaf_beside_image.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "e0caa4dd3a7112122bd799a1e31e3f826893a9ff04c7f628ad2b335cb8e36cbe",
+   "golden_sha256": "7e4b5707834975315eadea226a20737b29b00652f7909cc4348413142b9ca61f",
+   "base_fbb2e59ed": "0/DIFF/26/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/20/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "no6_left_multiline_depth1",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "outer-origin",
+    "multiline note left"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_left_multiline_depth1.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_left_multiline_depth1.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "0c0730578b2559579340a07df28633626e057c1d7dd77ae6e6a56c627ee4075c",
+   "golden_sha256": "1874622633e6b62affe4a3404142d7c2c2d3d2b20f00ffcab99bdce622d5dbbf",
+   "base_fbb2e59ed": "0/DIFF/22/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/16/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "no6_left_right_both",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "outer-origin",
+    "two notes, opposite sides"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_left_right_both.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_left_right_both.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "f17693147236ac84e85e4a91307db101c12a31f6658ed223c1d044662384dc78",
+   "golden_sha256": "a73d67d5fb088fbf11e2b90b65aa56a3091f88f97fc1d7aeee20739fcf1c35e4",
+   "base_fbb2e59ed": "0/DIFF/25/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/18/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "no6_note_on_link_image",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "outer-origin",
+    "note on link"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_note_on_link_image.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_note_on_link_image.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "e2eef912966380862719ee1a2a834e2432d4a6a357496fda829765da37e0058f",
+   "golden_sha256": "4c88acd08051d33dfdc09623ede9d58b75e21fdb17d96a5dd7d63dd2a116c310",
+   "base_fbb2e59ed": "0/DIFF/26/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/26/comments=True",
+   "tip_8dda18b1b": "0/DIFF/26/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "no6_right_long",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "outer-origin",
+    "note right",
+    "wide note"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_right_long.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_right_long.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "3985be3f41a0b4538adc83fc41c4c7a7b368e45388ccfa6333558a13159c65fd",
+   "golden_sha256": "80a9f7b218616c0c56b735d427bdb9af0b2dc1187d15d7a4cab0803dfbf78693",
+   "base_fbb2e59ed": "0/DIFF/21/comments=False",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "no6_top_depth2",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "outer-origin",
+    "note top (declared residual)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_top_depth2.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_top_depth2.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "e58f6d127d202e91ff998060b9f1d7305e931e090d892eb3bd6f01306bd73ca2",
+   "golden_sha256": "0fc2b49299219a908168376fa929ca10d239bc1acdbd785770db98a0f3d09689",
+   "base_fbb2e59ed": "0/DIFF/18/comments=True",
+   "merge_d6f63a8aa": "0/DIFF/18/comments=True",
+   "tip_8dda18b1b": "0/DIFF/18/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "no6_two_left_same",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "outer-origin",
+    "two notes same side (BG three-notes mechanism)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_two_left_same.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/no6_two_left_same.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "f2b7120b1cb06c2d501f1e72a7e9453a3e911cf49d13fc008673d8326cff3c1f",
+   "golden_sha256": "891874330d96f42b08282c830be703123a8d0966fecd583cbdd6d9401da01da5",
+   "base_fbb2e59ed": "0/DIFF/26/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/20/comments=False",
+   "tip_8dda18b1b": "0/DIFF/20/comments=False",
+   "result": "fail"
+  },
+  {
+   "name": "pt6_note_before_concurrent",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "pass-three",
+    "concurrent region"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/pt6_note_before_concurrent.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/pt6_note_before_concurrent.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "278a8bc6f87dd2ebba572fecfedc68e3176b59dabb3cbc1b7bdbd868cfc37cb4",
+   "golden_sha256": "ede301910b7b662f5f6a6ea472a0a4d2bf7098209aae3071dee59146b7427336",
+   "base_fbb2e59ed": "0/DIFF/35/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/35/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "pt6_note_before_nested_link",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "pass-three",
+    "note before anchor inside group"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/pt6_note_before_nested_link.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/pt6_note_before_nested_link.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "0d649c63a8b7248e99e7a61535bf5b9d274d548bef2f1ac0636e53aa28ebb906",
+   "golden_sha256": "2907d093c003d8a3f52383a9bdcf5a12235dfd708e165583c17fc170afbf819f",
+   "base_fbb2e59ed": "0/DIFF/20/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/20/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "pt6_note_before_root_link_image",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "pass-three",
+    "root note before anchor, image path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/pt6_note_before_root_link_image.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/pt6_note_before_root_link_image.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "2b31cc9a30dcc53a23d6468c156fc69a311826d7cd9fcdbe66fcb31b8b71c7b5",
+   "golden_sha256": "db6b4a113f7939b4f744d03c3040897909454e1cd56834b0ea3062e6144e25ef",
+   "base_fbb2e59ed": "0/DIFF/27/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/27/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "pt6_note_outer_anchor_later_inner",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "pass-three",
+    "root note, anchor first created inside group"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/pt6_note_outer_anchor_later_inner.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/pt6_note_outer_anchor_later_inner.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "426405a1f65b1d74f1a4f3fa02d8057029f9ffeed01053dd98098239c060c539",
+   "golden_sha256": "cf82dd92b4a29d2b518fd5c35c050084e778bb58071bbcc85b703dd3e0f7898d",
+   "base_fbb2e59ed": "0/DIFF/21/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/21/comments=False",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "pt6_two_notes_before",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "pass-three",
+    "two notes before both anchors, flat"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/pt6_two_notes_before.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/pt6_two_notes_before.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "2980ddb6de4c3c0b727cd3b175e20a79bc66d546d79ddd1d8b7067f2ed562486",
+   "golden_sha256": "5436a0cc0e91bccf0989b65536770669a46b283325e7b50d66e522bd29537fc8",
+   "base_fbb2e59ed": "0/match/0/comments=True",
+   "merge_d6f63a8aa": "0/match/0/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "rp6_depth3",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "root-path-names",
+    "depth 3 non-autarkic"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/rp6_depth3.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/rp6_depth3.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "29726b25a205f79bf1c057bcc8a13c84a6ea03e7b54995f92e8315b1d6b83625",
+   "golden_sha256": "bbd8a31d7ae1dd34854c007d941dd955c2b977fc07d9c9d8b4671beddf00f501",
+   "base_fbb2e59ed": "0/DIFF/36/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/1/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "rp6_duplicate_text",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "root-path-names",
+    "duplicate note text"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/rp6_duplicate_text.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/rp6_duplicate_text.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "0654dac318779d1114253ac435522965bbbf0c182b8185d1c9e43535312d8a71",
+   "golden_sha256": "e9d4446cc3dfb4bbfc82100fef3d7ec77929d2a928e8aca51124f06dfad85b13",
+   "base_fbb2e59ed": "0/DIFF/32/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/2/comments=True",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "rp6_group_note_outer_anchor",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "root-path-names",
+    "group reopened"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/rp6_group_note_outer_anchor.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/rp6_group_note_outer_anchor.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "5a2ef60179bbeafbdaa9c83d4759b1baa0ee80cc56ef79f5431f21edf85b7ebe",
+   "golden_sha256": "36572774a9f6031d15444cda34a7f2d35eab88570f0c437f3388202ff026b141",
+   "base_fbb2e59ed": "0/DIFF/31/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/13/comments=True",
+   "tip_8dda18b1b": "0/DIFF/12/comments=True",
+   "result": "fail"
+  },
+  {
+   "name": "rp6_named_floating_in_group",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "root-path-names",
+    "floating named note in group (declared residual)"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/rp6_named_floating_in_group.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/rp6_named_floating_in_group.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "e512a689ef6d23a222a0bc16545c229b2daeec29070b2bc17df45f34ffef8d12",
+   "golden_sha256": "705db3efe622501c36a117e9ae65ebeaa05eb4a4529b2f060de997f3dae26e1d",
+   "base_fbb2e59ed": "0/DIFF/28/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/28/comments=False",
+   "tip_8dda18b1b": "0/DIFF/28/comments=False",
+   "result": "fail"
+  },
+  {
+   "name": "rp6_root_and_group",
+   "batch": "BH",
+   "reference_batch": "BH (relay batch c5a, staged by this checker; held out from the maker)",
+   "axes": [
+    "root-path-names",
+    "root note next to group note"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/rp6_root_and_group.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5/rp6_root_and_group.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round5",
+   "source_sha256": "67f5b893bf218cedc2f26171570d6742d18a21d482e024fbaee7c475f9b10e33",
+   "golden_sha256": "d9e53c3b0a78dae217967bc6c79ca73739c8ab785d195eb27713cf9ba79e57f8",
+   "base_fbb2e59ed": "0/DIFF/32/comments=False",
+   "merge_d6f63a8aa": "0/DIFF/32/comments=False",
+   "tip_8dda18b1b": "0/match/0/comments=True",
+   "result": "pass"
+  }
+ ]
+}

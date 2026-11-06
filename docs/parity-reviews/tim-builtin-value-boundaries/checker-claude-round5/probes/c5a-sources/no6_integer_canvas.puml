@@ -1,0 +1,8 @@
+@startuml
+[*] --> Ward
+state Ward {
+  [*] --> Bed
+  Bed --> [*]
+}
+Ward --> [*]
+@enduml

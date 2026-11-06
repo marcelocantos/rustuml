@@ -1,0 +1,77 @@
+[
+  {
+    "mechanism": "creole-parameter-candidate-grammar",
+    "preaccount": "c14bea51a",
+    "production": "8ca73318f584dc29d7d8ab1c91f25a21718ca713",
+    "java": "CommandCreoleBuilder candidate order -> family-specific matchingSize patterns on CharHidder stream -> recursive command body -> AtomText unhide",
+    "rust": "parameter_command anchored private typed candidate -> handle_tag captured parameters -> walk_parameter_body private barriers and recursive hidden stream -> existing parse_segments_inner projection",
+    "invariant": "Eligibility precedes style mutation/body consumption; failed candidate leaves one-character literal fallback. ASCII word/digit/case and source-defined NBSP/quote classes are explicit. Parameter body uses first case-insensitive close, otherwise EOL.",
+    "families": [
+      {
+        "name": "size/color",
+        "source": "Splitter.fontSizePattern/fontColorPattern; CommandCreoleSizeChange/ColorChange",
+        "controls": [
+          "checker28/hide_parameter_size",
+          "checker28/hide_parameter_color",
+          "fresh16/size_rejected",
+          "fresh16/color_rejected",
+          "fresh16/size_forms",
+          "fresh16/color_forms"
+        ]
+      },
+      {
+        "name": "combined font / family priority",
+        "source": "CommandCreoleColorAndSizeChange.fontPattern then CommandCreoleFontFamilyChange; Pattern2 %s/%g and FontConfiguration.changeFamily",
+        "controls": [
+          "fresh16/font_priority",
+          "fresh16/font_rejected",
+          "fresh16/font_fallback",
+          "fresh16/font_family"
+        ]
+      },
+      {
+        "name": "parameterized background",
+        "source": "FontStyle.BACKCOLOR Ubrex and CharClassRaw.WORD",
+        "controls": [
+          "fresh16/back_rejected",
+          "fresh16/back_forms"
+        ]
+      },
+      {
+        "name": "image/icon",
+        "source": "Splitter.imgPatternNoSrcColon/openiconPattern; CommandCreoleImg",
+        "controls": [
+          "fresh16/image_rejected",
+          "fresh16/icon_rejected"
+        ]
+      },
+      {
+        "name": "existing sprite neighbor",
+        "source": "Splitter.spritePattern; unchanged is_sprite_tag",
+        "controls": [
+          "fresh16/sprite_neighbor",
+          "sprites50"
+        ]
+      }
+    ],
+    "independent_axes": [
+      "hidden/plain/malformed parameters",
+      "candidate family and priority",
+      "whitespace/case/repeated captures",
+      "closed/empty/EOL/nested body",
+      "note/WBS/class-member consumer"
+    ],
+    "preserved": "Recursive hiding, flush barriers, actual-empty stripe, URLs, legacy tspan, WBS arithmetic and every other production file unchanged.",
+    "residue": "Fresh color_forms and font_family remain whole failures. hide_raw_regions remains registry/reset obligation. Oversized numeric conversion, invalid recognized color names, image loading/icon resolver, extended activation, URL/italic and legacy behavior are not accepted by lexical grammar evidence. Java itself admits hidden # into broad font-family fields in passing font_fallback; no blanket PUA prohibition. No math claims."
+  },
+  {
+    "mechanism": "explicit-font-alias-compatibility",
+    "preaccount": "5652ec397eab87fb9449beefb7e2368179ae1919",
+    "production": "8ca73318f584dc29d7d8ab1c91f25a21718ca713",
+    "java": "CommandCreoleFontFamilyChange -> FontConfiguration.changeFamily -> FontStack.getFonts/Font.decode; SvgGraphics.java697-708",
+    "rust": "handle_tag::Family sets the existing flag for quote-trimmed ASCII-case-insensitive Courier/monospace/Monospaced only; shared resolver untouched",
+    "invariant": "Parameter eligibility does not erase required alias semantics. Preserve existing alias spacing/metric contract without blanket activation.",
+    "controls": "Six golden regressions restored; unchanged explicit_font_monospace unit and 91 focused creole tests pass; final1992 replay preserves checker two repairs and fresh14/16.",
+    "residue": "Monospaced text_render.rs760 coupling remains shared resolver target T14.15; fresh font_family retains name and metric mismatch."
+  }
+]

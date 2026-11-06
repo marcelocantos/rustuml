@@ -1,0 +1,4 @@
+@startyaml
+k: one\ltwo\rthree
+m: x\ry\lz
+@endyaml

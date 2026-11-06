@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Arial
+start
+:quay
+אבגד𝅧
+wharf;
+stop
+@enduml

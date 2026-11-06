@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Courier New
+skinparam classFontStyle bold
+interface "Wharf q𝅧r" as K
+@enduml

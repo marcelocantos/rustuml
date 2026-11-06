@@ -1,0 +1,6 @@
+@startuml
+note left of Ko : busy
+state Mooring {
+  Pier --> Ko
+}
+@enduml

@@ -1,0 +1,341 @@
+{
+  "units": [
+    {
+      "crate": "rustuml_layout",
+      "passed": 41,
+      "failed": 0
+    },
+    {
+      "crate": "rustuml_math",
+      "passed": 10,
+      "failed": 0
+    },
+    {
+      "crate": "rustuml_oracle",
+      "passed": 31,
+      "failed": 0
+    },
+    {
+      "crate": "rustuml_parser",
+      "passed": 624,
+      "failed": 0
+    },
+    {
+      "crate": "rustuml_render",
+      "passed": 791,
+      "failed": 2
+    }
+  ],
+  "cli": 15,
+  "focused": 94,
+  "product_library": {
+    "passed": 11179,
+    "eligible": 11251
+  },
+  "assisted_library": {
+    "passed": 10497,
+    "eligible": 11251,
+    "total": 12550,
+    "skipped": 1299
+  },
+  "names": {
+    "no_oracle": {
+      "names": 72,
+      "sha256": "7fe3bf366cbf6b4baa85b02e4a3bd7d42cfa0c514e0be05e619353930169710a",
+      "byte_identical": true
+    },
+    "golden": {
+      "names": 754,
+      "sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+      "byte_identical": true
+    }
+  },
+  "standing": {
+    "entries": 1912,
+    "harness_pass": 815,
+    "before_cli": 834,
+    "after_cli": 845,
+    "unmapped": [],
+    "discrepancies": [
+      "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_filtered_environment.puml",
+      "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unsecure_environment.puml",
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+      "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_nested.puml",
+      "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_return_include.puml",
+      "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_selected.puml",
+      "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.puml",
+      "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+      "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+      "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+      "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_function_selector.puml",
+      "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_repeated_comments.puml",
+      "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_fixed_fraction.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_new_york_summer.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_tokyo_width.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_utc_width.puml"
+    ]
+  },
+  "guards": {
+    "passed": 4,
+    "total": 6,
+    "failures": [
+      "decimal_literal_ratchet",
+      "parity_review_records_are_complete"
+    ]
+  },
+  "clippy": "Unchanged crates/rustuml-parser/src/parse/component.rs:72 dead code; exit101",
+  "workspace_format": "Unchanged parser/render class.rs; exit1",
+  "owned_creole_format": "pass",
+  "gate_executions": [
+    {
+      "name": "library",
+      "argv": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--lib",
+        "--release",
+        "--no-fail-fast"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/src-after",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/target-after",
+        "CARGO_BUILD_JOBS": "4",
+        "RAYON_NUM_THREADS": "4",
+        "RUST_TEST_THREADS": "4",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "exit": 101,
+      "seconds": 60.12516133399913
+    },
+    {
+      "name": "cli",
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "rustuml",
+        "--test",
+        "pipe_mode",
+        "--release"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/src-after",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/target-after",
+        "CARGO_BUILD_JOBS": "4",
+        "RAYON_NUM_THREADS": "4",
+        "RUST_TEST_THREADS": "4",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "exit": 0,
+      "seconds": 1.0988016669871286
+    },
+    {
+      "name": "focused",
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "rustuml-render",
+        "--lib",
+        "--release",
+        "creole::"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/src-after",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/target-after",
+        "CARGO_BUILD_JOBS": "4",
+        "RAYON_NUM_THREADS": "4",
+        "RUST_TEST_THREADS": "4",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "exit": 0,
+      "seconds": 21.89622783300001
+    },
+    {
+      "name": "main-product",
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "rustuml-oracle",
+        "--release",
+        "--test",
+        "golden_no_oracle",
+        "--",
+        "--nocapture"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/src-after",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/target-after",
+        "CARGO_BUILD_JOBS": "4",
+        "RAYON_NUM_THREADS": "4",
+        "RUST_TEST_THREADS": "4",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "exit": 101,
+      "seconds": 4.969072457999573
+    },
+    {
+      "name": "main-assisted",
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "rustuml-oracle",
+        "--release",
+        "--test",
+        "golden_pairs",
+        "--",
+        "--nocapture"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/src-after",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/target-after",
+        "CARGO_BUILD_JOBS": "4",
+        "RAYON_NUM_THREADS": "4",
+        "RUST_TEST_THREADS": "4",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "exit": 101,
+      "seconds": 3.9076970419991994
+    },
+    {
+      "name": "standing",
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "rustuml-oracle",
+        "--release",
+        "--test",
+        "parity_perturbations",
+        "--",
+        "--nocapture"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/src-after",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/target-after",
+        "CARGO_BUILD_JOBS": "4",
+        "RAYON_NUM_THREADS": "4",
+        "RUST_TEST_THREADS": "4",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "exit": 101,
+      "seconds": 2.839883207998355
+    },
+    {
+      "name": "guards",
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "rustuml-oracle",
+        "--release",
+        "--test",
+        "harness_guards",
+        "--",
+        "--nocapture"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/src-after",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/target-after",
+        "CARGO_BUILD_JOBS": "4",
+        "RAYON_NUM_THREADS": "4",
+        "RUST_TEST_THREADS": "4",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "exit": 101,
+      "seconds": 1.4146858750027604
+    },
+    {
+      "name": "clippy",
+      "argv": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/src-after",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/target-after",
+        "CARGO_BUILD_JOBS": "4",
+        "RAYON_NUM_THREADS": "4",
+        "RUST_TEST_THREADS": "4",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "exit": 101,
+      "seconds": 18.52896879200125
+    },
+    {
+      "name": "format",
+      "argv": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/src-after",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/target-after",
+        "CARGO_BUILD_JOBS": "4",
+        "RAYON_NUM_THREADS": "4",
+        "RUST_TEST_THREADS": "4",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "exit": 1,
+      "seconds": 1.2042795830057003
+    },
+    {
+      "name": "touched-format",
+      "argv": [
+        "rustfmt",
+        "--edition",
+        "2024",
+        "--check",
+        "--config",
+        "skip_children=true",
+        "crates/rustuml-render/src/creole.rs"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/src-after",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/target-after",
+        "CARGO_BUILD_JOBS": "4",
+        "RAYON_NUM_THREADS": "4",
+        "RUST_TEST_THREADS": "4",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "exit": 0,
+      "seconds": 0.03285837499424815
+    }
+  ],
+  "registration": "1912 existing pairs tested once; 32 new pairs retained for standing discovery, measured separately through actual CLI and unchanged comparator. New entries do not count as repairs of existing failures."
+}

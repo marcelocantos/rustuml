@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Verdana
+participant Ann
+note over Ann
+quay
+אב‬ 𝅧
+end note
+@enduml

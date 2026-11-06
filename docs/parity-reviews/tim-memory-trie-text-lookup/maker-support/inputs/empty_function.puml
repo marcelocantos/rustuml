@@ -1,0 +1,9 @@
+@startuml
+class Anchor
+!function $unused()
+!startsub empty
+!endsub
+!return 1
+!endfunction
+class Lost
+@enduml

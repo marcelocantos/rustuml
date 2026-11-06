@@ -1,0 +1,8 @@
+@startuml
+[*] --> Pier
+state Pier {
+  [*] --> Dock
+  Dock --> [*]
+}
+Pier --> [*]
+@enduml

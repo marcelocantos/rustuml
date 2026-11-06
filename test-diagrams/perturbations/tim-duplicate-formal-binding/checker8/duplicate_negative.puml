@@ -1,0 +1,7 @@
+@startuml
+!function $join($x,$x)
+!return $x
+!endfunction
+!$v=$join($x="bad")
+class Lost
+@enduml

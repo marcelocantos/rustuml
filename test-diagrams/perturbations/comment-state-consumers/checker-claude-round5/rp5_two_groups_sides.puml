@@ -1,0 +1,13 @@
+@startuml
+state East {
+  Oak --> Elm
+  note left of Oak : bark
+}
+state West {
+  Fir --> Yew
+  note right of Yew : sap
+}
+Start --> Oak
+Elm --> Fir
+note right of Start : go
+@enduml

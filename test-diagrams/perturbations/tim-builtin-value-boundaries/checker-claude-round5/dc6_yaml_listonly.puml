@@ -1,0 +1,4 @@
+@startyaml
+- "x\U0010FFFD y"
+- plain
+@endyaml

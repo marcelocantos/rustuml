@@ -1,0 +1,8 @@
+@startuml
+state Pier {
+  Jetty --> Mm
+  note right of Mm : calm
+}
+note left of Gull : drift
+Gull --> Jetty
+@enduml

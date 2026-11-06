@@ -1,0 +1,28 @@
+{
+ "failing": {
+  "460570ba2": 1365,
+  "716762056": 1700,
+  "b0ca0a7dc": 1684
+ },
+ "new_vs_base_on_files_existing_at_base": [],
+ "new_vs_merge_on_files_existing_at_merge": [],
+ "new_vs_merge_total": 0,
+ "fixed_merge_to_tip": [
+  "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_flow_escape.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_cr.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_arabic.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_seq_arabic.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1ad0.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1e6e3.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u18_05c8.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_end.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_nested.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_relative_indent.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_flow_seq_escapes.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_real_tab_value.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+ ]
+}

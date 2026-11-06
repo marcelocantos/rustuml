@@ -1,0 +1,734 @@
+{
+ "by_category": {
+  "control": {
+   "n": 88,
+   "tip_match": 60,
+   "merge_match": 60,
+   "base_match": 43
+  },
+  "match-iff-control-matches": {
+   "n": 128,
+   "tip_match": 98,
+   "merge_match": 59,
+   "base_match": 48,
+   "controls_fail": 20,
+   "no_named_control_mapped": 16
+  },
+  "same-as-plain": {
+   "n": 55,
+   "tip_match": 40,
+   "merge_match": 15,
+   "base_match": 12,
+   "twin_named": 55,
+   "rust_equiv_twin": 10,
+   "java_equiv_twin": 10
+  },
+  "fail": {
+   "n": 103,
+   "tip_match": 13,
+   "merge_match": 13,
+   "base_match": 8,
+   "unexpected_match": 13
+  }
+ },
+ "violations": [
+  {
+   "name": "m10a_comp_cn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_comp_cn_p"
+  },
+  {
+   "name": "m10a_comp_cn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_comp_cn_p"
+  },
+  {
+   "name": "m10a_comp_cn_bi_ctrl",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_comp_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_comp_cn_bi_ctrl",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_comp_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_comp_ss_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_comp_ss_p"
+  },
+  {
+   "name": "m10a_comp_ss_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_comp_ss_p"
+  },
+  {
+   "name": "m10a_comp_tn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_comp_tn_p"
+  },
+  {
+   "name": "m10a_comp_tn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_comp_tn_p"
+  },
+  {
+   "name": "m10a_comp_vd_i",
+   "kind": "controls match, probe fails",
+   "controls": [
+    "m10a_comp_vd_p"
+   ],
+   "ndiff": 5,
+   "head": "[AttrMismatch { index: 4, tag: \"rect\", expected_attrs: [(\"fill\", \"#F1F1F1\"), (\"height\", \"47.0146\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"99.3223\"), (\"x\", \"7\"), (\"y\", \"7\")], actual_attrs: [(\"fill\", \"#F1F1F1\"), (\"height\", \"47.0146\"), (\"rx\", \"2.5\"), (\""
+  },
+  {
+   "name": "m10a_comp_vd_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_comp_vd_p"
+  },
+  {
+   "name": "m10a_comp_vd_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_comp_vd_p"
+  },
+  {
+   "name": "m10a_node_ss_bi",
+   "kind": "expected fail, matches"
+  },
+  {
+   "name": "m10a_rect_ss_bi",
+   "kind": "expected fail, matches"
+  },
+  {
+   "name": "m10a_artf_ss_bi",
+   "kind": "expected fail, matches"
+  },
+  {
+   "name": "m10a_dbse_cn_bi",
+   "kind": "expected fail, matches"
+  },
+  {
+   "name": "m10a_dbse_cn_bi_ctrl",
+   "kind": "expected fail, matches"
+  },
+  {
+   "name": "m10a_dbse_ss_bi",
+   "kind": "expected fail, matches"
+  },
+  {
+   "name": "m10a_dbse_tn_bi",
+   "kind": "expected fail, matches"
+  },
+  {
+   "name": "m10a_dbse_vd_bi",
+   "kind": "expected fail, matches"
+  },
+  {
+   "name": "m10a_actd_cn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_actd_cn_p"
+  },
+  {
+   "name": "m10a_actd_cn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_actd_cn_p"
+  },
+  {
+   "name": "m10a_actd_cn_bi_ctrl",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_actd_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_actd_cn_bi_ctrl",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_actd_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_actd_ss_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_actd_ss_p"
+  },
+  {
+   "name": "m10a_actd_ss_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_actd_ss_p"
+  },
+  {
+   "name": "m10a_actd_tn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_actd_tn_p"
+  },
+  {
+   "name": "m10a_actd_tn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_actd_tn_p"
+  },
+  {
+   "name": "m10a_actd_vd_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_actd_vd_p"
+  },
+  {
+   "name": "m10a_actd_vd_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_actd_vd_p"
+  },
+  {
+   "name": "m10a_nodc_cn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_nodc_cn_p"
+  },
+  {
+   "name": "m10a_nodc_cn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_nodc_cn_p"
+  },
+  {
+   "name": "m10a_nodc_cn_bi_ctrl",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_nodc_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_nodc_cn_bi_ctrl",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_nodc_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_nodc_ss_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_nodc_ss_p"
+  },
+  {
+   "name": "m10a_nodc_ss_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_nodc_ss_p"
+  },
+  {
+   "name": "m10a_nodc_tn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_nodc_tn_p"
+  },
+  {
+   "name": "m10a_nodc_tn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_nodc_tn_p"
+  },
+  {
+   "name": "m10a_nodc_vd_i",
+   "kind": "controls match, probe fails",
+   "controls": [
+    "m10a_nodc_vd_p"
+   ],
+   "ndiff": 12,
+   "head": "[AttrMismatch { index: 4, tag: \"polygon\", expected_attrs: [(\"fill\", \"#F1F1F1\"), (\"points\", \"16,16,26,6,115.3223,6,115.3223,43.0146,105.3223,53.0146,16,53.0146,16,16\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")], actual_attrs: [(\"fill\", \"#F1F1F1\"), (\"points\", \"16,16,26,6,115.418,6,115.418,43.0146"
+  },
+  {
+   "name": "m10a_nodc_vd_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_nodc_vd_p"
+  },
+  {
+   "name": "m10a_nodc_vd_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_nodc_vd_p"
+  },
+  {
+   "name": "m10a_artc_cn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_artc_cn_p"
+  },
+  {
+   "name": "m10a_artc_cn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_artc_cn_p"
+  },
+  {
+   "name": "m10a_artc_cn_bi_ctrl",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_artc_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_artc_cn_bi_ctrl",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_artc_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_artc_ss_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_artc_ss_p"
+  },
+  {
+   "name": "m10a_artc_ss_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_artc_ss_p"
+  },
+  {
+   "name": "m10a_artc_tn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_artc_tn_p"
+  },
+  {
+   "name": "m10a_artc_tn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_artc_tn_p"
+  },
+  {
+   "name": "m10a_artc_vd_i",
+   "kind": "controls match, probe fails",
+   "controls": [
+    "m10a_artc_vd_p"
+   ],
+   "ndiff": 12,
+   "head": "[AttrMismatch { index: 4, tag: \"rect\", expected_attrs: [(\"fill\", \"#F1F1F1\"), (\"height\", \"40.0146\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"89.3223\"), (\"x\", \"7\"), (\"y\", \"7\")], actual_attrs: [(\"fill\", \"#F1F1F1\"), (\"height\", \"40.0146\"), (\"rx\", \"2.5\"), (\""
+  },
+  {
+   "name": "m10a_artc_vd_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_artc_vd_p"
+  },
+  {
+   "name": "m10a_artc_vd_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_artc_vd_p"
+  },
+  {
+   "name": "m10a_dbsc_cn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_dbsc_cn_p"
+  },
+  {
+   "name": "m10a_dbsc_cn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_dbsc_cn_p"
+  },
+  {
+   "name": "m10a_dbsc_cn_bi_ctrl",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_dbsc_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_dbsc_cn_bi_ctrl",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_dbsc_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_dbsc_ss_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_dbsc_ss_p"
+  },
+  {
+   "name": "m10a_dbsc_ss_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_dbsc_ss_p"
+  },
+  {
+   "name": "m10a_dbsc_tn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_dbsc_tn_p"
+  },
+  {
+   "name": "m10a_dbsc_tn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_dbsc_tn_p"
+  },
+  {
+   "name": "m10a_dbsc_vd_i",
+   "kind": "controls match, probe fails",
+   "controls": [
+    "m10a_dbsc_vd_p"
+   ],
+   "ndiff": 10,
+   "head": "[AttrMismatch { index: 4, tag: \"path\", expected_attrs: [(\"d\", \"M6,16 C6,6 45.6611,6 45.6611,6 C45.6611,6 85.3223,6 85.3223,16 L85.3223,42.0146 C85.3223,52.0146 45.6611,52.0146 45.6611,52.0146 C45.6611,52.0146 6,52.0146 6,42.0146 L6,16\"), (\"fill\", \"#F1F1F1\"), (\"style\", \"stroke:#181818;stroke-width:0."
+  },
+  {
+   "name": "m10a_dbsc_vd_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_dbsc_vd_p"
+  },
+  {
+   "name": "m10a_dbsc_vd_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_dbsc_vd_p"
+  },
+  {
+   "name": "m10a_actu_cn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_actu_cn_p"
+  },
+  {
+   "name": "m10a_actu_cn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_actu_cn_p"
+  },
+  {
+   "name": "m10a_actu_cn_bi_ctrl",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_actu_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_actu_cn_bi_ctrl",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_actu_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_actu_ss_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_actu_ss_p"
+  },
+  {
+   "name": "m10a_actu_ss_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_actu_ss_p"
+  },
+  {
+   "name": "m10a_actu_tn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_actu_tn_p"
+  },
+  {
+   "name": "m10a_actu_tn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_actu_tn_p"
+  },
+  {
+   "name": "m10a_actu_vd_i",
+   "kind": "controls match, probe fails",
+   "controls": [
+    "m10a_actu_vd_p"
+   ],
+   "ndiff": 7,
+   "head": "[AttrMismatch { index: 4, tag: \"ellipse\", expected_attrs: [(\"cx\", \"35.6611\"), (\"cy\", \"14\"), (\"fill\", \"#F1F1F1\"), (\"rx\", \"8\"), (\"ry\", \"8\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")], actual_attrs: [(\"cx\", \"35.709\"), (\"cy\", \"14\"), (\"fill\", \"#F1F1F1\"), (\"rx\", \"8\"), (\"ry\", \"8\"), (\"style\", \"stroke:#"
+  },
+  {
+   "name": "m10a_actu_vd_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_actu_vd_p"
+  },
+  {
+   "name": "m10a_actu_vd_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_actu_vd_p"
+  },
+  {
+   "name": "m10a_usec_cn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_usec_cn_p"
+  },
+  {
+   "name": "m10a_usec_cn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_usec_cn_p"
+  },
+  {
+   "name": "m10a_usec_cn_bi_ctrl",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_usec_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_usec_cn_bi_ctrl",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_usec_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_usec_ss_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_usec_ss_p"
+  },
+  {
+   "name": "m10a_usec_ss_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_usec_ss_p"
+  },
+  {
+   "name": "m10a_usec_tn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_usec_tn_p"
+  },
+  {
+   "name": "m10a_usec_tn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_usec_tn_p"
+  },
+  {
+   "name": "m10a_usec_vd_i",
+   "kind": "controls match, probe fails",
+   "controls": [
+    "m10a_usec_vd_p"
+   ],
+   "ndiff": 2,
+   "head": "[AttrMismatch { index: 4, tag: \"ellipse\", expected_attrs: [(\"cx\", \"51.9472\"), (\"cy\", \"22.0312\"), (\"fill\", \"#F1F1F1\"), (\"rx\", \"44.9472\"), (\"ry\", \"15.0312\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")], actual_attrs: [(\"cx\", \"52.0148\"), (\"cy\", \"22.0312\"), (\"fill\", \"#F1F1F1\"), (\"rx\", \"45.0148\"), (\"r"
+  },
+  {
+   "name": "m10a_usec_vd_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_usec_vd_p"
+  },
+  {
+   "name": "m10a_usec_vd_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_usec_vd_p"
+  },
+  {
+   "name": "m10a_stat_vd_i",
+   "kind": "controls match, probe fails",
+   "controls": [
+    "m10a_stat_vd_p"
+   ],
+   "ndiff": 3,
+   "head": "[AttrMismatch { index: 4, tag: \"rect\", expected_attrs: [(\"fill\", \"#F1F1F1\"), (\"height\", \"50\"), (\"rx\", \"12.5\"), (\"ry\", \"12.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"79.3223\"), (\"x\", \"7\"), (\"y\", \"7\")], actual_attrs: [(\"fill\", \"#F1F1F1\"), (\"height\", \"50\"), (\"rx\", \"12.5\"), (\"ry\", \"1"
+  },
+  {
+   "name": "m10a_part_cn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_part_cn_p"
+  },
+  {
+   "name": "m10a_part_cn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_part_cn_p"
+  },
+  {
+   "name": "m10a_part_cn_bi_ctrl",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_part_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_part_cn_bi_ctrl",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_part_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_part_ss_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_part_ss_p"
+  },
+  {
+   "name": "m10a_part_ss_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_part_ss_p"
+  },
+  {
+   "name": "m10a_part_tn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_part_tn_p"
+  },
+  {
+   "name": "m10a_part_tn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_part_tn_p"
+  },
+  {
+   "name": "m10a_part_vd_i",
+   "kind": "controls match, probe fails",
+   "controls": [
+    "m10a_part_vd_p"
+   ],
+   "ndiff": 10,
+   "head": "[AttrMismatch { index: 5, tag: \"rect\", expected_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"62.7993\"), (\"width\", \"8\"), (\"x\", \"37.6611\"), (\"y\", \"37.0146\")], actual_attrs: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"62.7993\"), (\"width\", \"8\"), (\"x\", \"37.709\""
+  },
+  {
+   "name": "m10a_part_vd_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_part_vd_p"
+  },
+  {
+   "name": "m10a_part_vd_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_part_vd_p"
+  },
+  {
+   "name": "m10a_acts_cn_bi",
+   "kind": "expected fail, matches"
+  },
+  {
+   "name": "m10a_acts_cn_bi_ctrl",
+   "kind": "expected fail, matches"
+  },
+  {
+   "name": "m10a_acts_ss_bi",
+   "kind": "expected fail, matches"
+  },
+  {
+   "name": "m10a_acts_tn_bi",
+   "kind": "expected fail, matches"
+  },
+  {
+   "name": "m10a_acts_vd_bi",
+   "kind": "expected fail, matches"
+  },
+  {
+   "name": "m10a_clss_cn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_clss_cn_p"
+  },
+  {
+   "name": "m10a_clss_cn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_clss_cn_p"
+  },
+  {
+   "name": "m10a_clss_cn_bi",
+   "kind": "match differs from twin",
+   "twin": "m10a_clss_cn_p",
+   "tip": false
+  },
+  {
+   "name": "m10a_clss_cn_bi_ctrl",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_clss_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_clss_cn_bi_ctrl",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_clss_cn_p_ctrl"
+  },
+  {
+   "name": "m10a_clss_cn_bi_ctrl",
+   "kind": "match differs from twin",
+   "twin": "m10a_clss_cn_p_ctrl",
+   "tip": false
+  },
+  {
+   "name": "m10a_clss_ss_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_clss_ss_p"
+  },
+  {
+   "name": "m10a_clss_ss_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_clss_ss_p"
+  },
+  {
+   "name": "m10a_clss_ss_bi",
+   "kind": "match differs from twin",
+   "twin": "m10a_clss_ss_p",
+   "tip": false
+  },
+  {
+   "name": "m10a_clss_tn_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_clss_tn_p"
+  },
+  {
+   "name": "m10a_clss_tn_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_clss_tn_p"
+  },
+  {
+   "name": "m10a_clss_tn_bi",
+   "kind": "match differs from twin",
+   "twin": "m10a_clss_tn_p",
+   "tip": false
+  },
+  {
+   "name": "m10a_clss_vd_i",
+   "kind": "controls match, probe fails",
+   "controls": [
+    "m10a_clss_vd_p"
+   ],
+   "ndiff": 4,
+   "head": "[AttrMismatch { index: 4, tag: \"rect\", expected_attrs: [(\"fill\", \"#F1F1F1\"), (\"height\", \"48\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"91.3223\"), (\"x\", \"7\"), (\"y\", \"7\")], actual_attrs: [(\"fill\", \"#F1F1F1\"), (\"height\", \"48\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\""
+  },
+  {
+   "name": "m10a_clss_vd_bi",
+   "kind": "rust tip differs from plain twin",
+   "twin": "m10a_clss_vd_p"
+  },
+  {
+   "name": "m10a_clss_vd_bi",
+   "kind": "java differs from plain twin",
+   "twin": "m10a_clss_vd_p"
+  },
+  {
+   "name": "m10a_clss_vd_bi",
+   "kind": "match differs from twin",
+   "twin": "m10a_clss_vd_p",
+   "tip": false
+  },
+  {
+   "name": "m10a_actv_vd_i",
+   "kind": "controls match, probe fails",
+   "controls": [
+    "m10a_actv_vd_p"
+   ],
+   "ndiff": 5,
+   "head": "[AttrMismatch { index: 3, tag: \"ellipse\", expected_attrs: [(\"cx\", \"51.4238\"), (\"cy\", \"25\"), (\"fill\", \"#222222\"), (\"rx\", \"10\"), (\"ry\", \"10\"), (\"style\", \"stroke:#222222;stroke-width:1;\")], actual_attrs: [(\"cx\", \"51.4648\"), (\"cy\", \"25\"), (\"fill\", \"#222222\"), (\"rx\", \"10\"), (\"ry\", \"10\"), (\"style\", \"strok"
+  }
+ ],
+ "transitions": {
+  "011": 45,
+  "111": 102,
+  "101": 9,
+  "001": 55,
+  "000": 163
+ },
+ "losses": {},
+ "gains": {
+  "merge->tip": [
+   "m10a_comp_cn_i",
+   "m10a_comp_cn_bi",
+   "m10a_comp_cn_bi_ctrl",
+   "m10a_comp_ss_bi",
+   "m10a_comp_tn_i",
+   "m10a_comp_tn_bi",
+   "m10a_comp_vd_bi",
+   "m10a_nodc_cn_i",
+   "m10a_nodc_cn_bi",
+   "m10a_nodc_cn_bi_ctrl",
+   "m10a_nodc_ss_bi",
+   "m10a_nodc_tn_i",
+   "m10a_nodc_tn_bi",
+   "m10a_nodc_vd_bi",
+   "m10a_artc_cn_i",
+   "m10a_artc_cn_bi",
+   "m10a_artc_cn_bi_ctrl",
+   "m10a_artc_ss_bi",
+   "m10a_artc_tn_i",
+   "m10a_artc_tn_bi",
+   "m10a_artc_vd_bi",
+   "m10a_dbsc_ss_bi",
+   "m10a_dbsc_vd_bi",
+   "m10a_actu_cn_i",
+   "m10a_actu_cn_i_ctrl",
+   "m10a_actu_cn_b",
+   "m10a_actu_cn_b_ctrl",
+   "m10a_actu_ss_i",
+   "m10a_actu_ss_b",
+   "m10a_actu_tn_i",
+   "m10a_actu_tn_b",
+   "m10a_actu_vd_b",
+   "m10a_usec_cn_i",
+   "m10a_usec_cn_i_ctrl",
+   "m10a_usec_cn_b",
+   "m10a_usec_cn_b_ctrl",
+   "m10a_usec_ss_i",
+   "m10a_usec_ss_b",
+   "m10a_usec_tn_i",
+   "m10a_usec_tn_b",
+   "m10a_usec_vd_b",
+   "m10a_stat_cn_i",
+   "m10a_stat_tn_i",
+   "m10a_part_cn_i",
+   "m10a_part_cn_bi",
+   "m10a_part_cn_bi_ctrl",
+   "m10a_part_ss_bi",
+   "m10a_part_tn_i",
+   "m10a_part_tn_bi",
+   "m10a_part_vd_bi",
+   "m10a_actv_ss_bi",
+   "m10a_actv_tn_i",
+   "m10a_actv_tn_bi",
+   "m10a_actv_vd_bi",
+   "m10a_css_comp_cn_i",
+   "m10a_css_comp_tn_i",
+   "m10a_css_stat_cn_i",
+   "m10a_css_stat_tn_i",
+   "m10a_css_usec_cn_i",
+   "m10a_css_usec_tn_i",
+   "m10a_css_usec_cn_b",
+   "m10a_css_usec_tn_b",
+   "m10a_stereo_comp_cn_mk",
+   "m10a_stereo_dbse_cn_mk"
+  ]
+ }
+}

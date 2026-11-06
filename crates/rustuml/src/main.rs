@@ -123,21 +123,32 @@ fn main() {
 
     match diagram_result {
         Ok(diagram) => match output_mode {
-            OutputMode::Ast => println!("{diagram:#?}"),
+            // Carried Java text (rustuml_parser::java_utf16) is shown plainly:
+            // escapes removed, unpaired units as U+FFFD.
+            OutputMode::Ast => {
+                let shown = rustuml_parser::java_utf16::display_model(&diagram, '\u{FFFD}');
+                println!("{:#?}", shown.as_ref().unwrap_or(&diagram));
+            }
             OutputMode::Yaml => {
-                print!(
-                    "{}",
-                    serde_yml::to_string(&diagram).expect("YAML serialization failed")
-                );
+                let yaml = match rustuml_parser::java_utf16::display_value(&diagram, '\u{FFFD}') {
+                    Some(shown) => serde_yml::to_string(&shown),
+                    None => serde_yml::to_string(&diagram),
+                };
+                print!("{}", yaml.expect("YAML serialization failed"));
             }
             OutputMode::Svg => {
-                print!(
-                    "{}",
-                    rustuml_render::render_svg_with_theme(&diagram, &theme)
-                );
+                // SvgGraphics export can fail (ToStream surrogate rule); Java
+                // then exports its crash diagram. Rust reports it (🎯T14.20).
+                match rustuml_render::try_render_svg_with_theme(&diagram, &theme) {
+                    Ok(svg) => print!("{svg}"),
+                    Err(e) => {
+                        eprintln!("export error: {e}");
+                        std::process::exit(1);
+                    }
+                }
             }
             OutputMode::Pdf => {
-                let svg = rustuml_render::render_svg_with_theme(&diagram, &theme);
+                let svg = rustuml_render::render_svg_for_conversion(&diagram, &theme);
                 match rustuml_render::pdf::svg_to_pdf(&svg) {
                     Ok(bytes) => {
                         use std::io::Write;
@@ -150,7 +161,7 @@ fn main() {
                 }
             }
             OutputMode::Png => {
-                let svg = rustuml_render::render_svg_with_theme(&diagram, &theme);
+                let svg = rustuml_render::render_svg_for_conversion(&diagram, &theme);
                 match rustuml_render::png::svg_to_png(&svg) {
                     Ok(bytes) => {
                         use std::io::Write;
@@ -163,7 +174,7 @@ fn main() {
                 }
             }
             OutputMode::Eps => {
-                let svg = rustuml_render::render_svg_with_theme(&diagram, &theme);
+                let svg = rustuml_render::render_svg_for_conversion(&diagram, &theme);
                 match rustuml_render::eps::svg_to_eps(&svg) {
                     Ok(bytes) => {
                         use std::io::Write;
@@ -176,7 +187,13 @@ fn main() {
                 }
             }
             OutputMode::Txt => {
-                print!("{}", rustuml_render::render_ascii(&diagram));
+                // UGraphicTxt prints through a UTF-8 PrintStream: an unpaired
+                // unit occupies one cell and is written as '?'.
+                let shown = rustuml_parser::java_utf16::display_model(&diagram, '?');
+                print!(
+                    "{}",
+                    rustuml_render::render_ascii(shown.as_ref().unwrap_or(&diagram))
+                );
             }
         },
         Err(e) => {

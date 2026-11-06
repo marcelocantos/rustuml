@@ -1,0 +1,9 @@
+@startuml
+state Hub {
+  state Spoke {
+    [*] --> Axle
+  }
+}
+Left --> Axle
+Axle --> Right
+@enduml

@@ -258,8 +258,8 @@ fn emit_chrome_text(buf: &mut String, bx: f64, by: f64, r: &Ribbon) {
         r##"<text fill="{fill}" font-family="sans-serif" font-size="{fs}" lengthAdjust="spacing" textLength="{tl}" x="{x}" y="{y}">{escaped}</text>"##,
         tl = pm::fmt_coord(tl),
         x = pm::fmt_coord(bx),
-        y = pm::fmt_coord(baseline),
-    ));
+        y = pm::fmt_coord(baseline), fill = crate::svg::escape_attribute(fill),
+));
 }
 
 // ── Grid layout ──────────────────────────────────────────────────────────────
@@ -737,7 +737,8 @@ fn widget_dim(widget: &SaltWidget) -> (f64, f64) {
         SaltWidget::Dropdown(t) | SaltWidget::DropdownOpen(t) => {
             let display = strip_creole(t);
             let tw = pm::text_width(display.trim(), FONT_SIZE, false);
-            let char_len = display.trim().chars().count() as f64;
+            // AbstractElementText.getCharNumber: String.length(), Java's units.
+            let char_len = rustuml_parser::java_utf16::units(display.trim()).len() as f64;
             let managed = tw.max(char_len * CHAR_SPACE);
             (managed + 4.0 + DROP_BOX, th + 4.0)
         }
@@ -1228,8 +1229,8 @@ fn emit_rect_15(buf: &mut String, x: f64, y: f64, w: f64, h: f64, fill: &str) {
         h = pm::fmt_coord(h),
         w = pm::fmt_coord(w),
         x = pm::fmt_coord(x),
-        y = pm::fmt_coord(y),
-    ));
+        y = pm::fmt_coord(y), fill = crate::svg::escape_attribute(fill),
+));
 }
 
 fn emit_rounded_rect_stroke(
@@ -1247,8 +1248,8 @@ fn emit_rounded_rect_stroke(
         sw = pm::fmt_coord(stroke_w),
         w = pm::fmt_coord(w),
         x = pm::fmt_coord(x),
-        y = pm::fmt_coord(y),
-    ));
+        y = pm::fmt_coord(y), fill = crate::svg::escape_attribute(fill),
+));
 }
 
 fn emit_ellipse_15(buf: &mut String, cx: f64, cy: f64, r: f64, fill: &str) {
@@ -1256,8 +1257,8 @@ fn emit_ellipse_15(buf: &mut String, cx: f64, cy: f64, r: f64, fill: &str) {
         r##"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{r}" ry="{r}" style="stroke:#000000;stroke-width:1.5;"/>"##,
         cx = pm::fmt_coord(cx),
         cy = pm::fmt_coord(cy),
-        r = pm::fmt_coord(r),
-    ));
+        r = pm::fmt_coord(r), fill = crate::svg::escape_attribute(fill),
+));
 }
 
 fn emit_check_poly(buf: &mut String, px: f64, py: f64) {
@@ -1420,7 +1421,7 @@ fn emit_gray_line(buf: &mut String, x1: f64, y1: f64, x2: f64, y2: f64) {
 fn managed_text_width(t: &str) -> f64 {
     let stripped = strip_creole(t);
     let tw = pm::text_width(stripped.trim(), FONT_SIZE, false);
-    let char_len = stripped.chars().count() as f64;
+    let char_len = rustuml_parser::java_utf16::units(&stripped).len() as f64;
     tw.max(char_len * CHAR_SPACE)
 }
 

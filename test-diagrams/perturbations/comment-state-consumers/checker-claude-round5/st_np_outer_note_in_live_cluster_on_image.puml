@@ -1,0 +1,11 @@
+@startuml
+state Estate {
+  state Manor {
+    Hall --> Stair
+  }
+  note right of Manor : grand
+  state gate <<entryPoint>>
+  gate --> Manor
+}
+Road --> gate
+@enduml

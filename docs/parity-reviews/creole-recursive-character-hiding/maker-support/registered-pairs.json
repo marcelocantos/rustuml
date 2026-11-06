@@ -1,0 +1,74 @@
+[
+  {
+    "id": "fresh12/html_escape_stream",
+    "source": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/html_escape_stream.puml",
+    "reference": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/html_escape_stream.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "fresh12/overlapping_openers",
+    "source": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/overlapping_openers.puml",
+    "reference": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/overlapping_openers.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "fresh12/wave_tilde_pairs",
+    "source": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/wave_tilde_pairs.puml",
+    "reference": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/wave_tilde_pairs.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "fresh12/recursive_hiding",
+    "source": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/recursive_hiding.puml",
+    "reference": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/recursive_hiding.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "fresh12/literal_neighbors",
+    "source": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/literal_neighbors.puml",
+    "reference": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/literal_neighbors.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "fresh12/empty_parameter_runs",
+    "source": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/empty_parameter_runs.puml",
+    "reference": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/empty_parameter_runs.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "fresh12/consumed_parameter_runs",
+    "source": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/consumed_parameter_runs.puml",
+    "reference": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/consumed_parameter_runs.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "fresh12/wbs_line_commands",
+    "source": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/wbs_line_commands.puml",
+    "reference": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/wbs_line_commands.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "fresh12/wbs_hidden_leaf",
+    "source": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/wbs_hidden_leaf.puml",
+    "reference": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/wbs_hidden_leaf.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "fresh12/note_commands",
+    "source": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/note_commands.puml",
+    "reference": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/note_commands.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "fresh12/activity_commands",
+    "source": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/activity_commands.puml",
+    "reference": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/activity_commands.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "fresh12/wbs_escape_lines",
+    "source": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/wbs_escape_lines.puml",
+    "reference": "test-diagrams/perturbations/creole-recursive-character-hiding/maker12/wbs_escape_lines.svg",
+    "reference_valid": true
+  }
+]

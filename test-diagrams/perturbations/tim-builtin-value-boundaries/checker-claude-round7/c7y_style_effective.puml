@@ -1,0 +1,10 @@
+@startyaml
+<style>
+yamlDiagram {
+  node {
+    BackGroundColor pink
+  }
+}
+</style>
+k: v
+@endyaml

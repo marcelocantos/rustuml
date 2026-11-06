@@ -1,0 +1,5 @@
+@startuml
+start
+:[[https://example.invalid/p?x=2&y=3{Glow&<>"'Dusk}Link]];
+stop
+@enduml

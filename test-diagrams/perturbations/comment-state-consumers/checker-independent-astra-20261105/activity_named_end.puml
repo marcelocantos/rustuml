@@ -1,0 +1,4 @@
+@startuml
+(*) --> "Inspect amber"
+--> (*Z)
+@enduml

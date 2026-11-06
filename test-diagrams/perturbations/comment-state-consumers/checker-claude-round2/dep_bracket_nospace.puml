@@ -1,0 +1,4 @@
+@startuml
+[Mash]
+[Mash] --> [Still]
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+state Furnace {
+  Heat --> Cool
+  --
+  Blow --> Rest
+}
+Stoker --> Blow
+@enduml

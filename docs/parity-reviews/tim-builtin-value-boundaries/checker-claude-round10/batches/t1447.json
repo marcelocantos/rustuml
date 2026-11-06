@@ -1,0 +1,89 @@
+{
+ "selected_sources": 481,
+ "selector": "arial|!theme|!include|!import",
+ "bins": {
+  "95291dc6b": "2ca8e3fc4d5c4ce53ccf009e48888eda8b5372a59bd2054b76787a07bd19e772",
+  "95291dc6b-v1": "069ce311d3b5aeb0ed687d92c5ec71b20c08f1acbc5e197cf4e035ff1f29611b",
+  "95291dc6b-v2": "50a5f5ad4bbbf7afc163b061350185a4099aded1214ac62dd12e76f2ca45d0a9",
+  "e24240b35": "7aab1701cf06c9a88f7f7c8c95fc8f4a7dfa28aa7556862005bd2acfa79d3b3d",
+  "e24240b35-v1": "c6beae46ca2b5946c6e529741f3198ad7ecc7e0857491fffe0341c36b01ea8a1",
+  "e24240b35-v2": "009f461bcd80cf744d6ceb7ce02cc64e2c7bd8ffac2ca207b9872d00b82e90ed"
+ },
+ "95291dc6b-v1": {
+  "outputs_changed": [
+   "test-diagrams/golden/state/state_skinparam_state_fontname.puml"
+  ],
+  "lost_matches": [
+   "test-diagrams/golden/state/state_skinparam_state_fontname.puml"
+  ],
+  "gained_matches": [],
+  "lost_goldens": [
+   "test-diagrams/golden/state/state_skinparam_state_fontname.puml"
+  ],
+  "lost_perturbations": []
+ },
+ "95291dc6b-v2": {
+  "outputs_changed": [
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_ar_i.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_ar_i.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_descs_ar_i.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_ar_i.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_ar_i.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_bi_state.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_bi_state_ctrl.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state_ctrl.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_sp_statenote_mx_N.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_sp_statenote_mx_N_ctrl.puml"
+  ],
+  "lost_matches": [],
+  "gained_matches": [
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_ar_i.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_ar_i.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_ar_i.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_ar_i.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state_ctrl.puml"
+  ],
+  "lost_goldens": [],
+  "lost_perturbations": []
+ },
+ "e24240b35-v1": {
+  "outputs_changed": [
+   "test-diagrams/golden/state/state_skinparam_state_fontname.puml"
+  ],
+  "lost_matches": [
+   "test-diagrams/golden/state/state_skinparam_state_fontname.puml"
+  ],
+  "gained_matches": [],
+  "lost_goldens": [
+   "test-diagrams/golden/state/state_skinparam_state_fontname.puml"
+  ],
+  "lost_perturbations": []
+ },
+ "e24240b35-v2": {
+  "outputs_changed": [
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_ar_i.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_ar_i.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_descs_ar_i.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_ar_i.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_ar_i.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_bi_state.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_bi_state_ctrl.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state_ctrl.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_sp_statenote_mx_N.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_sp_statenote_mx_N_ctrl.puml"
+  ],
+  "lost_matches": [],
+  "gained_matches": [
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_ar_i.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_ar_i.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_ar_i.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_ar_i.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state_ctrl.puml"
+  ],
+  "lost_goldens": [],
+  "lost_perturbations": []
+ }
+}

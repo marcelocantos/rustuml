@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Courier New
+rectangle "Pylon v𝅧k" as E1
+@enduml

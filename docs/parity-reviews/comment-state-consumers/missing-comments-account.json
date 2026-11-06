@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "base_revision": "3875fee3b164d63d4b39df4bc6c13ca8ace89169",
+  "review_revision": "075f5095520bb1dc85a32c1f051a98421522419d",
+  "import_revision": "138ca3e5f",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "mechanism": "Legacy activity linear link comment producers",
+  "java_locations": [
+    "activitydiagram/ActivityDiagram.java:82\u201398 start/end quark identities",
+    "activitydiagram/command/CommandLinkActivity.java executeArg creates links from parsed activity entities",
+    "svek/SvekEdge.java:837 always draws Link.commentForSvg before geometry",
+    "abel/Link.java:116\u2013120 forward/reverse local identity names"
+  ],
+  "rust_locations": [
+    {
+      "function": "emit_legacy_v1_start_edge",
+      "line": 28374
+    },
+    {
+      "function": "emit_legacy_v1_partition_start_edge",
+      "line": 28399
+    },
+    {
+      "function": "emit_legacy_v1_up_start_edge",
+      "line": 28423
+    },
+    {
+      "function": "emit_legacy_v1_action_edge",
+      "line": 28449
+    },
+    {
+      "function": "emit_legacy_v1_action_edge_numbered",
+      "line": 28496
+    },
+    {
+      "function": "emit_legacy_v1_up_edge",
+      "line": 28541
+    },
+    {
+      "function": "emit_legacy_v1_right_edge",
+      "line": 28589
+    },
+    {
+      "function": "emit_legacy_v1_left_edge",
+      "line": 28643
+    },
+    {
+      "function": "emit_legacy_v1_up_end_edge",
+      "line": 28694
+    },
+    {
+      "function": "emit_legacy_v1_end_edge",
+      "line": 28739
+    },
+    {
+      "function": "emit_legacy_v1_end_edge_numbered",
+      "line": 28784
+    }
+  ],
+  "invariant": "Every real linear activity edge consumer emits the corresponding whole-body serialized Java link comment before the existing element; no new entities, links, attributes or geometry.",
+  "causal_divergence": "Graph activity emitter has comments, but eleven real linear edge emitters omit them; Unicode/control-rich graphs fall back to these emitters and lose comments while still emitting actual edges.",
+  "planned_change": "Add one comment write at each of the eleven named edge producers, using existing endpoint string arguments and direction consistent with the emitted path. Do not alter layout selection, parsing, geometry, element templates or arguments. Do not synthesize comments for empty object models or wrong-family dispatch.",
+  "production_files": [
+    "crates/rustuml-render/src/activity.rs"
+  ],
+  "perturbation_axes": [
+    "start/action/end endpoints and forward/reverse/left/right branches",
+    "ASCII alias/plain labels versus safe Unicode/adjacent and trailing dashes"
+  ],
+  "residuals": [
+    "T14.17 empty object parser model and named start/end state source dispatched as Sequence",
+    "T14.23 oracle-only path IDs may not permit unambiguous recovery of missing endpoint identities; no splitting path strings to invent comments"
+  ]
+}

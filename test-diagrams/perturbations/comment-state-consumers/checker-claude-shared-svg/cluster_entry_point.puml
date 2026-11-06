@@ -1,0 +1,8 @@
+@startuml
+state Mill {
+  state intake <<entryPoint>>
+  intake --> Grind
+}
+[*] --> intake
+Grind --> [*]
+@enduml

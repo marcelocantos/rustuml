@@ -1,0 +1,7 @@
+@startuml
+class Quay
+legend
+quay
+אב ‬ 𝅧
+endlegend
+@enduml

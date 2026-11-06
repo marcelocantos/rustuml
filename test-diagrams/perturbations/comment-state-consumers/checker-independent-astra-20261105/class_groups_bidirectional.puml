@@ -1,0 +1,10 @@
+@startuml
+package "Silver Hall" as Hall {
+class Seat
+}
+package "Bronze Wing" as Wing {
+class Desk
+}
+Hall --> Wing
+Hall <.. Wing
+@enduml

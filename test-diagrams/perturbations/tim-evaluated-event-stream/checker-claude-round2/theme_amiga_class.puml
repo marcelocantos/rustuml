@@ -1,0 +1,6 @@
+@startuml
+!theme amiga
+class Granary
+class Mill
+Granary --> Mill
+@enduml

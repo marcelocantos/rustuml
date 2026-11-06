@@ -1,0 +1,4 @@
+@startuml
+actor "Clerk%substr("🦉",0,1)" as K
+K --> (Ring)
+@enduml

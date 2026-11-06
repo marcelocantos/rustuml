@@ -1,0 +1,15 @@
+@startuml
+!$key="$a"
+!function $change()
+!$key="$a"
+!return "plum"
+!endfunction
+!function $pair($a="first",$b="last")
+!return $a+"/"+$b
+!endfunction
+!function $outer($key="$b")
+!return $pair($key=$change())
+!endfunction
+!$r=$outer()
+class "$r/$key" as Snapshot
+@enduml

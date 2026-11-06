@@ -1,0 +1,8 @@
+@startnwdiag
+nwdiag {
+network bridge {
+address = "L<back:transparent>Mist</back>R";
+node1;
+}
+}
+@endnwdiag

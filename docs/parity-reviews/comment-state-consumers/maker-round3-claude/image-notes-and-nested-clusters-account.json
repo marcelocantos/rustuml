@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "mechanism": "comment-state-consumers",
+  "sub_mechanism": "autarkic state groups drawn as GroupMakerState images when they contain notes; leaf corners and paint order of clusters nested inside an image (review-3 obligations 2 and 3)",
+  "status": "maker causal account before draft; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "svek/GroupMakerState.java#getImage (110-137) and #createGeneralImageBuilder (140-152): an autarkic STATE group becomes InnerStateAutonom over a GraphvizImageBuilder whose leaves are group.leafs() (the note entity created by CommandFactoryNoteOnEntity inside the group is one of them) and whose links are getPureInnerLinks (101-107, EntityUtils.isPureInnerLink12), so the note's link is laid out inside the image like a transition.",
+    "svek/GraphvizImageBuilder.java#buildImage (209-260): the note becomes an SVEK node; isOpalisable (133-148) / onlyOneLink (313-325) turn a note with a single link to a non-note into an Opale note (EntityImageNote.setOpaleLine) and the edge is marked opale and not painted as a link. This is the same rule the root cluster path already ports (emit_attached_svek_note, attached_note_specs).",
+    "svek/GraphvizImageBuilder.java#printGroups/printGroup/printEntities (348-434): Bibliotekon nodes are created by a preorder walk of the image's groups (each cluster's leafs(), then its subgroups) and only then for getUnpackagedEntities, the image group's own leaves.",
+    "svek/SvekResult.java#drawU (lines 39-65): all clusters are drawn, then Bibliotekon.allNodes() in that creation order at (node.getMinX(), node.getMinY()), then all edges. #calculateDimension (90-97) moves everything by (6 - minMax.getMinX(), 6 - minMax.getMinY()).",
+    "svek/SvekNode.getMinX/getMinY with DotStringFactory.solve: the node corner is read from Graphviz's SVG polygon, serialized with two decimals; EntityImageState.drawU paints the rectangle at that corner. Only the corner, plus whole translations, reaches the output, so leaf x in an image keeps Graphviz's two decimals whenever the image's minMax origin and offsets are whole (AW rc_entry_inside_autarkic_depth3: 50.68, 50.28, 51.59)."
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs#build_autonomous_composite: returns None for any diagram with notes, so an autarkic group with a note falls through to the flat path (rc_inner_note_autarkic: 50x50 Loft, children outside, note at x=-29).",
+    "crates/rustuml-render/src/state.rs#build_state_group_outcome / layout_autonomous_scope: the image region layout has no note nodes or note edges.",
+    "crates/rustuml-render/src/state.rs#emit_autonomous_scope_entities: quantizes the state's center (cx) and paints the rectangle at center - width/2, so the corner keeps width/2's four decimals (50.6826 for 50.68).",
+    "crates/rustuml-render/src/state.rs#emit_autonomous_composite: paints a region's entities in layout id order, not in printGroups order (Bay's door and Weld before Hall's Paint)."
+  ],
+  "causal_divergence": [
+    "The image builder lacks Java's note leaves and their opale links, so the drawing decision falls back to the flat path even though java_state_group_is_autarkic already says 'image' (the comment list is exact, the geometry is not).",
+    "Rust rounds the node center where Java rounds the node corner.",
+    "Rust's region paint order is the layout id order; Java's is printGroups preorder followed by the image's own leaves."
+  ],
+  "invariant": "An autarkic group is drawn as the GroupMakerState image whatever leaves it has: its notes with a resolved left/right anchor inside the same image are SVEK nodes of that image, linked by the line0/minlen-0 opale edge, painted with emit_attached_svek_note after the image's state leaves and never painted as links. Every state leaf inside an image is painted at its Graphviz two-decimal corner plus the accumulated translations, and the leaves of one image region are painted clusters first, then printGroups preorder (leaves of each live cluster before its subclusters), then the region's own leaves.",
+  "planned_change": [
+    "AutonomousScopeLayout gains the region's attached-note positions (corner, as on the root path), shifted by normalize_autonomous_scope and included in its painted bounds.",
+    "layout_autonomous_scope takes the region's attached notes: add_node after the state nodes, add_cluster_node when the note's group is a live cluster, add_plantuml_svek_line0_edge plus add_edge_with_minlen(.., 0) exactly as render_non_autarkic_root_clusters does.",
+    "build_state_group_outcome assigns each left/right attached note to the region that owns its declaring group (the same membership test as the region's state ids) and requires its anchor in that region; build_autonomous_composite accepts notes only when every note was assigned to some image region, otherwise it keeps the previous fall-through.",
+    "emit_autonomous_composite paints a region's notes after its leaves (qualified name '<group>.GMNn' from the declaring group and the allocated GMN id) and paints the leaves in printGroups order, by owner position in the region's preorder live-cluster list.",
+    "emit_autonomous_scope_entities paints a state at its corner (center - width/2 without quantizing the center); the solved corner is already Graphviz's two-decimal value."
+  ],
+  "declared_residue": [
+    "A note's position among the leaves of its group in Bibliotekon follows its creation order in Java; the draft paints all of a region's notes after its state leaves, as the root path does. A probe with a state created after the note is relayed.",
+    "Notes on links, floating notes and notes whose anchor lies outside their own image keep the previous fall-through.",
+    "The note's DOT node order: added after the region's state nodes (root-path convention), not interleaved by creation."
+  ],
+  "perturbation_axes": [
+    "autarkic group with a note on the first child, on the last child, on the left, and two notes, at depths 1-3, renamed labels",
+    "note inside a non-autarkic cluster that sits inside an image",
+    "clusters nested 2-4 levels inside an image, with entry and exit points and wider labels"
+  ],
+  "precommitted_measurement": {
+    "oracle": "strict compare and exact comment lists on AW rc_inner_note_autarkic and rc_entry_inside_autarkic_depth3 plus fresh relayed probes; whole CLI output over the 16,441-source sweep against the merged base",
+    "expect_fixed": [
+      "AW rc_inner_note_autarkic and rc_entry_inside_autarkic_depth3 strict-match"
+    ],
+    "expect": "outputs change only for state diagrams that reach the image path (with notes now, or with leaves whose center was quantized); zero lost strict matches, zero new errors"
+  }
+}

@@ -1,0 +1,5 @@
+@startuml
+object "North Fixture"
+object "South Fixture"
+"North Fixture" --> "South Fixture"
+@enduml

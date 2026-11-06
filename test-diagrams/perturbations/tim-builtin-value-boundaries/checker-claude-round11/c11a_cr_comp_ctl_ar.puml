@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Arial
+component "Wavy Dog kim Vay 9 ovo" as E1
+@enduml

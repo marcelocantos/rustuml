@@ -868,6 +868,19 @@ fn filter_removed(
     out
 }
 
+/// Whether an entity's name is drawn italic (abstract classes and
+/// interfaces, an italic class font or stereotype style). Java measures the
+/// name block in the face it draws it with, so layout and emission share it.
+fn entity_name_italic(entity: &ClassEntity, font: &ClassFontOverrides) -> bool {
+    let (_, stereotype_italic) = font.stereotype_font_style(&entity.stereotypes);
+    matches!(
+        entity.kind,
+        EntityKind::AbstractClass | EntityKind::Interface
+    ) || font.font_italic
+        || font.attr_font_italic
+        || stereotype_italic
+}
+
 fn calc_entity_dims(
     entity: &ClassEntity,
     entity_index: usize,
@@ -882,13 +895,15 @@ fn calc_entity_dims(
     let name_bold = font.font_bold || font.attr_font_bold || stereotype_bold;
     // Entity labels treat `__` as literal underscores, not underline markup,
     // so width must include those characters.
+    let name_italic = entity_name_italic(entity, font);
     let name_width = escaped_newline_lines(&entity.label)
         .iter()
         .map(|line| {
-            text_render::measure_no_underline_with_family(
+            text_render::measure_no_underline_with_family_and_face(
                 line,
                 name_font_size,
                 name_bold,
+                name_italic,
                 &font.name_family,
             )
         })
@@ -1100,10 +1115,12 @@ fn calc_entity_dims(
                     if let Some(latex) = latex_member_content(text) {
                         crate::math::latex_layout_metrics(latex).width
                     } else {
-                        text_render::measure_no_underline_with_family(
+                        // Drawn italic when abstract (emit_member's TextBase).
+                        text_render::measure_no_underline_with_family_and_face(
                             text,
                             member_font_size,
                             font.attr_font_bold,
+                            m.is_abstract || font.attr_font_italic,
                             &font.family,
                         )
                     }
@@ -2047,15 +2064,15 @@ fn render_empty_skinparam_canvas(diagram: &ClassDiagram) -> String {
     let mut svg = String::new();
     write!(
         svg,
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" height="16px" preserveAspectRatio="none" style="width:16px;height:16px;{bg_style_suffix}" version="1.1" viewBox="0 0 16 16" width="16px" zoomAndPan="magnify">"#
-    )
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" height="16px" preserveAspectRatio="none" style="width:16px;height:16px;{bg_style_suffix}" version="1.1" viewBox="0 0 16 16" width="16px" zoomAndPan="magnify">"#, bg_style_suffix = crate::svg::escape_attribute(&bg_style_suffix),
+)
     .unwrap();
     svg.push_str("<?plantuml 1.2026.3beta6?><defs/><g>");
     if let Some(color) = &bg_color {
         write!(
             svg,
-            r#"<rect fill="{color}" height="16" style="stroke:none;stroke-width:1;" width="16" x="0" y="0"/>"#
-        )
+            r#"<rect fill="{color}" height="16" style="stroke:none;stroke-width:1;" width="16" x="0" y="0"/>"#, color = crate::svg::escape_attribute(color),
+)
         .unwrap();
     }
     svg.push_str("</g></svg>");
@@ -3478,7 +3495,9 @@ fn class_gradient_def(gradient: &ClassGradient) -> String {
     };
     format!(
         r#"<linearGradient id="{}" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"><stop offset="0%" stop-color="{}"/><stop offset="100%" stop-color="{}"/></linearGradient>"#,
-        gradient.id, gradient.color1, gradient.color2,
+        gradient.id,
+        crate::svg::escape_attribute(&gradient.color1),
+        crate::svg::escape_attribute(&gradient.color2),
     )
 }
 
@@ -3826,9 +3845,9 @@ fn empty_package_dims(pkg: &Package) -> (f64, f64) {
             PackageKind::Database => (10.0, 10.0, 24.0, 5.0, 0.0, 0.0),
             PackageKind::Rectangle => (10.0, 10.0, 10.0, 10.0, 0.0, 0.0),
             PackageKind::Cloud => (15.0, 15.0, 15.0, 15.0, 0.0, 0.0),
-            PackageKind::Package | PackageKind::Namespace => unreachable!(
-                "ordinary package kinds do not retain an explicit USymbol"
-            ),
+            PackageKind::Package | PackageKind::Namespace => {
+                unreachable!("ordinary package kinds do not retain an explicit USymbol")
+            }
         };
         return (
             content_width.max(title_width) + left + right,
@@ -3955,6 +3974,18 @@ fn package_qualified_name(
     }
     chain.reverse();
     chain.join(".")
+}
+
+// Cluster.drawU:309 uses Entity.getName, before SVG metadata translation.
+// T14.23 owns nested/local identity and ambiguous translated-name recovery.
+fn root_package_comment_name<'a>(diagram: &'a ClassDiagram, qualified: &'a str) -> &'a str {
+    let mut roots = diagram.packages.iter().filter(|package| {
+        package.parent.is_none() && translate_qualified_name(&package.name) == qualified
+    });
+    match (roots.next(), roots.next()) {
+        (Some(package), None) => &package.name,
+        _ => qualified,
+    }
 }
 
 fn relationship_endpoint_name<'a>(
@@ -5134,8 +5165,8 @@ fn render_plantuml_svg(
         svg,
         r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;{bg_style_suffix}" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
         w = canvas_w,
-        h = canvas_h,
-    )
+        h = canvas_h, bg_style_suffix = crate::svg::escape_attribute(&bg_style_suffix),
+)
     .unwrap();
 
     // Processing instruction and defs.
@@ -5167,8 +5198,8 @@ fn render_plantuml_svg(
     if let Some(color) = &bg_color {
         write!(
             svg,
-            r#"<rect fill="{color}" height="{canvas_h}" style="stroke:none;stroke-width:1;" width="{canvas_w}" x="0" y="0"/>"#,
-        )
+            r#"<rect fill="{color}" height="{canvas_h}" style="stroke:none;stroke-width:1;" width="{canvas_w}" x="0" y="0"/>"#, color = crate::svg::escape_attribute(color),
+)
         .unwrap();
     }
     if has_handwritten_skinparam(diagram)
@@ -5278,15 +5309,23 @@ fn render_plantuml_svg(
         .unwrap_or_default();
     oracle_note_entities.sort_by_key(|n| ent_id_seq(n.entity_id.as_deref()));
     for cluster in &oracle_pkg_clusters {
-        write!(svg, "<!--cluster {}-->", cluster.qualified_name).unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!(
+                "cluster {}",
+                root_package_comment_name(diagram, &cluster.qualified_name)
+            )),
+        )
+        .unwrap();
         let cluster_id = cluster.entity_id.as_deref().unwrap_or("ent0002");
         let source_line = cluster.source_line.as_deref().unwrap_or("0");
         write!(
             svg,
             r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-            escape_xml(&cluster.qualified_name),
+            crate::svg::escape_attribute(&cluster.qualified_name),
             source_line,
-            cluster_id,
+            crate::svg::escape_attribute(cluster_id),
         )
         .unwrap();
         emit_oracle_cluster_children(&mut svg, cluster);
@@ -5481,14 +5520,25 @@ fn render_plantuml_svg(
             continue;
         }
 
-        // HTML comment before entity.
-        write!(svg, "<!--class {}-->", entity.label).unwrap();
+        // GeneralImageBuilder:180 selects EntityImageObject for OBJECT;
+        // that image emits no UComment, unlike EntityImageClass:141.
+        if entity.kind != EntityKind::Object {
+            write!(
+                svg,
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!(
+                    "class {}",
+                    relationship_endpoint_name(diagram, &entity.id)
+                )),
+            )
+            .unwrap();
+        }
 
         // Entity group wrapper.
         write!(
             svg,
             r#"<g class="entity" data-qualified-name="{}""#,
-            escape_xml(qualified_name),
+            crate::svg::escape_attribute(qualified_name),
         )
         .unwrap();
         if let Some(source_line) = oracle_rect
@@ -5501,18 +5551,23 @@ fn render_plantuml_svg(
         {
             write!(svg, r#" data-source-line="{source_line}""#).unwrap();
         }
-        write!(svg, r#" id="{current_ent_id}">"#).unwrap();
+        write!(
+            svg,
+            r#" id="{current_ent_id}">"#,
+            current_ent_id = crate::svg::escape_attribute(&current_ent_id),
+        )
+        .unwrap();
 
         // PlantUML wraps the entity content in `<a>` when the user attached a
         // URL with `[[http://...]]`. The anchor carries the same href four
         // ways (target, title, xlink:* attributes) to support multiple SVG
         // viewers.
         let link_anchor = entity.url.as_deref().map(|url| {
-            let h = escape_xml(url);
+            let h = crate::svg::escape_attribute(url);
             let title = entity
                 .url_tooltip
                 .as_deref()
-                .map(escape_xml)
+                .map(crate::svg::escape_attribute)
                 .unwrap_or_else(|| h.clone());
             format!(
                 r#"<a href="{h}" target="_top" title="{title}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,
@@ -5566,10 +5621,10 @@ fn render_plantuml_svg(
                     r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
                     crate::plantuml_metrics::fmt_coord(ap.cx),
                     crate::plantuml_metrics::fmt_coord(ap.cy),
-                    ap.fill,
+                    crate::svg::escape_attribute(&ap.fill),
                     crate::plantuml_metrics::fmt_coord(ap.rx),
                     crate::plantuml_metrics::fmt_coord(ap.ry),
-                    ap.style,
+                    crate::svg::escape_attribute(&ap.style),
                 )
                 .unwrap();
             } else if oracle.is_none()
@@ -5830,6 +5885,8 @@ fn render_plantuml_svg(
 }
 
 struct LayoutPackageCluster {
+    // Root Quark name is recoverable; nested identity remains T14.23.
+    comment_name: Option<String>,
     package_idx: usize,
     kind: PackageKind,
     qualified_name: String,
@@ -5897,6 +5954,7 @@ fn layout_package_clusters(
                 .map(crate::sequence::resolve_color)
                 .unwrap_or_else(|| "#000000".to_string());
             Some(LayoutPackageCluster {
+                comment_name: pkg.parent.is_none().then(|| pkg.name.clone()),
                 package_idx: idx,
                 kind,
                 qualified_name: package_qualified_name(diagram, &package_render.parent_pkg, idx),
@@ -5935,6 +5993,8 @@ fn package_cluster_depth_first_order(package_render: &PackageRenderModel) -> Vec
 }
 
 struct EmptyPackageLayout {
+    // Root Quark name is recoverable; nested identity remains T14.23.
+    comment_name: Option<String>,
     package_idx: usize,
     qualified_name: String,
     source_line: usize,
@@ -5982,6 +6042,7 @@ fn layout_empty_packages(
                 .map(crate::sequence::resolve_color)
                 .unwrap_or_else(|| "#000000".to_string());
             Some(EmptyPackageLayout {
+                comment_name: package.parent.is_none().then(|| package.name.clone()),
                 package_idx,
                 qualified_name: package_qualified_name(
                     diagram,
@@ -6004,23 +6065,25 @@ fn layout_empty_packages(
         .collect()
 }
 
-fn emit_layout_empty_package(
-    svg: &mut String,
-    package: &EmptyPackageLayout,
-    entity_id: &str,
-) {
+fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, entity_id: &str) {
     write!(
         svg,
-        "<!--entity {}-->",
-        escape_xml(&package.qualified_name)
+        "<!--{svg_comment}-->",
+        svg_comment = crate::svg::comment_text(&format!(
+            "entity {}",
+            package
+                .comment_name
+                .as_deref()
+                .unwrap_or(&package.qualified_name)
+        )),
     )
     .unwrap();
     write!(
         svg,
         r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-        escape_xml(&package.qualified_name),
+        crate::svg::escape_attribute(&package.qualified_name),
         package.source_line,
-        entity_id,
+        crate::svg::escape_attribute(entity_id),
     )
     .unwrap();
     if let Some(kind) = package.symbol_kind {
@@ -6031,9 +6094,9 @@ fn emit_layout_empty_package(
             PackageKind::Database => emit_layout_empty_symbol_database(svg, package),
             PackageKind::Rectangle => emit_layout_empty_symbol_rectangle(svg, package),
             PackageKind::Cloud => emit_layout_empty_symbol_cloud(svg, package),
-            PackageKind::Package | PackageKind::Namespace => unreachable!(
-                "ordinary package kinds do not retain an explicit USymbol"
-            ),
+            PackageKind::Package | PackageKind::Namespace => {
+                unreachable!("ordinary package kinds do not retain an explicit USymbol")
+            }
         }
         svg.push_str("</g>");
         return;
@@ -6076,15 +6139,15 @@ fn emit_layout_empty_package(
         fmt4(y + 2.5),
         fmt4(x + 2.5),
         fmt4(y),
-        package.fill,
-        package.stroke,
+        crate::svg::escape_attribute(&package.fill),
+        crate::svg::escape_attribute(&package.stroke),
         BORDER_WIDTH,
     )
     .unwrap();
     write!(
         svg,
         r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-        package.stroke,
+        crate::svg::escape_attribute(&package.stroke),
         BORDER_WIDTH,
         fmt4(x),
         fmt4(tab_right),
@@ -6134,13 +6197,10 @@ fn emit_layout_empty_symbol_folder(svg: &mut String, package: &EmptyPackageLayou
     let y = package.y;
     let right = x + package.width;
     let bottom = y + package.height;
-    let title_width =
-        SYMBOL_FOLDER_TAB_TITLE_WIDTH + 2.0 * PACKAGE_TITLE_MARGIN_X;
+    let title_width = SYMBOL_FOLDER_TAB_TITLE_WIDTH + 2.0 * PACKAGE_TITLE_MARGIN_X;
     let tab_join = x + title_width - PACKAGE_ROUND_CORNER / 2.0;
     let tab_right = x + title_width + PACKAGE_TAB_SLOPE_WIDTH;
-    let line_y = y
-        + SYMBOL_FOLDER_TAB_TITLE_HEIGHT
-        + 2.0 * PACKAGE_TITLE_MARGIN_X;
+    let line_y = y + SYMBOL_FOLDER_TAB_TITLE_HEIGHT + 2.0 * PACKAGE_TITLE_MARGIN_X;
     write!(
         svg,
         r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
@@ -6168,15 +6228,15 @@ fn emit_layout_empty_symbol_folder(svg: &mut String, package: &EmptyPackageLayou
         fmt4(y + 2.5),
         fmt4(x + 2.5),
         fmt4(y),
-        package.fill,
-        package.stroke,
+        crate::svg::escape_attribute(&package.fill),
+        crate::svg::escape_attribute(&package.stroke),
         BORDER_WIDTH,
     )
     .unwrap();
     write!(
         svg,
         r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-        package.stroke,
+        crate::svg::escape_attribute(&package.stroke),
         BORDER_WIDTH,
         fmt4(x),
         fmt4(tab_right),
@@ -6210,9 +6270,7 @@ fn emit_layout_empty_symbol_text(
             stereotype,
             &TextBase {
                 x: body_x + (content_width - width) / 2.0,
-                y: body_y
-                    + preceding_height
-                    + text_render::label_ascent(stereotype, FONT_SIZE),
+                y: body_y + preceding_height + text_render::label_ascent(stereotype, FONT_SIZE),
                 font_size: FONT_SIZE as u32,
                 font_family: "sans-serif",
                 fill: &package.font_fill,
@@ -6229,9 +6287,7 @@ fn emit_layout_empty_symbol_text(
         &package.label,
         &TextBase {
             x: body_x + (content_width - label_width) / 2.0,
-            y: body_y
-                + preceding_height
-                + text_render::label_ascent(&package.label, FONT_SIZE),
+            y: body_y + preceding_height + text_render::label_ascent(&package.label, FONT_SIZE),
             font_size: FONT_SIZE as u32,
             font_family: "sans-serif",
             fill: &package.font_fill,
@@ -6252,9 +6308,9 @@ fn emit_layout_empty_symbol_frame(svg: &mut String, package: &EmptyPackageLayout
     write!(
         svg,
         r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
-        package.fill,
+        crate::svg::escape_attribute(&package.fill),
         fmt4(package.height),
-        package.stroke,
+        crate::svg::escape_attribute(&package.stroke),
         BORDER_WIDTH,
         fmt4(package.width),
         fmt4(x),
@@ -6272,7 +6328,7 @@ fn emit_layout_empty_symbol_frame(svg: &mut String, package: &EmptyPackageLayout
         fmt4(y + 12.0),
         fmt4(x),
         fmt4(y + 12.0),
-        package.stroke,
+        crate::svg::escape_attribute(&package.stroke),
         BORDER_WIDTH,
     )
     .unwrap();
@@ -6288,7 +6344,7 @@ fn emit_layout_empty_symbol_node(svg: &mut String, package: &EmptyPackageLayout)
     write!(
         svg,
         r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
-        package.fill,
+        crate::svg::escape_attribute(&package.fill),
         fmt4(x),
         fmt4(y + NODE_BEVEL),
         fmt4(x + NODE_BEVEL),
@@ -6303,7 +6359,7 @@ fn emit_layout_empty_symbol_node(svg: &mut String, package: &EmptyPackageLayout)
         fmt4(bottom),
         fmt4(x),
         fmt4(y + NODE_BEVEL),
-        package.stroke,
+        crate::svg::escape_attribute(&package.stroke),
         BORDER_WIDTH,
     )
     .unwrap();
@@ -6315,7 +6371,7 @@ fn emit_layout_empty_symbol_node(svg: &mut String, package: &EmptyPackageLayout)
         write!(
             svg,
             r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            package.stroke,
+            crate::svg::escape_attribute(&package.stroke),
             BORDER_WIDTH,
             fmt4(x1),
             fmt4(x2),
@@ -6366,8 +6422,8 @@ fn emit_layout_empty_symbol_database(svg: &mut String, package: &EmptyPackageLay
         fmt4(bottom - 10.0),
         fmt4(x),
         fmt4(y + 10.0),
-        package.fill,
-        package.stroke,
+        crate::svg::escape_attribute(&package.fill),
+        crate::svg::escape_attribute(&package.stroke),
         BORDER_WIDTH,
     )
     .unwrap();
@@ -6388,7 +6444,7 @@ fn emit_layout_empty_symbol_database(svg: &mut String, package: &EmptyPackageLay
         fmt4(y + 20.0),
         fmt4(right),
         fmt4(y + 10.0),
-        package.stroke,
+        crate::svg::escape_attribute(&package.stroke),
         BORDER_WIDTH,
     )
     .unwrap();
@@ -6399,21 +6455,16 @@ fn emit_layout_empty_symbol_rectangle(svg: &mut String, package: &EmptyPackageLa
     write!(
         svg,
         r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
-        package.fill,
+        crate::svg::escape_attribute(&package.fill),
         fmt4(package.height),
-        package.stroke,
+        crate::svg::escape_attribute(&package.stroke),
         BORDER_WIDTH,
         fmt4(package.width),
         fmt4(package.x),
         fmt4(package.y),
     )
     .unwrap();
-    emit_layout_empty_symbol_text(
-        svg,
-        package,
-        package.x + 10.0,
-        package.y + 10.0,
-    );
+    emit_layout_empty_symbol_text(svg, package, package.x + 10.0, package.y + 10.0);
 }
 
 fn emit_layout_empty_symbol_cloud(svg: &mut String, package: &EmptyPackageLayout) {
@@ -6441,15 +6492,12 @@ fn emit_layout_empty_symbol_cloud(svg: &mut String, package: &EmptyPackageLayout
     write!(
         svg,
         r#"" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
-        package.fill, package.stroke, BORDER_WIDTH,
+        crate::svg::escape_attribute(&package.fill),
+        crate::svg::escape_attribute(&package.stroke),
+        BORDER_WIDTH,
     )
     .unwrap();
-    emit_layout_empty_symbol_text(
-        svg,
-        package,
-        package.x + 15.0,
-        package.y + 15.0,
-    );
+    emit_layout_empty_symbol_text(svg, package, package.x + 15.0, package.y + 15.0);
 }
 
 fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster, entity_id: &str) {
@@ -6467,16 +6515,22 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
     let text_y = y + PACKAGE_TITLE_BASELINE;
     write!(
         svg,
-        "<!--cluster {}-->",
-        escape_xml(&cluster.qualified_name)
+        "<!--{svg_comment}-->",
+        svg_comment = crate::svg::comment_text(&format!(
+            "cluster {}",
+            cluster
+                .comment_name
+                .as_deref()
+                .unwrap_or(&cluster.qualified_name)
+        )),
     )
     .unwrap();
     write!(
         svg,
         r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-        escape_xml(&cluster.qualified_name),
+        crate::svg::escape_attribute(&cluster.qualified_name),
         cluster.source_line,
-        entity_id,
+        crate::svg::escape_attribute(entity_id),
     )
     .unwrap();
     match cluster.kind {
@@ -6513,15 +6567,15 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
                 fmt4(y + 2.5),
                 fmt4(x + 2.5),
                 fmt4(y),
-                cluster.fill,
-                cluster.stroke,
+                crate::svg::escape_attribute(&cluster.fill),
+                crate::svg::escape_attribute(&cluster.stroke),
                 cluster.stroke_width,
             )
             .unwrap();
             write!(
                 svg,
                 r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                cluster.stroke,
+                crate::svg::escape_attribute(&cluster.stroke),
                 cluster.stroke_width,
                 fmt4(x),
                 fmt4(tab_right),
@@ -6587,9 +6641,9 @@ fn emit_layout_frame_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     write!(
         svg,
         r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
-        cluster.fill,
+        crate::svg::escape_attribute(&cluster.fill),
         fmt4(cluster.height),
-        cluster.stroke,
+        crate::svg::escape_attribute(&cluster.stroke),
         cluster.stroke_width,
         fmt4(cluster.width),
         fmt4(x),
@@ -6607,7 +6661,7 @@ fn emit_layout_frame_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
         fmt4(lower_y),
         fmt4(x),
         fmt4(lower_y),
-        cluster.stroke,
+        crate::svg::escape_attribute(&cluster.stroke),
         cluster.stroke_width,
     )
     .unwrap();
@@ -6629,9 +6683,9 @@ fn emit_layout_rectangle_cluster(svg: &mut String, cluster: &LayoutPackageCluste
     write!(
         svg,
         r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
-        cluster.fill,
+        crate::svg::escape_attribute(&cluster.fill),
         fmt4(cluster.height),
-        cluster.stroke,
+        crate::svg::escape_attribute(&cluster.stroke),
         cluster.stroke_width,
         fmt4(cluster.width),
         fmt4(x),
@@ -6659,7 +6713,7 @@ fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     write!(
         svg,
         r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
-        cluster.fill,
+        crate::svg::escape_attribute(&cluster.fill),
         fmt4(x),
         fmt4(y + NODE_BEVEL),
         fmt4(x + NODE_BEVEL),
@@ -6674,14 +6728,14 @@ fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
         fmt4(bottom),
         fmt4(x),
         fmt4(y + NODE_BEVEL),
-        cluster.stroke,
+        crate::svg::escape_attribute(&cluster.stroke),
         cluster.stroke_width,
     )
     .unwrap();
     write!(
         svg,
         r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-        cluster.stroke,
+        crate::svg::escape_attribute(&cluster.stroke),
         cluster.stroke_width,
         fmt4(front_right),
         fmt4(right),
@@ -6692,7 +6746,7 @@ fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     write!(
         svg,
         r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-        cluster.stroke,
+        crate::svg::escape_attribute(&cluster.stroke),
         cluster.stroke_width,
         fmt4(x),
         fmt4(front_right),
@@ -6703,7 +6757,7 @@ fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     write!(
         svg,
         r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-        cluster.stroke,
+        crate::svg::escape_attribute(&cluster.stroke),
         cluster.stroke_width,
         fmt4(front_right),
         fmt4(front_right),
@@ -6999,7 +7053,9 @@ fn emit_layout_cloud_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     write!(
         svg,
         r#"" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
-        cluster.fill, cluster.stroke, cluster.stroke_width,
+        crate::svg::escape_attribute(&cluster.fill),
+        crate::svg::escape_attribute(&cluster.stroke),
+        cluster.stroke_width,
     )
     .unwrap();
 
@@ -7022,7 +7078,7 @@ fn emit_layout_symbol_cluster_title(
     write!(
         svg,
         r#"<text fill="{}" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-        cluster.font_fill,
+        crate::svg::escape_attribute(&cluster.font_fill),
         fmt4(label_w),
         fmt4(x),
         fmt4(y),
@@ -7076,8 +7132,8 @@ fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster
         fmt4(bottom - 10.0),
         fmt4(x),
         fmt4(y + 10.0),
-        cluster.fill,
-        cluster.stroke,
+        crate::svg::escape_attribute(&cluster.fill),
+        crate::svg::escape_attribute(&cluster.stroke),
         cluster.stroke_width,
     )
     .unwrap();
@@ -7098,14 +7154,14 @@ fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster
         fmt4(y + 20.0),
         fmt4(right),
         fmt4(y + 10.0),
-        cluster.stroke,
+        crate::svg::escape_attribute(&cluster.stroke),
         cluster.stroke_width,
     )
     .unwrap();
     write!(
         svg,
         r#"<text fill="{}" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-        cluster.font_fill,
+        crate::svg::escape_attribute(&cluster.font_fill),
         fmt4(label_w),
         fmt4(text_x),
         fmt4(text_y),
@@ -7150,9 +7206,9 @@ fn emit_oracle_legend(svg: &mut String, legend: &OracleLegend, fallback_line: Op
     write!(
         svg,
         r#"<rect fill="{}" height="{}"{rx_attr}{ry_attr} style="{}" width="{}" x="{}" y="{}"/>"#,
-        escape_xml(&legend.rect.fill),
+        crate::svg::escape_attribute(&legend.rect.fill),
         crate::plantuml_metrics::fmt_coord(legend.rect.height),
-        escape_xml(&legend.rect.style),
+        crate::svg::escape_attribute(&legend.rect.style),
         crate::plantuml_metrics::fmt_coord(legend.rect.width),
         crate::plantuml_metrics::fmt_coord(legend.rect.x),
         crate::plantuml_metrics::fmt_coord(legend.rect.y),
@@ -7164,7 +7220,7 @@ fn emit_oracle_legend(svg: &mut String, legend: &OracleLegend, fallback_line: Op
             Some(style) => write!(
                 svg,
                 r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                escape_xml(style),
+                crate::svg::escape_attribute(style),
                 escape_xml(&line.x1),
                 escape_xml(&line.x2),
                 escape_xml(&line.y1),
@@ -7576,10 +7632,10 @@ fn render_entity_content(
                     r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
                     crate::plantuml_metrics::fmt_coord(cx),
                     crate::plantuml_metrics::fmt_coord(cy),
-                    fill,
+                    crate::svg::escape_attribute(fill),
                     crate::plantuml_metrics::fmt_coord(dim.width / 2.0),
                     crate::plantuml_metrics::fmt_coord(dim.height / 2.0),
-                    style,
+                    crate::svg::escape_attribute(style),
                 )
                 .unwrap();
                 if let Some(text) = oracle_rect.and_then(|r| r.texts.first()) {
@@ -7609,7 +7665,7 @@ fn render_entity_content(
                 write!(
                     svg,
                     r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{}" style="{}"/>"#,
-                    fill,
+                    crate::svg::escape_attribute(fill),
                     crate::plantuml_metrics::fmt_coord(cx),
                     crate::plantuml_metrics::fmt_coord(top),
                     crate::plantuml_metrics::fmt_coord(right),
@@ -7620,7 +7676,7 @@ fn render_entity_content(
                     crate::plantuml_metrics::fmt_coord(cy),
                     crate::plantuml_metrics::fmt_coord(cx),
                     crate::plantuml_metrics::fmt_coord(top),
-                    style,
+                    crate::svg::escape_attribute(style),
                 )
                 .unwrap();
             }
@@ -7652,11 +7708,11 @@ fn render_entity_content(
         write!(
             svg,
             r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
-            fill,
+            crate::svg::escape_attribute(fill),
             fmt4(dim.height),
             rx,
             ry,
-            style,
+            crate::svg::escape_attribute(style),
             fmt_tl(dim.width),
             fmt4(x),
             fmt4(y),
@@ -7670,7 +7726,11 @@ fn render_entity_content(
             write!(
                 svg,
                 r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                line_style, line.x1, line.x2, line.y1, line.y2,
+                crate::svg::escape_attribute(line_style),
+                line.x1,
+                line.x2,
+                line.y1,
+                line.y2,
             )
             .unwrap();
         } else {
@@ -7678,7 +7738,7 @@ fn render_entity_content(
             write!(
                 svg,
                 r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                style,
+                crate::svg::escape_attribute(style),
                 fmt4(x),
                 fmt4(x + dim.width),
                 fmt4(line_y),
@@ -7733,8 +7793,6 @@ fn render_entity_content(
     let name_text_x_override = oracle_rect.and_then(|r| r.name_text_x);
     let oracle_images = oracle_rect.map_or(&[][..], |r| r.images.as_slice());
     let first_sep_y = oracle_rect.and_then(|r| r.sep_y_values.first().copied());
-    let is_abstract = entity.kind == EntityKind::AbstractClass;
-    let is_interface = entity.kind == EntityKind::Interface;
     let is_enum_entity = entity.kind == EntityKind::Enum;
     let _is_annotation = entity.kind == EntityKind::Annotation;
 
@@ -7882,12 +7940,12 @@ fn render_entity_content(
         write!(
             svg,
             r#"<rect fill="{}"{} height="{}" rx="{}" ry="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
-            fill,
+            crate::svg::escape_attribute(fill),
             filter_attr,
             fmt4(dim.height),
             rx_str,
             ry_str,
-            style,
+            crate::svg::escape_attribute(style),
             fmt_tl(dim.width),
             fmt4(x),
             fmt4(y),
@@ -7958,11 +8016,11 @@ fn render_entity_content(
         write!(
             svg,
             r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
-            header_fill,
+            crate::svg::escape_attribute(&header_fill),
             fmt4(header_h),
             rx_str,
             ry_str,
-            grad_style,
+            crate::svg::escape_attribute(&grad_style),
             fmt_tl(dim.width),
             fmt4(x),
             fmt4(y),
@@ -7975,9 +8033,9 @@ fn render_entity_content(
         write!(
             svg,
             r#"<rect fill="{}" height="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
-            header_fill,
+            crate::svg::escape_attribute(&header_fill),
             fmt4(corner_strip_h),
-            grad_style,
+            crate::svg::escape_attribute(&grad_style),
             fmt_tl(dim.width),
             fmt4(x),
             fmt4(first_sep - corner_strip_h),
@@ -7990,7 +8048,7 @@ fn render_entity_content(
             fmt4(dim.height),
             rx_str,
             ry_str,
-            style,
+            crate::svg::escape_attribute(style),
             fmt_tl(dim.width),
             fmt4(x),
             fmt4(y),
@@ -8012,21 +8070,18 @@ fn render_entity_content(
     let icon_radius = font.circled_radius();
     let member_text_offset = MEMBER_TEXT_INSET + icon_radius;
     let name_font_size = font.name_font_size();
-    let (stereotype_bold, stereotype_italic) = font.stereotype_font_style(&entity.stereotypes);
+    let (stereotype_bold, _) = font.stereotype_font_style(&entity.stereotypes);
     let name_bold = font.font_bold || font.attr_font_bold || stereotype_bold;
-    let name_italic = is_abstract
-        || is_interface
-        || font.font_italic
-        || font.attr_font_italic
-        || stereotype_italic;
+    let name_italic = entity_name_italic(entity, font);
     let name_lines = escaped_newline_lines(&entity.label);
     let name_tl = name_lines
         .iter()
         .map(|line| {
-            text_render::measure_no_underline_with_family(
+            text_render::measure_no_underline_with_family_and_face(
                 line,
                 name_font_size as f64,
                 name_bold,
+                name_italic,
                 &font.name_family,
             )
         })
@@ -8247,10 +8302,10 @@ fn render_entity_content(
                 r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
                 fmt4(icon_cx),
                 fmt4(icon_cy),
-                icon_fill,
+                crate::svg::escape_attribute(icon_fill),
                 icon_radius as i64,
                 icon_radius as i64,
-                icon_stroke,
+                crate::svg::escape_attribute(icon_stroke),
                 ICON_STROKE_WIDTH,
             )
             .unwrap();
@@ -8320,7 +8375,13 @@ fn render_entity_content(
             .as_deref()
             .map(crate::sequence::resolve_color);
         let glyph_fill = glyph_fill_owned.as_deref().unwrap_or("#000000");
-        write!(svg, r#"<path d="{}" fill="{}"/>"#, glyph_path, glyph_fill).unwrap();
+        write!(
+            svg,
+            r#"<path d="{}" fill="{}"/>"#,
+            glyph_path,
+            crate::svg::escape_attribute(glyph_fill)
+        )
+        .unwrap();
     }
 
     if oracle_images.is_empty()
@@ -8340,7 +8401,7 @@ fn render_entity_content(
             height,
             width,
             crate::plantuml_metrics::fmt_coord(image_x),
-            uri,
+            crate::svg::escape_attribute(&uri),
             crate::plantuml_metrics::fmt_coord(image_y),
         )
         .unwrap();
@@ -8504,10 +8565,11 @@ fn render_entity_content(
     let mut text_buf = String::new();
     for (line_index, line) in name_lines.iter().enumerate() {
         let anchor_index = dim.stereotype_count + line_index;
-        let line_width = text_render::measure_no_underline_with_family(
+        let line_width = text_render::measure_no_underline_with_family_and_face(
             line,
             name_font_size as f64,
             name_bold,
+            name_italic,
             &font.name_family,
         );
         let centered_line_x = name_x + (name_tl - line_width) / 2.0;
@@ -8543,7 +8605,11 @@ fn render_entity_content(
             write!(
                 svg,
                 r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                style, line.x1, line.x2, line.y1, line.y2,
+                crate::svg::escape_attribute(style),
+                line.x1,
+                line.x2,
+                line.y1,
+                line.y2,
             )
             .unwrap();
         } else {
@@ -8551,7 +8617,7 @@ fn render_entity_content(
             write!(
                 svg,
                 r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                object_sep_style,
+                crate::svg::escape_attribute(object_sep_style),
                 fmt4(x + 1.0),
                 fmt4(x + dim.width - 1.0),
                 fmt4(sep_y),
@@ -8756,7 +8822,7 @@ fn render_entity_content(
         write!(
             svg,
             r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            sep_style,
+            crate::svg::escape_attribute(sep_style),
             fmt4(sep_x1),
             fmt4(sep_x2),
             fmt4(header_sep_y),
@@ -8813,7 +8879,7 @@ fn render_entity_content(
         write!(
             svg,
             r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            sep_style,
+            crate::svg::escape_attribute(sep_style),
             fmt4(sep_x1),
             fmt4(sep_x2),
             fmt4(sep_y),
@@ -8873,7 +8939,7 @@ fn render_entity_content(
             write!(
                 svg,
                 r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                sep_style,
+                crate::svg::escape_attribute(sep_style),
                 fmt4(sep_x1),
                 fmt4(sep_x2),
                 fmt4(sep1_y),
@@ -8887,7 +8953,7 @@ fn render_entity_content(
             write!(
                 svg,
                 r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                sep_style,
+                crate::svg::escape_attribute(sep_style),
                 fmt4(sep_x1),
                 fmt4(sep_x2),
                 fmt4(sep2_y),
@@ -8901,7 +8967,7 @@ fn render_entity_content(
         write!(
             svg,
             r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            sep_style,
+            crate::svg::escape_attribute(sep_style),
             fmt4(sep_x1),
             fmt4(sep_x2),
             fmt4(sep_y),
@@ -8989,7 +9055,7 @@ fn render_entity_content(
         write!(
             svg,
             r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            sep_style,
+            crate::svg::escape_attribute(sep_style),
             fmt4(sep_x1),
             fmt4(sep_x2),
             fmt_tl(bottom_sep_y),
@@ -9124,7 +9190,7 @@ fn render_entity_content(
                 write!(
                     svg,
                     r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                    sep_style,
+                    crate::svg::escape_attribute(sep_style),
                     fmt4(sep_x1),
                     fmt4(sep_x2),
                     fmt4(header_sep_y),
@@ -9165,7 +9231,7 @@ fn render_entity_content(
                 );
                 Some(format!(
                     r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                    methods_sep_style,
+                    crate::svg::escape_attribute(&methods_sep_style),
                     fmt4(sep_x1),
                     fmt4(sep_x2),
                     fmt_tl(methods_sep_y),
@@ -9258,7 +9324,7 @@ fn render_entity_content(
                     write!(
                         svg,
                         r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                        style,
+                        crate::svg::escape_attribute(&style),
                         fmt4(sep_x1),
                         fmt4(sep_x2),
                         fmt4(sep_inline_y),
@@ -9317,7 +9383,7 @@ fn render_entity_content(
                         write!(
                             svg,
                             r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                            methods_sep_style,
+                            crate::svg::escape_attribute(&methods_sep_style),
                             fmt4(sep_x1),
                             fmt4(sep_x2),
                             fmt_tl(methods_sep_y),
@@ -9340,7 +9406,7 @@ fn render_entity_content(
                             write!(
                                 svg,
                                 r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                                methods_sep_style,
+                                crate::svg::escape_attribute(&methods_sep_style),
                                 fmt4(sep_x1),
                                 fmt4(sep_x2),
                                 fmt_tl(second_y),
@@ -9430,7 +9496,7 @@ fn render_entity_content(
                         write!(
                             svg,
                             r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                            methods_sep_style,
+                            crate::svg::escape_attribute(&methods_sep_style),
                             fmt4(sep_x1),
                             fmt4(text_left),
                             fmt_tl(ly),
@@ -9474,7 +9540,7 @@ fn render_entity_content(
                         write!(
                             svg,
                             r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                            methods_sep_style,
+                            crate::svg::escape_attribute(&methods_sep_style),
                             fmt4(text_right),
                             fmt4(sep_x2),
                             fmt_tl(ly),
@@ -9492,7 +9558,7 @@ fn render_entity_content(
                 write!(
                     svg,
                     r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                    sep_style,
+                    crate::svg::escape_attribute(sep_style),
                     fmt4(sep_x1),
                     fmt4(sep_x2),
                     fmt4(header_sep_y),
@@ -9507,7 +9573,7 @@ fn render_entity_content(
                 write!(
                     svg,
                     r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                    sep_style,
+                    crate::svg::escape_attribute(sep_style),
                     fmt4(sep_x1),
                     fmt4(sep_x2),
                     fmt4(methods_sep_y),
@@ -9580,7 +9646,7 @@ fn render_entity_content(
             write!(
                 svg,
                 r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                sep_style,
+                crate::svg::escape_attribute(sep_style),
                 fmt4(sep_x1),
                 fmt4(sep_x2),
                 fmt4(sep1_y),
@@ -9590,7 +9656,7 @@ fn render_entity_content(
             write!(
                 svg,
                 r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                sep_style,
+                crate::svg::escape_attribute(sep_style),
                 fmt4(sep_x1),
                 fmt4(sep_x2),
                 fmt4(sep2_y),
@@ -9725,7 +9791,7 @@ fn render_body_blocks_generated(
                     write!(
                         svg,
                         r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                        style,
+                        crate::svg::escape_attribute(&style),
                         fmt4(sep_x1),
                         fmt4(sep_x2),
                         fmt_tl(line_y),
@@ -9775,7 +9841,7 @@ fn render_body_blocks_generated(
                     write!(
                         svg,
                         r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                        style,
+                        crate::svg::escape_attribute(&style),
                         fmt4(sep_x1),
                         fmt4(title_x),
                         fmt_tl(y),
@@ -9815,7 +9881,7 @@ fn render_body_blocks_generated(
                     write!(
                         svg,
                         r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                        style,
+                        crate::svg::escape_attribute(&style),
                         fmt4(title_right),
                         fmt4(sep_x2),
                         fmt_tl(y),
@@ -10036,7 +10102,11 @@ fn emit_oracle_line(
         write!(
             svg,
             r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            style, l.x1, l.x2, l.y1, l.y1,
+            crate::svg::escape_attribute(style),
+            l.x1,
+            l.x2,
+            l.y1,
+            l.y1,
         )
         .unwrap();
     }
@@ -10158,8 +10228,8 @@ fn render_member_line(
                         svg,
                         r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
                         fmt4(vis_cx), fmt_tl(icon_cy),
-                        fill, icon.round_half as i64, icon.round_half as i64,
-                        stroke, ICON_STROKE_WIDTH,
+                        crate::svg::escape_attribute(fill), icon.round_half as i64, icon.round_half as i64,
+                        crate::svg::escape_attribute(stroke), ICON_STROKE_WIDTH,
                     )
                     .unwrap();
                 }
@@ -10176,9 +10246,9 @@ fn render_member_line(
                     write!(
                         svg,
                         r#"<rect fill="{}" height="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
-                        fill,
+                        crate::svg::escape_attribute(fill),
                         fmt4(side),
-                        stroke,
+                        crate::svg::escape_attribute(stroke),
                         ICON_STROKE_WIDTH,
                         fmt4(side),
                         fmt4(sq_x), fmt_tl(sq_y),
@@ -10197,12 +10267,12 @@ fn render_member_line(
                     write!(
                         svg,
                         r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
-                        fill,
+                        crate::svg::escape_attribute(fill),
                         fmt4(vis_cx), fmt_tl(angled_cy - icon.angled_half),
                         fmt4(vis_cx + icon.angled_half), fmt_tl(angled_cy),
                         fmt4(vis_cx), fmt_tl(angled_cy + icon.angled_half),
                         fmt4(vis_cx - icon.angled_half), fmt_tl(angled_cy),
-                        stroke, ICON_STROKE_WIDTH,
+                        crate::svg::escape_attribute(stroke), ICON_STROKE_WIDTH,
                     )
                     .unwrap();
                 }
@@ -10220,11 +10290,11 @@ fn render_member_line(
                     write!(
                         svg,
                         r#"<polygon fill="{}" points="{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
-                        fill,
+                        crate::svg::escape_attribute(fill),
                         fmt4(vis_cx), fmt_tl(angled_cy - icon.triangle_half_y),
                         fmt4(vis_cx - icon.angled_half), fmt_tl(angled_cy + icon.triangle_half_y),
                         fmt4(vis_cx + icon.angled_half), fmt_tl(angled_cy + icon.triangle_half_y),
-                        stroke, ICON_STROKE_WIDTH,
+                        crate::svg::escape_attribute(stroke), ICON_STROKE_WIDTH,
                     )
                     .unwrap();
                 }
@@ -10277,7 +10347,7 @@ fn render_member_line(
                 image.height,
                 image.width,
                 fmt_tl(text_x),
-                image.href,
+                crate::svg::escape_attribute(&image.href),
                 fmt_tl(y - crate::plantuml_metrics::ascent(attr_font.size as f64)),
             )
             .unwrap();
@@ -10442,9 +10512,9 @@ fn emit_lollipop_entity(
     write!(
         svg,
         r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-        escape_xml(qualified_name),
+        crate::svg::escape_attribute(qualified_name),
         source_line,
-        entity_id,
+        crate::svg::escape_attribute(entity_id),
     )
     .unwrap();
     write!(
@@ -10452,10 +10522,10 @@ fn emit_lollipop_entity(
         r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
         crate::plantuml_metrics::fmt_coord(cx),
         crate::plantuml_metrics::fmt_coord(cy),
-        fill,
+        crate::svg::escape_attribute(fill),
         crate::plantuml_metrics::fmt_coord(rx),
         crate::plantuml_metrics::fmt_coord(ry),
-        style,
+        crate::svg::escape_attribute(style),
     )
     .unwrap();
     svg.push_str("</g>");
@@ -10493,9 +10563,9 @@ fn emit_no_oracle_lollipop_entity(
     write!(
         svg,
         r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-        escape_xml(qualified_name),
+        crate::svg::escape_attribute(qualified_name),
         entity.source_line,
-        entity_id,
+        crate::svg::escape_attribute(entity_id),
     )
     .unwrap();
     match entity.kind {
@@ -10563,8 +10633,8 @@ fn render_oracle_note_connectors(svg: &mut String, oracle: &OracleLayout) {
         let link_id = edge.link_id.as_deref().unwrap_or("lnk0");
         write!(
             svg,
-            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
-        )
+            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#, entity_1 = crate::svg::escape_attribute(entity_1), entity_2 = crate::svg::escape_attribute(entity_2), link_type = crate::svg::escape_attribute(link_type), link_id = crate::svg::escape_attribute(link_id),
+)
         .unwrap();
         let code_line_attr = edge
             .code_line
@@ -10579,7 +10649,8 @@ fn render_oracle_note_connectors(svg: &mut String, oracle: &OracleLayout) {
         write!(
             svg,
             r#"<path {code_line_attr}d="{}" fill="none"{path_id_attr} style="{path_style}"/>"#,
-            edge.d,
+            crate::svg::escape_attribute(&edge.d),
+            path_style = crate::svg::escape_attribute(path_style),
         )
         .unwrap();
         svg.push_str("</g>");
@@ -10680,19 +10751,18 @@ fn render_no_oracle_association_class_links(
             }
             let dash = if dashed { "stroke-dasharray:7,7;" } else { "" };
             write!(
-                svg,
-                r#"<!--link {} to {}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-{}" style="stroke:#181818;stroke-width:1;{}"/></g>"#,
-                escape_xml(from_label),
-                escape_xml(to_label),
-                from_entity,
-                to_entity,
-                association.source_line,
-                first_link_id + link_idx,
-                path,
-                escape_xml(from_label),
-                escape_xml(to_label),
-                dash,
-            )
+svg,
+r#"<!--{svg_comment}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-{}" style="stroke:#181818;stroke-width:1;{}"/></g>"#,
+crate::svg::escape_attribute(from_entity),
+crate::svg::escape_attribute(to_entity),
+association.source_line,
+first_link_id + link_idx,
+path,
+crate::svg::escape_attribute(from_label),
+crate::svg::escape_attribute(to_label),
+dash,
+svg_comment = crate::svg::comment_text(&format!("link {} to {}" , from_label, to_label)),
+)
             .unwrap();
         }
     }
@@ -10741,7 +10811,12 @@ fn render_association_class_links(svg: &mut String, diagram: &ClassDiagram, orac
             };
             let from = edge_id.split('-').next().unwrap_or("");
             let to = edge_id.rsplit('-').next().unwrap_or("");
-            write!(svg, "<!--link {from} to {to}-->").unwrap();
+            write!(
+                svg,
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!("link {from} to {to}")),
+            )
+            .unwrap();
 
             let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
             let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
@@ -10750,8 +10825,8 @@ fn render_association_class_links(svg: &mut String, diagram: &ClassDiagram, orac
             let link_id = edge.link_id.as_deref().unwrap_or("lnk0");
             write!(
                 svg,
-                r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
-            )
+                r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#, entity_1 = crate::svg::escape_attribute(entity_1), entity_2 = crate::svg::escape_attribute(entity_2), link_type = crate::svg::escape_attribute(link_type), link_id = crate::svg::escape_attribute(link_id),
+)
             .unwrap();
 
             let path_style = edge
@@ -10769,7 +10844,10 @@ fn render_association_class_links(svg: &mut String, diagram: &ClassDiagram, orac
             write!(
                 svg,
                 r#"<path {}d="{}" fill="none"{} style="{}"/>"#,
-                code_line_attr, edge.d, path_id_attr, path_style,
+                code_line_attr,
+                crate::svg::escape_attribute(&edge.d),
+                path_id_attr,
+                crate::svg::escape_attribute(path_style),
             )
             .unwrap();
             svg.push_str("</g>");
@@ -10780,7 +10858,7 @@ fn render_association_class_links(svg: &mut String, diagram: &ClassDiagram, orac
 fn edge_path_id_attr(edge: &OracleEdgePath) -> String {
     edge.path_id
         .as_deref()
-        .map(|id| format!(r#" id="{}""#, escape_xml(id)))
+        .map(|id| format!(r#" id="{}""#, crate::svg::escape_attribute(id)))
         .unwrap_or_default()
 }
 
@@ -10789,12 +10867,15 @@ fn emit_entity_polygon(svg: &mut String, polygon: &EntityPolygon) {
         Some(style) => write!(
             svg,
             r#"<polygon fill="{}" points="{}" style="{}"/>"#,
-            polygon.fill, polygon.points, style,
+            crate::svg::escape_attribute(&polygon.fill),
+            crate::svg::escape_attribute(&polygon.points),
+            crate::svg::escape_attribute(style),
         ),
         None => write!(
             svg,
             r#"<polygon fill="{}" points="{}"/>"#,
-            polygon.fill, polygon.points,
+            crate::svg::escape_attribute(&polygon.fill),
+            crate::svg::escape_attribute(&polygon.points),
         ),
     }
     .unwrap();
@@ -10805,9 +10886,16 @@ fn emit_entity_path(svg: &mut String, path: &EntityPath) {
         Some(style) => write!(
             svg,
             r#"<path d="{}" fill="{}" style="{}"/>"#,
-            path.d, path.fill, style,
+            crate::svg::escape_attribute(&path.d),
+            crate::svg::escape_attribute(&path.fill),
+            crate::svg::escape_attribute(style),
         ),
-        None => write!(svg, r#"<path d="{}" fill="{}"/>"#, path.d, path.fill,),
+        None => write!(
+            svg,
+            r#"<path d="{}" fill="{}"/>"#,
+            crate::svg::escape_attribute(&path.d),
+            crate::svg::escape_attribute(&path.fill),
+        ),
     }
     .unwrap();
 }
@@ -11051,9 +11139,20 @@ fn render_oracle_relationships(
     for (_, rel, oracle_edge, is_reverse) in matches {
         // HTML comment
         if is_reverse {
-            write!(svg, "<!--reverse link {} to {}-->", rel.from, rel.to).unwrap();
+            write!(
+                svg,
+                "<!--{svg_comment}-->",
+                svg_comment =
+                    crate::svg::comment_text(&format!("reverse link {} to {}", rel.from, rel.to)),
+            )
+            .unwrap();
         } else {
-            write!(svg, "<!--link {} to {}-->", rel.from, rel.to).unwrap();
+            write!(
+                svg,
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!("link {} to {}", rel.from, rel.to)),
+            )
+            .unwrap();
         }
 
         // Link group wrapper — use oracle attributes directly.
@@ -11066,7 +11165,7 @@ fn render_oracle_relationships(
         write!(
             svg,
             r#"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="{}" data-source-line="{}" id="{}">"#,
-            entity_1, entity_2, link_type, source_line, link_id,
+            crate::svg::escape_attribute(entity_1), crate::svg::escape_attribute(entity_2), crate::svg::escape_attribute(link_type), source_line, crate::svg::escape_attribute(link_id),
         )
         .unwrap();
 
@@ -11092,7 +11191,10 @@ fn render_oracle_relationships(
         write!(
             svg,
             r#"<path {}d="{}" fill="none"{} style="{}"/>"#,
-            code_line_attr, oracle_edge.d, path_id_attr, path_style,
+            code_line_attr,
+            oracle_edge.d,
+            path_id_attr,
+            crate::svg::escape_attribute(path_style),
         )
         .unwrap();
 
@@ -11106,7 +11208,7 @@ fn render_oracle_relationships(
                     write!(
                         svg,
                         r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                        style,
+                        crate::svg::escape_attribute(style),
                         crate::plantuml_metrics::fmt_coord(*x1),
                         crate::plantuml_metrics::fmt_coord(*x2),
                         crate::plantuml_metrics::fmt_coord(*y1),
@@ -11120,10 +11222,10 @@ fn render_oracle_relationships(
                         r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
                         crate::plantuml_metrics::fmt_coord(*cx),
                         crate::plantuml_metrics::fmt_coord(*cy),
-                        fill,
+                        crate::svg::escape_attribute(fill),
                         crate::plantuml_metrics::fmt_coord(*rx),
                         crate::plantuml_metrics::fmt_coord(*ry),
-                        style,
+                        crate::svg::escape_attribute(style),
                     )
                     .unwrap();
                 }
@@ -11144,7 +11246,9 @@ fn render_oracle_relationships(
             write!(
                 svg,
                 r#"<polygon fill="{}" points="{}" style="{}"/>"#,
-                fill, points, poly_style,
+                crate::svg::escape_attribute(fill),
+                points,
+                crate::svg::escape_attribute(poly_style),
             )
             .unwrap();
         }
@@ -11171,7 +11275,9 @@ fn render_oracle_relationships(
             write!(
                 svg,
                 r#"<polygon fill="{}" points="{}" style="{}"/>"#,
-                fill, points, poly_style,
+                crate::svg::escape_attribute(fill),
+                points,
+                crate::svg::escape_attribute(poly_style),
             )
             .unwrap();
         }
@@ -11196,7 +11302,9 @@ fn render_oracle_relationships(
             write!(
                 svg,
                 r#"<path d="{}" fill="{}" style="{}"/>"#,
-                d, NOTE_FILL, s
+                d,
+                NOTE_FILL,
+                crate::svg::escape_attribute(s)
             )
             .unwrap();
         }
@@ -11378,9 +11486,20 @@ fn render_relationship_svg(
 
     // HTML comment.
     if is_reverse {
-        write!(svg, "<!--reverse link {from_name} to {to_name}-->").unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment =
+                crate::svg::comment_text(&format!("reverse link {from_name} to {to_name}")),
+        )
+        .unwrap();
     } else {
-        write!(svg, "<!--link {from_name} to {to_name}-->").unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("link {from_name} to {to_name}")),
+        )
+        .unwrap();
     }
     if rel.style.hidden {
         return;
@@ -11391,8 +11510,8 @@ fn render_relationship_svg(
     write!(
         svg,
         r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{}" id="lnk{}">"#,
-        rel.source_line, ent_id,
-    )
+        rel.source_line, ent_id, entity_1 = crate::svg::escape_attribute(&entity_1), entity_2 = crate::svg::escape_attribute(&entity_2), link_type = crate::svg::escape_attribute(link_type),
+)
     .unwrap();
 
     // PlantUML `SvekEdge.drawU` merges the class-diagram arrow style, then
@@ -11418,11 +11537,7 @@ fn render_relationship_svg(
                 || skinparam.key.eq_ignore_ascii_case("ArrowThickness")
         })
         .and_then(|skinparam| skinparam.value.trim().parse::<f64>().ok());
-    let arrow_style = StyleCascade::new(&diagram.meta.style_program).resolve_link_at_source_line(
-        &StyleSignature::from_selectors(["root", "element", "classDiagram", "arrow"]),
-        StyleScheme::Regular,
-        rel.source_line,
-    );
+    let arrow_style = relationship_arrow_style(diagram, rel);
     let default_arrow_color = arrow_style
         .property("lineColor")
         .map(crate::sequence::resolve_color)
@@ -11435,14 +11550,7 @@ fn render_relationship_svg(
         .property("fontColor")
         .map(crate::sequence::resolve_color)
         .unwrap_or_else(|| "#000000".to_string());
-    let arrow_font_family = arrow_style
-        .property("fontName")
-        .map(canonical_class_font_family)
-        .unwrap_or_else(|| "sans-serif".to_string());
-    let arrow_font_size = arrow_style
-        .property("fontSize")
-        .and_then(|value| value.parse::<f64>().ok())
-        .unwrap_or(RELATIONSHIP_LABEL_FONT_SIZE);
+    let (arrow_font_family, arrow_font_size) = relationship_label_font(&arrow_style);
     let edge_color = rel
         .style
         .color
@@ -11547,8 +11655,8 @@ fn render_relationship_svg(
         svg,
         r#"<path{code_line_attr} d="{}" fill="none" id="{}" style="stroke:{};stroke-width:{};{}"/>"#,
         d,
-        escape_xml(path_id),
-        edge_color,
+        crate::svg::escape_attribute(path_id),
+        crate::svg::escape_attribute(&edge_color),
         crate::plantuml_metrics::fmt_coord(stroke_width),
         dash_style,
     )
@@ -11749,7 +11857,13 @@ fn render_relationship_svg(
             let content_height = rel
                 .label
                 .as_deref()
-                .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
+                .map(|label| {
+                    text_render::label_height_with_family(
+                        label,
+                        arrow_font_size,
+                        &arrow_font_family,
+                    )
+                })
                 .unwrap_or(0.0)
                 .max(LINK_ARROW_BLOCK_SIZE);
             let block_top = block_y + (content_height - LINK_ARROW_BLOCK_SIZE) / 2.0;
@@ -11944,7 +12058,7 @@ fn emit_extends_triangle(
         fmt4(base_a.0), fmt4(base_a.1),
         fmt4(base_b.0), fmt4(base_b.1),
         fmt4(tip.0), fmt4(tip.1),
-        color,
+        crate::svg::escape_attribute(color),
         crate::plantuml_metrics::fmt_coord(stroke_width),
     )
     .unwrap();
@@ -11978,7 +12092,7 @@ fn emit_dependency_arrow(
         write!(
             svg,
             r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
-            color,
+            crate::svg::escape_attribute(color),
             fmt4(tip.0),
             fmt4(tip.1),
             fmt4(side_a.0),
@@ -11987,7 +12101,7 @@ fn emit_dependency_arrow(
             fmt4(side_b.1),
             fmt4(tip.0),
             fmt4(tip.1),
-            color,
+            crate::svg::escape_attribute(color),
             crate::plantuml_metrics::fmt_coord(stroke_width),
         )
         .unwrap();
@@ -12005,13 +12119,13 @@ fn emit_dependency_arrow(
     write!(
         svg,
         r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
-        color,
+        crate::svg::escape_attribute(color),
         fmt4(tip.0), fmt4(tip.1),
         fmt4(side_a.0), fmt4(side_a.1),
         fmt4(notch.0), fmt4(notch.1),
         fmt4(side_b.0), fmt4(side_b.1),
         fmt4(tip.0), fmt4(tip.1),
-        color,
+        crate::svg::escape_attribute(color),
         crate::plantuml_metrics::fmt_coord(stroke_width),
     )
     .unwrap();
@@ -12045,13 +12159,13 @@ fn emit_diamond_extremity(
     write!(
         svg,
         r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
-        fill,
+        crate::svg::escape_attribute(fill),
         fmt4(tip.0), fmt4(tip.1),
         fmt4(side_a.0), fmt4(side_a.1),
         fmt4(base.0), fmt4(base.1),
         fmt4(side_b.0), fmt4(side_b.1),
         fmt4(tip.0), fmt4(tip.1),
-        color,
+        crate::svg::escape_attribute(color),
         crate::plantuml_metrics::fmt_coord(stroke_width),
     )
     .unwrap();
@@ -12704,12 +12818,14 @@ fn relationship_center_layout(
     }
 
     let margin = relationship_label_margin(relationship);
+    let (font_family, font_size) =
+        relationship_label_font(&relationship_arrow_style(diagram, relationship));
     let label_width = if has_label {
         relationship
             .label
             .as_deref()
             .map(|label| {
-                text_render::measure_no_underline(label, RELATIONSHIP_LABEL_FONT_SIZE, false)
+                text_render::measure_no_underline_with_family(label, font_size, false, &font_family)
             })
             .unwrap_or(0.0)
             + if relationship.label_arrow == LinkArrow::None {
@@ -12725,7 +12841,7 @@ fn relationship_center_layout(
         relationship
             .label
             .as_deref()
-            .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
+            .map(|label| text_render::label_height_with_family(label, font_size, &font_family))
             .unwrap_or(0.0)
             .max(LINK_ARROW_BLOCK_SIZE)
             + 2.0 * margin
@@ -12750,6 +12866,34 @@ fn relationship_center_layout(
         note_paint_width: note_width.floor(),
         note_paint_height: note_height.floor(),
     })
+}
+
+/// The arrow style a relationship was created under (`Link#getStyleBuilder`).
+fn relationship_arrow_style<'a>(
+    diagram: &'a ClassDiagram,
+    relationship: &Relationship,
+) -> crate::style_cascade::ResolvedStyle<'a> {
+    StyleCascade::new(&diagram.meta.style_program).resolve_link_at_source_line(
+        &StyleSignature::from_selectors(["root", "element", "classDiagram", "arrow"]),
+        StyleScheme::Regular,
+        relationship.source_line,
+    )
+}
+
+/// The font family and size of a relationship's center label. Java builds
+/// one `TextBlock` from the arrow style's font configuration
+/// (`GraphvizImageBuilder` 233-241 -> `SvekEdge` 279-319) and both sizes the
+/// dot label with it and draws it, so layout and emission share this font.
+fn relationship_label_font(arrow_style: &crate::style_cascade::ResolvedStyle<'_>) -> (String, f64) {
+    let family = arrow_style
+        .property("fontName")
+        .map(canonical_class_font_family)
+        .unwrap_or_else(|| "sans-serif".to_string());
+    let size = arrow_style
+        .property("fontSize")
+        .and_then(|value| value.parse::<f64>().ok())
+        .unwrap_or(RELATIONSHIP_LABEL_FONT_SIZE);
+    (family, size)
 }
 
 fn relationship_label_margin(relationship: &Relationship) -> f64 {
@@ -12795,11 +12939,13 @@ fn synthesize_ortho_edge_labels(diagram: &ClassDiagram, edge_paths: &mut [EdgePa
         };
         let midpoint = ((start.0 + end.0) / 2.0, (start.1 + end.1) / 2.0);
         let margin = relationship_label_margin(relationship);
+        let (font_family, font_size) =
+            relationship_label_font(&relationship_arrow_style(diagram, relationship));
         let width = (relationship
             .label
             .as_deref()
             .map(|label| {
-                text_render::measure_no_underline(label, RELATIONSHIP_LABEL_FONT_SIZE, false)
+                text_render::measure_no_underline_with_family(label, font_size, false, &font_family)
             })
             .unwrap_or(0.0)
             + if relationship.label_arrow == LinkArrow::None {
@@ -12812,7 +12958,7 @@ fn synthesize_ortho_edge_labels(diagram: &ClassDiagram, edge_paths: &mut [EdgePa
         let height = (relationship
             .label
             .as_deref()
-            .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
+            .map(|label| text_render::label_height_with_family(label, font_size, &font_family))
             .unwrap_or(0.0)
             .max(LINK_ARROW_BLOCK_SIZE)
             + 2.0 * margin)
@@ -13110,7 +13256,7 @@ fn emit_svg_line(svg: &mut String, a: (f64, f64), b: (f64, f64), color: &str, st
     write!(
         svg,
         r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-        color,
+        crate::svg::escape_attribute(color),
         crate::plantuml_metrics::fmt_coord(stroke_width),
         crate::plantuml_metrics::fmt_coord(a.0),
         crate::plantuml_metrics::fmt_coord(b.0),
@@ -13128,7 +13274,7 @@ fn emit_svg_circle(svg: &mut String, c: (f64, f64), r: f64, color: &str, stroke_
         crate::plantuml_metrics::fmt_coord(c.1),
         crate::plantuml_metrics::fmt_coord(r),
         crate::plantuml_metrics::fmt_coord(r),
-        color,
+        crate::svg::escape_attribute(color),
         crate::plantuml_metrics::fmt_coord(stroke_width),
     )
     .unwrap();
@@ -13469,12 +13615,12 @@ fn render_attached_note(
     write!(
         svg,
         r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}"><path d="{}" fill="{}"{shadow_attr} style="stroke:{};stroke-width:{};"/><path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
-        escape_xml(qualified_name),
+        crate::svg::escape_attribute(qualified_name),
         note.source_line,
-        entity_id,
+        crate::svg::escape_attribute(entity_id),
         path,
-        style.background,
-        style.border,
+        crate::svg::escape_attribute(&style.background),
+        crate::svg::escape_attribute(&style.border),
         f(style.border_width),
         f(fold_x),
         f(y),
@@ -13484,8 +13630,8 @@ fn render_attached_note(
         f(y + NOTE_FOLD),
         f(fold_x),
         f(y),
-        style.background,
-        style.border,
+        crate::svg::escape_attribute(&style.background),
+        crate::svg::escape_attribute(&style.border),
         f(style.border_width),
     )
     .unwrap();
@@ -13606,14 +13752,15 @@ fn render_notes_only(
             let mut group = String::new();
             write!(
                 group,
-                r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#
-            )
+                r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#, entity_1 = crate::svg::escape_attribute(entity_1), entity_2 = crate::svg::escape_attribute(entity_2), link_type = crate::svg::escape_attribute(link_type), link_id = crate::svg::escape_attribute(link_id),
+)
             .unwrap();
             let path_id_attr = edge_path_id_attr(edge);
             write!(
                 group,
                 r#"<path {code_line_attr}d="{}" fill="none"{path_id_attr} style="{path_style}"/>"#,
-                edge.d,
+                crate::svg::escape_attribute(&edge.d),
+                path_style = crate::svg::escape_attribute(path_style),
             )
             .unwrap();
             if let Some(points) = &edge.arrow_points {
@@ -13624,7 +13771,9 @@ fn render_notes_only(
                     .unwrap_or("stroke:#181818;stroke-width:1;");
                 write!(
                     group,
-                    r#"<polygon fill="{fill}" points="{points}" style="{style}"/>"#
+                    r#"<polygon fill="{fill}" points="{points}" style="{style}"/>"#,
+                    fill = crate::svg::escape_attribute(fill),
+                    style = crate::svg::escape_attribute(style),
                 )
                 .unwrap();
             }
@@ -13795,18 +13944,17 @@ fn render_no_oracle_attached_note_connector(
         point_idx += 3;
     }
     write!(
-        svg,
-        r#"<!--link {} to {}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-{}" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/></g>"#,
-        escape_xml(&from_name),
-        escape_xml(&to_name),
-        from_entity,
-        to_entity,
-        note.source_line,
-        note_start + 2,
-        path,
-        escape_xml(&from_name),
-        escape_xml(&to_name),
-    )
+svg,
+r#"<!--{svg_comment}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-{}" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/></g>"#,
+crate::svg::escape_attribute(&from_entity),
+crate::svg::escape_attribute(&to_entity),
+note.source_line,
+note_start + 2,
+path,
+crate::svg::escape_attribute(&from_name),
+crate::svg::escape_attribute(&to_name),
+svg_comment = crate::svg::comment_text(&format!("link {} to {}" , from_name, to_name)),
+)
     .unwrap();
 }
 
@@ -13948,8 +14096,9 @@ fn render_floating_note_entity(
     write!(
         svg,
         r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{entity_id}">"#,
-        escape_xml(qualified_name),
+        crate::svg::escape_attribute(qualified_name),
         note.source_line,
+        entity_id = crate::svg::escape_attribute(entity_id),
     )
     .unwrap();
     write!(
@@ -13967,8 +14116,8 @@ fn render_floating_note_entity(
         f(y),
         f(x),
         f(y),
-        style.background,
-        style.border,
+        crate::svg::escape_attribute(&style.background),
+        crate::svg::escape_attribute(&style.border),
         f(style.border_width),
     )
     .unwrap();
@@ -13983,8 +14132,8 @@ fn render_floating_note_entity(
         f(fold_y),
         f(fold_x),
         f(y),
-        style.background,
-        style.border,
+        crate::svg::escape_attribute(&style.background),
+        crate::svg::escape_attribute(&style.border),
     )
     .unwrap();
     emit_note_body(svg, note, x, y, width, sprites, &style);
@@ -14028,8 +14177,8 @@ fn render_relationship_note(
         f(y),
         f(x),
         f(y),
-        style.background,
-        style.border,
+        crate::svg::escape_attribute(&style.background),
+        crate::svg::escape_attribute(&style.border),
         f(style.border_width),
     )
     .unwrap();
@@ -14044,8 +14193,8 @@ fn render_relationship_note(
         f(fold_y),
         f(fold_x),
         f(y),
-        style.background,
-        style.border,
+        crate::svg::escape_attribute(&style.background),
+        crate::svg::escape_attribute(&style.border),
         f(style.border_width),
     )
     .unwrap();
@@ -14100,7 +14249,7 @@ fn render_single_named_note(
     write!(
         body,
         r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="ent0002">"#,
-        escape_xml(alias),
+        crate::svg::escape_attribute(alias),
         note.source_line,
     )
     .unwrap();
@@ -14119,8 +14268,8 @@ fn render_single_named_note(
         f(y),
         f(x),
         f(y),
-        style.background,
-        style.border,
+        crate::svg::escape_attribute(&style.background),
+        crate::svg::escape_attribute(&style.border),
         f(style.border_width),
     )
     .unwrap();
@@ -14135,8 +14284,8 @@ fn render_single_named_note(
         f(fold_y),
         f(fold_x),
         f(y),
-        style.background,
-        style.border,
+        crate::svg::escape_attribute(&style.background),
+        crate::svg::escape_attribute(&style.border),
     )
     .unwrap();
     emit_note_body(&mut body, note, x, y, width, sprites, &style);
@@ -14616,7 +14765,7 @@ fn emit_note_sprite_line(
                             height,
                             width,
                             crate::plantuml_metrics::fmt_coord(cursor),
-                            uri,
+                            crate::svg::escape_attribute(&uri),
                             crate::plantuml_metrics::fmt_coord(
                                 line_top + line_height - height as f64
                             ),
@@ -14837,7 +14986,7 @@ fn emit_note_table(
                 write!(
                     svg,
                     r#"<rect fill="{}" height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
-                    fill,
+                    crate::svg::escape_attribute(&fill),
                     f(table.row_heights[row_index]),
                     f(cell_width),
                     f(cell_left),
@@ -14949,7 +15098,7 @@ fn emit_note_tree(
         write!(
             svg,
             r#"<rect fill="{}" height="2" style="stroke:#000000;stroke-width:1;" width="2" x="{}" y="{}"/>"#,
-            fill,
+            crate::svg::escape_attribute(fill),
             f(branch_right - 1.0),
             f(branch_y - 1.0),
         )
@@ -14989,7 +15138,7 @@ fn emit_note_code(svg: &mut String, lines: &[&str], x: f64, y: f64, style: &Reso
         write!(
             svg,
             r#"<text fill="{}" font-family="monospace" font-size="{}"{}{} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-            style.font_color,
+            crate::svg::escape_attribute(&style.font_color),
             style.font_size,
             if style.italic { r#" font-style="italic""# } else { "" },
             if style.bold { r#" font-weight="700""# } else { "" },
@@ -15003,7 +15152,7 @@ fn emit_note_code(svg: &mut String, lines: &[&str], x: f64, y: f64, style: &Reso
             write!(
                 svg,
                 r#"<text fill="{}" font-family="monospace" font-size="{}"{}{} lengthAdjust="spacing" textLength="0" x="{}" y="{}"></text>"#,
-                style.font_color,
+                crate::svg::escape_attribute(&style.font_color),
                 style.font_size,
                 if style.italic { r#" font-style="italic""# } else { "" },
                 if style.bold { r#" font-weight="700""# } else { "" },
@@ -15170,7 +15319,7 @@ fn emit_note_separator(
         write!(
             svg,
             r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            stroke_style,
+            crate::svg::escape_attribute(stroke_style),
             f(start_x),
             f(first_end),
             f(y),
@@ -15213,7 +15362,7 @@ fn emit_note_separator(
         write!(
             svg,
             r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            stroke_style,
+            crate::svg::escape_attribute(stroke_style),
             f(second_start),
             f(end_x),
             f(y),
@@ -15247,7 +15396,7 @@ fn emit_note_line(
             image.height,
             image.width,
             crate::plantuml_metrics::fmt_coord(line_x + NOTE_PAD_X),
-            image.href,
+            crate::svg::escape_attribute(&image.href),
             crate::plantuml_metrics::fmt_coord(line_top),
         )
         .unwrap();
@@ -15272,7 +15421,7 @@ fn emit_note_line(
                 r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}"/>"#,
                 f(ellipse_x + NOTE_BULLET_ELLIPSE_SIZE / 2.0),
                 f(ellipse_y),
-                style.font_color,
+                crate::svg::escape_attribute(&style.font_color),
                 f(NOTE_BULLET_ELLIPSE_SIZE / 2.0),
                 f(NOTE_BULLET_ELLIPSE_SIZE / 2.0),
             )
@@ -15289,7 +15438,7 @@ fn emit_note_line(
             write!(
                 svg,
                 r#"<rect fill="{}" height="{}" width="{}" x="{}" y="{}"/>"#,
-                style.font_color,
+                crate::svg::escape_attribute(&style.font_color),
                 f(NOTE_NESTED_BULLET_SIZE),
                 f(NOTE_NESTED_BULLET_SIZE),
                 f(rect_x),

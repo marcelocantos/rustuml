@@ -1,0 +1,4 @@
+@startuml
+skinparam componentFontStyle bold
+component "Pylon vk" as E1
+@enduml

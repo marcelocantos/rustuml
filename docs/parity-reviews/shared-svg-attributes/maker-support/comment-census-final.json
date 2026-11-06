@@ -1,0 +1,44 @@
+[
+  {
+    "phase": "before",
+    "corpus": "golden",
+    "files": 12550,
+    "comments": 31766,
+    "malformed": []
+  },
+  {
+    "phase": "before",
+    "corpus": "registered",
+    "files": 1944,
+    "comments": 4912,
+    "malformed": []
+  },
+  {
+    "phase": "before",
+    "corpus": "retained+fresh",
+    "files": 2104,
+    "comments": 5045,
+    "malformed": []
+  },
+  {
+    "phase": "after",
+    "corpus": "golden",
+    "files": 12550,
+    "comments": 31766,
+    "malformed": []
+  },
+  {
+    "phase": "after",
+    "corpus": "registered",
+    "files": 1966,
+    "comments": 4915,
+    "malformed": []
+  },
+  {
+    "phase": "after",
+    "corpus": "retained+fresh",
+    "files": 2104,
+    "comments": 5045,
+    "malformed": []
+  }
+]

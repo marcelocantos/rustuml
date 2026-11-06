@@ -1,0 +1,4 @@
+@startuml
+skinparam footerFontName Serif%substr("🦉",1,1)
+class Plain
+@enduml

@@ -1,0 +1,98 @@
+[
+  {
+    "cohort": "retained",
+    "differences": {}
+  },
+  {
+    "cohort": "maker18",
+    "differences": {}
+  },
+  {
+    "cohort": "sprites50",
+    "differences": {}
+  },
+  {
+    "cohort": "checker38",
+    "differences": {}
+  },
+  {
+    "cohort": "fresh15",
+    "differences": {}
+  },
+  {
+    "cohort": "fresh26",
+    "differences": {}
+  },
+  {
+    "cohort": "new15",
+    "differences": {}
+  },
+  {
+    "cohort": "delimiters4",
+    "differences": {}
+  },
+  {
+    "cohort": "focused2",
+    "differences": {}
+  },
+  {
+    "cohort": "checker30",
+    "differences": {}
+  },
+  {
+    "cohort": "supplement8",
+    "differences": {}
+  },
+  {
+    "cohort": "fresh12",
+    "differences": {}
+  },
+  {
+    "cohort": "checker28",
+    "differences": {}
+  },
+  {
+    "cohort": "fresh16",
+    "differences": {}
+  },
+  {
+    "cohort": "golden-regressions",
+    "differences": {}
+  },
+  {
+    "cohort": "checker36",
+    "differences": {}
+  },
+  {
+    "cohort": "fallback16",
+    "differences": {}
+  },
+  {
+    "cohort": "checker32",
+    "differences": {}
+  },
+  {
+    "cohort": "shared22",
+    "differences": {}
+  },
+  {
+    "cohort": "checker87",
+    "differences": {}
+  },
+  {
+    "cohort": "corrective16",
+    "differences": {}
+  },
+  {
+    "cohort": "checker54",
+    "differences": {}
+  },
+  {
+    "cohort": "consumer16",
+    "differences": {}
+  },
+  {
+    "cohort": "full-golden",
+    "differences": {}
+  }
+]

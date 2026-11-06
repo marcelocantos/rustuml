@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-sub-directive-selection",
+  "rust_revision": "7bb210e9f7578705638c8f3b7c3b43d8b4b906c3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/EaterIncludesub.java:analyze",
+    "tim/EaterStartsub.java:analyze",
+    "text/TLineType.java:simpleKeyword",
+    "preproc/Sub.java:fromFile",
+    "tim/TContext.java:executeIncludesub"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Includesub expands its selector before choosing local/external subblocks. STARTSUB accepts directive whitespace but validates every raw block name, even in ignored sections. Only selected bodies execute with original located lines and included base.",
+  "causal_divergence": "Literal-space matching misses tabs; the unexpanded selector is tested by regex; malformed unselected markers are ignored.",
+  "planned_change": "Parse directive boundaries and expand selectors once. Select located raw lines after validating marker grammar, retaining Java found/skip behavior and caller memory. Propagate structural errors at included origins; reuse existing base handling.",
+  "perturbation_axes": [
+    "Tabs/mixed whitespace and selectors from variables/functions",
+    "Unselected structural errors versus ignored runtime errors and local/external selection"
+  ],
+  "oracle_plan": [
+    "Reuse checker3 exact references and unchanged shipped CLI comparator; source diagnostics supplementary.",
+    "Bounded new axes via remote headless Monkey Man only, preserving every success/failure.",
+    "Parser/CLI, guards, touched format and both main tiers once stabilized; report actual local cohort and all invalid/error/renderer dependencies."
+  ],
+  "constraints": [
+    "No renderer/parser handoff edits; timezone width implementation unchanged.",
+    "No fixture/reference/comparator/baseline/review/target changes; no self-review.",
+    "All prior evidence retained; new independent checker required."
+  ]
+}

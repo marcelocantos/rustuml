@@ -1,0 +1,52 @@
+[
+  {
+    "path": "crates/rustuml-render/src/activity.rs",
+    "before_sha256": "d2ae4e3adc25b6069a9be7ad726106bfe2cc1b608d386eef2099b284f0638a42",
+    "after_sha256": "b655fea0005fe7c053892c410058bee5e31bdc341a22cb3ccc868ad9b51dea0b"
+  },
+  {
+    "path": "crates/rustuml-render/src/archimate.rs",
+    "before_sha256": "c99528c2f42b467fcf972df0ea07a0829743085b96f2e096a6cc5b755b52c266",
+    "after_sha256": "20ee875cf38ca25fedb1f857511cab86225a93bae13a1564423fe5fda0e9e884"
+  },
+  {
+    "path": "crates/rustuml-render/src/class.rs",
+    "before_sha256": "8a632a0e4da36235a2ea4fc9e9ba1c36c61eb606b59fc93c98cc988384ca2538",
+    "after_sha256": "81007d3253d670b1927045ce9452d8bea5dc00aea6f039a1ed44ac7414d2218c"
+  },
+  {
+    "path": "crates/rustuml-render/src/component.rs",
+    "before_sha256": "df44367eaf3db65b9ed15351ce0cb8edb35ea201e3c040f783cd0af77cfdee68",
+    "after_sha256": "93d9918017f2f7e73cb0f7c165a3232be2a503ce557a0b33178259210296478b"
+  },
+  {
+    "path": "crates/rustuml-render/src/deployment.rs",
+    "before_sha256": "8a515d672cb34f6c6029ee3a623cf7de4a737d112411223b550aa6164398a118",
+    "after_sha256": "2cce18ea2abd2b662579e62b6539d99b35e4a934593deb59e6e268acfeb6efc2"
+  },
+  {
+    "path": "crates/rustuml-render/src/object.rs",
+    "before_sha256": "1ebdfb3e3eaf97f9286fbec0717a273e250869fafca834b1906db552639f9c37",
+    "after_sha256": "20fd8064baa316319fab06ac5e488639a41277a417ad5e85343cd38a0523bffe"
+  },
+  {
+    "path": "crates/rustuml-render/src/state.rs",
+    "before_sha256": "1d8ab0a29f28ff9332658f67115ed4bb240084b152db9e5de6f737ffba24e7f4",
+    "after_sha256": "ce5811ca01e92fc4ce8d7647f542171516445bc0a2e811b0037b23a26a6b8633"
+  },
+  {
+    "path": "crates/rustuml-render/src/svg.rs",
+    "before_sha256": "c44bd62b7161ead71d0548de7e9c05394d47ed4e14f4ce3b50375ae6418b8b3a",
+    "after_sha256": "da4a601bd5a82376317fc52d3251c4d7a27e107988027ef76229dc952273375f"
+  },
+  {
+    "path": "crates/rustuml-render/src/usecase.rs",
+    "before_sha256": "d7b101690fe4426448551c1349b7bc844a9e3eaf2422cae0f2de4f8f02c5aee6",
+    "after_sha256": "4db501f7c63ea8d07b3b9c8ae3eac00f09505ae115883fdea6cf7f082caa2256"
+  },
+  {
+    "path": "crates/rustuml/tests/pipe_mode.rs",
+    "before_sha256": "d5f18f2f44e78d4b9eaf49b2fef78ddbb745bd7999d81bc4a1b18d1986ec4bad",
+    "after_sha256": "3c8df23c9e295f2e30c330164bd3cff74ea1ca4cffc963fcddd0b73a54a911bd"
+  }
+]

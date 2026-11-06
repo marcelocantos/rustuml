@@ -1,0 +1,36 @@
+{
+  "setup_failure": "Initial source snapshot omitted Makefile; oracle harness test failed before parser/render ran. Preserved initial failure. Restored exact Makefile; ran only previously unrun crates and the single setup-failed oracle test. No passing job or broad golden suite repeated.",
+  "commands": [
+    {
+      "name": "library-missing",
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "rustuml-parser",
+        "-p",
+        "rustuml-render",
+        "--lib",
+        "--release"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/source-after",
+      "exit": 101,
+      "seconds": 0.7182209491729736
+    },
+    {
+      "name": "oracle-setup-recovery",
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "rustuml-oracle",
+        "--lib",
+        "--release",
+        "harness::tests::make_gate_preserves_failure_and_runs_remaining_checks"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/source-after",
+      "exit": 0,
+      "seconds": 0.44188690185546875
+    }
+  ]
+}

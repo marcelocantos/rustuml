@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam classFontStyle bold
+class "Wharf qr" as K
+@enduml

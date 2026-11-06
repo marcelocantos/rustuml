@@ -1,0 +1,3 @@
+@startuml
+class "maple/spruce/maple/spruce/caller" as Rpn
+@enduml

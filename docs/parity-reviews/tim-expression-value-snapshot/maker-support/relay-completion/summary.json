@@ -1,0 +1,56 @@
+{
+  "candidate": "6c550246b458eb5f37539713510dc7d919843421",
+  "cases": 17,
+  "valid_references": 14,
+  "svg_matches": 14,
+  "source_matches": 14,
+  "negative_references": [
+    "/tmp/rustuml-tim4/new/builtin_negative_length.puml",
+    "/tmp/rustuml-tim4/new/procedure_value_error.puml",
+    "/tmp/rustuml-tim4/new/sub_bad_unselected.puml"
+  ],
+  "valid_cli_errors": [],
+  "valid_svg_failures": [],
+  "transport_input_compressed_sha256": "4cd171c5c3b0e08205875b4e845f7434cd03c41a6ac875ea539541218f400539",
+  "transport_output_compressed_sha256": "cd50f6bf14cd85993a8e584280d4db3c45133ced6a74ca6682c0d3da0704f7ae",
+  "resources_verified": 20,
+  "binary_sha256": "0b73e42dc1d512ba8bc39345c9c6c09936b0efba022c39dfd42960e86a408a2b",
+  "comparator_sha256": "43ce27167f6ad8697a8043edbb4f580ddbf9ab68b4e0ea4db15f2a69e3fc97b5",
+  "local_java_launches": 0,
+  "previous_evidence_commit": "7cae38b255a62f41f1e0234b646899426fb67316",
+  "production_changes": 0,
+  "full_suites_repeated": false,
+  "checker_status": "A new independent checker is still required; no review or acceptance record authored.",
+  "negative_classification": [
+    {
+      "case": "builtin_negative_length",
+      "java_svg_exit": 1,
+      "java_probe_exit": 1,
+      "rust_exit": 1,
+      "java_diagnostic": "StringIndexOutOfBoundsException in Substr.executeReturnFunction",
+      "rust_diagnostic": "parse error: line 1: Substring index out of range",
+      "java_svg_bytes": 0,
+      "notes": "First substring error wins before the subsequent unknown call; empty Java output is retained and is not positive SVG evidence."
+    },
+    {
+      "case": "procedure_value_error",
+      "java_svg_exit": 200,
+      "java_probe_exit": 0,
+      "rust_exit": 1,
+      "java_diagnostic": "ERROR / 4 / Illegal call here. Is there a return directive in your function?",
+      "rust_diagnostic": "parse error: line 4: Illegal call here. Is there a return directive in your function?",
+      "notes": "Java emits a syntax-error SVG and an error-source diagnostic; neither is a successful diagram reference."
+    },
+    {
+      "case": "sub_bad_unselected",
+      "java_svg_exit": 200,
+      "java_probe_exit": 0,
+      "rust_exit": 1,
+      "java_diagnostic": "ERROR / 1 / Bad sub name",
+      "rust_diagnostic": "parse error: line 0: Bad sub name",
+      "notes": "Unselected malformed marker rejects before selected execution. Error line numbers/format are recorded as observed, not claimed byte-identical."
+    }
+  ],
+  "remote_calls": 34,
+  "remote_timeout_statuses": 0
+}

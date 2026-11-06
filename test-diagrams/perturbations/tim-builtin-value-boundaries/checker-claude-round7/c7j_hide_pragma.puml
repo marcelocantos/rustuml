@@ -1,0 +1,5 @@
+@startjson
+hide x
+!pragma y z
+{"a": [1, 2]}
+@endjson

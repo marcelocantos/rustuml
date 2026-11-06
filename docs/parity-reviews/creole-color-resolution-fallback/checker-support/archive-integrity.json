@@ -1,0 +1,19 @@
+{
+  "archive": "measurements.tar.gz",
+  "sha256": "8d78bc2450b0a56b6d0fe145b14113ec4d2aae5c896e08714ae9c69783ed9c48",
+  "bytes": 13304383,
+  "files": 33817,
+  "all_members_read_back_and_verified": true,
+  "excluded_rebuildable": [
+    "__pycache__",
+    "after-rustuml",
+    "before-rustuml",
+    "maker",
+    "probe",
+    "src-after",
+    "src-before",
+    "target-after",
+    "target-before"
+  ],
+  "maker_exclusion": "Original maker archive is already retained byte-exact at ../maker-support/measurements.tar.gz; extract it into maker/ to resolve frozen-input paths. No maker history omitted from the repository."
+}

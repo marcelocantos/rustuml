@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Helvetica
+usecase "Wharf q𝅧r" as U1
+@enduml

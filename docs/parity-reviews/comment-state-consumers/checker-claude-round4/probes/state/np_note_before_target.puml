@@ -1,0 +1,10 @@
+@startuml
+state Lab {
+  state Bench {
+    note right of Flask : hot
+    state tap <<entryPoint>>
+    tap --> Flask
+  }
+  Flask --> Shelf
+}
+@enduml

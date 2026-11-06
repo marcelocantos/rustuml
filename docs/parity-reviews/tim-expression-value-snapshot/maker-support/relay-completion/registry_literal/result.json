@@ -1,0 +1,64 @@
+{
+  "source": "/tmp/rustuml-tim4/new/registry_literal.puml",
+  "mechanism": "tim-builtin-registration",
+  "intended_negative": false,
+  "source_sha256": "3924d1277f0218e7746b449b7a24fc3f0f944cc236a5b09b52fb3db966362817",
+  "java_exit": 0,
+  "java_probe_exit": 0,
+  "java_svg_xml_valid": true,
+  "java_valid_reference": true,
+  "cli_exit": 0,
+  "comparison_exit": 0,
+  "svg_match": true,
+  "source_equal": true,
+  "source_diagnostic_error": null,
+  "java_argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/new",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "java_probe_argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/new",
+    "--timezone",
+    "GMT+11:00",
+    "--probe",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/SourceProbe.java",
+    "--classpath",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP",
+    "--",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/new/registry_literal.puml",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/new"
+  ],
+  "rust_calls": [
+    {
+      "argv": [
+        "/tmp/rustuml-tim4/final-rustuml",
+        "-pipe"
+      ],
+      "cwd": "/tmp/rustuml-tim4/new",
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "/tmp/rustuml-tim4/final-rustuml",
+        "--yaml",
+        "-pipe"
+      ],
+      "cwd": "/tmp/rustuml-tim4/new",
+      "exit_code": 0
+    }
+  ],
+  "comparison_argv": [
+    "/tmp/rustuml-tim4/probe",
+    "compare",
+    "/tmp/rustuml-tim4/relay-completion/registry_literal/java.svg",
+    "/tmp/rustuml-tim4/relay-completion/registry_literal/rust.svg"
+  ]
+}

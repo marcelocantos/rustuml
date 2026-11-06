@@ -1,0 +1,7 @@
+@startuml
+!procedure $emit($a)
+class Phantom
+!endprocedure
+!$r=$emit()
+class Lost
+@enduml

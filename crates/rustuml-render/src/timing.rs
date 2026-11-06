@@ -361,8 +361,8 @@ pub fn render(diagram: &TimingDiagram, _theme: &Theme) -> String {
             h = fmt_coord(axis_bottom - axis_top),
             w = fmt_coord(x2 - x1),
             x = fmt_coord(x1),
-            y = fmt_coord(axis_top),
-        ));
+            y = fmt_coord(axis_top), fill = crate::svg::escape_attribute(&fill),
+));
     }
 
     // ── Ruler vertical grid lines ───────────────────────────────────────────────
@@ -586,8 +586,8 @@ fn emit_text_colored(
         r#"<text fill="{fill}" font-family="sans-serif" font-size="{sz}"{weight} lengthAdjust="spacing" textLength="{tl}" x="{x}" y="{y}">{escaped}</text>"#,
         sz = fmt_coord(size),
         x = fmt_coord(x),
-        y = fmt_coord(y),
-    ));
+        y = fmt_coord(y), fill = crate::svg::escape_attribute(fill),
+));
 }
 
 fn timing_note_size(note: &TimingNote) -> (f64, f64) {
@@ -719,8 +719,8 @@ fn emit_line(svg: &mut SvgBuilder, x1: f64, y1: f64, x2: f64, y2: f64, color: &s
         x1 = fmt_coord(x1),
         x2 = fmt_coord(x2),
         y1 = fmt_coord(y1),
-        y2 = fmt_coord(y2),
-    ));
+        y2 = fmt_coord(y2), color = crate::svg::escape_attribute(color),
+));
 }
 
 fn emit_text(svg: &mut SvgBuilder, x: f64, y: f64, content: &str, size: f64, bold: bool) {
@@ -924,6 +924,8 @@ fn emit_polygon(
         r#"<polygon fill="{fill}" points="{p}" style="stroke:{stroke};stroke-width:{w};"/>"#,
         p = points.join(","),
         w = fmt_coord(width),
+        fill = crate::svg::escape_attribute(fill),
+        stroke = crate::svg::escape_attribute(stroke),
     ));
 }
 
@@ -944,6 +946,8 @@ fn emit_path(
     svg.raw(&format!(
         r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:{w};"/>"#,
         w = fmt_coord(width),
+        fill = crate::svg::escape_attribute(fill),
+        stroke = crate::svg::escape_attribute(stroke),
     ));
 }
 

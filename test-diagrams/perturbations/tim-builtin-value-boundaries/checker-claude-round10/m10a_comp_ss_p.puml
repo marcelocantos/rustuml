@@ -1,0 +1,3 @@
+@startuml
+component "Pylon vk" as E1
+@enduml

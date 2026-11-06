@@ -1,0 +1,10 @@
+@startuml
+skinparam defaultFontName Courier New
+<style>
+component {
+  FontStyle italic
+  FontWeight bold
+}
+</style>
+component "Avid Dawky Vow 4.7, gym kayak ovo!" as E1
+@enduml

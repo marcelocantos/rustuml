@@ -1,0 +1,20 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/supplement/define_spelling.puml",
+    "mechanism": "tim-exact-memory-identities",
+    "negative": false,
+    "cwd": "supplement",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/supplement/define_condition.puml",
+    "mechanism": "tim-exact-memory-identities",
+    "negative": false,
+    "cwd": "supplement",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  }
+]

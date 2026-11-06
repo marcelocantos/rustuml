@@ -1,0 +1,3 @@
+@startuml
+class "Gate 􏠀 end" as Gate
+@enduml

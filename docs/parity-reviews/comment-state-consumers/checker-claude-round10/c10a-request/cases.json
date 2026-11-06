@@ -1,0 +1,3670 @@
+{
+ "batch": "C10A",
+ "cases": [
+  {
+   "name": "c10a_st_comp_ar",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "comp",
+    "ar"
+   ]
+  },
+  {
+   "name": "c10a_st_comp_tn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "comp",
+    "tn"
+   ]
+  },
+  {
+   "name": "c10a_st_comp_vd",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "comp",
+    "vd"
+   ]
+  },
+  {
+   "name": "c10a_st_comp_cn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "comp",
+    "cn"
+   ]
+  },
+  {
+   "name": "c10a_st_comp_ss",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "comp",
+    "ss"
+   ]
+  },
+  {
+   "name": "c10a_st_comp_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "comp",
+    "tn",
+    "label italic"
+   ]
+  },
+  {
+   "name": "c10a_st_nodc_ar",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "nodc",
+    "ar"
+   ]
+  },
+  {
+   "name": "c10a_st_nodc_tn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "nodc",
+    "tn"
+   ]
+  },
+  {
+   "name": "c10a_st_nodc_vd",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "nodc",
+    "vd"
+   ]
+  },
+  {
+   "name": "c10a_st_nodc_cn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "nodc",
+    "cn"
+   ]
+  },
+  {
+   "name": "c10a_st_nodc_ss",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "nodc",
+    "ss"
+   ]
+  },
+  {
+   "name": "c10a_st_nodc_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "nodc",
+    "tn",
+    "label italic"
+   ]
+  },
+  {
+   "name": "c10a_st_dbsc_ar",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "dbsc",
+    "ar"
+   ]
+  },
+  {
+   "name": "c10a_st_dbsc_tn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "dbsc",
+    "tn"
+   ]
+  },
+  {
+   "name": "c10a_st_dbsc_vd",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "dbsc",
+    "vd"
+   ]
+  },
+  {
+   "name": "c10a_st_dbsc_cn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "dbsc",
+    "cn"
+   ]
+  },
+  {
+   "name": "c10a_st_dbsc_ss",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "dbsc",
+    "ss"
+   ]
+  },
+  {
+   "name": "c10a_st_dbsc_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "dbsc",
+    "tn",
+    "label italic"
+   ]
+  },
+  {
+   "name": "c10a_st_cldc_ar",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "cldc",
+    "ar"
+   ]
+  },
+  {
+   "name": "c10a_st_cldc_tn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "cldc",
+    "tn"
+   ]
+  },
+  {
+   "name": "c10a_st_cldc_vd",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "cldc",
+    "vd"
+   ]
+  },
+  {
+   "name": "c10a_st_cldc_cn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "cldc",
+    "cn"
+   ]
+  },
+  {
+   "name": "c10a_st_cldc_ss",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "cldc",
+    "ss"
+   ]
+  },
+  {
+   "name": "c10a_st_cldc_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "cldc",
+    "tn",
+    "label italic"
+   ]
+  },
+  {
+   "name": "c10a_st_quec_ar",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "quec",
+    "ar"
+   ]
+  },
+  {
+   "name": "c10a_st_quec_tn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "quec",
+    "tn"
+   ]
+  },
+  {
+   "name": "c10a_st_quec_vd",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "quec",
+    "vd"
+   ]
+  },
+  {
+   "name": "c10a_st_quec_cn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "quec",
+    "cn"
+   ]
+  },
+  {
+   "name": "c10a_st_quec_ss",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "quec",
+    "ss"
+   ]
+  },
+  {
+   "name": "c10a_st_quec_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "quec",
+    "tn",
+    "label italic"
+   ]
+  },
+  {
+   "name": "c10a_st_usec_ar",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "usec",
+    "ar"
+   ]
+  },
+  {
+   "name": "c10a_st_usec_tn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "usec",
+    "tn"
+   ]
+  },
+  {
+   "name": "c10a_st_usec_vd",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "usec",
+    "vd"
+   ]
+  },
+  {
+   "name": "c10a_st_usec_cn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "usec",
+    "cn"
+   ]
+  },
+  {
+   "name": "c10a_st_usec_ss",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "usec",
+    "ss"
+   ]
+  },
+  {
+   "name": "c10a_st_usec_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "usec",
+    "tn",
+    "label italic"
+   ]
+  },
+  {
+   "name": "c10a_st_actu_ar",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "actu",
+    "ar"
+   ]
+  },
+  {
+   "name": "c10a_st_actu_tn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "actu",
+    "tn"
+   ]
+  },
+  {
+   "name": "c10a_st_actu_vd",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "actu",
+    "vd"
+   ]
+  },
+  {
+   "name": "c10a_st_actu_cn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "actu",
+    "cn"
+   ]
+  },
+  {
+   "name": "c10a_st_actu_ss",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "actu",
+    "ss"
+   ]
+  },
+  {
+   "name": "c10a_st_actu_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "actu",
+    "tn",
+    "label italic"
+   ]
+  },
+  {
+   "name": "c10a_st_part_ar",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "part",
+    "ar"
+   ]
+  },
+  {
+   "name": "c10a_st_part_tn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "part",
+    "tn"
+   ]
+  },
+  {
+   "name": "c10a_st_part_vd",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "part",
+    "vd"
+   ]
+  },
+  {
+   "name": "c10a_st_part_cn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "part",
+    "cn"
+   ]
+  },
+  {
+   "name": "c10a_st_part_ss",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "part",
+    "ss"
+   ]
+  },
+  {
+   "name": "c10a_st_part_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "part",
+    "tn",
+    "label italic"
+   ]
+  },
+  {
+   "name": "c10a_st_clss_ar",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "clss",
+    "ar"
+   ]
+  },
+  {
+   "name": "c10a_st_clss_tn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "clss",
+    "tn"
+   ]
+  },
+  {
+   "name": "c10a_st_clss_vd",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "clss",
+    "vd"
+   ]
+  },
+  {
+   "name": "c10a_st_clss_cn",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "clss",
+    "cn"
+   ]
+  },
+  {
+   "name": "c10a_st_clss_ss",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "clss",
+    "ss"
+   ]
+  },
+  {
+   "name": "c10a_st_clss_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "stereotype",
+    "clss",
+    "tn",
+    "label italic"
+   ]
+  },
+  {
+   "name": "c10a_cl_ss_d_n",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "ss",
+    "size default",
+    "no stereo"
+   ]
+  },
+  {
+   "name": "c10a_cl_ss_d_s",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "ss",
+    "size default",
+    "stereo"
+   ]
+  },
+  {
+   "name": "c10a_cl_ss_20_n",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "ss",
+    "size 20",
+    "no stereo"
+   ]
+  },
+  {
+   "name": "c10a_cl_ss_20_s",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "ss",
+    "size 20",
+    "stereo"
+   ]
+  },
+  {
+   "name": "c10a_cl_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cl_tn_d_n",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "tn",
+    "size default",
+    "no stereo"
+   ]
+  },
+  {
+   "name": "c10a_cl_tn_d_s",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "tn",
+    "size default",
+    "stereo"
+   ]
+  },
+  {
+   "name": "c10a_cl_tn_20_n",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "tn",
+    "size 20",
+    "no stereo"
+   ]
+  },
+  {
+   "name": "c10a_cl_tn_20_s",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "tn",
+    "size 20",
+    "stereo"
+   ]
+  },
+  {
+   "name": "c10a_cl_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cl_vd_d_n",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "vd",
+    "size default",
+    "no stereo"
+   ]
+  },
+  {
+   "name": "c10a_cl_vd_d_s",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "vd",
+    "size default",
+    "stereo"
+   ]
+  },
+  {
+   "name": "c10a_cl_vd_20_n",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "vd",
+    "size 20",
+    "no stereo"
+   ]
+  },
+  {
+   "name": "c10a_cl_vd_20_s",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "vd",
+    "size 20",
+    "stereo"
+   ]
+  },
+  {
+   "name": "c10a_cl_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cl_lone_tn",
+   "intended_valid": true,
+   "axes": [
+    "cloud",
+    "tn",
+    "lone (deployment path)"
+   ]
+  },
+  {
+   "name": "c10a_ml_comp_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "comp",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ml_comp_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "comp",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ml_comp_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "comp",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ml_comp_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "comp",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ml_comp_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "comp",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ml_comp_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "comp",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ml_nodc_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "nodc",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ml_nodc_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "nodc",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ml_nodc_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "nodc",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ml_nodc_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "nodc",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ml_nodc_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "nodc",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ml_nodc_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "nodc",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ml_part_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "part",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ml_part_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "part",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ml_part_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "part",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ml_part_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "part",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ml_part_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "part",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ml_part_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "part",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ml_actv_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "actv",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ml_actv_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "actv",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ml_actv_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "actv",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ml_actv_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "actv",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ml_actv_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "actv",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ml_actv_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "actv",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ml_stat_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "stat",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ml_stat_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "stat",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ml_stat_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "stat",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ml_stat_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "stat",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ml_stat_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "stat",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ml_stat_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "stat",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ml_usec_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "usec",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ml_usec_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "usec",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ml_usec_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "usec",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ml_usec_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "usec",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ml_usec_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "usec",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ml_usec_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "usec",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ml_actu_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "actu",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ml_actu_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "actu",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ml_actu_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "actu",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ml_actu_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "actu",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ml_actu_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "actu",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ml_actu_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "multiline",
+    "actu",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_cr_comp_bt_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "comp",
+    "bt",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_comp_bt_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "comp",
+    "bt",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_comp_sz_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "comp",
+    "sz",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_comp_sz_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "comp",
+    "sz",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_comp_fo_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "comp",
+    "fo",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_comp_fo_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "comp",
+    "fo",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_comp_st_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "comp",
+    "st",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_comp_st_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "comp",
+    "st",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_part_bt_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "part",
+    "bt",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_part_bt_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "part",
+    "bt",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_part_sz_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "part",
+    "sz",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_part_sz_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "part",
+    "sz",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_part_fo_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "part",
+    "fo",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_part_fo_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "part",
+    "fo",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_part_st_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "part",
+    "st",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_part_st_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "part",
+    "st",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_actv_bt_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "actv",
+    "bt",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_actv_bt_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "actv",
+    "bt",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_actv_sz_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "actv",
+    "sz",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_actv_sz_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "actv",
+    "sz",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_actv_fo_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "actv",
+    "fo",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_actv_fo_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "actv",
+    "fo",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_actv_st_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "actv",
+    "st",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_actv_st_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "actv",
+    "st",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_usec_bt_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "usec",
+    "bt",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_usec_bt_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "usec",
+    "bt",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_usec_sz_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "usec",
+    "sz",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_usec_sz_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "usec",
+    "sz",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_usec_fo_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "usec",
+    "fo",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_usec_fo_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "usec",
+    "fo",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_usec_st_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "usec",
+    "st",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_usec_st_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "usec",
+    "st",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_stat_bt_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "stat",
+    "bt",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_stat_bt_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "stat",
+    "bt",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_stat_sz_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "stat",
+    "sz",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_stat_sz_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "stat",
+    "sz",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_stat_fo_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "stat",
+    "fo",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_stat_fo_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "stat",
+    "fo",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_cr_stat_st_p",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "stat",
+    "st",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_cr_stat_st_i",
+   "intended_valid": true,
+   "axes": [
+    "creole",
+    "stat",
+    "st",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_comp_sp_then_css",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "comp",
+    "skinparam italic then style bold"
+   ]
+  },
+  {
+   "name": "c10a_pr_comp_css_then_sp",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "comp",
+    "style bold then skinparam italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_comp_nested_sel",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "comp",
+    "diagram-scoped selector italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_comp_stereo_sel",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "comp",
+    "stereotype selector italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_comp_element_sel",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "comp",
+    "element selector italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_comp_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "comp",
+    "no style",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_pr_part_sp_then_css",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "part",
+    "skinparam italic then style bold"
+   ]
+  },
+  {
+   "name": "c10a_pr_part_css_then_sp",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "part",
+    "style bold then skinparam italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_part_nested_sel",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "part",
+    "diagram-scoped selector italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_part_stereo_sel",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "part",
+    "stereotype selector italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_part_element_sel",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "part",
+    "element selector italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_part_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "part",
+    "no style",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_pr_actv_sp_then_css",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "actv",
+    "skinparam italic then style bold"
+   ]
+  },
+  {
+   "name": "c10a_pr_actv_css_then_sp",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "actv",
+    "style bold then skinparam italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_actv_nested_sel",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "actv",
+    "diagram-scoped selector italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_actv_element_sel",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "actv",
+    "element selector italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_actv_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "actv",
+    "no style",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_pr_stat_sp_then_css",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "stat",
+    "skinparam italic then style bold"
+   ]
+  },
+  {
+   "name": "c10a_pr_stat_css_then_sp",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "stat",
+    "style bold then skinparam italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_stat_nested_sel",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "stat",
+    "diagram-scoped selector italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_stat_stereo_sel",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "stat",
+    "stereotype selector italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_stat_element_sel",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "stat",
+    "element selector italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_stat_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "stat",
+    "no style",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_pr_usec_sp_then_css",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "usec",
+    "skinparam italic then style bold"
+   ]
+  },
+  {
+   "name": "c10a_pr_usec_css_then_sp",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "usec",
+    "style bold then skinparam italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_usec_nested_sel",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "usec",
+    "diagram-scoped selector italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_usec_stereo_sel",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "usec",
+    "stereotype selector italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_usec_element_sel",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "usec",
+    "element selector italic"
+   ]
+  },
+  {
+   "name": "c10a_pr_usec_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "precedence",
+    "usec",
+    "no style",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ns_pkg_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "pkg",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ns_pkg_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "pkg",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ns_pkg_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "pkg",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ns_innode_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "innode",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ns_innode_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "innode",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ns_innode_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "innode",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ns_folder_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "folder",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ns_folder_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "folder",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ns_folder_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "folder",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ns_nodenode_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "nodenode",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ns_nodenode_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "nodenode",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ns_nodenode_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "nodenode",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ns_seqbox_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "seqbox",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ns_seqbox_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "seqbox",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ns_seqbox_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "seqbox",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ns_compst_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "compst",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ns_compst_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "compst",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ns_compst_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "compst",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ns_ucrect_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "ucrect",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ns_ucrect_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "ucrect",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ns_ucrect_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "ucrect",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ns_partition_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "partition",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ns_partition_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "partition",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ns_partition_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "partition",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ns_swim_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "swim",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ns_swim_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "swim",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ns_swim_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "nested",
+    "swim",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_fv_comp_BOLD",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "comp",
+    "BOLD"
+   ]
+  },
+  {
+   "name": "c10a_fv_comp_Italic",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "comp",
+    "Italic"
+   ]
+  },
+  {
+   "name": "c10a_fv_comp_bolder",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "comp",
+    "bolder"
+   ]
+  },
+  {
+   "name": "c10a_fv_comp_lighter",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "comp",
+    "lighter"
+   ]
+  },
+  {
+   "name": "c10a_fv_comp_w600",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "comp",
+    "600"
+   ]
+  },
+  {
+   "name": "c10a_fv_comp_w650",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "comp",
+    "650"
+   ]
+  },
+  {
+   "name": "c10a_fv_comp_w900",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "comp",
+    "900"
+   ]
+  },
+  {
+   "name": "c10a_fv_comp_normal",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "comp",
+    "normal"
+   ]
+  },
+  {
+   "name": "c10a_fv_comp_italicbold",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "comp",
+    "italic bold"
+   ]
+  },
+  {
+   "name": "c10a_fv_comp_oblique",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "comp",
+    "oblique"
+   ]
+  },
+  {
+   "name": "c10a_fv_comp_css800",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "comp",
+    "style 800"
+   ]
+  },
+  {
+   "name": "c10a_fv_comp_cssbi",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "comp",
+    "style bold italic"
+   ]
+  },
+  {
+   "name": "c10a_fv_comp_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "comp",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_fv_part_BOLD",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "part",
+    "BOLD"
+   ]
+  },
+  {
+   "name": "c10a_fv_part_Italic",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "part",
+    "Italic"
+   ]
+  },
+  {
+   "name": "c10a_fv_part_bolder",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "part",
+    "bolder"
+   ]
+  },
+  {
+   "name": "c10a_fv_part_lighter",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "part",
+    "lighter"
+   ]
+  },
+  {
+   "name": "c10a_fv_part_w600",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "part",
+    "600"
+   ]
+  },
+  {
+   "name": "c10a_fv_part_w650",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "part",
+    "650"
+   ]
+  },
+  {
+   "name": "c10a_fv_part_w900",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "part",
+    "900"
+   ]
+  },
+  {
+   "name": "c10a_fv_part_normal",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "part",
+    "normal"
+   ]
+  },
+  {
+   "name": "c10a_fv_part_italicbold",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "part",
+    "italic bold"
+   ]
+  },
+  {
+   "name": "c10a_fv_part_oblique",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "part",
+    "oblique"
+   ]
+  },
+  {
+   "name": "c10a_fv_part_css800",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "part",
+    "style 800"
+   ]
+  },
+  {
+   "name": "c10a_fv_part_cssbi",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "part",
+    "style bold italic"
+   ]
+  },
+  {
+   "name": "c10a_fv_part_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "part",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_fv_actv_BOLD",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "actv",
+    "BOLD"
+   ]
+  },
+  {
+   "name": "c10a_fv_actv_Italic",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "actv",
+    "Italic"
+   ]
+  },
+  {
+   "name": "c10a_fv_actv_bolder",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "actv",
+    "bolder"
+   ]
+  },
+  {
+   "name": "c10a_fv_actv_lighter",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "actv",
+    "lighter"
+   ]
+  },
+  {
+   "name": "c10a_fv_actv_w600",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "actv",
+    "600"
+   ]
+  },
+  {
+   "name": "c10a_fv_actv_w650",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "actv",
+    "650"
+   ]
+  },
+  {
+   "name": "c10a_fv_actv_w900",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "actv",
+    "900"
+   ]
+  },
+  {
+   "name": "c10a_fv_actv_normal",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "actv",
+    "normal"
+   ]
+  },
+  {
+   "name": "c10a_fv_actv_italicbold",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "actv",
+    "italic bold"
+   ]
+  },
+  {
+   "name": "c10a_fv_actv_oblique",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "actv",
+    "oblique"
+   ]
+  },
+  {
+   "name": "c10a_fv_actv_css800",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "actv",
+    "style 800"
+   ]
+  },
+  {
+   "name": "c10a_fv_actv_cssbi",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "actv",
+    "style bold italic"
+   ]
+  },
+  {
+   "name": "c10a_fv_actv_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "actv",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_fv_stat_BOLD",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "BOLD"
+   ]
+  },
+  {
+   "name": "c10a_fv_stat_Italic",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "Italic"
+   ]
+  },
+  {
+   "name": "c10a_fv_stat_bolder",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "bolder"
+   ]
+  },
+  {
+   "name": "c10a_fv_stat_lighter",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "lighter"
+   ]
+  },
+  {
+   "name": "c10a_fv_stat_w600",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "600"
+   ]
+  },
+  {
+   "name": "c10a_fv_stat_w650",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "650"
+   ]
+  },
+  {
+   "name": "c10a_fv_stat_w900",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "900"
+   ]
+  },
+  {
+   "name": "c10a_fv_stat_normal",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "normal"
+   ]
+  },
+  {
+   "name": "c10a_fv_stat_italicbold",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "italic bold"
+   ]
+  },
+  {
+   "name": "c10a_fv_stat_oblique",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "oblique"
+   ]
+  },
+  {
+   "name": "c10a_fv_stat_css800",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "style 800"
+   ]
+  },
+  {
+   "name": "c10a_fv_stat_cssbi",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "style bold italic"
+   ]
+  },
+  {
+   "name": "c10a_fv_stat_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "stat",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_fv_usec_BOLD",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "usec",
+    "BOLD"
+   ]
+  },
+  {
+   "name": "c10a_fv_usec_Italic",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "usec",
+    "Italic"
+   ]
+  },
+  {
+   "name": "c10a_fv_usec_bolder",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "usec",
+    "bolder"
+   ]
+  },
+  {
+   "name": "c10a_fv_usec_lighter",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "usec",
+    "lighter"
+   ]
+  },
+  {
+   "name": "c10a_fv_usec_w600",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "usec",
+    "600"
+   ]
+  },
+  {
+   "name": "c10a_fv_usec_w650",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "usec",
+    "650"
+   ]
+  },
+  {
+   "name": "c10a_fv_usec_w900",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "usec",
+    "900"
+   ]
+  },
+  {
+   "name": "c10a_fv_usec_normal",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "usec",
+    "normal"
+   ]
+  },
+  {
+   "name": "c10a_fv_usec_italicbold",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "usec",
+    "italic bold"
+   ]
+  },
+  {
+   "name": "c10a_fv_usec_oblique",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "usec",
+    "oblique"
+   ]
+  },
+  {
+   "name": "c10a_fv_usec_css800",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "usec",
+    "style 800"
+   ]
+  },
+  {
+   "name": "c10a_fv_usec_cssbi",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "usec",
+    "style bold italic"
+   ]
+  },
+  {
+   "name": "c10a_fv_usec_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "fontstyle-value",
+    "usec",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_bi_classname_bi",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "classname",
+    "classFontStyle",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "c10a_bi_classname_p",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "classname",
+    "classFontStyle",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_bi_classattr_bi",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "classattr",
+    "classAttributeFontStyle",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "c10a_bi_classattr_p",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "classattr",
+    "classAttributeFontStyle",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_bi_compnote_bi",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "compnote",
+    "noteFontStyle",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "c10a_bi_compnote_p",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "compnote",
+    "noteFontStyle",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_bi_seqnote_bi",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "seqnote",
+    "noteFontStyle",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "c10a_bi_seqnote_p",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "seqnote",
+    "noteFontStyle",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_bi_seqarrow_bi",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "seqarrow",
+    "sequenceArrowFontStyle",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "c10a_bi_seqarrow_p",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "seqarrow",
+    "sequenceArrowFontStyle",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_bi_comparrow_bi",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "comparrow",
+    "arrowFontStyle",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "c10a_bi_comparrow_p",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "comparrow",
+    "arrowFontStyle",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_bi_title_bi",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "title",
+    "titleFontStyle",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "c10a_bi_title_p",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "title",
+    "titleFontStyle",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_bi_legend_bi",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "legend",
+    "legendFontStyle",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "c10a_bi_legend_p",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "legend",
+    "legendFontStyle",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_bi_pkg_bi",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "pkg",
+    "packageFontStyle",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "c10a_bi_pkg_p",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "pkg",
+    "packageFontStyle",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_bi_seqbox_bi",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "seqbox",
+    "sequenceBoxFontStyle",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "c10a_bi_seqbox_p",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "seqbox",
+    "sequenceBoxFontStyle",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_bi_swim_bi",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "swim",
+    "swimlaneTitleFontStyle",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "c10a_bi_swim_p",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "swim",
+    "swimlaneTitleFontStyle",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_bi_diamond_bi",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "diamond",
+    "activityDiamondFontStyle",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "c10a_bi_diamond_p",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "diamond",
+    "activityDiamondFontStyle",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_bi_statattr_bi",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "statattr",
+    "stateAttributeFontStyle",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "c10a_bi_statattr_p",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "statattr",
+    "stateAttributeFontStyle",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_bi_objname_bi",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "objname",
+    "objectFontStyle",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "c10a_bi_objname_p",
+   "intended_valid": true,
+   "axes": [
+    "bold-italic-consumer",
+    "objname",
+    "objectFontStyle",
+    "none",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ft_ar_plain",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "ar",
+    "plain"
+   ]
+  },
+  {
+   "name": "c10a_ft_ar_italic",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "ar",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ft_ar_bold",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "ar",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ft_ar_bolditalic",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "ar",
+    "bolditalic"
+   ]
+  },
+  {
+   "name": "c10a_ft_vd_plain",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "vd",
+    "plain"
+   ]
+  },
+  {
+   "name": "c10a_ft_vd_italic",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ft_vd_bold",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ft_vd_bolditalic",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "vd",
+    "bolditalic"
+   ]
+  },
+  {
+   "name": "c10a_ft_hv_plain",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "hv",
+    "plain"
+   ]
+  },
+  {
+   "name": "c10a_ft_hv_italic",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "hv",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ft_hv_bold",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "hv",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ft_hv_bolditalic",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "hv",
+    "bolditalic"
+   ]
+  },
+  {
+   "name": "c10a_ft_tn_plain",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "tn",
+    "plain"
+   ]
+  },
+  {
+   "name": "c10a_ft_tn_italic",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ft_tn_bold",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ft_tn_bolditalic",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "tn",
+    "bolditalic"
+   ]
+  },
+  {
+   "name": "c10a_ft_cn_plain",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "cn",
+    "plain"
+   ]
+  },
+  {
+   "name": "c10a_ft_cn_italic",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ft_cn_bold",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ft_cn_bolditalic",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "cn",
+    "bolditalic"
+   ]
+  },
+  {
+   "name": "c10a_ft_ss_plain",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "ss",
+    "plain"
+   ]
+  },
+  {
+   "name": "c10a_ft_ss_italic",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ft_ss_bold",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "c10a_ft_ss_bolditalic",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "ss",
+    "bolditalic"
+   ]
+  },
+  {
+   "name": "c10a_ft_ar_creolebi",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "ar",
+    "bold label + creole italic"
+   ]
+  },
+  {
+   "name": "c10a_ft_ar_creolebi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "ar",
+    "bold label",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ft_vd_creolebi",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "vd",
+    "bold label + creole italic"
+   ]
+  },
+  {
+   "name": "c10a_ft_vd_creolebi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "vd",
+    "bold label",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ft_tn_creolebi",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "tn",
+    "bold label + creole italic"
+   ]
+  },
+  {
+   "name": "c10a_ft_tn_creolebi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "face-table",
+    "tn",
+    "bold label",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_sz_comp_p",
+   "intended_valid": true,
+   "axes": [
+    "size",
+    "comp",
+    "20",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_sz_comp_i",
+   "intended_valid": true,
+   "axes": [
+    "size",
+    "comp",
+    "20",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_sz_part_p",
+   "intended_valid": true,
+   "axes": [
+    "size",
+    "part",
+    "18",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_sz_part_i",
+   "intended_valid": true,
+   "axes": [
+    "size",
+    "part",
+    "18",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_sz_actv_p",
+   "intended_valid": true,
+   "axes": [
+    "size",
+    "actv",
+    "17",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_sz_actv_i",
+   "intended_valid": true,
+   "axes": [
+    "size",
+    "actv",
+    "17",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_sz_stat_p",
+   "intended_valid": true,
+   "axes": [
+    "size",
+    "stat",
+    "19",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_sz_stat_i",
+   "intended_valid": true,
+   "axes": [
+    "size",
+    "stat",
+    "19",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_sz_usec_p",
+   "intended_valid": true,
+   "axes": [
+    "size",
+    "usec",
+    "16",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_sz_usec_i",
+   "intended_valid": true,
+   "axes": [
+    "size",
+    "usec",
+    "16",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_sx_composite_p",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "composite",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_sx_composite_i",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "composite",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_sx_composite_nm_i",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "composite",
+    "stateFontName + italic"
+   ]
+  },
+  {
+   "name": "c10a_sx_composite_ar_i",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "composite",
+    "Arial italic"
+   ]
+  },
+  {
+   "name": "c10a_sx_descs_p",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "descs",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_sx_descs_i",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "descs",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_sx_descs_nm_i",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "descs",
+    "stateFontName + italic"
+   ]
+  },
+  {
+   "name": "c10a_sx_descs_ar_i",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "descs",
+    "Arial italic"
+   ]
+  },
+  {
+   "name": "c10a_sx_concurrent_p",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "concurrent",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_sx_concurrent_i",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "concurrent",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_sx_concurrent_nm_i",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "concurrent",
+    "stateFontName + italic"
+   ]
+  },
+  {
+   "name": "c10a_sx_concurrent_ar_i",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "concurrent",
+    "Arial italic"
+   ]
+  },
+  {
+   "name": "c10a_sx_longname_p",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "longname",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_sx_longname_i",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "longname",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_sx_longname_nm_i",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "longname",
+    "stateFontName + italic"
+   ]
+  },
+  {
+   "name": "c10a_sx_longname_ar_i",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "longname",
+    "Arial italic"
+   ]
+  },
+  {
+   "name": "c10a_sx_statename_p",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "statename",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_sx_statename_i",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "statename",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_sx_statename_nm_i",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "statename",
+    "stateFontName + italic"
+   ]
+  },
+  {
+   "name": "c10a_sx_statename_ar_i",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "statename",
+    "Arial italic"
+   ]
+  },
+  {
+   "name": "c10a_ax_table_p",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "table",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ax_table_i",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "table",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ax_table_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "table",
+    "Verdana italic"
+   ]
+  },
+  {
+   "name": "c10a_ax_bullets_p",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "bullets",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ax_bullets_i",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "bullets",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ax_bullets_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "bullets",
+    "Verdana italic"
+   ]
+  },
+  {
+   "name": "c10a_ax_numbered_p",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "numbered",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ax_numbered_i",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "numbered",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ax_numbered_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "numbered",
+    "Verdana italic"
+   ]
+  },
+  {
+   "name": "c10a_ax_repeat_p",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "repeat",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ax_repeat_i",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "repeat",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ax_repeat_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "repeat",
+    "Verdana italic"
+   ]
+  },
+  {
+   "name": "c10a_ax_deprecated_p",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "deprecated",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ax_deprecated_i",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "deprecated",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ax_deprecated_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "deprecated",
+    "Verdana italic"
+   ]
+  },
+  {
+   "name": "c10a_ax_while_p",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "while",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "c10a_ax_while_i",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "while",
+    "italic"
+   ]
+  },
+  {
+   "name": "c10a_ax_while_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "activity",
+    "while",
+    "Verdana italic"
+   ]
+  }
+ ]
+}

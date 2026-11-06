@@ -1,0 +1,50 @@
+[
+  {
+    "id": "checker30/html_parameters",
+    "whole_output": "fail",
+    "comparison": "SVG structural differences:\n  [30] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"31\"), (\"font-style\", \"italic\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"74.4727\"), (\"x\", \"42.4438\"), (\"y\", \"95.7695\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"31\"), (\"font-style\", \"italic\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"74.4727\"), (\"x\", \"42.4438\"), (\"y\", \"78.3672\")]\n\n",
+    "text_count": {
+      "before": 7,
+      "after": 9,
+      "java": 9
+    },
+    "text_attributes_exact": false,
+    "cause": "sequence.rs::emit_message_label carries prior line baseline into a line whose first run is size 31. text_render::emit_segments treats base.y as the first-run baseline. The missing ascent delta is (31-13)*0.966796875 = 17.40234375, exactly 95.7695-78.3672 to SVG precision. Text content, run count, style, width and all other comparator elements agree."
+  },
+  {
+    "id": "fresh12/literal_neighbors",
+    "whole_output": "fail",
+    "comparison": "SVG structural differences:\n  [27] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"51.2446\"), (\"x\", \"45.8071\"), (\"y\", \"78.3672\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"48.0835\"), (\"x\", \"45.8071\"), (\"y\", \"78.3672\")]\n\n",
+    "text_count": {
+      "before": 8,
+      "after": 10,
+      "java": 10
+    },
+    "text_attributes_exact": false,
+    "cause": "plantuml_metrics.rs::char_width has no U+03A9 table entry and falls back to the ASCII a advance. Only P~a~\u03a9Q textLength differs (48.0835 vs 51.2446). Fresh residual_ascii_neighbor passes with Omega alone replaced by W; residual_omega_only reproduces the width error and its downstream geometry. No escape text or style disagreement remains."
+  },
+  {
+    "id": "checker28/hide_closing_capture",
+    "whole_output": "fail",
+    "comparison": "SVG structural differences:\n  [13] <path> attr mismatch:\n    expected: [(\"d\", \"M36,51.4883 L36,122.4883 L147,122.4883 L147,61.4883 L137,51.4883 L36,51.4883\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M36,51.4883 L36,121.4883 L147,121.4883 L147,61.4883 L137,51.4883 L36,51.4883\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n\n",
+    "text_count": {
+      "before": 14,
+      "after": 14,
+      "java": 14
+    },
+    "text_attributes_exact": true,
+    "cause": "Four size-13 rows: Java AbstractTextualComponent#getTextHeight sums text block height and 2*marginY; ComponentRoseNote#drawInternalU casts the total to int. Rust note_rendered_height floors each later row separately: floor(15.310546875+10)+3*floor(15.310546875)=70, versus floor(4*15.310546875+10)=71. Text runs/styles/positions are byte-exact, but note bottom 121.4883 vs 122.4883 fails whole output. This is unchanged sequence code; no WBS origin adjustment is justified."
+  },
+  {
+    "id": "checker28/flush_eol_nested",
+    "whole_output": "fail",
+    "comparison": "SVG structural differences:\n  [13] <path> attr mismatch:\n    expected: [(\"d\", \"M36,51.4883 L36,122.4883 L73,122.4883 L73,61.4883 L63,51.4883 L36,51.4883\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M36,51.4883 L36,121.4883 L73,121.4883 L73,61.4883 L63,51.4883 L36,51.4883\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n\n",
+    "text_count": {
+      "before": 8,
+      "after": 8,
+      "java": 8
+    },
+    "text_attributes_exact": true,
+    "cause": "Four size-13 rows: Java AbstractTextualComponent#getTextHeight sums text block height and 2*marginY; ComponentRoseNote#drawInternalU casts the total to int. Rust note_rendered_height floors each later row separately: floor(15.310546875+10)+3*floor(15.310546875)=70, versus floor(4*15.310546875+10)=71. Text runs/styles/positions are byte-exact, but note bottom 121.4883 vs 122.4883 fails whole output. This is unchanged sequence code; no WBS origin adjustment is justified."
+  }
+]

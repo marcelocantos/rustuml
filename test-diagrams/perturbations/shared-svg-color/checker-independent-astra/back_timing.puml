@@ -1,0 +1,7 @@
+@startuml
+robust "L<back:transparent>Mist</back>R" as Track
+@0
+Track is low
+@30
+Track is high
+@enduml

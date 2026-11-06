@@ -1,0 +1,1 @@
+iteration1 fresh {'total': 42, 'matches': 32, 'invalid': 10, 'cli_errors': 7, 'valid_cli_errors': 0, 'panics': 0, 'sources': 32} missing 0

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-call-resolution-arity",
+  "rust_revision": "47a723b6fd424a2584dc3d89ac0dc0328eeb0ae7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/FunctionsSet.java:getFunctionSmart",
+    "tim/TFunctionImpl.java:canCover,getNewMemory",
+    "tim/expression/ReversePolishInterpretor.java:constructor",
+    "tim/EaterFunctionCall.java:analyze",
+    "tim/builtin/*:canCover"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Call resolution validates actual positional count and context-specific named argument coverage after argument evaluation, before body execution; the first failure is preserved.",
+  "causal_divergence": "Implemented builtin branches silently consume missing/extra arguments, and user binding fabricates absent required values or discards excess values.",
+  "planned_change": "Add source-derived arity checks for existing implemented builtins and function binding. Distinguish RPN empty-name-set resolution from plain-call named coverage. Preserve argument-effect order and all captured defaults. Do not change the date formatting implementation.",
+  "perturbation_axes": [
+    "Too few/too many arguments with and without a later error",
+    "Builtin versus user calls and plain versus expression resolution"
+  ],
+  "oracle_plan": [
+    "Preserved checker4 31 controls, full restored1516, exact source/model and unchanged actual CLI SVG comparator.",
+    "Compact new maker cases via parent checksummed T3 relay only; all outputs/errors retained.",
+    "Main release tiers once stabilized; parser/CLI/guards/touched formatting. No baselines, old records, renderer/date/reader changes or acceptance claim."
+  ]
+}

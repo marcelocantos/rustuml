@@ -1,0 +1,14 @@
+@startuml
+skinparam defaultFontName Courier New
+participant "<i>Pier x𝅧</i>" as A
+participant B
+A -> B : <i>Quay y𝅧</i>
+note over A : <i>Reef z𝅧</i>
+note right of B
+<i>Dock w𝅧</i>
+end note
+group <i>Grp g𝅧</i>
+A -> B : <b><i>Bold b𝅧</i></b>
+end
+== <i>Div d𝅧</i> ==
+@enduml

@@ -1,0 +1,82 @@
+{
+  "builds": [
+    {
+      "phase": "before",
+      "source_revision": "246ff6396b538843143ee9d2cc9a569b67f614dd",
+      "source_tree": "aeccec6d121d0159943824b230d8ba74ead2bc2f",
+      "binary": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/before-rustuml",
+      "binary_sha256": "f85ca6d1b8424da41d6f4c1000e85c445bbb4834522f53199cc0736c2aeea493",
+      "argv": [
+        "cargo",
+        "build",
+        "-p",
+        "rustuml",
+        "--release",
+        "-j",
+        "4"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-e09eee52",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/target-before",
+        "CARGO_BUILD_JOBS": "4"
+      },
+      "exit": 0,
+      "log": "logs/build-before.log",
+      "source_hashes": {
+        "crates/rustuml-render/src/creole.rs": "1808dc85c6efd65c97e35c24bd385d17d7ca4b766392295886111715f1ed6cae",
+        "crates/rustuml-render/src/text_render.rs": "03df40c764d78539d2679149cf61dbad83d90e31163740b6c3ea4d0dd2165c3a",
+        "crates/rustuml-render/src/wbs.rs": "98b6f5782161f0d029e33bfc302d4b66a48016664b95982475eb2709eec49599",
+        "crates/rustuml-render/src/class.rs": "3dcd6a57d46892a5ef6aa73a0205610b1d2485a4422d5f4d0adeb2913c53a9aa",
+        "crates/rustuml-render/src/sequence.rs": "4950fd8388388990b323ec04ea5899ead6cff69dec4eee92cffa91734cd7d95b"
+      }
+    },
+    {
+      "phase": "after",
+      "source_revision": "a84856637adcd8e8d4e78fd2ee00658c9c612feb",
+      "source_tree": "b0f88ce4702a65967578314713c72f09c712762d",
+      "binary": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/after-rustuml",
+      "binary_sha256": "235de18a60d3428e5a10327485a02e09daaa1a352ae6c84d63682e2ac3a2dfe6",
+      "argv": [
+        "cargo",
+        "build",
+        "--workspace",
+        "--release",
+        "-j",
+        "4"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-e09eee52",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/target-after",
+        "CARGO_BUILD_JOBS": "4"
+      },
+      "exit": 0,
+      "log": "logs/build-after.log",
+      "source_hashes": {
+        "crates/rustuml-render/src/creole.rs": "17d9f5bfa96c0217d0ad7ab5fd0feb17576afbcb62429cd0fa5ee4d8ebff3499",
+        "crates/rustuml-render/src/text_render.rs": "a24772ef9b0167d84b4e44aa38963380a438b4231794d032b1e667b21b76e49f",
+        "crates/rustuml-render/src/wbs.rs": "d578e2b15a730df1c34233f199467e9004dd7e7f1e6fa3851ae6f07d02af1df8",
+        "crates/rustuml-render/src/class.rs": "3dcd6a57d46892a5ef6aa73a0205610b1d2485a4422d5f4d0adeb2913c53a9aa",
+        "crates/rustuml-render/src/sequence.rs": "4950fd8388388990b323ec04ea5899ead6cff69dec4eee92cffa91734cd7d95b"
+      }
+    }
+  ],
+  "probe": {
+    "argv": [
+      "rustc",
+      "--edition=2024",
+      "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/probe.rs",
+      "-L",
+      "dependency=/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/target-after/release/deps",
+      "--extern",
+      "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/target-after/release/deps/librustuml_oracle-81ecaf2bd12988ce.rlib",
+      "--extern",
+      "rustuml_parser=/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/target-after/release/deps/librustuml_parser-69497e1bef91509b.rlib",
+      "-o",
+      "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/probe"
+    ],
+    "exit": 0,
+    "source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+    "binary_sha256": "ff7b3a8656b6565734d11e4aaa3f7fecc27ebe9aa9d10faa5ae36a61af578f21"
+  },
+  "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.3\n"
+}

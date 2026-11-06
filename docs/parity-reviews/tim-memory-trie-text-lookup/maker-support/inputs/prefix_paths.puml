@@ -1,0 +1,5 @@
+@startuml
+!$x=%set_variable_value("ax","short")
+!$x=%set_variable_value("ax-bc","long")
+class "ax-bX / ax- / ax / ax-bc / ax-bcZ" as Paths
+@enduml

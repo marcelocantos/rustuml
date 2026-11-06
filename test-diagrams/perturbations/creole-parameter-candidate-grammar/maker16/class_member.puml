@@ -1,0 +1,6 @@
+@startuml
+class Juniper {
+ L<size:~13>oak</size>R
+ L<color:~#123456>bud</color>R
+}
+@enduml

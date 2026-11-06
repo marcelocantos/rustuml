@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Monospaced
+participant Ann
+participant Bob
+Ann -> Bob : <i>Wharf q𝅧r</i>
+@enduml

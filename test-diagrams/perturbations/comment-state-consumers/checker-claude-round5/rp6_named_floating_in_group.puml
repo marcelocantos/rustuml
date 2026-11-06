@@ -1,0 +1,7 @@
+@startuml
+state Ward {
+  Nurse --> Bed
+  note "rounds" as N1
+}
+Desk --> Nurse
+@enduml

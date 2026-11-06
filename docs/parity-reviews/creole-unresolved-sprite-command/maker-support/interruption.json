@@ -1,0 +1,6 @@
+{
+  "status": "interrupted before first gate completed",
+  "process_session": 33543,
+  "evidence": "write_stdin returned Unknown process id; pgrep found no gate driver/cargo process; no gates.json existed. library log ended during compilation, without test result.",
+  "action": "Preserved initial partial logs and resumed the same final gate driver; this is not a repeat of a completed gate."
+}

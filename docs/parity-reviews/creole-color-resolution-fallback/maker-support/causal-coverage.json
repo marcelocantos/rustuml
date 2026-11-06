@@ -1,0 +1,39 @@
+[
+  {
+    "mechanism": "creole-color-resolution-fallback",
+    "preaccount": "f977806cef5a90a868175e8e707a89d4d791d29d",
+    "java": "CommandCreoleColorChange catches lookup failure and keeps fc1; CommandCreoleStyle.getExtendedColor calls HColorSet.getColorOrWhite; combined font throws separately.",
+    "rust": "is_resolvable_color validates after parameter_command selection; Color conditionally changes fill; Background chooses white on failure; walk_parameter_body/style barriers unchanged.",
+    "controls": [
+      "checker36/color_invalid_hex",
+      "fallback16/color_invalid_runs",
+      "fallback16/color_nested_current",
+      "fallback16/color_eol_activity",
+      "fallback16/back_invalid",
+      "fallback16/back_nested",
+      "fallback16/color_wbs_member",
+      "fallback16/grammar_neighbors"
+    ],
+    "neighbor_controls": [
+      "fallback16/color_valid_neighbors",
+      "fallback16/color_registry_boundary",
+      "fallback16/back_invalid_gradient",
+      "checker36/back_forms",
+      "checker36/hidden_selection"
+    ],
+    "residue": "No serialization, gradient, alpha, throwing-font contract, shared registry or public API changes; negative and valid residual cases remain executable."
+  },
+  {
+    "mechanism": "creole-image-fallback-style",
+    "preaccount": "f977806cef5a90a868175e8e707a89d4d791d29d",
+    "java": "AtomImg.create independent UFontFactory.monospaced(14) + FontConfiguration.blackBlueTrue creates plain black, undecorated normal-position atom.",
+    "rust": "Image arm builds default Style plus monospace,size14,black fill instead of cloning nested markup. Surrounding barriers retain caller style.",
+    "controls": [
+      "fallback16/image_markup_faces",
+      "fallback16/image_markup_config",
+      "fallback16/image_plain_scale",
+      "fallback16/image_base_bold"
+    ],
+    "residue": "Checker image_grammar/image_nested remaining lower-line sequence baselines, all icon consumers, image loading/messages/scale semantics and consumer base-style OR stay outside claim."
+  }
+]

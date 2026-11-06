@@ -1,0 +1,10 @@
+{
+ "schema_version": 1,
+ "mechanism": "FontDesignMetrics simple path through CCharToGlyphMapper: Lucida Grande's own cmap maps U+000A and U+000D to glyph 2 (nonmarkingreturn), whose advance equals the space glyph's (measured with CoreText CTFontGetGlyphsForCharacters/CTFontGetAdvancesForGlyphs on colossus: regular 648/2048 em for glyph 2 and glyph 3 (space), bold 675/2048 for both).",
+ "kind": "addendum after measurement, before the change",
+ "amends": "maker-round6-claude/yaml-json-display-account.json",
+ "measured": "draft 85968418f (dev build) on held-out BH: dc6_yaml_nested, dc6_yaml_plain, dc6_yaml_key_newline, dc6_yaml_apostrophe, dc6_yaml_comment, dc6_yaml_hash_in_quotes, dc6_yaml_single match; dc6_yaml_block differs by 3 (rect width 57.8027 vs Java 58.9307, the second line's textLength 28.9434 vs 25.6416).",
+ "cause": "The block scalar's second Display line is 'b\"' LF 'c' (a real U+000A inside the line; Display.getWithNewlines splits only at backslash-n, not at a real newline). Java measures that LF as 4.4297 = 25.6416 - b 8.8115 - quote 5.2295 - c 7.1709, the space advance. RustUML falls to its 'a' approximation (7.7314) for a C0 control.",
+ "change": "plantuml_metrics::literal_char_width: U+000A and U+000D advance by the face's space advance (the measured table's space entry). TAB is not added: AtomText tokenizes TABs before any measurement.",
+ "expect": "BH dc6_yaml_block matches; outputs change only for SansSerif text holding a real CR or LF; zero lost matches."
+}

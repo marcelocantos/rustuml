@@ -1,0 +1,7 @@
+@startuml
+state Loft {
+  Dry --> Bale
+  note right of Bale : tied
+}
+Loft --> Cart
+@enduml

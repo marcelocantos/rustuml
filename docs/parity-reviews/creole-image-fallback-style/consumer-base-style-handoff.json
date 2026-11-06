@@ -1,0 +1,11 @@
+{
+  "name": "image-consumer-base-style-inheritance",
+  "cases": [
+    "checker36/image_grammar",
+    "checker36/image_nested"
+  ],
+  "status": "Nested image face/color/config now independent and fresh image controls pass. Checker image whole failures retain sequence lower-line baselines. TextBase OR remains an independent source-proven inability to reset explicit base bold/italic; fresh image_base_bold WBS case passes and does not establish an explicit bold TextBase override was reached.",
+  "java": "AtomImg.create:114-115 uses new plain blackBlueTrue(monospaced(14)) config",
+  "rust": "text_render.rs:583,607,682,1614-1615 OR base/style booleans; measurements and emission require same reset semantics",
+  "scope": "No consumer or public Style API change. No geometry compensation."
+}

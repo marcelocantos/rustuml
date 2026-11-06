@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Verdana
+state "Kiln wq vista" as E1
+E1 : first desc line
+E1 : a longer second desc
+E1 --> E2
+state "Second Dawky" as E2
+@enduml

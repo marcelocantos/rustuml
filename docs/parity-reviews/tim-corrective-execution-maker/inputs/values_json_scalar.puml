@@ -1,0 +1,12 @@
+@startuml
+!$n = %str2json("1.5")
+!$b = %str2json("true")
+!$s = %str2json('"007"')
+!function $relay($x)
+!return $x
+!endfunction
+!$a = $relay($n) + 2
+!$c = $relay($b) + 2
+!$d = $relay($s) + 2
+class "$a / $c / $d" as Values
+@enduml

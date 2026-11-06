@@ -1,0 +1,5 @@
+thread 'font_chain::tests::coverage_table_is_the_stored_reference_host_extraction' (54049647) panicked at crates/rustuml-render/src/font_chain.rs:905:13:
+assertion `left == right` failed: Helvetica plan facts
+  left: (false, 0, false, false, true, false, true, false, true, false)
+ right: (false, 0, false, false, true, false, true, false, false, false)
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 850 filtered out; finished in 0.05s

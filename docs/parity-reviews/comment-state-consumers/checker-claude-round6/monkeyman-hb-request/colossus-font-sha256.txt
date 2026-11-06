@@ -1,0 +1,8 @@
+658718d77497145281cb0ec45ff2fe7c6e18062b2a38f837d0d792d9be3a9ba3  /System/Library/Fonts/Helvetica.ttc
+c481b239979bf0a4912949494e00568fba253fd6265a9770c8721e7989e111ca  /System/Library/Fonts/LucidaGrande.ttc
+f2d400484a6aace67980730ec0a9ef24ce9e535a2604f118e6fdc2510021b85f  /System/Library/Fonts/Menlo.ttc
+42e4302bb33db1869a17f1af1e7e9bd6d1b594c0292c683b51d4db0ea5d1206a  /System/Library/Fonts/GeezaPro.ttc
+f3b4ffff71c2a0c7227d37497683b2498fb2d0a4e8beae26f022e3ccfcaabfa3  /System/Library/Fonts/Supplemental/Times New Roman.ttf
+0da8c12f3e15d95585434d2cf294b3113a3e3fc84bf9ba9d64f2ef834ef4bd98  /System/Library/Fonts/Supplemental/Verdana.ttf
+525979822591a3447cfc49d943d6f7683508e25543407871c0ed8fed05fd2bd9  /System/Library/Fonts/Supplemental/Arial.ttf
+c886ca3172d8ce9189976992d145ec090500a4ff516ecb9d4df56b1a78336247  /System/Library/Fonts/Supplemental/Courier New.ttf

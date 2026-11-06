@@ -1,0 +1,312 @@
+{
+ "AR": {
+  "exact_viewbox_base_merge_tip": [
+   13,
+   18,
+   18
+  ],
+  "comment_list_exact_base_merge_tip": [
+   13,
+   19,
+   19
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "AU": {
+  "exact_viewbox_base_merge_tip": [
+   19,
+   23,
+   23
+  ],
+  "comment_list_exact_base_merge_tip": [
+   22,
+   29,
+   29
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "AW": {
+  "exact_viewbox_base_merge_tip": [
+   13,
+   30,
+   30
+  ],
+  "comment_list_exact_base_merge_tip": [
+   22,
+   43,
+   43
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BB": {
+  "exact_viewbox_base_merge_tip": [
+   2,
+   25,
+   25
+  ],
+  "comment_list_exact_base_merge_tip": [
+   11,
+   35,
+   35
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BC": {
+  "exact_viewbox_base_merge_tip": [
+   0,
+   18,
+   18
+  ],
+  "comment_list_exact_base_merge_tip": [
+   4,
+   18,
+   18
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BE": {
+  "exact_viewbox_base_merge_tip": [
+   0,
+   22,
+   22
+  ],
+  "comment_list_exact_base_merge_tip": [
+   2,
+   24,
+   24
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BF": {
+  "exact_viewbox_base_merge_tip": [
+   8,
+   34,
+   34
+  ],
+  "comment_list_exact_base_merge_tip": [
+   6,
+   42,
+   42
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BG": {
+  "exact_viewbox_base_merge_tip": [
+   16,
+   47,
+   47
+  ],
+  "comment_list_exact_base_merge_tip": [
+   6,
+   49,
+   49
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BH": {
+  "exact_viewbox_base_merge_tip": [
+   14,
+   82,
+   82
+  ],
+  "comment_list_exact_base_merge_tip": [
+   22,
+   93,
+   93
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BI": {
+  "exact_viewbox_base_merge_tip": [
+   7,
+   42,
+   42
+  ],
+  "comment_list_exact_base_merge_tip": [
+   15,
+   48,
+   48
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BJ": {
+  "exact_viewbox_base_merge_tip": [
+   24,
+   99,
+   99
+  ],
+  "comment_list_exact_base_merge_tip": [
+   55,
+   118,
+   118
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BK": {
+  "exact_viewbox_base_merge_tip": [
+   6,
+   36,
+   36
+  ],
+  "comment_list_exact_base_merge_tip": [
+   16,
+   49,
+   49
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BL": {
+  "exact_viewbox_base_merge_tip": [
+   21,
+   77,
+   77
+  ],
+  "comment_list_exact_base_merge_tip": [
+   71,
+   141,
+   141
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BM": {
+  "exact_viewbox_base_merge_tip": [
+   7,
+   12,
+   12
+  ],
+  "comment_list_exact_base_merge_tip": [
+   0,
+   26,
+   26
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BN": {
+  "exact_viewbox_base_merge_tip": [
+   18,
+   33,
+   33
+  ],
+  "comment_list_exact_base_merge_tip": [
+   1,
+   63,
+   63
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BO": {
+  "exact_viewbox_base_merge_tip": [
+   27,
+   31,
+   39
+  ],
+  "comment_list_exact_base_merge_tip": [
+   25,
+   81,
+   81
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [
+   "c8a_bl_lucida_thai_digit_after_r"
+  ],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BP": {
+  "exact_viewbox_base_merge_tip": [
+   27,
+   18,
+   36
+  ],
+  "comment_list_exact_base_merge_tip": [
+   44,
+   50,
+   50
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BQ": {
+  "exact_viewbox_base_merge_tip": [
+   1,
+   1,
+   1
+  ],
+  "comment_list_exact_base_merge_tip": [
+   8,
+   8,
+   8
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ },
+ "BR": {
+  "exact_viewbox_base_merge_tip": [
+   67,
+   87,
+   113
+  ],
+  "comment_list_exact_base_merge_tip": [
+   274,
+   286,
+   286
+  ],
+  "viewbox_lost_merge_to_tip": [],
+  "viewbox_lost_base_to_tip": [
+   "c9a_sp_seqnote_pdf_N_ctrl",
+   "c9a_sv_actmid_N_sp_ctrl",
+   "c9a_sv_classnote_N_ctrl"
+  ],
+  "comment_list_lost_merge_to_tip": [],
+  "comment_list_lost_base_to_tip": []
+ }
+}

@@ -1,0 +1,4 @@
+@startuml
+!$result=%strpos("é😀a", "a")
+class "$result" as Result
+@enduml

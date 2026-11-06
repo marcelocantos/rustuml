@@ -1,0 +1,859 @@
+#host	Version 27.2 (Build 26B123)
+.SFNS-Bold	.AppleSystemUIFont	system	/System/Library/Fonts/SFNS.ttf
+.SFNS-Regular	.AppleSystemUIFont	system	/System/Library/Fonts/SFNS.ttf
+AcademyEngravedLetPlain	Academy Engraved LET	system	/System/Library/Fonts/Supplemental/Academy Engraved LET Fonts.ttf
+AlBayan	Al Bayan	system	/System/Library/Fonts/Supplemental/AlBayan.ttc
+AlBayan-Bold	Al Bayan	system	/System/Library/Fonts/Supplemental/AlBayan.ttc
+AlNile	Al Nile	system	/System/Library/Fonts/Supplemental/Al Nile.ttc
+AlNile-Bold	Al Nile	system	/System/Library/Fonts/Supplemental/Al Nile.ttc
+AlTarikh	Al Tarikh	system	/System/Library/Fonts/Supplemental/Al Tarikh.ttc
+AmericanTypewriter	American Typewriter	system	/System/Library/Fonts/Supplemental/AmericanTypewriter.ttc
+AmericanTypewriter-Bold	American Typewriter	system	/System/Library/Fonts/Supplemental/AmericanTypewriter.ttc
+AmericanTypewriter-Condensed	American Typewriter	system	/System/Library/Fonts/Supplemental/AmericanTypewriter.ttc
+AmericanTypewriter-CondensedBold	American Typewriter	system	/System/Library/Fonts/Supplemental/AmericanTypewriter.ttc
+AmericanTypewriter-CondensedLight	American Typewriter	system	/System/Library/Fonts/Supplemental/AmericanTypewriter.ttc
+AmericanTypewriter-Light	American Typewriter	system	/System/Library/Fonts/Supplemental/AmericanTypewriter.ttc
+AmericanTypewriter-Semibold	American Typewriter	system	/System/Library/Fonts/Supplemental/AmericanTypewriter.ttc
+AndaleMono	Andale Mono	system	/System/Library/Fonts/Supplemental/Andale Mono.ttf
+Apple-Chancery	Apple Chancery	system	/System/Library/Fonts/Supplemental/Apple Chancery.ttf
+AppleBraille	Apple Braille	system	/System/Library/Fonts/Apple Braille.ttf
+AppleBraille-Outline6Dot	Apple Braille	system	/System/Library/Fonts/Apple Braille Outline 6 Dot.ttf
+AppleBraille-Outline8Dot	Apple Braille	system	/System/Library/Fonts/Apple Braille Outline 8 Dot.ttf
+AppleBraille-Pinpoint6Dot	Apple Braille	system	/System/Library/Fonts/Apple Braille Pinpoint 6 Dot.ttf
+AppleBraille-Pinpoint8Dot	Apple Braille	system	/System/Library/Fonts/Apple Braille Pinpoint 8 Dot.ttf
+AppleColorEmoji	Apple Color Emoji	system	/System/Library/Fonts/Apple Color Emoji.ttc
+AppleGothic	AppleGothic	system	/System/Library/Fonts/Supplemental/AppleGothic.ttf
+AppleMyungjo	AppleMyungjo	system	/System/Library/Fonts/Supplemental/AppleMyungjo.ttf
+AppleSDGothicNeo-Bold	Apple SD Gothic Neo	system	/System/Library/Fonts/AppleSDGothicNeo.ttc
+AppleSDGothicNeo-ExtraBold	Apple SD Gothic Neo	system	/System/Library/Fonts/AppleSDGothicNeo.ttc
+AppleSDGothicNeo-Heavy	Apple SD Gothic Neo	system	/System/Library/Fonts/AppleSDGothicNeo.ttc
+AppleSDGothicNeo-Light	Apple SD Gothic Neo	system	/System/Library/Fonts/AppleSDGothicNeo.ttc
+AppleSDGothicNeo-Medium	Apple SD Gothic Neo	system	/System/Library/Fonts/AppleSDGothicNeo.ttc
+AppleSDGothicNeo-Regular	Apple SD Gothic Neo	system	/System/Library/Fonts/AppleSDGothicNeo.ttc
+AppleSDGothicNeo-SemiBold	Apple SD Gothic Neo	system	/System/Library/Fonts/AppleSDGothicNeo.ttc
+AppleSDGothicNeo-Thin	Apple SD Gothic Neo	system	/System/Library/Fonts/AppleSDGothicNeo.ttc
+AppleSDGothicNeo-UltraLight	Apple SD Gothic Neo	system	/System/Library/Fonts/AppleSDGothicNeo.ttc
+AppleSymbols	Apple Symbols	system	/System/Library/Fonts/Apple Symbols.ttf
+Arial-Black	Arial Black	system	/System/Library/Fonts/Supplemental/Arial Black.ttf
+Arial-BoldItalicMT	Arial	system	/System/Library/Fonts/Supplemental/Arial Bold Italic.ttf
+Arial-BoldMT	Arial	system	/System/Library/Fonts/Supplemental/Arial Bold.ttf
+Arial-ItalicMT	Arial	system	/System/Library/Fonts/Supplemental/Arial Italic.ttf
+ArialHebrew	Arial Hebrew	system	/System/Library/Fonts/ArialHB.ttc
+ArialHebrew-Bold	Arial Hebrew	system	/System/Library/Fonts/ArialHB.ttc
+ArialHebrew-Light	Arial Hebrew	system	/System/Library/Fonts/ArialHB.ttc
+ArialHebrewScholar	Arial Hebrew Scholar	system	/System/Library/Fonts/ArialHB.ttc
+ArialHebrewScholar-Bold	Arial Hebrew Scholar	system	/System/Library/Fonts/ArialHB.ttc
+ArialHebrewScholar-Light	Arial Hebrew Scholar	system	/System/Library/Fonts/ArialHB.ttc
+ArialMT	Arial	system	/System/Library/Fonts/Supplemental/Arial.ttf
+ArialNarrow	Arial Narrow	system	/System/Library/Fonts/Supplemental/Arial Narrow.ttf
+ArialNarrow-Bold	Arial Narrow	system	/System/Library/Fonts/Supplemental/Arial Narrow Bold.ttf
+ArialNarrow-BoldItalic	Arial Narrow	system	/System/Library/Fonts/Supplemental/Arial Narrow Bold Italic.ttf
+ArialNarrow-Italic	Arial Narrow	system	/System/Library/Fonts/Supplemental/Arial Narrow Italic.ttf
+ArialRoundedMTBold	Arial Rounded MT Bold	system	/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf
+ArialUnicodeMS	Arial Unicode MS	system	/System/Library/Fonts/Supplemental/Arial Unicode.ttf
+Avenir-Black	Avenir	system	/System/Library/Fonts/Avenir.ttc
+Avenir-BlackOblique	Avenir	system	/System/Library/Fonts/Avenir.ttc
+Avenir-Book	Avenir	system	/System/Library/Fonts/Avenir.ttc
+Avenir-BookOblique	Avenir	system	/System/Library/Fonts/Avenir.ttc
+Avenir-Heavy	Avenir	system	/System/Library/Fonts/Avenir.ttc
+Avenir-HeavyOblique	Avenir	system	/System/Library/Fonts/Avenir.ttc
+Avenir-Light	Avenir	system	/System/Library/Fonts/Avenir.ttc
+Avenir-LightOblique	Avenir	system	/System/Library/Fonts/Avenir.ttc
+Avenir-Medium	Avenir	system	/System/Library/Fonts/Avenir.ttc
+Avenir-MediumOblique	Avenir	system	/System/Library/Fonts/Avenir.ttc
+Avenir-Oblique	Avenir	system	/System/Library/Fonts/Avenir.ttc
+Avenir-Roman	Avenir	system	/System/Library/Fonts/Avenir.ttc
+AvenirNext-Bold	Avenir Next	system	/System/Library/Fonts/Avenir Next.ttc
+AvenirNext-BoldItalic	Avenir Next	system	/System/Library/Fonts/Avenir Next.ttc
+AvenirNext-DemiBold	Avenir Next	system	/System/Library/Fonts/Avenir Next.ttc
+AvenirNext-DemiBoldItalic	Avenir Next	system	/System/Library/Fonts/Avenir Next.ttc
+AvenirNext-Heavy	Avenir Next	system	/System/Library/Fonts/Avenir Next.ttc
+AvenirNext-HeavyItalic	Avenir Next	system	/System/Library/Fonts/Avenir Next.ttc
+AvenirNext-Italic	Avenir Next	system	/System/Library/Fonts/Avenir Next.ttc
+AvenirNext-Medium	Avenir Next	system	/System/Library/Fonts/Avenir Next.ttc
+AvenirNext-MediumItalic	Avenir Next	system	/System/Library/Fonts/Avenir Next.ttc
+AvenirNext-Regular	Avenir Next	system	/System/Library/Fonts/Avenir Next.ttc
+AvenirNext-UltraLight	Avenir Next	system	/System/Library/Fonts/Avenir Next.ttc
+AvenirNext-UltraLightItalic	Avenir Next	system	/System/Library/Fonts/Avenir Next.ttc
+AvenirNextCondensed-Bold	Avenir Next Condensed	system	/System/Library/Fonts/Avenir Next Condensed.ttc
+AvenirNextCondensed-BoldItalic	Avenir Next Condensed	system	/System/Library/Fonts/Avenir Next Condensed.ttc
+AvenirNextCondensed-DemiBold	Avenir Next Condensed	system	/System/Library/Fonts/Avenir Next Condensed.ttc
+AvenirNextCondensed-DemiBoldItalic	Avenir Next Condensed	system	/System/Library/Fonts/Avenir Next Condensed.ttc
+AvenirNextCondensed-Heavy	Avenir Next Condensed	system	/System/Library/Fonts/Avenir Next Condensed.ttc
+AvenirNextCondensed-HeavyItalic	Avenir Next Condensed	system	/System/Library/Fonts/Avenir Next Condensed.ttc
+AvenirNextCondensed-Italic	Avenir Next Condensed	system	/System/Library/Fonts/Avenir Next Condensed.ttc
+AvenirNextCondensed-Medium	Avenir Next Condensed	system	/System/Library/Fonts/Avenir Next Condensed.ttc
+AvenirNextCondensed-MediumItalic	Avenir Next Condensed	system	/System/Library/Fonts/Avenir Next Condensed.ttc
+AvenirNextCondensed-Regular	Avenir Next Condensed	system	/System/Library/Fonts/Avenir Next Condensed.ttc
+AvenirNextCondensed-UltraLight	Avenir Next Condensed	system	/System/Library/Fonts/Avenir Next Condensed.ttc
+AvenirNextCondensed-UltraLightItalic	Avenir Next Condensed	system	/System/Library/Fonts/Avenir Next Condensed.ttc
+Ayuthaya	Ayuthaya	system	/System/Library/Fonts/Supplemental/Ayuthaya.ttf
+BIZUDGothic-Bold	BIZ UDGothic	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/42529d87b12845309dd4a57dea9e58446826e94c.asset/AssetData/BIZ_UDGothic.ttc
+BIZUDGothic-Regular	BIZ UDGothic	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/42529d87b12845309dd4a57dea9e58446826e94c.asset/AssetData/BIZ_UDGothic.ttc
+BIZUDMincho-Regular	BIZ UDMincho	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/0ebfdb7e5a2a1db668fa6209779e0725d6f6baba.asset/AssetData/BIZ_UDMincho-regular.ttf
+BMDoHyeon-OTF	BM Dohyeon	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/6ca8b19114fa5b803af8c74eff3f7b75be41559a.asset/AssetData/BMDoHyeon-Regular.otf
+BMHANNA11yrsoldOTF	BM Hanna 11yrs Old	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/22656331beb61633e057fa20aa73b3bd117707f9.asset/AssetData/BMHanna11yrs-Regular.otf
+BMHANNAAirOTF	BM Hanna Air	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/b7cb5af102eef622e55e701862272b80e89d2d5f.asset/AssetData/BMHannaAir-Regular.otf
+BMHANNAProOTF	BM Hanna Pro	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/3d0af21c67c597a49a25214ff4c70179baf6f3ca.asset/AssetData/BMHannaPro-Regular.otf
+BMJUAOTF	BM Jua	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/b37171b0cb7d2044e39dd8001c23a0e540f91207.asset/AssetData/BMJua-Regular.otf
+BMKIRANGHAERANG-OTF	BM Kirang Haerang	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/7a694995bfafc612fac18a23b283bdf239ef4f2c.asset/AssetData/BMKirangHaerang-Regular.otf
+BMYEONSUNG-OTF	BM Yeonsung	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/a7a90316a83e0693b3d971d89b235ee578c59f0c.asset/AssetData/BMYeongSung-Regular.otf
+Baghdad	Baghdad	system	/System/Library/Fonts/Supplemental/Baghdad.ttc
+BanglaMN	Bangla MN	system	/System/Library/Fonts/Supplemental/Bangla MN.ttc
+BanglaMN-Bold	Bangla MN	system	/System/Library/Fonts/Supplemental/Bangla MN.ttc
+BanglaSangamMN	Bangla Sangam MN	system	/System/Library/Fonts/Supplemental/Bangla Sangam MN.ttc
+BanglaSangamMN-Bold	Bangla Sangam MN	system	/System/Library/Fonts/Supplemental/Bangla Sangam MN.ttc
+Baskerville	Baskerville	system	/System/Library/Fonts/Supplemental/Baskerville.ttc
+Baskerville-Bold	Baskerville	system	/System/Library/Fonts/Supplemental/Baskerville.ttc
+Baskerville-BoldItalic	Baskerville	system	/System/Library/Fonts/Supplemental/Baskerville.ttc
+Baskerville-Italic	Baskerville	system	/System/Library/Fonts/Supplemental/Baskerville.ttc
+Baskerville-SemiBold	Baskerville	system	/System/Library/Fonts/Supplemental/Baskerville.ttc
+Baskerville-SemiBoldItalic	Baskerville	system	/System/Library/Fonts/Supplemental/Baskerville.ttc
+Beirut	Beirut	system	/System/Library/Fonts/Supplemental/Beirut.ttc
+BiauKaiHK-Regular	BiauKaiHK	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/5f4c23e4a0c7b70597730d79e252955e973ead7d.asset/AssetData/BiauKai.ttc
+BiauKaiTC-Regular	BiauKaiTC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/5f4c23e4a0c7b70597730d79e252955e973ead7d.asset/AssetData/BiauKai.ttc
+BigCaslon-Medium	Big Caslon	system	/System/Library/Fonts/Supplemental/BigCaslon.ttf
+BodoniOrnamentsITCTT	Bodoni Ornaments	system	/System/Library/Fonts/Supplemental/Bodoni Ornaments.ttf
+BodoniSvtyTwoITCTT-Bold	Bodoni 72	system	/System/Library/Fonts/Supplemental/Bodoni 72.ttc
+BodoniSvtyTwoITCTT-Book	Bodoni 72	system	/System/Library/Fonts/Supplemental/Bodoni 72.ttc
+BodoniSvtyTwoITCTT-BookIta	Bodoni 72	system	/System/Library/Fonts/Supplemental/Bodoni 72.ttc
+BodoniSvtyTwoOSITCTT-Bold	Bodoni 72 Oldstyle	system	/System/Library/Fonts/Supplemental/Bodoni 72 OS.ttc
+BodoniSvtyTwoOSITCTT-Book	Bodoni 72 Oldstyle	system	/System/Library/Fonts/Supplemental/Bodoni 72 OS.ttc
+BodoniSvtyTwoOSITCTT-BookIt	Bodoni 72 Oldstyle	system	/System/Library/Fonts/Supplemental/Bodoni 72 OS.ttc
+BodoniSvtyTwoSCITCTT-Book	Bodoni 72 Smallcaps	system	/System/Library/Fonts/Supplemental/Bodoni 72 Smallcaps Book.ttf
+BradleyHandITCTT-Bold	Bradley Hand	system	/System/Library/Fonts/Supplemental/Bradley Hand Bold.ttf
+BrushScriptMT	Brush Script MT	system	/System/Library/Fonts/Supplemental/Brush Script.ttf
+Chalkboard	Chalkboard	system	/System/Library/Fonts/Supplemental/Chalkboard.ttc
+Chalkboard-Bold	Chalkboard	system	/System/Library/Fonts/Supplemental/Chalkboard.ttc
+ChalkboardSE-Bold	Chalkboard SE	system	/System/Library/Fonts/Supplemental/ChalkboardSE.ttc
+ChalkboardSE-Light	Chalkboard SE	system	/System/Library/Fonts/Supplemental/ChalkboardSE.ttc
+ChalkboardSE-Regular	Chalkboard SE	system	/System/Library/Fonts/Supplemental/ChalkboardSE.ttc
+Chalkduster	Chalkduster	system	/System/Library/Fonts/Supplemental/Chalkduster.ttf
+Charter-Black	Charter	system	/System/Library/Fonts/Supplemental/Charter.ttc
+Charter-BlackItalic	Charter	system	/System/Library/Fonts/Supplemental/Charter.ttc
+Charter-Bold	Charter	system	/System/Library/Fonts/Supplemental/Charter.ttc
+Charter-BoldItalic	Charter	system	/System/Library/Fonts/Supplemental/Charter.ttc
+Charter-Italic	Charter	system	/System/Library/Fonts/Supplemental/Charter.ttc
+Charter-Roman	Charter	system	/System/Library/Fonts/Supplemental/Charter.ttc
+Cochin	Cochin	system	/System/Library/Fonts/Supplemental/Cochin.ttc
+Cochin-Bold	Cochin	system	/System/Library/Fonts/Supplemental/Cochin.ttc
+Cochin-BoldItalic	Cochin	system	/System/Library/Fonts/Supplemental/Cochin.ttc
+Cochin-Italic	Cochin	system	/System/Library/Fonts/Supplemental/Cochin.ttc
+ComicSansMS	Comic Sans MS	system	/System/Library/Fonts/Supplemental/Comic Sans MS.ttf
+ComicSansMS-Bold	Comic Sans MS	system	/System/Library/Fonts/Supplemental/Comic Sans MS Bold.ttf
+Copperplate	Copperplate	system	/System/Library/Fonts/Supplemental/Copperplate.ttc
+Copperplate-Bold	Copperplate	system	/System/Library/Fonts/Supplemental/Copperplate.ttc
+Copperplate-Light	Copperplate	system	/System/Library/Fonts/Supplemental/Copperplate.ttc
+CorsivaHebrew	Corsiva Hebrew	system	/System/Library/Fonts/Supplemental/Corsiva.ttc
+CorsivaHebrew-Bold	Corsiva Hebrew	system	/System/Library/Fonts/Supplemental/Corsiva.ttc
+CourierNewPS-BoldItalicMT	Courier New	system	/System/Library/Fonts/Supplemental/Courier New Bold Italic.ttf
+CourierNewPS-BoldMT	Courier New	system	/System/Library/Fonts/Supplemental/Courier New Bold.ttf
+CourierNewPS-ItalicMT	Courier New	system	/System/Library/Fonts/Supplemental/Courier New Italic.ttf
+CourierNewPSMT	Courier New	system	/System/Library/Fonts/Supplemental/Courier New.ttf
+DFWaWaSC-W5	Wawati SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/37618f984b05fb22375ca0987912653aba363389.asset/AssetData/WawaSC-Regular.otf
+DFWaWaTC-W5	Wawati TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/9f4afe404b767c06554b8b78551e10e92f695147.asset/AssetData/WawaTC-Regular.otf
+DINAlternate-Bold	DIN Alternate	system	/System/Library/Fonts/Supplemental/DIN Alternate Bold.ttf
+DINCondensed-Bold	DIN Condensed	system	/System/Library/Fonts/Supplemental/DIN Condensed Bold.ttf
+Damascus	Damascus	system	/System/Library/Fonts/Supplemental/Damascus.ttc
+DamascusBold	Damascus	system	/System/Library/Fonts/Supplemental/Damascus.ttc
+DamascusLight	Damascus	system	/System/Library/Fonts/Supplemental/Damascus.ttc
+DamascusMedium	Damascus	system	/System/Library/Fonts/Supplemental/Damascus.ttc
+DamascusSemiBold	Damascus	system	/System/Library/Fonts/Supplemental/Damascus.ttc
+DecoTypeNaskh	DecoType Naskh	system	/System/Library/Fonts/Supplemental/DecoTypeNaskh.ttc
+DevanagariMT	Devanagari MT	system	/System/Library/Fonts/Supplemental/DevanagariMT.ttc
+DevanagariMT-Bold	Devanagari MT	system	/System/Library/Fonts/Supplemental/DevanagariMT.ttc
+DevanagariSangamMN	Devanagari Sangam MN	system	/System/Library/Fonts/Supplemental/Devanagari Sangam MN.ttc
+DevanagariSangamMN-Bold	Devanagari Sangam MN	system	/System/Library/Fonts/Supplemental/Devanagari Sangam MN.ttc
+Didot	Didot	system	/System/Library/Fonts/Supplemental/Didot.ttc
+Didot-Bold	Didot	system	/System/Library/Fonts/Supplemental/Didot.ttc
+Didot-Italic	Didot	system	/System/Library/Fonts/Supplemental/Didot.ttc
+DiwanKufi	Diwan Kufi	system	/System/Library/Fonts/Supplemental/Diwan Kufi.ttc
+DiwanMishafi	Mishafi	system	/System/Library/Fonts/Supplemental/Mishafi.ttf
+DiwanMishafiGold	Mishafi Gold	system	/System/Library/Fonts/Supplemental/Mishafi Gold.ttf
+DiwanThuluth	Diwan Thuluth	system	/System/Library/Fonts/Supplemental/Diwan Thuluth.ttf
+EuphemiaUCAS	Euphemia UCAS	system	/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc
+EuphemiaUCAS-Bold	Euphemia UCAS	system	/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc
+EuphemiaUCAS-Italic	Euphemia UCAS	system	/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc
+FZLTTHB--B51-0	Lantinghei TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/f14049099a04e570b893c01d9a4cd71f87c9e8d8.asset/AssetData/Lantinghei.ttc
+FZLTTHK--GBK1-0	Lantinghei SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/f14049099a04e570b893c01d9a4cd71f87c9e8d8.asset/AssetData/Lantinghei.ttc
+FZLTXHB--B51-0	Lantinghei TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/f14049099a04e570b893c01d9a4cd71f87c9e8d8.asset/AssetData/Lantinghei.ttc
+FZLTXHK--GBK1-0	Lantinghei SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/f14049099a04e570b893c01d9a4cd71f87c9e8d8.asset/AssetData/Lantinghei.ttc
+FZLTZHB--B51-0	Lantinghei TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/f14049099a04e570b893c01d9a4cd71f87c9e8d8.asset/AssetData/Lantinghei.ttc
+FZLTZHK--GBK1-0	Lantinghei SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/f14049099a04e570b893c01d9a4cd71f87c9e8d8.asset/AssetData/Lantinghei.ttc
+Farah	Farah	system	/System/Library/Fonts/Supplemental/Farah.ttc
+Farisi	Farisi	system	/System/Library/Fonts/Supplemental/Farisi.ttf
+Futura-Bold	Futura	system	/System/Library/Fonts/Supplemental/Futura.ttc
+Futura-CondensedExtraBold	Futura	system	/System/Library/Fonts/Supplemental/Futura.ttc
+Futura-CondensedMedium	Futura	system	/System/Library/Fonts/Supplemental/Futura.ttc
+Futura-Medium	Futura	system	/System/Library/Fonts/Supplemental/Futura.ttc
+Futura-MediumItalic	Futura	system	/System/Library/Fonts/Supplemental/Futura.ttc
+GB18030Bitmap	GB18030 Bitmap	system	/System/Library/Fonts/Supplemental/NISC18030.ttf
+Galvji	Galvji	system	/System/Library/Fonts/Supplemental/Galvji.ttc
+Galvji-Bold	Galvji	system	/System/Library/Fonts/Supplemental/Galvji.ttc
+Galvji-BoldOblique	Galvji	system	/System/Library/Fonts/Supplemental/Galvji.ttc
+Galvji-Oblique	Galvji	system	/System/Library/Fonts/Supplemental/Galvji.ttc
+GeezaPro	Geeza Pro	system	/System/Library/Fonts/GeezaPro.ttc
+GeezaPro-Bold	Geeza Pro	system	/System/Library/Fonts/GeezaPro.ttc
+Geneva	Geneva	system	/System/Library/Fonts/Geneva.ttf
+Georgia	Georgia	system	/System/Library/Fonts/Supplemental/Georgia.ttf
+Georgia-Bold	Georgia	system	/System/Library/Fonts/Supplemental/Georgia Bold.ttf
+Georgia-BoldItalic	Georgia	system	/System/Library/Fonts/Supplemental/Georgia Bold Italic.ttf
+Georgia-Italic	Georgia	system	/System/Library/Fonts/Supplemental/Georgia Italic.ttf
+GillSans	Gill Sans	system	/System/Library/Fonts/Supplemental/GillSans.ttc
+GillSans-Bold	Gill Sans	system	/System/Library/Fonts/Supplemental/GillSans.ttc
+GillSans-BoldItalic	Gill Sans	system	/System/Library/Fonts/Supplemental/GillSans.ttc
+GillSans-Italic	Gill Sans	system	/System/Library/Fonts/Supplemental/GillSans.ttc
+GillSans-Light	Gill Sans	system	/System/Library/Fonts/Supplemental/GillSans.ttc
+GillSans-LightItalic	Gill Sans	system	/System/Library/Fonts/Supplemental/GillSans.ttc
+GillSans-SemiBold	Gill Sans	system	/System/Library/Fonts/Supplemental/GillSans.ttc
+GillSans-SemiBoldItalic	Gill Sans	system	/System/Library/Fonts/Supplemental/GillSans.ttc
+GillSans-UltraBold	Gill Sans	system	/System/Library/Fonts/Supplemental/GillSans.ttc
+GranthaSangamMN-Bold	Grantha Sangam MN	system	/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc
+GranthaSangamMN-Regular	Grantha Sangam MN	system	/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc
+GujaratiMT	Gujarati MT	system	/System/Library/Fonts/Supplemental/GujaratiMT.ttc
+GujaratiMT-Bold	Gujarati MT	system	/System/Library/Fonts/Supplemental/GujaratiMT.ttc
+GujaratiSangamMN	Gujarati Sangam MN	system	/System/Library/Fonts/Supplemental/Gujarati Sangam MN.ttc
+GujaratiSangamMN-Bold	Gujarati Sangam MN	system	/System/Library/Fonts/Supplemental/Gujarati Sangam MN.ttc
+GurmukhiMN	Gurmukhi MN	system	/System/Library/Fonts/Supplemental/Gurmukhi MN.ttc
+GurmukhiMN-Bold	Gurmukhi MN	system	/System/Library/Fonts/Supplemental/Gurmukhi MN.ttc
+GurmukhiSangamMN	Gurmukhi Sangam MN	system	/System/Library/Fonts/Supplemental/Gurmukhi Sangam MN.ttc
+GurmukhiSangamMN-Bold	Gurmukhi Sangam MN	system	/System/Library/Fonts/Supplemental/Gurmukhi Sangam MN.ttc
+Hack-Bold	Hack	user	/Users/marcelo/Library/Fonts/Hack-Bold.ttf
+Hack-BoldItalic	Hack	user	/Users/marcelo/Library/Fonts/Hack-BoldItalic.ttf
+Hack-Italic	Hack	user	/Users/marcelo/Library/Fonts/Hack-Italic.ttf
+Hack-Regular	Hack	user	/Users/marcelo/Library/Fonts/Hack-Regular.ttf
+HannotateSC-W5	Hannotate SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/00bfc46ccb002b730e29def5116e0a571fb617d8.asset/AssetData/Hannotate.ttc
+HannotateSC-W7	Hannotate SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/00bfc46ccb002b730e29def5116e0a571fb617d8.asset/AssetData/Hannotate.ttc
+HannotateTC-W5	Hannotate TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/00bfc46ccb002b730e29def5116e0a571fb617d8.asset/AssetData/Hannotate.ttc
+HannotateTC-W7	Hannotate TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/00bfc46ccb002b730e29def5116e0a571fb617d8.asset/AssetData/Hannotate.ttc
+HanziPenSC-W3	HanziPen SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/a3c69464b629577766c23bcdb12ffbfe3759b923.asset/AssetData/Hanzipen.ttc
+HanziPenSC-W5	HanziPen SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/a3c69464b629577766c23bcdb12ffbfe3759b923.asset/AssetData/Hanzipen.ttc
+HanziPenTC-W3	HanziPen TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/a3c69464b629577766c23bcdb12ffbfe3759b923.asset/AssetData/Hanzipen.ttc
+HanziPenTC-W5	HanziPen TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/a3c69464b629577766c23bcdb12ffbfe3759b923.asset/AssetData/Hanzipen.ttc
+Helvetica	Helvetica	system	/System/Library/Fonts/Helvetica.ttc
+Helvetica-Bold	Helvetica	system	/System/Library/Fonts/Helvetica.ttc
+Helvetica-BoldOblique	Helvetica	system	/System/Library/Fonts/Helvetica.ttc
+Helvetica-Light	Helvetica	system	/System/Library/Fonts/Helvetica.ttc
+Helvetica-LightOblique	Helvetica	system	/System/Library/Fonts/Helvetica.ttc
+Helvetica-Oblique	Helvetica	system	/System/Library/Fonts/Helvetica.ttc
+HelveticaNeue	Helvetica Neue	system	/System/Library/Fonts/HelveticaNeue.ttc
+HelveticaNeue-Bold	Helvetica Neue	system	/System/Library/Fonts/HelveticaNeue.ttc
+HelveticaNeue-BoldItalic	Helvetica Neue	system	/System/Library/Fonts/HelveticaNeue.ttc
+HelveticaNeue-CondensedBlack	Helvetica Neue	system	/System/Library/Fonts/HelveticaNeue.ttc
+HelveticaNeue-CondensedBold	Helvetica Neue	system	/System/Library/Fonts/HelveticaNeue.ttc
+HelveticaNeue-Italic	Helvetica Neue	system	/System/Library/Fonts/HelveticaNeue.ttc
+HelveticaNeue-Light	Helvetica Neue	system	/System/Library/Fonts/HelveticaNeue.ttc
+HelveticaNeue-LightItalic	Helvetica Neue	system	/System/Library/Fonts/HelveticaNeue.ttc
+HelveticaNeue-Medium	Helvetica Neue	system	/System/Library/Fonts/HelveticaNeue.ttc
+HelveticaNeue-MediumItalic	Helvetica Neue	system	/System/Library/Fonts/HelveticaNeue.ttc
+HelveticaNeue-Thin	Helvetica Neue	system	/System/Library/Fonts/HelveticaNeue.ttc
+HelveticaNeue-ThinItalic	Helvetica Neue	system	/System/Library/Fonts/HelveticaNeue.ttc
+HelveticaNeue-UltraLight	Helvetica Neue	system	/System/Library/Fonts/HelveticaNeue.ttc
+HelveticaNeue-UltraLightItalic	Helvetica Neue	system	/System/Library/Fonts/HelveticaNeue.ttc
+Herculanum	Herculanum	system	/System/Library/Fonts/Supplemental/Herculanum.ttf
+HiraMaruProN-W4	Hiragino Maru Gothic ProN	system	/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc
+HiraMinProN-W3	Hiragino Mincho ProN	system	/System/Library/Fonts/ヒラギノ明朝 ProN.ttc
+HiraMinProN-W6	Hiragino Mincho ProN	system	/System/Library/Fonts/ヒラギノ明朝 ProN.ttc
+HiraginoSans-W0	Hiragino Sans	system	/System/Library/Fonts/ヒラギノ角ゴシック W0.ttc
+HiraginoSans-W1	Hiragino Sans	system	/System/Library/Fonts/ヒラギノ角ゴシック W1.ttc
+HiraginoSans-W2	Hiragino Sans	system	/System/Library/Fonts/ヒラギノ角ゴシック W2.ttc
+HiraginoSans-W3	Hiragino Sans	system	/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc
+HiraginoSans-W4	Hiragino Sans	system	/System/Library/Fonts/ヒラギノ角ゴシック W4.ttc
+HiraginoSans-W5	Hiragino Sans	system	/System/Library/Fonts/ヒラギノ角ゴシック W5.ttc
+HiraginoSans-W6	Hiragino Sans	system	/System/Library/Fonts/ヒラギノ角ゴシック W6.ttc
+HiraginoSans-W7	Hiragino Sans	system	/System/Library/Fonts/ヒラギノ角ゴシック W7.ttc
+HiraginoSans-W8	Hiragino Sans	system	/System/Library/Fonts/ヒラギノ角ゴシック W8.ttc
+HiraginoSans-W9	Hiragino Sans	system	/System/Library/Fonts/ヒラギノ角ゴシック W9.ttc
+HiraginoSansGB-W3	Hiragino Sans GB	system	/System/Library/Fonts/Hiragino Sans GB.ttc
+HiraginoSansGB-W6	Hiragino Sans GB	system	/System/Library/Fonts/Hiragino Sans GB.ttc
+HiraginoSansTC-W3	Hiragino Sans TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/862669affb9c2df6a5af4627f6e8c4496e643d6e.asset/AssetData/Hiragino_Sans_TC.ttc
+HiraginoSansTC-W6	Hiragino Sans TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/862669affb9c2df6a5af4627f6e8c4496e643d6e.asset/AssetData/Hiragino_Sans_TC.ttc
+HoeflerText-Black	Hoefler Text	system	/System/Library/Fonts/Supplemental/Hoefler Text.ttc
+HoeflerText-BlackItalic	Hoefler Text	system	/System/Library/Fonts/Supplemental/Hoefler Text.ttc
+HoeflerText-Italic	Hoefler Text	system	/System/Library/Fonts/Supplemental/Hoefler Text.ttc
+HoeflerText-Ornaments	Hoefler Text	system	/System/Library/Fonts/Supplemental/Hoefler Text Ornaments.ttf
+HoeflerText-Regular	Hoefler Text	system	/System/Library/Fonts/Supplemental/Hoefler Text.ttc
+ITFDevanagari-Bold	ITF Devanagari	system	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
+ITFDevanagari-Book	ITF Devanagari	system	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
+ITFDevanagari-Demi	ITF Devanagari	system	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
+ITFDevanagari-Light	ITF Devanagari	system	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
+ITFDevanagari-Medium	ITF Devanagari	system	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
+ITFDevanagariMarathi-Bold	ITF Devanagari Marathi	system	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
+ITFDevanagariMarathi-Book	ITF Devanagari Marathi	system	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
+ITFDevanagariMarathi-Demi	ITF Devanagari Marathi	system	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
+ITFDevanagariMarathi-Light	ITF Devanagari Marathi	system	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
+ITFDevanagariMarathi-Medium	ITF Devanagari Marathi	system	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
+Impact	Impact	system	/System/Library/Fonts/Supplemental/Impact.ttf
+InaiMathi	InaiMathi	system	/System/Library/Fonts/Supplemental/InaiMathi-MN.ttc
+InaiMathi-Bold	InaiMathi	system	/System/Library/Fonts/Supplemental/InaiMathi-MN.ttc
+JCHEadA	HeadLineA	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/c6821a5885b1c099dc7e340ca61cd3ddb35cb62e.asset/AssetData/HeadlineA.ttf
+JCfg	PilGi	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/9ea5dc040323daeddd09ec48cfe7c73fc3144368.asset/AssetData/Pilgiche.ttf
+JCkg	GungSeo	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/2cbbb46d93096244bde9fa13aa10939987dd0964.asset/AssetData/Gungseouche.ttf
+JCsmPC	PCMyungjo	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/833e6cdde7e9b6be27aeb4bb26a2d25f93a6b1f7.asset/AssetData/PCmyoungjo.ttf
+JetBrainsMonoNF-Bold	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Bold.ttf
+JetBrainsMonoNF-BoldItalic	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-BoldItalic.ttf
+JetBrainsMonoNF-ExtraBold	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraBold.ttf
+JetBrainsMonoNF-ExtraBoldItalic	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraBoldItalic.ttf
+JetBrainsMonoNF-ExtraLight	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraLight.ttf
+JetBrainsMonoNF-ExtraLightItalic	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraLightItalic.ttf
+JetBrainsMonoNF-Italic	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Italic.ttf
+JetBrainsMonoNF-Light	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Light.ttf
+JetBrainsMonoNF-LightItalic	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-LightItalic.ttf
+JetBrainsMonoNF-Medium	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Medium.ttf
+JetBrainsMonoNF-MediumItalic	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-MediumItalic.ttf
+JetBrainsMonoNF-Regular	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Regular.ttf
+JetBrainsMonoNF-SemiBold	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-SemiBold.ttf
+JetBrainsMonoNF-SemiBoldItalic	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-SemiBoldItalic.ttf
+JetBrainsMonoNF-Thin	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Thin.ttf
+JetBrainsMonoNF-ThinItalic	JetBrainsMono Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ThinItalic.ttf
+JetBrainsMonoNFM-Bold	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Bold.ttf
+JetBrainsMonoNFM-BoldItalic	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-BoldItalic.ttf
+JetBrainsMonoNFM-ExtraBold	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraBold.ttf
+JetBrainsMonoNFM-ExtraBoldItalic	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraBoldItalic.ttf
+JetBrainsMonoNFM-ExtraLight	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraLight.ttf
+JetBrainsMonoNFM-ExtraLightItalic	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraLightItalic.ttf
+JetBrainsMonoNFM-Italic	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Italic.ttf
+JetBrainsMonoNFM-Light	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Light.ttf
+JetBrainsMonoNFM-LightItalic	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-LightItalic.ttf
+JetBrainsMonoNFM-Medium	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Medium.ttf
+JetBrainsMonoNFM-MediumItalic	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-MediumItalic.ttf
+JetBrainsMonoNFM-Regular	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Regular.ttf
+JetBrainsMonoNFM-SemiBold	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-SemiBold.ttf
+JetBrainsMonoNFM-SemiBoldItalic	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-SemiBoldItalic.ttf
+JetBrainsMonoNFM-Thin	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Thin.ttf
+JetBrainsMonoNFM-ThinItalic	JetBrainsMono Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ThinItalic.ttf
+JetBrainsMonoNFP-Bold	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Bold.ttf
+JetBrainsMonoNFP-BoldItalic	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-BoldItalic.ttf
+JetBrainsMonoNFP-ExtraBold	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraBold.ttf
+JetBrainsMonoNFP-ExtraBoldItalic	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraBoldItalic.ttf
+JetBrainsMonoNFP-ExtraLight	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraLight.ttf
+JetBrainsMonoNFP-ExtraLightItalic	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraLightItalic.ttf
+JetBrainsMonoNFP-Italic	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Italic.ttf
+JetBrainsMonoNFP-Light	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Light.ttf
+JetBrainsMonoNFP-LightItalic	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-LightItalic.ttf
+JetBrainsMonoNFP-Medium	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Medium.ttf
+JetBrainsMonoNFP-MediumItalic	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-MediumItalic.ttf
+JetBrainsMonoNFP-Regular	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Regular.ttf
+JetBrainsMonoNFP-SemiBold	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-SemiBold.ttf
+JetBrainsMonoNFP-SemiBoldItalic	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-SemiBoldItalic.ttf
+JetBrainsMonoNFP-Thin	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Thin.ttf
+JetBrainsMonoNFP-ThinItalic	JetBrainsMono Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ThinItalic.ttf
+JetBrainsMonoNLNF-Bold	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Bold.ttf
+JetBrainsMonoNLNF-BoldItalic	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-BoldItalic.ttf
+JetBrainsMonoNLNF-ExtraBold	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraBold.ttf
+JetBrainsMonoNLNF-ExtraBoldItalic	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraBoldItalic.ttf
+JetBrainsMonoNLNF-ExtraLight	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraLight.ttf
+JetBrainsMonoNLNF-ExtraLightItalic	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraLightItalic.ttf
+JetBrainsMonoNLNF-Italic	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Italic.ttf
+JetBrainsMonoNLNF-Light	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Light.ttf
+JetBrainsMonoNLNF-LightItalic	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-LightItalic.ttf
+JetBrainsMonoNLNF-Medium	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Medium.ttf
+JetBrainsMonoNLNF-MediumItalic	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-MediumItalic.ttf
+JetBrainsMonoNLNF-Regular	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Regular.ttf
+JetBrainsMonoNLNF-SemiBold	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-SemiBold.ttf
+JetBrainsMonoNLNF-SemiBoldItalic	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-SemiBoldItalic.ttf
+JetBrainsMonoNLNF-Thin	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Thin.ttf
+JetBrainsMonoNLNF-ThinItalic	JetBrainsMonoNL Nerd Font	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ThinItalic.ttf
+JetBrainsMonoNLNFM-Bold	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Bold.ttf
+JetBrainsMonoNLNFM-BoldItalic	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-BoldItalic.ttf
+JetBrainsMonoNLNFM-ExtraBold	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraBold.ttf
+JetBrainsMonoNLNFM-ExtraBoldItalic	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraBoldItalic.ttf
+JetBrainsMonoNLNFM-ExtraLight	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraLight.ttf
+JetBrainsMonoNLNFM-ExtraLightItalic	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraLightItalic.ttf
+JetBrainsMonoNLNFM-Italic	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Italic.ttf
+JetBrainsMonoNLNFM-Light	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Light.ttf
+JetBrainsMonoNLNFM-LightItalic	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-LightItalic.ttf
+JetBrainsMonoNLNFM-Medium	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Medium.ttf
+JetBrainsMonoNLNFM-MediumItalic	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-MediumItalic.ttf
+JetBrainsMonoNLNFM-Regular	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Regular.ttf
+JetBrainsMonoNLNFM-SemiBold	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-SemiBold.ttf
+JetBrainsMonoNLNFM-SemiBoldItalic	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-SemiBoldItalic.ttf
+JetBrainsMonoNLNFM-Thin	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Thin.ttf
+JetBrainsMonoNLNFM-ThinItalic	JetBrainsMonoNL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ThinItalic.ttf
+JetBrainsMonoNLNFP-Bold	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Bold.ttf
+JetBrainsMonoNLNFP-BoldItalic	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-BoldItalic.ttf
+JetBrainsMonoNLNFP-ExtraBold	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraBold.ttf
+JetBrainsMonoNLNFP-ExtraBoldItalic	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraBoldItalic.ttf
+JetBrainsMonoNLNFP-ExtraLight	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraLight.ttf
+JetBrainsMonoNLNFP-ExtraLightItalic	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraLightItalic.ttf
+JetBrainsMonoNLNFP-Italic	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Italic.ttf
+JetBrainsMonoNLNFP-Light	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Light.ttf
+JetBrainsMonoNLNFP-LightItalic	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-LightItalic.ttf
+JetBrainsMonoNLNFP-Medium	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Medium.ttf
+JetBrainsMonoNLNFP-MediumItalic	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-MediumItalic.ttf
+JetBrainsMonoNLNFP-Regular	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Regular.ttf
+JetBrainsMonoNLNFP-SemiBold	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-SemiBold.ttf
+JetBrainsMonoNLNFP-SemiBoldItalic	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-SemiBoldItalic.ttf
+JetBrainsMonoNLNFP-Thin	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Thin.ttf
+JetBrainsMonoNLNFP-ThinItalic	JetBrainsMonoNL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ThinItalic.ttf
+Kailasa	Kailasa	system	/System/Library/Fonts/Supplemental/Kailasa.ttc
+Kailasa-Bold	Kailasa	system	/System/Library/Fonts/Supplemental/Kailasa.ttc
+KannadaMN	Kannada MN	system	/System/Library/Fonts/Supplemental/Kannada MN.ttc
+KannadaMN-Bold	Kannada MN	system	/System/Library/Fonts/Supplemental/Kannada MN.ttc
+KannadaSangamMN	Kannada Sangam MN	system	/System/Library/Fonts/Supplemental/Kannada Sangam MN.ttc
+KannadaSangamMN-Bold	Kannada Sangam MN	system	/System/Library/Fonts/Supplemental/Kannada Sangam MN.ttc
+KefaIII-Bold	Kefa III	system	/System/Library/Fonts/Supplemental/KefaIII.ttf
+KefaIII-ExtraBold	Kefa III	system	/System/Library/Fonts/Supplemental/KefaIII.ttf
+KefaIII-Light	Kefa III	system	/System/Library/Fonts/Supplemental/KefaIII.ttf
+KefaIII-Regular	Kefa III	system	/System/Library/Fonts/Supplemental/KefaIII.ttf
+KhmerMN	Khmer MN	system	/System/Library/Fonts/Supplemental/Khmer MN.ttc
+KhmerMN-Bold	Khmer MN	system	/System/Library/Fonts/Supplemental/Khmer MN.ttc
+KhmerSangamMN	Khmer Sangam MN	system	/System/Library/Fonts/Supplemental/Khmer Sangam MN.ttf
+Klee-Demibold	Klee	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/81e879dcb4d596ab140f7cffcd5ccaaf8108519b.asset/AssetData/Klee.ttc
+Klee-Medium	Klee	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/81e879dcb4d596ab140f7cffcd5ccaaf8108519b.asset/AssetData/Klee.ttc
+KohinoorBangla-Bold	Kohinoor Bangla	system	/System/Library/Fonts/KohinoorBangla.ttc
+KohinoorBangla-Light	Kohinoor Bangla	system	/System/Library/Fonts/KohinoorBangla.ttc
+KohinoorBangla-Medium	Kohinoor Bangla	system	/System/Library/Fonts/KohinoorBangla.ttc
+KohinoorBangla-Regular	Kohinoor Bangla	system	/System/Library/Fonts/KohinoorBangla.ttc
+KohinoorBangla-Semibold	Kohinoor Bangla	system	/System/Library/Fonts/KohinoorBangla.ttc
+KohinoorDevanagari-Bold	Kohinoor Devanagari	system	/System/Library/Fonts/Kohinoor.ttc
+KohinoorDevanagari-Light	Kohinoor Devanagari	system	/System/Library/Fonts/Kohinoor.ttc
+KohinoorDevanagari-Medium	Kohinoor Devanagari	system	/System/Library/Fonts/Kohinoor.ttc
+KohinoorDevanagari-Regular	Kohinoor Devanagari	system	/System/Library/Fonts/Kohinoor.ttc
+KohinoorDevanagari-Semibold	Kohinoor Devanagari	system	/System/Library/Fonts/Kohinoor.ttc
+KohinoorGujarati-Bold	Kohinoor Gujarati	system	/System/Library/Fonts/KohinoorGujarati.ttc
+KohinoorGujarati-Light	Kohinoor Gujarati	system	/System/Library/Fonts/KohinoorGujarati.ttc
+KohinoorGujarati-Medium	Kohinoor Gujarati	system	/System/Library/Fonts/KohinoorGujarati.ttc
+KohinoorGujarati-Regular	Kohinoor Gujarati	system	/System/Library/Fonts/KohinoorGujarati.ttc
+KohinoorGujarati-Semibold	Kohinoor Gujarati	system	/System/Library/Fonts/KohinoorGujarati.ttc
+KohinoorTelugu-Bold	Kohinoor Telugu	system	/System/Library/Fonts/KohinoorTelugu.ttc
+KohinoorTelugu-Light	Kohinoor Telugu	system	/System/Library/Fonts/KohinoorTelugu.ttc
+KohinoorTelugu-Medium	Kohinoor Telugu	system	/System/Library/Fonts/KohinoorTelugu.ttc
+KohinoorTelugu-Regular	Kohinoor Telugu	system	/System/Library/Fonts/KohinoorTelugu.ttc
+KohinoorTelugu-Semibold	Kohinoor Telugu	system	/System/Library/Fonts/KohinoorTelugu.ttc
+Kokonor	Kokonor	system	/System/Library/Fonts/Supplemental/Kokonor.ttf
+Krungthep	Krungthep	system	/System/Library/Fonts/Supplemental/Krungthep.ttf
+KufiStandardGK	KufiStandardGK	system	/System/Library/Fonts/Supplemental/KufiStandardGK.ttc
+LaoMN	Lao MN	system	/System/Library/Fonts/Supplemental/Lao MN.ttc
+LaoMN-Bold	Lao MN	system	/System/Library/Fonts/Supplemental/Lao MN.ttc
+LaoSangamMN	Lao Sangam MN	system	/System/Library/Fonts/Supplemental/Lao Sangam MN.ttf
+LiGothicMed	Apple LiGothic	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ecb0f9fe84d4cf732f739bbc2c6a8c29cfefd08e.asset/AssetData/AppleLiGothic-Medium.ttf
+LiHeiPro	LiHei Pro	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/5d3a1229823fff781c0d9dac611c90f9fc31e138.asset/AssetData/LiHeiPro.ttf
+LiSongPro	LiSong Pro	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/6372627020b45393e500bb1661c460d4a93aff49.asset/AssetData/LiSongPro.ttf
+LiSungLight	Apple LiSung	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/b3a305e67bac3daadc55e9b976b534261c038509.asset/AssetData/AppleLiSung-Light.ttf
+LucidaGrande	Lucida Grande	system	/System/Library/Fonts/LucidaGrande.ttc
+LucidaGrande-Bold	Lucida Grande	system	/System/Library/Fonts/LucidaGrande.ttc
+Luminari-Regular	Luminari	system	/System/Library/Fonts/Supplemental/Luminari.ttf
+MLingWaiMedium-SC	LingWai SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/78f88149335340bffebcfade41e6a326a865625c.asset/AssetData/LingWaiSC-Medium.otf
+MLingWaiMedium-TC	LingWai TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/bde53ad6e1bb82eb008445d7ed26d067e4c89497.asset/AssetData/LingWaiTC-Medium.otf
+MalayalamMN	Malayalam MN	system	/System/Library/Fonts/Supplemental/Malayalam MN.ttc
+MalayalamMN-Bold	Malayalam MN	system	/System/Library/Fonts/Supplemental/Malayalam MN.ttc
+MalayalamSangamMN	Malayalam Sangam MN	system	/System/Library/Fonts/Supplemental/Malayalam Sangam MN.ttc
+MalayalamSangamMN-Bold	Malayalam Sangam MN	system	/System/Library/Fonts/Supplemental/Malayalam Sangam MN.ttc
+MarkerFelt-Thin	Marker Felt	system	/System/Library/Fonts/MarkerFelt.ttc
+MarkerFelt-Wide	Marker Felt	system	/System/Library/Fonts/MarkerFelt.ttc
+Menlo-Bold	Menlo	system	/System/Library/Fonts/Menlo.ttc
+Menlo-BoldItalic	Menlo	system	/System/Library/Fonts/Menlo.ttc
+Menlo-Italic	Menlo	system	/System/Library/Fonts/Menlo.ttc
+Menlo-Regular	Menlo	system	/System/Library/Fonts/Menlo.ttc
+MesloLGL-RegularForPowerline	Meslo LG L for Powerline	user	/Users/marcelo/Library/Fonts/Meslo LG L Regular for Powerline.otf
+MesloLGLDZ-RegularForPowerline	Meslo LG L DZ for Powerline	user	/Users/marcelo/Library/Fonts/Meslo LG L DZ Regular for Powerline.otf
+MesloLGLDZNF-Bold	MesloLGLDZ Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-Bold.ttf
+MesloLGLDZNF-BoldItalic	MesloLGLDZ Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-BoldItalic.ttf
+MesloLGLDZNF-Italic	MesloLGLDZ Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-Italic.ttf
+MesloLGLDZNF-Regular	MesloLGLDZ Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-Regular.ttf
+MesloLGLDZNFM-Bold	MesloLGLDZ Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-Bold.ttf
+MesloLGLDZNFM-BoldItalic	MesloLGLDZ Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-BoldItalic.ttf
+MesloLGLDZNFM-Italic	MesloLGLDZ Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-Italic.ttf
+MesloLGLDZNFM-Regular	MesloLGLDZ Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-Regular.ttf
+MesloLGLDZNFP-Bold	MesloLGLDZ Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-Bold.ttf
+MesloLGLDZNFP-BoldItalic	MesloLGLDZ Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-BoldItalic.ttf
+MesloLGLDZNFP-Italic	MesloLGLDZ Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-Italic.ttf
+MesloLGLDZNFP-Regular	MesloLGLDZ Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-Regular.ttf
+MesloLGLNF-Bold	MesloLGL Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGLNerdFont-Bold.ttf
+MesloLGLNF-BoldItalic	MesloLGL Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGLNerdFont-BoldItalic.ttf
+MesloLGLNF-Italic	MesloLGL Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGLNerdFont-Italic.ttf
+MesloLGLNF-Regular	MesloLGL Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGLNerdFont-Regular.ttf
+MesloLGLNFM-Bold	MesloLGL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-Bold.ttf
+MesloLGLNFM-BoldItalic	MesloLGL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-BoldItalic.ttf
+MesloLGLNFM-Italic	MesloLGL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-Italic.ttf
+MesloLGLNFM-Regular	MesloLGL Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-Regular.ttf
+MesloLGLNFP-Bold	MesloLGL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-Bold.ttf
+MesloLGLNFP-BoldItalic	MesloLGL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-BoldItalic.ttf
+MesloLGLNFP-Italic	MesloLGL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-Italic.ttf
+MesloLGLNFP-Regular	MesloLGL Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-Regular.ttf
+MesloLGM-RegularForPowerline	Meslo LG M for Powerline	user	/Users/marcelo/Library/Fonts/Meslo LG M Regular for Powerline.otf
+MesloLGMDZ-RegularForPowerline	Meslo LG M DZ for Powerline	user	/Users/marcelo/Library/Fonts/Meslo LG M DZ Regular for Powerline.otf
+MesloLGMDZNF-Bold	MesloLGMDZ Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-Bold.ttf
+MesloLGMDZNF-BoldItalic	MesloLGMDZ Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-BoldItalic.ttf
+MesloLGMDZNF-Italic	MesloLGMDZ Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-Italic.ttf
+MesloLGMDZNF-Regular	MesloLGMDZ Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-Regular.ttf
+MesloLGMDZNFM-Bold	MesloLGMDZ Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-Bold.ttf
+MesloLGMDZNFM-BoldItalic	MesloLGMDZ Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-BoldItalic.ttf
+MesloLGMDZNFM-Italic	MesloLGMDZ Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-Italic.ttf
+MesloLGMDZNFM-Regular	MesloLGMDZ Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-Regular.ttf
+MesloLGMDZNFP-Bold	MesloLGMDZ Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-Bold.ttf
+MesloLGMDZNFP-BoldItalic	MesloLGMDZ Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-BoldItalic.ttf
+MesloLGMDZNFP-Italic	MesloLGMDZ Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-Italic.ttf
+MesloLGMDZNFP-Regular	MesloLGMDZ Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-Regular.ttf
+MesloLGMNF-Bold	MesloLGM Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGMNerdFont-Bold.ttf
+MesloLGMNF-BoldItalic	MesloLGM Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGMNerdFont-BoldItalic.ttf
+MesloLGMNF-Italic	MesloLGM Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGMNerdFont-Italic.ttf
+MesloLGMNF-Regular	MesloLGM Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGMNerdFont-Regular.ttf
+MesloLGMNFM-Bold	MesloLGM Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-Bold.ttf
+MesloLGMNFM-BoldItalic	MesloLGM Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-BoldItalic.ttf
+MesloLGMNFM-Italic	MesloLGM Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-Italic.ttf
+MesloLGMNFM-Regular	MesloLGM Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-Regular.ttf
+MesloLGMNFP-Bold	MesloLGM Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-Bold.ttf
+MesloLGMNFP-BoldItalic	MesloLGM Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-BoldItalic.ttf
+MesloLGMNFP-Italic	MesloLGM Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-Italic.ttf
+MesloLGMNFP-Regular	MesloLGM Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-Regular.ttf
+MesloLGS-NF-Bold	MesloLGS NF	user	/Users/marcelo/Library/Fonts/MesloLGS NF Bold.ttf
+MesloLGS-NF-Bold-Italic	MesloLGS NF	user	/Users/marcelo/Library/Fonts/MesloLGS NF Bold Italic.ttf
+MesloLGS-NF-Italic	MesloLGS NF	user	/Users/marcelo/Library/Fonts/MesloLGS NF Italic.ttf
+MesloLGS-NF-Regular	MesloLGS NF	user	/Users/marcelo/Library/Fonts/MesloLGS NF Regular.ttf
+MesloLGS-RegularForPowerline	Meslo LG S for Powerline	user	/Users/marcelo/Library/Fonts/Meslo LG S Regular for Powerline.otf
+MesloLGSDZ-RegularForPowerline	Meslo LG S DZ for Powerline	user	/Users/marcelo/Library/Fonts/Meslo LG S DZ Regular for Powerline.otf
+MesloLGSDZNF-Bold	MesloLGSDZ Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-Bold.ttf
+MesloLGSDZNF-BoldItalic	MesloLGSDZ Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-BoldItalic.ttf
+MesloLGSDZNF-Italic	MesloLGSDZ Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-Italic.ttf
+MesloLGSDZNF-Regular	MesloLGSDZ Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-Regular.ttf
+MesloLGSDZNFM-Bold	MesloLGSDZ Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-Bold.ttf
+MesloLGSDZNFM-BoldItalic	MesloLGSDZ Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-BoldItalic.ttf
+MesloLGSDZNFM-Italic	MesloLGSDZ Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-Italic.ttf
+MesloLGSDZNFM-Regular	MesloLGSDZ Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-Regular.ttf
+MesloLGSDZNFP-Bold	MesloLGSDZ Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-Bold.ttf
+MesloLGSDZNFP-BoldItalic	MesloLGSDZ Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-BoldItalic.ttf
+MesloLGSDZNFP-Italic	MesloLGSDZ Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-Italic.ttf
+MesloLGSDZNFP-Regular	MesloLGSDZ Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-Regular.ttf
+MesloLGSNF-Bold	MesloLGS Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGSNerdFont-Bold.ttf
+MesloLGSNF-BoldItalic	MesloLGS Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGSNerdFont-BoldItalic.ttf
+MesloLGSNF-Italic	MesloLGS Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGSNerdFont-Italic.ttf
+MesloLGSNF-Regular	MesloLGS Nerd Font	user	/Users/marcelo/Library/Fonts/MesloLGSNerdFont-Regular.ttf
+MesloLGSNFM-Bold	MesloLGS Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-Bold.ttf
+MesloLGSNFM-BoldItalic	MesloLGS Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-BoldItalic.ttf
+MesloLGSNFM-Italic	MesloLGS Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-Italic.ttf
+MesloLGSNFM-Regular	MesloLGS Nerd Font Mono	user	/Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-Regular.ttf
+MesloLGSNFP-Bold	MesloLGS Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-Bold.ttf
+MesloLGSNFP-BoldItalic	MesloLGS Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-BoldItalic.ttf
+MesloLGSNFP-Italic	MesloLGS Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-Italic.ttf
+MesloLGSNFP-Regular	MesloLGS Nerd Font Propo	user	/Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-Regular.ttf
+MicrosoftSansSerif	Microsoft Sans Serif	system	/System/Library/Fonts/Supplemental/Microsoft Sans Serif.ttf
+Monaco	Monaco	system	/System/Library/Fonts/Monaco.ttf
+MonotypeGurmukhi	Gurmukhi MT	system	/System/Library/Fonts/Supplemental/Gurmukhi.ttf
+Mshtakan	Mshtakan	system	/System/Library/Fonts/Supplemental/Mshtakan.ttc
+MshtakanBold	Mshtakan	system	/System/Library/Fonts/Supplemental/Mshtakan.ttc
+MshtakanBoldOblique	Mshtakan	system	/System/Library/Fonts/Supplemental/Mshtakan.ttc
+MshtakanOblique	Mshtakan	system	/System/Library/Fonts/Supplemental/Mshtakan.ttc
+MuktaMahee-Bold	Mukta Mahee	system	/System/Library/Fonts/MuktaMahee.ttc
+MuktaMahee-ExtraBold	Mukta Mahee	system	/System/Library/Fonts/MuktaMahee.ttc
+MuktaMahee-ExtraLight	Mukta Mahee	system	/System/Library/Fonts/MuktaMahee.ttc
+MuktaMahee-Light	Mukta Mahee	system	/System/Library/Fonts/MuktaMahee.ttc
+MuktaMahee-Medium	Mukta Mahee	system	/System/Library/Fonts/MuktaMahee.ttc
+MuktaMahee-Regular	Mukta Mahee	system	/System/Library/Fonts/MuktaMahee.ttc
+MuktaMahee-SemiBold	Mukta Mahee	system	/System/Library/Fonts/MuktaMahee.ttc
+Muna	Muna	system	/System/Library/Fonts/Supplemental/Muna.ttc
+MunaBlack	Muna	system	/System/Library/Fonts/Supplemental/Muna.ttc
+MunaBold	Muna	system	/System/Library/Fonts/Supplemental/Muna.ttc
+MyanmarMN	Myanmar MN	system	/System/Library/Fonts/Supplemental/Myanmar MN.ttc
+MyanmarMN-Bold	Myanmar MN	system	/System/Library/Fonts/Supplemental/Myanmar MN.ttc
+MyanmarSangamMN	Myanmar Sangam MN	system	/System/Library/Fonts/Supplemental/Myanmar Sangam MN.ttc
+MyanmarSangamMN-Bold	Myanmar Sangam MN	system	/System/Library/Fonts/Supplemental/Myanmar Sangam MN.ttc
+Nadeem	Nadeem	system	/System/Library/Fonts/Supplemental/Nadeem.ttc
+NanumBrush	Nanum Brush Script	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/1fb44cf128344a11e654a43ccd7a45a68026bf5d.asset/AssetData/NanumScript.ttc
+NanumGothic	Nanum Gothic	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/7a0b5c0f3c1d41c4c52a33343496c9c65ad52c50.asset/AssetData/NanumGothic.ttc
+NanumGothicBold	Nanum Gothic	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/7a0b5c0f3c1d41c4c52a33343496c9c65ad52c50.asset/AssetData/NanumGothic.ttc
+NanumGothicExtraBold	Nanum Gothic	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/7a0b5c0f3c1d41c4c52a33343496c9c65ad52c50.asset/AssetData/NanumGothic.ttc
+NanumMyeongjo	Nanum Myeongjo	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/4c932c71d74fc9e4c1bd9cbf270374b0b3ee7519.asset/AssetData/NanumMyeongjo.ttc
+NanumMyeongjoBold	Nanum Myeongjo	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/4c932c71d74fc9e4c1bd9cbf270374b0b3ee7519.asset/AssetData/NanumMyeongjo.ttc
+NanumMyeongjoExtraBold	Nanum Myeongjo	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/4c932c71d74fc9e4c1bd9cbf270374b0b3ee7519.asset/AssetData/NanumMyeongjo.ttc
+NanumPen	Nanum Pen Script	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/1fb44cf128344a11e654a43ccd7a45a68026bf5d.asset/AssetData/NanumScript.ttc
+NewPeninimMT	New Peninim MT	system	/System/Library/Fonts/Supplemental/NewPeninimMT.ttc
+NewPeninimMT-Bold	New Peninim MT	system	/System/Library/Fonts/Supplemental/NewPeninimMT.ttc
+NewPeninimMT-BoldInclined	New Peninim MT	system	/System/Library/Fonts/Supplemental/NewPeninimMT.ttc
+NewPeninimMT-Inclined	New Peninim MT	system	/System/Library/Fonts/Supplemental/NewPeninimMT.ttc
+Noteworthy-Bold	Noteworthy	system	/System/Library/Fonts/Noteworthy.ttc
+Noteworthy-Light	Noteworthy	system	/System/Library/Fonts/Noteworthy.ttc
+NotoNastaliqUrdu	Noto Nastaliq Urdu	system	/System/Library/Fonts/NotoNastaliq.ttc
+NotoNastaliqUrdu-Bold	Noto Nastaliq Urdu	system	/System/Library/Fonts/NotoNastaliq.ttc
+NotoSansBatak-Regular	Noto Sans Batak	system	/System/Library/Fonts/Supplemental/NotoSansBatak-Regular.ttf
+NotoSansKannada-Black	Noto Sans Kannada	system	/System/Library/Fonts/NotoSansKannada.ttc
+NotoSansKannada-Bold	Noto Sans Kannada	system	/System/Library/Fonts/NotoSansKannada.ttc
+NotoSansKannada-ExtraBold	Noto Sans Kannada	system	/System/Library/Fonts/NotoSansKannada.ttc
+NotoSansKannada-ExtraLight	Noto Sans Kannada	system	/System/Library/Fonts/NotoSansKannada.ttc
+NotoSansKannada-Light	Noto Sans Kannada	system	/System/Library/Fonts/NotoSansKannada.ttc
+NotoSansKannada-Medium	Noto Sans Kannada	system	/System/Library/Fonts/NotoSansKannada.ttc
+NotoSansKannada-Regular	Noto Sans Kannada	system	/System/Library/Fonts/NotoSansKannada.ttc
+NotoSansKannada-SemiBold	Noto Sans Kannada	system	/System/Library/Fonts/NotoSansKannada.ttc
+NotoSansKannada-Thin	Noto Sans Kannada	system	/System/Library/Fonts/NotoSansKannada.ttc
+NotoSansNKo-Regular	Noto Sans NKo	system	/System/Library/Fonts/Supplemental/NotoSansNKo-Regular.ttf
+NotoSansOriya	Noto Sans Oriya	system	/System/Library/Fonts/NotoSansOriya.ttc
+NotoSansOriya-Bold	Noto Sans Oriya	system	/System/Library/Fonts/NotoSansOriya.ttc
+NotoSansSunuwar-Regular	Noto Sans Sunuwar	system	/System/Library/Fonts/Supplemental/NotoSansSunuwar-Regular.otf
+NotoSansSyriac-Regular	Noto Sans Syriac	system	/System/Library/Fonts/Supplemental/NotoSansSyriac-Regular.ttf
+NotoSansSyriac-Regular_Black	Noto Sans Syriac	system	/System/Library/Fonts/Supplemental/NotoSansSyriac-Regular.ttf
+NotoSansSyriac-Regular_Bold	Noto Sans Syriac	system	/System/Library/Fonts/Supplemental/NotoSansSyriac-Regular.ttf
+NotoSansSyriac-Regular_ExtraBold	Noto Sans Syriac	system	/System/Library/Fonts/Supplemental/NotoSansSyriac-Regular.ttf
+NotoSansSyriac-Regular_ExtraLight	Noto Sans Syriac	system	/System/Library/Fonts/Supplemental/NotoSansSyriac-Regular.ttf
+NotoSansSyriac-Regular_Light	Noto Sans Syriac	system	/System/Library/Fonts/Supplemental/NotoSansSyriac-Regular.ttf
+NotoSansSyriac-Regular_Medium	Noto Sans Syriac	system	/System/Library/Fonts/Supplemental/NotoSansSyriac-Regular.ttf
+NotoSansSyriac-Regular_SemiBold	Noto Sans Syriac	system	/System/Library/Fonts/Supplemental/NotoSansSyriac-Regular.ttf
+NotoSansSyriac-Regular_Thin	Noto Sans Syriac	system	/System/Library/Fonts/Supplemental/NotoSansSyriac-Regular.ttf
+NotoSansTagalog-Regular	Noto Sans Tagalog	system	/System/Library/Fonts/Supplemental/NotoSansTagalog-Regular.ttf
+NotoSerifMyanmar-Black	Noto Serif Myanmar	system	/System/Library/Fonts/NotoSerifMyanmar.ttc
+NotoSerifMyanmar-Bold	Noto Serif Myanmar	system	/System/Library/Fonts/NotoSerifMyanmar.ttc
+NotoSerifMyanmar-ExtraBold	Noto Serif Myanmar	system	/System/Library/Fonts/NotoSerifMyanmar.ttc
+NotoSerifMyanmar-ExtraLight	Noto Serif Myanmar	system	/System/Library/Fonts/NotoSerifMyanmar.ttc
+NotoSerifMyanmar-Light	Noto Serif Myanmar	system	/System/Library/Fonts/NotoSerifMyanmar.ttc
+NotoSerifMyanmar-Medium	Noto Serif Myanmar	system	/System/Library/Fonts/NotoSerifMyanmar.ttc
+NotoSerifMyanmar-Regular	Noto Serif Myanmar	system	/System/Library/Fonts/NotoSerifMyanmar.ttc
+NotoSerifMyanmar-SemiBold	Noto Serif Myanmar	system	/System/Library/Fonts/NotoSerifMyanmar.ttc
+NotoSerifMyanmar-Thin	Noto Serif Myanmar	system	/System/Library/Fonts/NotoSerifMyanmar.ttc
+Optima-Bold	Optima	system	/System/Library/Fonts/Optima.ttc
+Optima-BoldItalic	Optima	system	/System/Library/Fonts/Optima.ttc
+Optima-ExtraBlack	Optima	system	/System/Library/Fonts/Optima.ttc
+Optima-Italic	Optima	system	/System/Library/Fonts/Optima.ttc
+Optima-Regular	Optima	system	/System/Library/Fonts/Optima.ttc
+OriyaMN	Oriya MN	system	/System/Library/Fonts/Supplemental/Oriya MN.ttc
+OriyaMN-Bold	Oriya MN	system	/System/Library/Fonts/Supplemental/Oriya MN.ttc
+OriyaSangamMN	Oriya Sangam MN	system	/System/Library/Fonts/Supplemental/Oriya Sangam MN.ttc
+OriyaSangamMN-Bold	Oriya Sangam MN	system	/System/Library/Fonts/Supplemental/Oriya Sangam MN.ttc
+Osaka	Osaka	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/0b5bb0a7f7e82279e049e3c943133f4b186ff8a2.asset/AssetData/Osaka.ttf
+Osaka-Mono	Osaka	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/37b7a41df590ab4ef2d6826c6ec7c69f0fd7379f.asset/AssetData/OsakaMono.ttf
+PSLOrnanongPro-Bold	PSL Ornanong Pro	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ee57314cb0de889f6f741b43d931bf85d038ff0e.asset/AssetData/Ornanong.ttc
+PSLOrnanongPro-BoldItalic	PSL Ornanong Pro	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ee57314cb0de889f6f741b43d931bf85d038ff0e.asset/AssetData/Ornanong.ttc
+PSLOrnanongPro-Demibold	PSL Ornanong Pro	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ee57314cb0de889f6f741b43d931bf85d038ff0e.asset/AssetData/Ornanong.ttc
+PSLOrnanongPro-DemiboldItalic	PSL Ornanong Pro	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ee57314cb0de889f6f741b43d931bf85d038ff0e.asset/AssetData/Ornanong.ttc
+PSLOrnanongPro-Italic	PSL Ornanong Pro	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ee57314cb0de889f6f741b43d931bf85d038ff0e.asset/AssetData/Ornanong.ttc
+PSLOrnanongPro-Light	PSL Ornanong Pro	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ee57314cb0de889f6f741b43d931bf85d038ff0e.asset/AssetData/Ornanong.ttc
+PSLOrnanongPro-LightItalic	PSL Ornanong Pro	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ee57314cb0de889f6f741b43d931bf85d038ff0e.asset/AssetData/Ornanong.ttc
+PSLOrnanongPro-Regular	PSL Ornanong Pro	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ee57314cb0de889f6f741b43d931bf85d038ff0e.asset/AssetData/Ornanong.ttc
+PTMono-Bold	PT Mono	system	/System/Library/Fonts/Supplemental/PTMono.ttc
+PTMono-Regular	PT Mono	system	/System/Library/Fonts/Supplemental/PTMono.ttc
+PTSans-Bold	PT Sans	system	/System/Library/Fonts/Supplemental/PTSans.ttc
+PTSans-BoldItalic	PT Sans	system	/System/Library/Fonts/Supplemental/PTSans.ttc
+PTSans-Caption	PT Sans Caption	system	/System/Library/Fonts/Supplemental/PTSans.ttc
+PTSans-CaptionBold	PT Sans Caption	system	/System/Library/Fonts/Supplemental/PTSans.ttc
+PTSans-Italic	PT Sans	system	/System/Library/Fonts/Supplemental/PTSans.ttc
+PTSans-Narrow	PT Sans Narrow	system	/System/Library/Fonts/Supplemental/PTSans.ttc
+PTSans-NarrowBold	PT Sans Narrow	system	/System/Library/Fonts/Supplemental/PTSans.ttc
+PTSans-Regular	PT Sans	system	/System/Library/Fonts/Supplemental/PTSans.ttc
+PTSerif-Bold	PT Serif	system	/System/Library/Fonts/Supplemental/PTSerif.ttc
+PTSerif-BoldItalic	PT Serif	system	/System/Library/Fonts/Supplemental/PTSerif.ttc
+PTSerif-Caption	PT Serif Caption	system	/System/Library/Fonts/Supplemental/PTSerifCaption.ttc
+PTSerif-CaptionItalic	PT Serif Caption	system	/System/Library/Fonts/Supplemental/PTSerifCaption.ttc
+PTSerif-Italic	PT Serif	system	/System/Library/Fonts/Supplemental/PTSerif.ttc
+PTSerif-Regular	PT Serif	system	/System/Library/Fonts/Supplemental/PTSerif.ttc
+Palatino-Bold	Palatino	system	/System/Library/Fonts/Palatino.ttc
+Palatino-BoldItalic	Palatino	system	/System/Library/Fonts/Palatino.ttc
+Palatino-Italic	Palatino	system	/System/Library/Fonts/Palatino.ttc
+Palatino-Roman	Palatino	system	/System/Library/Fonts/Palatino.ttc
+Papyrus	Papyrus	system	/System/Library/Fonts/Supplemental/Papyrus.ttc
+Papyrus-Condensed	Papyrus	system	/System/Library/Fonts/Supplemental/Papyrus.ttc
+PartyLetPlain	Party LET	system	/System/Library/Fonts/Supplemental/PartyLET-plain.ttf
+Phosphate-Inline	Phosphate	system	/System/Library/Fonts/Supplemental/Phosphate.ttc
+Phosphate-Solid	Phosphate	system	/System/Library/Fonts/Supplemental/Phosphate.ttc
+PingFangHK-Light	PingFang HK	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangHK-Medium	PingFang HK	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangHK-Regular	PingFang HK	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangHK-Semibold	PingFang HK	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangHK-Thin	PingFang HK	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangHK-Ultralight	PingFang HK	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangMO-Light	PingFang MO	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangMO-Medium	PingFang MO	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangMO-Regular	PingFang MO	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangMO-Semibold	PingFang MO	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangMO-Thin	PingFang MO	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangMO-Ultralight	PingFang MO	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangSC-Light	PingFang SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangSC-Medium	PingFang SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangSC-Regular	PingFang SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangSC-Semibold	PingFang SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangSC-Thin	PingFang SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangSC-Ultralight	PingFang SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangTC-Light	PingFang TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangTC-Medium	PingFang TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangTC-Regular	PingFang TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangTC-Semibold	PingFang TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangTC-Thin	PingFang TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PingFangTC-Ultralight	PingFang TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+PlantagenetCherokee	Plantagenet Cherokee	system	/System/Library/Fonts/Supplemental/PlantagenetCherokee.ttf
+Raanana	Raanana	system	/System/Library/Fonts/Supplemental/Raanana.ttc
+RaananaBold	Raanana	system	/System/Library/Fonts/Supplemental/Raanana.ttc
+SIL-Hei-Med-Jian	Hei	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/5feac9245cca79adaf638ded7a4994b1ddb33ca0.asset/AssetData/Hei.ttf
+SIL-Kai-Reg-Jian	Kai	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/6331c5916c361af1b83fb8b8b76ef2eece20c8eb.asset/AssetData/Kai.ttf
+STBaoliSC-Regular	Baoli SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/70875a1270987c17cfd6f40cd3d755ec04d03b33.asset/AssetData/Baoli.ttc
+STBaoliTC-Regular	Baoli TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/70875a1270987c17cfd6f40cd3d755ec04d03b33.asset/AssetData/Baoli.ttc
+STFangsong	STFangsong	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/1b6b2f148cdf17dd0d788706c83c61ca1998c3a6.asset/AssetData/STFANGSO.ttf
+STHeiti	STHeiti	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/53fe5be564086fefc7523ccd0a31200acf92e0e5.asset/AssetData/STHEITI.ttf
+STHeitiSC-Light	Heiti SC	system	/System/Library/Fonts/STHeiti Light.ttc
+STHeitiSC-Medium	Heiti SC	system	/System/Library/Fonts/STHeiti Medium.ttc
+STHeitiTC-Light	Heiti TC	system	/System/Library/Fonts/STHeiti Light.ttc
+STHeitiTC-Medium	Heiti TC	system	/System/Library/Fonts/STHeiti Medium.ttc
+STIXTwoMath-Regular	STIX Two Math	system	/System/Library/Fonts/Supplemental/STIXTwoMath.otf
+STIXTwoText	STIX Two Text	system	/System/Library/Fonts/Supplemental/STIXTwoText.ttf
+STIXTwoText-Italic	STIX Two Text	system	/System/Library/Fonts/Supplemental/STIXTwoText-Italic.ttf
+STIXTwoText-Italic_Bold-Italic	STIX Two Text	system	/System/Library/Fonts/Supplemental/STIXTwoText-Italic.ttf
+STIXTwoText-Italic_Medium-Italic	STIX Two Text	system	/System/Library/Fonts/Supplemental/STIXTwoText-Italic.ttf
+STIXTwoText-Italic_SemiBold-Italic	STIX Two Text	system	/System/Library/Fonts/Supplemental/STIXTwoText-Italic.ttf
+STIXTwoText_Bold	STIX Two Text	system	/System/Library/Fonts/Supplemental/STIXTwoText.ttf
+STIXTwoText_Medium	STIX Two Text	system	/System/Library/Fonts/Supplemental/STIXTwoText.ttf
+STIXTwoText_SemiBold	STIX Two Text	system	/System/Library/Fonts/Supplemental/STIXTwoText.ttf
+STKaiti	STKaiti	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/88d6cc32a907955efa1d014207889413890573be.asset/AssetData/Kaiti.ttc
+STKaitiSC-Black	Kaiti SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/88d6cc32a907955efa1d014207889413890573be.asset/AssetData/Kaiti.ttc
+STKaitiSC-Bold	Kaiti SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/88d6cc32a907955efa1d014207889413890573be.asset/AssetData/Kaiti.ttc
+STKaitiSC-Regular	Kaiti SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/88d6cc32a907955efa1d014207889413890573be.asset/AssetData/Kaiti.ttc
+STKaitiTC-Black	Kaiti TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/88d6cc32a907955efa1d014207889413890573be.asset/AssetData/Kaiti.ttc
+STKaitiTC-Bold	Kaiti TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/88d6cc32a907955efa1d014207889413890573be.asset/AssetData/Kaiti.ttc
+STKaitiTC-Regular	Kaiti TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/88d6cc32a907955efa1d014207889413890573be.asset/AssetData/Kaiti.ttc
+STLibianSC-Regular	Libian SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/a304e3396d019087ab67af77f5e398977529007d.asset/AssetData/Libian.ttc
+STLibianTC-Regular	Libian TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/a304e3396d019087ab67af77f5e398977529007d.asset/AssetData/Libian.ttc
+STSong	STSong	system	/System/Library/Fonts/Supplemental/Songti.ttc
+STSongti-SC-Black	Songti SC	system	/System/Library/Fonts/Supplemental/Songti.ttc
+STSongti-SC-Bold	Songti SC	system	/System/Library/Fonts/Supplemental/Songti.ttc
+STSongti-SC-Light	Songti SC	system	/System/Library/Fonts/Supplemental/Songti.ttc
+STSongti-SC-Regular	Songti SC	system	/System/Library/Fonts/Supplemental/Songti.ttc
+STSongti-TC-Bold	Songti TC	system	/System/Library/Fonts/Supplemental/Songti.ttc
+STSongti-TC-Light	Songti TC	system	/System/Library/Fonts/Supplemental/Songti.ttc
+STSongti-TC-Regular	Songti TC	system	/System/Library/Fonts/Supplemental/Songti.ttc
+STXihei	STHeiti	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/10e7a462a671950b802274fad767b566ff8457d1.asset/AssetData/STXIHEI.ttf
+STXingkaiSC-Bold	Xingkai SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/13b8ce423f920875b28b551f9406bf1014e0a656.asset/AssetData/Xingkai.ttc
+STXingkaiSC-Light	Xingkai SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/13b8ce423f920875b28b551f9406bf1014e0a656.asset/AssetData/Xingkai.ttc
+STXingkaiTC-Bold	Xingkai TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/13b8ce423f920875b28b551f9406bf1014e0a656.asset/AssetData/Xingkai.ttc
+STXingkaiTC-Light	Xingkai TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/13b8ce423f920875b28b551f9406bf1014e0a656.asset/AssetData/Xingkai.ttc
+STYuanti-SC-Bold	Yuanti SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/4a418d1fa4860652a3241e8ee457806c8557fc64.asset/AssetData/Yuanti.ttc
+STYuanti-SC-Light	Yuanti SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/4a418d1fa4860652a3241e8ee457806c8557fc64.asset/AssetData/Yuanti.ttc
+STYuanti-SC-Regular	Yuanti SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/4a418d1fa4860652a3241e8ee457806c8557fc64.asset/AssetData/Yuanti.ttc
+STYuanti-TC-Bold	Yuanti TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/4a418d1fa4860652a3241e8ee457806c8557fc64.asset/AssetData/Yuanti.ttc
+STYuanti-TC-Light	Yuanti TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/4a418d1fa4860652a3241e8ee457806c8557fc64.asset/AssetData/Yuanti.ttc
+STYuanti-TC-Regular	Yuanti TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/4a418d1fa4860652a3241e8ee457806c8557fc64.asset/AssetData/Yuanti.ttc
+Sana	Sana	system	/System/Library/Fonts/Supplemental/Sana.ttc
+Sathu	Sathu	system	/System/Library/Fonts/Supplemental/Sathu.ttf
+SauceCodeProNF	SauceCodePro Nerd Font	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Regular.ttf
+SauceCodeProNF-Black	SauceCodePro Nerd Font	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Black.ttf
+SauceCodeProNF-BlackItalic	SauceCodePro Nerd Font	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-BlackItalic.ttf
+SauceCodeProNF-Bold	SauceCodePro Nerd Font	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Bold.ttf
+SauceCodeProNF-BoldItalic	SauceCodePro Nerd Font	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-BoldItalic.ttf
+SauceCodeProNF-ExtraLight	SauceCodePro Nerd Font	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-ExtraLight.ttf
+SauceCodeProNF-ExtraLightItalic	SauceCodePro Nerd Font	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-ExtraLightItalic.ttf
+SauceCodeProNF-Italic	SauceCodePro Nerd Font	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Italic.ttf
+SauceCodeProNF-Light	SauceCodePro Nerd Font	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Light.ttf
+SauceCodeProNF-LightItalic	SauceCodePro Nerd Font	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-LightItalic.ttf
+SauceCodeProNF-Medium	SauceCodePro Nerd Font	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Medium.ttf
+SauceCodeProNF-MediumItalic	SauceCodePro Nerd Font	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-MediumItalic.ttf
+SauceCodeProNF-SemiBold	SauceCodePro Nerd Font	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-SemiBold.ttf
+SauceCodeProNF-SemiBoldItalic	SauceCodePro Nerd Font	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-SemiBoldItalic.ttf
+SauceCodeProNFM	SauceCodePro Nerd Font Mono	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Regular.ttf
+SauceCodeProNFM-Black	SauceCodePro Nerd Font Mono	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Black.ttf
+SauceCodeProNFM-BlackItalic	SauceCodePro Nerd Font Mono	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-BlackItalic.ttf
+SauceCodeProNFM-Bold	SauceCodePro Nerd Font Mono	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Bold.ttf
+SauceCodeProNFM-BoldItalic	SauceCodePro Nerd Font Mono	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-BoldItalic.ttf
+SauceCodeProNFM-ExtraLight	SauceCodePro Nerd Font Mono	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-ExtraLight.ttf
+SauceCodeProNFM-ExtraLightItalic	SauceCodePro Nerd Font Mono	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-ExtraLightItalic.ttf
+SauceCodeProNFM-Italic	SauceCodePro Nerd Font Mono	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Italic.ttf
+SauceCodeProNFM-Light	SauceCodePro Nerd Font Mono	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Light.ttf
+SauceCodeProNFM-LightItalic	SauceCodePro Nerd Font Mono	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-LightItalic.ttf
+SauceCodeProNFM-Medium	SauceCodePro Nerd Font Mono	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Medium.ttf
+SauceCodeProNFM-MediumItalic	SauceCodePro Nerd Font Mono	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-MediumItalic.ttf
+SauceCodeProNFM-SemiBold	SauceCodePro Nerd Font Mono	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-SemiBold.ttf
+SauceCodeProNFM-SemiBoldItalic	SauceCodePro Nerd Font Mono	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-SemiBoldItalic.ttf
+SauceCodeProNFP	SauceCodePro Nerd Font Propo	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Regular.ttf
+SauceCodeProNFP-Black	SauceCodePro Nerd Font Propo	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Black.ttf
+SauceCodeProNFP-BlackItalic	SauceCodePro Nerd Font Propo	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-BlackItalic.ttf
+SauceCodeProNFP-Bold	SauceCodePro Nerd Font Propo	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Bold.ttf
+SauceCodeProNFP-BoldItalic	SauceCodePro Nerd Font Propo	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-BoldItalic.ttf
+SauceCodeProNFP-ExtraLight	SauceCodePro Nerd Font Propo	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-ExtraLight.ttf
+SauceCodeProNFP-ExtraLightItalic	SauceCodePro Nerd Font Propo	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-ExtraLightItalic.ttf
+SauceCodeProNFP-Italic	SauceCodePro Nerd Font Propo	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Italic.ttf
+SauceCodeProNFP-Light	SauceCodePro Nerd Font Propo	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Light.ttf
+SauceCodeProNFP-LightItalic	SauceCodePro Nerd Font Propo	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-LightItalic.ttf
+SauceCodeProNFP-Medium	SauceCodePro Nerd Font Propo	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Medium.ttf
+SauceCodeProNFP-MediumItalic	SauceCodePro Nerd Font Propo	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-MediumItalic.ttf
+SauceCodeProNFP-SemiBold	SauceCodePro Nerd Font Propo	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-SemiBold.ttf
+SauceCodeProNFP-SemiBoldItalic	SauceCodePro Nerd Font Propo	user	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-SemiBoldItalic.ttf
+SavoyeLetPlain	Savoye LET	system	/System/Library/Fonts/Supplemental/Savoye LET.ttc
+ShreeDev0714	Shree Devanagari 714	system	/System/Library/Fonts/Supplemental/Shree714.ttc
+ShreeDev0714-Bold	Shree Devanagari 714	system	/System/Library/Fonts/Supplemental/Shree714.ttc
+ShreeDev0714-BoldItalic	Shree Devanagari 714	system	/System/Library/Fonts/Supplemental/Shree714.ttc
+ShreeDev0714-Italic	Shree Devanagari 714	system	/System/Library/Fonts/Supplemental/Shree714.ttc
+SignPainter-HouseScript	SignPainter	system	/System/Library/Fonts/Supplemental/SignPainter.ttc
+SignPainter-HouseScriptSemibold	SignPainter	system	/System/Library/Fonts/Supplemental/SignPainter.ttc
+Silom	Silom	system	/System/Library/Fonts/Supplemental/Silom.ttf
+SimSong-Bold	SimSong	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/259e8f5a322e8dae602d51ac00aefb3d6b05c224.asset/AssetData/SimSong.ttc
+SimSong-Regular	SimSong	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/259e8f5a322e8dae602d51ac00aefb3d6b05c224.asset/AssetData/SimSong.ttc
+SinhalaMN	Sinhala MN	system	/System/Library/Fonts/Supplemental/Sinhala MN.ttc
+SinhalaMN-Bold	Sinhala MN	system	/System/Library/Fonts/Supplemental/Sinhala MN.ttc
+SinhalaSangamMN	Sinhala Sangam MN	system	/System/Library/Fonts/Supplemental/Sinhala Sangam MN.ttc
+SinhalaSangamMN-Bold	Sinhala Sangam MN	system	/System/Library/Fonts/Supplemental/Sinhala Sangam MN.ttc
+Skia-Regular	Skia	system	/System/Library/Fonts/Supplemental/Skia.ttf
+Skia-Regular_Black	Skia	system	/System/Library/Fonts/Supplemental/Skia.ttf
+Skia-Regular_Black-Condensed	Skia	system	/System/Library/Fonts/Supplemental/Skia.ttf
+Skia-Regular_Black-Extended	Skia	system	/System/Library/Fonts/Supplemental/Skia.ttf
+Skia-Regular_Bold	Skia	system	/System/Library/Fonts/Supplemental/Skia.ttf
+Skia-Regular_Condensed	Skia	system	/System/Library/Fonts/Supplemental/Skia.ttf
+Skia-Regular_Extended	Skia	system	/System/Library/Fonts/Supplemental/Skia.ttf
+Skia-Regular_Light	Skia	system	/System/Library/Fonts/Supplemental/Skia.ttf
+Skia-Regular_Light-Condensed	Skia	system	/System/Library/Fonts/Supplemental/Skia.ttf
+Skia-Regular_Light-Extended	Skia	system	/System/Library/Fonts/Supplemental/Skia.ttf
+SnellRoundhand	Snell Roundhand	system	/System/Library/Fonts/Supplemental/SnellRoundhand.ttc
+SnellRoundhand-Black	Snell Roundhand	system	/System/Library/Fonts/Supplemental/SnellRoundhand.ttc
+SnellRoundhand-Bold	Snell Roundhand	system	/System/Library/Fonts/Supplemental/SnellRoundhand.ttc
+SpotMono-Bold	Spot Mono	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/97d327a33425a29aa6bf467dfc46a6e3d7b59a66.asset/AssetData/SpotMono.ttc
+SpotMono-Medium	Spot Mono	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/97d327a33425a29aa6bf467dfc46a6e3d7b59a66.asset/AssetData/SpotMono.ttc
+SpotMono-Regular	Spot Mono	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/97d327a33425a29aa6bf467dfc46a6e3d7b59a66.asset/AssetData/SpotMono.ttc
+SukhumvitSet-Bold	Sukhumvit Set	system	/System/Library/Fonts/Supplemental/SukhumvitSet.ttc
+SukhumvitSet-Light	Sukhumvit Set	system	/System/Library/Fonts/Supplemental/SukhumvitSet.ttc
+SukhumvitSet-Medium	Sukhumvit Set	system	/System/Library/Fonts/Supplemental/SukhumvitSet.ttc
+SukhumvitSet-SemiBold	Sukhumvit Set	system	/System/Library/Fonts/Supplemental/SukhumvitSet.ttc
+SukhumvitSet-Text	Sukhumvit Set	system	/System/Library/Fonts/Supplemental/SukhumvitSet.ttc
+SukhumvitSet-Thin	Sukhumvit Set	system	/System/Library/Fonts/Supplemental/SukhumvitSet.ttc
+Symbol	Symbol	system	/System/Library/Fonts/Symbol.ttf
+Tahoma	Tahoma	system	/System/Library/Fonts/Supplemental/Tahoma.ttf
+Tahoma-Bold	Tahoma	system	/System/Library/Fonts/Supplemental/Tahoma Bold.ttf
+TamilMN	Tamil MN	system	/System/Library/Fonts/Supplemental/Tamil MN.ttc
+TamilMN-Bold	Tamil MN	system	/System/Library/Fonts/Supplemental/Tamil MN.ttc
+TamilSangamMN	Tamil Sangam MN	system	/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc
+TamilSangamMN-Bold	Tamil Sangam MN	system	/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc
+TeluguMN	Telugu MN	system	/System/Library/Fonts/Supplemental/Telugu MN.ttc
+TeluguMN-Bold	Telugu MN	system	/System/Library/Fonts/Supplemental/Telugu MN.ttc
+TeluguSangamMN	Telugu Sangam MN	system	/System/Library/Fonts/Supplemental/Telugu Sangam MN.ttc
+TeluguSangamMN-Bold	Telugu Sangam MN	system	/System/Library/Fonts/Supplemental/Telugu Sangam MN.ttc
+Thonburi	Thonburi	system	/System/Library/Fonts/Supplemental/Thonburi.ttc
+Thonburi-Bold	Thonburi	system	/System/Library/Fonts/Supplemental/Thonburi.ttc
+Thonburi-Light	Thonburi	system	/System/Library/Fonts/Supplemental/Thonburi.ttc
+TimesNewRomanPS-BoldItalicMT	Times New Roman	system	/System/Library/Fonts/Supplemental/Times New Roman Bold Italic.ttf
+TimesNewRomanPS-BoldMT	Times New Roman	system	/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf
+TimesNewRomanPS-ItalicMT	Times New Roman	system	/System/Library/Fonts/Supplemental/Times New Roman Italic.ttf
+TimesNewRomanPSMT	Times New Roman	system	/System/Library/Fonts/Supplemental/Times New Roman.ttf
+ToppanBunkyuGothicPr6N-DB	Toppan Bunkyu Gothic	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/7a4aca403fc9a901dcfe5e71131b423d71231eec.asset/AssetData/ToppanBunkyuGothicPr6N.ttc
+ToppanBunkyuGothicPr6N-Regular	Toppan Bunkyu Gothic	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/7a4aca403fc9a901dcfe5e71131b423d71231eec.asset/AssetData/ToppanBunkyuGothicPr6N.ttc
+ToppanBunkyuMidashiGothicStdN-ExtraBold	Toppan Bunkyu Midashi Gothic	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/c6dd5dda81ed310c2248630a4e62f4fd71316d91.asset/AssetData/ToppanBunkyuMidashiGothicStdN-ExtraBold.otf
+ToppanBunkyuMidashiMinchoStdN-ExtraBold	Toppan Bunkyu Midashi Mincho	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/36a81f2dad2ef266c50802d85839e0201fcf4e57.asset/AssetData/ToppanBunkyuMidashiMinchoStdN-ExtraBold.otf
+ToppanBunkyuMinchoPr6N-Regular	Toppan Bunkyu Mincho	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/a35803b18dea500ee1e426f403635efbe5a84bd4.asset/AssetData/ToppanBunkyuMinchoPr6N-Regular.otf
+Trattatello	Trattatello	system	/System/Library/Fonts/Supplemental/Trattatello.ttf
+Trebuchet-BoldItalic	Trebuchet MS	system	/System/Library/Fonts/Supplemental/Trebuchet MS Bold Italic.ttf
+TrebuchetMS	Trebuchet MS	system	/System/Library/Fonts/Supplemental/Trebuchet MS.ttf
+TrebuchetMS-Bold	Trebuchet MS	system	/System/Library/Fonts/Supplemental/Trebuchet MS Bold.ttf
+TrebuchetMS-Italic	Trebuchet MS	system	/System/Library/Fonts/Supplemental/Trebuchet MS Italic.ttf
+TsukuARdGothic-Bold	Tsukushi A Round Gothic	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/a9507b2dd1e57ecf7dc3a2fe25e8abfef12973ad.asset/AssetData/TsukushiAMaruGothic.ttc
+TsukuARdGothic-Regular	Tsukushi A Round Gothic	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/a9507b2dd1e57ecf7dc3a2fe25e8abfef12973ad.asset/AssetData/TsukushiAMaruGothic.ttc
+TsukuBRdGothic-Bold	Tsukushi B Round Gothic	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/60484a5d6f3fa8d51dcbeff43b7e70c9d42bcd2f.asset/AssetData/TsukushiBMaruGothic.ttc
+TsukuBRdGothic-Regular	Tsukushi B Round Gothic	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/60484a5d6f3fa8d51dcbeff43b7e70c9d42bcd2f.asset/AssetData/TsukushiBMaruGothic.ttc
+Verdana	Verdana	system	/System/Library/Fonts/Supplemental/Verdana.ttf
+Verdana-Bold	Verdana	system	/System/Library/Fonts/Supplemental/Verdana Bold.ttf
+Verdana-BoldItalic	Verdana	system	/System/Library/Fonts/Supplemental/Verdana Bold Italic.ttf
+Verdana-Italic	Verdana	system	/System/Library/Fonts/Supplemental/Verdana Italic.ttf
+Waseem	Waseem	system	/System/Library/Fonts/Supplemental/Waseem.ttc
+WaseemLight	Waseem	system	/System/Library/Fonts/Supplemental/Waseem.ttc
+Webdings	Webdings	system	/System/Library/Fonts/Supplemental/Webdings.ttf
+WeibeiSC-Bold	Weibei SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/04cf228b25a7ceefda732ebbb9d1a42c0e095528.asset/AssetData/WeibeiSC-Bold.otf
+WeibeiTC-Bold	Weibei TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/c4f5f063cf47a2009786f645b423c09ea75666b8.asset/AssetData/WeibeiTC-Bold.otf
+Wingdings-Regular	Wingdings	system	/System/Library/Fonts/Supplemental/Wingdings.ttf
+Wingdings2	Wingdings 2	system	/System/Library/Fonts/Supplemental/Wingdings 2.ttf
+Wingdings3	Wingdings 3	system	/System/Library/Fonts/Supplemental/Wingdings 3.ttf
+YuGo-Bold	YuGothic	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/b7a6a6575a699e801915b73b9e1e75c74a3404ce.asset/AssetData/YuGothic-Bold.otf
+YuGo-Medium	YuGothic	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ee89e7987a76cc8cfdff36c96bd7bc77655b343e.asset/AssetData/YuGothic-Medium.otf
+YuKyo-Bold	YuKyokasho	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/2b7cea021df336d26a89f699c8469a51c721e9a2.asset/AssetData/Kyokasho.ttc
+YuKyo-Medium	YuKyokasho	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/2b7cea021df336d26a89f699c8469a51c721e9a2.asset/AssetData/Kyokasho.ttc
+YuKyo_Yoko-Bold	YuKyokasho Yoko	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/2b7cea021df336d26a89f699c8469a51c721e9a2.asset/AssetData/Kyokasho.ttc
+YuKyo_Yoko-Medium	YuKyokasho Yoko	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/2b7cea021df336d26a89f699c8469a51c721e9a2.asset/AssetData/Kyokasho.ttc
+YuMin-Demibold	YuMincho	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/99517f5220d46dff05d0dbb2a22d0036afefb089.asset/AssetData/YuMincho.ttc
+YuMin-Extrabold	YuMincho	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/99517f5220d46dff05d0dbb2a22d0036afefb089.asset/AssetData/YuMincho.ttc
+YuMin-Medium	YuMincho	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/99517f5220d46dff05d0dbb2a22d0036afefb089.asset/AssetData/YuMincho.ttc
+YuMin_36pKn-Demibold	YuMincho +36p Kana	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/99517f5220d46dff05d0dbb2a22d0036afefb089.asset/AssetData/YuMincho.ttc
+YuMin_36pKn-Extrabold	YuMincho +36p Kana	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/99517f5220d46dff05d0dbb2a22d0036afefb089.asset/AssetData/YuMincho.ttc
+YuMin_36pKn-Medium	YuMincho +36p Kana	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/99517f5220d46dff05d0dbb2a22d0036afefb089.asset/AssetData/YuMincho.ttc
+YuppySC-Regular	Yuppy SC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/b860c3b445cd974141686f9fcfee362886d80bd9.asset/AssetData/YuppySC-Regular.otf
+YuppyTC-Regular	Yuppy TC	asset	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ac5cfaf67b84566ed61f464ef9820d3d59d18bf0.asset/AssetData/YuppyTC-Regular.otf
+ZapfDingbatsITC	Zapf Dingbats	system	/System/Library/Fonts/ZapfDingbats.ttf
+Zapfino	Zapfino	system	/System/Library/Fonts/Supplemental/Zapfino.ttf

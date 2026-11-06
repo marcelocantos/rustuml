@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "mechanism": "shared-svg-corrective",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A08474951-e1a7-40da-806b-5e06f7c9ced3",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "tool": "T3 Code / Codex harness",
+    "independence": "New independent checker, no prior implementation involvement. Evidence-only unique branch in T3-prepared checkout; no children, new worktrees, production changes or shipping."
+  },
+  "account_commit": "4157ec70f277dbb4795f5272859c8aec5d43ede0",
+  "implementation_commit": "47dece176b375bea41a575085ab71832d0d1a76a",
+  "evidence_revision": "3875fee3b164d63d4b39df4bc6c13ca8ace89169",
+  "production_base": "a33dccc8e94dc44b5bafdc756fc1b88c42823a7d",
+  "evidence_base": "a2167f93695497e49b8ae71c4830bac96309023b",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "jdk": "OpenJDK21.0.5 Homebrew",
+  "support": "docs/parity-reviews/shared-svg-corrective/checker-support/",
+  "commands": [
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/build.py (exact private production snapshots, separate release targets, jobs4)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/replay_all.py before; then after (actual CLI SVG+YAML and unchanged comparator; 14757 membership entries per phase)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/gates.py (one stable broad run before fresh registrations)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/fresh_measure.py; same with unicode-followup (54 fresh pairs)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/dtd_check.py; ratchet.py (scratch-only mutations discarded)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/register.py (54 fresh executable pairs; exact standing library test scoped to those pairs, exit101)",
+    "Parent existing reference runner: --cwd <worker>/new --timezone GMT+11:00 -- -pipe -tsvg. Workers lTnmIo28 and I3Ig0G77; argv derived from pinned wrapper, not process-traced."
+  ],
+  "policy": "Any whole-output failure rejects production parity. Bounded serialization evidence does not waive any failure. No combined correctness claim with concurrent sequence packet.",
+  "submechanism": "doctype",
+  "findings": [
+    "The account4157ec70f precedes implementation47dece176 and remains byte-identical. Actual copied parse_cli_svg helper compiled against the pinned roxmltree0.20 dependency passes25 independently generated acceptance/rejection mutations: exact declaration with XML/whitespace; comment/PI decoys; BOM; internal whitespace; altered PUBLIC/system IDs; SYSTEM-only; internal subsets; duplicate/after-root DOCTYPE; external-entity use; non-DTD comments/PIs. All scratch mutation documents were discarded.",
+    "All26 real DOT sources rendered by the private after CLI pass this exact helper. Guard requires first markup after optional XML declaration and XML whitespace, exact SVG1.1 declaration bytes and no internal subset. BOM-before-DTD is rejected under this contract. No network/filesystem resolver exists: tokenizer parse_external_id discards identifiers; external entity definitions yield None. Undefined external reference is rejected. No DTD or entity was resolved.",
+    "The seven approved expected-malformed entries and both-direction enforcement are unchanged since741d1785a. Exact standing test compiled in scratch: control exit0; inject new malformed output exit101; repair a known malformed output exit101. Production and repo inputs were not mutated. Mutation directories were removed.",
+    "The two fresh PlantUML pairs below are ordinary no-DTD controls with passing whole outputs; the DTD policy evidence is the separate25-mutation matrix plus26 actual DOT outputs, not those two pairs. This verdict accepts only the oracle-policy correction, not comments, state parity or the overall packet."
+  ],
+  "verdict": "accepted",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_00.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_00.svg",
+      "source_sha256": "95797badc3fbca837300b5e49f780dacd7285baeba867d86647594cd735cbd2b",
+      "golden_sha256": "1ff3c6986217ae9cbcc94de3ff38df137a79ae0a9ea689e5b99b9672fd90c112",
+      "axes": [
+        "single dash boundary/delimiter token",
+        "unaliased class"
+      ],
+      "mechanism": "comments",
+      "result": "pass",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": true,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": "not well-formed (invalid token): line 1, column 345",
+      "after_malformed": null,
+      "java_comments": [
+        "class - "
+      ],
+      "rust_comments": [
+        "class - "
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_7a3c9101.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_7a3c9101.svg",
+      "source_sha256": "471a0a3f834cbfcfc8d2993470d536a88607a2b1340836904231f09ee431bdd8",
+      "golden_sha256": "93091d9732868f9e7c7ec1735d1c14847965a63144bf9326e4f577533bfff5c9",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent #7a3c9101"
+      ],
+      "mechanism": "state-fill",
+      "result": "pass",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": true,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    }
+  ],
+  "measurements": {},
+  "mutation_evidence": "checker-support/dtd-results.json",
+  "ratchet_evidence": "checker-support/ratchet-results.json"
+}

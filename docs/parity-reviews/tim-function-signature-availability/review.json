@@ -1,0 +1,253 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-function-signature-availability",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A797285a5-2bc0-46e3-b562-d8c4c8bcf12c",
+    "model": "gpt-6-astra, high reasoning, Codex in T3",
+    "independent": true,
+    "children": []
+  },
+  "account_commit": "4652860936464f02d80584ef158a29a4a1c13cd1",
+  "implementation_commit": "55de7dd6cb090d86febc1e5e3f57804134429a19",
+  "candidate_commit": "2cf6c7eeebae7354e7a3b7e53b86fb3754883e67",
+  "before_commit": "4a288dd47fe925a792f7cb672ca294f6ef6fdcf3",
+  "production_parent_commit": "329c39f48eccddfbb4896f1710dd97ddd1c1f2e8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=<private>/target-before cargo build --release -p rustuml (cwd: git archive of exact before)",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=<private>/target-after cargo build --release -p rustuml (cwd: isolated candidate checkout)",
+    "uv run --no-project python <private>/replay.py",
+    "uv run --no-project python <private>/fresh.py",
+    "Fresh Java through parent existing Monkey Man runner only: exact wrapper/Java argv, cwd and env in checker7-support/remote-request.json and measurements.tar.gz/fresh-references/*/commands.json",
+    "All final gate argv, cwd, env, real exits in checker7-support/gates2.json; executed once before evidence packaging"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-function-signature-availability/checker7/select_0.puml",
+      "golden": "test-diagrams/perturbations/tim-function-signature-availability/checker7/select_0.svg",
+      "axes": [
+        "declaration order",
+        "exact arity versus named fallback and bare boundary"
+      ],
+      "result": "fail",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": false,
+      "semantic_control_pass": true,
+      "source_sha256": "199d96babdfd3a22c2844a0ad2458db2859ccb7431254ea3bae41428bace68b9",
+      "golden_sha256": "63275549bce6eb3080536dd71e4a5c3a329be5f375bf1895de4e1381e4664eca"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-signature-availability/checker7/select_1.puml",
+      "golden": "test-diagrams/perturbations/tim-function-signature-availability/checker7/select_1.svg",
+      "axes": [
+        "declaration order",
+        "exact arity versus named fallback and bare boundary"
+      ],
+      "result": "fail",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": false,
+      "semantic_control_pass": true,
+      "source_sha256": "097c183c24a032d71e5e70affa4db0b399049938d1361e078283140d23f5b59e",
+      "golden_sha256": "f1cddb6b47a2c1f6cd967603efca8986073e9427d79de4171dd202ce3a18537b"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-signature-availability/checker7/pending_replace.puml",
+      "golden": "test-diagrams/perturbations/tim-function-signature-availability/checker7/pending_replace.svg",
+      "axes": [
+        "pending defaults call completed signature",
+        "replacement preserves other arity"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": true,
+      "semantic_control_pass": true,
+      "source_sha256": "38c525026039d4180a015cc95fe9bfdbb48dfb9afbe20e6c0a6cd377f412bc98",
+      "golden_sha256": "fcc76226466610060ce721d5798db43f83d14d6383b5f52ac4add6d431eea2b1"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-signature-availability/checker7/kind_after_exact.puml",
+      "golden": "test-diagrams/perturbations/tim-function-signature-availability/checker7/kind_after_exact.svg",
+      "axes": [
+        "exact versus compatible fallback",
+        "procedure rejected by expression kind"
+      ],
+      "result": "fail",
+      "intended_validity": "intended_negative",
+      "observed_classification": {
+        "intended": "intended_negative",
+        "observed_valid": false,
+        "svg_exit": 200,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": null,
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": false,
+        "source_has_end": false,
+        "comparator_rejects_reference": true,
+        "reference_category": "syntax_error",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": null,
+      "svg_match": false,
+      "semantic_control_pass": true,
+      "source_sha256": "5b6b93510fe1aaa5a658c1522eeaee6fab438346724b6dc4b84028a2cb95193d",
+      "golden_sha256": "2d920c5c4c6d7adcfc65108731e665c9b289226c4b82581315c31dc1399b379e"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-signature-availability/checker7/named_coverage.puml",
+      "golden": "test-diagrams/perturbations/tim-function-signature-availability/checker7/named_coverage.svg",
+      "axes": [
+        "multiple compatible arities",
+        "named-key coverage filters candidates"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": true,
+      "semantic_control_pass": true,
+      "source_sha256": "5dc3b1404aa1b69ac367a22bd77bd483fa32a9750ffa9f28102a9b2efd22e5c4",
+      "golden_sha256": "52ee0efe650678da1d080896d8c22617da0d3a88e7d353a3ded71dca2c790d20"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-signature-availability/checker7/capacity_20.puml",
+      "golden": "test-diagrams/perturbations/tim-function-signature-availability/checker7/capacity_20.svg",
+      "axes": [
+        "ordinary HashMap size96 versus97",
+        "bucket order differs from declaration order"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": true,
+      "semantic_control_pass": true,
+      "source_sha256": "944ef891e658ee8dc8ec77d6ddfdeb2c7d0b5d6d216893ab6caeadf20ec309a8",
+      "golden_sha256": "174b0229ae296f82938071c616c275c4dba4785a1c8fd1149ab6712593e5ec7d"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-signature-availability/checker7/capacity_21.puml",
+      "golden": "test-diagrams/perturbations/tim-function-signature-availability/checker7/capacity_21.svg",
+      "axes": [
+        "ordinary HashMap size96 versus97",
+        "bucket order differs from declaration order"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": true,
+      "semantic_control_pass": true,
+      "source_sha256": "ddd5d7d7d96b9ab440c0bfadc693ef19a62686cdac21e2970974c133389f062d",
+      "golden_sha256": "c5c35115cf70eaa807b041563de791bd8905d45fc73218af258448b6b4ea134b"
+    }
+  ],
+  "findings": [
+    "Completed signature publication, pending definition defaults, replacement by name and arity, exact lookup before compatible fallback, named/default coverage, and expression kind after signature selection match all six fresh valid evaluated-source oracles. The kind-negative is rejected but remains a nonpositive oracle.",
+    "Independent source audit reconstructed all 74 builtin signatures and verified every pinned Java file hash. Hash initial 1, multiplier 31, spread shift 16, capacity 16, load 3/4, doubling, and ordinary-bin insertion order derive from TFunctionSignature and the retained JDK source, not fitted output.",
+    "Fresh capacity_20 and capacity_21 cross 96/97 total signatures: capacity 128/256 reverses the fallback choice of the two $oak515 overloads. Both match source and SVG. These inputs do not exercise tree bins.",
+    "Valid select_0 and select_1 have exact evaluated source but fail SVG before and after. The Rust class declaration regex stops at the first inner quote and accepts a prefix, losing the remaining label and alias. Java CommandCreateClass/NameAndCodeParser consumes the full command. This downstream product failure is retained; source equality is not an acceptance waiver.",
+    "HashMap iteration is not specified by Java Map. Tree-bin root promotion and identity-based ties, differing JVM implementations/versions, legacy overload occupancy/collisions, and legacy declaration syntax remain unproved. The separate Rust legacy registry and function_exists path do not justify unqualified registry equivalence.",
+    "Standing gates are not waived: main product and assisted library diagnostics, standing perturbations, guards and clippy remain failing. Preserve historical class-body, Unicode IntVal, sequence panics, and all 27 environment discrepancies.",
+    "No fixture-shaped branches, golden reads, or SVG output surgery were found in the production diff. Candidate production is identical to final production 55de7dd6; filename dispatch is restored verbatim and its original CLI regression passes."
+  ],
+  "repair_obligations": [
+    "Repair the downstream full-command class name/display parse exposed by select_0/select_1 without altering the frozen inputs or comparator.",
+    "Establish tree-bin and supported legacy signature occupancy/syntax behavior before making a broader registry-equivalence claim; pin or test the intended JVM ordering contract."
+  ],
+  "verdict": "rejected",
+  "evidence": "docs/parity-reviews/tim-exact-memory-identities/checker7-support/README.md",
+  "nonpositive_result_policy": "result is pass only for a valid Java reference matching the unchanged SVG comparator. Properly rejected negative controls are recorded separately and do not become positive suite passes."
+}

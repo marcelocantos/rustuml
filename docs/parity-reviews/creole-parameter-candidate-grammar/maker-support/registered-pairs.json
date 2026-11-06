@@ -1,0 +1,258 @@
+[
+  {
+    "id": "fresh16/size_rejected",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/size_rejected.puml",
+        "sha256": "a8910fea862e1e7a8c4d1ec40aa03bb0410466df792638198f3f8e4b4f79173c",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/size_rejected.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/size_rejected.svg",
+        "sha256": "706f8626fe04a31908ae390f6f3fd6d977af03f66170e22cecc9aa190b3374f6",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/size_rejected/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fresh16/color_rejected",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/color_rejected.puml",
+        "sha256": "a68b8eb41d16470b673d0e0141f72323f962b3ff5e3a50ff5be11ca43329a208",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/color_rejected.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/color_rejected.svg",
+        "sha256": "649c96af3df2f3d5bfd9e2b3a866d0684cea3b1b60fc3da3413a783654a7e81e",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/color_rejected/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fresh16/size_forms",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/size_forms.puml",
+        "sha256": "05562fd38726ef9f69990d20bc5d2f2a093ca89700ff58641a555e296615c9f8",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/size_forms.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/size_forms.svg",
+        "sha256": "0471711c0fc7c93fe3727e0f55a8dc3335d372d06129eff27ca5640ee49f8069",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/size_forms/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fresh16/color_forms",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/color_forms.puml",
+        "sha256": "35a49c8e56eb48193dcd99bb07f29685b24e1e43ac897351670d5cc36714bd07",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/color_forms.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/color_forms.svg",
+        "sha256": "b7fb638b5b3b0305233a359077adaf2b0c7cef2841efb1539719e03478b5641c",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/color_forms/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fresh16/font_priority",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_priority.puml",
+        "sha256": "2b6d1e1eaa16883c6d89b3d541cf019cf3b6d4a764dea69b79cd56a2b5cf2db1",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/font_priority.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_priority.svg",
+        "sha256": "ebadb793f661dbbc2ddb0ea4c96caaf91f60cf45832ac3cece1ced0f8c795fe0",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/font_priority/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fresh16/font_rejected",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_rejected.puml",
+        "sha256": "a6a12f0d904258532378efbd639c93f5cce196cfe32a730573ba4028e0df1542",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/font_rejected.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_rejected.svg",
+        "sha256": "018f9d148f0abcc45edfab7a3849862f213cb05cc5497a01b3345c8b147cd8fc",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/font_rejected/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fresh16/font_fallback",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_fallback.puml",
+        "sha256": "273397943a4fc952c7fcb60624753b69147b00ac83a7f84faa259b4cb4f16723",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/font_fallback.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_fallback.svg",
+        "sha256": "40139fa097b8d97c3812b224eebc736cbab2dd223332ec6169233394bf2999d3",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/font_fallback/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fresh16/font_family",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_family.puml",
+        "sha256": "e44089180c9f9942ad16efa5464364994826827943b88f7c228ed82fdef7dfcb",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/font_family.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_family.svg",
+        "sha256": "8ce8b37def80a88a154bc81f60f03032cc4714219e73c71dfde383c750d3ff52",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/font_family/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fresh16/back_rejected",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/back_rejected.puml",
+        "sha256": "126d011b45433c3a2f423e2f082476dd2be8a9729315df04440644420a2c8653",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/back_rejected.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/back_rejected.svg",
+        "sha256": "b3a2ade5f0edde667319b6ffd689f01bf7eb131cecae293b786aeece1aaeeae3",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/back_rejected/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fresh16/back_forms",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/back_forms.puml",
+        "sha256": "24a54bc6eac6354f7dcda78bf1144f803d04d11de23059330ab85ddf52e536e8",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/back_forms.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/back_forms.svg",
+        "sha256": "152e3eea7d03c4fee639d99646cca8a4f5860abc7590db40c6d2af0d6d688325",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/back_forms/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fresh16/image_rejected",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/image_rejected.puml",
+        "sha256": "2d3d241ce4cb04515a58c9515157334c7367d714239654739b3ee7348c26bad8",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/image_rejected.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/image_rejected.svg",
+        "sha256": "e2476b5ffbf407886346590d1ebfc6c1c5d72db1b4798261327125f487448236",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/image_rejected/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fresh16/icon_rejected",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/icon_rejected.puml",
+        "sha256": "56a8d5f58ad6f9399bb3f017164929045402998473d5e452c51518f78669ac47",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/icon_rejected.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/icon_rejected.svg",
+        "sha256": "d5af0b83f4d26ba4f8a83e80d4082ed3630b88a6ec7e7cb003aad2361cb27782",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/icon_rejected/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fresh16/sprite_neighbor",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/sprite_neighbor.puml",
+        "sha256": "6bf8f0df78d021267611992a61859b2d91b2bafda326761fdd2febedcf2016a1",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/sprite_neighbor.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/sprite_neighbor.svg",
+        "sha256": "bb61092c9981a0960540e39615a2ef5c6032b2068aab3e53b09323e370c91bbd",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/sprite_neighbor/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fresh16/wbs_parameters",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/wbs_parameters.puml",
+        "sha256": "7ccb34a66e6b6f4437bcaaa77986d337c2e0c4414a597a9a1f6767ae74e24295",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/wbs_parameters.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/wbs_parameters.svg",
+        "sha256": "168073513ae67df3486cf4b436cd53d6d2912bd2f79418b1a09dfd82c4b7d353",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/wbs_parameters/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fresh16/inner_candidate",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/inner_candidate.puml",
+        "sha256": "9c4fd455aabf7b7a83b75f708b1abae1bc44fc960746d9049da892df8dabbf04",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/inner_candidate.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/inner_candidate.svg",
+        "sha256": "7612ed5ef6f59b3bd2143aca079e9f6c005afbe88249df22ce384dfbae0752ef",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/inner_candidate/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  },
+  {
+    "id": "fresh16/class_member",
+    "files": {
+      "puml": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/class_member.puml",
+        "sha256": "d486366d798fe1cbdf87c40cca2a8693a95a9106d3bd8f17f201ae188915d027",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/new/class_member.puml"
+      },
+      "svg": {
+        "path": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/class_member.svg",
+        "sha256": "bbf16939db709bcdaf53300a016752c6a9ca802345866af3a2f36459cca241ca",
+        "original": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/fresh-reference/class_member/java.svg.stdout"
+      }
+    },
+    "reference_valid": true
+  }
+]

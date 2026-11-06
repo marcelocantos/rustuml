@@ -1,0 +1,9 @@
+@startuml
+<style>
+root {
+LineColor RebeccaPurple
+}
+</style>
+[*] --> Harbor
+Harbor --> [*]
+@enduml

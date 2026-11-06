@@ -1,0 +1,6 @@
+BO c8a_lt_verdana_deva_link (Verdana; link label "क𝅧 x"): Java viewBox 0 0 80 195; base 5d8b1f7c1 79 (strict MATCH); merge d6e9ffd94 and tip 76 (DIFF1).
+Bisect over git rev-list --reverse --no-merges 5d8b1f7c1..d6e9ffd94 -- crates (78 commits), each built from git archive with a shared CARGO_TARGET_DIR:
+ index 77 (d6e9ffd94 side)  viewBox 0 0 76 195
+ 38 61f3883ff 79 | 57 f6b7f66f0 79 | 67 5ceb530db 79 | 72 41bf60196 79 | 74 6838ac4ea 79 | 75 f74008cd8 79 | 76 adc5ffde4 79
+first bad: 9f33bc3b10918b014187ac7fd08d965dc417d852 (round 7, metrics: shape unmapped marks per HarfBuzz buffer ... under HarfBuzz 15.0.0); last good adc5ffde4.
+The rendered label textLength is 35.2737 in Java and at every tree; only the root canvas extent changes.

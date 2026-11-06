@@ -1,0 +1,13 @@
+@startuml
+state Plant {
+  state Pump {
+    state inlet <<entryPoint>>
+    inlet --> Valve
+    note right of Valve : open
+  }
+  Valve --> Tank
+  --
+  Fan --> Duct
+  note left of Duct : cold
+}
+@enduml

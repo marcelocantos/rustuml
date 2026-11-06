@@ -1,0 +1,100 @@
+{
+  "row": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/empty_styled.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "empty stripe",
+      "closed size"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  "classification": "positive_reference",
+  "reference_valid": true,
+  "java_svg_exit": 0,
+  "java_probe_exit": 0,
+  "xml_valid": true,
+  "factory": "SEQUENCE",
+  "reference_comparator_exit": 0,
+  "source_sha256": "582f836b8f6742d58c6a6eca5b4db182c2af4f811a4f3a5d673c6fa9ad255bc8",
+  "golden_sha256": "27b852896f6bf915acb210efe995b9bfd542249b8a9bee1f998741af3b49e039",
+  "java_source_sha256": "582f836b8f6742d58c6a6eca5b4db182c2af4f811a4f3a5d673c6fa9ad255bc8",
+  "phases": {
+    "after": {
+      "id": "fresh18/empty_styled",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new",
+        "exit": 0,
+        "seconds": 0.010949667004751973,
+        "stdout_sha256": "4f1baf527a6179f1a641f63105956ce958898c3e9d806618e4c6714c267b882d",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new",
+        "exit": 0,
+        "seconds": 0.010980082995956764,
+        "stdout_sha256": "264d1d0675fcc951c655645167c3f06c060b085578713cca6742967a5cbd2f94",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/empty_styled/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/empty_styled/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+        "exit": 0,
+        "seconds": 0.004094542004168034,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "SEQUENCE",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Sequence",
+        "entities": null,
+        "source": "@startuml\nAlice -> Bob : <size:20><$absent></size>\n@enduml\n"
+      },
+      "exact_source": true
+    }
+  },
+  "direct_source": {
+    "argv": [
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/source-probe",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/empty_styled.puml",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new"
+    ],
+    "cwd": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new",
+    "exit": 0,
+    "seconds": 0.006640916006290354,
+    "stdout_sha256": "582f836b8f6742d58c6a6eca5b4db182c2af4f811a4f3a5d673c6fa9ad255bc8",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "direct_source_equal": true
+}

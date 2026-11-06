@@ -1,0 +1,5 @@
+class Head
+!startsub empty
+!endsub
+!$v=%intval("bad")
+class Lost

@@ -1,0 +1,827 @@
+{
+  "entries": 1710,
+  "distinct_pairs": 1631,
+  "duplicate_entries": 79,
+  "cohort_summary": {
+    "collateral": {
+      "entries": 1516,
+      "distinct_pairs": 1437,
+      "before": {
+        "valid": 1459,
+        "svg": 567,
+        "valid_source_available": 59,
+        "valid_source_exact": 59,
+        "all_source_exact": 59,
+        "panics": 32
+      },
+      "after": {
+        "valid": 1459,
+        "svg": 567,
+        "valid_source_available": 59,
+        "valid_source_exact": 59,
+        "all_source_exact": 59,
+        "panics": 32
+      }
+    },
+    "prior31": {
+      "entries": 31,
+      "distinct_pairs": 31,
+      "before": {
+        "valid": 21,
+        "svg": 21,
+        "valid_source_available": 21,
+        "valid_source_exact": 21,
+        "all_source_exact": 21,
+        "panics": 0
+      },
+      "after": {
+        "valid": 21,
+        "svg": 21,
+        "valid_source_available": 21,
+        "valid_source_exact": 21,
+        "all_source_exact": 21,
+        "panics": 0
+      }
+    },
+    "fresh29": {
+      "entries": 29,
+      "distinct_pairs": 29,
+      "before": {
+        "valid": 14,
+        "svg": 14,
+        "valid_source_available": 14,
+        "valid_source_exact": 14,
+        "all_source_exact": 15,
+        "panics": 0
+      },
+      "after": {
+        "valid": 14,
+        "svg": 14,
+        "valid_source_available": 14,
+        "valid_source_exact": 14,
+        "all_source_exact": 15,
+        "panics": 0
+      }
+    },
+    "maker15": {
+      "entries": 15,
+      "distinct_pairs": 15,
+      "before": {
+        "valid": 9,
+        "svg": 9,
+        "valid_source_available": 9,
+        "valid_source_exact": 9,
+        "all_source_exact": 9,
+        "panics": 0
+      },
+      "after": {
+        "valid": 9,
+        "svg": 9,
+        "valid_source_available": 9,
+        "valid_source_exact": 9,
+        "all_source_exact": 9,
+        "panics": 0
+      }
+    },
+    "maker17": {
+      "entries": 17,
+      "distinct_pairs": 17,
+      "before": {
+        "valid": 14,
+        "svg": 14,
+        "valid_source_available": 14,
+        "valid_source_exact": 14,
+        "all_source_exact": 14,
+        "panics": 0
+      },
+      "after": {
+        "valid": 14,
+        "svg": 14,
+        "valid_source_available": 14,
+        "valid_source_exact": 14,
+        "all_source_exact": 14,
+        "panics": 0
+      }
+    },
+    "maker18": {
+      "entries": 18,
+      "distinct_pairs": 18,
+      "before": {
+        "valid": 8,
+        "svg": 8,
+        "valid_source_available": 8,
+        "valid_source_exact": 8,
+        "all_source_exact": 8,
+        "panics": 0
+      },
+      "after": {
+        "valid": 8,
+        "svg": 8,
+        "valid_source_available": 8,
+        "valid_source_exact": 8,
+        "all_source_exact": 8,
+        "panics": 0
+      }
+    },
+    "fresh6": {
+      "entries": 29,
+      "distinct_pairs": 29,
+      "before": {
+        "valid": 19,
+        "svg": 17,
+        "valid_source_available": 19,
+        "valid_source_exact": 17,
+        "all_source_exact": 17,
+        "panics": 0
+      },
+      "after": {
+        "valid": 19,
+        "svg": 17,
+        "valid_source_available": 19,
+        "valid_source_exact": 17,
+        "all_source_exact": 17,
+        "panics": 0
+      }
+    },
+    "newmaker15": {
+      "entries": 15,
+      "distinct_pairs": 15,
+      "before": {
+        "valid": 14,
+        "svg": 14,
+        "valid_source_available": 14,
+        "valid_source_exact": 14,
+        "all_source_exact": 14,
+        "panics": 0
+      },
+      "after": {
+        "valid": 14,
+        "svg": 14,
+        "valid_source_available": 14,
+        "valid_source_exact": 14,
+        "all_source_exact": 14,
+        "panics": 0
+      }
+    },
+    "supplement2": {
+      "entries": 2,
+      "distinct_pairs": 2,
+      "before": {
+        "valid": 2,
+        "svg": 1,
+        "valid_source_available": 2,
+        "valid_source_exact": 2,
+        "all_source_exact": 2,
+        "panics": 0
+      },
+      "after": {
+        "valid": 2,
+        "svg": 1,
+        "valid_source_available": 2,
+        "valid_source_exact": 2,
+        "all_source_exact": 2,
+        "panics": 0
+      }
+    },
+    "fresh23": {
+      "entries": 23,
+      "distinct_pairs": 23,
+      "before": {
+        "valid": 19,
+        "svg": 14,
+        "valid_source_available": 19,
+        "valid_source_exact": 16,
+        "all_source_exact": 16,
+        "panics": 0
+      },
+      "after": {
+        "valid": 19,
+        "svg": 17,
+        "valid_source_available": 19,
+        "valid_source_exact": 19,
+        "all_source_exact": 21,
+        "panics": 0
+      }
+    },
+    "maker13": {
+      "entries": 13,
+      "distinct_pairs": 13,
+      "before": {
+        "valid": 11,
+        "svg": 3,
+        "valid_source_available": 11,
+        "valid_source_exact": 3,
+        "all_source_exact": 3,
+        "panics": 0
+      },
+      "after": {
+        "valid": 11,
+        "svg": 10,
+        "valid_source_available": 11,
+        "valid_source_exact": 11,
+        "all_source_exact": 13,
+        "panics": 0
+      }
+    },
+    "maker2": {
+      "entries": 2,
+      "distinct_pairs": 2,
+      "before": {
+        "valid": 2,
+        "svg": 0,
+        "valid_source_available": 2,
+        "valid_source_exact": 1,
+        "all_source_exact": 1,
+        "panics": 0
+      },
+      "after": {
+        "valid": 2,
+        "svg": 1,
+        "valid_source_available": 2,
+        "valid_source_exact": 2,
+        "all_source_exact": 2,
+        "panics": 0
+      }
+    }
+  },
+  "retained": {
+    "entries": 1672,
+    "before": {
+      "valid": 1560,
+      "svg": 665,
+      "exact_source": 158,
+      "available_source": 160
+    },
+    "after": {
+      "valid": 1560,
+      "svg": 665,
+      "exact_source": 158,
+      "available_source": 160
+    }
+  },
+  "intersections": {
+    "collateral & prior31": 0,
+    "collateral & fresh29": 0,
+    "collateral & maker15": 0,
+    "collateral & maker17": 0,
+    "collateral & maker18": 0,
+    "collateral & fresh6": 0,
+    "collateral & newmaker15": 0,
+    "collateral & supplement2": 0,
+    "collateral & fresh23": 0,
+    "collateral & maker13": 0,
+    "collateral & maker2": 0,
+    "prior31 & fresh29": 0,
+    "prior31 & maker15": 0,
+    "prior31 & maker17": 0,
+    "prior31 & maker18": 0,
+    "prior31 & fresh6": 0,
+    "prior31 & newmaker15": 0,
+    "prior31 & supplement2": 0,
+    "prior31 & fresh23": 0,
+    "prior31 & maker13": 0,
+    "prior31 & maker2": 0,
+    "fresh29 & maker15": 0,
+    "fresh29 & maker17": 0,
+    "fresh29 & maker18": 0,
+    "fresh29 & fresh6": 0,
+    "fresh29 & newmaker15": 0,
+    "fresh29 & supplement2": 0,
+    "fresh29 & fresh23": 0,
+    "fresh29 & maker13": 0,
+    "fresh29 & maker2": 0,
+    "maker15 & maker17": 0,
+    "maker15 & maker18": 0,
+    "maker15 & fresh6": 0,
+    "maker15 & newmaker15": 0,
+    "maker15 & supplement2": 0,
+    "maker15 & fresh23": 0,
+    "maker15 & maker13": 0,
+    "maker15 & maker2": 0,
+    "maker17 & maker18": 0,
+    "maker17 & fresh6": 0,
+    "maker17 & newmaker15": 0,
+    "maker17 & supplement2": 0,
+    "maker17 & fresh23": 0,
+    "maker17 & maker13": 0,
+    "maker17 & maker2": 0,
+    "maker18 & fresh6": 0,
+    "maker18 & newmaker15": 0,
+    "maker18 & supplement2": 0,
+    "maker18 & fresh23": 0,
+    "maker18 & maker13": 0,
+    "maker18 & maker2": 0,
+    "fresh6 & newmaker15": 0,
+    "fresh6 & supplement2": 0,
+    "fresh6 & fresh23": 0,
+    "fresh6 & maker13": 0,
+    "fresh6 & maker2": 0,
+    "newmaker15 & supplement2": 0,
+    "newmaker15 & fresh23": 0,
+    "newmaker15 & maker13": 0,
+    "newmaker15 & maker2": 0,
+    "supplement2 & fresh23": 0,
+    "supplement2 & maker13": 0,
+    "supplement2 & maker2": 0,
+    "fresh23 & maker13": 0,
+    "fresh23 & maker2": 0,
+    "maker13 & maker2": 0
+  },
+  "lost_valid_passes": [],
+  "new_valid_errors": [],
+  "gains": [
+    "fresh23/0004-key_dollar",
+    "fresh23/0005-key_combining",
+    "fresh23/0006-parameter_duplicate",
+    "maker13/0000-stored_names",
+    "maker13/0001-prefix_paths",
+    "maker13/0004-original_boundaries",
+    "maker13/0005-surrogate_prefix",
+    "maker13/0006-duplicate_named",
+    "maker13/0007-duplicate_defaults",
+    "maker13/0008-duplicate_effects",
+    "maker2/0000-no_rescan"
+  ],
+  "model_drops": [
+    {
+      "id": "fresh23/0020-sub_empty_0",
+      "reference_valid": false,
+      "before": {
+        "type": "Class",
+        "entities": 2,
+        "source": "@startuml\nclass Anchor\nclass Tail\nAnchor --> Tail\n@enduml\n"
+      },
+      "after": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass Anchor\n"
+      }
+    },
+    {
+      "id": "fresh23/0021-sub_empty_1",
+      "reference_valid": false,
+      "before": {
+        "type": "Class",
+        "entities": 2,
+        "source": "@startuml\nclass Anchor\nclass Tail\nAnchor --> Tail\n@enduml\n"
+      },
+      "after": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass Anchor\n"
+      }
+    },
+    {
+      "id": "maker13/0010-empty_function",
+      "reference_valid": false,
+      "before": {
+        "type": "Class",
+        "entities": 2,
+        "source": "@startuml\nclass Anchor\nclass Lost\n@enduml\n"
+      },
+      "after": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass Anchor\n"
+      }
+    }
+  ],
+  "valid_model_drops": [],
+  "panic_groups": {
+    "panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615": [
+      "collateral/0754-checker_live_stack_2",
+      "collateral/0755-checker_live_stack_3",
+      "collateral/0859-checker_recovery_legacy_r0_w0",
+      "collateral/0860-checker_recovery_legacy_r0_w1",
+      "collateral/0863-checker_recovery_teoz_r0_w0",
+      "collateral/0864-checker_recovery_teoz_r0_w1",
+      "collateral/0873-checker_recovery_legacy_r0_w0",
+      "collateral/0874-checker_recovery_legacy_r0_w1",
+      "collateral/0877-checker_recovery_teoz_r0_w0",
+      "collateral/0878-checker_recovery_teoz_r0_w1",
+      "collateral/0903-checker_recovery_legacy_r0_w0",
+      "collateral/0904-checker_recovery_legacy_r0_w1",
+      "collateral/0907-checker_recovery_teoz_r0_w0",
+      "collateral/0908-checker_recovery_teoz_r0_w1",
+      "collateral/0927-checker_recovery_legacy_r0_w0",
+      "collateral/0928-checker_recovery_legacy_r0_w1",
+      "collateral/0931-checker_recovery_teoz_r0_w0",
+      "collateral/0932-checker_recovery_teoz_r0_w1",
+      "collateral/0951-checker_recovery_colored_teoz0",
+      "collateral/0952-checker_recovery_colored_teoz1",
+      "collateral/0953-checker_recovery_legacy_r0_w0",
+      "collateral/0954-checker_recovery_legacy_r0_w1",
+      "collateral/0959-checker_recovery_teoz_r0_w0",
+      "collateral/0960-checker_recovery_teoz_r0_w1"
+    ],
+    "panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615": [
+      "collateral/0919-checker_focus_half_bottom_n0_e0",
+      "collateral/0920-checker_focus_half_bottom_n0_e1",
+      "collateral/0921-checker_focus_half_bottom_n1_e0",
+      "collateral/0922-checker_focus_half_bottom_n1_e1",
+      "collateral/0923-checker_focus_half_top_n0_e0",
+      "collateral/0924-checker_focus_half_top_n0_e1",
+      "collateral/0925-checker_focus_half_top_n1_e0",
+      "collateral/0926-checker_focus_half_top_n1_e1"
+    ]
+  },
+  "classification_disagreements": [],
+  "standing": {
+    "total": 1628,
+    "passed": 609,
+    "matching_environment_cli": 636,
+    "discrepancies": [
+      {
+        "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_filtered_environment.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "prior31/0026-checker4_registry_filtered_environment"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unsecure_environment.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "prior31/0027-checker4_registry_unsecure_environment"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1266-checker2_fractional_zone"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1270-checker2_long_zone"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1301-checker2_retained_local_theme_once"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1351-checker2_theme_from_order"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1482-checker3_dynamic_selector"
+        ],
+        "failure": "parse failed: line 3: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/blocks.inc!chosen"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1480-checker3_nested"
+        ],
+        "failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/nested.inc!chosen"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1481-checker3_relative"
+        ],
+        "failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/caller.inc!chosen"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1478-checker3_repeated"
+        ],
+        "failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/blocks.inc!chosen"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1479-checker3_tabs"
+        ],
+        "failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/tabs.inc!chosen"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1484-checker3_include_from_return"
+        ],
+        "failure": "parse failed: line 3: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/caller.inc!chosen"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1383-checker2_sub_ignored_prelude"
+        ],
+        "failure": "parse failed: line 1: cannot include test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_body.inc!useful"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_function_selector.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "prior31/0020-checker4_sub_function_selector"
+        ],
+        "failure": "parse failed: line 5: cannot include checker4-resources/blocks.inc!chosen"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_repeated_comments.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "fresh29/0016-sub_repeated_comments"
+        ],
+        "failure": "parse failed: line 2: cannot include lib/repeated.inc!chosen"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1403-checker_include_theme"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1512-checker3_casablanca_ramadan"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1513-checker3_casablanca_summer"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1485-checker3_london_winter",
+          "collateral/1488-checker3_dublin_winter"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_fixed_fraction.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1490-checker3_fixed_fraction"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1489-checker3_kathmandu"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1486-checker3_london_summer"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1485-checker3_london_winter",
+          "collateral/1488-checker3_dublin_winter"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1487-checker3_lord_howe"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_new_york_summer.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1505-checker3_retained_zone_new_york_summer"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_tokyo_width.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1504-checker3_retained_zone_tokyo_width"
+        ],
+        "failure": "SVG structural differences:"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_utc_width.puml",
+        "standing_pass": false,
+        "cli_pass": true,
+        "matched_ids": [
+          "collateral/1506-checker3_retained_zone_utc_width"
+        ],
+        "failure": "SVG structural differences:"
+      }
+    ]
+  },
+  "known_valid_errors": [
+    {
+      "id": "collateral/0095-body_ownership",
+      "panic": false
+    },
+    {
+      "id": "collateral/0754-checker_live_stack_2",
+      "panic": true
+    },
+    {
+      "id": "collateral/0755-checker_live_stack_3",
+      "panic": true
+    },
+    {
+      "id": "collateral/0859-checker_recovery_legacy_r0_w0",
+      "panic": true
+    },
+    {
+      "id": "collateral/0860-checker_recovery_legacy_r0_w1",
+      "panic": true
+    },
+    {
+      "id": "collateral/0863-checker_recovery_teoz_r0_w0",
+      "panic": true
+    },
+    {
+      "id": "collateral/0864-checker_recovery_teoz_r0_w1",
+      "panic": true
+    },
+    {
+      "id": "collateral/0873-checker_recovery_legacy_r0_w0",
+      "panic": true
+    },
+    {
+      "id": "collateral/0874-checker_recovery_legacy_r0_w1",
+      "panic": true
+    },
+    {
+      "id": "collateral/0877-checker_recovery_teoz_r0_w0",
+      "panic": true
+    },
+    {
+      "id": "collateral/0878-checker_recovery_teoz_r0_w1",
+      "panic": true
+    },
+    {
+      "id": "collateral/0903-checker_recovery_legacy_r0_w0",
+      "panic": true
+    },
+    {
+      "id": "collateral/0904-checker_recovery_legacy_r0_w1",
+      "panic": true
+    },
+    {
+      "id": "collateral/0907-checker_recovery_teoz_r0_w0",
+      "panic": true
+    },
+    {
+      "id": "collateral/0908-checker_recovery_teoz_r0_w1",
+      "panic": true
+    },
+    {
+      "id": "collateral/0919-checker_focus_half_bottom_n0_e0",
+      "panic": true
+    },
+    {
+      "id": "collateral/0920-checker_focus_half_bottom_n0_e1",
+      "panic": true
+    },
+    {
+      "id": "collateral/0921-checker_focus_half_bottom_n1_e0",
+      "panic": true
+    },
+    {
+      "id": "collateral/0922-checker_focus_half_bottom_n1_e1",
+      "panic": true
+    },
+    {
+      "id": "collateral/0923-checker_focus_half_top_n0_e0",
+      "panic": true
+    },
+    {
+      "id": "collateral/0924-checker_focus_half_top_n0_e1",
+      "panic": true
+    },
+    {
+      "id": "collateral/0925-checker_focus_half_top_n1_e0",
+      "panic": true
+    },
+    {
+      "id": "collateral/0926-checker_focus_half_top_n1_e1",
+      "panic": true
+    },
+    {
+      "id": "collateral/0927-checker_recovery_legacy_r0_w0",
+      "panic": true
+    },
+    {
+      "id": "collateral/0928-checker_recovery_legacy_r0_w1",
+      "panic": true
+    },
+    {
+      "id": "collateral/0931-checker_recovery_teoz_r0_w0",
+      "panic": true
+    },
+    {
+      "id": "collateral/0932-checker_recovery_teoz_r0_w1",
+      "panic": true
+    },
+    {
+      "id": "collateral/0951-checker_recovery_colored_teoz0",
+      "panic": true
+    },
+    {
+      "id": "collateral/0952-checker_recovery_colored_teoz1",
+      "panic": true
+    },
+    {
+      "id": "collateral/0953-checker_recovery_legacy_r0_w0",
+      "panic": true
+    },
+    {
+      "id": "collateral/0954-checker_recovery_legacy_r0_w1",
+      "panic": true
+    },
+    {
+      "id": "collateral/0959-checker_recovery_teoz_r0_w0",
+      "panic": true
+    },
+    {
+      "id": "collateral/0960-checker_recovery_teoz_r0_w1",
+      "panic": true
+    },
+    {
+      "id": "fresh6/0017-intval_unicode_digits",
+      "panic": false
+    },
+    {
+      "id": "fresh6/0018-intval_unicode_json",
+      "panic": false
+    }
+  ],
+  "valid_source_mismatches": [
+    "fresh6/0017-intval_unicode_digits",
+    "fresh6/0018-intval_unicode_json"
+  ]
+}

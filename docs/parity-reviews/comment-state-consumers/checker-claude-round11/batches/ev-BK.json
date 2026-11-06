@@ -1,0 +1,2003 @@
+{
+ "cases": 49,
+ "trees": {
+  "base": {
+   "java_valid": 48,
+   "strict_match_valid": 4,
+   "viewBox_exact": 6,
+   "comments_exact": 16,
+   "nonzero_exit": 5,
+   "panics": 0,
+   "nonempty_stderr": 5
+  },
+  "merge": {
+   "java_valid": 48,
+   "strict_match_valid": 32,
+   "viewBox_exact": 36,
+   "comments_exact": 49,
+   "nonzero_exit": 1,
+   "panics": 0,
+   "nonempty_stderr": 1
+  },
+  "tip": {
+   "java_valid": 48,
+   "strict_match_valid": 32,
+   "viewBox_exact": 36,
+   "comments_exact": 49,
+   "nonzero_exit": 1,
+   "panics": 0,
+   "nonempty_stderr": 1
+  }
+ },
+ "deltas": {
+  "base->tip": {
+   "gained_match": [
+    "j9_cr_key",
+    "j9_skinparam_block",
+    "mk9_180f_thai",
+    "mk9_couriernew_hebrew_space",
+    "mk9_hangul_base",
+    "mk9_hangul_space",
+    "mk9_hangul_space_ctrl",
+    "mk9_helv_syriac",
+    "mk9_lucida_arabic_space",
+    "mk9_lucida_deva_base",
+    "mk9_lucida_thai_base",
+    "mk9_u17_10efa",
+    "mk9_u17_11b60",
+    "mk9_u17_1ad5",
+    "mk9_u18_10ecb",
+    "mk9_u18_1d127",
+    "mk9_u18_b53",
+    "y9_block_depth3",
+    "y9_block_hash_lines",
+    "y9_block_quoted_key",
+    "y9_block_tab_inside",
+    "y9_block_text_dedent",
+    "y9_flow_seq_empty",
+    "y9_flow_seq_number",
+    "y9_flow_seq_quotes",
+    "y9_hide_then_data",
+    "y9_tab_indent",
+    "y9_tab_key"
+   ],
+   "viewBox_gained": [
+    "j9_cr_key",
+    "j9_skinparam_block",
+    "mk9_180f_thai",
+    "mk9_arial_hebrew_space",
+    "mk9_couriernew_hebrew_space",
+    "mk9_hangul_base",
+    "mk9_hangul_space",
+    "mk9_hangul_space_ctrl",
+    "mk9_helv_syriac",
+    "mk9_lucida_arabic_space",
+    "mk9_lucida_deva_base",
+    "mk9_lucida_thai_base",
+    "mk9_mono_hebrew_space",
+    "mk9_u17_10efa",
+    "mk9_u17_11b60",
+    "mk9_u17_1ad5",
+    "mk9_u18_10ecb",
+    "mk9_u18_1d127",
+    "mk9_u18_b53",
+    "y9_block_depth3",
+    "y9_block_hash_lines",
+    "y9_block_quoted_key",
+    "y9_block_tab_inside",
+    "y9_block_text_dedent",
+    "y9_flow_seq_empty",
+    "y9_flow_seq_number",
+    "y9_flow_seq_quotes",
+    "y9_hide_then_data",
+    "y9_tab_indent",
+    "y9_tab_key"
+   ],
+   "output_changed": [
+    "j9_cr_key",
+    "j9_skinparam_block",
+    "mk9_180f_thai",
+    "mk9_180f_thai_ctrl",
+    "mk9_arial_hebrew_space",
+    "mk9_arial_hebrew_space_ctrl",
+    "mk9_couriernew_hebrew_space",
+    "mk9_couriernew_hebrew_space_ctrl",
+    "mk9_hangul_base",
+    "mk9_hangul_space",
+    "mk9_hangul_space_ctrl",
+    "mk9_helv_hebrew_space",
+    "mk9_helv_hebrew_space_ctrl",
+    "mk9_helv_syriac",
+    "mk9_helv_syriac_ctrl",
+    "mk9_lucida_arabic_space",
+    "mk9_lucida_arabic_space_ctrl",
+    "mk9_lucida_deva_base",
+    "mk9_lucida_deva_ctrl",
+    "mk9_lucida_hebrew_hiriq",
+    "mk9_lucida_hebrew_hiriq_ctrl",
+    "mk9_lucida_hebrew_space",
+    "mk9_lucida_hebrew_space_ctrl",
+    "mk9_lucida_hebrew_wj",
+    "mk9_lucida_thai_base",
+    "mk9_mono_hebrew_space",
+    "mk9_mono_hebrew_space_ctrl",
+    "mk9_seq_hebrew",
+    "mk9_u17_10efa",
+    "mk9_u17_11b60",
+    "mk9_u17_1ad5",
+    "mk9_u18_10ecb",
+    "mk9_u18_1d127",
+    "mk9_u18_b53",
+    "mk9_verdana_hebrew_space",
+    "mk9_verdana_hebrew_space_ctrl",
+    "y9_block_depth3",
+    "y9_block_hash_lines",
+    "y9_block_quoted_key",
+    "y9_block_tab_inside",
+    "y9_block_text_dedent",
+    "y9_flow_seq_empty",
+    "y9_flow_seq_number",
+    "y9_flow_seq_quotes",
+    "y9_hide_then_data",
+    "y9_tab_indent",
+    "y9_tab_key"
+   ],
+   "stderr_changed": [
+    "j9_skinparam_block",
+    "y9_block_text_dedent",
+    "y9_hide_then_data",
+    "y9_tab_indent"
+   ]
+  },
+  "base->tip_counts": {
+   "gained_match": 28,
+   "viewBox_gained": 30,
+   "output_changed": 47,
+   "stderr_changed": 4
+  },
+  "merge->tip": {},
+  "merge->tip_counts": {},
+  "base->merge": {
+   "gained_match": [
+    "j9_cr_key",
+    "j9_skinparam_block",
+    "mk9_180f_thai",
+    "mk9_couriernew_hebrew_space",
+    "mk9_hangul_base",
+    "mk9_hangul_space",
+    "mk9_hangul_space_ctrl",
+    "mk9_helv_syriac",
+    "mk9_lucida_arabic_space",
+    "mk9_lucida_deva_base",
+    "mk9_lucida_thai_base",
+    "mk9_u17_10efa",
+    "mk9_u17_11b60",
+    "mk9_u17_1ad5",
+    "mk9_u18_10ecb",
+    "mk9_u18_1d127",
+    "mk9_u18_b53",
+    "y9_block_depth3",
+    "y9_block_hash_lines",
+    "y9_block_quoted_key",
+    "y9_block_tab_inside",
+    "y9_block_text_dedent",
+    "y9_flow_seq_empty",
+    "y9_flow_seq_number",
+    "y9_flow_seq_quotes",
+    "y9_hide_then_data",
+    "y9_tab_indent",
+    "y9_tab_key"
+   ],
+   "viewBox_gained": [
+    "j9_cr_key",
+    "j9_skinparam_block",
+    "mk9_180f_thai",
+    "mk9_arial_hebrew_space",
+    "mk9_couriernew_hebrew_space",
+    "mk9_hangul_base",
+    "mk9_hangul_space",
+    "mk9_hangul_space_ctrl",
+    "mk9_helv_syriac",
+    "mk9_lucida_arabic_space",
+    "mk9_lucida_deva_base",
+    "mk9_lucida_thai_base",
+    "mk9_mono_hebrew_space",
+    "mk9_u17_10efa",
+    "mk9_u17_11b60",
+    "mk9_u17_1ad5",
+    "mk9_u18_10ecb",
+    "mk9_u18_1d127",
+    "mk9_u18_b53",
+    "y9_block_depth3",
+    "y9_block_hash_lines",
+    "y9_block_quoted_key",
+    "y9_block_tab_inside",
+    "y9_block_text_dedent",
+    "y9_flow_seq_empty",
+    "y9_flow_seq_number",
+    "y9_flow_seq_quotes",
+    "y9_hide_then_data",
+    "y9_tab_indent",
+    "y9_tab_key"
+   ],
+   "output_changed": [
+    "j9_cr_key",
+    "j9_skinparam_block",
+    "mk9_180f_thai",
+    "mk9_180f_thai_ctrl",
+    "mk9_arial_hebrew_space",
+    "mk9_arial_hebrew_space_ctrl",
+    "mk9_couriernew_hebrew_space",
+    "mk9_couriernew_hebrew_space_ctrl",
+    "mk9_hangul_base",
+    "mk9_hangul_space",
+    "mk9_hangul_space_ctrl",
+    "mk9_helv_hebrew_space",
+    "mk9_helv_hebrew_space_ctrl",
+    "mk9_helv_syriac",
+    "mk9_helv_syriac_ctrl",
+    "mk9_lucida_arabic_space",
+    "mk9_lucida_arabic_space_ctrl",
+    "mk9_lucida_deva_base",
+    "mk9_lucida_deva_ctrl",
+    "mk9_lucida_hebrew_hiriq",
+    "mk9_lucida_hebrew_hiriq_ctrl",
+    "mk9_lucida_hebrew_space",
+    "mk9_lucida_hebrew_space_ctrl",
+    "mk9_lucida_hebrew_wj",
+    "mk9_lucida_thai_base",
+    "mk9_mono_hebrew_space",
+    "mk9_mono_hebrew_space_ctrl",
+    "mk9_seq_hebrew",
+    "mk9_u17_10efa",
+    "mk9_u17_11b60",
+    "mk9_u17_1ad5",
+    "mk9_u18_10ecb",
+    "mk9_u18_1d127",
+    "mk9_u18_b53",
+    "mk9_verdana_hebrew_space",
+    "mk9_verdana_hebrew_space_ctrl",
+    "y9_block_depth3",
+    "y9_block_hash_lines",
+    "y9_block_quoted_key",
+    "y9_block_tab_inside",
+    "y9_block_text_dedent",
+    "y9_flow_seq_empty",
+    "y9_flow_seq_number",
+    "y9_flow_seq_quotes",
+    "y9_hide_then_data",
+    "y9_tab_indent",
+    "y9_tab_key"
+   ],
+   "stderr_changed": [
+    "j9_skinparam_block",
+    "y9_block_text_dedent",
+    "y9_hide_then_data",
+    "y9_tab_indent"
+   ]
+  },
+  "base->merge_counts": {
+   "gained_match": 28,
+   "viewBox_gained": 30,
+   "output_changed": 47,
+   "stderr_changed": 4
+  }
+ },
+ "per_case": {
+  "mk9_u17_1ad5": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 113 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "49e6deb2797e796c305cdb022434213fca4e6dc09874010eb092ccc7ae34da34"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "7e2a7799a998f94662bed0a4066e57d9a6da82303170fb0569f46c56a8f30e96"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "7e2a7799a998f94662bed0a4066e57d9a6da82303170fb0569f46c56a8f30e96"
+   }
+  },
+  "mk9_u17_10efa": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 101 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "b6c9f44524311a20c8ae001337c262657e26ab8cf39edc835978d24545ff7d00"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "1b53ab8627945502804a68f3ccc1da8602c31cd4e22412a534837c3bf465abb1"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "1b53ab8627945502804a68f3ccc1da8602c31cd4e22412a534837c3bf465abb1"
+   }
+  },
+  "mk9_u17_11b60": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 92 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "523f18894af7a548e029cca17b41e0e615d6244ae11ffa7bbf8c3f1e4828e37d"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "738c0e720cd4760c24735da474ca76ef591e3a25382303cbb36962ad9a9627d4"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "738c0e720cd4760c24735da474ca76ef591e3a25382303cbb36962ad9a9627d4"
+   }
+  },
+  "mk9_u18_b53": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 101 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "fd26ff789f885e39462ba3e74fff42de05a7fb517bedde15cf761b81743e55ef"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "2896c191301144d382bc3afcb5c9008eeff070096254a882c2111b09dd0194cc"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "2896c191301144d382bc3afcb5c9008eeff070096254a882c2111b09dd0194cc"
+   }
+  },
+  "mk9_u18_1d127": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 91 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "91f014bd16982f4023877002e74cc4682ea5992f4bcaafa7ed25b402b06904f8"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "4b71f6e454195f86bb9f84aaa6bdb40c27ef276b234d7f0ff9684fcf2e10d586"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "4b71f6e454195f86bb9f84aaa6bdb40c27ef276b234d7f0ff9684fcf2e10d586"
+   }
+  },
+  "mk9_u18_10ecb": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 99 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "f8faec577b92aacf2f2deb6c7bc4390dc60ad89ed9e3cf562c7fab2bc83d0563"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "cb77a7d976fa230895548d356f8b37d0b1b38e40af02ec42e1b6b9fe6d070620"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "cb77a7d976fa230895548d356f8b37d0b1b38e40af02ec42e1b6b9fe6d070620"
+   }
+  },
+  "mk9_180f_thai": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 94 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "796604493b856e23834c6929891ad3b35bf40e2a44f5d56be712a503c872a196"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "d4c43a135b14c0cc745bfd4526ee1cad2ed7cfe55a4936519bd40282713e9d6c"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "d4c43a135b14c0cc745bfd4526ee1cad2ed7cfe55a4936519bd40282713e9d6c"
+   }
+  },
+  "mk9_180f_thai_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 94 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "6616ccba8fbc67f3b4c167674c873655542d0990f21daec08b250dbe8591762a"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "c94fd8cc423af9654258513d1af9c97e0593a348d0667e70044788f7f206c925"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "c94fd8cc423af9654258513d1af9c97e0593a348d0667e70044788f7f206c925"
+   }
+  },
+  "mk9_lucida_hebrew_space": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 107 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "73fe6915dbc63702fb65c32a350fbe02533bc8cdc059e3a6c8712283ef7f0943"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "9d055f1f256e58d94452e0dfec67c1eb7f9246e126a710018128772473fea008"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "9d055f1f256e58d94452e0dfec67c1eb7f9246e126a710018128772473fea008"
+   }
+  },
+  "mk9_lucida_hebrew_space_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 107 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "232df3cd7c733032a72daebdbe2a412d8df8ac46631733ad06c04ae684b579d6"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "61e209ebcfe7f4c12d1d9daf2015eda9fe33f2d56b253ae37bd4bf1529acdd94"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "61e209ebcfe7f4c12d1d9daf2015eda9fe33f2d56b253ae37bd4bf1529acdd94"
+   }
+  },
+  "mk9_helv_hebrew_space": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 105 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "730af073f0cfd873968fa6726468ca2552785b0d281e87add1146f4275e6f0a9"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d7cfea77e6e780ddaf3f4626cf050278447124afe5a073ca1c005dc9d4f06a9c"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d7cfea77e6e780ddaf3f4626cf050278447124afe5a073ca1c005dc9d4f06a9c"
+   }
+  },
+  "mk9_helv_hebrew_space_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 105 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "bc38f39bcceffe14e9e2187c4470158c3f46b5ab939121487386d2f28c66bfd4"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "55eab5ef0ab696509228bb779a2e4c4506f8037093d5867699c33777bdd40326"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "55eab5ef0ab696509228bb779a2e4c4506f8037093d5867699c33777bdd40326"
+   }
+  },
+  "mk9_verdana_hebrew_space": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 123 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "aae1d37eaac5155c2e9cdb2c640bf621ce82545bc2765b6f5abe53964f39ebba"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "02eb459db2d53ed201969787fbe73d952b78a9464551aefb74cdd75d0410a30d"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "02eb459db2d53ed201969787fbe73d952b78a9464551aefb74cdd75d0410a30d"
+   }
+  },
+  "mk9_verdana_hebrew_space_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 109 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "1ef0ef79096eb256ee7d506a7554f7327de36049499b6c54086f8cc5389a4a7d"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d7a93424b57db24ddc4f62bd4f4c711183cf3c4b2babb7f382c109f018bd70bf"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d7a93424b57db24ddc4f62bd4f4c711183cf3c4b2babb7f382c109f018bd70bf"
+   }
+  },
+  "mk9_arial_hebrew_space": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 114 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "55f5fb981a9ce69b6e87c8f523f3d3b2b6a4fbd7f0ed0f49f7960fb50f8dd819"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "986615c3c332be34f909cb325a883aa0016c1cc85a6adc66bae29a9ffce21a63"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "986615c3c332be34f909cb325a883aa0016c1cc85a6adc66bae29a9ffce21a63"
+   }
+  },
+  "mk9_arial_hebrew_space_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 104 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "61ab2f4237d8a05f90d8528aa9c6913d9594fe0d7c5b81087a4b365867b748c2"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "5464f1ba4fea70d2498db31963373e0e179fc556e766224be06e9803ee685593"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "5464f1ba4fea70d2498db31963373e0e179fc556e766224be06e9803ee685593"
+   }
+  },
+  "mk9_couriernew_hebrew_space": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 119 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "3ab68cb3df232553ab4353214c2aa47380cf8f92fb9a8c6384c374db3e67a966"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "4d19b351519819083f6fe900d8dd0f3e09bb67f9055d1ea9ec2e7da973574658"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "4d19b351519819083f6fe900d8dd0f3e09bb67f9055d1ea9ec2e7da973574658"
+   }
+  },
+  "mk9_couriernew_hebrew_space_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 119 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "9df2a1e544759fa9023a1d4a6180457390ffdf16a5ba403dffb20616abd40fa9"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "dfc6cbbd6c4987133953b548c2d76d7f1c47a1a22c7f05ba61c380b4b9d9b495"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "dfc6cbbd6c4987133953b548c2d76d7f1c47a1a22c7f05ba61c380b4b9d9b495"
+   }
+  },
+  "mk9_mono_hebrew_space": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 119 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "8b317ce73e0877e684dce244fb332dd9a763cdb04f4df2c1e52b51e51e575414"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "210856ac64c735b1201593d8ca7f895d507f3753103867bd948b6a9f33cfe525"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "210856ac64c735b1201593d8ca7f895d507f3753103867bd948b6a9f33cfe525"
+   }
+  },
+  "mk9_mono_hebrew_space_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 119 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "a3d955881d5a69265d2f9794d970f410e09215bdd9ef0a62798d2816eeeb2a30"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "5f09b14b127a8f364f49077762f18a59738a4ae9530ed546a5ac75599286e026"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "5f09b14b127a8f364f49077762f18a59738a4ae9530ed546a5ac75599286e026"
+   }
+  },
+  "mk9_lucida_arabic_space": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 102 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "40596fbb8ca70c2766dc75bc2adb350f4b917c282538e7c3c95e2b352a77ec45"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "bb4e3cfa2e14da5cbd504a620e5d2cc6b474628dc6491e7fc987fff15a271c41"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "bb4e3cfa2e14da5cbd504a620e5d2cc6b474628dc6491e7fc987fff15a271c41"
+   }
+  },
+  "mk9_lucida_arabic_space_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 102 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "2b10dff37c6902ab53c721f3fe13db012b9d71c9b35711f1ec8270d5b68efb20"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "56192101adf7b94bf06435ccbf5361fdc183ae6ca6130c2914e4f41fa65b51e1"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "56192101adf7b94bf06435ccbf5361fdc183ae6ca6130c2914e4f41fa65b51e1"
+   }
+  },
+  "mk9_helv_syriac": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 94 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "23b76cd2e02d6ee2679fc6bf1a1cc95901152b669506129f2121eb59344c3ca0"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "ee26f9cb87488ef1bf791d718de03dcefaf7a30a3d274d121548d10c684e2862"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "ee26f9cb87488ef1bf791d718de03dcefaf7a30a3d274d121548d10c684e2862"
+   }
+  },
+  "mk9_helv_syriac_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 98 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "dc7726871e1ddddd37159ed652f8d5eaa8d70a28798a7af81525379df372cf5a"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "1a5b5f7aff78cd27e4d0570e764a2e366c74ccf9150c390f531795c7d1f74470"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "1a5b5f7aff78cd27e4d0570e764a2e366c74ccf9150c390f531795c7d1f74470"
+   }
+  },
+  "mk9_lucida_thai_base": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 104 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "7e37ebf92b1b7e76b294be5f2d5a62d6e2341c9acb327d4d437eb31ccfec7845"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "933c5211910b22b6cb17b9b1960951dc954f98c8c6a167b462848dc5fb5d58bf"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "933c5211910b22b6cb17b9b1960951dc954f98c8c6a167b462848dc5fb5d58bf"
+   }
+  },
+  "mk9_lucida_deva_base": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 107 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "5f1f91364aa6fccf1448f6924e84ec46db805967e492bc1a0f5912c0beb0da08"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "4d08bbb78c1945b8924ee6db66c45512cc591a03ca3368a01d55c8f876066e45"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "4d08bbb78c1945b8924ee6db66c45512cc591a03ca3368a01d55c8f876066e45"
+   }
+  },
+  "mk9_lucida_deva_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 96 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "ff5ff5ef16468866c274032bd394786cab6c6820e3c7ff5023d5bafb6556bf53"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "b9c2293b4c167f163cd4cb07095b27bc4fa5bfbb86fe12beff7090a0d90cb28e"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "b9c2293b4c167f163cd4cb07095b27bc4fa5bfbb86fe12beff7090a0d90cb28e"
+   }
+  },
+  "mk9_lucida_hebrew_wj": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 95 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "a64c80a4447ae8224ce9c2061c957107c44658f7ded3ddf7c9f00b34749e7e99"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "76e4870dfb2971057a94810ba7bde5baa031867bfeb9d16db63ad788474c2588"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "76e4870dfb2971057a94810ba7bde5baa031867bfeb9d16db63ad788474c2588"
+   }
+  },
+  "mk9_lucida_hebrew_hiriq": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 95 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "860ea60d955c235ceb6bb2227fab920ddcc7fccdb6caeaeb0bf8327012a2b57c"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "48c2e7eb34f225d9acd013a096af291d4f9f54f1bdc7b15c329034fbc5618928"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "48c2e7eb34f225d9acd013a096af291d4f9f54f1bdc7b15c329034fbc5618928"
+   }
+  },
+  "mk9_lucida_hebrew_hiriq_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 95 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "3383f4e890fb723a6071fc72b91019ba8ad160ae20f687f42dd1a72182d3b44d"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "5781a88384a02c7fe0350c6310c4b29ec037bb7269f5e08cfc9bb14a49a48fc2"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "5781a88384a02c7fe0350c6310c4b29ec037bb7269f5e08cfc9bb14a49a48fc2"
+   }
+  },
+  "mk9_hangul_space": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 121 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "cb61d4225477a83648dc3df44ac15f068387940dda2d10198d47ab5405f771d7"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "276750ab2b3f3a03ec023f63297d32b83119d1d1c094bb925fd8aa981886ce5a"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "276750ab2b3f3a03ec023f63297d32b83119d1d1c094bb925fd8aa981886ce5a"
+   }
+  },
+  "mk9_hangul_space_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 121 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "2ab40c9ff13f0bc0b23868567ff8da161d64e5c3379fe29f2a8b2a91892c9543"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "07e7e8c46ea1345d86dfc700ce5b4760f7899d6d04c899ff31a42ff2a4f6026c"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "07e7e8c46ea1345d86dfc700ce5b4760f7899d6d04c899ff31a42ff2a4f6026c"
+   }
+  },
+  "mk9_hangul_base": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 119 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "1295e65b4a803d3437e0027e4d13a3dc74ea900558432a7ab5beef8440734ef0"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "31831fb5ac87cf3596069a5fa79abf5dff0b25cee6c4f5715732a3704ce2e377"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "31831fb5ac87cf3596069a5fa79abf5dff0b25cee6c4f5715732a3704ce2e377"
+   }
+  },
+  "mk9_seq_hebrew": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 123 123",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d3c12827874b781c9d11bc90be4e3e9efb7d9ffec7248304abc5c05b328cc0f1"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "20461281ccbe42fff1e14b7ba2fb72781959d1e3fe29bbc5bc3f5f8809e51bbf"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "20461281ccbe42fff1e14b7ba2fb72781959d1e3fe29bbc5bc3f5f8809e51bbf"
+   }
+  },
+  "mk9_seq_hebrew_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 123 123",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "631dcbb9496e0ea65762b4d66b529c7b44bd71def0587ac83a6c8c06f543b428"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "631dcbb9496e0ea65762b4d66b529c7b44bd71def0587ac83a6c8c06f543b428"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "631dcbb9496e0ea65762b4d66b529c7b44bd71def0587ac83a6c8c06f543b428"
+   }
+  },
+  "y9_block_depth3": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 401 62",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 7,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "68972645382fd33b1deb157e60bb0fe321f18988a54513b898f9b53507bad625"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "21b52ff3a2d723692b1456718f0a8f9792601c9eefd78c5b7dddbe5ffd78a567"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "21b52ff3a2d723692b1456718f0a8f9792601c9eefd78c5b7dddbe5ffd78a567"
+   }
+  },
+  "y9_block_text_dedent": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 201 62",
+   "base": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "parse error: line 4: YAML parse error: could not find expected ':' at line 4 column 1, while scanning a simple key at line 3 column 1",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "f8c67a63da011c9f4d315c09cc4b59ff05693ae342c4b414241778c9da872225"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "f8c67a63da011c9f4d315c09cc4b59ff05693ae342c4b414241778c9da872225"
+   }
+  },
+  "y9_block_hash_lines": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 242 62",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "74d17386ea96db8326b39b644a175b1c4170893a6a44e01ff62920e52c9022dc"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "6cc5a775ee95d763afb4d8cbf6c40c7af2e57ee5009ec800ee30454cc1932b37"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "6cc5a775ee95d763afb4d8cbf6c40c7af2e57ee5009ec800ee30454cc1932b37"
+   }
+  },
+  "y9_block_tab_inside": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 124 62",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "611f73a27d57173a84dbf4bd7ca8d26b43a420d2e95d464981f3b821aa264a68"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "fb9ff9f618d4c22da8569dde4eb169f239cc49830b7890ef28a353f5af922fd2"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "fb9ff9f618d4c22da8569dde4eb169f239cc49830b7890ef28a353f5af922fd2"
+   }
+  },
+  "y9_block_quoted_key": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 178 62",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "49a9ff4d2c3a344c059afb384d1ffc9a92a58536d1a01396aaf4979388d32e47"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "eac7e9e2c2339c4552ee5704c82092aef687061ff6c3979ec24e37e5f799fa9a"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "eac7e9e2c2339c4552ee5704c82092aef687061ff6c3979ec24e37e5f799fa9a"
+   }
+  },
+  "y9_tab_indent": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 199 62",
+   "base": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "parse error: line 2: YAML parse error: found character that cannot start any token at line 2 column 1, while scanning for the next token",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "812b1fe4efd100b949f6825d8d09a3b6f12b60f735694a3692c8d667eeb62a93"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "812b1fe4efd100b949f6825d8d09a3b6f12b60f735694a3692c8d667eeb62a93"
+   }
+  },
+  "y9_tab_key": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 121 42",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 8,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d0c286dd32b1249e28e04f9b58b3b827336bcc5883d1e7e0204c7d99c086eed9"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "8ba0fa159319170ebe5ab489dd6523f026bcfd13f3d4056daf93926a04a0b681"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "8ba0fa159319170ebe5ab489dd6523f026bcfd13f3d4056daf93926a04a0b681"
+   }
+  },
+  "y9_flow_seq_quotes": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 144 103",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "fa11c0f27730b721f955ea70419ef5556cc9048432aa5c9dc82feaee64a412d7"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "e7143ccecfcfb92f7ad70b148082a2b3e9d66bac3622f9b55c1b7fd07dee2b12"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "e7143ccecfcfb92f7ad70b148082a2b3e9d66bac3622f9b55c1b7fd07dee2b12"
+   }
+  },
+  "y9_flow_seq_empty": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 115 62",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 7,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "f2f9d54a0d3c7cd645c195a43a172e003ebac940252a71d0f3ad05b0d065b929"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "d77f723df63217461858961fb9b9cd43baa98184545f7eac5aa6794fb2565c19"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "d77f723df63217461858961fb9b9cd43baa98184545f7eac5aa6794fb2565c19"
+   }
+  },
+  "y9_flow_seq_number": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 146 83",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 11,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "f6e944bcaa09a72c24907ae9441ae3ce5d6c77c8b9f9455bbae073df98df07d8"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "69520ca482d5f8b275b59ef000565ea12d83ee1b93596f19b197a3ef5f4311ee"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "69520ca482d5f8b275b59ef000565ea12d83ee1b93596f19b197a3ef5f4311ee"
+   }
+  },
+  "j9_skinparam_block": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 59 42",
+   "base": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "parse error: line 1: JSON parse error: expected value at line 1 column 1",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "44df472ea219d9a8617241c17a9d74b0e5bd2bc295507ce87535c42abd2ddc1a"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "44df472ea219d9a8617241c17a9d74b0e5bd2bc295507ce87535c42abd2ddc1a"
+   }
+  },
+  "y9_hide_then_data": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 58 42",
+   "base": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "parse error: line 2: YAML parse error: mapping values are not allowed in this context at line 2 column 2",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "3e3efa73d7bb0e0b81f597ef83475a717090aee44f710e92b6727def446c902f"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "3e3efa73d7bb0e0b81f597ef83475a717090aee44f710e92b6727def446c902f"
+   }
+  },
+  "y9_skinparam_after_data": {
+   "java_valid": false,
+   "java_stderr": "net.sourceforge.plantuml.yaml.parser.YamlSyntaxException: YamlLineType.NO_KEY_ONLY_TEXT\n\tat net.sourceforge.plantuml.yaml.parser.YamlParser.parse(YamlParser.java:54)\n\tat net.sourceforge.plantuml.yaml.YamlDiagramFactory.createSystem(YamlDiagramFactory.java:90)\n\tat net.sourceforge.plantuml.PSystemBuilder.createPSystem(PSystemBuilder.java:237)\n\tat net.sourceforge.plantuml.BlockUml.getDiagram(BlockUml",
+   "java_viewBox": "0 0 359 41",
+   "base": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "parse error: line 3: YAML parse error: could not find expected ':' at line 3 column 1, while scanning a simple key at line 2 column 1",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "merge": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "parse error: line 3: YAML parse error: could not find expected ':' at line 3 column 1, while scanning a simple key at line 2 column 1",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "parse error: line 3: YAML parse error: could not find expected ':' at line 3 column 1, while scanning a simple key at line 2 column 1",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "j9_cr_key": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 85 62",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 11,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "f2768ede7a46337039c37131df52e16e8cd1d9c11ced07d96c06e7bfa8d4786e"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "699e740b4dd6b4c2e4e8c327fdea7bd05dd93da05a13a4a8422ef6fb72c58616"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "699e740b4dd6b4c2e4e8c327fdea7bd05dd93da05a13a4a8422ef6fb72c58616"
+   }
+  }
+ }
+}

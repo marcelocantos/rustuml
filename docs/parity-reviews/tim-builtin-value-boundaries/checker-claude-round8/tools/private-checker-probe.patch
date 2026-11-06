@@ -1,0 +1,36 @@
+--- /Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/src/c3116f0b0/crates/rustuml-render/src/java_bidi.rs	2026-11-06 04:29:18
++++ crates/rustuml-render/src/java_bidi.rs	2026-11-06 04:40:06
+@@ -1473,5 +1473,33 @@
+         // The 31 lines where JDK's BidiBase departs from UAX #9 (see
+         // conformance_sample).
+         assert_eq!(failed, 31);
++    }
++}
++
++/// CHECKER PROBE (private copy only, not product code): for each input line
++/// `<dir>;<hex units space-separated>` print `requiresBidi;isLTR;paraLevel;levels`
++/// for set_para(units, dir) where dir is 0, 1 or D (DEFAULT_LTR).
++#[cfg(test)]
++mod checker_probe {
++    use super::*;
++    #[test]
++    #[ignore]
++    fn checker_dump_levels() {
++        let input = std::env::var("CHECKER_BIDI_IN").unwrap();
++        let output = std::env::var("CHECKER_BIDI_OUT").unwrap();
++        let text = std::fs::read_to_string(input).unwrap();
++        let mut out = String::new();
++        for line in text.lines() {
++            let (dir, hex) = line.split_once(';').unwrap();
++            let units: Vec<u16> = hex.split_whitespace().map(|h| u16::from_str_radix(h, 16).unwrap()).collect();
++            let para = match dir { "0" => 0, "1" => 1, _ => LEVEL_DEFAULT_LTR };
++            let p = set_para(&units, para);
++            let rb = requires_bidi(&units);
++            let tl = text_line_levels(&units);
++            let lv: Vec<String> = p.levels.iter().map(|l| l.to_string()).collect();
++            out.push_str(&format!("{};{};{};{};{}\n", rb as u8, p.is_left_to_right() as u8, p.para_level, lv.join(" "),
++                tl.map(|v| v.iter().map(|l| l.to_string()).collect::<Vec<_>>().join(" ")).unwrap_or_else(|| "-".into())));
++        }
++        std::fs::write(output, out).unwrap();
+     }
+ }

@@ -1,0 +1,257 @@
+{
+  "chronology": [
+    {
+      "path": "docs/parity-reviews/comment-state-consumers/comment-selection-account.json",
+      "sha256": "0bcd324028b1a974eab3c2b51b9c99d610c571d3cd1c86fd74a23753b8bc8625",
+      "commit": "42344228ed430c5678b46ec8f42f7f9018124247",
+      "is_ancestor_of_production": true,
+      "unchanged": true,
+      "object_rust_locations": false
+    },
+    {
+      "path": "docs/parity-reviews/comment-state-consumers/missing-comments-account.json",
+      "sha256": "2fa45481d8516901098c98d2ba2a6f845b5fb649bc73a34f55cf5da356866eef",
+      "commit": "42344228ed430c5678b46ec8f42f7f9018124247",
+      "is_ancestor_of_production": true,
+      "unchanged": true,
+      "object_rust_locations": true
+    },
+    {
+      "path": "docs/parity-reviews/comment-state-consumers/state-paint-account.json",
+      "sha256": "294a6c42f9f6a4f4b0ca1aa3b73a8961ee9a415262cedf74f2773cfbe6566c91",
+      "commit": "42344228ed430c5678b46ec8f42f7f9018124247",
+      "is_ancestor_of_production": true,
+      "unchanged": true,
+      "object_rust_locations": false
+    },
+    {
+      "path": "docs/parity-reviews/comment-state-consumers/follow-on-producers-account.json",
+      "sha256": "4e807660383c420fed1d9e2ed38fe8ea3894c5a8413d5535b99ff9450c1cefc8",
+      "commit": "dda0437c0ffa88fe975f54f3a784d3f3e3bdbda1",
+      "is_ancestor_of_production": true,
+      "unchanged": true,
+      "object_rust_locations": true
+    },
+    {
+      "path": "source-boundary-addendum.json",
+      "commit": "27bb1c3ff9a6318e5438d8c8d773d40216f2b677",
+      "unchanged": true,
+      "is_ancestor_of_production": true
+    },
+    {
+      "path": "state-fill-sites.json",
+      "commit": "42344228ed430c5678b46ec8f42f7f9018124247",
+      "unchanged": true,
+      "is_ancestor_of_production": true
+    }
+  ],
+  "canonical_index_postproduction": true,
+  "index_adds_no_causal_claim": true,
+  "format_deviations": [
+    "Four predraft accounts used descriptive filenames rather than the canonical account.json path.",
+    "missing-comments-account.json and follow-on-producers-account.json have object-shaped rust_locations arrays rather than schema string arrays; original bytes are preserved."
+  ],
+  "production_changed_files": [
+    "crates/rustuml-render/src/activity.rs",
+    "crates/rustuml-render/src/class.rs",
+    "crates/rustuml-render/src/creole.rs",
+    "crates/rustuml-render/src/deployment.rs",
+    "crates/rustuml-render/src/state.rs"
+  ],
+  "only_accounted_production_files": true,
+  "no_sequence_changes": true,
+  "prior_evidence": [
+    {
+      "revision": "3875fee3b164d63d4b39df4bc6c13ca8ace89169",
+      "files": 11406,
+      "mismatches": []
+    },
+    {
+      "revision": "138ca3e5f",
+      "files": 11553,
+      "mismatches": []
+    },
+    {
+      "revision": "075f5095520bb1dc85a32c1f051a98421522419d",
+      "files": 11553,
+      "mismatches": []
+    }
+  ],
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_sources": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageStateCommon.java",
+      "sha256": "aee1b7c29fc99da6a0ac481f0505eb22580e6999016dde6dfb6dc5e3e9b11614",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/ConcurrentStates.java",
+      "sha256": "dfd9f3c660ad7773ff9f6083f75132cbff0e804b6273eb986e58f501a90967f8",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+      "sha256": "e1d04c9264cd4a0215581f30560917ff44aad2d70ecd7fe6c639dd8f7eec41d3",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/ValueImpl.java",
+      "sha256": "803a162f03659ed7ca6a48238145bd0f8c8176a5e6f01fc7c37c1013568ffa4b",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/HColorSet.java",
+      "sha256": "cdd4b8ae6aaf39eebafb1107bab16184e671e639aafdc77fd925bc1b66597be1",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverRectangleSvg.java",
+      "sha256": "5aab9c05752a57b4067781ccdba9794c5b7b9cc5eea1acbead12113491c47435",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverEllipseSvg.java",
+      "sha256": "e3f5b3a121c257437daee11f950ba97a6320db872e76e83f44c017ac11a29b29",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverPolygonSvg.java",
+      "sha256": "2a2cff7c676d62b3c3cf4dbcebdc54c5ac9cc1f877d5eafaf051b9e3717ae4e2",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverPathSvg.java",
+      "sha256": "d2cf41f092ffd9b9f42ab12dc93c43d771b51ec802afa61815f6ea7731f38b2f",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "sha256": "853cab1a6ed28d5bbdbf7be524b9d6b7610fbd392804e0ec9df3620ad40910bf",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Link.java",
+      "sha256": "79d7108561706e96a94086fe3ad44ba9b8ae2b8d08056827d46fd02be37865a0",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+      "sha256": "b10a512804766ce08729a737389ee2a26320a5b725f41dfc20c0e8bb16aab8c2",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/plasma/Quark.java",
+      "sha256": "0135f01bd5be1b9ed184b8db8f7f98e29c45caa787dac15b13bf99b5ef476700",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/statediagram/StateDiagram.java",
+      "sha256": "21ccc49da0f4a4aa7d0f44b80a2b2c093af03bef0a5319457c299604aab10db7",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/activitydiagram/ActivityDiagram.java",
+      "sha256": "6408e7b2bd17b71e576ca1eb11e4bcee172b41b43926f4ff3771e2792f2dcd9c",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java",
+      "sha256": "b81129ac2c552c56fe4ca2d64edfad865778366118813ae6970cb126e6679f51",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageObject.java",
+      "sha256": "9afa2227c3801d4b595f34aa38e0fb13d653a9a712035784d4bb22e2c99d5072",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageClass.java",
+      "sha256": "0edd4959c52fff7d3eaa42e22a8b970c883b16fffd6926920ae22ccf4b25aeb8",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": null
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java",
+      "sha256": "2f000b9eca5b99f3f492eda8b7e49835e447041327da49be78a2f0bdf51e9d6e",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": null
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageState.java",
+      "sha256": "26b0def08b0af1554f4eedb3167d5879f50a69676ee7b39e27811f337a5e9883",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": null
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageStateEmptyDescription.java",
+      "sha256": "8d5c63386e8721b3a8734e6d63bd2213dd0a802e5099c42ca3177335f16fbadb",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": null
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImagePseudoState.java",
+      "sha256": "84b56e541acc5211e046b371baa468116f9f66fd1b4635a2ae2a36182312f92d",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": null
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDeepHistory.java",
+      "sha256": "29fc948266cd8b7ef3f62194e7fa69241efb3c7b9e1990170c2e7f39b71a37a4",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": null
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageSynchroBar.java",
+      "sha256": "e07f58440b35dcf17c66b2faa41eab0e47a01d0e3d4b070f7c629fa9bef6f658",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": null
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageBranch.java",
+      "sha256": "56c01a5ae8f6802e5e27ba60a96a856e1b0fe8709c2f52025353abdf6b29f1f9",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": null
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java",
+      "sha256": "742fc602d073e06b494e24b4d932db4cfded4c6ae98bf463648854e7a2c0a19d",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": null
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/activitydiagram/command/CommandLinkActivity.java",
+      "sha256": "6bd37418fb88213a193747299753f69cbdf0cddeddfc1b0fc17411f5493749d3",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": null
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+      "sha256": "4c7e91766b084ca734321706cac46ca28891109cb5a77297be8daea717894593",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": null
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/ColorTrieNode.java",
+      "sha256": "5d5f6ed904384a6706c22a60073b279d030b5892b07a2bb6f08cdd2d27e6880f",
+      "checkout_matches_pin": true,
+      "declared_hash_matches": null
+    }
+  ]
+}

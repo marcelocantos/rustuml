@@ -1,0 +1,3606 @@
+{
+ "batch": "M10A",
+ "cases": [
+  {
+   "name": "m10a_comp_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_comp_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_comp_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_comp_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_comp_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_comp_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_comp_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_comp_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_comp_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_comp_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_comp_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_comp_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_comp_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_comp_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_comp_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_comp_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_comp_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_comp_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_comp_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_comp_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_node_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_node_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_node_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_node_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_node_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_node_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_node_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_node_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_node_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_node_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_node_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_node_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_node_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_node_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_node_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_node_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_node_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_node_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_node_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_node_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_rect_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rect_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rect_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_rect_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rect_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_rect_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rect_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_rect_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rect_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rect_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_rect_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_rect_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_rect_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rect_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_rect_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_rect_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_rect_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rect_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_rect_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_rect_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "rect",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_artf_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artf_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artf_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_artf_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artf_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_artf_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artf_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_artf_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artf_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artf_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_artf_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_artf_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_artf_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artf_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_artf_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_artf_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_artf_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artf_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_artf_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_artf_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "artf",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_dbse_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbse_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbse_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_dbse_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbse_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_dbse_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbse_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_dbse_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbse_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbse_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_dbse_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_dbse_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_dbse_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbse_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_dbse_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_dbse_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_dbse_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbse_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_dbse_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_dbse_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_actd_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actd_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actd_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_actd_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actd_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_actd_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actd_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_actd_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actd_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actd_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_actd_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_actd_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_actd_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actd_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_actd_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_actd_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_actd_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actd_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_actd_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_actd_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "actd",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_nodc_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_nodc_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_nodc_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_nodc_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_nodc_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_nodc_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_nodc_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_nodc_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_nodc_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_nodc_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_nodc_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_nodc_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_nodc_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_nodc_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_nodc_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_nodc_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_nodc_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_nodc_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_nodc_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_nodc_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "nodc",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_rctc_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rctc_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rctc_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_rctc_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rctc_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_rctc_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rctc_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_rctc_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rctc_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rctc_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_rctc_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_rctc_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_rctc_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rctc_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_rctc_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_rctc_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_rctc_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_rctc_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_rctc_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_rctc_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "rctc",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_artc_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artc_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artc_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_artc_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artc_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_artc_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artc_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_artc_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artc_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artc_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_artc_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_artc_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_artc_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artc_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_artc_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_artc_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_artc_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_artc_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_artc_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_artc_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "artc",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_dbsc_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "dbsc",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_actu_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actu_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actu_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_actu_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actu_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_actu_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actu_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_actu_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actu_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actu_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_actu_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_actu_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_actu_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actu_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_actu_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_actu_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_actu_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actu_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_actu_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_actu_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "actu",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_usec_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_usec_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_usec_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_usec_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_usec_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_usec_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_usec_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_usec_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_usec_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_usec_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_usec_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_usec_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_usec_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_usec_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_usec_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_usec_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_usec_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_usec_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_usec_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_usec_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_stat_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_stat_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_stat_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_stat_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_stat_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_stat_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_stat_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_stat_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_stat_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_stat_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_stat_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_stat_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_stat_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_stat_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_stat_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_stat_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_stat_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_stat_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_stat_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_stat_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_part_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_part_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_part_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_part_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_part_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_part_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_part_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_part_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_part_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_part_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_part_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_part_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_part_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_part_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_part_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_part_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_part_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_part_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_part_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_part_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_acts_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_acts_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_acts_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_acts_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_acts_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_acts_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_acts_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_acts_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_acts_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_acts_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_acts_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_acts_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_acts_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_acts_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_acts_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_acts_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_acts_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_acts_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_acts_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_acts_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "acts",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_clss_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_clss_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_clss_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_clss_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_clss_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_clss_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_clss_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_clss_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_clss_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_clss_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_clss_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_clss_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_clss_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_clss_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_clss_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_clss_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_clss_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_clss_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_clss_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_clss_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_actv_cn_p",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "cn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actv_cn_p_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "cn",
+    "plain",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actv_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "cn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_actv_cn_i_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "cn",
+    "italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actv_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "cn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_actv_cn_b_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "cn",
+    "bold",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actv_cn_bi",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "cn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_actv_cn_bi_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "cn",
+    "bold italic",
+    "mark-free",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actv_ss_p",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "ss",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actv_ss_i",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "ss",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_actv_ss_b",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "ss",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_actv_ss_bi",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "ss",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_actv_tn_p",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "tn",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actv_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "tn",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_actv_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "tn",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_actv_tn_bi",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "tn",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_actv_vd_p",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "vd",
+    "plain",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_actv_vd_i",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "vd",
+    "italic"
+   ]
+  },
+  {
+   "name": "m10a_actv_vd_b",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "vd",
+    "bold"
+   ]
+  },
+  {
+   "name": "m10a_actv_vd_bi",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "vd",
+    "bold italic"
+   ]
+  },
+  {
+   "name": "m10a_css_comp_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "cn",
+    "italic",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_comp_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "tn",
+    "italic",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_comp_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "cn",
+    "bold",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_comp_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "tn",
+    "bold",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_node_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "cn",
+    "italic",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_node_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "tn",
+    "italic",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_node_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "cn",
+    "bold",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_node_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "tn",
+    "bold",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_stat_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "cn",
+    "italic",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_stat_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "tn",
+    "italic",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_stat_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "cn",
+    "bold",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_stat_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "stat",
+    "tn",
+    "bold",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_usec_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "cn",
+    "italic",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_usec_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "tn",
+    "italic",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_usec_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "cn",
+    "bold",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_usec_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "usec",
+    "tn",
+    "bold",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_clss_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "cn",
+    "italic",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_clss_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "tn",
+    "italic",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_clss_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "cn",
+    "bold",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_clss_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "clss",
+    "tn",
+    "bold",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_part_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "cn",
+    "italic",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_part_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "tn",
+    "italic",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_part_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "cn",
+    "bold",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_part_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "part",
+    "tn",
+    "bold",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_actv_cn_i",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "cn",
+    "italic",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_actv_tn_i",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "tn",
+    "italic",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_actv_cn_b",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "cn",
+    "bold",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_css_actv_tn_b",
+   "intended_valid": true,
+   "axes": [
+    "actv",
+    "tn",
+    "bold",
+    "style-block"
+   ]
+  },
+  {
+   "name": "m10a_stereo_comp_cn_mk",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "cn",
+    "stereotype"
+   ]
+  },
+  {
+   "name": "m10a_stereo_comp_cn_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "comp",
+    "cn",
+    "stereotype",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_stereo_node_cn_mk",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "cn",
+    "stereotype"
+   ]
+  },
+  {
+   "name": "m10a_stereo_node_cn_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "node",
+    "cn",
+    "stereotype",
+    "control"
+   ]
+  },
+  {
+   "name": "m10a_stereo_dbse_cn_mk",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "cn",
+    "stereotype"
+   ]
+  },
+  {
+   "name": "m10a_stereo_dbse_cn_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "dbse",
+    "cn",
+    "stereotype",
+    "control"
+   ]
+  }
+ ]
+}

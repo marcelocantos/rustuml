@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Arial
+abstract class "Wharf qr" as K
+@enduml

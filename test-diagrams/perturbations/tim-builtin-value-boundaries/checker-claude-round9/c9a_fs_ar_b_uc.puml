@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Arial
+usecase "<b>Wharf q𝅧r</b>" as U1
+@enduml

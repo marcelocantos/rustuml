@@ -1,0 +1,5 @@
+@startuml
+class Right
+note "$prod / first" as Nfirst
+note "$prod / last" as Nlast
+@enduml

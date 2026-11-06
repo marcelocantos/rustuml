@@ -1,0 +1,30 @@
+{
+  "total": 29,
+  "valid": 14,
+  "before": 11,
+  "current": 14,
+  "source_matches": 14,
+  "negative_rejected": 12,
+  "panics": 0,
+  "losses": [],
+  "gains": [
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/keys_exact_spelling.puml",
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/macro_original_prefix.puml",
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/adjacent_hsl_alpha.puml"
+  ],
+  "new_valid_errors": [],
+  "model_drops": [
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/arity_plain_named_builtin.puml",
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/keys_duplicate.puml",
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/adjacent_dispatch.puml",
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/keys_nested_call.puml"
+  ],
+  "cohort955": {
+    "total": 0,
+    "current": 0
+  },
+  "cohort1044": {
+    "total": 0,
+    "current": 0
+  }
+}

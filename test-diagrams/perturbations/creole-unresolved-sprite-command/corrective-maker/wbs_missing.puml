@@ -1,0 +1,6 @@
+@startwbs
+* Root<outer<$twig>>!
+** Left<$leaf>End
+*** <$bud>
+** Plain
+@endwbs

@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontSize 16
+class A
+class B
+A --> B : Pier quay
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+!$n=0
+!function $tick()
+!$n=$n+1
+!return "ignored"
+!endfunction
+class "%strlen("fir",$ignored=$tick())/$n" as Arity
+@enduml

@@ -1,0 +1,12 @@
+sub_defined_in_uncalled java 0 valid True rust 1 svg False source False
+  java-source '@startuml\nclass Kept\n@enduml\n'
+  rust-source ''
+operand_overload_return java 0 valid True rust 1 svg False source False
+  java-source '@startuml\nclass "value 7" as Selected\n@enduml\n'
+  rust-source ''
+operand_overload_procedure java 0 valid True rust 1 svg False source False
+  java-source '@startuml\nclass "alder/beech" as Kept\n@enduml\n'
+  rust-source ''
+rpn_bare_read java 0 valid True rust 0 svg False source False
+  java-source '@startuml\nclass "plain/dollar" as Read\n@enduml\n'
+  rust-source '@startuml\nclass "b/dollar" as Read\n@enduml\n'

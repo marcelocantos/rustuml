@@ -1,0 +1,6 @@
+@startuml
+state Press {
+  state feed <<InputPin>>
+  state Squeeze
+}
+@enduml

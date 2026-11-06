@@ -1,0 +1,5 @@
+@startuml
+!define TOKEN amber
+!$v="TOKEN"
+class "north\nTOKEN / $v" as Boundary
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Courier New
+skinparam defaultFontSize 11
+abstract class "Wharf q𝅧r" as K
+@enduml

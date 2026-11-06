@@ -1,0 +1,34 @@
+{
+  "unchanged_import_revision": "95c114314f479be301ff9549f4f1d3edf2616a28",
+  "old_evidence_files_verified": 9245,
+  "modified_old_files": [],
+  "candidate": "2274e808433568aa1d8042bf9e3cb1f1de338b4b",
+  "golden_gitlink": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "module_sha256": "3d99e98125f55671b8e8b0f6353a2aece3c4f9106e99dccd0b5d9f2b588cb334",
+  "binaries": {
+    "before-rustuml": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/before-rustuml",
+      "sha256": "43d564a4c6f5bd3b80469c158ba6840089be2ed3954996ee614295d323959608"
+    },
+    "iteration1-rustuml": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration1-rustuml",
+      "sha256": "f91dd989d8bb22a5dbbd15ea49ece31debf67e0fd5d750536465880879d6aa21"
+    },
+    "iteration2-rustuml": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/iteration2-rustuml",
+      "sha256": "c44f7a80fbfb22cbd3f6fe008395694d6813b0f911b160c03783e1cdb80fd726"
+    },
+    "final-rustuml": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/final-rustuml",
+      "sha256": "c44f7a80fbfb22cbd3f6fe008395694d6813b0f911b160c03783e1cdb80fd726"
+    },
+    "probe": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/probe",
+      "sha256": "43ce27167f6ad8697a8043edbb4f580ddbf9ab68b4e0ea4db15f2a69e3fc97b5"
+    }
+  },
+  "build_targets": {
+    "before": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/target-after (unchanged exact 2cf6 candidate, copied hash-verified)",
+    "current": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/target-after (existing own persistent target; before snapshots never rebuilt here during this packet; jobs4)"
+  }
+}

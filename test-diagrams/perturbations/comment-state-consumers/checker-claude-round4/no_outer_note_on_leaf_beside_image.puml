@@ -1,0 +1,7 @@
+@startuml
+state Barn {
+  Hay --> Loft
+}
+Barn --> Field
+note right of Field : green
+@enduml

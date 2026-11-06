@@ -1,0 +1,7 @@
+@startuml
+actor "Sea Pilot" as Pilot
+usecase "Read Compass" as Compass
+component "Signal Box" as Signal
+Pilot --> Compass
+Compass <.. Signal
+@enduml

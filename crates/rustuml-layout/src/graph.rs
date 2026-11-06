@@ -898,6 +898,15 @@ impl LayoutGraph {
 
     #[allow(unsafe_op_in_unsafe_fn)]
     unsafe fn run_graphviz_layout_inner(&self) -> LayoutResult {
+        // Java runs dot through ProcessRunner and never writes its error
+        // stream (`AbstractGraphviz.createFile3`: the isCheckDotError report
+        // is commented out), so dot's diagnostics, such as the
+        // `port P unrecognized` warning for a short-label entry/exit point's
+        // `uid:P`, never reach the CLI's stderr. Consume them the same way.
+        static DISCARD_DIAGNOSTICS: std::sync::Once = std::sync::Once::new();
+        DISCARD_DIAGNOSTICS.call_once(|| {
+            graphviz_ffi::agseterrf(Some(discard_graphviz_diagnostic));
+        });
         let gvc = graphviz_ffi::gvContext();
 
         // Register the statically-linked dot layout plugin.
@@ -3403,4 +3412,11 @@ mod tests {
             "ranksep should be applied in pixels: expected {RANK_SEP_PX}, got {spaced_gap}"
         );
     }
+}
+
+/// `agusererrf` that drops a Graphviz diagnostic (see `run_graphviz_layout_inner`).
+unsafe extern "C" fn discard_graphviz_diagnostic(
+    _message: *mut std::os::raw::c_char,
+) -> std::os::raw::c_int {
+    0
 }

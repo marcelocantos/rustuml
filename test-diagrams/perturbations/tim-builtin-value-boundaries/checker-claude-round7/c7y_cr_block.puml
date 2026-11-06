@@ -1,0 +1,5 @@
+@startyaml
+k: |
+  a%chr(13)b
+  c
+@endyaml

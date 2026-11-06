@@ -1,0 +1,7 @@
+@startuml
+!function $mix(b="007",$b="08")
+!return b+2+"/"+$b+3+"/"+%get_variable_value("b")
+!endfunction
+!$v=$mix()
+class "$v/$mix(b="oak",$b="ash")" as Dual
+@enduml

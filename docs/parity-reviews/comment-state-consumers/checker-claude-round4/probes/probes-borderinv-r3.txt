@@ -1,0 +1,5 @@
+files OK 5 violations 4
+/Users/marcelo/Library/Caches/rustuml-shared-svg-round4-claude-checker/probes/state/bp_d4_wide_exit.71d16da4a.svg VIOLATION [(79.76, 250.4883)]
+/Users/marcelo/Library/Caches/rustuml-shared-svg-round4-claude-checker/probes/state/bp_entry_exit_same_cluster_wide.71d16da4a.svg VIOLATION [(75.06, 137.4883), (71.23, 295.4883)]
+/Users/marcelo/Library/Caches/rustuml-shared-svg-round4-claude-checker/probes/state/bp_multiline_label.71d16da4a.svg VIOLATION [(86.75, 172.4883)]
+/Users/marcelo/Library/Caches/rustuml-shared-svg-round4-claude-checker/probes/state/bp_wide_entry_with_note.71d16da4a.svg VIOLATION [(69.72, 137.4883)]

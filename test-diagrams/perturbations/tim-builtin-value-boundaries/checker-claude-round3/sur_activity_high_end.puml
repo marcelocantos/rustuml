@@ -1,0 +1,5 @@
+@startuml
+start
+:pour%substr("🦉",0,1);
+stop
+@enduml

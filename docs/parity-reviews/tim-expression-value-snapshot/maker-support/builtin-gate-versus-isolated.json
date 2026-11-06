@@ -1,0 +1,117 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml",
+    "passed": false,
+    "failure": "parse failed: line 3: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/blocks.inc!chosen"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+    "passed": false,
+    "failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/nested.inc!chosen"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+    "passed": false,
+    "failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/caller.inc!chosen"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+    "passed": false,
+    "failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/blocks.inc!chosen"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+    "passed": false,
+    "failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/tabs.inc!chosen"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+    "passed": false,
+    "failure": "parse failed: line 3: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/caller.inc!chosen"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+    "passed": false,
+    "failure": "parse failed: line 1: cannot include test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_body.inc!useful"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_fixed_fraction.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_new_york_summer.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_tokyo_width.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_utc_width.puml",
+    "passed": false,
+    "failure": "SVG structural differences:"
+  }
+]

@@ -1,0 +1,56 @@
+{
+  "validated": true,
+  "cases": 36,
+  "timeouts": 0,
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.9trNkwXM",
+  "hashes": {
+    "reference-results.json.gz": "418a77d16237cf83fa7c0d6582cb67a6c3c0675fd10144157abd0f8308b93f28",
+    "reference-transport.json": "54d7eeb137cc7206cea2085007d94a9d5366b80cbc3d076af0f7d32a853f3940"
+  },
+  "remote_names": {
+    "reference-results.json.gz": "reference-results.json.gz",
+    "reference-transport.json": "reference-transport.json"
+  },
+  "exit_statuses": {
+    "0": 36
+  },
+  "intended_invalid": [
+    "sur_activity_low_end",
+    "sur_class_high_mid_valid",
+    "sur_class_high_then_nonascii",
+    "sur_class_low_end",
+    "sur_class_low_mid",
+    "sur_link_title_escape",
+    "sur_sequence_high_space",
+    "sur_sequence_participant_high",
+    "sur_state_link_title_escape",
+    "sur_tooltip_high_end"
+  ],
+  "intended_invalid_exit0": [
+    "sur_activity_low_end",
+    "sur_class_high_mid_valid",
+    "sur_class_high_then_nonascii",
+    "sur_class_low_end",
+    "sur_class_low_mid",
+    "sur_link_title_escape",
+    "sur_sequence_high_space",
+    "sur_sequence_participant_high",
+    "sur_state_link_title_escape",
+    "sur_tooltip_high_end"
+  ],
+  "intended_valid_nonzero": [],
+  "nonempty_stderr": [
+    "sur_activity_low_end",
+    "sur_class_high_mid_valid",
+    "sur_class_high_then_nonascii",
+    "sur_class_low_end",
+    "sur_class_low_mid",
+    "sur_link_title_escape",
+    "sur_sequence_high_space",
+    "sur_sequence_participant_high",
+    "sur_state_link_title_escape",
+    "sur_tooltip_high_end"
+  ],
+  "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+  "classification": "Validity not inferred from exit status."
+}

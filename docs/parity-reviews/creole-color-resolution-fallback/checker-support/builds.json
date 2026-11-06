@@ -1,0 +1,42 @@
+[
+  {
+    "phase": "before",
+    "argv": [
+      "cargo",
+      "build",
+      "--release",
+      "-p",
+      "rustuml",
+      "-j",
+      "4"
+    ],
+    "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/src-before",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/target-before",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "exit": 0,
+    "seconds": 67.36687641699973,
+    "binary_sha256": "ce59c78baabef84aa4eefbfaed0f2495600050292e28c0e14d2b9aa025c92d18"
+  },
+  {
+    "phase": "after",
+    "argv": [
+      "cargo",
+      "build",
+      "--release",
+      "-p",
+      "rustuml",
+      "-j",
+      "4"
+    ],
+    "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/src-after",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "exit": 0,
+    "seconds": 65.15503462500055,
+    "binary_sha256": "44bcf42869572b3ac995540ef15a4b93beb76bba42df4eb24b7494a9cdd39826"
+  }
+]

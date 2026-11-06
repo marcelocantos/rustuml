@@ -1,0 +1,7 @@
+@startuml
+sprite $checker [2x2/16] {
+F0
+0F
+}
+class "A<$checker>B<$north>C" as Birch
+@enduml

@@ -1,0 +1,738 @@
+[
+  {
+    "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_2.puml",
+    "source_sha256": "aeff6e48900776f40418573bec35843265f3929b77dfe3ddd428af47faf2b152",
+    "golden_sha256": "1276e1768a355b42fe708d3d3da198891ab4e863bfc4b7189b264bc29b1abcb2",
+    "cohort955": true,
+    "cohort1044": true,
+    "cli_exit": 101,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": false,
+    "panic": true,
+    "stderr": "\nthread 'main' (12385657) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_3.puml",
+    "source_sha256": "2a432be9f6284b3f320c9cb8a74e58cd4378c4f1e7f4fe223c055548a797e0d5",
+    "golden_sha256": "7f57261209c995089b749c843bff52a0efc8801dd5069af92c0b6e96724901df",
+    "cohort955": true,
+    "cohort1044": true,
+    "cli_exit": 101,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": false,
+    "panic": true,
+    "stderr": "\nthread 'main' (12385661) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_letter.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "signed instant/date boundary",
+      "token width and quoting"
+    ],
+    "source_sha256": "d5ad3344977c7d8a50e6c11f16cee5e2af4fac528ff84dd10db45023619789f7",
+    "golden_sha256": "0b957ba461b456781b7c26b4e47724acd08c98b277daa8e84d787e9688395a2e",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_quote.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "signed instant/date boundary",
+      "token width and quoting"
+    ],
+    "source_sha256": "b6e6ee02414fd5659b64b4a8b2262a6c65bc9c96c5828634c474f1b2803943c1",
+    "golden_sha256": "3fcd653923a035c02d5d5deefe019861c3468cbd98c83f28127b75069454fa3b",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: unterminated quote\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_x.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "signed instant/date boundary",
+      "token width and quoting"
+    ],
+    "source_sha256": "a70cd8975e8a454424ccbb60642eadcc74a1f38eb3d7cda41c441cbcbb89a390",
+    "golden_sha256": "415e92ece67c159161617174b61cea28ebc07631787dfacbdb10993bdd5aea97",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: X must have one to three letters\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_four_x.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x.puml",
+    "source_sha256": "954a83809f5e488dde3f1d06ad03b9f186fd50134f6353fbcc408effc8352169",
+    "golden_sha256": "20d40ba4eb4df38ec79757a789d3f73ffadedc37fe981960d091f48bd47e7e1c",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: X must have one to three letters\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_unclosed_pattern.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern.puml",
+    "source_sha256": "887f6b8e96c9d2f10ece4ae967c12865ea6a2ac5035a24b7561e8be0846c93e6",
+    "golden_sha256": "287bd814828314085e1c718e40f46bbcf06e5ec1c17d29a71f325cf9b5ada4e0",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: unterminated quote\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+    "source_sha256": "f15f329c74d6dc30b1d8bf7719e87689c7f10dae627d48e60958b8a0543edc95",
+    "golden_sha256": "077250790d9a8af47a18e001d523a558952af13366916386caaeb5e06f612e39",
+    "cohort955": true,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+    "source_sha256": "e4b7a8ea2482d5e18e80974b4000946a7b421aa5e2aa1069958764b1c0b82046",
+    "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cohort955": true,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 1: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context default_error",
+      "pattern versus overflow or inactive execution"
+    ],
+    "source_sha256": "8b29e8755da32eba52745a1d70a3e2619d2aae226be97f3d165dbd6d4f7d7876",
+    "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 1: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_error_after_theme.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context error_after_theme",
+      "pattern versus overflow or inactive execution"
+    ],
+    "source_sha256": "6796e29c7eedcaa83b7f7224aa94d9e608be7dff1e8eac9ba31fe1227588a026",
+    "golden_sha256": "2c139ff7584ca1b1da45d066662e15276edf67832ccb190c61f6dc49178f70e6",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 3: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_function_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context function_error",
+      "pattern versus overflow or inactive execution"
+    ],
+    "source_sha256": "fa9a115e6ec5da20343275bf51c618d5563a1cda4e33b698fa1d7a90a82fd39b",
+    "golden_sha256": "9a8d00316eee49b00bd14b6c525345357c2cb9fae8bf7b93f20d354e9158188e",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context inactive_error",
+      "pattern versus overflow or inactive execution"
+    ],
+    "source_sha256": "b8f87bbfb4153a8f9c701439bee5859342bd6e72f6ef25931556094419338de7",
+    "golden_sha256": "525ac36cc98b90bd3f8d13f352fdcb7bd74d3a1f5f36f874f93c182f2455b401",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 3: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_include_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context include_error",
+      "pattern versus overflow or inactive execution"
+    ],
+    "source_sha256": "070d7caab26437d73adabe5d2c80e1c69b8ecfa71a8df09c350ea96a7b6c6f72",
+    "golden_sha256": "ba87c8a7369ecb6ecb73a6f7a81f6ac4708706d543d36400244de1c93d479a55",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 0: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_0.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-parser-error-propagation/maker-cases/invalid_0.puml",
+    "source_sha256": "216a38380ecc3c783b188cb0491caf0bcd3257332291dcef032c630fc251d842",
+    "golden_sha256": "f4c7917342def5193aec96b1f27fd1e77cf93d149b33c4945923829adde3d90a",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_1.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-parser-error-propagation/maker-cases/invalid_1.puml",
+    "source_sha256": "4c6bb511046da15a0c1999b15500354d49d8fe4a1d1a202fac28d3cd63e7c004",
+    "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 2: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_2.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-parser-error-propagation/maker-cases/invalid_2.puml",
+    "source_sha256": "e4ca7bed3006d7d496ff7772794df728723165abc582bd7ec8599e117dfda483",
+    "golden_sha256": "cfb8dff08ace6f07fc02f6f3450da3cf99abf6fd5ab4ffb2d98c3023885be82b",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_3.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-parser-error-propagation/maker-cases/invalid_3.puml",
+    "source_sha256": "e499390b80fd22e757c757631b13a2280855d3d632c683718542ce39dd6033d5",
+    "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 2: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sequence_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context sequence_error",
+      "pattern versus overflow or inactive execution"
+    ],
+    "source_sha256": "057630086b2a234e61710828cc647e066121ab45a7c4bf1278e590ddd06d103a",
+    "golden_sha256": "1fa5949e5f93cbfa97b5fbf07ea8275dc212e1fca9ab506b7fd0ebca0f05c2ab",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 3: Bad date pattern: X must have one to three letters\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context short_circuit_error",
+      "pattern versus overflow or inactive execution"
+    ],
+    "source_sha256": "abb1dbfbfeab8b0514371f1ffa979ffd2979bf1feface78368da8f8b9e2f3a69",
+    "golden_sha256": "4a475abb89561b6432109b2676ed9ee03ad8c947fdafc09bf03306d5dffc16cc",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "signed lower overflow",
+      "partial class output"
+    ],
+    "source_sha256": "642b5c2073293e92f65e09e3b8af98839bebcad815116077d339c14cc3ba6818",
+    "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 2: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "external selected subblock",
+      "fatal pattern"
+    ],
+    "source_sha256": "98c93155e330343d4eddb12887b7d4b921a1beb5576af3d68eb754916ef502a3",
+    "golden_sha256": "3ce882a42d75320d0d961ff09fdd878d70ad1e3c08e8f2d32f01dcb0b366de0a",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_two_errors.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context two_errors",
+      "pattern versus overflow or inactive execution"
+    ],
+    "source_sha256": "be07aeac9360e683a5e3bfea9b1719ebe6b68605e8b045de52c802496dc46845",
+    "golden_sha256": "90f23b385fdc768482db683b74ac9d532520e85bb5dc4f5f56498d05d3f602ca",
+    "cohort955": false,
+    "cohort1044": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "builtin exception before date",
+      "first error cancellation"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 2: Substring index out of range\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "unknown builtin before date",
+      "first error cancellation"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 2: Unknown built-in function %missing_checker3\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_nested.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "nested function origins",
+      "multiple fatal expressions"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_literal_before_date.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "axes": [
+      "integer literal before invalid formatter",
+      "diagnostic and source line"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 2: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_default_first_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "axes": [
+      "default evaluation exceptions",
+      "declaration-time order"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 1: Substring index out of range\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_procedure_expression.puml",
+    "mechanism": "tim-function-execution-kind",
+    "axes": [
+      "procedure versus return call context",
+      "illegal expression invocation"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 4: Illegal call here. Is there a return directive in your function?\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_selected_origin.puml",
+    "mechanism": "tim-external-sub-selection",
+    "axes": [
+      "selected fatal versus ignored body",
+      "first diagnostic and file origin"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 1: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_arguments.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "negative": true,
+    "cwd": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/first_error_arguments.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 6: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_logical.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "negative": true,
+    "cwd": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/first_error_logical.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 1: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_retained_sub_selected_fatal.puml",
+    "mechanism": "tim-external-sub-selection",
+    "negative": true,
+    "cwd": "test-diagrams/perturbations/tim-external-sub-selection/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/sub_selected_fatal.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 2: Bad date pattern: X must have one to three letters\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_pattern.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "exact root assertion source",
+    "axes": [
+      "class versus sequence",
+      "literal versus pattern failure"
+    ],
+    "negative": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_literal.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "exact root assertion source",
+    "axes": [
+      "class versus sequence",
+      "literal versus pattern failure"
+    ],
+    "negative": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 2: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_pattern.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "exact root assertion source",
+    "axes": [
+      "class versus sequence",
+      "literal versus pattern failure"
+    ],
+    "negative": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_literal.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "exact root assertion source",
+    "axes": [
+      "class versus sequence",
+      "literal versus pattern failure"
+    ],
+    "negative": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 2: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr_only.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "first fatal builtin",
+      "later visible output cancellation"
+    ],
+    "kind": "fresh isolating counterexample",
+    "negative_intent": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 2: Substring index out of range\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown_only.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "first fatal builtin",
+      "later visible output cancellation"
+    ],
+    "kind": "fresh isolating counterexample",
+    "negative_intent": true,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "panic": false,
+    "source_equal": false,
+    "stderr": "parse error: line 2: Unknown built-in function %missing_checker3\n"
+  }
+]

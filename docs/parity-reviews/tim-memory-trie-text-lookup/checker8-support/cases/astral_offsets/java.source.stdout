@@ -1,0 +1,3 @@
+@startuml
+class "long replacement / a😁 / pair / 😀a / \nshort / short²" as Offsets
+@enduml

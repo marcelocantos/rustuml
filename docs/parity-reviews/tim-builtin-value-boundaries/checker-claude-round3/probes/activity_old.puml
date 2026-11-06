@@ -1,0 +1,4 @@
+@startuml
+(*) --> "Mix%substr("🦉",0,1)"
+"Mix%substr("🦉",0,1)" --> (*)
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+skinparam defaultFontName Times New Roman
+<style>
+participant {
+  FontStyle bold
+}
+</style>
+skinparam participantFontStyle italic
+participant "Kiln wq vista" as E1 <<Dock>>
+E1 -> E1 : ok
+@enduml

@@ -1,0 +1,4 @@
+@startyaml
+skinparam handwritten true
+k: v
+@endyaml

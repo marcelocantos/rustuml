@@ -1,0 +1,413 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A76d88857-1ec0-408c-8c06-0b37eda8395a",
+    "model": "gpt-6-astra",
+    "tool": "Codex harness in T3 Code",
+    "reasoning_effort": "high",
+    "independent": true,
+    "prior_implementation_involvement": false,
+    "branch": "review/comment-state-independent-20261105",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-2f87fc19"
+  },
+  "account_commit": "42344228ed430c5678b46ec8f42f7f9018124247",
+  "implementation_commit": "523a2d89226d764b818b7af2472593d2690e9c4b",
+  "evidence_revision": "2a791353c998e4c34bbf0f16699c7ffd21d50cea",
+  "base_revision": "3875fee3b164d63d4b39df4bc6c13ca8ace89169",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/comment-state-independent-20261105 2a791353c998e4c34bbf0f16699c7ffd21d50cea",
+    "git archive 3875fee3b164d63d4b39df4bc6c13ca8ace89169 | tar -x -C /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/before-source",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/target-before cargo build --release -j 4 -p rustuml (cwd /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/before-source)",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/target-after cargo build --release -j 4 -p rustuml",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/replay_checker.py before",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/replay_checker.py after",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/validate_fresh.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/supplement/validate_fresh.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/replay_fresh.py checker94",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/replay_fresh.py checker6",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/run_assisted.py",
+    "Parent existing Monkey Man runner only: reference --cwd <worker>/new --timezone GMT+11:00 -- -pipe -tsvg; exact per-case invocations and streams archived; Java argv derived, not process-traced."
+  ],
+  "verdict": "rejected",
+  "no_production_changes": true,
+  "no_shipping": true,
+  "mechanism": "comment-state-consumers/comment-identity",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_alias_bidirectional.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_alias_bidirectional.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "pass",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "fd35c20d2a57d5d292954f69d6e0aa6e4262cf608c3e54989c1eaddd5e71c04d",
+      "java_svg_sha256": "c13ed87f4d0adf17b1e7ecd70c034038a6c8d3ebda7883fdb086bac7a91c3948"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_quoted_spaces.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_quoted_spaces.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "pass",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "de646399e763eb08a187444a171bfb169f970f2733807c3f87bbc602d94955b2",
+      "java_svg_sha256": "58a06803f66da9ca1ee48e851353108ad8168550a04d904ca6c39ed33fc50ffd"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_namespace_default.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_namespace_default.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "fb4a330309ac4a589f6ad4f8fa0ed24284c277d5cf6abbeb53aaf55e33e1275b",
+      "java_svg_sha256": "b795749eed51237fea0e6c0916ada0083a16063045e69a7895251855ca958e5e"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_groups_bidirectional.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_groups_bidirectional.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "d3778d331245153080e02871d106d63dae40b603108f2383b664b5a2bc9e4f48",
+      "java_svg_sha256": "fb042bef647bb5e3200a2594862210868ae1b27da20983c26d91162de25253c1"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_nested_default.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_nested_default.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "d9ecfa4a2036836291396fbfb2300e274ef92e53a8e1425765fd5dad0ac45279",
+      "java_svg_sha256": "aba04173981114a5e2bf8c9d73c0fd3ad9de8a5b30ffa36750b3188d90aad3a0"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_custom_separator_residue.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_custom_separator_residue.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "76fd054fb8eb6772dbbeed8a6f833cfa206d0ea22beeb63a4fd7df9fa67dfe73",
+      "java_svg_sha256": "9d37ed0a5548119b2cdedadcfe71a26d49b774d8927dba12a5cb86379cb3bcbb"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_object_mixed.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/class_object_mixed.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "1225dba8ddb60163b3932227ad8d347a0389f3e785f137f045bb1bf443c63236",
+      "java_svg_sha256": "70b36a14e3a9f7da11227fc17b2310585c0e8fffe118c1c80030dcd7f5dc0490"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/object_quoted_admission.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/object_quoted_admission.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "612ca1ac69b5d2174f103b4bffb70d5100bd0041f7a691c83eca4ae73835c326",
+      "java_svg_sha256": "8f95e74f4d0a38c78c08117485ce304131026950d8d04eb8808f1767d1bfde85"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/deploy_alias_collision.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/deploy_alias_collision.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "f2ed4437529e49622c173d8dea22a18d53ea0db06d07fbafcc29c872bd5105de",
+      "java_svg_sha256": "a5640f9acec18549bb63e1f4fea88221ed900c99e5a509becf30c845b3cc2fba"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/deploy_raw_spaces.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/deploy_raw_spaces.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "pass",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "d22a0d619cde52bfe83da26da7d89684de37062bf107f2f072ee391d052fe333",
+      "java_svg_sha256": "e99f107191120cac7e04e64e142bdd89abc078eb02901baca51fa0644bdf207d"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/deploy_nested_groups.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/deploy_nested_groups.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "537df21d7662700d43d614e58b40e4331b34cc45f7fba596e1cb8d635345cffa",
+      "java_svg_sha256": "9ba548e199b02aa72e86d9ee6b7c7ba5634ec4de3485dd3d729691e9159072a1"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/description_kinds.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/description_kinds.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "5e42895b33a62fd0538f0d910faca6cb5c2d773b0b9328042a15d772c3979cbb",
+      "java_svg_sha256": "78afbd16beb618ca1292616a7e98f4d015068a8f87ea008ea7a15fd22863b261"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/description_namespace.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/description_namespace.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "82c0b4faf4d66a6ad274e51382a2f46d4562f6495a08299a7c2cd5dbc0c1b408",
+      "java_svg_sha256": "cf514025a273eaa758ab0b8803c505dc8ce5d61ad3b159f4dddde0858b147bc8"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/group_identity_collision.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/group_identity_collision.svg",
+      "axes": [
+        "line versus fill roles / explicit-alias collision",
+        "style inheritance / container topology / end identity"
+      ],
+      "result": "fail",
+      "mechanism": "comment-identity",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "96349866730006231405bc1a5f211b7f9b2cd5ea74104df383238e71a4c5ed95",
+      "java_svg_sha256": "07754538778b1b3f0cc4e24c17087e2fa781bdce4295543dbc65fb0a4380e04b"
+    }
+  ],
+  "findings": [
+    "REJECTED: deployment_comment_name at deployment.rs:791 tests label_to_id(label)==id to infer an unaliased identity. Explicit aliases Copper_Bay and Metal_Case collide with that transformation: fresh deploy_alias_collision and group_identity_collision emit Copper Bay/Metal Case where pinned EntityImageDescription/Cluster use Copper_Bay/Metal_Case. The link comments newly lose previously correct underscore identities. This is identity inference, not a lossless model projection. T14.23 explicitly records the missing alias/derived-id data but does not make these outputs correct.",
+    "Class aliases and bare quoted names improve: class_alias_bidirectional and class_quoted_spaces match both whole-output comparator and exact producer lists. Root package recovery is bounded; default nested namespaces still emit Observatory.Dome/Upper.Middle instead of Dome/Middle, and custom separator emits West..Bay instead of Bay. These three sources PASS the shipped strict comparator because it ignores comments. T14.23 residue is explicit, but acceptance remains rejected.",
+    "Nested state history projection is ineffective in emit_autonomous_scope_links: transition endpoints are first shortened through autonomous_endpoint_svg_name at state.rs:4141\u20134142, losing the [H]/[H*] prefix on nested IDs, then state_comment_endpoint is called at :4154\u20134155/:4165\u20134166. Fresh state_history_nested_identity emits Lower instead of *historical*Lower / *deephistory*Lower. Pinned StateDiagram.getHistorical/getDeepHistory constructs the synthetic name from the local group name.",
+    "Reverse deployment/group links and mixed description-family ordering remain wrong on deploy_alias_collision, deploy_nested_groups, and description_kinds. These are retained whole-output failures, not newly lost comparator passes.",
+    "Object-kind comment omission is supported by GeneralImageBuilder.java:180\u2013181 selecting EntityImageObject, whose drawU has no UComment. Fresh class_object_mixed has the exact Java comment list and omits only the Object comment; its whole output still fails geometry. Golden combo_class_vs_object also has the exact Java list after removal. Quoted object admission remains T14.17 and emits an empty model; it is not repaired by comment selection."
+  ],
+  "bounded_support_is_not_acceptance": true,
+  "measurements": {
+    "full_golden": {
+      "entries": 12550,
+      "valid": 11251,
+      "before_pass": 11179,
+      "after_pass": 11179,
+      "errors": 80,
+      "panics": 0,
+      "malformed": 0,
+      "new_errors": 0,
+      "new_panics": 0,
+      "lost_comparator_passes": 0
+    },
+    "cohorts": {
+      "entries": 2277,
+      "valid": 2119,
+      "before_pass": 1065,
+      "after_pass": 1072,
+      "errors": 131,
+      "panics": 36,
+      "malformed": 14,
+      "new_errors": 0,
+      "new_panics": 0,
+      "lost_comparator_passes": 0
+    },
+    "golden_bytes": {
+      "changed": 194,
+      "all_comment_only": true,
+      "decoded_equal": true,
+      "exact_java_comment_lists": 188,
+      "remaining_comment_differences": [
+        "full-golden/combo/combo_embedded_state_machine",
+        "full-golden/combo/combo_microservice_arch",
+        "full-golden/combo/combo_state_everything",
+        "full-golden/edge-cases/edge_misc_kitchen_sink_state",
+        "full-golden/state/state_composite_entry_exit_concurrent",
+        "full-golden/type-detection/ambiguous_allowmixing_sequence_component"
+      ],
+      "changed_passing": 184,
+      "changed_nonpassing": 10
+    },
+    "new_comment_list_regressions": 2,
+    "fresh": {
+      "checker94": {
+        "entries": 94,
+        "valid": 93,
+        "before_pass": 18,
+        "after_pass": 23,
+        "comment_and_comparator_pass": 20,
+        "losses": [],
+        "gains": [
+          "checker94/paint_simple_transparent",
+          "checker94/paint_composite_a01",
+          "checker94/paint_composite_a7f",
+          "checker94/paint_composite_afe",
+          "checker94/paint_composite_aff"
+        ],
+        "new_errors": [],
+        "new_panics": [],
+        "errors": 0,
+        "panics": 0,
+        "malformed": 0
+      },
+      "checker6": {
+        "entries": 6,
+        "valid": 5,
+        "before_pass": 2,
+        "after_pass": 2,
+        "comment_and_comparator_pass": 2,
+        "losses": [],
+        "gains": [],
+        "new_errors": [],
+        "new_panics": [],
+        "errors": 0,
+        "panics": 0,
+        "malformed": 0
+      }
+    },
+    "library_diagnostics": {
+      "product_pass": 11179,
+      "assisted_pass": 10497,
+      "eligible": 11251,
+      "failure_names_exact": [
+        72,
+        754
+      ],
+      "standing_pass": 930,
+      "standing_total": 2139,
+      "guards_pass": 4,
+      "guards_total": 6,
+      "parser_lib_pass": 624,
+      "renderer_lib_pass": 799,
+      "renderer_lib_total": 801,
+      "cli_gate_pass": 17,
+      "cli_gate_total": 17
+    },
+    "xml_registered": {
+      "entries": 2139,
+      "emitted": 2024,
+      "malformed": 14,
+      "errors": 115,
+      "panics": 36
+    },
+    "yaml": {
+      "memberships": 14827,
+      "byte_equal": 14818,
+      "order_only_changes": 9,
+      "semantic_differences": 0,
+      "owner": "T14.6.6",
+      "maker_order_only_changes": 8
+    }
+  },
+  "evidence_support": "../checker-support/README.md"
+}

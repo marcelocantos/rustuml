@@ -1,0 +1,10 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-builtin-value-boundaries",
+ "kind": "addendum after measurement (relay batch r6a = BI), before the change",
+ "amends": "maker-round6-claude/yaml-block-line-breaks-addendum.json",
+ "measured": "BI yd7_block_mid_document ('note: |' block with a blank line between two text lines): Java draws 'Moss line\\nFern line' with textLength 127.1074 = Moss line 63.9434 + Fern line 58.7344 + one LF 4.4297 (the trailing LF is trimmed); the draft has two LFs between the lines (131.5371).",
+ "java_location": "jsondiagram/StyleExtractor.java 59-64: the source iterator skips every line whose trim() is empty before YamlDiagramFactory (73-90) and JsonDiagramFactory build their line list, so the YAML parser never sees blank lines.",
+ "change": "crates/rustuml-parser/src/parse/json_diagram.rs extract_body drops lines that are empty after Java's trim (characters <= U+0020).",
+ "expect": "BI yd7_block_mid_document matches; outputs change only for YAML/JSON sources with blank lines inside block scalars; zero lost matches."
+}

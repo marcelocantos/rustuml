@@ -1,0 +1,8 @@
+@startuml
+node Harbour {
+  node "Inner Dock" as Dock
+}
+node Gate
+Dock <-- Gate
+Gate <.up. Dock
+@enduml

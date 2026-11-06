@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "fir/yew" as Shortcut
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Shortcut
+  entities:
+  - id: Shortcut
+    label: fir/yew
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

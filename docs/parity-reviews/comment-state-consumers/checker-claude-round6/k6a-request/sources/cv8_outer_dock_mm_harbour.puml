@@ -1,0 +1,9 @@
+@startuml
+[*] --> Dock
+state Dock {
+  [*] --> Mm
+  Mm --> Harbour
+  Harbour --> [*]
+}
+Dock --> [*]
+@enduml

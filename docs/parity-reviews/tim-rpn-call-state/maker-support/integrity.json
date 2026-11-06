@@ -1,0 +1,31 @@
+{
+  "unchanged_import_revision": "079c1bc1ffc325e8ebfa1719bc0ce2d3c71573c2",
+  "old_evidence_files_verified": 7866,
+  "modified_old_files": [],
+  "candidate": "f663c083df56b736b7d8fef693a9b9a3c106c7a5",
+  "golden_gitlink": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "binaries": {
+    "before-rustuml": {
+      "path": "/tmp/rustuml-tim6/before-rustuml",
+      "sha256": "be7949988c2a1212f587deb7b80362c0f40d21556c6138c925d0e73ae34594b5"
+    },
+    "iteration1-rustuml": {
+      "path": "/tmp/rustuml-tim6/iteration1-rustuml",
+      "sha256": "bdb61e928203e608df44f1ec157a1cb3fd8e89589cfd20f17cb118594d6b0813"
+    },
+    "final-rustuml": {
+      "path": "/tmp/rustuml-tim6/final-rustuml",
+      "sha256": "d12f8b9b79daa5d1b6ca85a16a7553d2a32bed6680a15643c9ce476caaf0b584"
+    },
+    "probe": {
+      "path": "/tmp/rustuml-tim6/probe",
+      "sha256": "43ce27167f6ad8697a8043edbb4f580ddbf9ab68b4e0ea4db15f2a69e3fc97b5"
+    }
+  },
+  "module_sha256": "f727fbe9a61b3fb9df68cbd5d33bf462d89bc1ffc867aa07a86fcd7ff5c45c03",
+  "before_module_sha256": "70876ee52b4c1705a928b7d3b42f411b96c1ff46d6dc3b12893edbad4ef3c317",
+  "build_targets": {
+    "before": "/tmp/rustuml-tim5-target (unchanged previously built candidate; copied with its recorded be794998 binary hash)",
+    "current": "/tmp/rustuml-tim6-target (fresh isolated persistent target, jobs4; no source switch)"
+  }
+}

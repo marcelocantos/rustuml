@@ -1,0 +1,167 @@
+{
+  "approved": true,
+  "approval_scope": "exact seven additions, four T14.20 crashes and three T14.21 syntax errors;14total; unchanged two-way source-hash ratchet",
+  "entries": [
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_class.puml",
+      "source_sha256": "df47ce2f69adeee777f31f890dfc593c147affcfc1426c24ca029791161a844b",
+      "trigger": "literal U+E000 (source contains no XML-invalid C0)",
+      "owner": "T14.20",
+      "java_classification": "java_crash",
+      "java_exit": 0,
+      "java_outcome": "AtomText \u2192 CharHidder.unhideChar maps U+E000 to NUL; SAXException crash SVG",
+      "rust_outcome": "exit0, malformed SVG containing raw NUL U+0000 in painted text",
+      "rust_invalid_controls": [
+        {
+          "codepoint": "U+0000",
+          "count": 1
+        }
+      ],
+      "rust_capture": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/registered/before/shared-svg-corrective/checker-independent-astra/unicode_class/svg.stdout",
+      "rust_sha256": "160ed8645f9537c02264d9b1e9a5b60feecee1ff96ab9bfed53bec2cee08dd8d",
+      "ratchet": "same exact source hash and both directions; improvement requires removing entry",
+      "xml_error": "not well-formed (invalid token): line 1, column 1479",
+      "reason": "Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text"
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_description.puml",
+      "source_sha256": "aab33e667d509ea2d8063d3897d5f4e5d507e2358db71457551292d382b81ad9",
+      "trigger": "literal U+E000 (source contains no XML-invalid C0)",
+      "owner": "T14.20",
+      "java_classification": "java_crash",
+      "java_exit": 0,
+      "java_outcome": "AtomText \u2192 CharHidder.unhideChar maps U+E000 to NUL; SAXException crash SVG",
+      "rust_outcome": "exit0, malformed SVG containing raw NUL U+0000 in painted text",
+      "rust_invalid_controls": [
+        {
+          "codepoint": "U+0000",
+          "count": 1
+        }
+      ],
+      "rust_capture": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/registered/before/shared-svg-corrective/checker-independent-astra/unicode_description/svg.stdout",
+      "rust_sha256": "2a1616baf76e95fc89136ccd904eca58d61744c449746cdf03c9f14df8dc84bd",
+      "ratchet": "same exact source hash and both directions; improvement requires removing entry",
+      "xml_error": "not well-formed (invalid token): line 4, column 163",
+      "reason": "Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text"
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_component.puml",
+      "source_sha256": "6772e182b9660b497dfff524975f8b73aae367bd4c56369896186f72aa5c7b10",
+      "trigger": "literal U+E000 (source contains no XML-invalid C0)",
+      "owner": "T14.21",
+      "java_classification": "syntax_error",
+      "java_exit": 200,
+      "java_outcome": "Syntax-error SVG exit200; no Java crash claimed for this exact source",
+      "rust_outcome": "exit0, malformed SVG containing raw NUL U+0000 in painted text",
+      "rust_invalid_controls": [
+        {
+          "codepoint": "U+0000",
+          "count": 1
+        }
+      ],
+      "rust_capture": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/registered/before/shared-svg-corrective/checker-independent-astra/unicode_component/svg.stdout",
+      "rust_sha256": "e585613f6cb02fbc6c210085a35a81925bda0ca4607a4046ddbd9ca03de7df67",
+      "ratchet": "same exact source hash and both directions; improvement requires removing entry",
+      "xml_error": "not well-formed (invalid token): line 7, column 163",
+      "reason": "Java sequence-family syntax error exit200; Rust admits a different family and emits raw NUL; T14.17 per-family admission co-dependency"
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_state.puml",
+      "source_sha256": "c161d04190ebe1dea4bd67347aad21cf6f84acc8d12f06cff90647c6326b9d75",
+      "trigger": "literal U+E000 (source contains no XML-invalid C0)",
+      "owner": "T14.20",
+      "java_classification": "java_crash",
+      "java_exit": 0,
+      "java_outcome": "AtomText \u2192 CharHidder.unhideChar maps U+E000 to NUL; SAXException crash SVG",
+      "rust_outcome": "exit0, malformed SVG containing raw NUL U+0000 in painted text",
+      "rust_invalid_controls": [
+        {
+          "codepoint": "U+0000",
+          "count": 1
+        }
+      ],
+      "rust_capture": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/registered/before/shared-svg-corrective/checker-independent-astra/unicode_state/svg.stdout",
+      "rust_sha256": "f0131c88344eb7b18690e65356080666e910769c5791b01cb6a38d1ba235d84f",
+      "ratchet": "same exact source hash and both directions; improvement requires removing entry",
+      "xml_error": "not well-formed (invalid token): line 1, column 765",
+      "reason": "Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text"
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_deployment.puml",
+      "source_sha256": "5e86638d8f970a1cab17650001a91007e317e4593c81180939480174504a7a47",
+      "trigger": "literal U+E000 (source contains no XML-invalid C0)",
+      "owner": "T14.21",
+      "java_classification": "syntax_error",
+      "java_exit": 200,
+      "java_outcome": "Syntax-error SVG exit200; no Java crash claimed for this exact source",
+      "rust_outcome": "exit0, malformed SVG containing raw NUL U+0000 in painted text",
+      "rust_invalid_controls": [
+        {
+          "codepoint": "U+0000",
+          "count": 1
+        }
+      ],
+      "rust_capture": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/registered/before/shared-svg-corrective/checker-independent-astra/unicode_deployment/svg.stdout",
+      "rust_sha256": "1c789e2d3d199993f237f30aa828c3235574522972395f66b49f0e1859c1fcab",
+      "ratchet": "same exact source hash and both directions; improvement requires removing entry",
+      "xml_error": "not well-formed (invalid token): line 7, column 163",
+      "reason": "Java sequence-family syntax error exit200; Rust admits a different family and emits raw NUL; T14.17 per-family admission co-dependency"
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_usecase.puml",
+      "source_sha256": "61a5e45d66cfa42679026c35e7ba22a46a41bb89022c79ab824e81d9c20a6099",
+      "trigger": "literal U+E000 (source contains no XML-invalid C0)",
+      "owner": "T14.21",
+      "java_classification": "syntax_error",
+      "java_exit": 200,
+      "java_outcome": "Syntax-error SVG exit200; no Java crash claimed for this exact source",
+      "rust_outcome": "exit0, malformed SVG containing raw NUL U+0000 in painted text",
+      "rust_invalid_controls": [
+        {
+          "codepoint": "U+0000",
+          "count": 1
+        }
+      ],
+      "rust_capture": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/registered/before/shared-svg-corrective/checker-independent-astra/unicode_usecase/svg.stdout",
+      "rust_sha256": "8c27dae987cf75d1f71af5323c042a0214d71a40f67bb58cdf31ab3c6331fed3",
+      "ratchet": "same exact source hash and both directions; improvement requires removing entry",
+      "xml_error": "not well-formed (invalid token): line 4, column 168",
+      "reason": "Java sequence-family syntax error exit200; Rust admits a different family and emits raw NUL; T14.17 per-family admission co-dependency"
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+      "source_sha256": "581ce90669640ed9f818dca58a00ae6df33b7233415406216ba1fabccdfb4f3f",
+      "trigger": "literal U+E000 (source contains no XML-invalid C0)",
+      "owner": "T14.20",
+      "java_classification": "java_crash",
+      "java_exit": 0,
+      "java_outcome": "AtomText \u2192 CharHidder.unhideChar maps U+E000 to NUL; SAXException crash SVG",
+      "rust_outcome": "exit0, malformed SVG containing raw NUL U+0000 in painted text",
+      "rust_invalid_controls": [
+        {
+          "codepoint": "U+0000",
+          "count": 1
+        }
+      ],
+      "rust_capture": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/registered/before/shared-svg-corrective/checker-independent-astra/unicode_activity/svg.stdout",
+      "rust_sha256": "b22ad24f224097b94f54a7728620137b5abd83c0fc542471baf4e461b4eb6a63",
+      "ratchet": "same exact source hash and both directions; improvement requires removing entry",
+      "xml_error": "not well-formed (invalid token): line 1, column 801",
+      "reason": "Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text"
+    }
+  ],
+  "object_exclusion": {
+    "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_object.puml",
+    "source_sha256": "4f6497255977e24a37962699f814ec7e704bcc2a6e484860297b0de96deee47d",
+    "rust_svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n",
+    "rust_svg_sha256": "ad3d3a34b33c760f2dc8bad60025fa6ae03a0b4e4ecf12c64bad10b103c82d10",
+    "well_formed": true,
+    "explanation": "Parser emits Object model with objects/links/notes/packages empty; label is retained only in meta.source, never painted or unhidden. This is dropped-model/input-admission divergence, not correct Java crash behavior.",
+    "yaml_capture": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/replay/before/checker54/unicode_object/yaml.stdout",
+    "java": "SAXException crash SVG from U+E000\u2192NUL; nonpositive",
+    "dependencies": [
+      "T14.17",
+      "T14.20"
+    ]
+  }
+}

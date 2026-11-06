@@ -1,0 +1,7 @@
+@startuml
+state Vat {
+  Malt --> Wort
+}
+note left of Vat : one
+note left of Vat : two
+@enduml

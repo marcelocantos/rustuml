@@ -1,0 +1,6 @@
+collateral {"total": 1516, "valid": 1459, "before": 567, "after": 567, "source_matches": 59, "negative_rejected": 37, "panics": 32, "losses": [], "new_valid_errors": [], "valid_model_drops": []}
+prior31 {"total": 31, "valid": 21, "before": 21, "after": 21, "source_matches": 21, "negative_rejected": 8, "panics": 0, "losses": [], "new_valid_errors": [], "valid_model_drops": []}
+fresh29 {"total": 29, "valid": 14, "before": 11, "after": 14, "source_matches": 14, "negative_rejected": 12, "panics": 0, "losses": [], "new_valid_errors": [], "valid_model_drops": []}
+maker15 {"total": 15, "valid": 9, "before": 9, "after": 9, "source_matches": 9, "negative_rejected": 6, "panics": 0, "losses": [], "new_valid_errors": [], "valid_model_drops": []}
+maker17 {"total": 17, "valid": 14, "before": 14, "after": 14, "source_matches": 14, "negative_rejected": 3, "panics": 0, "losses": [], "new_valid_errors": [], "valid_model_drops": []}
+maker18 {"total": 18, "valid": 8, "before": 2, "after": 8, "source_matches": 8, "negative_rejected": 10, "panics": 0, "losses": [], "new_valid_errors": [], "valid_model_drops": []}

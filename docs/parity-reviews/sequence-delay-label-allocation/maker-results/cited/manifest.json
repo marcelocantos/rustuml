@@ -1,0 +1,26 @@
+{
+ "schema_version": 1,
+ "note": "Byte-identical copies of cited inputs and Java references (T14.6.7); originals unchanged.",
+ "files": [
+  {
+   "original": "test-diagrams/golden/edge-cases/edge_sequence_delay.puml",
+   "copy": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/cited/edge_sequence_delay.puml",
+   "sha256": "6fec85af0f012516ca5ef3fbbb56ae1bb07460ce42f82d89be64d16236fd2102"
+  },
+  {
+   "original": "test-diagrams/golden/edge-cases/edge_sequence_delay.svg",
+   "copy": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/cited/edge_sequence_delay.svg",
+   "sha256": "315477f7090b1610194a8204da241966320f6253af3a2b1cfbd4496a5d900e65"
+  },
+  {
+   "original": "test-diagrams/golden/edge-cases/edge_seq_delay_texts.puml",
+   "copy": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/cited/edge_seq_delay_texts.puml",
+   "sha256": "fcca346ad3928d22ebec57d3177b30ff2bb76abd83e2efc0d2b310aea4d99e27"
+  },
+  {
+   "original": "test-diagrams/golden/edge-cases/edge_seq_delay_texts.svg",
+   "copy": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/cited/edge_seq_delay_texts.svg",
+   "sha256": "9fb0710498c6e75fe8c093a33f470addc7766dadcc31e23b0817a18f019c90cc"
+  }
+ ]
+}

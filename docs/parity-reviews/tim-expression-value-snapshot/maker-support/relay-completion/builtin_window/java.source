@@ -1,0 +1,3 @@
+@startuml
+class "fo / 80000000 / 0 / ab / 6" as Window
+@enduml

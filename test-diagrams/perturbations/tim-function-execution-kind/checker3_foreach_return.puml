@@ -1,0 +1,12 @@
+@startuml
+!$count=0
+!function $once()
+!foreach $x in ["005","006"]
+!$count=$count+1
+!return $x
+!endfor
+!return "lost"
+!endfunction
+!$result=$once()+2
+class "$result / $count" as Result
+@enduml

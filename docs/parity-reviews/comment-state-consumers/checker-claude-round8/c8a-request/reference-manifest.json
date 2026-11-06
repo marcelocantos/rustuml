@@ -1,0 +1,1933 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "cases": [
+  {
+   "name": "c8a_ci_abstract_latin",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_abstract_latin.puml",
+   "source_sha256": "5cbcac7a69a7849aa64fc91e44b375eba34dbadac167c9f750490b0f53ec5c02",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract"
+   ]
+  },
+  {
+   "name": "c8a_ci_abstract_latin_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_abstract_latin_ctrl.puml",
+   "source_sha256": "17d0948a2970e95fc9e3319f88176e9019e8c7e6efdefd3ba3e5644bf5048f3a",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_abstract_hebrew",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_abstract_hebrew.puml",
+   "source_sha256": "8d2cfa1ad9d446022d58f44f23c5a6ed8483240721f3edbcfd4af83e55fdec3c",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract",
+    "hebrew"
+   ]
+  },
+  {
+   "name": "c8a_ci_abstract_hebrew_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_abstract_hebrew_ctrl.puml",
+   "source_sha256": "027f2ecbdb46700cdc8a0a638d3f4d701082a685727ad060734cf6a36de0811e",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract",
+    "hebrew",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_abstract_leading",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_abstract_leading.puml",
+   "source_sha256": "253e1f0b2736152f8a56ca6d303b494532200895c0a8832bffa90632019603e6",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract",
+    "leading-mark"
+   ]
+  },
+  {
+   "name": "c8a_ci_abstract_leading_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_abstract_leading_ctrl.puml",
+   "source_sha256": "4e708f2fc1c6b3b9314475e95bb40be3f83bab6f432a99c82bd803c4cefb6501",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract",
+    "leading-mark",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_stereo_latin",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_stereo_latin.puml",
+   "source_sha256": "4228698a1289d7894a4c32f4440e384e2bdb18ca1ae1a6eaff9fc589dd8ca180",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "stereotype"
+   ]
+  },
+  {
+   "name": "c8a_ci_stereo_latin_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_stereo_latin_ctrl.puml",
+   "source_sha256": "4c2d23565aa1bfdda3153ac54ecae05470aa8360b2eeefea475c35bb3eae816d",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "stereotype",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_fontstyle_italic",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_fontstyle_italic.puml",
+   "source_sha256": "232f41d5eca7b2a50b9b65a5c3d457bbe5c301d90b7256bc39fe6c8d138f2f14",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "defaultFontStyle"
+   ]
+  },
+  {
+   "name": "c8a_ci_fontstyle_italic_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_fontstyle_italic_ctrl.puml",
+   "source_sha256": "9b10e6967c88c26b9a51469a00abc2fb156efb9d2f2b240770f30968841b8f72",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "defaultFontStyle",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_creole_italic",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_creole_italic.puml",
+   "source_sha256": "749133521c79bf1597e05ac15c11686e801c60d4c43d90af7272d34b8a3a3ca1",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "creole-member"
+   ]
+  },
+  {
+   "name": "c8a_ci_creole_italic_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_creole_italic_ctrl.puml",
+   "source_sha256": "dbbf8fa95ad1d9ad00f3043693f40d48bea68a3cd15890cc6f341307a324be9e",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "creole-member",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_creole_bolditalic",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_creole_bolditalic.puml",
+   "source_sha256": "ab8319443804fdb7014cfd5cb578a78a604c388da225930c2c8114dcbc8c0f58",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-bold-italic",
+    "creole-member"
+   ]
+  },
+  {
+   "name": "c8a_ci_creole_bolditalic_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_creole_bolditalic_ctrl.puml",
+   "source_sha256": "bf99fa56721df5aa3d39869700a6d0fb7ba51ccfbbc0343cd202f87614ae6390",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-bold-italic",
+    "creole-member",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_usecase_italic",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_usecase_italic.puml",
+   "source_sha256": "4b2e46a55915d99ac349786b5d00ec511d984d03020166ae4bbddf954f276b61",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "usecase"
+   ]
+  },
+  {
+   "name": "c8a_ci_usecase_italic_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_usecase_italic_ctrl.puml",
+   "source_sha256": "9d344193b95bfe58861cd5a28f0da360aac114f511edb25ba5ed70007a4281a2",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "usecase",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_ci_abstract_size11",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_abstract_size11.puml",
+   "source_sha256": "6dd348d4aa3354affb4418f5763ad93c953ef35ae22cd589a015c28bf65472fd",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract",
+    "size"
+   ]
+  },
+  {
+   "name": "c8a_ci_abstract_size11_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_ci_abstract_size11_ctrl.puml",
+   "source_sha256": "ee2ea38a79be009948c131b50dc2b03d4bc51193fffecf917a39fb038c34d564",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-italic",
+    "abstract",
+    "size",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_cr_member_plain",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_cr_member_plain.puml",
+   "source_sha256": "4781bc21b20aa3100c889153e77b34e4560c57ae5f56aa84a3a2e83aee764253",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-regular",
+    "member"
+   ]
+  },
+  {
+   "name": "c8a_cr_member_plain_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_cr_member_plain_ctrl.puml",
+   "source_sha256": "2d7c3a733e274d90a1f79f1cb5e782b429ff6ca8d5f8730a0a306496bc16cd13",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-regular",
+    "member",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_cr_member_bold",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_cr_member_bold.puml",
+   "source_sha256": "1ad9f62b1f3a2289af135d2b37e756c521887c88e60bb719bb5c350acef687ef",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-bold",
+    "creole-member"
+   ]
+  },
+  {
+   "name": "c8a_cr_member_bold_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_cr_member_bold_ctrl.puml",
+   "source_sha256": "2c8ec5ab9f0d6dc5a6868bc22ccc65c39d59f56c92f433182d916ad7fe01c1cb",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-bold",
+    "creole-member",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_cr_usecase_plain",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_cr_usecase_plain.puml",
+   "source_sha256": "d184dd262ce2b907427c743f0570a46190486d7a8a46149cb4b43a29d71802d0",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-regular",
+    "usecase"
+   ]
+  },
+  {
+   "name": "c8a_cr_usecase_plain_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_cr_usecase_plain_ctrl.puml",
+   "source_sha256": "653249e5a04825acdebb1fc7b24ab30ba64b2f3719014adfb027566cce626ead",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "courier-regular",
+    "usecase",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_hm_rtl_left",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_hm_rtl_left.puml",
+   "source_sha256": "6f751ffb83af5a7a7a666c2f7e1569975f31b727c74c576e698af1d6b78f5ab8",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "mirroring",
+    "helvetica"
+   ]
+  },
+  {
+   "name": "c8a_hm_rtl_right",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_hm_rtl_right.puml",
+   "source_sha256": "660332876b75a7cb8c8ead8efe0d03c7b688788050543c90b20d08efc7f5a68d",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "mirroring",
+    "helvetica"
+   ]
+  },
+  {
+   "name": "c8a_hm_ltr_left",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_hm_ltr_left.puml",
+   "source_sha256": "66bb1eca99d38ffab0753a047dfc8a4e5e39d4d7469157c4f5eec0787c0e8f95",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "mirroring",
+    "helvetica",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_hm_ltr_right",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_hm_ltr_right.puml",
+   "source_sha256": "2d7dc494ff694f694c804b0dba2bfc47e370e16e250058e7c3eddb89766839bf",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "mirroring",
+    "helvetica",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_hm_lucida_parens",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_hm_lucida_parens.puml",
+   "source_sha256": "8ee23a4774a9dccf527b89de67e4561ce54196dbf7664cf2cada75e4c42709be",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "mirroring",
+    "lucida",
+    "equal-advance"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_bracket_nsm_latin",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_bracket_nsm_latin.puml",
+   "source_sha256": "f49522d3159d2da06eb232f98e66ecf11579b710e22e895851deda9c44b60ead",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "NSM-after-bracket",
+    "jdk-deviation"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_bracket_nsm_latin_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_bracket_nsm_latin_ctrl.puml",
+   "source_sha256": "166bae94d7c49531fe1db39fbaae1d80042d8bfe8a99e65c03670eb6c45382a7",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "NSM-after-bracket",
+    "jdk-deviation",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_square_nsm_end",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_square_nsm_end.puml",
+   "source_sha256": "de4b9649532cdee09053536cb6649e0d78b58068784ad5bf86a3183c809ca242",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "NSM-after-bracket"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_square_nsm_end_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_square_nsm_end_ctrl.puml",
+   "source_sha256": "f413f35ce8d32d96f7fc5143c931bea5f15fdced059f8468066a4755d0560219",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "NSM-after-bracket",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_angle_nsm_end",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_angle_nsm_end.puml",
+   "source_sha256": "5a088843b551bd51fc662c35d60300dfe12fe3c88e776ec4f3c8c9b63f39de31",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "canonical-bracket"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_angle_nsm_end_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_angle_nsm_end_ctrl.puml",
+   "source_sha256": "ce14b9f96adadfc5e7339fa2a2704eb6ee9c45ba6ae98ab6f841595f2e50ca70",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "canonical-bracket",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_bracket_nsm_r",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_bracket_nsm_r.puml",
+   "source_sha256": "f5560ef53f20695ed49e2728153184ba8f07da98d1395011506d57c1751d32b1",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "N1"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_bracket_nsm_r_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_bracket_nsm_r_ctrl.puml",
+   "source_sha256": "0e3480f409d55d93748fe9c8b7bd05a98fc6d4cff662560005606f6c552b4261",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "N1",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_mark_then_digit",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_mark_then_digit.puml",
+   "source_sha256": "1d457dc869b6ebe7b50f03967e930cd4eb33cad905ac6cb181920a92722bca07",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "R-run"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_mark_then_digit_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_mark_then_digit_ctrl.puml",
+   "source_sha256": "bbf301c6aaa2d6aef41e60e8975628b1ec136fe8442c074c4ce304180d25b36b",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "R-run",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_open_l_context",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_open_l_context.puml",
+   "source_sha256": "a4af5322f54797c320cbe156575dc3b7ae8ba5ac98dac6ddf8121bc13c4d98fc",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "embedding-direction"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_open_l_context_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_open_l_context_ctrl.puml",
+   "source_sha256": "16a53142fbf9b64883fbd475351c3f1dad8fc2768cf296e5a04da834c68d9756",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "embedding-direction",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_an_digit_thai",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_an_digit_thai.puml",
+   "source_sha256": "234df90d73c8933d9df19ee396e516720a59b1d167326f0e7e372189087fc669",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AN",
+    "script-of-component"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_an_digit_thai_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_an_digit_thai_ctrl.puml",
+   "source_sha256": "548fc3ee928707ac34840d95a1779b66ae456b3a495a6b05b54fcd7e988c8251",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AN",
+    "script-of-component",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_al_en_thai",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_al_en_thai.puml",
+   "source_sha256": "ac7afa0029730aec9c52ce15f7142944caba917382c00292593c38a95713b57c",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W2"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_al_en_thai_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_al_en_thai_ctrl.puml",
+   "source_sha256": "ff460058a66014f529c4eaaec15736c3c5ebe39544c2b9e41fb9e15a1aa4e937",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W2",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_al_then_thai_en",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_al_then_thai_en.puml",
+   "source_sha256": "2601fe2fcf7572c4c8d1a488788a87a13c155a3c79ff81fe9ae65d7e41cb219c",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W2",
+    "W7"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_al_then_thai_en_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_al_then_thai_en_ctrl.puml",
+   "source_sha256": "a0a84166b787d27a5b09fe5ddf038466b4bef42f6cc977fc26ca10f8500ebf5f",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W2",
+    "W7",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_thai_digit_after_r",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_thai_digit_after_r.puml",
+   "source_sha256": "ea32ee8a7cf3fae564292312b4da9828861b911127a386b9e79345a9b32a40f1",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "L-digit"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_thai_digit_after_r_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_thai_digit_after_r_ctrl.puml",
+   "source_sha256": "188a89fb04081cd2ef77e62054126d7fce18392eedd4abf288c5a5da9b5d2e13",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "L-digit",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_ext_arabic_digit",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_ext_arabic_digit.puml",
+   "source_sha256": "a1ed1aa2f99b8d07e7b263de64171437de844f22c377473a22df7ee8d97d9060",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "EN",
+    "arabic-script-digit"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_ext_arabic_digit_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_ext_arabic_digit_ctrl.puml",
+   "source_sha256": "bcd7b9931b6222729bca0be381f3d141a4e8b72bd271f928bf60fd9c531b210d",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "EN",
+    "arabic-script-digit",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_en_cs_en",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_en_cs_en.puml",
+   "source_sha256": "08de1b9b86992d64ff8e27b2f107e018e56e9c59b05bba6133f97c13d4fbadfa",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W4"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_en_cs_en_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_en_cs_en_ctrl.puml",
+   "source_sha256": "75ce576035a929d44887790aeac54c94809b8a987d1739244fad5106f7b958ff",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W4",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_an_cs_an",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_an_cs_an.puml",
+   "source_sha256": "e59aaf7bd7efa31faec77e8f4714023610f281702d6ba5dcbe6b152d294c4ba6",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W4",
+    "AN"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_an_cs_an_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_an_cs_an_ctrl.puml",
+   "source_sha256": "abb2aa6441349097be20e1f509821860117122aed79e58f53aac0868be50ebb3",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W4",
+    "AN",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_et_en",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_et_en.puml",
+   "source_sha256": "71d9325d105e2bf6c29e7484f2fd64d537a5a42988f5c841d539b2d0fdd0402c",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W5"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_et_en_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_et_en_ctrl.puml",
+   "source_sha256": "2b58c6ca4042e4a53217d152cbaa3ef8069eb828207e2ec085ff587f2f8c0fc8",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "W5",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_rli_digit",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_rli_digit.puml",
+   "source_sha256": "4b9d7b8ba86a9f3c0f9971bb04f41aea61fae641cc5b01d16fb02cce7f9550b1",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "RLI",
+    "isolate"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_rli_digit_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_rli_digit_ctrl.puml",
+   "source_sha256": "1dbea8bad897d1dde72ee9f47f3c6eed8a7e239cfdf93355fae323e5f99b9553",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "RLI",
+    "isolate",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_deva_digit_r",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_deva_digit_r.puml",
+   "source_sha256": "24ac363c00dd2090ecb7d46e17537b1142969124a4d91830ce184c20865b5807",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "L-digit",
+    "deva"
+   ]
+  },
+  {
+   "name": "c8a_bl_lucida_deva_digit_r_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_lucida_deva_digit_r_ctrl.puml",
+   "source_sha256": "9fa0e1d7a3a5331d3ed5de54a65b7b2018e8f5bb3fad17bae249a2a6ff9803a4",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "L-digit",
+    "deva",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_cnew_khmer_split",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_cnew_khmer_split.puml",
+   "source_sha256": "644895f1e0c34f7c6c108e311c146b611ae07a0e8ce7fd283d86724e2d09aa35",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "courier-regular",
+    "khmer"
+   ]
+  },
+  {
+   "name": "c8a_bl_cnew_khmer_split_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_cnew_khmer_split_ctrl.puml",
+   "source_sha256": "32eea6f8834d0c5c16c93a5c7df982e22603ce79d932b3f237077dc55ebae382",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "courier-regular",
+    "khmer",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_cnew_hangul_split",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_cnew_hangul_split.puml",
+   "source_sha256": "ad5045ae22c9ce03092deaded1ec2c45c724a4a7a3f203f68a335484d322c71d",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "courier-regular",
+    "hangul"
+   ]
+  },
+  {
+   "name": "c8a_bl_cnew_hangul_split_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_cnew_hangul_split_ctrl.puml",
+   "source_sha256": "bff9c46080f0f50b85fc8742f1f64c98d510c21f62ed6929f4953d639aabbdcb",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "courier-regular",
+    "hangul",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_sequence",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_sequence.puml",
+   "source_sha256": "09ee82b0247b8e668e170652d20c911dfd951bd99112feb707a2bdb958a7dccf",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "sequence",
+    "N0"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_sequence_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_sequence_ctrl.puml",
+   "source_sha256": "8e6975ac6d493b316a1d14737d6e54e47a54097f74f4abd654360194862159e4",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "sequence",
+    "N0",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_activity",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_activity.puml",
+   "source_sha256": "f0324647c6e6f2d90b4feda6e92093dd0d9e6825c3de28f7c4c5e7e4cce8806d",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "activity"
+   ]
+  },
+  {
+   "name": "c8a_bl_verdana_activity_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_bl_verdana_activity_ctrl.puml",
+   "source_sha256": "54a6558008b72d4d4403a4766aae271afa6907fceb3e4a9e48caf88e80e2da24",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "activity",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_tn_abstract_italic",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_tn_abstract_italic.puml",
+   "source_sha256": "cb821663ea8d529820cfd26450c8b50bf517ae7018a3a1627271bc5fa64b50d9",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "times-italic",
+    "blocklisted"
+   ]
+  },
+  {
+   "name": "c8a_tn_abstract_italic_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_tn_abstract_italic_ctrl.puml",
+   "source_sha256": "49ec4a755457d9d391429845703c2614c3349f8c1be7b5f4193f3eff4db861ab",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "times-italic",
+    "blocklisted",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_tn_regular",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_tn_regular.puml",
+   "source_sha256": "329f47f03f9563bb1f07c2bf71fe425e92c16beae801f2a92a822af7a0176af8",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "times-regular"
+   ]
+  },
+  {
+   "name": "c8a_tn_regular_ctrl",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_tn_regular_ctrl.puml",
+   "source_sha256": "a05996c5a418ea14fb6877a36c66036e6740cfc0db6d01c19a689fb84c0d5281",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "times-regular",
+    "control"
+   ]
+  },
+  {
+   "name": "c8a_lt_deva_participant",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_lt_deva_participant.puml",
+   "source_sha256": "5d4ec40abacc5dd9df2e44f5d5e8da5162f09b366b304ab06c45a679910f4d44",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  },
+  {
+   "name": "c8a_lt_thai_note",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_lt_thai_note.puml",
+   "source_sha256": "cbc58ced008f7630c0ee917dc3864fef448e9b0c1079fdf4e8cafcc422a2bee5",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  },
+  {
+   "name": "c8a_lt_cjk_usecase",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_lt_cjk_usecase.puml",
+   "source_sha256": "ef5448a6bf791b2f4a4cf02ce50da8a0045301987f93501954cd7dceec11dcf0",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  },
+  {
+   "name": "c8a_lt_emoji_title",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_lt_emoji_title.puml",
+   "source_sha256": "65174dda5e016c10276546b02ed54d603fc18c11c5c35c0fc2967864b233e361",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  },
+  {
+   "name": "c8a_lt_latin_marks_state",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_lt_latin_marks_state.puml",
+   "source_sha256": "3a99560d4f1f5d896b96691f2f49031346e46c65db6327e231e74fbc85ade550",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  },
+  {
+   "name": "c8a_lt_verdana_deva_link",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_lt_verdana_deva_link.puml",
+   "source_sha256": "e41c21cddbb2eb570d4a4e63d2f36ad10e0b51527f883ec12655a6b12362fe3f",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  },
+  {
+   "name": "c8a_lt_arial_tibetan",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_lt_arial_tibetan.puml",
+   "source_sha256": "cc09575c6dd2177f51d3be36d570253ade369fabf8f166fd9757d941e4a46526",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  },
+  {
+   "name": "c8a_lt_cnew_thai_stereo",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a/sources/c8a_lt_cnew_thai_stereo.puml",
+   "source_sha256": "484f5cc1cec3ffd57568ca4ba6e24a602e032d85e5e12871a0f1de3509473fef",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "ltr-invariance"
+   ]
+  }
+ ]
+}

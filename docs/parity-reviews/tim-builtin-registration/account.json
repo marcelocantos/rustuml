@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-builtin-registration",
+  "rust_revision": "3020a0aaffba609cf48859ba3d65d21e7000a082",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/TContext.java:addStandardFunctions,getFunctionNameAt",
+    "tim/expression/ReversePolishInterpretor.java",
+    "tim/builtin/Getenv.java:executeReturnFunction,getenv",
+    "security/SecurityProfile.java:init,canWeReadThisEnvironmentVariable"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Plain substitution recognizes registered function names; unknown expression calls fail. Getenv is a registered one-argument string function: denied or absent environment entries yield empty; permitted entries retain their exact text.",
+  "causal_divergence": "The original adapter silently returned empty for every unimplemented call. Making that fatal exposed an existing valid bundled-theme getenv call, and treating every percent token as registered incorrectly applies expression errors to ordinary text.",
+  "planned_change": "Represent pinned Java builtin name registration (and existing Rust extensions) for plain substitution. Add Getenv argument validation and source-derived name/profile filtering, process environment lookup, and native path/line separator properties. Rust has no arbitrary JVM system-property namespace; that unsupported environment surface remains explicit residue. Keep unknown expression calls fatal.",
+  "perturbation_axes": [
+    "Registered versus unknown names in plain text and expression contexts",
+    "Permitted/denied/absent names, separator properties, and profile selection"
+  ],
+  "oracle_plan": [
+    "Reuse preserved outline-state fixture and all prior checker records without changes.",
+    "Stage fresh source controls for remote-only reference runs when SSH recovers; never invent unavailable references.",
+    "Record environment scope and missing JVM property configuration explicitly."
+  ],
+  "constraints": [
+    "No unowned production, frozen evidence, guard, comparator or baseline changes.",
+    "This is maker work, not acceptance or independent review."
+  ]
+}

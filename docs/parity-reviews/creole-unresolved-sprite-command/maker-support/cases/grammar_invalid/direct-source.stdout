@@ -1,0 +1,3 @@
+@startuml
+class "a <$bad.name> b <$bad name> c <$> d <$ghost*bad> end" as A
+@enduml

@@ -1,0 +1,20 @@
+{
+  "total": 15,
+  "valid": 9,
+  "before": {
+    "svg": 9,
+    "source": 9,
+    "source_oracles": 9,
+    "negative_rejected": 6,
+    "panics": 0
+  },
+  "after": {
+    "svg": 9,
+    "source": 9,
+    "source_oracles": 9,
+    "negative_rejected": 6,
+    "panics": 0
+  },
+  "lost_passes": [],
+  "new_valid_errors": []
+}

@@ -1096,22 +1096,27 @@ fn emit_object_cluster(
     let tab_join = position.x + title_width - 2.5;
     let right = position.x + position.width;
     let bottom = position.y + position.height;
-    write!(svg, "<!--cluster {}-->", escape_xml(&cluster.qname)).unwrap();
+    write!(
+        svg,
+        "<!--{svg_comment}-->",
+        svg_comment = crate::svg::comment_text(&format!("cluster {}", cluster.qname)),
+    )
+    .unwrap();
     if cluster.source_line > 0 {
         write!(
             svg,
             r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-            escape_xml(&cluster.qname),
+            crate::svg::escape_attribute(&cluster.qname),
             cluster.source_line,
-            entity_id,
+            crate::svg::escape_attribute(entity_id),
         )
         .unwrap();
     } else {
         write!(
             svg,
             r#"<g class="cluster" data-qualified-name="{}" id="{}">"#,
-            escape_xml(&cluster.qname),
-            entity_id,
+            crate::svg::escape_attribute(&cluster.qname),
+            crate::svg::escape_attribute(entity_id),
         )
         .unwrap();
     }
@@ -1297,21 +1302,26 @@ fn render_plantuml_svg(
         .unwrap_or_default();
     for cluster in &oracle_clusters {
         let cid = cluster.entity_id.as_deref().unwrap_or("ent0002");
-        write!(svg, "<!--cluster {}-->", cluster.qualified_name).unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("cluster {}", cluster.qualified_name)),
+        )
+        .unwrap();
         match cluster.source_line.as_deref() {
             Some(sl) => write!(
                 svg,
                 r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-                escape_xml(&cluster.qualified_name),
+                crate::svg::escape_attribute(&cluster.qualified_name),
                 sl,
-                cid,
+                crate::svg::escape_attribute(cid),
             )
             .unwrap(),
             None => write!(
                 svg,
                 r#"<g class="cluster" data-qualified-name="{}" id="{}">"#,
-                escape_xml(&cluster.qualified_name),
-                cid,
+                crate::svg::escape_attribute(&cluster.qualified_name),
+                crate::svg::escape_attribute(cid),
             )
             .unwrap(),
         }
@@ -1408,9 +1418,9 @@ fn render_plantuml_svg(
         write!(
             svg,
             r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-            escape_xml(&effective_qname),
+            crate::svg::escape_attribute(&effective_qname),
             source_line,
-            current_ent_id_string,
+            crate::svg::escape_attribute(&current_ent_id_string),
         )
         .unwrap();
 
@@ -1496,13 +1506,18 @@ fn render_layout_links(
         let path_id = object_link_path_id(link, from_base, to_base, parallel_index);
         let link_type = object_link_type(link.kind);
 
-        write!(svg, "<!--link {from_base} to {to_base}-->").unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("link {from_base} to {to_base}")),
+        )
+        .unwrap();
         write!(
             svg,
             r#"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
             svg_ids.objects[from_index],
-            svg_ids.objects[to_index],
-        )
+            svg_ids.objects[to_index], link_type = crate::svg::escape_attribute(link_type), link_id = crate::svg::escape_attribute(link_id),
+)
         .unwrap();
         // Java `SvgResult` parses Graphviz's two-decimal SVG coordinates
         // before `SvekEdge` shortens paths for endpoint decorations.
@@ -1520,8 +1535,8 @@ fn render_layout_links(
         write!(
             svg,
             r#"<path codeLine="{source_line}" d="{}" fill="none" id="{path_id}" style="stroke:{BORDER_COLOR};stroke-width:1;{dash_style}"/>"#,
-            edge_path_d(&path_points),
-        )
+            edge_path_d(&path_points), path_id = crate::svg::escape_attribute(&path_id),
+)
         .unwrap();
         emit_object_link_start_decor(svg, link, &raw_points);
         emit_object_link_end_decor(svg, link, &raw_points);
@@ -1851,9 +1866,9 @@ fn render_attached_object_note(
     write!(
         svg,
         r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}"><path d="{}" fill="{}" style="stroke:{};stroke-width:0.5;"/><path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:0.5;"/>"#,
-        escape_xml(qualified_name),
+        crate::svg::escape_attribute(qualified_name),
         note.source_line,
-        entity_id,
+        crate::svg::escape_attribute(entity_id),
         path,
         NOTE_FILL,
         BORDER_COLOR,
@@ -2198,8 +2213,8 @@ fn emit_diamond(svg: &mut String, points: &[(f64, f64)], at_start: bool, fill: &
         fmt_tl(side2.0),
         fmt_tl(side2.1),
         fmt_tl(contact.0),
-        fmt_tl(contact.1),
-    )
+        fmt_tl(contact.1), fill = crate::svg::escape_attribute(fill),
+)
     .unwrap();
 }
 
@@ -2324,11 +2339,11 @@ fn render_object_content(
     write!(
         svg,
         r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="{}" width="{}" x="{}" y="{}"/>"#,
-        fill,
+        crate::svg::escape_attribute(fill),
         fmt_tl(dim.height),
         rx,
         ry,
-        style,
+        crate::svg::escape_attribute(style),
         fmt_tl(dim.width),
         fmt_tl(x),
         fmt_tl(y),
@@ -2434,7 +2449,7 @@ fn render_object_content(
     write!(
         svg,
         r#"<line style="stroke:{};stroke-width:{sep_w};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-        object_style.border,
+        crate::svg::escape_attribute(&object_style.border),
         fmt_tl(sep_x1),
         fmt_tl(sep_x2),
         fmt_tl(header_sep_y),
@@ -2457,7 +2472,11 @@ fn emit_oracle_line(svg: &mut String, line: &crate::layout_oracle::EntityLine) {
     write!(
         svg,
         r#"<line style="{style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-        line.x1, line.x2, line.y1, line.y2,
+        line.x1,
+        line.x2,
+        line.y1,
+        line.y2,
+        style = crate::svg::escape_attribute(style),
     )
     .unwrap();
 }
@@ -2678,7 +2697,7 @@ fn render_map_rows(
         write!(
             svg,
             r#"<line style="stroke:{};stroke-width:{MAP_LINE_WIDTH};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            object_style.border,
+            crate::svg::escape_attribute(&object_style.border),
             fmt_tl(divider_x),
             fmt_tl(divider_x),
             fmt_tl(row_top),
@@ -2692,7 +2711,7 @@ fn render_map_rows(
             write!(
                 svg,
                 r#"<line style="stroke:{};stroke-width:{MAP_LINE_WIDTH};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                object_style.border,
+                crate::svg::escape_attribute(&object_style.border),
                 fmt_tl(x),
                 fmt_tl(x + dim.width),
                 fmt_tl(h_sep_y),
@@ -2744,11 +2763,16 @@ fn render_oracle_links(
         let source_line = edge.source_line.as_deref().unwrap_or("0");
         let link_id = edge.link_id.as_deref().unwrap_or("lnk0");
 
-        write!(svg, "<!--link {from_base} to {to_base}-->").unwrap();
         write!(
             svg,
-            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("link {from_base} to {to_base}")),
         )
+        .unwrap();
+        write!(
+            svg,
+            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#, entity_1 = crate::svg::escape_attribute(entity_1), entity_2 = crate::svg::escape_attribute(entity_2), link_type = crate::svg::escape_attribute(link_type), link_id = crate::svg::escape_attribute(link_id),
+)
         .unwrap();
 
         let code_line = edge.code_line.as_deref().unwrap_or("0");
@@ -2759,7 +2783,9 @@ fn render_oracle_links(
         write!(
             svg,
             r#"<path codeLine="{code_line}" d="{}" fill="none" id="{}" style="{path_style}"/>"#,
-            edge.d, edge.id,
+            crate::svg::escape_attribute(&edge.d),
+            crate::svg::escape_attribute(&edge.id),
+            path_style = crate::svg::escape_attribute(path_style),
         )
         .unwrap();
 
@@ -2772,6 +2798,8 @@ fn render_oracle_links(
             write!(
                 svg,
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+                fill = crate::svg::escape_attribute(fill),
+                poly_style = crate::svg::escape_attribute(poly_style),
             )
             .unwrap();
         }
@@ -2789,6 +2817,8 @@ fn render_oracle_links(
             write!(
                 svg,
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+                fill = crate::svg::escape_attribute(fill),
+                poly_style = crate::svg::escape_attribute(poly_style),
             )
             .unwrap();
         }

@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam usecaseFontStyle italic
+usecase "Kiln wq\nlonger second line" as E1
+@enduml

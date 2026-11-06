@@ -1,0 +1,4 @@
+@startuml
+class "before 0" as Before
+class "after 1" as After
+@enduml

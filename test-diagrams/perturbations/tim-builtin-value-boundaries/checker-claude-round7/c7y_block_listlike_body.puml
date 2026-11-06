@@ -1,0 +1,8 @@
+@startyaml
+root:
+  notes: |
+    - not a list
+      key: not a key
+    -
+  after: y
+@endyaml

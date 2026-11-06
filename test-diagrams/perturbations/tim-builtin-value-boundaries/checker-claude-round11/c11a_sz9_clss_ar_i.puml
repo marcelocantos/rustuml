@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam classFontSize 9
+skinparam classFontStyle italic
+class "Avid Dawky Vow 4.7, gym kayak ovo!" as E1
+@enduml

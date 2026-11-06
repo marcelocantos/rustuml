@@ -1,0 +1,27 @@
+{
+  "candidate": "faf463445591a53f17d25c5c16611f8e626ef93d",
+  "archive_files_verified": 31516,
+  "archive_sha256": "6f5610fe3ad92741ea126d4a38d889fd5ff5b12546e2396370f5336b40b812a9",
+  "historical_files_unchanged": 9245,
+  "fresh_pairs_exact": 20,
+  "include_resources_exact": 3,
+  "tracked_modifications": [],
+  "reviews": [
+    {
+      "path": "docs/parity-reviews/tim-duplicate-formal-binding/review.json",
+      "cases": 5,
+      "verdict": "rejected"
+    },
+    {
+      "path": "docs/parity-reviews/tim-empty-sub-iterator-termination/review.json",
+      "cases": 7,
+      "verdict": "rejected"
+    },
+    {
+      "path": "docs/parity-reviews/tim-memory-trie-text-lookup/review.json",
+      "cases": 8,
+      "verdict": "rejected"
+    }
+  ],
+  "scope": "Evidence registration only; no broad product gate repeated."
+}

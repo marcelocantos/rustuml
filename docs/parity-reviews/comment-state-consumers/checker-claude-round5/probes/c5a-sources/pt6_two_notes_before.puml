@@ -1,0 +1,5 @@
+@startuml
+note left of Ash : grey
+note right of Elm : tall
+Ash --> Elm
+@enduml

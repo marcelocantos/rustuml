@@ -1,0 +1,7 @@
+@startuml
+participant Elm
+note right of Elm
+q<font:Oak Ω𐐷>fir</font>r
+q<font:Oak«Fir»>fir</font>r
+end note
+@enduml

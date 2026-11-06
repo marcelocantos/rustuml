@@ -1,0 +1,19 @@
+test java_bidi::tests::conformance_bidi_character_test ... ignored
+test font_chain::tests::planner_ports_harfbuzz_15 ... ok
+test font_chain::tests::script_runs_follow_jdk_script_run ... ok
+test font_chain::tests::gsub_chosen_script_categorizes_the_shaper ... ok
+test font_chain::tests::complexity_follows_java_units ... ok
+test font_chain::tests::unmapped_scalars_take_the_primary_notdef_on_both_paths ... ok
+test font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer ... ok
+test font_chain::tests::fallback_port_follows_position_cluster ... ok
+test font_chain::tests::harfbuzz_hides_unmapped_default_ignorables ... ok
+test font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef ... ok
+test font_chain::tests::harfbuzz_buffers_split_at_bidi_level_changes ... ok
+test font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15 ... FAILED
+test java_bidi::tests::conformance_sample ... ok
+test java_bidi::tests::bidi_tables_are_jdk_ubidi_icu ... ok
+test font_chain::tests::coverage_table_is_the_stored_reference_host_extraction ... ok
+test font_chain::tests::unicode_mark_tables_are_ucd_18 ... ok
+thread 'font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15' (56450839) panicked at crates/rustuml-render/src/font_chain.rs:732:5:
+test result: FAILED. 14 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.03s
+error: test failed, to rerun pass `-p rustuml-render --lib`

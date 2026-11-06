@@ -1,0 +1,93 @@
+{
+  "base": "a84856637adcd8e8d4e78fd2ee00658c9c612feb",
+  "production": "8df6bb53fac4fdf364a1a9aeea0b203cb6dab8e6",
+  "builds": [
+    {
+      "phase": "before",
+      "revision": "dc796484a0a1ef723b8030ef0fd767da2708533d",
+      "source_tree": "d5442ec37b532a0911092c7c555864ab53db07b8",
+      "source_hashes": {
+        "crates/rustuml-parser/src/diagram/wbs.rs": "73172191913da9195966dc1adf45053557ddf1357ec47308a705ff92330591ad",
+        "crates/rustuml-parser/src/parse/wbs.rs": "75e4a9fa77b579a03bf24a30fbf89061cf319fff5c593e2816fcfb1b17f44a21",
+        "crates/rustuml-render/src/creole.rs": "17d9f5bfa96c0217d0ad7ab5fd0feb17576afbcb62429cd0fa5ee4d8ebff3499",
+        "crates/rustuml-render/src/wbs.rs": "d578e2b15a730df1c34233f199467e9004dd7e7f1e6fa3851ae6f07d02af1df8",
+        "crates/rustuml-render/src/text_render.rs": "a24772ef9b0167d84b4e44aa38963380a438b4231794d032b1e667b21b76e49f",
+        "crates/rustuml-render/src/class.rs": "3dcd6a57d46892a5ef6aa73a0205610b1d2485a4422d5f4d0adeb2913c53a9aa",
+        "crates/rustuml-render/src/sequence.rs": "4950fd8388388990b323ec04ea5899ead6cff69dec4eee92cffa91734cd7d95b",
+        "crates/rustuml-parser/src/parse/class.rs": "434ee97977df8071b7140af7fb0b621b2fea01b92919f34e84b9dc22ad2d314d",
+        "crates/rustuml-parser/src/preprocess/mod.rs": "3d99e98125f55671b8e8b0f6353a2aece3c4f9106e99dccd0b5d9f2b588cb334"
+      },
+      "binary": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/before-rustuml",
+      "binary_sha256": "ceec1206d620933bc24acd3c421a3aef8e6d22a729a26b4141cb9d56b9d64237",
+      "argv": [
+        "cargo",
+        "build",
+        "-p",
+        "rustuml",
+        "--release",
+        "-j",
+        "4"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/target-before",
+        "CARGO_BUILD_JOBS": "4"
+      },
+      "exit": 0,
+      "log": "logs/build-before.log",
+      "status_provenance": "Captured successful Finished release log; interrupted earlier build separately retained."
+    },
+    {
+      "phase": "after",
+      "revision": "8df6bb53fac4fdf364a1a9aeea0b203cb6dab8e6",
+      "source_tree": "780fca90ade698ef6cdb43b5f477e502d6246bd2",
+      "source_hashes": {
+        "crates/rustuml-parser/src/diagram/wbs.rs": "3915f7a06eb0f5bb369b59b94831502c1fa600aec790188f4500dc6d299058a9",
+        "crates/rustuml-parser/src/parse/wbs.rs": "d57cc6840af28925e85b441b108465a1a437afc0e96840a4ee0db3b1751b0cd2",
+        "crates/rustuml-render/src/creole.rs": "f74f2b9868f56a8c12333bbaf33d232eb7f0834ceeaa957854a7de234b9c77e3",
+        "crates/rustuml-render/src/wbs.rs": "9266be9a568908fa51fe025eed61a11b1bd2f00257a80fbc458f152a04f67d4a",
+        "crates/rustuml-render/src/text_render.rs": "a24772ef9b0167d84b4e44aa38963380a438b4231794d032b1e667b21b76e49f",
+        "crates/rustuml-render/src/class.rs": "3dcd6a57d46892a5ef6aa73a0205610b1d2485a4422d5f4d0adeb2913c53a9aa",
+        "crates/rustuml-render/src/sequence.rs": "4950fd8388388990b323ec04ea5899ead6cff69dec4eee92cffa91734cd7d95b",
+        "crates/rustuml-parser/src/parse/class.rs": "434ee97977df8071b7140af7fb0b621b2fea01b92919f34e84b9dc22ad2d314d",
+        "crates/rustuml-parser/src/preprocess/mod.rs": "3d99e98125f55671b8e8b0f6353a2aece3c4f9106e99dccd0b5d9f2b588cb334"
+      },
+      "binary": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/after-rustuml",
+      "binary_sha256": "ca6d09ed0cd07893b49e938721ca6fd50f201b584c6c5bcdebc28cd3eb31d77f",
+      "argv": [
+        "cargo",
+        "build",
+        "-p",
+        "rustuml",
+        "--release",
+        "-j",
+        "4"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/target-after",
+        "CARGO_BUILD_JOBS": "4"
+      },
+      "exit": 0,
+      "log": "logs/build-after-delimiters-resumed.log",
+      "status_provenance": "Captured successful Finished release log; interrupted earlier build separately retained."
+    }
+  ],
+  "production_files": [
+    "crates/rustuml-parser/src/diagram/wbs.rs",
+    "crates/rustuml-parser/src/parse/wbs.rs",
+    "crates/rustuml-render/src/creole.rs",
+    "crates/rustuml-render/src/wbs.rs"
+  ],
+  "legacy_tspan_prefix_unchanged": true,
+  "public_shared_signatures": "No public shared text signature changed; additive parser WbsShape/WbsNode.shape explicitly authorized.",
+  "toolchain": {
+    "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.3\n",
+    "cargo": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)\n"
+  },
+  "diagnostic": {
+    "source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+    "binary_sha256": "ff7b3a8656b6565734d11e4aaa3f7fecc27ebe9aa9d10faa5ae36a61af578f21",
+    "provenance": "Unchanged diagnostic from corrective checker cache, uses unchanged compare_svg_strict; no new comparator."
+  }
+}

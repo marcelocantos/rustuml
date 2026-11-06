@@ -1,0 +1,9 @@
+@startuml
+!$seed="007"
+!function $read($a=$seed,$a="08",$tail=2)
+!return $a+$tail
+!endfunction
+!$seed="999"
+!$v=$read()+" / "+$read("03","04",5)
+class "$v / $read($a="05")" as Defaults
+@enduml

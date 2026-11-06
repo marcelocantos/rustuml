@@ -1,0 +1,4 @@
+@startuml
+!$result=%substr("cedar", %str2json("2"))
+class "$result" as Result
+@enduml

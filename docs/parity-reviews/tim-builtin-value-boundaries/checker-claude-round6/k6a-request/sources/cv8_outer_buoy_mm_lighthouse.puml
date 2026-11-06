@@ -1,0 +1,9 @@
+@startuml
+[*] --> Buoy
+state Buoy {
+  [*] --> Mm
+  Mm --> Lighthouse
+  Lighthouse --> [*]
+}
+Buoy --> [*]
+@enduml

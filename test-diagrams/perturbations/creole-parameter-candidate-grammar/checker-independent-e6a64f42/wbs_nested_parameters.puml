@@ -1,0 +1,5 @@
+@startwbs
+* Grove
+** a<b><size:14><color:navy>seed</color></size></b>z
+** a<back:#44aa77><font size=14 color=navy>seed</font></back>z
+@endwbs

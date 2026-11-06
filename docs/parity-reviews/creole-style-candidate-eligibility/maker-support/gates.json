@@ -1,0 +1,235 @@
+[
+  {
+    "name": "library",
+    "argv": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--lib",
+      "--release"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 45.43531366600655
+  },
+  {
+    "name": "cli",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml",
+      "--test",
+      "pipe_mode",
+      "--release"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 0,
+    "seconds": 1.1797996670065913
+  },
+  {
+    "name": "main-product",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "golden_no_oracle",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 4.804929000005359
+  },
+  {
+    "name": "main-assisted",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "golden_pairs",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 2.5828758329880657
+  },
+  {
+    "name": "standing",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "parity_perturbations",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 2.836563083008514
+  },
+  {
+    "name": "guards",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "harness_guards",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 1.3927464170119492
+  },
+  {
+    "name": "clippy",
+    "argv": [
+      "cargo",
+      "clippy",
+      "--workspace",
+      "--all-targets",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 5.048613209000905
+  },
+  {
+    "name": "format",
+    "argv": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 1,
+    "seconds": 1.143075250001857
+  },
+  {
+    "name": "touched-format",
+    "argv": [
+      "rustfmt",
+      "--edition",
+      "2024",
+      "--check",
+      "--config",
+      "skip_children=true",
+      "crates/rustuml-render/src/creole.rs",
+      "crates/rustuml-parser/src/diagram/wbs.rs",
+      "crates/rustuml-parser/src/parse/wbs.rs",
+      "crates/rustuml-render/src/wbs.rs"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 0,
+    "seconds": 0.033196834003319964
+  },
+  {
+    "name": "diff",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 0,
+    "seconds": 0.030061166995437816
+  }
+]

@@ -1,0 +1,5 @@
+@startuml
+skinparam activityFontStyle bold
+start
+:Pylon vk;
+@enduml

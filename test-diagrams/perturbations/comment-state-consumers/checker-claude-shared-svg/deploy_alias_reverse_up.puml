@@ -1,0 +1,7 @@
+@startuml
+node "Salt Works" as Salt_Works
+node "Brine Tank" as Tank
+Salt_Works <-- Tank
+Salt_Works -up-> Tank
+Salt_Works -- Tank
+@enduml

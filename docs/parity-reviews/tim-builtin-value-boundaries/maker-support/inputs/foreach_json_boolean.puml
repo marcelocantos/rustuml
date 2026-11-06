@@ -1,0 +1,6 @@
+@startuml
+!foreach $x in %str2json("false")
+class Lost
+!endfor
+class After
+@enduml

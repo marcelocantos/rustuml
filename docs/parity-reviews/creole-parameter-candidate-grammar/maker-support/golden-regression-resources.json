@@ -1,0 +1,62 @@
+[
+  {
+    "original": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/activity/act_creole_monospace.puml",
+    "capture": "golden-regression-inputs/activity/act_creole_monospace/source.puml",
+    "sha256": "8cd627a4be9539c71e91cf6749ea36b30ce9e0d78480d7dace3f4f593c2304bf"
+  },
+  {
+    "original": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/activity/act_creole_monospace.svg",
+    "capture": "golden-regression-inputs/activity/act_creole_monospace/java.svg",
+    "sha256": "0b7dd3517eac6f784d6bcd0bcce103029b0e376e4a37c628384e48c55eb26d86"
+  },
+  {
+    "original": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_activity.puml",
+    "capture": "golden-regression-inputs/creole/creole_font_name_in_activity/source.puml",
+    "sha256": "74b171775e996514875cc22ed6fd31c15a3c03dbc1810e76d3ec934a2ca0d778"
+  },
+  {
+    "original": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_activity.svg",
+    "capture": "golden-regression-inputs/creole/creole_font_name_in_activity/java.svg",
+    "sha256": "0ba45571240e014a85ea1c9c0055412021337d64ab0cd5597bfc339558dc4f89"
+  },
+  {
+    "original": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_class.puml",
+    "capture": "golden-regression-inputs/creole/creole_font_name_in_class/source.puml",
+    "sha256": "1367f8825de71dbe1d38bdf9dd4a1eb5fbc61a6a90cbf6158a5f65f055eda97c"
+  },
+  {
+    "original": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_class.svg",
+    "capture": "golden-regression-inputs/creole/creole_font_name_in_class/java.svg",
+    "sha256": "000482a2caccda5454926841d0d158cac1f374757ae336dd2871296b1ead59c7"
+  },
+  {
+    "original": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_note.puml",
+    "capture": "golden-regression-inputs/creole/creole_font_name_in_note/source.puml",
+    "sha256": "bad23e09920f013a9105a001ea5a8b32f053d9ec8f38cc493bfa1e7f228f34f1"
+  },
+  {
+    "original": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_note.svg",
+    "capture": "golden-regression-inputs/creole/creole_font_name_in_note/java.svg",
+    "sha256": "0d8fea8d69ff378018c059f8fad8f65f47136f064ff28c94f30aaace1ca5ab3d"
+  },
+  {
+    "original": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_sequence.puml",
+    "capture": "golden-regression-inputs/creole/creole_font_name_in_sequence/source.puml",
+    "sha256": "ca3a4c30f204d0ea88dc48aaf43dcdce846d9542a51c2f259eaec5e12536720e"
+  },
+  {
+    "original": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_sequence.svg",
+    "capture": "golden-regression-inputs/creole/creole_font_name_in_sequence/java.svg",
+    "sha256": "439d431ba57b2779df263b6ac95c4c4fa7ff3b184cad49310db9601d2c219ec6"
+  },
+  {
+    "original": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_title.puml",
+    "capture": "golden-regression-inputs/creole/creole_font_name_in_title/source.puml",
+    "sha256": "595ab56f5d4a5e159fbd876c5ed494b4e3a72fa642bd7c68336848a3060af388"
+  },
+  {
+    "original": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45/test-diagrams/golden/creole/creole_font_name_in_title.svg",
+    "capture": "golden-regression-inputs/creole/creole_font_name_in_title/java.svg",
+    "sha256": "d642f928e81c9999b1a2b40fa0fc7d74c9ea0b30a3b2ec67ce7c49f4ebe67ab8"
+  }
+]

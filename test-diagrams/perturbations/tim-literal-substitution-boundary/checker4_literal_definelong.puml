@@ -1,0 +1,10 @@
+@startuml
+!definelong TOKEN
+changed
+!enddefinelong
+!$v="TOKEN"
+!function $word()
+!return "TOKEN"
+!endfunction
+class "$v / $word()" as Literal
+@enduml

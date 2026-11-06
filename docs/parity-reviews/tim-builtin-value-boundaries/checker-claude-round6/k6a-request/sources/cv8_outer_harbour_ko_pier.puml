@@ -1,0 +1,9 @@
+@startuml
+[*] --> Harbour
+state Harbour {
+  [*] --> Ko
+  Ko --> Pier
+  Pier --> [*]
+}
+Harbour --> [*]
+@enduml

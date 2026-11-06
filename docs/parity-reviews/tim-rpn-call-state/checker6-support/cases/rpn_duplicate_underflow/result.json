@@ -1,0 +1,141 @@
+{
+  "source": "/tmp/rustuml-checker6/new/rpn_duplicate_underflow.puml",
+  "mechanism": "tim-rpn-call-state",
+  "axes": [
+    "duplicate keys",
+    "surrounding operator"
+  ],
+  "negative": true,
+  "cwd": "/tmp/rustuml-checker6/new",
+  "zone": "GMT+11:00",
+  "debug": "date=1774210426000,tz=AEDT+1100",
+  "env": {},
+  "golden": "/tmp/rustuml-checker6/relay25/rpn_duplicate_underflow/java.svg.stdout",
+  "reference_source": "/tmp/rustuml-checker6/relay25/rpn_duplicate_underflow/java.source.stdout",
+  "java_exit": 1,
+  "java_probe_exit": 1,
+  "source_sha256": "fbe220ec4f132741ceff4110c3c9b903da5f149c9576964d6e5a77df5cbc9602",
+  "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "suite": "fresh25",
+  "capture_id": "0003-rpn_duplicate_underflow",
+  "reference_valid": false,
+  "reference_xml_valid": false,
+  "phases": {
+    "before": {
+      "cli_exit": 0,
+      "comparison_exit": 3,
+      "svg_match": false,
+      "panic": false,
+      "calls": [
+        {
+          "mode": "svg",
+          "argv": [
+            "/tmp/rustuml-checker6/before-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 0,
+          "stdout_sha256": "cb44f0dcb724eb84c95da907e37ecf1b000afda639283efa2645553902216f98",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "mode": "yaml",
+          "argv": [
+            "/tmp/rustuml-checker6/before-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 0,
+          "stdout_sha256": "086af446fdddd6f416881450664298287469a82641e6fbbcae8e995872d1f1bf",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-checker6/probe",
+        "compare",
+        "/tmp/rustuml-checker6/relay25/rpn_duplicate_underflow/java.svg.stdout",
+        "/tmp/rustuml-checker6/replay/fresh25/0003-rpn_duplicate_underflow/before/rust.svg"
+      ],
+      "first_diagnostic": [],
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass Lost\n@enduml\n"
+      },
+      "source_equal": false,
+      "reference_source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "after": {
+      "cli_exit": 1,
+      "comparison_exit": 3,
+      "svg_match": false,
+      "panic": false,
+      "calls": [
+        {
+          "mode": "svg",
+          "argv": [
+            "/tmp/rustuml-checker6/after-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "172c902ae282710876f4c95853f7712324abc28298c1be27eabc08e007af0ee9"
+        },
+        {
+          "mode": "yaml",
+          "argv": [
+            "/tmp/rustuml-checker6/after-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "172c902ae282710876f4c95853f7712324abc28298c1be27eabc08e007af0ee9"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-checker6/probe",
+        "compare",
+        "/tmp/rustuml-checker6/relay25/rpn_duplicate_underflow/java.svg.stdout",
+        "/tmp/rustuml-checker6/replay/fresh25/0003-rpn_duplicate_underflow/after/rust.svg"
+      ],
+      "first_diagnostic": [
+        "parse error: line 4: Expression operand stack underflow"
+      ],
+      "source_equal": false
+    }
+  },
+  "actual_source": "/tmp/rustuml-checker6/new/rpn_duplicate_underflow.puml",
+  "actual_golden": "/tmp/rustuml-checker6/relay25/rpn_duplicate_underflow/java.svg.stdout",
+  "committed_source": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_duplicate_underflow.puml",
+  "committed_golden": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_duplicate_underflow.svg",
+  "committed_evidence": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow",
+  "java_svg_text": []
+}

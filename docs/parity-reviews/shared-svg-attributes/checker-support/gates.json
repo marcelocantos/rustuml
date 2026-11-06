@@ -1,0 +1,135 @@
+[
+  {
+    "name": "library",
+    "argv": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--lib",
+      "--release",
+      "--locked"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-1ab6ad70",
+    "exit": 101,
+    "seconds": 55.59127016700222
+  },
+  {
+    "name": "cli",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml",
+      "--test",
+      "pipe_mode",
+      "--release",
+      "--locked",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-1ab6ad70",
+    "exit": 0,
+    "seconds": 74.85251529200468
+  },
+  {
+    "name": "main-product",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--locked",
+      "--test",
+      "golden_no_oracle",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-1ab6ad70",
+    "exit": 101,
+    "seconds": 6.108437250004499
+  },
+  {
+    "name": "main-assisted",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--locked",
+      "--test",
+      "golden_pairs",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-1ab6ad70",
+    "exit": 101,
+    "seconds": 2.946748749993276
+  },
+  {
+    "name": "standing",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--locked",
+      "--test",
+      "parity_perturbations",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-1ab6ad70",
+    "exit": 101,
+    "seconds": 2.8959544579993235
+  },
+  {
+    "name": "guards",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--locked",
+      "--test",
+      "harness_guards",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-1ab6ad70",
+    "exit": 101,
+    "seconds": 1.4007696670014411
+  },
+  {
+    "name": "clippy",
+    "argv": [
+      "cargo",
+      "clippy",
+      "--workspace",
+      "--all-targets",
+      "--locked",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-1ab6ad70",
+    "exit": 101,
+    "seconds": 18.54850845799956
+  },
+  {
+    "name": "format",
+    "argv": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-1ab6ad70",
+    "exit": 1,
+    "seconds": 1.268463291999069
+  }
+]

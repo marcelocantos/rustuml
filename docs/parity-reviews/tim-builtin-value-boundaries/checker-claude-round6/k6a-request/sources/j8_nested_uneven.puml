@@ -1,0 +1,3 @@
+@startjson
+{"a": {"k": "one\\ntwo\\nthree", "m": "x"}, "b": ["u\\nv", "w"], "c": 1}
+@endjson

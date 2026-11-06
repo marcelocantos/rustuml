@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Monospaced
+class Quay
+Quay : <b>Wharf q𝅧r</b>
+@enduml

@@ -1,0 +1,15 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-builtin-value-boundaries",
+ "kind": "addendum after measurement, before the change",
+ "amends": "maker-round6-claude/yaml-json-display-account.json",
+ "measured": "with the CR/LF advance (commit after control-newline-advance-addendum.json), BH dc6_yaml_block's second line has Java's textLength 25.6416 but its column is 4.4297 (one LF advance) narrower than Java's 30.0713 text width.",
+ "java_locations": [
+  "yaml/parser/YamlParser.java 83-84: KEY_AND_BLOCK_STYLE ('key: |') takes getBlockStyleString; 133-149 getBlockStyleString appends cleanBlockStyle(line) and '\\n' for every following text or empty line until a line indented at most the key's, so the value always ends with a line break and keeps blank lines (YAML keep chomping, '|+').",
+  "YamlParser.java 61-88: KEY_AND_FOLDED_STYLE ('key: >') has no branch and throws UnsupportedOperationException('wip4'): unchanged here.",
+  "DriverTextSvg.java 115-125: StringUtils.trin removes the trailing LF from the drawn text, while AtomText.getWidth measured it (the 4.4297)."
+ ],
+ "cause": "RustUML joins the YAML body without a final line break and serde_yml applies clip chomping to '|', so the block value loses its last LF.",
+ "change": "crates/rustuml-parser/src/parse/json_diagram.rs: the YAML body handed to serde ends with a line break and a block-style indicator line ('key: |' or '- key: |') is read with keep chomping ('|+'), as getBlockStyleString keeps every line break.",
+ "expect": "BH dc6_yaml_block matches; outputs change only for YAML sources with '|' block scalars; zero lost matches."
+}

@@ -1,0 +1,6 @@
+@startuml
+state Kiosk {
+  Coin --> Ticket
+}
+note top of Kiosk : paid
+@enduml

@@ -1,0 +1,16 @@
+{
+  "changed": 194,
+  "all_comment_only": true,
+  "decoded_equal": true,
+  "exact_java_comment_lists": 188,
+  "remaining_comment_differences": [
+    "full-golden/combo/combo_embedded_state_machine",
+    "full-golden/combo/combo_microservice_arch",
+    "full-golden/combo/combo_state_everything",
+    "full-golden/edge-cases/edge_misc_kitchen_sink_state",
+    "full-golden/state/state_composite_entry_exit_concurrent",
+    "full-golden/type-detection/ambiguous_allowmixing_sequence_component"
+  ],
+  "changed_passing": 184,
+  "changed_nonpassing": 10
+}

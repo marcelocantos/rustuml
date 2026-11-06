@@ -1,0 +1,33 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-builtin-value-boundaries",
+ "sub_mechanism": "every width path measures Java characters, never the escape prefix (round-5 obligation 3, BLOCKING)",
+ "status": "maker causal account before draft; independent review required",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-4.json (findings[2], bounded_next_obligations[1])",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "java_locations": [
+  "FileFormat.getJavaDimension (220-238) measures the Java String: a legitimate U+10F7FF..U+10FFFF scalar is one character (two UTF-16 units); RustUML's ESCAPE prefix does not exist in Java, so it can contribute no advance.",
+  "salt/element/AbstractElementText (getCharNumber 68-72, getTextDimensionAt 82-93): charLength is the purged text's String.length(), Java's UTF-16 units, in max(textWidth, charLength * CHAR_SIZE)."
+ ],
+ "rust_locations": [
+  "plantuml_metrics::text_width decodes java_utf16::tokens only; mono_text_width, courier_new_text_width (chars().count()), times_new_roman_text_width, serif_text_width, text_render::family_table_text_width (Arial, Verdana) and helvetica_text_width iterate raw chars, so ESCAPE is measured (review-4: Arial +10.5, Courier and Monospaced +1 cell, Times New Roman +10.8896).",
+  "salt.rs Dropdown and managed_text_width: charLen = chars().count(), which counts ESCAPE and counts an astral scalar once."
+ ],
+ "audit_of_entry_points": "Every public width function of plantuml_metrics (text_width, mono_text_width, courier_new_text_width, times_new_roman_text_width, serif_text_width) and every MetricFamily arm of text_render::family_text_width (which all text_render::measure* callers reach); grep of crates/rustuml-render for chars().count() and per-char width loops found the two salt charLen sites besides these. The -ttxt renderer already measures a decoded copy (round 4).",
+  "planned_change": [
+  "Each of those functions measures java_utf16::tokens(text): Token::Char(c) by the family's rule for c, Token::Unit(u) exactly as the carrier scalar was measured before (one em in the SansSerif paths, one cell in Monospaced/Courier New, the former table lookup for Times New Roman and Serif).",
+  "salt charLen = java_utf16::units(text).len() (String.length())."
+ ],
+ "declared_residue": [
+  "Character wrapping that splits text between ESCAPE and its scalar is not covered (no maxMessageSize wrapping exists in the Rust sequence renderer; cr_wrap_seq_pua fails in base too)."
+ ],
+ "perturbation_axes": [
+  "U+10FFFD, U+10F800 (inside the carrier range) and U+10F7FF under Arial, Helvetica, Verdana, Courier New, Monospaced, Times New Roman, with 'Vault ' controls"
+ ],
+ "precommitted_measurement": {
+  "oracle": "same cohorts and comparator as missing-glyph-account.json",
+  "expect_fixed": ["BF w_arial_pua_b, w_courier_pua_b, w_times_pua_b, w_monospaced_pua_b"],
+  "expect_kept": ["BF w_*_ctl controls"],
+  "expect": "text without reserved scalars measures byte-identically; zero lost matches"
+ }
+}

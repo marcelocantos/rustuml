@@ -1,0 +1,6 @@
+5097,5098c5097,5098
+<     let width = outer.width.ceil() as i64;
+<     let height = outer.height.ceil() as i64;
+---
+>     let width = svg_ensure_visible_dimension(outer.width) as i64;
+>     let height = svg_ensure_visible_dimension(outer.height) as i64;

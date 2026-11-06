@@ -1,0 +1,9 @@
+@startnwdiag
+skinparam defaultFontName Quill<Reed>é𐐀
+nwdiag {
+network bridge {
+address = "Beacon";
+node1;
+}
+}
+@endnwdiag

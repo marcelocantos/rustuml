@@ -1,0 +1,3 @@
+@startuml
+Juniper -> Willow : <size:19>A<outer<$seed>>B</size>C<color:red>D<bogus<$bud>>E</color>F
+@enduml

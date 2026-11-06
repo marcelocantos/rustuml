@@ -1,0 +1,7 @@
+@startuml
+skinparam stateBackgroundColor #7a3c9100
+state Empty <<history>>
+state Body <<history>>
+Body : resume berth
+Empty --> Body
+@enduml

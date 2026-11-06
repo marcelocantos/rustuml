@@ -1,0 +1,428 @@
+{
+ "AR": {
+  "cases": 20,
+  "java_valid": 20,
+  "strict": [
+   6,
+   17,
+   17
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "AU": {
+  "cases": 32,
+  "java_valid": 29,
+  "strict": [
+   6,
+   21,
+   21
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "AW": {
+  "cases": 45,
+  "java_valid": 39,
+  "strict": [
+   6,
+   30,
+   30
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 6
+ },
+ "BB": {
+  "cases": 36,
+  "java_valid": 26,
+  "strict": [
+   2,
+   25,
+   25
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 9
+ },
+ "BC": {
+  "cases": 19,
+  "java_valid": 19,
+  "strict": [
+   0,
+   18,
+   18
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "BE": {
+  "cases": 34,
+  "java_valid": 30,
+  "strict": [
+   0,
+   22,
+   22
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 2
+ },
+ "BF": {
+  "cases": 46,
+  "java_valid": 45,
+  "strict": [
+   6,
+   32,
+   32
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "BG": {
+  "cases": 53,
+  "java_valid": 52,
+  "strict": [
+   12,
+   42,
+   42
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "BH": {
+  "cases": 99,
+  "java_valid": 96,
+  "strict": [
+   12,
+   78,
+   78
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "BI": {
+  "cases": 48,
+  "java_valid": 48,
+  "strict": [
+   5,
+   39,
+   39
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "BJ": {
+  "cases": 120,
+  "java_valid": 115,
+  "strict": [
+   25,
+   96,
+   96
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "BK": {
+  "cases": 49,
+  "java_valid": 48,
+  "strict": [
+   4,
+   32,
+   32
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 1
+ },
+ "BL": {
+  "cases": 142,
+  "java_valid": 134,
+  "strict": [
+   14,
+   65,
+   65
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 15
+ },
+ "BM": {
+  "cases": 26,
+  "java_valid": 26,
+  "strict": [
+   5,
+   8,
+   8
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "BN": {
+  "cases": 63,
+  "java_valid": 63,
+  "strict": [
+   17,
+   32,
+   32
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "BO": {
+  "cases": 81,
+  "java_valid": 81,
+  "strict": [
+   26,
+   36,
+   36
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [
+   "c8a_bl_lucida_thai_digit_after_r"
+  ],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "BP": {
+  "cases": 60,
+  "java_valid": 50,
+  "strict": [
+   20,
+   24,
+   24
+  ],
+  "merge->tip": {
+   "output_changed": 2
+  },
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "BQ": {
+  "cases": 8,
+  "java_valid": 6,
+  "strict": [
+   0,
+   0,
+   0
+  ],
+  "merge->tip": {},
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "BR": {
+  "cases": 288,
+  "java_valid": 288,
+  "strict": [
+   48,
+   92,
+   98
+  ],
+  "merge->tip": {
+   "gained_match": 6,
+   "output_changed": 6
+  },
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [
+   "c9a_sp_seqnote_pdf_N_ctrl",
+   "c9a_sv_actmid_N_sp_ctrl",
+   "c9a_sv_classnote_N_ctrl"
+  ],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "BS": {
+  "cases": 374,
+  "java_valid": 374,
+  "strict": [
+   130,
+   211,
+   221
+  ],
+  "merge->tip": {
+   "gained_match": 10,
+   "output_changed": 12
+  },
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [
+   "m10a_acts_cn_i",
+   "m10a_css_actv_cn_i",
+   "m10a_css_part_cn_i",
+   "m10a_dbse_cn_i"
+  ],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "BT": {
+  "cases": 379,
+  "java_valid": 379,
+  "strict": [
+   83,
+   157,
+   159
+  ],
+  "merge->tip": {
+   "output_changed": 21,
+   "gained_match": 2
+  },
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "BV": {
+  "cases": 100,
+  "java_valid": 100,
+  "strict": [
+   47,
+   50,
+   79
+  ],
+  "merge->tip": {
+   "gained_match": 29,
+   "output_changed": 41,
+   "viewBox_gained": 5,
+   "viewBox_lost": 1,
+   "ndiff_worse": 2
+  },
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [
+   "m11a_kd_queu_vd_i"
+  ],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ },
+ "BX": {
+  "cases": 515,
+  "java_valid": 515,
+  "strict": [
+   179,
+   200,
+   237
+  ],
+  "merge->tip": {
+   "gained_match": 37,
+   "output_changed": 117,
+   "viewBox_gained": 4,
+   "ndiff_worse": 4
+  },
+  "base->tip_lost": [],
+  "base->tip_vb_lost": [],
+  "base->tip_comments_lost": [],
+  "base->tip_new_err": [],
+  "base->tip_lost_rej": [],
+  "panics_tip": 0,
+  "stderr_tip": 0
+ }
+}

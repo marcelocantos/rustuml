@@ -1,0 +1,10 @@
+{
+  "path": "/Users/marcelo/Library/Caches/rustuml-review-4a288dd-checker6",
+  "before_binary_sha256": "97be1c5eea770f5cb613df5baaca97572c9301664202ebcaa120ba66042b5f41",
+  "after_binary_sha256": "8f2ae378b625379fb7922049bcc02d360b197d79b8b68b82da5be5e7b09f72de",
+  "target_directories": [
+    "target-before",
+    "target-after"
+  ],
+  "request_paths_remain": "/tmp/rustuml-checker6 (original immutable paths); cache is a durable byte copy"
+}

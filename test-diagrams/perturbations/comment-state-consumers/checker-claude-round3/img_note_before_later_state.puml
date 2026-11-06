@@ -1,0 +1,8 @@
+@startuml
+state Pier {
+  Dock --> Crane
+  note right of Dock : busy
+  Crane --> Barge
+}
+Pier --> Sea
+@enduml

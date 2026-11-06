@@ -1,0 +1,6 @@
+@startwbs
+* Pine\nP<size:12></size>Q
+** P<color:black></color>Q\n\nR
+***_ P<size:12><$twig></size>Q
+--_ P<color:black><$twig></color>Q
+@endwbs

@@ -1,0 +1,5 @@
+@startuml
+start
+:q<img:fallback-missing572.png>r\nq<img:fallback-missing572.png{scale=2}>r;
+stop
+@enduml

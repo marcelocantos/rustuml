@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Courier New
+skinparam classFontStyle bold
+class "Pier क" as K
+@enduml

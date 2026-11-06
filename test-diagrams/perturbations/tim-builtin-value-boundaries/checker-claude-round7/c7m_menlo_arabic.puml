@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Monospaced
+class "Quay ب𝅧" as Q
+@enduml

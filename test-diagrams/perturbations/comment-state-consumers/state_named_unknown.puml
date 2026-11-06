@@ -1,0 +1,4 @@
+@startuml
+skinparam stateBackgroundColor RebeccaPurple
+state Aspen : detail
+@enduml

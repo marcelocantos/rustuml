@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "rustc",
+    "--edition=2024",
+    "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/maker/probe.rs",
+    "-L",
+    "dependency=/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/target-after/release/deps",
+    "--extern",
+    "rustuml_parser=/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/target-after/release/deps/librustuml_parser-69497e1bef91509b.rlib",
+    "--extern",
+    "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/target-after/release/deps/librustuml_oracle-81ecaf2bd12988ce.rlib",
+    "-o",
+    "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/probe"
+  ],
+  "exit": 0,
+  "stderr": "",
+  "source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be"
+}

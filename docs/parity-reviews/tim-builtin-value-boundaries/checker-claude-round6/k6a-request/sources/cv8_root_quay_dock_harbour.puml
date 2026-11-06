@@ -1,0 +1,8 @@
+@startuml
+state Quay {
+  Dock --> Harbour
+  note right of Harbour : calm
+}
+note left of Gull : drift
+Gull --> Dock
+@enduml

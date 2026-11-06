@@ -1,0 +1,11 @@
+# Cross-stream kern bit per face (kern subtable coverage: OpenType 0x04, Apple 0x4000), CoreText table read on colossus, macOS 27.2 26B123; the round-6 reference extraction records kern formats but not this bit.
+LucidaGrande.tsv	cross_kern=0
+LucidaGrande-Bold.tsv	cross_kern=0
+ArialMT.tsv	cross_kern=0
+Arial-BoldMT.tsv	cross_kern=0
+Helvetica.tsv	cross_kern=0
+Helvetica-Bold.tsv	cross_kern=0
+Verdana.tsv	cross_kern=0
+Verdana-Bold.tsv	cross_kern=0
+Menlo-Regular.tsv	cross_kern=0
+CourierNewPSMT.tsv	cross_kern=0

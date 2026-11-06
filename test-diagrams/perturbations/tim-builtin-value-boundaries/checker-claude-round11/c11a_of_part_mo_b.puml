@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Monospaced
+skinparam participantFontStyle bold
+participant "Avid Dawky Vow 4.7, gym kayak ovo!" as E1
+E1 -> E1 : ok
+@enduml

@@ -1,0 +1,30 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "sub_mechanism": "YAML lines before Display: YamlLine's TAB replacement and flow-sequence escapes; StyleExtractor's preamble skinparam in @startyaml/@startjson (round-7 obligation 4)",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-7.json (findings[4]; held_out_failures y8_real_tab_value, y8_flow_seq_escapes, y8_tabsize4, j8_tabsize4; bounded_next_obligations[4])",
+ "java_locations": [
+  "src/main/java/net/sourceforge/plantuml/yaml/parser/YamlLine.java 54: line.replaceAll(\"\\t\", \"    \") before any parsing, so a TAB in a key, value or indentation is four spaces (block bodies use the raw line: YamlParser 143).",
+  "src/main/java/net/sourceforge/plantuml/yaml/parser/YamlLine.java 91-93: a rawValue that starts with '[' and ends with ']' is KEY_AND_FLOW_SEQUENCE with toList(inner); 117-170 toList: fields split at ',' outside quotes; a field that starts (after spaces) with a quote is kept as quoted text, others are trimmed; outside and inside quotes a backslash appends the next character literally; the last field is always added (so '[]' is one empty field).",
+  "src/main/java/net/sourceforge/plantuml/yaml/parser/MonomorphToJson.java 44-80 and YamlBuilder.onKeyAndFlowSequence 129-131: every value is a JSON string.",
+  "src/main/java/net/sourceforge/plantuml/jsondiagram/StyleExtractor.java 59-98: lines Java trims to empty are skipped; while at most the @start line is in the list (list.size() <= 1), lines starting 'skinparam ' are consumed (a '{' block up to a '}' line), only 'handwritten ... true' is kept as a flag; '!assume ', '!pragma ' and 'hide ' are ignored; 'scale ', 'title ' and 'skin ' set fields; '<style>' blocks are consumed anywhere.",
+  "src/main/java/net/sourceforge/plantuml/yaml/YamlDiagramFactory.java 70-90 and jsondiagram/JsonDiagramFactory.java 69-91 read StyleExtractor's list; neither applies a skinparam other than handwritten, so 'skinparam tabSize 4' leaves AtomText's eight-space tab (BJ y8_tabsize4 / j8_tabsize4: 'b' and 'z' at text x + 35.4375 = 8 x 4.4297)."
+ ],
+ "planned_change": [
+  "In the YAML preprocessing pass (shared with obligation 1): every non-block line has each TAB replaced by four spaces before serde sees it.",
+  "A KEY_AND_FLOW_SEQUENCE line becomes the same key and a flow sequence of single-quoted scalars holding toList's fields (all strings, as MonomorphToJson).",
+  "extract_body (JSON and YAML): before the first data line, a line whose Java trim starts with 'skinparam ' is consumed (with its '{' ... '}' block), as are '!assume ', '!pragma ' and 'hide ' lines. Not ported (residue, recorded): handwritten, title, scale, skin and <style> effects; those inputs keep their present behaviour."
+ ],
+ "precommitted_measurement": {
+  "oracle": "BJ Java references",
+  "expect": [
+   "BJ y8_real_tab_value and y8_flow_seq_escapes match whole-output.",
+   "BJ y8_tabsize4 and j8_tabsize4 render (exit 0) and match whole-output with the existing eight-space AtomText tab.",
+   "perturbations/shared-svg-attributes/checker-independent-astra/family_json (skinparam defaultFontName in @startjson, Java ignores it) renders instead of exiting 1.",
+   "No lost match, lost rejection, new valid-input error or panic."
+  ]
+ }
+}

@@ -1,0 +1,5 @@
+@startuml
+actor "Oak & <Fir>"
+usecase "Map" as U
+"Oak & <Fir>" --> U
+@enduml

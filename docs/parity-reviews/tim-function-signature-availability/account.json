@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-function-signature-availability",
+  "rust_revision": "ba57d3c7275a688b1f1ac565551cdff08fc52d32",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/FunctionsSet.java:addFunction,getFunctionSmart,executeEndfunction",
+    "tim/TFunctionSignature.java:equals,hashCode",
+    "tim/TFunctionImpl.java:canCover,getNewMemory",
+    "tim/iterator/CodeIteratorReturnFunction.java:peek",
+    "tim/TContext.java:addStandardFunctions",
+    "OpenJDK21 java/util/HashMap.java:hash,putVal,resize,HashIterator"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Completed function declarations remain available by exact function name and declared arity. Lookup checks exact positional signature first then compatible default/named coverage; expression coverage precedes kind and binding. Redefinition replaces only the same signature; pending definitions do not erase completed overloads.",
+  "causal_divergence": "Name-only insertion destroys other arities and publishes incomplete definitions. All downstream call sites therefore see an incomplete signature set, even when canCover and kind ordering are locally correct.",
+  "planned_change": "Store completed signatures with stable declaration slots and a separate pending body. Share resolution across expression/plain dispatch and existence/scanning. Preserve exact spelling of function names. Derive fallback order from TFunctionSignature hashing and ordinary JDK HashMap bucket traversal, using the 74 source-listed standard signatures plus current user/macro signatures to derive capacity (16, load3/4 and doubling are JDK defaults). No runtime JVM or new builtin bodies. Preserve existing explicit legacy/no-return extensions. Pathological tree-bin ordering and unsupported legacy-overload syntax remain unproved and must not become an acceptance claim.",
+  "perturbation_axes": [
+    "Declaration order, arity, exact versus optional/named fallback and return/procedure kind",
+    "Same-signature replacement, defaults captured while older signature remains available, and multiple compatible signatures"
+  ],
+  "prior_evidence": "checker6 a3b48251354497c68eaa0b93a168d3ba5c455c0f; all prior accounts/reviews retained",
+  "oracle_plan": [
+    "Existing reference cohorts first; source/model/real CLI and unchanged comparator, negative XML/status separately.",
+    "Compact fresh inputs via immutable persistent-cache request through parent Monkey Man relay; no local Java/SSH.",
+    "Final stable parser/CLI, both library tiers, standing/guards/format/clippy once; actual nonzero gates retained, no self-review or acceptance."
+  ]
+}
