@@ -1,0 +1,3 @@
+@startuml
+Alice -> Bob : tilde ~&#74; hidden &~#75; up ~<U+004B>
+@enduml

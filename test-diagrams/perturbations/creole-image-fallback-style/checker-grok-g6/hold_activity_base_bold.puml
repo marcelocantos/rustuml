@@ -1,0 +1,6 @@
+@startuml
+skinparam ActivityFontStyle bold
+start
+:Plover<b><color:blue><img:holdout-absent.png></color></b>Quill;
+stop
+@enduml

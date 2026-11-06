@@ -1,0 +1,72 @@
+{
+  "checker": "grok-4.7",
+  "session": "01a1b038-f966-72c2-b84f-aa9e5ff9d803",
+  "branch": "review/grok-g6-creole",
+  "evidence_tip": "3bc17a1201067c356a088d7ac44c74ae115f4e73",
+  "implementation_commit": "e36d76cc8a8a8448270c0bdb46ddbd7318c54935",
+  "account_commit": "f550169136a2ec0fcea67fa0f78a681799ffa418",
+  "base_revision": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "heldout_batch": "ckg6",
+  "reference_results_sha256": "07a5679719ea9d84c729183ecaac5281ae2e44bfb48593bf28a1b21f38eb652a",
+  "predictions_sha256": "b31f25ba66a92f657a177b94081702153f11f6ecc086fbdf892cde69dab9ef2f",
+  "worker": "worker.Jsc5yFtR",
+  "verdict": "rejected",
+  "accept_ready": false,
+  "binaries": {
+    "base_sha256": "cc8e5d1f1d953cee0c856f321d422df938c7c4b1615b048dd1f699f5552b130a",
+    "tip_sha256": "af23d85e052ee86be6e898379f6a3539ee20614eba0a38879c4ce9ca669d49a2",
+    "scorer_sha256": "8843e760e952f8dd525b4e91b34e35211b29210b23bf37a955182e2c1c5296c6"
+  },
+  "ckg6_strict": {
+    "base_match": "4/48",
+    "tip_match": "14/48",
+    "tip_fail": 32,
+    "tip_error": 2,
+    "lost_matches": 0,
+    "gains": 10
+  },
+  "ch_strict": {
+    "base_match": "1/20",
+    "tip_match": "13/20",
+    "tip_fail": 6,
+    "tip_error": 1
+  },
+  "cli": {
+    "goldens": "12550/12550 stdout and exit identical base versus tip. Exits 12474\u00d70 and 76\u00d71 on both. Panics 0. Timeouts 0.",
+    "perturbations": "6317/6328 unchanged. 11 changed. 10 of those strict-match Java only at the tip. 1 new valid-input error: cr_ent_dec_10fffd base exit 0, tip exit 1, Unicode 0xdffd. Panics 4/6328 on both trees (shared-svg-corrective dash_01, dash_03, dash_06, dash_07, class.rs index 0). Timeouts 0. Retained paths 112/112 unchanged."
+  },
+  "gates_tip": {
+    "lib": "1611 passed, 0 failed, 1 ignored (render 864; base render 862)",
+    "golden_no_oracle": "passed the family ratchet. Baseline sum 11181/11251. Failure names 70/11251.",
+    "golden_pairs": "12550 total, 10497 passed, 754 failed, 1299 skipped. Panics 0, xml diff 754, park candidates 746, parked 0. Error-golden skips 1199.",
+    "parity_perturbations": "2703 failures before these checker pairs were added. The 10 new registered matches are absent from that failure list. cr_ent_dec_10fffd is present.",
+    "pipe_mode": "17 passed, 0 failed",
+    "doc_claims": "2 passed, 0 failed",
+    "clippy": "exit 0. 23 file warnings. None in creole.rs or text_render.rs.",
+    "harness_guards": "4 passed, 2 failed. error_golden_census_is_frozen passed at 1199. decimal_literal_ratchet failed on class.rs 383->578, deployment.rs 43->44, plantuml_metrics.rs 1053->1055, state.rs 53->62. Those files and decimal_literal_baseline.txt are identical to cb550c0d6. parity_review_records_are_complete failed on 195 pre-existing latest reviews that are rejected."
+  },
+  "invalid_exit0": {
+    "ckg6_amp_dollar": "INVALID. Illegal group reference in manageAmpDiese appendReplacement.",
+    "ckg6_amp_backslash": "INVALID. character to be escaped is missing.",
+    "ckg6_amp_nul": "INVALID. XML character 0x0. Tip emits NUL.",
+    "ckg6_amp_surrogate": "INVALID. Invalid UTF-16 surrogate d800.",
+    "ckg6_amp_above_unicode": "INVALID. Not a valid Unicode code point 0x110000. Base and tip keep the literal."
+  },
+  "probe_problems": {
+    "ckg6_img_object": "Java exit 200, assumed type sequence. Rust base equals tip.",
+    "ckg6_img_timing": "Java exit 200, assumed type sequence. Rust base equals tip.",
+    "ckg6_img_salt": "Java exit 0 crash page, IllegalStateException '{s'. INVALID probe. Rust base equals tip."
+  },
+  "gates_base": {
+    "lib": "1609 passed, 0 failed, 1 ignored (render 862)",
+    "golden_no_oracle": "passed. Failure names identical to tip, 70/70, zero only-base and zero only-tip.",
+    "golden_pairs": "12550 total, 10497 passed, 754 failed, 1299 skipped. Same as tip. ULP candidate names 746/746 identical.",
+    "parity_perturbations": "2713 failures. Tip 2703. Only-base 10, only-tip 0. The 10 are the six registered image probes and c7r_class_amp13, c7r_note_amp13, c7r_seq_uplus, c7r_title_amp13.",
+    "pipe_mode": "17 passed, 0 failed",
+    "doc_claims": "2 passed, 0 failed",
+    "clippy": "exit 0. Same 23 file-warning diagnostics. None in creole.rs or text_render.rs.",
+    "harness_guards": "Same two failures as tip: decimal_literal_ratchet with the same four files, and parity_review_records_are_complete on the pre-existing rejected latest reviews. error census 1199 passed.",
+    "note": "These gate counts are the tree before checker-grok-g6 pairs were added. The four failing checker pairs in review-2.json are additional expected failures of this rejected review."
+  }
+}

@@ -1,0 +1,6 @@
+@startuml
+class "Crate" <<sten&#79;>> {
+  ""mono <U+00C6>""
+  field: &#80;ine
+}
+@enduml

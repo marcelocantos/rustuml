@@ -1,0 +1,4 @@
+@startuml
+skinparam ArrowFontStyle bold
+Plover -> Quill : left<img:holdout-absent.png>right
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+!define CKG6WORD &#81;uill
+!$ckg6wave = "<U+0052>ay"
+title Defined CKG6WORD and $ckg6wave
+@enduml

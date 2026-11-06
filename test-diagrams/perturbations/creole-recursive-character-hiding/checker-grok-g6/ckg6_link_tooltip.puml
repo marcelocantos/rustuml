@@ -1,0 +1,3 @@
+@startuml
+Alice -> Bob : [[https://example.com/ckg6{tip<U+004D>} lab&#78;el]]
+@enduml

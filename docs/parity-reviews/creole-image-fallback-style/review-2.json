@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "mechanism": "creole-image-fallback-style",
+  "reviewer": {
+    "task_id": "01a1b038-f966-72c2-b84f-aa9e5ff9d803",
+    "model": "grok-4.7",
+    "independence": "Independent checker. No maker edits, no children, no other worktrees.",
+    "branch": "review/grok-g6-creole"
+  },
+  "account_commit": "f550169136a2ec0fcea67fa0f78a681799ffa418",
+  "implementation_commit": "e36d76cc8a8a8448270c0bdb46ddbd7318c54935",
+  "evidence_tip": "3bc17a1201067c356a088d7ac44c74ae115f4e73",
+  "base_revision": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/grok-g6-creole 3bc17a1201067c356a088d7ac44c74ae115f4e73",
+    "CARGO_TARGET_DIR=$CACHE/target-tip cargo build --release --bin rustuml  # tip binary af23d85e052ee86be6e898379f6a3539ee20614eba0a38879c4ce9ca669d49a2",
+    "CARGO_TARGET_DIR=$CACHE/target-base cargo build --release --bin rustuml  # base binary cc8e5d1f1d953cee0c856f321d422df938c7c4b1615b048dd1f699f5552b130a from cb550c0d6",
+    "compare_svg_strict on whole Java stdout versus each CLI stdout (ckg6-score, rustuml-oracle compare.rs unchanged by this packet)",
+    "cargo test --release --workspace --lib",
+    "cargo test --release -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards --test doc_claims",
+    "cargo test --release -p rustuml --test pipe_mode",
+    "cargo clippy --release --workspace --all-targets --message-format=short",
+    "CLI -pipe -tsvg over 12550 goldens and 6328 perturbations, base binary and tip binary"
+  ],
+  "findings": [
+    "Style.owns_font_configuration is set on the AtomImg missing-image fallback and effective_bold, effective_italic, and effective_underline skip the consumer OR. The four CH hold probes (sequence bold, activity bold, class italic, state italic) strict-match at the tip and failed at the base. The six registered image probes under creole-image-fallback-style/checker-independent-ae47 (activity, class, sequence bold, sequence italic, state, title) do the same: base fail, tip match, on the whole SVG.",
+    "On ckg6 sequence and class, Java and the tip both draw '(Cannot decode)' as monospace 14 with no font-weight. Base draws those atoms at font-weight 700. Java has five cannot-decode nodes plus a literal <img>. Tip and base have seven cannot-decode nodes. The two extras are the present pix/ckdot.png and the quoted img tag, which Java decodes and Rust still reports as cannot-decode. That decode gap is byte-identical on present_only and is pre-existing. Sequence, activity, state, and class ckg6 images therefore still fail whole-SVG compare after the font fix.",
+    "Usecase, component, deployment, mindmap, WBS, gantt, salt, and present_only image probes are byte-identical base versus tip. The font change did not move them. ckg6_img_object and ckg6_img_timing exit 200 with 'Syntax Error? (Assumed diagram type: sequence)' because the probe text is not valid in those families. ckg6_img_salt exits 0 with IllegalStateException '{s' and is an INVALID crash page. Those three are probe problems, not packet regressions."
+  ],
+  "verdict": "rejected",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-grok-g6/hold_sequence_base_bold.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-grok-g6/hold_sequence_base_bold.svg",
+      "axes": [
+        "missing image",
+        "sequence base bold"
+      ],
+      "result": "pass",
+      "source_sha256": "c6af0545ea081a1ba6926660d8b64c07b049b62cabfdcc610cf025a730b74d73",
+      "golden_sha256": "13d75b9f1b250b0f6bb0e9e111ef28cb196421608a2effd4955f824745257504",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-grok-g6/hold_activity_base_bold.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-grok-g6/hold_activity_base_bold.svg",
+      "axes": [
+        "missing image",
+        "activity base bold"
+      ],
+      "result": "pass",
+      "source_sha256": "fe860c2d0c1040cc5a369d17e3b41a1c829eab7c477ba1e7745fce4e37a65242",
+      "golden_sha256": "a3170ad95e10c2f7851abe72863d14bca06d80d6d65c5e09edf0fd34640460bc",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-grok-g6/hold_class_base_italic.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-grok-g6/hold_class_base_italic.svg",
+      "axes": [
+        "missing image",
+        "class base italic"
+      ],
+      "result": "pass",
+      "source_sha256": "7796a8d9db1c09dcf1f439be8204bf365b02d827f163f04a99fa41a97efcf0a5",
+      "golden_sha256": "86016c321073da49fe1d9d02d19b962fc935093c956f210577524b8552efe11b",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-grok-g6/hold_state_base_italic.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-grok-g6/hold_state_base_italic.svg",
+      "axes": [
+        "missing image",
+        "state base italic"
+      ],
+      "result": "pass",
+      "source_sha256": "9c38543afdbc6ef7a9e15fd017c1791786d29578a6e7135aff84a771804993ed",
+      "golden_sha256": "93820e98c851e09d5fbb0e16948e939fe892be695b66c235309e66353a5257db",
+      "reference_exit": 0,
+      "reference_valid": true
+    }
+  ]
+}

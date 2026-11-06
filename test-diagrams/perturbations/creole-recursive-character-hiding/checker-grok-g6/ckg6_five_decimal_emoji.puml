@@ -1,0 +1,3 @@
+@startuml
+usecase "pop &#127881; and <U+1F389>" as U
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+skinparam StateFontStyle italic
+state Nest
+Nest : Wren<img:holdout-absent.png>Lark
+@enduml

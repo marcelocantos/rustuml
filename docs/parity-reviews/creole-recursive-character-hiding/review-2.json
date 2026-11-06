@@ -1,0 +1,220 @@
+{
+  "schema_version": 1,
+  "mechanism": "creole-recursive-character-hiding",
+  "reviewer": {
+    "task_id": "01a1b038-f966-72c2-b84f-aa9e5ff9d803",
+    "model": "grok-4.7",
+    "independence": "Independent checker. No maker edits, no children, no other worktrees.",
+    "branch": "review/grok-g6-creole"
+  },
+  "account_commit": "f550169136a2ec0fcea67fa0f78a681799ffa418",
+  "implementation_commit": "e36d76cc8a8a8448270c0bdb46ddbd7318c54935",
+  "evidence_tip": "3bc17a1201067c356a088d7ac44c74ae115f4e73",
+  "base_revision": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/grok-g6-creole 3bc17a1201067c356a088d7ac44c74ae115f4e73",
+    "CARGO_TARGET_DIR=$CACHE/target-tip cargo build --release --bin rustuml  # tip binary af23d85e052ee86be6e898379f6a3539ee20614eba0a38879c4ce9ca669d49a2",
+    "CARGO_TARGET_DIR=$CACHE/target-base cargo build --release --bin rustuml  # base binary cc8e5d1f1d953cee0c856f321d422df938c7c4b1615b048dd1f699f5552b130a from cb550c0d6",
+    "compare_svg_strict on whole Java stdout versus each CLI stdout (ckg6-score, rustuml-oracle compare.rs unchanged by this packet)",
+    "cargo test --release --workspace --lib",
+    "cargo test --release -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards --test doc_claims",
+    "cargo test --release -p rustuml --test pipe_mode",
+    "cargo clippy --release --workspace --all-targets --message-format=short",
+    "CLI -pipe -tsvg over 12550 goldens and 6328 perturbations, base binary and tip binary"
+  ],
+  "findings": [
+    "&#1114111; is a valid Java class label (exit 0, empty stderr, real CLASS diagram). The tip CLI exits 1: 'An invalid XML character (Unicode: 0xdfff)'. apply_amp_diese pushes char::from_u32(1114111), which is U+10FFFF. java_utf16 reserves U+10F800..=U+10FFFF as carriers for unpaired surrogates, and carried_unit(U+10FFFF) is 0xDFFF, so svg_export rejects the label. The registered probe tim-builtin-value-boundaries/checker-claude-round5/cr_ent_dec_10fffd.puml is the same hole one scalar down: class \"Vault &#1114109; end\" (U+10FFFD). Base CLI exits 0. Tip CLI exits 1 reporting 0xdffd. Strict compare of the tip stdout fails to parse. Base already missed that golden (6 diffs) and still produced a diagram.",
+    "U+00C6 is the right character and the wrong advance. Activity size 12, 'Step Sable \u00c6': Java textLength 74.4609, tip 71.8594. Title size 14, 'Title Thor \u00c6': Java 89.4346, tip 86.3379. Component size 14, 'Face \u00c6': Java 47.332, tip 44.2969. The ASCII label 'Comp Core' in that component diagram matches at 76.4121. Whole-output strict compare still fails (activity 10 diffs, chrome 3, component 1). The maker declared this residue for U+2028 and U+2029. \u00c6 is the same class on a held-out letter. U+1F389 in ckg6_five_decimal_emoji does match, so the hole is not every supplementary scalar.",
+    "&#128; on the class name Zed&#128;ora decodes to U+0080 in both the Java SVG and the tip SVG. The fill set is {#F1F1F1, #ADD1B2, #000000} on Java, base, and tip. textLength is 54.9199 versus 54.8652 (delta 0.0547, outside GEOM_EPS 0.02). This probe does not reproduce parse_entity_colors reading #233 out of &#233;. That residue remains the maker's ref_class_eacute_amp, one fill diff, reconfirmed on the CH re-score.",
+    "Ten held-out probes strict-match at the tip and failed at the base: leading zeros, adjacent references, five-digit emoji, a color argument, !define plus a TIM assignment, <U+0024> and <U+005C>, tilde forms, a link tooltip, a class stereotype with a mono member, and a WBS node. Lost strict matches on the 48-probe batch: 0. Forms Java does not convert match at both trees: &#x41;, bare &#;, <u+0044> and <U+010041>, and a reference split by Creole. CH re-score with these binaries against the maker's immutable Java results: 13/20 tip matches (the maker's match list) and 1/20 at the base. Separator probes and ref_class_eacute_amp stay misses. ref_invalid_uplus_nul is an INVALID crash page; the tip stdout contains a NUL.",
+    "&#36;, &#92;, &#55296;, and &#1114112; are exit-0 Java crash pages (Illegal group reference, character to be escaped is missing, invalid surrogate d800, not a valid code point 0x110000). They are INVALID. Base and tip stdout are byte-identical. &#0; is an exit-0 crash page for XML 0x0. The tip emits a raw NUL, so the comparator cannot parse the stdout. That change is on invalid input.",
+    "Timing, gantt, salt, JSON, YAML, and nwdiag probes are byte-identical base versus tip and still fail strict compare. Those emitters do not call push_literal, so the conversion never runs. Missing-emoji <:ckg6_nope:> stays literal beside a converted &#80;; Java splits the emoji fallback. That gap is pre-existing and the nearby reference did convert."
+  ],
+  "verdict": "rejected",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_leading_zeros.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_leading_zeros.svg",
+      "axes": [
+        "decimal reference",
+        "leading zeros"
+      ],
+      "result": "pass",
+      "source_sha256": "6c751d3fae5d79b0280d4507772e77f3393cecf5f4feade819176613170113f1",
+      "golden_sha256": "e81e498ea483e80569bdbb5305a7bcb19c715fae76aaf67ec37babae644a34ab",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_adjacent.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_adjacent.svg",
+      "axes": [
+        "decimal reference",
+        "adjacent references"
+      ],
+      "result": "pass",
+      "source_sha256": "e7f7f972d40dae4a42c279a6dbbb505c3e902c75242bd005a4663e6dc549529f",
+      "golden_sha256": "725f2b961d35029634af21fb24c8f666dcda6b02f1c8fb840b3f9ae36973b17c",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_five_decimal_emoji.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_five_decimal_emoji.svg",
+      "axes": [
+        "decimal reference",
+        "supplementary plane"
+      ],
+      "result": "pass",
+      "source_sha256": "7adc274fe726fb8456901a9ce6a4dfd97968ab4c83a5eafa2674b49404757d80",
+      "golden_sha256": "acdd2628dcc13b0ccbbca11e6b595d32883a748c0d2cacf57ceae234372fb0ac",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_color_argument.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_color_argument.svg",
+      "axes": [
+        "decimal reference",
+        "creole color argument"
+      ],
+      "result": "pass",
+      "source_sha256": "b5c6a0ea1fc14277e3042dbcfc497395cfe9cc24f11e9beddb1806470ee73cc4",
+      "golden_sha256": "b4bbee21c06b8e4a9f4d8b68e569840c35952b312633c45a88b53cfc8b9172f3",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_define_and_tim.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_define_and_tim.svg",
+      "axes": [
+        "decimal reference",
+        "define and tim"
+      ],
+      "result": "pass",
+      "source_sha256": "53901d3c2e45349d9b494ed447316c2351db46980b34660c1d4a20ac700bb3cc",
+      "golden_sha256": "0fa6517cf8b85c83b2657df116472f77652faa7886f7e09bcff2e3635a294408",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_uplus_money.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_uplus_money.svg",
+      "axes": [
+        "uplus notation",
+        "dollar and backslash"
+      ],
+      "result": "pass",
+      "source_sha256": "0d252899e91c4a7ec27e4286395fafd5af03d217b8eb2913759b08b45c42850d",
+      "golden_sha256": "b7aa03feebb5bd6d6f17871bd3c16d8168311bbd6cff6df7cddba96f79e9dc07",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_tilde_forms.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_tilde_forms.svg",
+      "axes": [
+        "tilde escape",
+        "decimal reference"
+      ],
+      "result": "pass",
+      "source_sha256": "bfbdadbfe893f17f0292601a75e5445be08efeb4ecbbd406f958f8c22c274f69",
+      "golden_sha256": "c4188f27ab729c5737b16949e1ebbddf52e04f9968474176edd88e0538fadbc6",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_link_tooltip.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_link_tooltip.svg",
+      "axes": [
+        "uplus notation",
+        "link tooltip"
+      ],
+      "result": "pass",
+      "source_sha256": "6c6a3d7c2806897853e8e8a1065293080d884f6d6cf48998cf3815fd3baebd01",
+      "golden_sha256": "4bc273cb993649b0843f4e6595d8666cd339c886d48ba89bfdd0de144792926a",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_class_member_stereo.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_class_member_stereo.svg",
+      "axes": [
+        "decimal reference",
+        "class member and stereotype"
+      ],
+      "result": "pass",
+      "source_sha256": "fd6b5a3d3138d6b61b77406d739b325ec443ae75a730dd20da0cb889ae2b36f9",
+      "golden_sha256": "bd39cc7fb808d0177a64fda524e2d4779803298ced34a065aa5b6cac3ab86fc6",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_wbs_nodes.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_wbs_nodes.svg",
+      "axes": [
+        "uplus notation",
+        "wbs consumer"
+      ],
+      "result": "pass",
+      "source_sha256": "ce02fd7c00b3180abe74c931ddee18b846e6c90f125d1e2028e12163be9ebb1a",
+      "golden_sha256": "a96b891ec12974a58894149a9de9ddb6fc2a961b115703afc2603f6488a81302",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_activity_action.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_activity_action.svg",
+      "axes": [
+        "uplus notation",
+        "text advance"
+      ],
+      "result": "fail",
+      "source_sha256": "0460ee37a0f5a28131bb742b9afe20c02fd27f80983318955411a88542d233ac",
+      "golden_sha256": "fac60692a54cff996620bdacabf7dd65c8b0fde8c7dca210edc207d54c017d0e",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_chrome_consumers.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_chrome_consumers.svg",
+      "axes": [
+        "decimal reference",
+        "text advance"
+      ],
+      "result": "fail",
+      "source_sha256": "8320f901201f2cde8dff736b94f796dc75499ee893a398b8ba83ff43cd0cc2bd",
+      "golden_sha256": "1a82d52291c1c6f32508385dad182ccad6e6e96730645d0a8c3f79a8d9deaf89",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_class_name_amp128.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_class_name_amp128.svg",
+      "axes": [
+        "decimal reference",
+        "c1 advance"
+      ],
+      "result": "fail",
+      "source_sha256": "ff23165747de56f2f4e052201da78b8811b422c0a89aa2df775f446c2078b1b0",
+      "golden_sha256": "59536c516331303197a12bff1aed54bbd46c9131956d2dc168d6dbf2ba2b307f",
+      "reference_exit": 0,
+      "reference_valid": true
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_amp_last_scalar.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-g6/ckg6_amp_last_scalar.svg",
+      "axes": [
+        "decimal reference",
+        "carrier-range scalar"
+      ],
+      "result": "fail",
+      "source_sha256": "ec1c087872ffd4fea527a2834c1ebdcaae0a9d410c2f266be98266c0d506185f",
+      "golden_sha256": "c812148e2bb1b8ef27cdff7db2cea74be467a3f4e39ffd7256f651154bb37fb1",
+      "reference_exit": 0,
+      "reference_valid": true
+    }
+  ]
+}

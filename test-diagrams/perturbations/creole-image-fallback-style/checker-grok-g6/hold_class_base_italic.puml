@@ -1,0 +1,6 @@
+@startuml
+skinparam ClassAttributeFontStyle italic
+class Nest {
+Wren<img:holdout-absent.png>Lark
+}
+@enduml

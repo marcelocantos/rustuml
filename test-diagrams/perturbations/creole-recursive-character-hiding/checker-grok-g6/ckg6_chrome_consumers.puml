@@ -1,0 +1,13 @@
+@startuml
+title Title &#84;hor <U+00C6>
+header Header &#72;elm
+footer Footer &#70;ern
+caption Caption &#67;airn
+legend
+Legend &#76;arch
+endlegend
+participant "Part &#80;ell" as P
+actor "Act <U+00C7>ora" as A
+P -> A : msg &#77;oss ""mono &#77;""
+note over P : note &#78;ock
+@enduml
