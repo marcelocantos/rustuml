@@ -999,7 +999,7 @@ fn apply_amp_diese(text: &str) -> Option<String> {
                 if ch == '$' || ch == '\\' {
                     return None;
                 }
-                out.push(ch);
+                push_decoded_scalar(&mut out, ch);
                 index = end + 1;
                 continue;
             }
@@ -1033,7 +1033,7 @@ fn apply_uplus(text: &str) -> Option<String> {
             }
             if let Some(len) = matched {
                 let value = i32::from_str_radix(&text[hex_at..hex_at + len], 16).ok()?;
-                out.push(java_to_chars(value)?);
+                push_decoded_scalar(&mut out, java_to_chars(value)?);
                 index = hex_at + len + 1;
                 continue;
             }
@@ -1064,6 +1064,18 @@ fn java_parse_int_decimal(digits: &str) -> Option<i32> {
 
 fn java_to_chars(value: i32) -> Option<char> {
     u32::try_from(value).ok().and_then(char::from_u32)
+}
+
+/// Store one scalar `Character.toChars` accepted.
+///
+/// `ESCAPE`..=U+10FFFF is also the unpaired-surrogate carrier range.
+/// `java_utf16::escape` prefixes a legitimate scalar there so `tokens`
+/// reads a character and the exporter does not see a lone unit.
+fn push_decoded_scalar(out: &mut String, ch: char) {
+    if rustuml_parser::java_utf16::reserved(ch) {
+        out.push(rustuml_parser::java_utf16::ESCAPE);
+    }
+    out.push(ch);
 }
 
 // CharHidder.hideChar/unhideChar reserve E000..E0FF for hidden syntax.
@@ -2119,6 +2131,35 @@ mod tests {
         let linked = parse_segments("[[https://example.com{<U+0041>} visible]]");
         assert_eq!(linked[0].text, "visible");
         assert_eq!(linked[0].style.link_title.as_deref(), Some("<U+0041>"));
+    }
+
+    #[test]
+    fn decoded_scalars_in_the_carrier_range_stay_characters() {
+        use rustuml_parser::java_utf16::{self, Token};
+        // Decimal form only: `<U+HHHHHH>` is six digits, and Java's `{4,5}`
+        // pattern leaves it literal. Five hex digits stop at U+FFFFF, below
+        // ESCAPE (U+10F7FF).
+        let cases = [
+            ("&#1112062;", '\u{10F7FE}', false),
+            ("&#1112063;", '\u{10F7FF}', true),
+            ("&#1112064;", '\u{10F800}', true),
+            ("&#1114109;", '\u{10FFFD}', true),
+            ("&#1114111;", '\u{10FFFF}', true),
+            ("&#128640;", '\u{1F680}', false),
+            ("<U+1F680>", '\u{1F680}', false),
+            ("&#233;", '\u{00e9}', false),
+        ];
+        for (source, scalar, reserved) in cases {
+            let text = &parse_segments(source)[0].text;
+            let tokens: Vec<_> = java_utf16::tokens(text).collect();
+            assert_eq!(tokens, vec![Token::Char(scalar)], "{source} -> {text:?}");
+            assert_eq!(text.contains(java_utf16::ESCAPE), reserved, "{source}");
+        }
+        assert_eq!(parse_segments("<U+10FFFF>")[0].text, "&lt;U+10FFFF&gt;");
+        assert_eq!(
+            parse_segments("Edge &#1114111; tail")[0].text,
+            format!("Edge {}\u{10FFFF} tail", java_utf16::ESCAPE)
+        );
     }
 
     #[test]
