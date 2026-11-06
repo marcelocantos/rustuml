@@ -1,0 +1,371 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "cases": [
+  {
+   "name": "g3_bi2_symbols",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout2/g3_bi2_symbols.puml",
+   "source_sha256": "ceed5106c8a1ecb0340721a7e4efa78e3483a785f663f01dd9209677e00185ed",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "symbols",
+    "AppleSymbols",
+    "U+2604",
+    "abstract-bold",
+    "size-14"
+   ]
+  },
+  {
+   "name": "g3_bi2_symbols_plain",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout2/g3_bi2_symbols_plain.puml",
+   "source_sha256": "a4f3a9bbd64d6b1ac36dfe4f855fc89c13e8e6f2d228d3ad85bb55e149ad93fb",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "symbols",
+    "AppleSymbols",
+    "U+2604",
+    "size-14",
+    "plain-control"
+   ]
+  },
+  {
+   "name": "g3_bi2_dingbat",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout2/g3_bi2_dingbat.puml",
+   "source_sha256": "4a3e689d7456658485c73339128f4886e0ce24664e160a8f793d5f773d3e3be7",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "dingbats",
+    "ZapfDingbatsITC",
+    "U+27B2",
+    "abstract-bold",
+    "size-14"
+   ]
+  },
+  {
+   "name": "g3_bi2_dingbat_plain",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout2/g3_bi2_dingbat_plain.puml",
+   "source_sha256": "34e57775b2fce7dee3bcbeeb5bafb7c177047c5f0d94a174f180f39666f27af4",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "dingbats",
+    "ZapfDingbatsITC",
+    "U+27B2",
+    "size-14",
+    "plain-control"
+   ]
+  },
+  {
+   "name": "g3_bi2_cjk",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout2/g3_bi2_cjk.puml",
+   "source_sha256": "a9d44b48c6b5cb798010f6ee7c12af24bebb6bf7116d1d7d35a6afb045da94ef",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "cjk-face",
+    "HiraginoSans-W6",
+    "U+2601",
+    "abstract-bold",
+    "size-14"
+   ]
+  },
+  {
+   "name": "g3_bi2_cjk_plain",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout2/g3_bi2_cjk_plain.puml",
+   "source_sha256": "44d612f90b3a351f1f2abf351c0d99d331f2c9f26af11daa47f1800bf533d3cc",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "cjk-face",
+    "HiraginoSans-W6",
+    "U+2601",
+    "size-14",
+    "plain-control"
+   ]
+  },
+  {
+   "name": "g3_bi2_emoji",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout2/g3_bi2_emoji.puml",
+   "source_sha256": "0a6fd2fe30afac8e92c01a78dee93e15271da797aca00cabc70fdd1472f962db",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "emoji",
+    "AppleColorEmoji",
+    "U+2614",
+    "abstract-bold",
+    "size-14"
+   ]
+  },
+  {
+   "name": "g3_bi2_emoji_plain",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout2/g3_bi2_emoji_plain.puml",
+   "source_sha256": "e298f1f2bfd00127ea280fe6a6339ad82cfa02e3d0094c9f76c53fdfbb0bb1db",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "emoji",
+    "AppleColorEmoji",
+    "U+2614",
+    "size-14",
+    "plain-control"
+   ]
+  },
+  {
+   "name": "g3_bi2_mixed",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout2/g3_bi2_mixed.puml",
+   "source_sha256": "596778bf67a6c59d44362e6dc91d759d714cc7f70af823b475dcdef9d2be289b",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "mixed",
+    "ascii-and-dingbat",
+    "U+27B2",
+    "abstract-bold",
+    "size-14"
+   ]
+  },
+  {
+   "name": "g3_bi2_mixed_plain",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout2/g3_bi2_mixed_plain.puml",
+   "source_sha256": "aaef59185f2ba7479308c177c4bb07e4a6ed7c872a64f77de4fcdf27c7512dd6",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "mixed",
+    "ascii-and-dingbat",
+    "U+27B2",
+    "size-14",
+    "plain-control"
+   ]
+  },
+  {
+   "name": "g3_bi2_emoji_12",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout2/g3_bi2_emoji_12.puml",
+   "source_sha256": "ac018245027c0335108cac12b0dd22005a8f98d4be122181d4c119b2408a2620",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "emoji",
+    "AppleColorEmoji",
+    "U+2614",
+    "abstract-bold",
+    "size-12"
+   ]
+  },
+  {
+   "name": "g3_bi2_emoji_12_plain",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout2/g3_bi2_emoji_12_plain.puml",
+   "source_sha256": "09cf42cebacb8acb7c60c1db7a20a7393c7f4535e6ee1771fa4cff25ecda905f",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "emoji",
+    "AppleColorEmoji",
+    "U+2614",
+    "size-12",
+    "plain-control"
+   ]
+  },
+  {
+   "name": "g3_bi2_dingbat_12",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout2/g3_bi2_dingbat_12.puml",
+   "source_sha256": "8c0088b14440b64669f7ad58aef7eacfd1f81c737a948fa274b1adc3a3c26e3a",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "dingbats",
+    "ZapfDingbatsITC",
+    "U+27B2",
+    "abstract-bold",
+    "size-12"
+   ]
+  },
+  {
+   "name": "g3_bi2_dingbat_12_plain",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout2/g3_bi2_dingbat_12_plain.puml",
+   "source_sha256": "66bc204c8fe125a8b552d099df7b855a12174179bf7302818902febfa63aef44",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "dingbats",
+    "ZapfDingbatsITC",
+    "U+27B2",
+    "size-12",
+    "plain-control"
+   ]
+  }
+ ]
+}
