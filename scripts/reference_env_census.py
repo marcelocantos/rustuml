@@ -582,10 +582,8 @@ def self_test() -> None:
         live = Path(tmp)
         (live / "census.txt").write_text(text, encoding="utf-8")
         same = check(live, committed)
-        if same != 2:
-            # The artifact census leaves FreeType's dylib hash empty, so a
-            # comparison against itself reports that one unpinned field.
-            raise SystemExit(f"self-check of the committed census exited {same}, expected 2")
+        if same != 0:
+            raise SystemExit(f"self-check of the committed census exited {same}, expected 0")
         drifted = text.replace(
             "658718d77497145281cb0ec45ff2fe7c6e18062b2a38f837d0d792d9be3a9ba3",
             "0000000000000000000000000000000000000000000000000000000000000000",

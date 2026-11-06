@@ -21,8 +21,10 @@ asset font is a `.ttf`, `.otf`, `.ttc` or `.dfont`. Catalog `.xml` files and
 `Info.plist` files are not asset fonts and are not written.
 
 `check` uses that same rule, so a census that still lists those catalog
-files does not count them as drift. Exit 0 means every pinned fact matches.
-Exit 1 means a pinned path, size or hash moved. Exit 2 means the pinned
-facts match but the baseline still has an open hash (FreeType's dylib,
-user-font contents, or a MobileAsset content hash). Exit 2 is not drift.
+files does not count them as drift. The committed census is the 2026-11-06
+live record (`868a9072ecffd939c07e174b7c606679b5ac379a5ae7c1d48f2cf25336458ae6`,
+relay `/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g7-census2/`).
+Exit 0 means every pinned fact matches. Exit 1 means a pinned path, size
+or hash moved. Exit 2 means the pinned facts match but a hash is still
+open. Exit 2 is not drift. A matching host exits 0.
 Return `$OUT/census.txt`. Do not `brew upgrade` on this host.

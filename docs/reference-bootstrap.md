@@ -172,7 +172,7 @@ Shaping libraries the reference JVM loads, confirmed by
 | Piece | Path | SHA256 |
 | --- | --- | --- |
 | HarfBuzz 15.0.0_1 | `/opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib` | `b04ab259a343ba51a50db8d1df637160f31d342a66c4192e18dba63ea42ed04a` |
-| FreeType 2.15.0 | `/opt/homebrew/Cellar/freetype/2.15.0/lib/libfreetype.6.dylib` | `1bf70387c4ef59accba8116c847cb87d2018ded2672db551686b95dce4c5d931` in the 2026-11-06 relay; not yet the committed census |
+| FreeType 2.15.0 | `/opt/homebrew/Cellar/freetype/2.15.0/lib/libfreetype.6.dylib` | `1bf70387c4ef59accba8116c847cb87d2018ded2672db551686b95dce4c5d931` |
 | `libfontmanager.dylib` | the OpenJDK 21.0.5 copy | `80488062f9ab885f1860b0e3b8fc3d13030a0a05765c06d12301668d7404812c` |
 | `java` | `.../openjdk.jdk/Contents/Home/bin/java` | `ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9` |
 
@@ -184,25 +184,24 @@ compatibility 27.0.0 / current 27.2.0. Relay batches captured before
 2026-10-28 were shaped by an older HarfBuzz and are not this oracle.
 
 The census is `tools/font-chain-reference/monkeyman-reference-env/census.txt`,
-sha256 `c0d8c8ab478d413d89cf04062c07e6ac9bcd8daede857e75d8453551db99da7c`.
-It was assembled from the round-6, round-8, round-9 and round-11 Monkey Man
-captures (font-chain SHA256SUMS `1c345cc384f0edb939dac3b87cf135db67ed7b6f8ffb76b586a8f9fd8480a6ed`,
+sha256 `868a9072ecffd939c07e174b7c606679b5ac379a5ae7c1d48f2cf25336458ae6`.
+It is the 2026-11-06 live record from
+`/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g7-census2/`,
+byte for byte. An earlier record the same day
+(`5a60468e222a9ae22f7dc26ba906f0cf7817b8991123f6c3f79f0c4d88809cda`)
+listed catalog `.xml` and `Info.plist` files as asset fonts and left 59
+MobileAsset font-file hashes as `-`. An asset font is a `.ttf`, `.otf`,
+`.ttc` or `.dfont`. `record` and `check` share that rule, and this census
+hashes every asset font file, every user font, and the FreeType dylib.
+`scripts/reference_env_census.py check` is the drift gate a relay runs
+before trusting a new Java reference. Exit 0 means the pinned facts match.
+Exit 1 means a pinned fact moved. Exit 2 means they match and a hash is
+still open. The font-chain tests fail when this census and the stored
+per-face extractions disagree. The round-6, round-8, round-9 and round-11
+captures remain the stored extractions (font-chain SHA256SUMS
+`1c345cc384f0edb939dac3b87cf135db67ed7b6f8ffb76b586a8f9fd8480a6ed`,
 styles `ad8e6566043819726c0146b76261b2aea3710eb83372d59547b46c3132f3ed55`,
 ascii `f5def121617419f6d55ed7361fdba5b1d0e0b90433766f1e662a0c81586573d1`).
-`scripts/reference_env_census.py check` is the drift gate a relay runs
-before trusting a new Java reference. Exit 1 means a pinned fact moved.
-An asset font is a `.ttf`, `.otf`, `.ttc` or `.dfont`. The 2026-11-06
-relay at `/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g7-census/`
-(census SHA256 `5a60468e222a9ae22f7dc26ba906f0cf7817b8991123f6c3f79f0c4d88809cda`)
-listed catalog `.xml` and `Info.plist` files as asset fonts and left 59
-MobileAsset font-file hashes as `-`. That file cannot be the fully pinned
-baseline, and hashing every font file changes what `record` writes, so the
-next census has to be recorded again.
-`tools/font-chain-reference/monkeyman-census-request/` is that request.
-`record` and `check` share the font-file rule, and `record` hashes every
-asset font file.
-The font-chain tests fail when that census and the stored per-face
-extractions disagree.
 
 ## PDF exporter (owner decision, 6 November 2026)
 

@@ -181,7 +181,10 @@ fn committed_census_matches_stored_face_extractions() {
         census_scalar(&census, "jdk.java.sha256"),
         "ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9"
     );
-    assert!(census_scalar(&census, "shaping.freetype.sha256").is_empty());
+    assert_eq!(
+        census_scalar(&census, "shaping.freetype.sha256"),
+        "1bf70387c4ef59accba8116c847cb87d2018ded2672db551686b95dce4c5d931"
+    );
     assert_eq!(
         census_scalar(&census, "shaping.freetype.loaded"),
         "/opt/homebrew/Cellar/freetype/2.15.0/lib/libfreetype.6.dylib"
