@@ -26,6 +26,9 @@ use crate::plantuml_metrics as pm;
 use crate::svg::normalize_svg_link_title;
 use rustuml_parser::java_utf16;
 
+#[path = "face_cmap_tables.rs"]
+mod face_cmap_tables;
+
 const TAB_STOP_SPACES: usize = 8;
 
 /// Effective styling for a base font that the caller controls. Each call to
@@ -1042,11 +1045,6 @@ const HELVETICA_FACES: AsciiFaces = AsciiFaces {
     bold_italic: &HELVETICA_BOLD_ITALIC_ASCII,
 };
 
-/// U+00AB and U+00BB were the only non-ASCII arms of the previous Helvetica
-/// tables (1139 font units, both weights). Kept until `face-cmap-advances`
-/// supplies the extracted advance of the face. Not a new measurement.
-const HELVETICA_RETAINED_GUILLEMET_UNITS: u16 = 1139;
-
 fn family_table_text_width(
     text: &str,
     font_size: f64,
@@ -1054,39 +1052,33 @@ fn family_table_text_width(
     italic: bool,
     family: ChainFamily,
     faces: &AsciiFaces,
+    cmap: &face_cmap_tables::CmapSlots,
 ) -> f64 {
     let table = faces.slot(bold, italic);
+    let extra = cmap.slot(bold, italic);
     chain_text_width(
         text,
         font_size,
         bold,
         ChainFace::for_style(family, bold, italic),
-        |c| ascii_advance(table, c, font_size),
+        |c| mapped_advance(table, extra, c, font_size),
     )
 }
 
-fn ascii_advance(table: &[u16; 95], c: char, font_size: f64) -> Option<f64> {
-    let code = c as usize;
-    (32..=126)
-        .contains(&code)
-        .then(|| f64::from(table[code - 32]) / ASCII_UNITS_PER_EM * font_size)
-}
-
-fn helvetica_text_width(text: &str, font_size: f64, bold: bool, italic: bool) -> f64 {
-    let table = HELVETICA_FACES.slot(bold, italic);
-    chain_text_width(
-        text,
-        font_size,
-        bold,
-        ChainFace::for_style(ChainFamily::Helvetica, bold, italic),
-        |c| {
-            ascii_advance(table, c, font_size).or_else(|| {
-                (c == '\u{00AB}' || c == '\u{00BB}').then(|| {
-                    f64::from(HELVETICA_RETAINED_GUILLEMET_UNITS) / ASCII_UNITS_PER_EM * font_size
-                })
-            })
-        },
-    )
+/// Printable ASCII comes from the `[u16; 95]` face. Every other scalar the
+/// face's cmap maps comes from `extra`. A miss is `None`, so
+/// [`chain_text_width`] keeps the fallback it uses for an unmapped character.
+fn mapped_advance(ascii: &[u16; 95], extra: &[(u32, u16)], c: char, font_size: f64) -> Option<f64> {
+    let code = u32::from(c);
+    let units = if (0x20..=0x7E).contains(&code) {
+        Some(ascii[(code - 0x20) as usize])
+    } else {
+        extra
+            .binary_search_by_key(&code, |row| row.0)
+            .ok()
+            .map(|index| extra[index].1)
+    };
+    units.map(|units| f64::from(units) / ASCII_UNITS_PER_EM * font_size)
 }
 
 /// Width of carried text in a physical face whose own table covers some
@@ -1143,8 +1135,17 @@ fn family_text_width(
             italic,
             ChainFamily::Arial,
             &ARIAL_FACES,
+            &face_cmap_tables::ARIAL_CMAP,
         ),
-        MetricFamily::Helvetica => helvetica_text_width(text, font_size, bold, italic),
+        MetricFamily::Helvetica => family_table_text_width(
+            text,
+            font_size,
+            bold,
+            italic,
+            ChainFamily::Helvetica,
+            &HELVETICA_FACES,
+            &face_cmap_tables::HELVETICA_CMAP,
+        ),
         MetricFamily::Verdana => family_table_text_width(
             text,
             font_size,
@@ -1152,6 +1153,7 @@ fn family_text_width(
             italic,
             ChainFamily::Verdana,
             &VERDANA_FACES,
+            &face_cmap_tables::VERDANA_CMAP,
         ),
         MetricFamily::TimesNewRoman => {
             pm::times_new_roman_text_width(text, font_size, bold, italic)
@@ -1925,6 +1927,160 @@ mod tests {
     /// hash as the reference host's), and each (bold, italic) slot reads its
     /// own face's table.
     #[test]
+    fn cmap_advances_are_the_extracted_faces() {
+        use sha2::{Digest, Sha256};
+        use std::collections::{BTreeSet, HashMap};
+        const DIR: &str = "tools/font-chain-reference/cmap-advances-g2";
+        const SHA256SUMS_SHA256: &str =
+            "1b1e9a8eeca7aeb326e825c8c583129de2c4eb846aba3c62e15aacea8e4d20fe";
+        const OWN_DIR: &str = "tools/font-chain-reference/monkeyman-round9";
+        let hex = |bytes: &[u8]| {
+            Sha256::digest(bytes)
+                .iter()
+                .map(|b| format!("{b:02x}"))
+                .collect::<String>()
+        };
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let dir = root.join(DIR);
+        let sums = std::fs::read(dir.join("SHA256SUMS")).expect("stored SHA256SUMS");
+        assert_eq!(hex(&sums), SHA256SUMS_SHA256);
+        for line in String::from_utf8(sums).unwrap().lines() {
+            let (hash, name) = line.split_once("  ").expect("shasum line");
+            let data = std::fs::read(dir.join(name)).unwrap_or_else(|e| panic!("{name}: {e}"));
+            assert_eq!(hex(&data), hash, "{name}");
+        }
+        let font_hashes = |path: std::path::PathBuf| -> HashMap<String, String> {
+            std::fs::read_to_string(path)
+                .unwrap()
+                .lines()
+                .filter_map(|line| {
+                    let (hash, path) = line.split_once("  ")?;
+                    (hash.len() == 64).then(|| (path.to_string(), hash.to_string()))
+                })
+                .collect()
+        };
+        let here = font_hashes(dir.join("font-hashes.txt"));
+        let reference_host = font_hashes(root.join(OWN_DIR).join("font-hashes.txt"));
+        let p_runs = |path: std::path::PathBuf| -> BTreeSet<u32> {
+            let mut scalars = BTreeSet::new();
+            for line in std::fs::read_to_string(path).unwrap().lines() {
+                let mut fields = line.split('\t');
+                if fields.next() != Some("P") {
+                    continue;
+                }
+                let start = u32::from_str_radix(fields.next().unwrap(), 16).unwrap();
+                let end = u32::from_str_radix(fields.next().unwrap(), 16).unwrap();
+                for code in start..=end {
+                    if !(0xD800..=0xDFFF).contains(&code) {
+                        scalars.insert(code);
+                    }
+                }
+            }
+            scalars
+        };
+        for (cmap, files) in [
+            (
+                &face_cmap_tables::ARIAL_CMAP,
+                [
+                    "ArialMT.plain",
+                    "Arial-BoldMT.bold",
+                    "Arial-ItalicMT.italic",
+                    "Arial-BoldItalicMT.bolditalic",
+                ],
+            ),
+            (
+                &face_cmap_tables::VERDANA_CMAP,
+                [
+                    "Verdana.plain",
+                    "Verdana-Bold.bold",
+                    "Verdana-Italic.italic",
+                    "Verdana-BoldItalic.bolditalic",
+                ],
+            ),
+            (
+                &face_cmap_tables::HELVETICA_CMAP,
+                [
+                    "Helvetica.plain",
+                    "Helvetica-Bold.bold",
+                    "Helvetica-Oblique.italic",
+                    "Helvetica-BoldOblique.bolditalic",
+                ],
+            ),
+        ] {
+            let styles = [(false, false), (true, false), (false, true), (true, true)];
+            for ((bold, italic), file) in styles.into_iter().zip(files) {
+                let text = std::fs::read_to_string(dir.join(format!("{file}.cmap.tsv")))
+                    .unwrap_or_else(|e| panic!("{file}: {e}"));
+                let header = |key: &str| {
+                    text.lines()
+                        .find_map(|line| line.strip_prefix(key))
+                        .unwrap_or_else(|| panic!("{file}: no {key}"))
+                        .to_string()
+                };
+                assert!(header("#units_per_em\t").starts_with("2048\t"), "{file}");
+                let font_file = header("#file\t");
+                assert_eq!(
+                    here.get(&font_file),
+                    reference_host.get(&font_file),
+                    "{font_file}"
+                );
+                let mut rows = Vec::new();
+                let mut scalars = BTreeSet::new();
+                for line in text.lines().filter(|line| line.starts_with("M\t")) {
+                    let fields: Vec<&str> = line.split('\t').collect();
+                    let code = u32::from_str_radix(fields[1], 16).unwrap();
+                    let advance: f64 = fields[3].parse().unwrap();
+                    assert_eq!(advance.fract(), 0.0, "{file} {code:04X}");
+                    scalars.insert(code);
+                    if !(0x20..=0x7E).contains(&code) {
+                        rows.push((code, advance as u16));
+                    }
+                }
+                let mapped: usize = header("#mapped\t").trim().parse().unwrap();
+                assert_eq!(scalars.len(), mapped, "{file}");
+                assert_eq!(
+                    p_runs(root.join(OWN_DIR).join(format!("{file}.own.tsv"))),
+                    scalars,
+                    "{file}: cmap scalars and the round-9 P runs disagree"
+                );
+                assert_eq!(
+                    cmap.slot(bold, italic),
+                    rows.as_slice(),
+                    "{file}: bold={bold} italic={italic}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn verdana_italic_mapped_text_uses_the_face_advance() {
+        use crate::font_chain::{ChainFace, ChainFamily};
+        assert_eq!(
+            pm::fmt_coord(measure_with_family_and_face(
+                "«Ferrous gauge vista»",
+                14.0,
+                false,
+                true,
+                "Verdana"
+            )),
+            "157.2197"
+        );
+        // U+4E00 is outside Verdana's cmap, so the width is the fallback chain.
+        let face = ChainFace::for_style(ChainFamily::Verdana, false, true);
+        let unmapped = "\u{4E00}";
+        assert!(
+            face_cmap_tables::VERDANA_CMAP
+                .italic
+                .binary_search_by_key(&0x4E00, |row| row.0)
+                .is_err()
+        );
+        assert_eq!(
+            measure_with_family_and_face(unmapped, 14.0, false, true, "Verdana"),
+            chain_text_width(unmapped, 14.0, false, face, |_| None)
+        );
+    }
+
+    #[test]
     fn ascii_tables_are_the_extracted_faces() {
         use sha2::{Digest, Sha256};
         use std::collections::HashMap;
@@ -2286,46 +2442,47 @@ mod tests {
         // Menlo Bold Italic and Menlo Bold hide the same scalars in every
         // context (monospaced width counts cells only).
         const EQUIVALENT: [(&str, bool); 1] = [("Monospaced", true)];
-        // The face's own ASCII table, chosen by the face's own (bold, italic).
-        fn ascii(table: &[u16; 95], c: char) -> Option<f64> {
-            ascii_advance(table, c, SIZE)
-        }
         type OwnWidth = fn(char, bool, bool) -> Option<f64>;
         // (family name as consumers pass it, chain family, own advance table)
         let families: [(&str, ChainFamily, Option<OwnWidth>); 5] = [
             (
                 "Arial",
                 ChainFamily::Arial,
-                Some(|c, bold, italic| match (bold, italic) {
-                    (false, false) => ascii(&ARIAL_ASCII, c),
-                    (true, false) => ascii(&ARIAL_BOLD_ASCII, c),
-                    (false, true) => ascii(&ARIAL_ITALIC_ASCII, c),
-                    (true, true) => ascii(&ARIAL_BOLD_ITALIC_ASCII, c),
+                Some(|c, bold, italic| {
+                    mapped_advance(
+                        ARIAL_FACES.slot(bold, italic),
+                        face_cmap_tables::ARIAL_CMAP.slot(bold, italic),
+                        c,
+                        SIZE,
+                    )
                 }),
             ),
             (
                 // Helvetica-Oblique and Helvetica-BoldOblique share the
-                // upright advances (ascii-advances-round11).
+                // upright ASCII advances (ascii-advances-round11). Their
+                // non-ASCII cmap rows still differ, and those rows are the
+                // own advance.
                 "Helvetica",
                 ChainFamily::Helvetica,
                 Some(|c, bold, italic| {
-                    let table = HELVETICA_FACES.slot(bold, italic);
-                    ascii_advance(table, c, SIZE).or_else(|| {
-                        (c == '\u{00AB}' || c == '\u{00BB}').then(|| {
-                            f64::from(HELVETICA_RETAINED_GUILLEMET_UNITS) / ASCII_UNITS_PER_EM
-                                * SIZE
-                        })
-                    })
+                    mapped_advance(
+                        HELVETICA_FACES.slot(bold, italic),
+                        face_cmap_tables::HELVETICA_CMAP.slot(bold, italic),
+                        c,
+                        SIZE,
+                    )
                 }),
             ),
             (
                 "Verdana",
                 ChainFamily::Verdana,
-                Some(|c, bold, italic| match (bold, italic) {
-                    (false, false) => ascii(&VERDANA_ASCII, c),
-                    (true, false) => ascii(&VERDANA_BOLD_ASCII, c),
-                    (false, true) => ascii(&VERDANA_ITALIC_ASCII, c),
-                    (true, true) => ascii(&VERDANA_BOLD_ITALIC_ASCII, c),
+                Some(|c, bold, italic| {
+                    mapped_advance(
+                        VERDANA_FACES.slot(bold, italic),
+                        face_cmap_tables::VERDANA_CMAP.slot(bold, italic),
+                        c,
+                        SIZE,
+                    )
                 }),
             ),
             ("Monospaced", ChainFamily::Menlo, None),
