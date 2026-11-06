@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-arial-text-width",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageStateCommon.java:70-75 — title TextBlock is Display.create8 of getStyleStateTitle(entity, skinParam).getFontConfiguration(...), so the name is measured in the state title style's font.",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageState.java:78-83 — field TextBlock is Display.create8 of getStyleStateHeader().getFontConfiguration(...).",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageState.java:88-96 — calculateDimensionSlow merges title.calculateDimension and fields.calculateDimension, then delta(MARGIN*2+2*MARGIN_LINE) and atLeast(MIN_WIDTH, MIN_HEIGHT).",
+    "src/main/java/net/sourceforge/plantuml/style/Style.java:203-214 — getUFont reads FontName, FontSize (default 14), FontStyle.asFontFace, and FontWeight.",
+    "src/main/java/net/sourceforge/plantuml/style/ValueImpl.java:159-178 — asFontFace: bold, italic, plain/normal, or a CSS weight; anything else, including \"bold italic\", is UFontFace.normal().",
+    "src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java:206-207 — addConFont(\"state\", SName.state) and addConFont(\"stateAttribute\", SName.state).",
+    "src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java:420-423 — addConFont registers skinparam+FontName/FontStyle/FontColor/FontSize as style properties.",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverTextSvg.java:98-129 and 181-182 — the drawn UFont's StringBounder width is the SVG textLength.",
+    "src/main/java/net/sourceforge/plantuml/klimt/font/StringBounderRaw.java:53-68 — calculateDimension measures that UFont (rich text mutates the same font).",
+    "Rust tables already ported: crates/rustuml-render/src/text_render.rs ARIAL_ASCII / ARIAL_BOLD_ASCII / ARIAL_ITALIC_ASCII / ARIAL_BOLD_ITALIC_ASCII (lines 884-921) and family_table_text_width (998-1018), from tools/font-chain-reference/ascii-advances-round11, selected by (bold, italic) via measure_with_family_and_face."
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs state_text_width_with_family (1616-1638) special-cases Arial into arial_text_width (1657-1665).",
+    "Callers: AutonomousTextStyle::width (2236-2244), which the no-oracle path uses whenever the style program is non-empty (state_node_size at 6604-6614), and layout_node_size_with_font (697-716) on the oracle / empty-program path.",
+    "skinparam state { FontName Arial } is stored as stateFontName (parse/state.rs:465-472) and legacy_mappings FONT_PREFIXES (\"state\", [\"state\"]) x fontname (parse/style.rs:1427-1428, 1471-1483) adds a style declaration, so the golden takes the autonomous path. The label branch is still reached because AutonomousTextStyle::width calls state_text_width_with_family."
+  ],
+  "invariant": "A state name or field in a named font is measured with that font's face table (bold/italic selected by the resolved FontConfiguration), exactly as Java's StringBounder measures the drawn UFont; no width depends on label text.",
+  "causal_divergence": "crates/rustuml-render/src/state.rs arial_text_width (introduced by ceda8d9f2) returns 9.3379 when the measured string is exactly \"A\" or \"B\", the size is 14 and the face is not bold. Every other Arial string, including italic, is measured with text_render::measure, which is SansSerif and drops italic. That is a fixture-label conditional (Parity Honesty rule 2).",
+  "planned_change": "Delete arial_text_width. Arial goes through text_render::measure_with_family_and_face, which already selects ARIAL_FACES by bold and italic and falls through the font chain for characters outside the ASCII table. No new decimal literal. No label match. No SVG rewrite. Add a harness_guards test that rejects a match arm whose pattern is one or more string literals and whose body returns a high-precision float (3+ decimal places) inside shipping crate sources. No existing allow-list is edited. If that scan hits a legitimate site, the test is not added and the guard is reported as a proposal. A library assertion calls the public measurement path for the reference label and one held-out label. It does not branch on the label. Before removing the field, build a mutant of the Arial-fixed tree that passes false instead of font.bold and compare whole CLI output with the unmutated tip on every golden and perturbation. If that mutant is byte-identical (stdout, and exit status; stderr only where a pre-existing panic's thread id differs), an addendum is committed and the field is removed, matching round 11. If any output differs, the field stays and a Java-backed pin is requested through the relay instead of being invented.",
+  "perturbation_axes": [
+    "label text (single letters other than A/B, A and B inside words, aliases)",
+    "font face (plain, bold, italic, bold italic)",
+    "font size (other than 14)",
+    "font naming route (stateFontName, defaultFontName, <style>)",
+    "state shape (composite, concurrent, notes, descriptions)"
+  ],
+  "provenance": "Root account assembled by the parent at merge from maker-grok/account.json (maker commit e576a9b94), because the maker brief placed the account under maker-grok/ only. Content is the maker's; no claim added."
+}

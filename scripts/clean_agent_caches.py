@@ -41,9 +41,23 @@ BYTES_PER_GB = 1024**3
 
 
 def is_cargo_target(d: Path) -> bool:
+    """A Cargo build directory.
+
+    Cargo writes CACHEDIR.TAG only when it creates the directory itself, so a
+    CARGO_TARGET_DIR made beforehand (mkdir -p) has no tag. Those are
+    recognised by Cargo's own .rustc_info.json plus a profile directory
+    holding .fingerprint.
+    """
     tag = d / "CACHEDIR.TAG"
     try:
-        return tag.is_file() and "cargo" in tag.read_text(errors="replace").lower()
+        if tag.is_file() and "cargo" in tag.read_text(errors="replace").lower():
+            return True
+    except OSError:
+        return False
+    if not (d / ".rustc_info.json").is_file():
+        return False
+    try:
+        return any((child / ".fingerprint").is_dir() for child in d.iterdir() if child.is_dir())
     except OSError:
         return False
 

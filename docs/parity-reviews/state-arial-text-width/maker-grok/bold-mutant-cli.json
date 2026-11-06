@@ -1,0 +1,10 @@
+{
+ "sources": 18878,
+ "identical": 18878,
+ "changed": 0,
+ "panic_a": 4,
+ "panic_b": 4,
+ "status_changed": [],
+ "panic_changed": [],
+ "stdout_changed": []
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "status": "maker addendum before correcting the held-out assertion, written after the first release lib run",
+  "answers": "account.json obligation_t14_47 parent_reference.held_out_not_in_this_golden",
+  "measured": {
+    "command": "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g1/target-tip cargo test --release -p rustuml-render arial_state_name_uses_the_face_advance_table",
+    "observation": "The italic reference assertion passed: the test panicked on the next assert, and the printed SVG is the held-out diagram. textLength is 77.041, rect width is 97.041, divider y is 33.0986, text x is 17, text y is 25.1318. font-family is Arial, font-size is 14, no font-style.",
+    "cause": "plantuml_metrics::fmt_coord (691-701) rounds HALF_UP at 4 decimals and then strips trailing zeros. 11270/2048*14 = 77.041015625 rounds to 77.0410 and prints 77.041. The account predicted the unstripped 4-decimal form."
+  },
+  "decision": "The unit test expects the printed form 77.041. No production measurement change. 77.8066 has no trailing zero, so the reference prediction is unchanged."
+}
