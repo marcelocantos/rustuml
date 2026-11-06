@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "binary": "rustuml-base",
+  "git": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "invocation": [
+    "rustuml",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timezone": "GMT+11:00",
+  "note": "Whole CLI stdout/stderr/exit versus pinned relay results. stderr matched empty and exit was 0 for every case. stdout matched none.",
+  "cases": [
+    {
+      "batch": "shared-svg-round2-r2a",
+      "name": "theme_plain_activity",
+      "java_stdout": 3684,
+      "rust_stdout": 3569,
+      "stdout_eq": false
+    },
+    {
+      "batch": "shared-svg-round2-r2a",
+      "name": "theme_mono_sequence",
+      "java_stdout": 3728,
+      "rust_stdout": 3683,
+      "stdout_eq": false
+    },
+    {
+      "batch": "shared-svg-round2-r2a",
+      "name": "theme_amiga_class",
+      "java_stdout": 3421,
+      "rust_stdout": 3269,
+      "stdout_eq": false
+    },
+    {
+      "batch": "shared-svg-round2-r2a",
+      "name": "theme_plain_state",
+      "java_stdout": 2992,
+      "rust_stdout": 2916,
+      "stdout_eq": false
+    },
+    {
+      "batch": "shared-svg-round2-r2a",
+      "name": "theme_mono_usecase",
+      "java_stdout": 1708,
+      "rust_stdout": 1845,
+      "stdout_eq": false
+    },
+    {
+      "batch": "shared-svg-round2-r2a",
+      "name": "theme_amiga_component",
+      "java_stdout": 2301,
+      "rust_stdout": 2181,
+      "stdout_eq": false
+    },
+    {
+      "batch": "shared-svg-round2-r2a",
+      "name": "theme_plain_variable",
+      "java_stdout": 3325,
+      "rust_stdout": 3251,
+      "stdout_eq": false
+    },
+    {
+      "batch": "shared-svg-round2-r2a",
+      "name": "theme_mono_inactive",
+      "java_stdout": 1621,
+      "rust_stdout": 1552,
+      "stdout_eq": false
+    },
+    {
+      "batch": "shared-svg-round2-r2a",
+      "name": "theme_plain_then_cerulean",
+      "java_stdout": 4867,
+      "rust_stdout": 4749,
+      "stdout_eq": false
+    },
+    {
+      "batch": "shared-svg-checker-c1",
+      "name": "theme_mono_class",
+      "java_stdout": 4576,
+      "rust_stdout": 3263,
+      "stdout_eq": false
+    },
+    {
+      "batch": "shared-svg-checker-c1",
+      "name": "theme_plain_class_note",
+      "java_stdout": 3965,
+      "rust_stdout": 3905,
+      "stdout_eq": false
+    },
+    {
+      "batch": "shared-svg-checker-c1",
+      "name": "theme_plain_sequence",
+      "java_stdout": 3213,
+      "rust_stdout": 3169,
+      "stdout_eq": false
+    },
+    {
+      "batch": "tim-continuation-cr2",
+      "name": "cr2_seq_tail_then_theme",
+      "java_stdout": 3727,
+      "rust_stdout": 3150,
+      "stdout_eq": false
+    },
+    {
+      "batch": "tim-continuation-cr2",
+      "name": "cr2_seq_theme_then_continued",
+      "java_stdout": 3220,
+      "rust_stdout": 3170,
+      "stdout_eq": false
+    },
+    {
+      "batch": "tim-continuation-mc1",
+      "name": "mc1_seq_theme_plain",
+      "java_stdout": 3716,
+      "rust_stdout": 3644,
+      "stdout_eq": false
+    },
+    {
+      "batch": "tim-continuation-mc1",
+      "name": "mc1_class_theme_sketchy",
+      "java_stdout": 7892,
+      "rust_stdout": 3611,
+      "stdout_eq": false,
+      "note": "shipped theme control; also mismatches"
+    },
+    {
+      "batch": "tim-continuation-mc1",
+      "name": "mc1_state_theme_bluegray",
+      "java_stdout": 2842,
+      "rust_stdout": 2745,
+      "stdout_eq": false,
+      "note": "shipped theme control; also mismatches"
+    }
+  ],
+  "feature_samples": {
+    "theme_plain_activity": {
+      "java_font": "Verdana",
+      "rust_font": "sans-serif",
+      "java_bg": "#FFFFFF",
+      "rust_action_fill": "#F1F1F1"
+    },
+    "theme_amiga_class": {
+      "java_bg": "#0B58A8",
+      "rust_bg": "#FFFFFF",
+      "java_font": "Verdana",
+      "rust_font": "sans-serif"
+    },
+    "theme_mono_sequence": {
+      "java_font": "Hack",
+      "rust_font": "sans-serif",
+      "java_participant_fill": "#FFFFFF",
+      "rust_participant_fill": "#E2E2F0"
+    },
+    "mc1_seq_theme_plain": {
+      "java_font": "Verdana",
+      "rust_font": "sans-serif"
+    }
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "mechanism": "jar-bundled-theme-sources",
+  "target": "T14.30",
+  "maker": "grok",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "java_locations": [
+    "net.sourceforge.plantuml.theme.ThemeUtils#loadTheme",
+    "net.sourceforge.plantuml.theme.ThemeUtils#loadBundledOrLocalTheme",
+    "net.sourceforge.plantuml.theme.ThemeUtils#getFilename",
+    "src/main/resources/themes/puml-theme-amiga.puml",
+    "src/main/resources/themes/puml-theme-blueprint.puml",
+    "src/main/resources/themes/puml-theme-carbon-gray.puml",
+    "src/main/resources/themes/puml-theme-crt-amber.puml",
+    "src/main/resources/themes/puml-theme-crt-green.puml",
+    "src/main/resources/themes/puml-theme-mimeograph.puml",
+    "src/main/resources/themes/puml-theme-mono.puml",
+    "src/main/resources/themes/puml-theme-plain.puml",
+    "src/main/resources/themes/puml-theme-sunlust.puml"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/themes.rs::JAVA_BUNDLED_UNSHIPPED_THEMES",
+    "crates/rustuml-parser/src/preprocess/themes.rs::get_theme_source",
+    "crates/rustuml-parser/src/preprocess/mod.rs::try_theme"
+  ],
+  "exact_unshipped_set": [
+    "amiga",
+    "blueprint",
+    "carbon-gray",
+    "crt-amber",
+    "crt-green",
+    "mimeograph",
+    "mono",
+    "plain",
+    "sunlust"
+  ],
+  "java_theme_files": [
+    {
+      "name": "amiga",
+      "java_path": "src/main/resources/themes/puml-theme-amiga.puml",
+      "bytes": 3317,
+      "sha256": "ddbd558c3329ae4cbac44220a00fe3f7e19d55bbfbdf1bb8ae4342d94e89abde",
+      "declared_license": ""
+    },
+    {
+      "name": "blueprint",
+      "java_path": "src/main/resources/themes/puml-theme-blueprint.puml",
+      "bytes": 2934,
+      "sha256": "d4f05851ad253a12b5e141426d5d5553cf1c43b079e9f2ce115c1cbd59233ee6",
+      "declared_license": ""
+    },
+    {
+      "name": "carbon-gray",
+      "java_path": "src/main/resources/themes/puml-theme-carbon-gray.puml",
+      "bytes": 13959,
+      "sha256": "0b2c3c4212ab0dda435f25a50720fe846f338255ce54aed9c3ff4b142c21f7e0",
+      "declared_license": ""
+    },
+    {
+      "name": "crt-amber",
+      "java_path": "src/main/resources/themes/puml-theme-crt-amber.puml",
+      "bytes": 3325,
+      "sha256": "aa10a84e7aa7bb5a54e80dc4bcda1c27c21cf5cd5add7e0af6f5da08644064e2",
+      "declared_license": ""
+    },
+    {
+      "name": "crt-green",
+      "java_path": "src/main/resources/themes/puml-theme-crt-green.puml",
+      "bytes": 3260,
+      "sha256": "d9eb2ca835e49b490ec7722f35aea0915bcbfdac04753794ee5c2eae29a2d989",
+      "declared_license": ""
+    },
+    {
+      "name": "mimeograph",
+      "java_path": "src/main/resources/themes/puml-theme-mimeograph.puml",
+      "bytes": 2940,
+      "sha256": "2d25d03699f7a74e212dbfc34eea97c7f631e4bd4a5150f0f9e2838aa034d208",
+      "declared_license": ""
+    },
+    {
+      "name": "mono",
+      "java_path": "src/main/resources/themes/puml-theme-mono.puml",
+      "bytes": 4686,
+      "sha256": "bed0c1cb2e57ad4d1b6f56345b93db478a0ff7dd4d32a01cb5c6e3a73d60356f",
+      "declared_license": ""
+    },
+    {
+      "name": "plain",
+      "java_path": "src/main/resources/themes/puml-theme-plain.puml",
+      "bytes": 3064,
+      "sha256": "87537f57edac21ea8e5f696ff65fa3a89d5d1d539262747fb59f112db5c8492c",
+      "declared_license": ""
+    },
+    {
+      "name": "sunlust",
+      "java_path": "src/main/resources/themes/puml-theme-sunlust.puml",
+      "bytes": 3748,
+      "sha256": "f49aad377544c1f8dc0932c1380fb49593e37da53777cb334cfe5e4b6b451bf5",
+      "declared_license": "GPL 3+"
+    }
+  ],
+  "license_record": "Eight files declare an empty license field. sunlust declares GPL 3+. The previous Rust exclusion treated a blank field as inheriting PlantUML GPL-3+. This obligation ships the nine files verbatim, with their upstream front matter unchanged, so Java's bundled theme bodies execute. They are not relicensed.",
+  "invariant": "When !theme NAME has no from-path, ThemeUtils.loadBundledOrLocalTheme reads /themes/puml-theme-NAME.puml from the jar and the preprocessor executes that body. Rust must execute the same body for every name in that jar directory.",
+  "causal_divergence": "get_theme_source returns None for the nine names, so try_theme emits only the parser-only marker skinparam __theme NAME. Class emulates a slice of plain (Verdana, circled radius 9, stereotype C colors). Activity, sequence, state and the other eight themes do not receive the theme's skinparam or style declarations. Base pipe output mismatches every pinned theme case above; amiga stays on a white background and plain/mono keep sans-serif where Java uses Verdana or Hack.",
+  "planned_change": "Vendor the nine Java theme files byte-for-byte under crates/rustuml-parser/themes and return them from get_theme_source. Clear JAVA_BUNDLED_UNSHIPPED_THEMES so the marker-only branch is not the bundled outcome. Do not edit the preprocessor. Do not fit renderer constants. Residue is any theme declaration the existing skinparam and style consumers still do not apply.",
+  "precommitted_measurement": "maker-grok/base-measurement.json",
+  "perturbation_axes": [
+    "theme name",
+    "diagram family",
+    "theme then continued line",
+    "variable override before theme",
+    "inactive theme"
+  ],
+  "frozen_untouched": [
+    "GEOM_EPS",
+    "syntax markers",
+    "park list",
+    "error census",
+    "guard allow-lists",
+    "strict-XML list",
+    "approved valid-error set",
+    "preprocess/mod.rs",
+    "parse/sequence.rs",
+    "render/sequence.rs",
+    "state.rs",
+    "class.rs",
+    "per-face font tables"
+  ]
+}
