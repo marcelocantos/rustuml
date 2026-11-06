@@ -1,0 +1,4 @@
+@startuml
+!$l=%substr("🚀",1,1)
+class "G6R3&#1114111;$l" as RefLow
+@enduml

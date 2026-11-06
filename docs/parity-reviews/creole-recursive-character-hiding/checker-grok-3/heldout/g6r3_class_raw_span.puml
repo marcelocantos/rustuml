@@ -1,0 +1,6 @@
+@startuml
+class "G6R3raw 􏟿A􏠀B􏿽C􏿿D" as R {
+  g6r3field: 􏿿
+}
+note right of R : G6R3 note 􏟿X􏠀Y
+@enduml
