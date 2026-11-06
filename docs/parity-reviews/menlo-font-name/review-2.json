@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "account_commit": "11d1edbf8948ff660b98bba210fda0990f5b5b75",
+  "implementation_commit": "0063e0e77a66e457bf37aa21e93d19b1bc480283",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "cd /Users/marcelo/.t3/worktrees/rustuml/t3-356ccc42 && CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-grok-g3-recheck/target-gates-tip cargo test --offline --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards --test parity_perturbations --test doc_claims",
+    "cd /Users/marcelo/Library/Caches/rustuml-grok-g3-recheck/src-base && CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-grok-g3-recheck/target-gates-base cargo test --offline --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards --test parity_perturbations",
+    "TZ=GMT+11 /Users/marcelo/Library/Caches/rustuml-grok-g3-recheck/bin/rustuml-tip -pipe -tsvg compared with compare_svg_strict via check_svg sha256 4b805d1fc4026573d0e372cc435aada63164f21d4b9fe5589ae6012feb8906ef",
+    "cargo clippy --offline --release -p rustuml -p rustuml-parser -p rustuml-render -p rustuml-layout -p rustuml-math -p rustuml-oracle --all-targets -- -W clippy::all"
+  ],
+  "reviewer": {
+    "task_id": "grok-g3-recheck",
+    "model": "grok-4.7",
+    "independent_from_maker": true
+  },
+  "mechanism": "menlo-font-name",
+  "verdict": "rejected",
+  "findings": [
+    "The font-decode correction moves fresh g3r2 from 47/68 to 51/68 against merge base 0cd7743aa8fe66a01e0be1e5b1c2a66aae34feaa. Gains are g3r2_log_css_monospace, g3r2_log_css_upper_mono, g3r2_log_monospaced, and g3r2_seq_ignore_sequencefont. Losses are none. Retained batches: CN 29/46 to 38/46, CG 6/6 to 6/6, CX 7/14 to 11/14. Golden failure names are 754/754 on both trees with an empty name diff. No-oracle failure names are 70/70 with an empty name diff. Shared perturbation names lose nothing; five pre-existing names start matching (w5_mono_ctl, c9a_fs_mo_b_class, c9a_fs_mo_b_class_ctrl, c9a_fs_mo_p_state, c9a_fs_mo_p_state_ctrl).",
+    "decimal_literal_ratchet is worse than the merge base. text_render.rs moves 51 to 52 because explicit_font_monospace_decodes_to_dialog copies the pre-existing test y-coordinate 76.6016. The baseline file is not in the diff. class.rs 383 to 578, deployment.rs 43 to 44, plantuml_metrics.rs 1053 to 1055, and state.rs 53 to 61 already fail on the merge base.",
+    "chk_skin_helvetica_light is new in the executable corpus and does not match Java. Both release binaries miss it. Helvetica-Light is in the round-6 census and is not one of the 16 registered PostScript names. That residue is already \ud83c\udfafT14.94. The tip perturbation failure set is 2689 names versus 2693 on the base: this file is the only tip-only failure. An accepted latest review cannot contain that failure, and the guard requires the file to be named, so this record is rejected.",
+    "The 16 registered PostScript names casefold onto tools/font-chain-reference/monkeyman-round6/census.tsv. Clippy --all-targets -W clippy::all exits 0 for all six workspace crates on both trees, and the 64 warning lines are identical. pipe_mode is 17/17, doc_claims 2/2, rustuml-render lib 868 passed and 1 ignored, rustuml-parser lib 665/665, rustuml-layout lib 41/41, rustuml-math lib 10/10, rustuml-oracle lib 31/31. The rustuml package has no library target. Golden pairs are 10497/12550 passed, 754 failed, 1299 skipped, 0 panics, on both trees.",
+    "Java batch CZ is 68/68 exit 0 with empty stderr and no syntax-error page. Rust CLI is 68/68 exit 0 with empty stderr. Both-tree misses are not losses: the creole probe's remaining tip mismatch is font-family SansSerif versus sans-serif with the same textLength; empty defaultFontName is emitted as sans-serif; sequence arrowFontStyle still treats bolditalic and the words bold italic as bold plus italic, and ignores CSS 700; class bolder emits weight 700 against Java 800 and lighter omits the weight against Java 300, with matching widths. The only Rust change versus the merge base is 221a17da0f616881ccd1a8251721e1a49b757cec, and the addendum 7a2b02604 precedes it."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_creole_menlo_class.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_creole_menlo_class.svg",
+      "source_sha256": "de7e83f1465234f76a3be8ab1f5c6f23435f27474d9d774dcf99f8dd68daf7f0",
+      "golden_sha256": "c2811d0d696fe4a33611ebdbe2930de52e862831045518c97bd34218b7dcb10c",
+      "result": "pass",
+      "axes": [
+        "creole font name",
+        "named font versus bare monospace"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_elem_seqfont_helvetica_bold.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_elem_seqfont_helvetica_bold.svg",
+      "source_sha256": "23fa150b637da168a9bfae2ce76a8c85e057963e0f01ba9635376d917306501d",
+      "golden_sha256": "95b4c5e4fd0c0b4558706382b320f033fb5d5bb18725101d7603e5fed5af14f4",
+      "result": "pass",
+      "axes": [
+        "element skinparam",
+        "Font.decode style token versus a PostScript name"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_skin_arialmt.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_skin_arialmt.svg",
+      "source_sha256": "9749378d5cf2d475c0f2d16c5052114975ce1edf0b2377307714f09df9514c4a",
+      "golden_sha256": "28d2774fcd6084bf24b7dc0f1a7992f5c5c1dd50c7d60af68f94502c257d2791",
+      "result": "pass",
+      "axes": [
+        "PostScript name versus family name"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_skin_helvetica_light.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_skin_helvetica_light.svg",
+      "source_sha256": "41fb3b6792f400d3613f949b51bc58c86a6fef1cb1e2dd569298f9a2e81759c7",
+      "golden_sha256": "f58cb9d393b31f08658ae35851a3e4ec15bcafed178943f4aa759e1f9b107ecb",
+      "result": "fail",
+      "axes": [
+        "PostScript name versus family name",
+        "census face absent from the registered table"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_skin_menlo_bold_space.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_skin_menlo_bold_space.svg",
+      "source_sha256": "091c7ede8d39fa171e0aad2d0ad40dc668568cd5235799373611c9efcb8270c2",
+      "golden_sha256": "7d03925f5f78028949bf6a1a7db24797f09eca6c96e08f1f2801e85d013e8f5c",
+      "result": "pass",
+      "axes": [
+        "Font.decode style token versus a PostScript name"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_skin_monospace_word.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_skin_monospace_word.svg",
+      "source_sha256": "eb8e07c1203240a967b812915c9676b9fd1e0412a9ffd61c247176436756aa30",
+      "golden_sha256": "86f3c5f5229620fc49a68512e947c580f842234e7c59dd268b93292bd6bd5e66",
+      "result": "pass",
+      "axes": [
+        "logical font name",
+        "user string monospace"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/g3r2_log_css_monospace.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/g3r2_log_css_monospace.svg",
+      "source_sha256": "45801762abf76a28cc3a2fbdf333cd33d5d39bcc5d19f4247a5ce1aac5e95bac",
+      "golden_sha256": "b8d2b05b53d8b82002436117e0c6d663b2080f2d6cf6a2df37c06ba09aab1442",
+      "result": "pass",
+      "axes": [
+        "logical font name",
+        "CSS lowercase monospace"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/g3r2_log_monospaced.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/g3r2_log_monospaced.svg",
+      "source_sha256": "80939f7649f80c93996a4c8032e7ba43bdea623718a31de645267d73538e1d70",
+      "golden_sha256": "9ab2e37041259133a96a13dc1163c2428778539e45e1206824f13d78271d16c9",
+      "result": "pass",
+      "axes": [
+        "logical font name",
+        "JDK logical Monospaced"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/g3r2_seq_ignore_sequencefont.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/g3r2_seq_ignore_sequencefont.svg",
+      "source_sha256": "fd4e5b1b16f1a36eac276ed22c4c14efa257bcb43c32abf4236b4ae59285681c",
+      "golden_sha256": "229e1b1b76785602d7823465af43a629564f89da0f4d351e564b2003d13206f6",
+      "result": "pass",
+      "axes": [
+        "sequenceFontName is not a FromSkinparamToStyle key"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/g3r2_sk_hyphen_style_size.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/g3r2_sk_hyphen_style_size.svg",
+      "source_sha256": "f7f780af59416e8a2add6566849aaea0cca5fbb22b3e9ccc130a249e859245f1",
+      "golden_sha256": "ff461a2cd390fadc94a18fe81c156723eba2ad17a053347fc90156a1a7fb33d8",
+      "result": "pass",
+      "axes": [
+        "Font.decode style token versus a PostScript name",
+        "name-style-size"
+      ]
+    }
+  ]
+}

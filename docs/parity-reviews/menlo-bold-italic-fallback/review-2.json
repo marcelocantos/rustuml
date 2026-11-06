@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "account_commit": "11d1edbf8948ff660b98bba210fda0990f5b5b75",
+  "implementation_commit": "0063e0e77a66e457bf37aa21e93d19b1bc480283",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "cd /Users/marcelo/.t3/worktrees/rustuml/t3-356ccc42 && CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-grok-g3-recheck/target-gates-tip cargo test --offline --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards --test parity_perturbations --test doc_claims",
+    "cd /Users/marcelo/Library/Caches/rustuml-grok-g3-recheck/src-base && CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-grok-g3-recheck/target-gates-base cargo test --offline --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards --test parity_perturbations",
+    "TZ=GMT+11 /Users/marcelo/Library/Caches/rustuml-grok-g3-recheck/bin/rustuml-tip -pipe -tsvg compared with compare_svg_strict via check_svg sha256 4b805d1fc4026573d0e372cc435aada63164f21d4b9fe5589ae6012feb8906ef",
+    "cargo clippy --offline --release -p rustuml -p rustuml-parser -p rustuml-render -p rustuml-layout -p rustuml-math -p rustuml-oracle --all-targets -- -W clippy::all"
+  ],
+  "reviewer": {
+    "task_id": "grok-g3-recheck",
+    "model": "grok-4.7",
+    "independent_from_maker": true
+  },
+  "mechanism": "menlo-bold-italic-fallback",
+  "verdict": "accepted",
+  "findings": [
+    "menlo_bi_fallback.rs is unchanged from merge base 0cd7743aa8fe66a01e0be1e5b1c2a66aae34feaa. All 267 rows equal docs/parity-reviews/menlo-bold-italic-fallback/maker-grok/probe-jrs-face/fallback-advances.tsv, SHA256 725db0d5d90a7e51c397d6d6772a6aa3a8f668eaecaa5b9314f48c3f2e4b14b6. advance() is consulted only for the Menlo Bold Italic face. No row is keyed to a fixture.",
+    "CQ is 7/7 and CR is 13/14 on both trees. The only CR miss is g3_bi2_emoji_12, the same file on both, which is the declared sbix per-size residue \ud83c\udfafT14.50.2. Fresh in-table probes g3r2_fb_menlo_bi_jcaron, g3r2_fb_menlo_bi_cloud, and g3r2_fb_menlo_bold_jcaron match Java on both trees. The c9a Menlo cohort in checker-claude-round9 stays matched.",
+    "Held-out misses that exist on both trees are outside this table's claim and are not losses: Menlo Italic and Courier New Bold Italic do not consult the table; U+1F4A1 is absent from it; a combining mark is counted as two cells; U+2615 at 13 pt follows the linear 14 pt emoji row. The sibling menlo-font-name review is rejected, so this acceptance does not make the branch accept-ready."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/g3r2_fb_menlo_bi_jcaron.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/g3r2_fb_menlo_bi_jcaron.svg",
+      "source_sha256": "939366aff396541efef134db108f2010ff29f60fed2336e54419d2b79bb07a4f",
+      "golden_sha256": "0340ae57d5c9f4198e509d33efeb764fb70c85bf2b2c9ffd6a32603d190bd106",
+      "result": "pass",
+      "axes": [
+        "scalar in Menlo Bold's cmap and not in Menlo Bold Italic's"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/g3r2_fb_menlo_bi_cloud.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/g3r2_fb_menlo_bi_cloud.svg",
+      "source_sha256": "2e6b0168cb5c8acfdd16b29ce3a534eef393e77210356b467eef5b0fe5ef73fe",
+      "golden_sha256": "974e34db0f1fb29ce804ea5dc2aa972b77b52b8f2bbe75f84957172bea94c665",
+      "result": "pass",
+      "axes": [
+        "scalar in Menlo Bold's cmap and not in Menlo Bold Italic's",
+        "fallback face advance"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/g3r2_fb_menlo_bold_jcaron.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/g3r2_fb_menlo_bold_jcaron.svg",
+      "source_sha256": "f610557ea225289268e8cb1e0e7b2397edd864eefdc05e99af1247102158c8b2",
+      "golden_sha256": "2e3539c3eb69bb0604d7183bd43ca9f92bbd39675dfede56abb3b2a4676ebe82",
+      "result": "pass",
+      "axes": [
+        "bold versus bold italic of the same scalar"
+      ]
+    }
+  ]
+}

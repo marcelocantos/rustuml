@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "mechanism": "menlo-bold-italic-fallback",
+  "verdict": "accepted",
+  "packet_accept_ready": false,
+  "merge_base": "0cd7743aa8fe66a01e0be1e5b1c2a66aae34feaa",
+  "tip": "0063e0e77a66e457bf37aa21e93d19b1bc480283",
+  "code_commit": "221a17da0f616881ccd1a8251721e1a49b757cec",
+  "addendum_commit": "7a2b0260427458f87176d89ae0880887d4dd242d",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "predictions_sha256": "debbce39468e70f19d6398e171d72ab18cba45496fca59aacc203e487cba3db9",
+  "reference_results_sha256": "3fb752b346049d34339c9f7d88697a695df59ac21e86525ae71ecd1cac07c925",
+  "reference_manifest_sha256": "dbf5e1c890405f72ac60dc4dc1ed752f27a6a7bc90bceac5c6a95d6e2bb56841",
+  "bundle_sha256": "82163bc689d574268e09b855091cf95bda2f959600cc60d953c02c0838dc90f9",
+  "rustuml_base_sha256": "316d8776bd86dc070139912a972356a547500c34a7ce849de1407f72e111429a",
+  "rustuml_tip_sha256": "396a4d35fb391735603381b11c0d54857e35db621fd8622074ef3b6198e19bef",
+  "check_svg_sha256": "4b805d1fc4026573d0e372cc435aada63164f21d4b9fe5589ae6012feb8906ef",
+  "fallback_tsv_sha256": "725db0d5d90a7e51c397d6d6772a6aa3a8f668eaecaa5b9314f48c3f2e4b14b6",
+  "scores": {
+    "g3r2": {
+      "base": "47/68",
+      "tip": "51/68",
+      "losses": [],
+      "gains": [
+        "g3r2_log_css_monospace",
+        "g3r2_log_css_upper_mono",
+        "g3r2_log_monospaced",
+        "g3r2_seq_ignore_sequencefont"
+      ]
+    },
+    "CN": {
+      "base": "29/46",
+      "tip": "38/46",
+      "losses": []
+    },
+    "CG": {
+      "base": "6/6",
+      "tip": "6/6",
+      "losses": []
+    },
+    "CQ": {
+      "base": "7/7",
+      "tip": "7/7",
+      "losses": []
+    },
+    "CR": {
+      "base": "13/14",
+      "tip": "13/14",
+      "losses": [],
+      "both_fail": [
+        "g3_bi2_emoji_12"
+      ]
+    },
+    "CX": {
+      "base": "7/14",
+      "tip": "11/14",
+      "losses": []
+    },
+    "golden_pairs": {
+      "both": "10497/12550 passed, 754 failed, 1299 skipped, 0 panics",
+      "name_diff": "empty"
+    },
+    "golden_no_oracle": {
+      "both": "70 failure names",
+      "name_diff": "empty"
+    },
+    "perturbations": {
+      "base_fail_names": 2693,
+      "tip_fail_names": 2689,
+      "tip_only": [
+        "test-diagrams/perturbations/menlo-font-name/chk_skin_helvetica_light.puml"
+      ],
+      "base_only": [
+        "w5_mono_ctl",
+        "c9a_fs_mo_b_class",
+        "c9a_fs_mo_b_class_ctrl",
+        "c9a_fs_mo_p_state",
+        "c9a_fs_mo_p_state_ctrl"
+      ]
+    },
+    "decimal_ratchet": {
+      "packet": "text_render.rs 51 -> 52",
+      "preexisting_on_base": [
+        "class.rs 383 -> 578",
+        "deployment.rs 43 -> 44",
+        "plantuml_metrics.rs 1053 -> 1055",
+        "state.rs 53 -> 61"
+      ]
+    },
+    "clippy_warning_lines": {
+      "base": 64,
+      "tip": 64,
+      "equal": true
+    }
+  },
+  "commands": [
+    "cd /Users/marcelo/.t3/worktrees/rustuml/t3-356ccc42 && CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-grok-g3-recheck/target-gates-tip cargo test --offline --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards --test parity_perturbations --test doc_claims",
+    "cd /Users/marcelo/Library/Caches/rustuml-grok-g3-recheck/src-base && CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-grok-g3-recheck/target-gates-base cargo test --offline --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards --test parity_perturbations",
+    "TZ=GMT+11 /Users/marcelo/Library/Caches/rustuml-grok-g3-recheck/bin/rustuml-tip -pipe -tsvg compared with compare_svg_strict via check_svg sha256 4b805d1fc4026573d0e372cc435aada63164f21d4b9fe5589ae6012feb8906ef",
+    "cargo clippy --offline --release -p rustuml -p rustuml-parser -p rustuml-render -p rustuml-layout -p rustuml-math -p rustuml-oracle --all-targets -- -W clippy::all"
+  ],
+  "findings": [
+    "menlo_bi_fallback.rs is unchanged from merge base 0cd7743aa8fe66a01e0be1e5b1c2a66aae34feaa. All 267 rows equal docs/parity-reviews/menlo-bold-italic-fallback/maker-grok/probe-jrs-face/fallback-advances.tsv, SHA256 725db0d5d90a7e51c397d6d6772a6aa3a8f668eaecaa5b9314f48c3f2e4b14b6. advance() is consulted only for the Menlo Bold Italic face. No row is keyed to a fixture.",
+    "CQ is 7/7 and CR is 13/14 on both trees. The only CR miss is g3_bi2_emoji_12, the same file on both, which is the declared sbix per-size residue \ud83c\udfafT14.50.2. Fresh in-table probes g3r2_fb_menlo_bi_jcaron, g3r2_fb_menlo_bi_cloud, and g3r2_fb_menlo_bold_jcaron match Java on both trees. The c9a Menlo cohort in checker-claude-round9 stays matched.",
+    "Held-out misses that exist on both trees are outside this table's claim and are not losses: Menlo Italic and Courier New Bold Italic do not consult the table; U+1F4A1 is absent from it; a combining mark is counted as two cells; U+2615 at 13 pt follows the linear 14 pt emoji row. The sibling menlo-font-name review is rejected, so this acceptance does not make the branch accept-ready."
+  ]
+}
