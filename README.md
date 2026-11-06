@@ -7,8 +7,8 @@ JVM, no Graphviz, no external fonts.
 ## Status
 
 Pre-release. 23 parsed diagram models are supported, but release-readiness
-claims are based on the no-oracle product tier: 11,175/11,251 eligible SVG
-goldens currently pass when rendered through the same path as the CLI (99.3%).
+claims are based on the no-oracle product tier: 11,181/11,251 eligible SVG
+goldens currently pass when rendered through the same path as the CLI (99.4%).
 The strict oracle-assisted tier passes 11,130/11,251 eligible SVG goldens and
 remains a regression net, not the headline product metric. The 1,199 Java
 PlantUML error-page goldens are skipped by both tiers and are not counted as
@@ -22,10 +22,10 @@ The table below is derived from `test-diagrams/no_oracle_baseline.txt`.
 | Type | Tag | Baseline family | No-oracle product status |
 |------|-----|-----------------|--------------------------|
 | Sequence | `@startuml` | `sequence` | 1,411/1,411 (100.0%, exact) |
-| Class | `@startuml` | `class` | 1,962/1,971 (99.5%, partial) |
+| Class | `@startuml` | `class` | 1,963/1,971 (99.6%, partial) |
 | Archimate | `@startuml` | `archimate` | 48/48 (100.0%, exact) |
-| Activity (new syntax) | `@startuml` | `activity` | 1,299/1,299 (100.0%, exact) |
-| State | `@startuml` | `state` | 895/901 (99.3%, partial) |
+| Activity (new syntax) | `@startuml` | `activity` | 1,297/1,299 (99.8%, partial) |
+| State | `@startuml` | `state` | 897/901 (99.6%, partial) |
 | Component | `@startuml` | `component` | 663/663 (100.0%, exact) |
 | Deployment | `@startuml` | `deployment` | 495/495 (100.0%, exact) |
 | Use Case | `@startuml` | `usecase` | 315/315 (100.0%, exact) |
