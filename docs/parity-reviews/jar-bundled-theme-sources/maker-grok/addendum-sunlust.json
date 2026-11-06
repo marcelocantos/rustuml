@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "mechanism": "jar-bundled-theme-sources",
+  "kind": "addendum",
+  "after": "base pipe measurement and a tip probe of the nine verbatim bodies",
+  "observation": "Executing puml-theme-sunlust.puml makes every fresh class, sequence, activity and state probe exit 1 with 'parse error: line 127: Unknown built-in function %splitstr'. The same body then calls %get_json_keys. Both names are in registered_builtin and absent from builtin_arity in preprocess/mod.rs, which this lane does not edit. The other eight themes exit 0 and change stdout. Java accepts sunlust.",
+  "decision": "Ship amiga, blueprint, carbon-gray, crt-amber, crt-green, mimeograph, mono and plain verbatim through get_theme_source. Leave sunlust as the sole JAVA_BUNDLED_UNSHIPPED_THEMES entry so try_theme keeps the parser-only skinparam __theme sunlust marker instead of rejecting the diagram.",
+  "preprocessor_proposal": "Implement %splitstr and %get_json_keys (and the JSON map reads sunlust uses) in the preprocessor, then return puml-theme-sunlust.puml from get_theme_source. Do not stub those calls.",
+  "not_tuned": "No renderer constant was fitted. Sequence participant fill, activity arrow and start colours, class note fill, usecase dispatch and Verdana/Hack advances stay whatever the existing consumers already do."
+}
