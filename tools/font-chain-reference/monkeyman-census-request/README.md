@@ -16,12 +16,13 @@ python3 -I reference_env_census.py check "$OUT" --committed census.txt
 
 `record` runs the reference JVM once with `DYLD_PRINT_LIBRARIES` and hashes
 the loaded HarfBuzz and FreeType libraries, the JDK, the modelled face files,
-`~/Library/Fonts`, `/Library/Fonts`, and the MobileAsset font trees. It hashes
-PingFang and LiHei Pro in full and records the size of every other asset font.
+`~/Library/Fonts`, `/Library/Fonts`, and every MobileAsset font file. An
+asset font is a `.ttf`, `.otf`, `.ttc` or `.dfont`. Catalog `.xml` files and
+`Info.plist` files are not asset fonts and are not written.
 
-`check` exits 0 when every pinned fact matches the committed census, 1 when a
-pinned path, size or hash moved, and 2 when the pinned facts match but hashes
-the baseline still leaves open (FreeType's dylib, user-font contents, most
-MobileAsset contents) are filled only on the live side. Exit 2 is not drift.
-Return `$OUT/census.txt` so it can be committed as the live baseline. Do not
-`brew upgrade` on this host.
+`check` uses that same rule, so a census that still lists those catalog
+files does not count them as drift. Exit 0 means every pinned fact matches.
+Exit 1 means a pinned path, size or hash moved. Exit 2 means the pinned
+facts match but the baseline still has an open hash (FreeType's dylib,
+user-font contents, or a MobileAsset content hash). Exit 2 is not drift.
+Return `$OUT/census.txt`. Do not `brew upgrade` on this host.

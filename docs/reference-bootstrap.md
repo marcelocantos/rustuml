@@ -172,7 +172,7 @@ Shaping libraries the reference JVM loads, confirmed by
 | Piece | Path | SHA256 |
 | --- | --- | --- |
 | HarfBuzz 15.0.0_1 | `/opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib` | `b04ab259a343ba51a50db8d1df637160f31d342a66c4192e18dba63ea42ed04a` |
-| FreeType 2.15.0 | `/opt/homebrew/Cellar/freetype/2.15.0/lib/libfreetype.6.dylib` | not in the round-6 capture; the live census pins it |
+| FreeType 2.15.0 | `/opt/homebrew/Cellar/freetype/2.15.0/lib/libfreetype.6.dylib` | `1bf70387c4ef59accba8116c847cb87d2018ded2672db551686b95dce4c5d931` in the 2026-11-06 relay; not yet the committed census |
 | `libfontmanager.dylib` | the OpenJDK 21.0.5 copy | `80488062f9ab885f1860b0e3b8fc3d13030a0a05765c06d12301668d7404812c` |
 | `java` | `.../openjdk.jdk/Contents/Home/bin/java` | `ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9` |
 
@@ -191,6 +191,16 @@ styles `ad8e6566043819726c0146b76261b2aea3710eb83372d59547b46c3132f3ed55`,
 ascii `f5def121617419f6d55ed7361fdba5b1d0e0b90433766f1e662a0c81586573d1`).
 `scripts/reference_env_census.py check` is the drift gate a relay runs
 before trusting a new Java reference. Exit 1 means a pinned fact moved.
+An asset font is a `.ttf`, `.otf`, `.ttc` or `.dfont`. The 2026-11-06
+relay at `/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g7-census/`
+(census SHA256 `5a60468e222a9ae22f7dc26ba906f0cf7817b8991123f6c3f79f0c4d88809cda`)
+listed catalog `.xml` and `Info.plist` files as asset fonts and left 59
+MobileAsset font-file hashes as `-`. That file cannot be the fully pinned
+baseline, and hashing every font file changes what `record` writes, so the
+next census has to be recorded again.
+`tools/font-chain-reference/monkeyman-census-request/` is that request.
+`record` and `check` share the font-file rule, and `record` hashes every
+asset font file.
 The font-chain tests fail when that census and the stored per-face
 extractions disagree.
 

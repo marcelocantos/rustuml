@@ -73,9 +73,9 @@ FONT_FILES = (
     "/System/Library/Fonts/Supplemental/Verdana.ttf",
 )
 
-# Asset basenames whose content hash the live census must record. The
-# committed census leaves them ``-`` until a live run is pinned.
-HASHED_ASSET_BASENAMES = {"PingFang.ttc", "LiHeiPro.ttf"}
+# An asset font is a font file. Catalog XML and per-asset Info.plist
+# files sit in the same MobileAsset trees and are not faces.
+ASSET_FONT_SUFFIXES = {".ttf", ".otf", ".ttc", ".dfont"}
 
 USER_FONT_DIRS = (
     Path.home() / "Library" / "Fonts",
@@ -136,6 +136,21 @@ def default_committed() -> Path:
     if root is None:
         return Path(__file__).resolve().with_name("census.txt")
     return root / "tools/font-chain-reference/monkeyman-reference-env/census.txt"
+
+
+def is_asset_font(path: Path) -> bool:
+    """True for a font file. Shared by ``record``, ``assemble`` and ``check``."""
+    return path.suffix.lower() in ASSET_FONT_SUFFIXES
+
+
+def asset_font_rows(rows: list[tuple[str, ...]]) -> list[tuple[str, ...]]:
+    """Drop MobileAsset catalog files. Font and user-font rows stay."""
+    kept = []
+    for row in rows:
+        if row[0] == "asset-font" and not is_asset_font(Path(row[-1])):
+            continue
+        kept.append(row)
+    return kept
 
 
 def sha256_file(path: Path) -> str:
@@ -304,6 +319,7 @@ def assemble(outfile: Path) -> None:
         rows.append(("user-font", size, marker, path))
     for size, marker, path in parse_ls_census(chain / "monkeyman-round6/asset-font-census.txt"):
         rows.append(("asset-font", size, marker, path))
+    rows = asset_font_rows(rows)
     header = [
         "# origin: stored Monkey Man relay artifacts, not a live re-hash",
         "# harfbuzz load: shared-svg-round6-monkeyman-hb SHA256SUMS c5d00e3cd71cd98cfb546c940ac747ef1a9281fc33cf0a10d1c010a63314adc8",
@@ -466,10 +482,12 @@ def record(outdir: Path) -> None:
                 full = Path(dirpath) / name
                 if not full.is_file() or full.is_symlink():
                     continue
-                digest = "-"
-                if name in HASHED_ASSET_BASENAMES:
-                    digest = sha256_file(full)
-                rows.append(("asset-font", str(full.stat().st_size), digest, str(full)))
+                # Hash only after the shared font-file test, so a catalog
+                # file is neither hashed nor written.
+                if not is_asset_font(full):
+                    continue
+                rows.append(("asset-font", str(full.stat().st_size), sha256_file(full), str(full)))
+    rows = asset_font_rows(rows)
     header = [
         "# origin: live Monkey Man record",
         "# written only under the output directory of this invocation",
@@ -495,6 +513,8 @@ def index_rows(rows: list[tuple[str, ...]]) -> dict[str, dict[str, tuple[str, ..
 def check(live_dir: Path, committed_path: Path) -> int:
     live_scalars, live_rows = parse_census((live_dir / "census.txt").read_text(encoding="utf-8"))
     committed_scalars, committed_rows = parse_census(committed_path.read_text(encoding="utf-8"))
+    live_rows = asset_font_rows(live_rows)
+    committed_rows = asset_font_rows(committed_rows)
     live = index_rows(live_rows)
     committed = index_rows(committed_rows)
     drift: list[str] = []
@@ -575,6 +595,22 @@ def self_test() -> None:
         changed = check(live, committed)
         if changed != 1:
             raise SystemExit(f"drift self-check exited {changed}, expected 1")
+        # Catalog files share the MobileAsset tree. They are not faces, and
+        # a record that lists them must not look like environment drift.
+        catalog = text.rstrip("\n") + (
+            "\nasset-font\t1138692\t-\t"
+            "/System/Library/AssetsV2/com_apple_MobileAsset_Font6/"
+            "com_apple_MobileAsset_Font6.xml\n"
+            "asset-font\t1011\t-\t"
+            "/System/Library/AssetsV2/com_apple_MobileAsset_Font8/"
+            "00bfc46ccb002b730e29def5116e0a571fb617d8.asset/Info.plist\n"
+        )
+        (live / "census.txt").write_text(catalog, encoding="utf-8")
+        catalog_check = check(live, committed)
+        if catalog_check != same:
+            raise SystemExit(
+                f"catalog files changed the check from {same} to {catalog_check}"
+            )
     print("self-test ok")
 
 
