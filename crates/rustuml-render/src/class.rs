@@ -11828,7 +11828,29 @@ fn render_relationship_svg(
                     };
                     // `SvekEdge` center labels use Creole styling, but preserve
                     // `__` and neutralize the `""` monospace delimiter.
-                    text_render::emit_text_no_mono(svg, &row.markup, &base);
+                    // A URL or stacked line that contains `|` is drawn directly.
+                    // Creole would treat the bar as the label separator.
+                    if let Some(url) = row.link_url.as_deref() {
+                        let h = crate::svg::escape_attribute(url);
+                        let title =
+                            crate::svg::escape_attribute(&crate::svg::normalize_svg_link_title(
+                                row.link_title.as_deref().unwrap_or(url),
+                            ));
+                        write!(
+                            svg,
+                            r#"<a href="{h}" target="_top" title="{title}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,
+                        )
+                        .unwrap();
+                        let link_base = TextBase {
+                            fill: "#0000FF",
+                            underline: true,
+                            ..base
+                        };
+                        text_render::emit_text_no_mono(svg, &row.markup, &link_base);
+                        svg.push_str("</a>");
+                    } else {
+                        text_render::emit_text_no_mono(svg, &row.markup, &base);
+                    }
                 }
                 line_top += stripe.height;
             }
@@ -12859,6 +12881,10 @@ struct RelationshipLabelRow {
     markup: String,
     x: f64,
     y: f64,
+    /// Set when the URL or a stacked line contains `|`. Creole splits on the
+    /// first bar and would drop the rest of that line.
+    link_url: Option<String>,
+    link_title: Option<String>,
 }
 
 struct RelationshipLabelStripe {
@@ -12933,7 +12959,8 @@ fn relationship_label_align_offset(
     }
 }
 
-/// Tooltip, href, and visible label, using the same split as `creole`'s `[[ ]]`.
+/// Tooltip, href, and visible label. `UrlBuilder` separates a label with
+/// whitespace. A `|` stays inside the URL (`S_LINK_WITH_OPTIONAL_TOOLTIP_WITH_OPTIONAL_LABEL`).
 fn relationship_link_parts(inner: &str) -> (Option<String>, String, String) {
     let (tooltip, body) = if let Some(brace) = inner.find('{') {
         if let Some(end) = inner[brace..].find('}') {
@@ -12948,17 +12975,7 @@ fn relationship_link_parts(inner: &str) -> (Option<String>, String, String) {
     } else {
         (None, inner.to_string())
     };
-    let (url, label) = if let Some(pos) = body.find('|') {
-        (
-            body[..pos].trim().to_string(),
-            body[pos + 1..]
-                .split('|')
-                .next()
-                .unwrap_or("")
-                .trim()
-                .to_string(),
-        )
-    } else if let Some(pos) = body.find(' ') {
+    let (url, label) = if let Some(pos) = body.find(' ') {
         (body[..pos].to_string(), body[pos + 1..].trim().to_string())
     } else {
         (body.clone(), body)
@@ -13038,6 +13055,8 @@ fn relationship_label_stripe(line: &str, font: &RelationshipLabelFont) -> Relati
                 markup: line.to_string(),
                 x: 0.0,
                 y: 0.0,
+                link_url: None,
+                link_title: None,
             }],
         };
     }
@@ -13045,7 +13064,7 @@ fn relationship_label_stripe(line: &str, font: &RelationshipLabelFont) -> Relati
     struct Placed {
         x: f64,
         height: f64,
-        rows: Vec<(String, f64, f64)>,
+        rows: Vec<(String, f64, f64, Option<String>, Option<String>)>,
     }
     let mut placed = Vec::new();
     let mut x = 0.0_f64;
@@ -13059,7 +13078,7 @@ fn relationship_label_stripe(line: &str, font: &RelationshipLabelFont) -> Relati
                 placed.push(Placed {
                     x,
                     height,
-                    rows: vec![(markup, 0.0, width)],
+                    rows: vec![(markup, 0.0, width, None, None)],
                 });
                 x += width;
                 stripe_height = stripe_height.max(height);
@@ -13072,13 +13091,27 @@ fn relationship_label_stripe(line: &str, font: &RelationshipLabelFont) -> Relati
                 let mut rows = Vec::new();
                 let mut y = 0.0_f64;
                 let mut box_width = 0.0_f64;
+                // Creole splits `[[url|label]]` on the first bar and keeps only
+                // the first label segment. A bar in the URL or in a stacked
+                // line cannot round-trip through that markup.
+                let direct = url.contains('|') || lines.iter().any(|piece| piece.contains('|'));
                 for piece in lines {
-                    let markup = relationship_link_markup(&url, tooltip.as_deref(), &piece);
+                    let markup = if direct {
+                        piece.clone()
+                    } else {
+                        relationship_link_markup(&url, tooltip.as_deref(), &piece)
+                    };
                     let width = relationship_label_line_width(&markup, font);
                     let height =
                         text_render::label_height_with_family(&markup, font.size, &font.family);
                     box_width = box_width.max(width);
-                    rows.push((markup, y, width));
+                    rows.push((
+                        markup,
+                        y,
+                        width,
+                        direct.then(|| url.clone()),
+                        direct.then(|| tooltip.clone()).flatten(),
+                    ));
                     y += height;
                 }
                 placed.push(Placed { x, height: y, rows });
@@ -13090,11 +13123,13 @@ fn relationship_label_stripe(line: &str, font: &RelationshipLabelFont) -> Relati
     let mut rows = Vec::new();
     for atom in placed {
         let y0 = stripe_height - atom.height;
-        for (markup, y, _) in atom.rows {
+        for (markup, y, _, link_url, link_title) in atom.rows {
             rows.push(RelationshipLabelRow {
                 markup,
                 x: atom.x,
                 y: y0 + y,
+                link_url,
+                link_title,
             });
         }
     }
@@ -16044,6 +16079,42 @@ mod tests {
         let one = relationship_label_stripe("pre", &arrow_font());
         assert!(stripe.width > one.width);
         assert!(stripe.height > one.height * 1.5);
+
+        // `UrlBuilder` keeps `|` in the URL. The newline splits that URL.
+        let (pipe_lines, _) =
+            relationship_label_display("pre\\n[[http://example.com/a|la\\nbel]]\\npost");
+        assert_eq!(
+            pipe_lines,
+            vec!["pre", "[[http://example.com/a|la\\nbel]]", "post"]
+        );
+        let pipe = relationship_label_stripe(&pipe_lines[1], &arrow_font());
+        assert_eq!(pipe.rows.len(), 2);
+        assert_eq!(pipe.rows[0].markup, "http://example.com/a|la");
+        assert_eq!(pipe.rows[1].markup, "bel");
+        assert_eq!(
+            pipe.rows[0].link_url.as_deref(),
+            Some("http://example.com/a|la\\nbel")
+        );
+        assert!(pipe.rows[0].link_title.is_none());
+
+        // A bar in the label is text. Creole would keep only the segment
+        // before that bar, so the row is emitted directly.
+        let (label_pipe_lines, _) =
+            relationship_label_display("[[http://example.com/a{hot} x|y\\nz]]");
+        assert_eq!(
+            label_pipe_lines,
+            vec!["[[http://example.com/a{hot} x|y\\nz]]"]
+        );
+        let label_pipe = relationship_label_stripe(&label_pipe_lines[0], &arrow_font());
+        assert_eq!(label_pipe.rows.len(), 2);
+        assert_eq!(label_pipe.rows[0].markup, "x|y");
+        assert_eq!(label_pipe.rows[1].markup, "z");
+        assert_eq!(
+            label_pipe.rows[0].link_url.as_deref(),
+            Some("http://example.com/a")
+        );
+        assert_eq!(label_pipe.rows[0].link_title.as_deref(), Some("hot"));
+        assert_eq!(label_pipe.rows[1].link_title.as_deref(), Some("hot"));
     }
 
     fn simple_class_diagram() -> ClassDiagram {
