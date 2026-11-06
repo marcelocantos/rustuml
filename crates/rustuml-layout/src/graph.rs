@@ -672,6 +672,7 @@ impl LayoutGraph {
             label_size: None,
             tail_label_size: None,
             head_label_size: None,
+            center_label_xlabel: false,
         });
     }
 
@@ -692,6 +693,7 @@ impl LayoutGraph {
             label_size: None,
             tail_label_size: None,
             head_label_size: None,
+            center_label_xlabel: false,
         });
     }
 
@@ -745,6 +747,7 @@ impl LayoutGraph {
             label_size: None,
             tail_label_size: None,
             head_label_size: None,
+            center_label_xlabel: false,
         });
     }
 
@@ -816,6 +819,7 @@ impl LayoutGraph {
             label_size,
             tail_label_size,
             head_label_size,
+            center_label_xlabel: false,
         });
         self.edges.len() - 1
     }
@@ -842,8 +846,20 @@ impl LayoutGraph {
             label_size,
             tail_label_size,
             head_label_size,
+            center_label_xlabel: false,
         });
         self.edges.len() - 1
+    }
+
+    /// Sends this edge's center-label table as Graphviz `xlabel`.
+    ///
+    /// Java `SvekEdge.appendLine` does that for `DotSplines.ORTHO`. The solved
+    /// box comes back through `ED_xlabel`, whose position `postproc.c` stores
+    /// as a center (`lp->pos = centerPt`).
+    pub fn set_center_label_xlabel(&mut self, edge_index: usize) {
+        if let Some(edge) = self.edges.get_mut(edge_index) {
+            edge.center_label_xlabel = true;
+        }
     }
 
     /// Marks the most recently registered matching edge as non-constraining.
@@ -1029,6 +1045,7 @@ impl LayoutGraph {
         let constraint_key = CString::new("constraint").unwrap();
         let headlabel_key = CString::new("headlabel").unwrap();
         let taillabel_key = CString::new("taillabel").unwrap();
+        let xlabel_key = CString::new("xlabel").unwrap();
         let external_endpoint_labels_key =
             CString::new("rustuml_external_endpoint_labels").unwrap();
         let true_val = CString::new("true").unwrap();
@@ -1343,8 +1360,13 @@ impl LayoutGraph {
                             empty.as_ptr(),
                         );
                     }
+                    let center_label_key = if edge_spec.center_label_xlabel {
+                        &xlabel_key
+                    } else {
+                        &label_key
+                    };
                     for (edge_label_key, color, size) in [
-                        (&label_key, "#000001", edge_spec.label_size),
+                        (center_label_key, "#000001", edge_spec.label_size),
                         (&taillabel_key, "#000002", edge_spec.tail_label_size),
                         (&headlabel_key, "#000003", edge_spec.head_label_size),
                     ] {
@@ -1624,7 +1646,10 @@ impl LayoutGraph {
                         start_point: if sflag != 0 { Some((sp_x, sp_y)) } else { None },
                         has_end_arrow: eflag != 0,
                         end_point: if eflag != 0 { Some((ep_x, ep_y)) } else { None },
-                        label: edge_label_position(e, 0),
+                        // Ortho center labels are `xlabel` (`ED_xlabel`). After
+                        // `postproc.c` `centerPt`, that position is a center,
+                        // same as `ED_label`.
+                        label: edge_label_position(e, 0).or_else(|| edge_label_position(e, 3)),
                         tail_label: edge_label_position(e, 1),
                         head_label: edge_label_position(e, 2),
                     });
@@ -2336,6 +2361,9 @@ struct EdgeSpec {
     label_size: Option<EdgeLabelSize>,
     tail_label_size: Option<EdgeLabelSize>,
     head_label_size: Option<EdgeLabelSize>,
+    /// `SvekEdge.appendLine` uses `xlabel` for `DotSplines.ORTHO` center labels.
+    /// Endpoint labels stay `headlabel` / `taillabel`.
+    center_label_xlabel: bool,
 }
 
 #[derive(Debug, Clone)]

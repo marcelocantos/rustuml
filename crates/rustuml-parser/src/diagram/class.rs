@@ -276,6 +276,12 @@ pub struct Relationship {
     pub label_arrow: LinkArrow,
     pub from_multiplicity: Option<String>,
     pub to_multiplicity: Option<String>,
+    /// `CommandLinkClass.executeArg` stores `Stereotype.build` of the optional
+    /// `STEREOTYPE` token that sits between the target and the label. The
+    /// inner text (`StereotypePattern.removeChevronBrackets`) selects the
+    /// arrow style. The token itself is not drawn.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub stereotypes: Vec<String>,
     /// Crow's-foot / IE endpoint decorations, as parsed from PlantUML's
     /// `LinkDecor` tokens by `CommandLinkElement.getLinkType`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
