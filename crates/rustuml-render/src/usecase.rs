@@ -1466,7 +1466,7 @@ fn use_case_footprint_atoms(
         let family = if let Some(family) = segment.style.font_family.as_deref() {
             family
         } else if segment.style.monospace {
-            "monospace"
+            "Monospaced"
         } else {
             font_family
         };

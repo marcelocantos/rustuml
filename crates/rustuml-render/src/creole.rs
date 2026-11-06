@@ -1450,12 +1450,9 @@ fn handle_tag(
                 Some("</font>")
             }
             ParameterCommand::Family(family) => {
-                // CommandCreoleFontFamilyChange -> FontConfiguration.changeFamily
-                // preserves the family; FontStack decodes its named font. SVG's
-                // SvgGraphics.drawString maps Monospaced to monospace and uses
-                // NBSP for monospace/Courier. Match text_render's existing alias
-                // normalization because its monospace flag also selects metrics;
-                // do not activate that shared compatibility path for all fonts.
+                // CommandCreoleFontFamilyChange keeps the name. Widths are
+                // Font.decode of that name. The flag is only the SvgGraphics
+                // NBSP rule for courier, monospace, and monospaced.
                 nested.font_family = Some(family.to_string());
                 nested.monospace = matches!(
                     family

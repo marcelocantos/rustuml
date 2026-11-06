@@ -14601,7 +14601,7 @@ fn note_code_line_width(line: &str, font_size: f64) -> f64 {
 }
 
 fn note_code_line_height(font_size: f64) -> f64 {
-    text_render::label_height_with_family("", font_size, "monospace").max(10.0)
+    text_render::label_height_with_family("", font_size, "Monospaced").max(10.0)
 }
 
 fn parse_note_body_separator(line: &str) -> Option<NoteBodySeparator<'_>> {
@@ -15137,7 +15137,7 @@ fn emit_note_code(svg: &mut String, lines: &[&str], x: f64, y: f64, style: &Reso
         let indent_width = crate::plantuml_metrics::mono_text_width(&" ".repeat(indent), font_size);
         let content_width = crate::plantuml_metrics::mono_text_width(content, font_size);
         let baseline =
-            row_top + text_render::label_ascent_with_family(content, font_size, "monospace");
+            row_top + text_render::label_ascent_with_family(content, font_size, "Monospaced");
         let escaped = crate::creole::escape_creole_text(content).replace(' ', "&#160;");
         write!(
             svg,
