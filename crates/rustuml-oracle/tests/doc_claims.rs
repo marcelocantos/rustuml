@@ -275,7 +275,7 @@ fn docs_name_the_product_truth_metric_and_error_skips() {
     let baseline = read_baseline();
     let total_pass: usize = baseline.values().map(|(pass, _)| pass).sum();
     let total_eligible: usize = baseline.values().map(|(_, eligible)| eligible).sum();
-    assert_eq!((total_pass, total_eligible), (11_181, 11_251));
+    assert_eq!((total_pass, total_eligible), (11_182, 11_251));
     let percentage = format!("{:.1}%", total_pass as f64 / total_eligible as f64 * 100.0);
 
     let readme = std::fs::read_to_string(repo_root().join("README.md")).expect("read README");
