@@ -293,7 +293,7 @@ fn docs_name_the_product_truth_metric_and_error_skips() {
             "{name} must identify no-oracle as the product metric"
         );
         assert!(
-            text.contains("11,181/11,251"),
+            text.contains("11,182/11,251"),
             "{name} must carry the current no-oracle total from the baseline"
         );
         assert!(
