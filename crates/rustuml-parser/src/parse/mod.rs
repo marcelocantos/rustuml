@@ -1258,6 +1258,16 @@ pub fn parse_with_base(
         diagram.meta_mut().source = Some(preprocess_out.uml_source);
         return Ok(diagram);
     }
+    // A `@startuml` source of its start line alone (TIM took the end line):
+    // PSystemWelcomeFactory needs two lines, and every family factory finds
+    // UmlSource#isEmpty and builds the `Empty description` error at the
+    // start line (PSystemCommandFactory.java:85-89).
+    if preprocess_out.one_line_source && !preprocess_out.swallowed_end_directive {
+        return Err(ParseError {
+            line: 0,
+            message: "Empty description".to_string(),
+        });
+    }
     let mut style_program = style::extract_style_program(&mut preprocess_out.lines);
     if typ == "uml" {
         for (index, line) in preprocess_out.lines.iter().enumerate() {

@@ -49,6 +49,9 @@ pub struct PreprocessOutput {
     /// source of exactly two lines, which `PSystemWelcomeFactory` turns into
     /// the empty (Welcome) diagram before any family factory runs.
     pub two_line_source: bool,
+    /// The `@startuml` source is its start line alone (TIM consumed the end
+    /// line): every factory reports `Empty description`.
+    pub one_line_source: bool,
 }
 
 const SOURCE_LINE_PREFIX: &str = "\x1ERSL:";
@@ -128,15 +131,30 @@ fn preprocess_full_inner(
     let mut tim_lines = Vec::new();
     let mut theme_tail = Vec::new();
     project_events(&events, &mut identity, &mut tim_lines, &mut theme_tail);
-    let (mut lines, two_line_source) = if ctx.start_checks_ending_backslash {
-        let joined = collapse_post_tim_ending_backslashes(tim_lines, ctx.block_end.as_ref());
-        (joined.lines, joined.two_line_source)
+    let mut lines = if ctx.start_checks_ending_backslash {
+        collapse_post_tim_ending_backslashes(tim_lines, ctx.block_end.as_ref())
     } else {
-        (tim_texts(tim_lines), false)
+        tim_texts(tim_lines)
     };
     // UmlSource#loadInternal joins with `checkEndingBackslash` exactly when
     // the start line's DiagramType#findStartTypes contains SEQUENCE.
     let uml_source = uml_source_string(&identity, ctx.start_checks_ending_backslash);
+    // `UmlSource#getTotalLineCount` of a `@startuml` source: the identity
+    // projection is Java's TIM result list, counted from the block's start
+    // line (BlockUmlBuilder collects from there; a Rust preamble is no part
+    // of it) through the loadInternal join. PSystemWelcomeFactory fires on
+    // 2; a source of the start line alone is empty for every factory.
+    let line_count = ctx
+        .start_checks_ending_backslash
+        .then(|| {
+            let start = events
+                .iter()
+                .position(|event| matches!(event, EvaluatedEvent::Boundary(_)))?;
+            let mut block_lines = Vec::new();
+            java_list_lines(&events[start..], &mut block_lines);
+            Some(uml_source_line_count(&block_lines))
+        })
+        .flatten();
     if !theme_tail.is_empty() {
         theme_tail.push(format!(
             "skinparam __svgIdSeed {}",
@@ -148,7 +166,8 @@ fn preprocess_full_inner(
         lines,
         uml_source,
         swallowed_end_directive: merged.swallowed_end,
-        two_line_source,
+        two_line_source: line_count == Some(2),
+        one_line_source: line_count == Some(1),
         error: ctx.error,
     }
 }
@@ -161,6 +180,17 @@ enum EvaluatedEvent {
     Plain(String),
     Boundary(String),
     ParserOnly(String),
+    /// A PLAIN line of Java's TIM result list that Rust's TIM executes itself
+    /// (`!pragma`, which Java's CommandPragma runs after UmlSource is built).
+    /// The identity projection carries its text; the parser projection
+    /// carries a stand-in unless the post-TIM join folds it into a line.
+    Executed(String),
+    /// Lines Java's TIM adds that Rust cannot reproduce: a Java-bundled theme
+    /// this distribution does not ship (TContext#executeTheme runs its body
+    /// into the result list). The parser projection carries the Rust-only
+    /// marker; the identity has no text for it; the line count knows only
+    /// that the span is non-empty.
+    JavaOnlyLines(String),
     Theme {
         name: String,
         source_line: usize,
@@ -186,6 +216,11 @@ fn project_events(
             }
             EvaluatedEvent::Boundary(line) => identity.push(line.clone()),
             EvaluatedEvent::ParserOnly(line) => lines.push(TimLine::RustOnly(line.clone())),
+            EvaluatedEvent::Executed(line) => {
+                identity.push(line.clone());
+                lines.push(TimLine::Executed(line.clone()));
+            }
+            EvaluatedEvent::JavaOnlyLines(marker) => lines.push(TimLine::RustOnly(marker.clone())),
             EvaluatedEvent::Theme {
                 name,
                 source_line,
@@ -313,6 +348,39 @@ fn uml_source_string(lines: &[String], collapse_ending_backslashes: bool) -> Str
         }
     }
     source
+}
+
+/// The lines of Java's TIM result list as far as the line count needs them:
+/// the identity projection's text, plus one placeholder for a span of lines
+/// only Java has (at least one line, which decides the 1 and 2 thresholds
+/// as Java's real span would).
+fn java_list_lines(events: &[EvaluatedEvent], lines: &mut Vec<String>) {
+    for event in events {
+        match event {
+            EvaluatedEvent::Plain(line) => lines.push(
+                split_source_line_marker(line)
+                    .map_or(line.as_str(), |(_, text)| text)
+                    .to_string(),
+            ),
+            EvaluatedEvent::Boundary(line) | EvaluatedEvent::Executed(line) => {
+                lines.push(line.clone())
+            }
+            EvaluatedEvent::ParserOnly(_) => {}
+            EvaluatedEvent::JavaOnlyLines(_) => lines.push(String::new()),
+            EvaluatedEvent::Theme { body, .. } => java_list_lines(body, lines),
+        }
+    }
+}
+
+/// `UmlSource#getTotalLineCount` after `loadInternal` with
+/// `checkEndingBackslash` (core/UmlSource.java:118-134, 198-200): every line
+/// that does not end with a backslash completes one joined line; a pending
+/// tail with no following line is never added.
+fn uml_source_line_count(lines: &[String]) -> usize {
+    lines
+        .iter()
+        .filter(|line| !ends_with_backslash(line))
+        .count()
 }
 
 /// Preprocess with a base directory, returning the full output.
@@ -1221,7 +1289,14 @@ impl PreprocessContext {
             if trimmed.starts_with("@end")
                 || (self.in_diagram_block && self.local_vars.is_empty() && is_end_directive(line))
             {
-                if self.in_diagram_block {
+                // An unterminated !procedure, !function or !definelong
+                // definition takes the end line as body text
+                // (CodeIteratorProcedure#peek, CodeIteratorReturnFunction#peek):
+                // the block still ends here, but the end is no line of TIM's
+                // result list.
+                let in_definition =
+                    self.collecting_function.is_some() || self.collecting_definelong.is_some();
+                if self.in_diagram_block && !in_definition {
                     if self.block_end.is_none() {
                         self.block_end =
                             Some((self.current_diagram_source_line(), line_no_comment.clone()));
@@ -1328,7 +1403,18 @@ impl PreprocessContext {
 
         // Directives that are consumed silently.
         if self.try_silent_directive(trimmed) {
-            self.push_directive_placeholder(output);
+            // TLineType has no pragma type (text/TLineType.java:259), so an
+            // active `!pragma` is a PLAIN line that TContext#addPlain adds to
+            // the result list with functions and variables applied; Java's
+            // CommandPragma runs it after UmlSource is built.
+            let in_tim_list =
+                self.in_diagram_block || self.include_depth > 0 || !self.local_vars.is_empty();
+            if is_pragma_directive(trimmed) && self.is_active() && in_tim_list {
+                let text = self.substitute_vars(&line_no_comment);
+                output.push(EvaluatedEvent::Executed(text));
+            } else {
+                self.push_directive_placeholder(output);
+            }
             return;
         }
 
@@ -2146,6 +2232,10 @@ impl PreprocessContext {
         }
 
         let path_str = quoted_path.or(bare_path)?;
+        // TContext#executeInclude (tim/TContext.java:799-802) cuts the text
+        // after the last '!' from every include; a local file ignores it
+        // (DiagramDetector#extractFromFile yields the first diagram).
+        let path_str = path_str.rsplit_once('!').map_or(path_str, |(path, _)| path);
         let file_path = if let Some(base) = &self.base_dir {
             base.join(path_str)
         } else {
@@ -2164,11 +2254,17 @@ impl PreprocessContext {
                 // DiagramDetector#extractFromFile when it holds a diagram, and
                 // raw (no merge) otherwise.
                 let content = crate::java_utf16::escape(&content);
-                let lines = match wrapped_diagram_lines(&content) {
+                let file_lines = read_line_reader_lines(&content);
+                let lines = match wrapped_diagram_lines(&file_lines) {
                     Some(body) => self.process_numbered_lines(
                         body.iter().map(|(line, text)| (*line, text.as_str())),
                     ),
-                    None => self.process_lines(&content.lines().collect::<Vec<_>>()),
+                    None => self.process_numbered_lines(
+                        file_lines
+                            .iter()
+                            .enumerate()
+                            .map(|(index, text)| (index + 1, text.as_ref())),
+                    ),
                 };
                 self.execution_kind = saved_kind;
                 self.base_dir = saved_base;
@@ -2240,7 +2336,9 @@ impl PreprocessContext {
                 let mut selected = Vec::new();
                 let mut found = false;
                 let mut skip = false;
-                for (index, text) in content.lines().enumerate() {
+                // ReadLineReader (tim/TContext.java:660) reads the file.
+                for (index, text) in read_line_reader_lines(&content).iter().enumerate() {
+                    let text: &str = text;
                     // Sub.fromFile sees raw markers before TIM's comment iterators.
                     // UncommentReadLine handles embedding prefixes, not TIM comments.
                     let trimmed = text.trim();
@@ -2351,7 +2449,7 @@ impl PreprocessContext {
             let source_line = self
                 .source_line_override
                 .unwrap_or_else(|| self.current_diagram_source_line());
-            output.push(EvaluatedEvent::ParserOnly(source_line_marker(
+            output.push(EvaluatedEvent::JavaOnlyLines(source_line_marker(
                 source_line,
                 &format!("skinparam __theme {name}"),
             )));
@@ -3996,10 +4094,25 @@ fn ends_with_backslash(s: &str) -> bool {
     s.ends_with('\\') && !s.ends_with("\\\\")
 }
 
-/// `Character#isWhitespace`, which excludes the no-break spaces Rust's
-/// `char::is_whitespace` includes.
+/// JDK 21 `Character#isWhitespace(int)`: a SPACE_SEPARATOR, LINE_SEPARATOR
+/// or PARAGRAPH_SEPARATOR code point that is not a no-break space (U+00A0,
+/// U+2007, U+202F), or one of U+0009-U+000D and U+001C-U+001F. Under
+/// Unicode 15.0 (Zs, Zl, Zp) that is exactly this set. Unlike Rust's
+/// `char::is_whitespace` it excludes U+0085 (NEL, category Cc) and includes
+/// the four information separators.
 fn java_is_whitespace(c: char) -> bool {
-    c.is_whitespace() && !matches!(c, '\u{00A0}' | '\u{2007}' | '\u{202F}')
+    matches!(
+        c,
+        '\u{0009}'..='\u{000D}'
+            | '\u{001C}'..='\u{0020}'
+            | '\u{1680}'
+            | '\u{2000}'..='\u{2006}'
+            | '\u{2008}'..='\u{200A}'
+            | '\u{2028}'
+            | '\u{2029}'
+            | '\u{205F}'
+            | '\u{3000}'
+    )
 }
 
 /// The text after a start or end directive's `@`/`\` marker: Java's
@@ -4013,6 +4126,11 @@ fn directive_tail(line: &str) -> Option<&str> {
 /// `StartUtils#isEndDirective`: case-sensitive `end` after the marker.
 fn is_end_directive(line: &str) -> bool {
     directive_tail(line).is_some_and(|tail| tail.starts_with("end"))
+}
+
+/// A trimmed `!pragma` line, as `try_silent_directive` recognises it.
+fn is_pragma_directive(line: &str) -> bool {
+    line.starts_with("!pragma ") || line.starts_with("!pragma\t")
 }
 
 /// The diagram type text after `start` (`DiagramType#findStartTypes` matches
@@ -4218,10 +4336,9 @@ fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
 /// first start and before the first end directive, each with its first
 /// piece's file line. `None` when the file holds no start directive: Java
 /// then reads it raw.
-fn wrapped_diagram_lines(content: &str) -> Option<Vec<(usize, String)>> {
-    let raw: Vec<Cow<'_, str>> = content.lines().map(Cow::Borrowed).collect();
+fn wrapped_diagram_lines(raw: &[Cow<'_, str>]) -> Option<Vec<(usize, String)>> {
     let mut header_to_remove: Option<String> = None;
-    let lines: Vec<(usize, String)> = read_filter_merge_lines(&raw)
+    let lines: Vec<(usize, String)> = read_filter_merge_lines(raw)
         .into_iter()
         .map(|line| {
             // UncommentReadLine#readLine (never paused here).
@@ -4251,6 +4368,42 @@ fn wrapped_diagram_lines(content: &str) -> Option<Vec<(usize, String)>> {
     )
 }
 
+/// `ReadLineReader#readLine` (preproc/ReadLineReader.java:89-103), the
+/// reader of every included file: each line loses one leading U+FEFF and has
+/// U+2013 replaced by '-'.
+fn read_line_reader_lines(content: &str) -> Vec<Cow<'_, str>> {
+    content
+        .lines()
+        .map(|line| {
+            let line = line.strip_prefix('\u{FEFF}').unwrap_or(line);
+            if line.contains('\u{2013}') {
+                Cow::Owned(line.replace('\u{2013}', "-"))
+            } else {
+                Cow::Borrowed(line)
+            }
+        })
+        .collect()
+}
+
+/// `Character#isLetterOrDigit(char)`: general category Lu, Ll, Lt, Lm, Lo
+/// or Nd of one UTF-16 unit. A supplementary code point reaches Java as two
+/// surrogate units, and a surrogate is neither a letter nor a digit.
+fn java_is_letter_or_digit(c: char) -> bool {
+    use unicode_properties::{GeneralCategory, UnicodeGeneralCategory};
+    let Ok(unit) = u16::try_from(u32::from(c)) else {
+        return false;
+    };
+    java_decimal_digit(unit).is_some()
+        || matches!(
+            c.general_category(),
+            GeneralCategory::UppercaseLetter
+                | GeneralCategory::LowercaseLetter
+                | GeneralCategory::TitlecaseLetter
+                | GeneralCategory::ModifierLetter
+                | GeneralCategory::OtherLetter
+        )
+}
+
 /// `StartUtils#beforeStartUml`: the text before a `[@\\]start` keyword that
 /// is preceded only by non-word characters (text inside `<...>` is skipped).
 fn before_start_uml(s: &str) -> Option<&str> {
@@ -4268,7 +4421,7 @@ fn before_start_uml(s: &str) -> Option<&str> {
         }
         if c == '<' {
             inside = true;
-        } else if c == '~' || c == '_' || c.is_alphanumeric() {
+        } else if c == '~' || c == '_' || java_is_letter_or_digit(c) {
             // `isWordOrTilde`: Character#isLetterOrDigit, '_' or '~'.
             return None;
         }
@@ -4301,6 +4454,10 @@ enum TimLine {
     /// A line of Java's TIM result list (`EvaluatedEvent::Plain`), as the
     /// parser stream carries it (possibly behind a source-line marker).
     Text(String),
+    /// A line of Java's TIM result list that Rust's TIM executed itself
+    /// (`EvaluatedEvent::Executed`): the join reads its text, and the parser
+    /// sees an empty stand-in unless the join folds it into a line.
+    Executed(String),
     /// A Rust-only parser line (`EvaluatedEvent::ParserOnly` and the theme
     /// marker): the empty stand-in for a top-level line that TIM consumes (a
     /// directive, a comment, an inactive branch), or Rust-only metadata. It
@@ -4310,65 +4467,53 @@ enum TimLine {
     RustOnly(String),
 }
 
-/// The parser stream for a projection: every entry becomes its text.
+/// The parser stream for a projection: every entry becomes its text, and an
+/// executed directive its stand-in.
 fn tim_texts(lines: Vec<TimLine>) -> Vec<String> {
     lines
         .into_iter()
         .map(|line| match line {
             TimLine::Text(text) | TimLine::RustOnly(text) => text,
+            TimLine::Executed(_) => String::new(),
         })
         .collect()
-}
-
-/// The parser stream after `UmlSource#loadInternal`.
-struct PostTimJoin {
-    lines: Vec<String>,
-    /// The join leaves Java's `UmlSource` with exactly two lines (the start
-    /// line and one more): `getTotalLineCount() == 2`.
-    two_line_source: bool,
 }
 
 /// `UmlSource#loadInternal` with `checkEndingBackslash` (true for
 /// `@startuml`, whose `DiagramType#findStartTypes` contains SEQUENCE) on the
 /// parser stream: after TIM, a line that `endsWithBackslash` is joined with
 /// the following ones, and the joined line takes the last piece's location.
-/// Stand-ins for consumed lines are not TIM lines and are passed over. The
-/// parser stream omits the block's end line, which Java's list ends with, so
-/// a tail still pending at the end joins with `block_end` (diagram source
-/// line and TIM text), as `pending.append(s)` does with the end line in Java.
-/// An end line that itself ends with a backslash stays pending and, being
-/// last, is never added (UmlSource.java:118-134).
-///
-/// The joined list's length, counted with the start line, is Java's
-/// `getTotalLineCount()`. It is reported only when the join changes the
-/// list; without a continuation the existing empty-diagram path applies.
+/// Rust-only lines are not TIM lines and are passed over; an executed
+/// directive is a TIM line whose text joins like any other. The parser
+/// stream omits the block's end line, which Java's list ends with, so a tail
+/// still pending at the end joins with `block_end` (diagram source line and
+/// TIM text), as `pending.append(s)` does with the end line in Java. An end
+/// line that itself ends with a backslash stays pending and, being last, is
+/// never added (UmlSource.java:118-134). The line count is taken from the
+/// identity projection (`uml_source_line_count`), not from this stream.
 fn collapse_post_tim_ending_backslashes(
     lines: Vec<TimLine>,
     block_end: Option<&(usize, String)>,
-) -> PostTimJoin {
+) -> Vec<String> {
     let end_continued = block_end.is_some_and(|(_, text)| ends_with_backslash(text));
     let continued = |line: &TimLine| match line {
-        TimLine::Text(text) => {
+        TimLine::Text(text) | TimLine::Executed(text) => {
             ends_with_backslash(split_source_line_marker(text).map_or(text, |(_, t)| t))
         }
         TimLine::RustOnly(_) => false,
     };
     if !end_continued && !lines.iter().any(continued) {
-        return PostTimJoin {
-            lines: tim_texts(lines),
-            two_line_source: false,
-        };
+        return tim_texts(lines);
     }
     let mut result = Vec::with_capacity(lines.len());
     let mut pending: Option<String> = None;
-    // `UmlSource#getTotalLineCount`: the start line, then every joined line.
-    let mut java_line_count = 1;
     // Once an entry is folded into a later one, output positions no longer
     // equal source lines; later content lines carry explicit markers.
     let mut shifted = false;
     for (index, line) in lines.into_iter().enumerate() {
-        let line = match line {
-            TimLine::Text(line) => line,
+        let (line, executed) = match line {
+            TimLine::Text(line) => (line, false),
+            TimLine::Executed(line) => (line, true),
             TimLine::RustOnly(text) => {
                 result.push(text);
                 continue;
@@ -4382,10 +4527,11 @@ fn collapse_post_tim_ending_backslashes(
             shifted = true;
             continue;
         }
-        java_line_count += 1;
         if let Some(mut joined) = pending.take() {
             joined.push_str(text);
             result.push(source_line_marker(source_line, &joined));
+        } else if executed {
+            result.push(String::new());
         } else if shifted && !text.is_empty() && split_source_line_marker(&line).is_none() {
             result.push(source_line_marker(source_line, text));
         } else {
@@ -4394,17 +4540,12 @@ fn collapse_post_tim_ending_backslashes(
     }
     if let Some((end_line, end_text)) = block_end
         && !end_continued
+        && let Some(mut joined) = pending
     {
-        java_line_count += 1;
-        if let Some(mut joined) = pending {
-            joined.push_str(end_text);
-            result.push(source_line_marker(*end_line, &joined));
-        }
+        joined.push_str(end_text);
+        result.push(source_line_marker(*end_line, &joined));
     }
-    PostTimJoin {
-        lines: result,
-        two_line_source: java_line_count == 2,
-    }
+    result
 }
 
 const SPECIAL_COMMENT_OPEN: &str = "/'''";
@@ -6897,9 +7038,9 @@ $record(SaffronArchive)\n\
         // DiagramDetector#extractFromFile: merged and uncommented lines,
         // after the first start and before the first end.
         assert_eq!(
-            wrapped_diagram_lines(
+            wrapped_diagram_lines(&read_line_reader_lines(
                 "!$x = 1\n@startuml\nKea -> Tui : w \\\n@enduml\nTui -> Kea : after\n"
-            ),
+            )),
             // The merge swallows the file's end, so DiagramExtractor reads on to
             // the end of the file.
             Some(vec![
@@ -6908,17 +7049,24 @@ $record(SaffronArchive)\n\
             ])
         );
         assert_eq!(
-            wrapped_diagram_lines("@startuml\nKea -> Tui : a\n  @enduml\nB -> C\n"),
+            wrapped_diagram_lines(&read_line_reader_lines(
+                "@startuml\nKea -> Tui : a\n  @enduml\nB -> C\n"
+            )),
             Some(vec![(2, "Kea -> Tui : a".to_string())])
         );
         // UncommentReadLine: a `' @startuml` header is removed from the lines
         // that start with it.
         assert_eq!(
-            wrapped_diagram_lines("' @startuml\n'Kea -> Tui : c\n' @enduml\n"),
+            wrapped_diagram_lines(&read_line_reader_lines(
+                "' @startuml\n'Kea -> Tui : c\n' @enduml\n"
+            )),
             Some(vec![(2, "Kea -> Tui : c".to_string())])
         );
         // No start directive: read raw.
-        assert_eq!(wrapped_diagram_lines("Kea -> Tui : t \\\n"), None);
+        assert_eq!(
+            wrapped_diagram_lines(&read_line_reader_lines("Kea -> Tui : t \\\n")),
+            None
+        );
 
         let dir = std::env::temp_dir().join("rustuml_test_wrapped_include");
         let _ = std::fs::create_dir_all(&dir);
@@ -6937,6 +7085,187 @@ $record(SaffronArchive)\n\
             .collect();
         assert_eq!(texts, vec!["Kea -> Tui : w @enduml", "Tui -> Kea : two"]);
         assert!(!out.two_line_source);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn pragma_is_a_line_of_the_tim_result_list() {
+        // TLineType has no pragma type: the line is counted and joined, and
+        // only its parser projection is a stand-in.
+        let out = preprocess_full_for_parse(
+            "@startuml\n!pragma layout smetana\nKea -> Tui : x %chr(92)\n@enduml",
+            None,
+        );
+        assert!(!out.two_line_source);
+        assert_eq!(
+            strip_source_line_markers(out.lines),
+            vec!["", "Kea -> Tui : x @enduml"]
+        );
+        assert_eq!(
+            out.uml_source,
+            "@startuml\n!pragma layout smetana\nKea -> Tui : x @enduml\n"
+        );
+        // The sequence projection keeps the teoz pragma as text; same count.
+        let out = preprocess_full_for_sequence_parse(
+            "@startuml\n!pragma teoz true\nKea -> Tui : x %chr(92)\n@enduml",
+            None,
+        );
+        assert!(!out.two_line_source);
+        // A pending tail joins with the pragma text, as UmlSource does.
+        let out = preprocess_full_for_parse(
+            "@startuml\nKea -> Tui : x %chr(92)\n!pragma layout smetana\nTui -> Kea : y\n@enduml",
+            None,
+        );
+        assert_eq!(
+            strip_source_line_markers(out.lines),
+            vec!["Kea -> Tui : x !pragma layout smetana", "Tui -> Kea : y"]
+        );
+        // Variables apply (TContext#addPlain); an inactive pragma is no line.
+        let out = preprocess_full_for_parse(
+            "@startuml\n!$k = layout\n!pragma $k smetana\n!if %false()\n!pragma x\n!endif\n@enduml",
+            None,
+        );
+        assert_eq!(
+            out.uml_source,
+            "@startuml\n!pragma layout smetana\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn line_count_reads_the_identity_projection() {
+        let count = |input: &str| {
+            let out = preprocess_full_for_parse(input, None);
+            (out.one_line_source, out.two_line_source)
+        };
+        // Rust-only parser lines are no lines of Java's list.
+        assert_eq!(
+            count("@startuml\n!option handwritten true\n@enduml"),
+            (false, true)
+        );
+        assert_eq!(count("@startuml\n!dump_memory\n@enduml"), (false, true));
+        assert_eq!(count("@startuml\n' c\n!$x = 1\n@enduml"), (false, true));
+        // A theme's body lines are.
+        assert_eq!(
+            count("@startuml\n!theme cerulean\nKea -> Tui : x %chr(92)\n@enduml"),
+            (false, false)
+        );
+        assert_eq!(
+            count("@startuml\n!pragma layout smetana\n@enduml"),
+            (false, false)
+        );
+        // A Java-bundled theme Rust does not ship still adds Java lines.
+        assert_eq!(count("@startuml\n!theme plain\n@enduml"), (false, false));
+        assert_eq!(
+            count("@startuml\n!theme plain\nKea -> Tui : x %chr(92)\n@enduml"),
+            (false, false)
+        );
+        // A preamble before the start line is no part of the block.
+        assert_eq!(count("!$x = 1\nfoo\n@startuml\n@enduml"), (false, true));
+        // Only `@startuml` sources are counted.
+        assert_eq!(count("@startmindmap\n@endmindmap"), (false, false));
+        // The end line stays pending and is dropped.
+        assert_eq!(count("@startuml\n@enduml \\"), (true, false));
+        assert_eq!(
+            count("@startuml\nKea -> Tui : x %chr(92)\n@enduml \\"),
+            (true, false)
+        );
+    }
+
+    #[test]
+    fn an_unterminated_definition_takes_the_end_line() {
+        for input in [
+            "@startuml\n!procedure $p()\nKea -> Tui : p\n\\enduml\n!endprocedure\n$p()\n@enduml",
+            "@startuml\n!function $f()\n!return 1\n@enduml\n!endfunction\n@enduml",
+            "@startuml\n!definelong D()\nKea -> Tui : d\n@enduml\n!enddefinelong\n@enduml",
+        ] {
+            let out = preprocess_full_for_parse(input, None);
+            assert!(out.one_line_source, "{input:?}");
+            assert_eq!(out.uml_source, "@startuml\n", "{input:?}");
+        }
+        // A terminated definition leaves the end line in place.
+        let out = preprocess_full_for_parse(
+            "@startuml\n!procedure $p()\nKea -> Tui : p\n!endprocedure\n$p()\n\\enduml",
+            None,
+        );
+        assert!(!out.one_line_source && !out.two_line_source);
+    }
+
+    #[test]
+    fn java_whitespace_is_character_is_whitespace() {
+        for c in [
+            '\t', '\n', '\u{b}', '\u{c}', '\r', '\u{1c}', '\u{1d}', '\u{1e}', '\u{1f}', ' ',
+            '\u{1680}', '\u{2000}', '\u{2006}', '\u{2008}', '\u{200a}', '\u{2028}', '\u{2029}',
+            '\u{205f}', '\u{3000}',
+        ] {
+            assert!(java_is_whitespace(c), "{c:?}");
+        }
+        for c in [
+            '\u{85}', '\u{a0}', '\u{2007}', '\u{202f}', '\u{180e}', '\u{200b}', '\u{feff}',
+            '\u{1b}', 'a',
+        ] {
+            assert!(!java_is_whitespace(c), "{c:?}");
+        }
+        assert!(is_end_directive("\u{1f}\\enduml"));
+        assert!(!is_end_directive("\u{85}\\enduml"));
+    }
+
+    #[test]
+    fn included_lines_follow_read_line_reader_and_is_letter_or_digit() {
+        assert_eq!(
+            read_line_reader_lines("\u{feff}\u{feff}a\nb \u{2013} c\n\u{feff}"),
+            vec!["\u{feff}a", "b - c", ""]
+        );
+        for c in [
+            'a', 'Z', '\u{aa}', '\u{1c5}', '\u{2b0}', '\u{663}', '7', '\u{ff10}',
+        ] {
+            assert!(java_is_letter_or_digit(c), "{c:?}");
+        }
+        for c in [
+            '\u{b2}',
+            '\u{bd}',
+            '\u{345}',
+            '\u{16ee}',
+            '\u{2160}',
+            '\u{1d400}',
+            '#',
+            ' ',
+        ] {
+            assert!(!java_is_letter_or_digit(c), "{c:?}");
+        }
+        // startsWithDirectiveKeyword skips whitespace from each index.
+        assert_eq!(before_start_uml("\u{b2} @startuml"), Some("\u{b2}"));
+        assert_eq!(before_start_uml("\u{1d400}@startuml"), Some("\u{1d400}"));
+        assert_eq!(before_start_uml("x @startuml"), None);
+
+        let dir = std::env::temp_dir().join(format!("rustuml-r4-include-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(
+            dir.join("w.iuml"),
+            "\u{feff}# @startuml\n\u{feff}# Kea -> Tui : a \u{2013} b\n# @enduml\n@startuml\nTui -> Kea : second\n@enduml\n",
+        )
+        .unwrap();
+        std::fs::write(dir.join("r.iuml"), "\u{feff}Kea -> Tui : raw\n").unwrap();
+        let texts = |input: &str| -> Vec<String> {
+            strip_source_line_markers(preprocess_full_for_parse(input, Some(dir.clone())).lines)
+                .into_iter()
+                .filter(|l| !l.is_empty())
+                .collect()
+        };
+        // The BOM goes before the header check, and '!2' is ignored: the
+        // first diagram is included.
+        for path in ["w.iuml", "w.iuml!2", "w.iuml!beta"] {
+            assert_eq!(
+                texts(&format!("@startuml\n!include {path}\n@enduml")),
+                // UncommentReadLine removes the header "#" (whitespace before
+                // `@start` belongs to the keyword test, not the header).
+                vec![" Kea -> Tui : a - b"],
+                "{path}"
+            );
+        }
+        assert_eq!(
+            texts("@startuml\n!include r.iuml!1\n@enduml"),
+            vec!["Kea -> Tui : raw"]
+        );
         let _ = std::fs::remove_dir_all(&dir);
     }
 }
