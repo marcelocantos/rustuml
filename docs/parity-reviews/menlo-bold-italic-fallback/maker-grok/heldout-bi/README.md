@@ -30,15 +30,20 @@ regenerate the SVGs after the Java run.
 The bold class name is the Menlo cell at `font-weight="700"` with no
 `font-style`. The bold member adds `font-style="italic"` and
 `font-weight="700"`. Plain controls have neither attribute. The 12 pt
-rows scale the 14 pt font-matrix extraction (`units / units_den / upem * size`).
+dingbat row scales the 14 pt font-matrix extraction
+(`units / units_den / upem * size`). The 12 pt Apple Color Emoji row
+used that same scale and is not a claim: the extraction is 14 pt only,
+and an sbix strike is not that scale. Java's member `textLength` on
+`g3_bi2_emoji_12` is 16. The prediction file is unchanged.
 
 Sources also live at
 `~/Library/Caches/rustuml-grok-g3/menlo-bi-heldout2/` (same bytes).
 `reference-manifest.json` SHA256
 `b84c81d7c95f362ed703c25a2fc3f5433fecff1ee0f69bb7a6cc66f362419459`.
 `reference-input-bundle.json.gz` SHA256
-`2a7af5e4daed20f16af7e8e0c20eeeafae770c8dfe15a7d69b05fc51198012e6`.
-Java has not been run. Stage the manifest and the bundle. Run each case
-with the invocation in the manifest, piping the bundled source. Return
-each Java SVG and its SHA256. Score with the unchanged
-`compare_svg_strict` against `rust-predictions/`.
+`b8b1338016cb11cf73ce938478a8c7e21870db5141ce80b62de7b4e0a59e17a4`.
+The bundle's `manifest` is the parsed object and each `files[].path` is
+the basename. `write_reference_bundle.py` writes that shape. Java results
+are `grok-g3-menlo-bi-heldout2`, `reference-results.json` SHA256
+`292acc63242f916a470e0a704c2cf6da0916b83d64abfde33a538820524d982c`.
+
