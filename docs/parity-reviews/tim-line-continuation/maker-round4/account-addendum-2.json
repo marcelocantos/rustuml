@@ -1,0 +1,15 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-line-continuation",
+ "target": "T14.22",
+ "round": 4,
+ "addendum": 2,
+ "account": "9ee6c154c",
+ "status": "written after measuring draft 3ae71ad99 and before changing it",
+ "measured_draft": "3ae71ad99 against merged base 1f6ffa9f4, all cohorts: 0 lost matches, 0 lost rejections, 0 new valid-input errors, 0 new panics. CA +13 gains (incl. 1 Welcome match), 6 newly rejected; golden +1 gain (edge_pragma_useVerticalIf); 0 SVG byte changes outside CA and that golden.",
+ "observation": "Pre-registered probe mr4_ws_nel_before_at_end (U+0085 then '@enduml', column 0 of the next line holds '@enduml'): the draft ends the block there and renders 'one'. The \\\\enduml path uses is_end_directive (fixed), but the '@end' path still tests trimmed.starts_with(\"@end\"), and Rust's str::trim strips U+0085 and the no-break spaces U+00A0, U+2007, U+202F, which Character#isWhitespace does not; it also tests the text after removeInnerComment, while BlockUmlBuilder tests the merged line before TIM.",
+ "java_trace": "BlockUmlBuilder ends the block at the first merged line for which StartUtils#isEndDirective (utils/StartUtils.java:110-111 -> startsWithDirectiveKeyword, 86-108) holds; that skips only Character#isWhitespace before '@' or '\\\\'. A line '\\u0085@enduml' is therefore block content; as a sequence line it is a syntax error (Java prediction: exit 200).",
+ "change": "Inside the top-level block (in_diagram_block and no local scope) the end test is is_end_directive on the line as BlockUmlBuilder reads it, for '@' and '\\\\' alike. Outside the block, and for lines a called procedure body emits, the previous trimmed '@end' test stays (TIM-generated end lines are T14.66).",
+ "corpus_scan": "No .puml/.iuml under test-diagrams (golden and perturbations), docs/parity-reviews, or any prepared cohort has a line that Rust's trim reaches as '@end' but isEndDirective does not, nor a '/'...'/ @end' line; only the probe itself. The change is expected to be byte-neutral outside the probe.",
+ "remeasure": "Rebuild the tip and rerun every cohort at the new tip; the comparison is again against 1f6ffa9f4."
+}
