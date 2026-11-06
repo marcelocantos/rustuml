@@ -154,6 +154,63 @@ is not a replacement for the preserved date goldens.
 hash, executable paths, environment, stdlib evidence and smoke result. This is
 machine-local scratch evidence, not a portable checkout or a checker verdict.
 
+## Monkey Man reference environment (owner decision, 6 November 2026)
+
+The owner chose to pin and gate, not to make the oracle hermetic. The
+Java oracle is Monkey Man as it stands: macOS 27.2 build 26B123, Homebrew
+OpenJDK 21.0.5 at `/opt/homebrew/Cellar/openjdk@21/21.0.5`, system fonts,
+downloaded MobileAsset fonts (PingFang, LiHei Pro) and the user fonts in
+`~/Library/Fonts` (Hack, MesloLGS NF, JetBrains Mono Nerd Font, and the
+rest of that directory). Do not `brew upgrade` on Monkey Man. A Homebrew
+upgrade changes the oracle.
+
+Shaping libraries the reference JVM loads, confirmed by
+`DYLD_PRINT_LIBRARIES` and by `lsof`/`vmmap` on a live reference JVM
+(relay `shared-svg-round6-monkeyman-hb`, SHA256SUMS
+`c5d00e3cd71cd98cfb546c940ac747ef1a9281fc33cf0a10d1c010a63314adc8`):
+
+| Piece | Path | SHA256 |
+| --- | --- | --- |
+| HarfBuzz 15.0.0_1 | `/opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib` | `b04ab259a343ba51a50db8d1df637160f31d342a66c4192e18dba63ea42ed04a` |
+| FreeType 2.15.0 | `/opt/homebrew/Cellar/freetype/2.15.0/lib/libfreetype.6.dylib` | not in the round-6 capture; the live census pins it |
+| `libfontmanager.dylib` | the OpenJDK 21.0.5 copy | `80488062f9ab885f1860b0e3b8fc3d13030a0a05765c06d12301668d7404812c` |
+| `java` | `.../openjdk.jdk/Contents/Home/bin/java` | `ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9` |
+
+`/opt/homebrew/opt/harfbuzz` has pointed at `../Cellar/harfbuzz/15.0.0_1`
+since 2026-10-28. Kegs 10.1.0 and 13.2.1 are still installed and are not
+what the JVM loads. The dylib's current version is 61500.0.0. Link-time,
+`libfontmanager` asks for HarfBuzz compatibility 61001.0.0 and FreeType
+compatibility 27.0.0 / current 27.2.0. Relay batches captured before
+2026-10-28 were shaped by an older HarfBuzz and are not this oracle.
+
+The census is `tools/font-chain-reference/monkeyman-reference-env/census.txt`,
+sha256 `c0d8c8ab478d413d89cf04062c07e6ac9bcd8daede857e75d8453551db99da7c`.
+It was assembled from the round-6, round-8, round-9 and round-11 Monkey Man
+captures (font-chain SHA256SUMS `1c345cc384f0edb939dac3b87cf135db67ed7b6f8ffb76b586a8f9fd8480a6ed`,
+styles `ad8e6566043819726c0146b76261b2aea3710eb83372d59547b46c3132f3ed55`,
+ascii `f5def121617419f6d55ed7361fdba5b1d0e0b90433766f1e662a0c81586573d1`).
+`scripts/reference_env_census.py check` is the drift gate a relay runs
+before trusting a new Java reference. Exit 1 means a pinned fact moved.
+The font-chain tests fail when that census and the stored per-face
+extractions disagree.
+
+## PDF exporter (owner decision, 6 November 2026)
+
+The owner chose to keep Rust's PDF exporter as a deliberate extension
+with its own oracle. Pinned Java's PDF route is commented out in
+`TitledDiagram.java` (the `FileFormat.PDF` branch around line 345), so
+`-tpdf` always throws `UnsupportedOperationException` from
+`TextBlockExporter12026.createUGraphic`. Parity tiers never count PDF
+cases as Java-backed. They render SVG only. `golden_formats` is a
+feature-gated smoke test and does not compare PDF bytes to Java.
+
+Rust's oracle is `cargo test -p rustuml --test pdf_contract`. It checks
+the PDF header, the xref table, a single page, and byte-identical output
+across two runs of a few diagrams. It does not invoke Java. PDF bytes
+come from a patched svg2pdf 0.13.0 (`third_party/svg2pdf`): resource
+dictionaries and font objects are written in a stable order, because
+the upstream `HashMap` iteration changes from process to process.
+
 ## Standing gates
 
 ### Campaign reference execution on Monkey Man
@@ -202,7 +259,8 @@ readiness record are in the remote operational directory's `README.md` and
 `readiness.json`.
 
 The existing remote runtime is Homebrew OpenJDK 21.0.5 and Graphviz 12.2.0 on
-macOS arm64, differing from the origin versions above. No installs or global
+macOS arm64, differing from the origin versions above. The pinned font and
+shaping oracle for that host is the Monkey Man environment section above. No installs or global
 changes were needed. Seven supplied source/reference pairs passed strict parsed
 XML equality, including both sequence font controls, a nested sequence group,
 class/container layout and the three raw-reader historical counterparts. This

@@ -61,6 +61,8 @@ pub mod openiconic;
 pub mod pdf;
 pub mod plantuml_metrics;
 pub mod png;
+#[cfg(test)]
+mod reference_env_census;
 pub mod regex_diagram;
 pub mod salt;
 pub mod scale;

@@ -1,0 +1,341 @@
+# rustuml reference-environment census schema 1
+# origin: stored Monkey Man relay artifacts, not a live re-hash
+# harfbuzz load: shared-svg-round6-monkeyman-hb SHA256SUMS c5d00e3cd71cd98cfb546c940ac747ef1a9281fc33cf0a10d1c010a63314adc8
+# font chain: shared-svg-round6-monkeyman-fontchain SHA256SUMS 1c345cc384f0edb939dac3b87cf135db67ed7b6f8ffb76b586a8f9fd8480a6ed
+# styles: shared-svg-round9-mm-styles SHA256SUMS ad8e6566043819726c0146b76261b2aea3710eb83372d59547b46c3132f3ed55
+# ascii: shared-svg-round11-mm-ascii SHA256SUMS f5def121617419f6d55ed7361fdba5b1d0e0b90433766f1e662a0c81586573d1
+# round8 font hash file sha256 a2ef54cecc47e0e8426043224a6cd9964c453e9f459002147acb45c825c626dd
+# FreeType dylib sha256 is unpinned (empty) until a live record lands.
+# Do not brew upgrade on Monkey Man. A keg change moves this oracle.
+host.hostname=MacBookPro
+host.product_name=macOS
+host.product_version=27.2
+host.build_version=26B123
+jdk.home=/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home
+jdk.java=/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java
+jdk.java.sha256=ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9
+jdk.fontmanager=/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib
+jdk.fontmanager.sha256=80488062f9ab885f1860b0e3b8fc3d13030a0a05765c06d12301668d7404812c
+jdk.reference_wrapper=/Users/marcelo/rustuml-reference/bin/reference
+jdk.reference_wrapper.sha256=6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e
+shaping.harfbuzz.opt_link=/opt/homebrew/opt/harfbuzz
+shaping.harfbuzz.opt_target=../Cellar/harfbuzz/15.0.0_1
+shaping.harfbuzz.link_switched=2026-10-28
+shaping.harfbuzz.kegs=10.1.0,13.2.1,15.0.0_1
+shaping.harfbuzz.loaded=/opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib
+shaping.harfbuzz.sha256=b04ab259a343ba51a50db8d1df637160f31d342a66c4192e18dba63ea42ed04a
+shaping.harfbuzz.current_version=61500.0.0
+shaping.freetype.loaded=/opt/homebrew/Cellar/freetype/2.15.0/lib/libfreetype.6.dylib
+shaping.freetype.sha256=
+shaping.freetype.link_compat=27.0.0
+shaping.freetype.link_current=27.2.0
+shaping.fontmanager.loaded=/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib
+asset-font	106248876	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/88d6cc32a907955efa1d014207889413890573be.asset/AssetData/Kaiti.ttc
+asset-font	10647884	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/2cbbb46d93096244bde9fa13aa10939987dd0964.asset/AssetData/Gungseouche.ttf
+asset-font	10831764	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/b7a6a6575a699e801915b73b9e1e75c74a3404ce.asset/AssetData/YuGothic-Bold.otf
+asset-font	10972028	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ee89e7987a76cc8cfdff36c96bd7bc77655b343e.asset/AssetData/YuGothic-Medium.otf
+asset-font	1200492	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/c6821a5885b1c099dc7e340ca61cd3ddb35cb62e.asset/AssetData/HeadlineA.ttf
+asset-font	1253896	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/b37171b0cb7d2044e39dd8001c23a0e540f91207.asset/AssetData/BMJua-Regular.otf
+asset-font	12727844	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/10e7a462a671950b802274fad767b566ff8457d1.asset/AssetData/STXIHEI.ttf
+asset-font	12799476	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/7a0b5c0f3c1d41c4c52a33343496c9c65ad52c50.asset/AssetData/NanumGothic.ttc
+asset-font	13182640	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/4c932c71d74fc9e4c1bd9cbf270374b0b3ee7519.asset/AssetData/NanumMyeongjo.ttc
+asset-font	13414496	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/2b7cea021df336d26a89f699c8469a51c721e9a2.asset/AssetData/Kyokasho.ttc
+asset-font	13635608	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/53fe5be564086fefc7523ccd0a31200acf92e0e5.asset/AssetData/STHEITI.ttf
+asset-font	14121440	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/6372627020b45393e500bb1661c460d4a93aff49.asset/AssetData/LiSongPro.ttf
+asset-font	14623996	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/7a4aca403fc9a901dcfe5e71131b423d71231eec.asset/AssetData/ToppanBunkyuGothicPr6N.ttc
+asset-font	14873176	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/81e879dcb4d596ab140f7cffcd5ccaaf8108519b.asset/AssetData/Klee.ttc
+asset-font	14899912	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/c4f5f063cf47a2009786f645b423c09ea75666b8.asset/AssetData/WeibeiTC-Bold.otf
+asset-font	15888000	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/1b6b2f148cdf17dd0d788706c83c61ca1998c3a6.asset/AssetData/STFANGSO.ttf
+asset-font	16117492	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/b860c3b445cd974141686f9fcfee362886d80bd9.asset/AssetData/YuppySC-Regular.otf
+asset-font	16219380	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ac5cfaf67b84566ed61f464ef9820d3d59d18bf0.asset/AssetData/YuppyTC-Regular.otf
+asset-font	16698704	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/862669affb9c2df6a5af4627f6e8c4496e643d6e.asset/AssetData/Hiragino_Sans_TC.ttc
+asset-font	17439564	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/37618f984b05fb22375ca0987912653aba363389.asset/AssetData/WawaSC-Regular.otf
+asset-font	17496496	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/9f4afe404b767c06554b8b78551e10e92f695147.asset/AssetData/WawaTC-Regular.otf
+asset-font	1938848	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/7a694995bfafc612fac18a23b283bdf239ef4f2c.asset/AssetData/BMKirangHaerang-Regular.otf
+asset-font	221252	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ee57314cb0de889f6f741b43d931bf85d038ff0e.asset/AssetData/Ornanong.ttc
+asset-font	2299356	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/37b7a41df590ab4ef2d6826c6ec7c69f0fd7379f.asset/AssetData/OsakaMono.ttf
+asset-font	23935440	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/78f88149335340bffebcfade41e6a326a865625c.asset/AssetData/LingWaiSC-Medium.otf
+asset-font	24062040	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/c745f84f5eb15b1f594d3769dc86146fccee61ff.asset/AssetData/WeibeiSC-Bold.otf
+asset-font	24062220	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/04cf228b25a7ceefda732ebbb9d1a42c0e095528.asset/AssetData/WeibeiSC-Bold.otf
+asset-font	24188224	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/bde53ad6e1bb82eb008445d7ed26d067e4c89497.asset/AssetData/LingWaiTC-Medium.otf
+asset-font	26049144	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/99517f5220d46dff05d0dbb2a22d0036afefb089.asset/AssetData/YuMincho.ttc
+asset-font	28525004	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/5f4c23e4a0c7b70597730d79e252955e973ead7d.asset/AssetData/BiauKai.ttc
+asset-font	3243356	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/c6dd5dda81ed310c2248630a4e62f4fd71316d91.asset/AssetData/ToppanBunkyuMidashiGothicStdN-ExtraBold.otf
+asset-font	36035612	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/a304e3396d019087ab67af77f5e398977529007d.asset/AssetData/Libian.ttc
+asset-font	3679052	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/0b5bb0a7f7e82279e049e3c943133f4b186ff8a2.asset/AssetData/Osaka.ttf
+asset-font	36859516	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/259e8f5a322e8dae602d51ac00aefb3d6b05c224.asset/AssetData/SimSong.ttc
+asset-font	389620	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/b7cb5af102eef622e55e701862272b80e89d2d5f.asset/AssetData/BMHannaAir-Regular.otf
+asset-font	42359600	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/70875a1270987c17cfd6f40cd3d755ec04d03b33.asset/AssetData/Baoli.ttc
+asset-font	43210292	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/f14049099a04e570b893c01d9a4cd71f87c9e8d8.asset/AssetData/Lantinghei.ttc
+asset-font	434312	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/97d327a33425a29aa6bf467dfc46a6e3d7b59a66.asset/AssetData/SpotMono.ttc
+asset-font	4491284	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/36a81f2dad2ef266c50802d85839e0201fcf4e57.asset/AssetData/ToppanBunkyuMidashiMinchoStdN-ExtraBold.otf
+asset-font	4638608	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/9ea5dc040323daeddd09ec48cfe7c73fc3144368.asset/AssetData/Pilgiche.ttf
+asset-font	538408	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/3d0af21c67c597a49a25214ff4c70179baf6f3ca.asset/AssetData/BMHannaPro-Regular.otf
+asset-font	5799784	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ecb0f9fe84d4cf732f739bbc2c6a8c29cfefd08e.asset/AssetData/AppleLiGothic-Medium.ttf
+asset-font	5895372	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/0ebfdb7e5a2a1db668fa6209779e0725d6f6baba.asset/AssetData/BIZ_UDMincho-regular.ttf
+asset-font	589540	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/22656331beb61633e057fa20aa73b3bd117707f9.asset/AssetData/BMHanna11yrs-Regular.otf
+asset-font	605252	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/6ca8b19114fa5b803af8c74eff3f7b75be41559a.asset/AssetData/BMDoHyeon-Regular.otf
+asset-font	6979568	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/5d3a1229823fff781c0d9dac611c90f9fc31e138.asset/AssetData/LiHeiPro.ttf
+asset-font	71910476	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/a3c69464b629577766c23bcdb12ffbfe3759b923.asset/AssetData/Hanzipen.ttc
+asset-font	7217896	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/1fb44cf128344a11e654a43ccd7a45a68026bf5d.asset/AssetData/NanumScript.ttc
+asset-font	7505836	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/5feac9245cca79adaf638ded7a4994b1ddb33ca0.asset/AssetData/Hei.ttf
+asset-font	78222888	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+asset-font	7898912	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/a9507b2dd1e57ecf7dc3a2fe25e8abfef12973ad.asset/AssetData/TsukushiAMaruGothic.ttc
+asset-font	7916348	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/6331c5916c361af1b83fb8b8b76ef2eece20c8eb.asset/AssetData/Kai.ttf
+asset-font	79221092	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/4a418d1fa4860652a3241e8ee457806c8557fc64.asset/AssetData/Yuanti.ttc
+asset-font	7957540	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/60484a5d6f3fa8d51dcbeff43b7e70c9d42bcd2f.asset/AssetData/TsukushiBMaruGothic.ttc
+asset-font	827624	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/a7a90316a83e0693b3d971d89b235ee578c59f0c.asset/AssetData/BMYeongSung-Regular.otf
+asset-font	85395896	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/00bfc46ccb002b730e29def5116e0a571fb617d8.asset/AssetData/Hannotate.ttc
+asset-font	8705236	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/42529d87b12845309dd4a57dea9e58446826e94c.asset/AssetData/BIZ_UDGothic.ttc
+asset-font	88760528	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/13b8ce423f920875b28b551f9406bf1014e0a656.asset/AssetData/Xingkai.ttc
+asset-font	8941248	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/a35803b18dea500ee1e426f403635efbe5a84bd4.asset/AssetData/ToppanBunkyuMinchoPr6N-Regular.otf
+asset-font	8947492	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/b3a305e67bac3daadc55e9b976b534261c038509.asset/AssetData/AppleLiSung-Light.ttf
+asset-font	9453612	-	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/833e6cdde7e9b6be27aeb4bb26a2d25f93a6b1f7.asset/AssetData/PCmyoungjo.ttf
+font	0da8c12f3e15d95585434d2cf294b3113a3e3fc84bf9ba9d64f2ef834ef4bd98	/System/Library/Fonts/Supplemental/Verdana.ttf
+font	252ef50efa09218d77d83311b531c14d7c0d45230e79389bd3db78448bc942f4	/System/Library/Fonts/Supplemental/Verdana Bold Italic.ttf
+font	359413e76969fc8a03e0acf91b355a98bb13c42472614e54bff5c8e4f4817fbb	/System/Library/Fonts/Supplemental/Tahoma.ttf
+font	374b0190a9844343110d8f8ed1818117a4591803d022bbb2bd189d63a681e731	/System/Library/Fonts/Supplemental/Arial Bold Italic.ttf
+font	42e4302bb33db1869a17f1af1e7e9bd6d1b594c0292c683b51d4db0ea5d1206a	/System/Library/Fonts/GeezaPro.ttc
+font	480f66b66430bdfa6e9a2199e4bf8f79d915221e60d58e7a32b4ff50645de2e0	/System/Library/Fonts/Supplemental/Verdana Bold.ttf
+font	500df4e46b554ae7d646e8727952fd8c7e60e94423481f6b82325cfddba2ee6a	/System/Library/Fonts/Supplemental/Courier New Bold.ttf
+font	50f5b1f27b7d34621090e437e8b1dd4510a22d2823fc876b3286bed327b64bbb	/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf
+font	525979822591a3447cfc49d943d6f7683508e25543407871c0ed8fed05fd2bd9	/System/Library/Fonts/Supplemental/Arial.ttf
+font	60e4c514200985d3f8405af039ffb89cd24b45fef5005b019825a4937b96135d	/System/Library/Fonts/Supplemental/Courier New Bold Italic.ttf
+font	658718d77497145281cb0ec45ff2fe7c6e18062b2a38f837d0d792d9be3a9ba3	/System/Library/Fonts/Helvetica.ttc
+font	7bb99c3a67697fbce15ab66d806d9a2151432ce1dab2eaba4156e1251da486c0	/System/Library/Fonts/Supplemental/Times New Roman Italic.ttf
+font	906157e8294fdf168d83002eaabde01c2d30fc3f44977be89e33fa22f262002a	/System/Library/Fonts/Supplemental/Times New Roman Bold Italic.ttf
+font	a1149e84da9e5c0a9b4cad68b62542b8503cb16ed8d1d7efd2640b36ce202b44	/System/Library/Fonts/Supplemental/Verdana Italic.ttf
+font	b5c6d453f16fb1693652671fa2e11d8c8ad1cd0046c3f38ae2608d165838ecf1	/System/Library/Fonts/Supplemental/Courier New Italic.ttf
+font	c481b239979bf0a4912949494e00568fba253fd6265a9770c8721e7989e111ca	/System/Library/Fonts/LucidaGrande.ttc
+font	c886ca3172d8ce9189976992d145ec090500a4ff516ecb9d4df56b1a78336247	/System/Library/Fonts/Supplemental/Courier New.ttf
+font	ce1d2f1ab89db45f9796100eee960f5702a40e84c225c2b48c3ec3e81d153f98	/System/Library/Fonts/Supplemental/Arial Italic.ttf
+font	d72db21f9242aedd6b917d8549ad5921766b24d5f8d0becfda2ff4c620b3c2e0	/System/Library/Fonts/Supplemental/Arial Bold.ttf
+font	f2d400484a6aace67980730ec0a9ef24ce9e535a2604f118e6fdc2510021b85f	/System/Library/Fonts/Menlo.ttc
+font	f3b4ffff71c2a0c7227d37497683b2498fb2d0a4e8beae26f022e3ccfcaabfa3	/System/Library/Fonts/Supplemental/Times New Roman.ttf
+font	fc1863ab504b9c160abaa12b92296363db72f5b759311982510a85fe2aa9ff4f	/System/Library/Fonts/Supplemental/Tahoma Bold.ttf
+user-font	1251424	-	/Users/marcelo/Library/Fonts/MesloLGS NF Italic.ttf
+user-font	1260156	-	/Users/marcelo/Library/Fonts/MesloLGS NF Bold Italic.ttf
+user-font	1292408	-	/Users/marcelo/Library/Fonts/MesloLGS NF Regular.ttf
+user-font	1301900	-	/Users/marcelo/Library/Fonts/MesloLGS NF Bold.ttf
+user-font	2121276	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-ExtraLightItalic.ttf
+user-font	2121516	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-LightItalic.ttf
+user-font	2122948	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Italic.ttf
+user-font	2123764	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-MediumItalic.ttf
+user-font	2125608	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-BoldItalic.ttf
+user-font	2126020	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-SemiBoldItalic.ttf
+user-font	2127060	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-BlackItalic.ttf
+user-font	2145480	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-ExtraLightItalic.ttf
+user-font	2145716	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-LightItalic.ttf
+user-font	2147156	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Italic.ttf
+user-font	2147952	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-MediumItalic.ttf
+user-font	2149808	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-BoldItalic.ttf
+user-font	2150208	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-SemiBoldItalic.ttf
+user-font	2151292	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-BlackItalic.ttf
+user-font	2151704	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Light.ttf
+user-font	2151708	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-ExtraLight.ttf
+user-font	2153572	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Thin.ttf
+user-font	2155828	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Medium.ttf
+user-font	2156096	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Regular.ttf
+user-font	2156636	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ThinItalic.ttf
+user-font	2156672	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraLight.ttf
+user-font	2157404	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-SemiBold.ttf
+user-font	2157444	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraLightItalic.ttf
+user-font	2158276	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Medium.ttf
+user-font	2158352	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Light.ttf
+user-font	2158480	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Bold.ttf
+user-font	2159080	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Italic.ttf
+user-font	2159088	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-MediumItalic.ttf
+user-font	2159132	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-SemiBold.ttf
+user-font	2159304	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Bold.ttf
+user-font	2159800	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-LightItalic.ttf
+user-font	2160352	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Black.ttf
+user-font	2160952	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraBold.ttf
+user-font	2161536	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-SemiBoldItalic.ttf
+user-font	2161620	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-BoldItalic.ttf
+user-font	2162784	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Regular.ttf
+user-font	2162960	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraBoldItalic.ttf
+user-font	2167600	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-ExtraLightItalic.ttf
+user-font	2167836	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-LightItalic.ttf
+user-font	2169276	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Italic.ttf
+user-font	2170072	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-MediumItalic.ttf
+user-font	2171928	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-BoldItalic.ttf
+user-font	2172328	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-SemiBoldItalic.ttf
+user-font	2173412	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-BlackItalic.ttf
+user-font	2175904	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Light.ttf
+user-font	2175912	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-ExtraLight.ttf
+user-font	2182464	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Medium.ttf
+user-font	2183320	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-SemiBold.ttf
+user-font	2183508	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Bold.ttf
+user-font	2184584	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Black.ttf
+user-font	2186992	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Regular.ttf
+user-font	2198520	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Light.ttf
+user-font	2198528	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-ExtraLight.ttf
+user-font	2200640	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Thin.ttf
+user-font	2200848	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Thin.ttf
+user-font	2202892	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Medium.ttf
+user-font	2203100	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Medium.ttf
+user-font	2203164	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Regular.ttf
+user-font	2203372	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Regular.ttf
+user-font	2203672	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ThinItalic.ttf
+user-font	2203736	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraLight.ttf
+user-font	2203880	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ThinItalic.ttf
+user-font	2203944	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraLight.ttf
+user-font	2204472	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-SemiBold.ttf
+user-font	2204476	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraLightItalic.ttf
+user-font	2204680	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-SemiBold.ttf
+user-font	2204684	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraLightItalic.ttf
+user-font	2205080	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Medium.ttf
+user-font	2205420	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Light.ttf
+user-font	2205548	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Bold.ttf
+user-font	2205628	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Light.ttf
+user-font	2205756	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Bold.ttf
+user-font	2205936	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-SemiBold.ttf
+user-font	2206116	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Italic.ttf
+user-font	2206120	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-MediumItalic.ttf
+user-font	2206124	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Bold.ttf
+user-font	2206324	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Italic.ttf
+user-font	2206328	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-MediumItalic.ttf
+user-font	2206836	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-LightItalic.ttf
+user-font	2207044	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-LightItalic.ttf
+user-font	2207200	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Black.ttf
+user-font	2208020	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraBold.ttf
+user-font	2208228	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraBold.ttf
+user-font	2208572	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-SemiBoldItalic.ttf
+user-font	2208656	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-BoldItalic.ttf
+user-font	2208780	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-SemiBoldItalic.ttf
+user-font	2208864	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-BoldItalic.ttf
+user-font	2209608	-	/Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Regular.ttf
+user-font	2209996	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraBoldItalic.ttf
+user-font	2210204	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraBoldItalic.ttf
+user-font	2234396	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Thin.ttf
+user-font	2236524	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ThinItalic.ttf
+user-font	2237716	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraLightItalic.ttf
+user-font	2238128	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Medium.ttf
+user-font	2238256	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Regular.ttf
+user-font	2238392	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraLight.ttf
+user-font	2240320	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-MediumItalic.ttf
+user-font	2240372	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Italic.ttf
+user-font	2240600	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-LightItalic.ttf
+user-font	2240680	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Light.ttf
+user-font	2241368	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-SemiBold.ttf
+user-font	2242024	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Bold.ttf
+user-font	2243284	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-BoldItalic.ttf
+user-font	2243392	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-SemiBoldItalic.ttf
+user-font	2243788	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraBold.ttf
+user-font	2245300	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraBoldItalic.ttf
+user-font	2281764	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Thin.ttf
+user-font	2281972	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Thin.ttf
+user-font	2283864	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ThinItalic.ttf
+user-font	2284072	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ThinItalic.ttf
+user-font	2285060	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraLightItalic.ttf
+user-font	2285268	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraLightItalic.ttf
+user-font	2285500	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Medium.ttf
+user-font	2285628	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Regular.ttf
+user-font	2285708	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Medium.ttf
+user-font	2285764	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraLight.ttf
+user-font	2285836	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Regular.ttf
+user-font	2285972	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraLight.ttf
+user-font	2287664	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-MediumItalic.ttf
+user-font	2287716	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Italic.ttf
+user-font	2287872	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-MediumItalic.ttf
+user-font	2287924	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Italic.ttf
+user-font	2287944	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-LightItalic.ttf
+user-font	2288052	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Light.ttf
+user-font	2288152	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-LightItalic.ttf
+user-font	2288260	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Light.ttf
+user-font	2288736	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-SemiBold.ttf
+user-font	2288944	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-SemiBold.ttf
+user-font	2289396	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Bold.ttf
+user-font	2289604	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Bold.ttf
+user-font	2290624	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-BoldItalic.ttf
+user-font	2290732	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-SemiBoldItalic.ttf
+user-font	2290832	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-BoldItalic.ttf
+user-font	2290940	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-SemiBoldItalic.ttf
+user-font	2291160	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraBold.ttf
+user-font	2291368	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraBold.ttf
+user-font	2292644	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraBoldItalic.ttf
+user-font	2292852	-	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraBoldItalic.ttf
+user-font	2485020	-	/Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-Italic.ttf
+user-font	2485060	-	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-Italic.ttf
+user-font	2485172	-	/Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-Italic.ttf
+user-font	2485212	-	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-Italic.ttf
+user-font	2485416	-	/Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-Italic.ttf
+user-font	2485456	-	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-Italic.ttf
+user-font	2501356	-	/Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-BoldItalic.ttf
+user-font	2501388	-	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-BoldItalic.ttf
+user-font	2501560	-	/Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-BoldItalic.ttf
+user-font	2501592	-	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-BoldItalic.ttf
+user-font	2501804	-	/Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-BoldItalic.ttf
+user-font	2501836	-	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-BoldItalic.ttf
+user-font	2525748	-	/Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-Regular.ttf
+user-font	2525784	-	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-Regular.ttf
+user-font	2525900	-	/Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-Regular.ttf
+user-font	2525936	-	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-Regular.ttf
+user-font	2526144	-	/Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-Regular.ttf
+user-font	2526180	-	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-Regular.ttf
+user-font	2542876	-	/Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-Bold.ttf
+user-font	2542912	-	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-Bold.ttf
+user-font	2543080	-	/Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-Bold.ttf
+user-font	2543116	-	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-Bold.ttf
+user-font	2543324	-	/Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-Bold.ttf
+user-font	2543360	-	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-Bold.ttf
+user-font	2571288	-	/Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-Italic.ttf
+user-font	2571324	-	/Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-Italic.ttf
+user-font	2571328	-	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-Italic.ttf
+user-font	2571364	-	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-Italic.ttf
+user-font	2571372	-	/Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-Italic.ttf
+user-font	2571412	-	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-Italic.ttf
+user-font	2571500	-	/Users/marcelo/Library/Fonts/MesloLGSNerdFont-Italic.ttf
+user-font	2571536	-	/Users/marcelo/Library/Fonts/MesloLGMNerdFont-Italic.ttf
+user-font	2571540	-	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-Italic.ttf
+user-font	2571576	-	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-Italic.ttf
+user-font	2571580	-	/Users/marcelo/Library/Fonts/MesloLGLNerdFont-Italic.ttf
+user-font	2571620	-	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-Italic.ttf
+user-font	2587624	-	/Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-BoldItalic.ttf
+user-font	2587656	-	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-BoldItalic.ttf
+user-font	2587712	-	/Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-BoldItalic.ttf
+user-font	2587744	-	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-BoldItalic.ttf
+user-font	2587760	-	/Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-BoldItalic.ttf
+user-font	2587792	-	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-BoldItalic.ttf
+user-font	2587840	-	/Users/marcelo/Library/Fonts/MesloLGSNerdFont-BoldItalic.ttf
+user-font	2587872	-	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-BoldItalic.ttf
+user-font	2587928	-	/Users/marcelo/Library/Fonts/MesloLGMNerdFont-BoldItalic.ttf
+user-font	2587960	-	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-BoldItalic.ttf
+user-font	2587972	-	/Users/marcelo/Library/Fonts/MesloLGLNerdFont-BoldItalic.ttf
+user-font	2588004	-	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-BoldItalic.ttf
+user-font	2612540	-	/Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-Regular.ttf
+user-font	2612576	-	/Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-Regular.ttf
+user-font	2612576	-	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-Regular.ttf
+user-font	2612612	-	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-Regular.ttf
+user-font	2612620	-	/Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-Regular.ttf
+user-font	2612656	-	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-Regular.ttf
+user-font	2612748	-	/Users/marcelo/Library/Fonts/MesloLGSNerdFont-Regular.ttf
+user-font	2612784	-	/Users/marcelo/Library/Fonts/MesloLGMNerdFont-Regular.ttf
+user-font	2612784	-	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-Regular.ttf
+user-font	2612820	-	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-Regular.ttf
+user-font	2612828	-	/Users/marcelo/Library/Fonts/MesloLGLNerdFont-Regular.ttf
+user-font	2612864	-	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-Regular.ttf
+user-font	2629668	-	/Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-Bold.ttf
+user-font	2629704	-	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-Bold.ttf
+user-font	2629756	-	/Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-Bold.ttf
+user-font	2629792	-	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-Bold.ttf
+user-font	2629800	-	/Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-Bold.ttf
+user-font	2629836	-	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-Bold.ttf
+user-font	2629876	-	/Users/marcelo/Library/Fonts/MesloLGSNerdFont-Bold.ttf
+user-font	2629912	-	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-Bold.ttf
+user-font	2629964	-	/Users/marcelo/Library/Fonts/MesloLGMNerdFont-Bold.ttf
+user-font	2630000	-	/Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-Bold.ttf
+user-font	2630008	-	/Users/marcelo/Library/Fonts/MesloLGLNerdFont-Bold.ttf
+user-font	2630044	-	/Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-Bold.ttf
+user-font	309408	-	/Users/marcelo/Library/Fonts/Hack-Regular.ttf
+user-font	316156	-	/Users/marcelo/Library/Fonts/Hack-Italic.ttf
+user-font	317628	-	/Users/marcelo/Library/Fonts/Hack-Bold.ttf
+user-font	322288	-	/Users/marcelo/Library/Fonts/Hack-BoldItalic.ttf
+user-font	36	-	/Library/Fonts/.uuid
+user-font	487108	-	/Users/marcelo/Library/Fonts/Meslo LG L Regular for Powerline.otf
+user-font	487108	-	/Users/marcelo/Library/Fonts/Meslo LG M Regular for Powerline.otf
+user-font	487108	-	/Users/marcelo/Library/Fonts/Meslo LG S Regular for Powerline.otf
+user-font	487380	-	/Users/marcelo/Library/Fonts/Meslo LG L DZ Regular for Powerline.otf
+user-font	487380	-	/Users/marcelo/Library/Fonts/Meslo LG M DZ Regular for Powerline.otf
+user-font	487380	-	/Users/marcelo/Library/Fonts/Meslo LG S DZ Regular for Powerline.otf
+user-font	52	link	/Library/Fonts/Arial Unicode.ttf
