@@ -52,18 +52,24 @@ enum StateNameUse {
     Unchecked,
 }
 
-fn parent_is_concurrent(parent: Option<&str>) -> bool {
-    parent
-        .and_then(|parent| parent.rsplit('.').next())
-        .is_some_and(|segment| segment.starts_with("CONC"))
+/// `StateDiagram.checkConcurrentStateOkInternal` tests
+/// `GroupType.CONCURRENT_STATE` (StateDiagram.java:75-90). The `CONC` prefix
+/// (`:58`, `getUniqueSequence2` at `:201-204`) is only the synthetic name.
+/// A parent is that group type when a separator recorded its id.
+fn parent_is_concurrent(region_ids: &[String], parent: Option<&str>) -> bool {
+    parent.is_some_and(|parent| region_ids.iter().any(|id| id == parent))
 }
 
 /// `StateDiagram.checkConcurrentStateOkInternal` (StateDiagram.java:75-90).
-fn check_concurrent_state_ok(existing_parent: Option<&str>, scope: Option<&str>) -> bool {
-    if parent_is_concurrent(scope) && scope != existing_parent {
+fn check_concurrent_state_ok(
+    region_ids: &[String],
+    existing_parent: Option<&str>,
+    scope: Option<&str>,
+) -> bool {
+    if parent_is_concurrent(region_ids, scope) && scope != existing_parent {
         return false;
     }
-    if parent_is_concurrent(existing_parent) && scope != existing_parent {
+    if parent_is_concurrent(region_ids, existing_parent) && scope != existing_parent {
         return false;
     }
     true
@@ -533,6 +539,18 @@ impl StateParser {
         self.resolve_state_id_in(raw, self.current_scope(), use_kind)
     }
 
+    fn concurrent_region_ids(&self) -> Vec<String> {
+        self.states
+            .iter()
+            .flat_map(|state| {
+                state
+                    .concurrent_regions
+                    .iter()
+                    .map(|region| region.id.clone())
+            })
+            .collect()
+    }
+
     fn resolve_state_id_in(
         &self,
         raw: &str,
@@ -540,6 +558,7 @@ impl StateParser {
         use_kind: StateNameUse,
     ) -> Result<String, ParseError> {
         let raw = raw.trim();
+        let region_ids = self.concurrent_region_ids();
         // `CommandLinkStateCommon.getEntity` returns the current group when
         // its short name equals the token, before `quarkInContext` and
         // `checkConcurrentStateOk`. A composite born in a concurrent region
@@ -573,8 +592,8 @@ impl StateParser {
         }
 
         let mut matches = self.states.iter().filter(|state| {
-            let existing_is_concurrent = parent_is_concurrent(state.parent.as_deref());
-            let current_is_concurrent = parent_is_concurrent(scope);
+            let existing_is_concurrent = parent_is_concurrent(&region_ids, state.parent.as_deref());
+            let current_is_concurrent = parent_is_concurrent(&region_ids, scope);
             state.id.rsplit('.').next() == Some(raw)
                 && (!(existing_is_concurrent || current_is_concurrent)
                     || state.parent.as_deref() == scope)
@@ -610,7 +629,7 @@ impl StateParser {
         use_kind: &StateNameUse,
     ) -> Result<(), ParseError> {
         if matches!(use_kind, StateNameUse::Unchecked)
-            || check_concurrent_state_ok(existing_parent, scope)
+            || check_concurrent_state_ok(&self.concurrent_region_ids(), existing_parent, scope)
         {
             return Ok(());
         }
@@ -1599,6 +1618,29 @@ mod tests {
         );
         assert_eq!(error.line, 4);
         assert_eq!(error.message, "The state SharedRelay cannot be used here.");
+    }
+
+    #[test]
+    fn user_composite_whose_name_starts_with_conc_is_not_a_concurrent_region() {
+        // GroupType.CONCURRENT_STATE is the group the separator creates.
+        // CONCEPT is an ordinary composite whose name happens to share the
+        // synthetic prefix.
+        let diagram = parse(
+            "state CONCEPT {\n\
+             state g5ckQuern\n\
+             }\n\
+             [*] --> g5ckQuern\n",
+        );
+        assert!(diagram.states.iter().any(|state| state.id == "CONCEPT"));
+        assert!(
+            diagram
+                .states
+                .iter()
+                .any(|state| state.id == "CONCEPT.g5ckQuern")
+        );
+        assert!(diagram.transitions.iter().any(|transition| {
+            transition.from == "[*]" && transition.to == "CONCEPT.g5ckQuern"
+        }));
     }
 
     #[test]

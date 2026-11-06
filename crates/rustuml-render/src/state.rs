@@ -695,7 +695,7 @@ fn layout_node_size_with_font(
     let label = state_def.map_or(id, |state| state.label.as_str());
     let descriptions = state_def.map_or(&[][..], |state| state.descriptions.as_slice());
     let family = font.name.unwrap_or("sans-serif");
-    let title_width = state_text_width_with_family(
+    let title_width = state_block_width(
         label,
         font.name_size,
         false,
@@ -706,7 +706,7 @@ fn layout_node_size_with_font(
     let fields_width = descriptions
         .iter()
         .map(|description| {
-            state_text_width_with_family(
+            state_block_width(
                 description,
                 font.desc_size,
                 false,
@@ -716,12 +716,10 @@ fn layout_node_size_with_font(
             )
         })
         .fold(0.0_f64, f64::max);
-    let title_height = text_render::label_height_with_family(label, font.name_size, family);
+    let title_height = state_block_height(label, font.name_size, family);
     let fields_height = descriptions
         .iter()
-        .map(|description| {
-            text_render::label_height_with_family(description, font.desc_size, family)
-        })
+        .map(|description| state_block_height(description, font.desc_size, family))
         .sum::<f64>();
 
     // Java provenance: `EntityImageState.calculateDimensionSlow` merges the
@@ -1664,6 +1662,51 @@ fn state_text_width_with_family(
     }
 }
 
+fn state_display(text: &str) -> rustuml_parser::display::DisplayText {
+    rustuml_parser::display::display_with_newlines(text)
+}
+
+fn state_block_width(
+    text: &str,
+    font_size: f64,
+    bold: bool,
+    italic: bool,
+    font_name: Option<&str>,
+    monospace: bool,
+) -> f64 {
+    state_display(text)
+        .lines
+        .iter()
+        .map(|line| {
+            state_text_width_with_family(line, font_size, bold, italic, font_name, monospace)
+        })
+        .fold(0.0, f64::max)
+}
+
+fn state_block_height(text: &str, font_size: f64, family: &str) -> f64 {
+    state_display(text)
+        .lines
+        .iter()
+        .map(|line| text_render::label_height_with_family(line, font_size, family))
+        .sum()
+}
+
+/// `ClusterDotString` sizes the title table from the title `Display` after
+/// `getWithNewlines`. One row keeps `measure` / `label_height` exactly.
+fn cluster_title_size(label: &str) -> ClusterTitleSize {
+    let lines = state_display(label).lines;
+    ClusterTitleSize {
+        width: lines
+            .iter()
+            .map(|line| text_render::measure(line, STATE_FONT_SIZE, false))
+            .fold(0.0, f64::max),
+        height: lines
+            .iter()
+            .map(|line| text_render::label_height(line, STATE_FONT_SIZE))
+            .sum(),
+    }
+}
+
 fn canonical_state_font_family(value: &str) -> String {
     let raw = value.trim();
     let quoted = (raw.starts_with('"') && raw.ends_with('"'))
@@ -1920,10 +1963,15 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
         let Some(parent) = state.parent.as_deref() else {
             continue;
         };
+        // The `CONC` prefix is only the synthetic name. A declared state
+        // such as CONCEPT is not a concurrent region even when metadata is
+        // absent. `Foo.CONC2` is not a state id, so models that predate
+        // explicit region metadata still reconstruct it.
         if parent
             .rsplit('.')
             .next()
             .is_some_and(|name| name.starts_with("CONC"))
+            && !diagram.states.iter().any(|state| state.id == parent)
         {
             concurrent_regions
                 .entry(parent)
@@ -2251,7 +2299,7 @@ struct AutonomousTextStyle {
 
 impl AutonomousTextStyle {
     fn width(&self, text: &str) -> f64 {
-        state_text_width_with_family(
+        state_block_width(
             text,
             self.size,
             self.bold,
@@ -2262,29 +2310,42 @@ impl AutonomousTextStyle {
     }
 
     fn height(&self, text: &str) -> f64 {
-        text_render::label_height_with_family(text, self.size, &self.family)
+        state_block_height(text, self.size, &self.family)
     }
 
     fn ascent(&self, text: &str) -> f64 {
-        text_render::label_ascent_with_family(text, self.size, &self.family)
+        let first = state_display(text)
+            .lines
+            .into_iter()
+            .next()
+            .unwrap_or_default();
+        text_render::label_ascent_with_family(&first, self.size, &self.family)
     }
 
     fn emit(&self, svg: &mut String, text: &str, x: f64, baseline: f64) {
-        text_render::emit_text(
-            svg,
-            text,
-            &TextBase {
-                x,
-                y: baseline,
-                font_size: self.size as u32,
-                font_family: &self.family,
-                fill: &self.color,
-                bold: self.bold,
-                italic: self.italic,
-                underline: false,
-                skip_underline: false,
-            },
-        );
+        let lines = state_display(text).lines;
+        let first = lines.first().map(String::as_str).unwrap_or("");
+        let first_ascent = text_render::label_ascent_with_family(first, self.size, &self.family);
+        let mut stripe_top = 0.0;
+        for line in &lines {
+            let line_ascent = text_render::label_ascent_with_family(line, self.size, &self.family);
+            text_render::emit_text(
+                svg,
+                line,
+                &TextBase {
+                    x,
+                    y: baseline - first_ascent + stripe_top + line_ascent,
+                    font_size: self.size as u32,
+                    font_family: &self.family,
+                    fill: &self.color,
+                    bold: self.bold,
+                    italic: self.italic,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            stripe_top += text_render::label_height_with_family(line, self.size, &self.family);
+        }
     }
 }
 
@@ -3230,14 +3291,7 @@ fn layout_autonomous_scope(
                 .iter()
                 .any(|candidate| candidate.id == *parent)
         });
-        layout.add_svek_cluster(
-            &cluster.id,
-            parent,
-            ClusterTitleSize {
-                width: text_render::measure(&cluster.label, STATE_FONT_SIZE, false),
-                height: text_render::label_height(&cluster.label, STATE_FONT_SIZE),
-            },
-        );
+        layout.add_svek_cluster(&cluster.id, parent, cluster_title_size(&cluster.label));
     }
     for id in &ids {
         let owner = if live_clusters.iter().any(|cluster| cluster.id == *id) {
@@ -5524,10 +5578,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         layout.add_svek_cluster(
             &composite.id,
             composite.parent.as_deref(),
-            ClusterTitleSize {
-                width: text_render::measure(&composite.label, STATE_FONT_SIZE, false),
-                height: text_render::label_height(&composite.label, STATE_FONT_SIZE),
-            },
+            cluster_title_size(&composite.label),
         );
     }
     for id in &ids {
@@ -7978,47 +8029,76 @@ pub fn render_with_oracle(
                             .unwrap();
                         }
 
-                        let text_w = state_text_width_with_family(
-                            label,
-                            title_style.size,
-                            title_style.bold,
-                            title_style.italic,
-                            Some(&title_style.family),
-                            is_state_monospace_family(&title_style.family),
-                        );
-                        let text_x = cx - text_w / 2.0;
-                        // Java `EntityImageStateEmptyDescription.drawU`
-                        // centers the measured title block, then draws it from
-                        // that top edge.
-                        let title_height = text_render::label_height_with_family(
-                            label,
-                            title_style.size,
-                            &title_style.family,
-                        );
-                        let text_y = box_y
-                            + (*bh - title_height) / 2.0
-                            + text_render::label_ascent_with_family(
-                                label,
+                        // Java `EntityImageStateEmptyDescription.drawU` centers
+                        // the measured title block, then draws it from that
+                        // top edge. `Display.getWithNewlines` has already
+                        // split the name into rows.
+                        let title_lines = state_display(label).lines;
+                        let text_w = title_lines
+                            .iter()
+                            .map(|line| {
+                                state_text_width_with_family(
+                                    line,
+                                    title_style.size,
+                                    title_style.bold,
+                                    title_style.italic,
+                                    Some(&title_style.family),
+                                    is_state_monospace_family(&title_style.family),
+                                )
+                            })
+                            .fold(0.0, f64::max);
+                        let title_height = title_lines
+                            .iter()
+                            .map(|line| {
+                                text_render::label_height_with_family(
+                                    line,
+                                    title_style.size,
+                                    &title_style.family,
+                                )
+                            })
+                            .sum::<f64>();
+                        let mut stripe_top = 0.0;
+                        for line in &title_lines {
+                            let line_w = state_text_width_with_family(
+                                line,
+                                title_style.size,
+                                title_style.bold,
+                                title_style.italic,
+                                Some(&title_style.family),
+                                is_state_monospace_family(&title_style.family),
+                            );
+                            let text_x = cx - text_w / 2.0 + (text_w - line_w) / 2.0;
+                            let text_y = box_y
+                                + (*bh - title_height) / 2.0
+                                + stripe_top
+                                + text_render::label_ascent_with_family(
+                                    line,
+                                    title_style.size,
+                                    &title_style.family,
+                                );
+                            let mut text_buf = String::new();
+                            text_render::emit_text(
+                                &mut text_buf,
+                                line,
+                                &TextBase {
+                                    x: text_x,
+                                    y: text_y,
+                                    font_size: title_style.size as u32,
+                                    font_family: &title_style.family,
+                                    fill: &title_style.color,
+                                    bold: title_style.bold,
+                                    italic: title_style.italic,
+                                    underline: false,
+                                    skip_underline: false,
+                                },
+                            );
+                            svg.push_str(&text_buf);
+                            stripe_top += text_render::label_height_with_family(
+                                line,
                                 title_style.size,
                                 &title_style.family,
                             );
-                        let mut text_buf = String::new();
-                        text_render::emit_text(
-                            &mut text_buf,
-                            label,
-                            &TextBase {
-                                x: text_x,
-                                y: text_y,
-                                font_size: title_style.size as u32,
-                                font_family: &title_style.family,
-                                fill: &title_style.color,
-                                bold: title_style.bold,
-                                italic: title_style.italic,
-                                underline: false,
-                                skip_underline: false,
-                            },
-                        );
-                        svg.push_str(&text_buf);
+                        }
                     } else {
                         write!(
                             svg,
@@ -8064,13 +8144,14 @@ pub fn render_with_oracle(
                         // font-size override the divider sits below a taller name
                         // band, so the analytic `box_y + DIVIDER_OFFSET` (keyed to
                         // the 14pt default) is wrong. The oracle value is exact.
+                        let title_display = state_display(label);
                         let div_y = orc_rect
                             .and_then(|r| r.sep_y_values.first().copied())
                             .unwrap_or_else(|| {
                                 box_y
                                     + 10.0
                                     + 2.0 * global_padding
-                                    + text_render::label_height_with_family(
+                                    + state_block_height(
                                         label,
                                         title_style.size,
                                         &title_style.family,
@@ -8098,79 +8179,119 @@ pub fn render_with_oracle(
                         // State name label. Prefer the oracle's captured name
                         // text x (exact byte-for-byte) over our re-centred
                         // value, which can drift by sub-ulp amounts versus
-                        // PlantUML's own text measurement.
-                        let text_w = state_text_width_with_family(
-                            label,
-                            title_style.size,
-                            title_style.bold,
-                            title_style.italic,
-                            Some(&title_style.family),
-                            is_state_monospace_family(&title_style.family),
-                        );
-                        let text_x = orc_rect
-                            .and_then(|r| r.name_text_x)
-                            .unwrap_or(cx - text_w / 2.0);
-                        // Prefer the oracle's captured baseline y: PlantUML
-                        // derives it from an unrounded box top, so recomputing
-                        // `box_y + offset` from the rounded rect.y can drift by
-                        // one ULP (e.g. 142.0234 vs 142.0235).
-                        let text_y = orc_rect
-                            .and_then(|r| r.text_y_values.first().copied())
-                            .unwrap_or_else(|| {
-                                box_y
-                                    + 5.0
-                                    + global_padding
-                                    + text_render::label_ascent_with_family(
-                                        label,
-                                        title_style.size,
-                                        &title_style.family,
-                                    )
-                            });
-                        let title_base = TextBase {
-                            x: text_x,
-                            y: text_y,
-                            font_size: title_style.size as u32,
-                            font_family: &title_style.family,
-                            fill: &title_style.color,
-                            bold: title_style.bold,
-                            italic: title_style.italic,
-                            underline: false,
-                            skip_underline: false,
-                        };
-                        if title_style.family != "sans-serif"
-                            && !state_text_has_creole_markup(label)
-                        {
-                            // Custom font name (`skinparam stateFontName ...` /
-                            // global `defaultFontName ...`): emit the
-                            // user-supplied family and the matching width.
-                            // A plain run is one atom; Creole markup below uses
-                            // the shared TextBlock emitter.
-                            let fam = crate::svg::font_family_attribute(&title_style.family);
-                            let style_attr = if title_style.italic {
-                                r#" font-style="italic""#
+                        // PlantUML's own text measurement. A one-row name keeps
+                        // that single element. Further rows come from
+                        // `Display.getWithNewlines` before Creole.
+                        let title_block_w = title_display
+                            .lines
+                            .iter()
+                            .map(|line| {
+                                state_text_width_with_family(
+                                    line,
+                                    title_style.size,
+                                    title_style.bold,
+                                    title_style.italic,
+                                    Some(&title_style.family),
+                                    is_state_monospace_family(&title_style.family),
+                                )
+                            })
+                            .fold(0.0, f64::max);
+                        let mut oracle_text_y_index = 0usize;
+                        let mut title_stripe = 0.0;
+                        for line in &title_display.lines {
+                            let line_w = state_text_width_with_family(
+                                line,
+                                title_style.size,
+                                title_style.bold,
+                                title_style.italic,
+                                Some(&title_style.family),
+                                is_state_monospace_family(&title_style.family),
+                            );
+                            let centered =
+                                cx - title_block_w / 2.0 + (title_block_w - line_w) / 2.0;
+                            let text_x = if title_display.lines.len() == 1 {
+                                orc_rect.and_then(|r| r.name_text_x).unwrap_or(centered)
                             } else {
-                                ""
+                                match title_display.align {
+                                    Some(rustuml_parser::display::DisplayAlign::Left) => {
+                                        box_x + 5.0 + global_padding
+                                    }
+                                    Some(rustuml_parser::display::DisplayAlign::Right) => {
+                                        box_x + bw - 5.0 - global_padding - line_w
+                                    }
+                                    Some(rustuml_parser::display::DisplayAlign::Center) | None => {
+                                        centered
+                                    }
+                                }
                             };
-                            let weight_attr = if title_style.bold {
-                                r#" font-weight="700""#
+                            let line_ascent = text_render::label_ascent_with_family(
+                                line,
+                                title_style.size,
+                                &title_style.family,
+                            );
+                            // Prefer the oracle's captured baseline y: PlantUML
+                            // derives it from an unrounded box top, so recomputing
+                            // `box_y + offset` from the rounded rect.y can drift by
+                            // one ULP (e.g. 142.0234 vs 142.0235).
+                            let text_y = orc_rect
+                                .and_then(|r| r.text_y_values.get(oracle_text_y_index).copied())
+                                .unwrap_or_else(|| {
+                                    box_y + 5.0 + global_padding + title_stripe + line_ascent
+                                });
+                            let title_base = TextBase {
+                                x: text_x,
+                                y: text_y,
+                                font_size: title_style.size as u32,
+                                font_family: &title_style.family,
+                                fill: &title_style.color,
+                                bold: title_style.bold,
+                                italic: title_style.italic,
+                                underline: false,
+                                skip_underline: false,
+                            };
+                            if title_style.family != "sans-serif"
+                                && !state_text_has_creole_markup(line)
+                            {
+                                // Custom font name (`skinparam stateFontName ...` /
+                                // global `defaultFontName ...`): emit the
+                                // user-supplied family and the matching width.
+                                // A plain run is one atom; Creole markup below uses
+                                // the shared TextBlock emitter.
+                                let fam = crate::svg::font_family_attribute(&title_style.family);
+                                let style_attr = if title_style.italic {
+                                    r#" font-style="italic""#
+                                } else {
+                                    ""
+                                };
+                                let weight_attr = if title_style.bold {
+                                    r#" font-weight="700""#
+                                } else {
+                                    ""
+                                };
+                                write!(
+                                    svg,
+                                    r#"<text {} font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                                    crate::svg::fill_attributes(&title_style.color),
+                                    title_style.size as u32,
+                                    fmt_f(line_w),
+                                    fmt_f(text_x),
+                                    fmt_f(text_y),
+                                    escape_text_content(line),
+                                )
+                                .unwrap();
+                                oracle_text_y_index += 1;
                             } else {
-                                ""
-                            };
-                            write!(
-                                svg,
-                                r#"<text {} font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-                                crate::svg::fill_attributes(&title_style.color),
-                                title_style.size as u32,
-                                fmt_f(text_w),
-                                fmt_f(text_x),
-                                fmt_f(text_y),
-                                escape_text_content(label),
-                            )
-                            .unwrap();
-                        } else {
-                            let mut text_buf = String::new();
-                            text_render::emit_text(&mut text_buf, label, &title_base);
-                            svg.push_str(&text_buf);
+                                let mut text_buf = String::new();
+                                text_render::emit_text(&mut text_buf, line, &title_base);
+                                svg.push_str(&text_buf);
+                                oracle_text_y_index +=
+                                    text_render::emitted_baseline_count(line, &title_base);
+                            }
+                            title_stripe += text_render::label_height_with_family(
+                                line,
+                                title_style.size,
+                                &title_style.family,
+                            );
                         }
 
                         // Description lines. Prefer the oracle's captured
@@ -8178,94 +8299,122 @@ pub fn render_with_oracle(
                         // label. Rich Creole names can emit more than one
                         // baseline (for example mixed font sizes), so `j + 1`
                         // would accidentally reuse the second name baseline.
-                        let mut oracle_text_y_index = if title_style.family != "sans-serif"
-                            && !state_text_has_creole_markup(label)
-                        {
-                            1
-                        } else {
-                            text_render::emitted_baseline_count(label, &title_base)
-                        };
-                        for (j, desc) in descriptions.iter().enumerate() {
-                            let desc_x = box_x + 5.0 + global_padding;
-                            let desc_y = orc_rect
-                                .and_then(|r| r.text_y_values.get(oracle_text_y_index).copied())
-                                .unwrap_or_else(|| {
-                                    // Java provenance:
-                                    // `EntityImageState.drawU` places the
-                                    // fields `SheetBlock1` five pixels below
-                                    // the divider. `Sea.doAlign` then uses the
-                                    // first run's actual ascent within each
-                                    // Creole line, so an enlarged first run
-                                    // must not inherit the 12pt default
-                                    // baseline.
-                                    div_y
-                                        + STATE_FIELD_TOP_PADDING
-                                        + global_padding
-                                        + text_render::label_first_baseline_ascent_with_family(
-                                            desc,
+                        // Each following stripe is that line's own height
+                        // (`SheetBlock1`), not the sans 12pt stride.
+                        let mut stripe_before = 0.0;
+                        for desc in descriptions {
+                            let desc_display = state_display(desc);
+                            for line in &desc_display.lines {
+                                let desc_x = match desc_display.align {
+                                    Some(rustuml_parser::display::DisplayAlign::Right) => {
+                                        let line_w = state_text_width_with_family(
+                                            line,
                                             attribute_style.size,
-                                            &attribute_style.family,
-                                        )
-                                        + j as f64 * DESC_LINE_SPACING
-                                });
-                            let desc_base = TextBase {
-                                x: desc_x,
-                                y: desc_y,
-                                font_size: attribute_style.size as u32,
-                                font_family: &attribute_style.family,
-                                fill: &attribute_style.color,
-                                bold: attribute_style.bold,
-                                italic: attribute_style.italic,
-                                underline: false,
-                                skip_underline: false,
-                            };
-                            if attribute_style.family != "sans-serif"
-                                && !state_text_has_creole_markup(desc)
-                            {
-                                let fam =
-                                    crate::svg::font_family_attribute(&attribute_style.family);
-                                let style_attr = if attribute_style.italic {
-                                    r#" font-style="italic""#
-                                } else {
-                                    ""
+                                            attribute_style.bold,
+                                            attribute_style.italic,
+                                            Some(&attribute_style.family),
+                                            is_state_monospace_family(&attribute_style.family),
+                                        );
+                                        box_x + bw - 5.0 - global_padding - line_w
+                                    }
+                                    Some(rustuml_parser::display::DisplayAlign::Center) => {
+                                        let line_w = state_text_width_with_family(
+                                            line,
+                                            attribute_style.size,
+                                            attribute_style.bold,
+                                            attribute_style.italic,
+                                            Some(&attribute_style.family),
+                                            is_state_monospace_family(&attribute_style.family),
+                                        );
+                                        cx - line_w / 2.0
+                                    }
+                                    Some(rustuml_parser::display::DisplayAlign::Left) | None => {
+                                        box_x + 5.0 + global_padding
+                                    }
                                 };
-                                let weight_attr = if attribute_style.bold {
-                                    r#" font-weight="700""#
-                                } else {
-                                    ""
+                                let desc_y = orc_rect
+                                    .and_then(|r| r.text_y_values.get(oracle_text_y_index).copied())
+                                    .unwrap_or_else(|| {
+                                        // Java provenance:
+                                        // `EntityImageState.drawU` places the
+                                        // fields `SheetBlock1` five pixels below
+                                        // the divider. `Sea.doAlign` then uses the
+                                        // first run's actual ascent within each
+                                        // Creole line.
+                                        div_y
+                                            + STATE_FIELD_TOP_PADDING
+                                            + global_padding
+                                            + stripe_before
+                                            + text_render::label_first_baseline_ascent_with_family(
+                                                line,
+                                                attribute_style.size,
+                                                &attribute_style.family,
+                                            )
+                                    });
+                                let desc_base = TextBase {
+                                    x: desc_x,
+                                    y: desc_y,
+                                    font_size: attribute_style.size as u32,
+                                    font_family: &attribute_style.family,
+                                    fill: &attribute_style.color,
+                                    bold: attribute_style.bold,
+                                    italic: attribute_style.italic,
+                                    underline: false,
+                                    skip_underline: false,
                                 };
-                                let content = if is_state_monospace_family(&attribute_style.family)
+                                if attribute_style.family != "sans-serif"
+                                    && !state_text_has_creole_markup(line)
                                 {
-                                    desc.replace(' ', "\u{00a0}")
+                                    let fam =
+                                        crate::svg::font_family_attribute(&attribute_style.family);
+                                    let style_attr = if attribute_style.italic {
+                                        r#" font-style="italic""#
+                                    } else {
+                                        ""
+                                    };
+                                    let weight_attr = if attribute_style.bold {
+                                        r#" font-weight="700""#
+                                    } else {
+                                        ""
+                                    };
+                                    let content =
+                                        if is_state_monospace_family(&attribute_style.family) {
+                                            line.replace(' ', "\u{00a0}")
+                                        } else {
+                                            line.clone()
+                                        };
+                                    let width = state_text_width_with_family(
+                                        &content,
+                                        attribute_style.size,
+                                        attribute_style.bold,
+                                        attribute_style.italic,
+                                        Some(&attribute_style.family),
+                                        is_state_monospace_family(&attribute_style.family),
+                                    );
+                                    write!(
+                                        svg,
+                                        r#"<text {} font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                                        crate::svg::fill_attributes(&attribute_style.color),
+                                        attribute_style.size as u32,
+                                        fmt_f(width),
+                                        fmt_f(desc_x),
+                                        fmt_f(desc_y),
+                                        escape_text_content(&content),
+                                    )
+                                    .unwrap();
+                                    oracle_text_y_index += 1;
                                 } else {
-                                    desc.clone()
-                                };
-                                let width = state_text_width_with_family(
-                                    &content,
+                                    let mut text_buf = String::new();
+                                    text_render::emit_text(&mut text_buf, line, &desc_base);
+                                    svg.push_str(&text_buf);
+                                    oracle_text_y_index +=
+                                        text_render::emitted_baseline_count(line, &desc_base);
+                                }
+                                stripe_before += text_render::label_height_with_family(
+                                    line,
                                     attribute_style.size,
-                                    attribute_style.bold,
-                                    attribute_style.italic,
-                                    Some(&attribute_style.family),
-                                    is_state_monospace_family(&attribute_style.family),
+                                    &attribute_style.family,
                                 );
-                                write!(
-                                    svg,
-                                    r#"<text {} font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-                                    crate::svg::fill_attributes(&attribute_style.color),
-                                    attribute_style.size as u32,
-                                    fmt_f(width),
-                                    fmt_f(desc_x),
-                                    fmt_f(desc_y),
-                                    escape_text_content(&content),
-                                )
-                                .unwrap();
-                                oracle_text_y_index += 1;
-                            } else {
-                                let mut text_buf = String::new();
-                                text_render::emit_text(&mut text_buf, desc, &desc_base);
-                                svg.push_str(&text_buf);
-                                oracle_text_y_index +=
-                                    text_render::emitted_baseline_count(desc, &desc_base);
                             }
                         }
 
@@ -13507,5 +13656,41 @@ Grate --> [*]
         assert!(svg.contains(">Hot</text>"));
         assert!(svg.contains(">steam</text>"));
         assert!(svg.contains(r#"font-family="Courier""#));
+    }
+
+    #[test]
+    fn newline_in_a_state_name_is_two_creole_rows() {
+        let source = r#"@startuml
+skinparam stateFontName Verdana
+state "~**g5ckQuern**" as g5ckQuern
+state "g5ckMidden\nfold" as g5ckMidden
+g5ckQuern --> g5ckMidden
+@enduml
+"#;
+        let svg = crate::render_svg(&rustuml_parser::parse::parse(source).unwrap());
+        // `~**` consumes the tilde and keeps the stars. Java's text node is
+        // `**g5ckQuern**` (textLength 111.8564), not a bold run.
+        assert!(svg.contains(">**g5ckQuern**</text>"));
+        assert!(!svg.contains("~**"));
+        assert!(svg.contains(">g5ckMidden</text>"));
+        assert!(svg.contains(">fold</text>"));
+        assert!(!svg.contains("g5ckMidden\\nfold"));
+        assert!(svg.contains(r#"height="54.0293""#));
+    }
+
+    #[test]
+    fn verdana_description_stripes_use_the_family_line_height() {
+        let source = r#"@startuml
+skinparam stateFontName Verdana
+state g5ckQuern
+g5ckQuern : plain row
+g5ckQuern : **bold row**
+g5ckQuern : //italic row//
+@enduml
+"#;
+        let svg = crate::render_svg(&rustuml_parser::parse::parse(source).unwrap());
+        assert!(svg.contains(r#"y="51.0791""#));
+        assert!(svg.contains(r#"y="65.6631""#));
+        assert!(svg.contains(r#"y="80.2471""#));
     }
 }
