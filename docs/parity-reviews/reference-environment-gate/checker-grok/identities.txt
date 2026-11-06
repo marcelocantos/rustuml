@@ -1,0 +1,4 @@
+script 48bd4273a7709c8d2f32de4b8bc7256babe54141497fa357270a68fe4f5fc991 27750 /Users/marcelo/.t3/worktrees/rustuml/t3-80778d8d/scripts/reference_env_census.py
+census 868a9072ecffd939c07e174b7c606679b5ac379a5ae7c1d48f2cf25336458ae6 50752 /Users/marcelo/.t3/worktrees/rustuml/t3-80778d8d/tools/font-chain-reference/monkeyman-reference-env/census.txt
+tip-bin 112a82a4bebe6085d7d0a6e1b857732462e684ce876f803fde67e808c3d91ab2 30082320 /Users/marcelo/Library/Caches/rustuml-grok-g7-checker/bin/rustuml-tip
+base-bin aa7c7790ddfa0dd029b0cd857ab961259a33ec9d6572bd6a09d8ebebd195eac4 30062816 /Users/marcelo/Library/Caches/rustuml-grok-g7-checker/bin/rustuml-base

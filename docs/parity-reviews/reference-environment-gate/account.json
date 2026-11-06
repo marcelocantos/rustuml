@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "mechanism": "reference-environment-gate",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/TitledDiagram.java:exportDiagramNow",
+    "src/main/java/net/sourceforge/plantuml/core/TextBlockExporter12026.java:createUGraphic"
+  ],
+  "rust_locations": [
+    "scripts/reference_env_census.py",
+    "crates/rustuml-render/src/reference_env_census.rs",
+    "crates/rustuml-render/src/pdf.rs",
+    "third_party/svg2pdf/src/util/context.rs",
+    "third_party/svg2pdf/src/util/resources.rs"
+  ],
+  "invariant": "A Monkey Man census matches the committed pin (OS build, JDK, HarfBuzz keg and dylib, FreeType dylib, user fonts, MobileAsset font files) before a reference batch is trusted, and Rust PDF bytes are stable without being counted as Java parity.",
+  "causal_divergence": "User-font symlink rows store only the link's lstat size and the marker link, so a same-length retarget or a change to the target file is invisible. The relay tools never run the check. Pinned Java comments out FileFormat.PDF, so Rust PDF is an extension rather than a Java match.",
+  "planned_change": "Pin symlink target path and target-file hash, fail check on exit 1 and exit 2, and run record then check inside seq_capture.py before any reference invocation. Keep PDF on its own oracle.",
+  "perturbation_axes": [
+    "Reference-host fact drift: HarfBuzz keg and dylib, FreeType hash, JDK, OS build, user font add/remove/hash, MobileAsset font add/remove/hash, symlink retarget",
+    "PDF byte stability across runs, cwd, pipe versus file, and diagram kinds, with non-PDF formats held identical"
+  ]
+}

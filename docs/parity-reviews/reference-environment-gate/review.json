@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "mechanism": "reference-environment-gate",
+  "reviewer": {
+    "task_id": "t3-80778d8d grok-g7 reference-environment checker",
+    "model": "grok-4.7",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "account_commit": "79f1104c7f7570fa4026c8bcec26b0da695218f8",
+  "implementation_commit": "79f1104c7f7570fa4026c8bcec26b0da695218f8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git switch -c review/grok-g7-env-pdf 79f1104c7f7570fa4026c8bcec26b0da695218f8",
+    "python3 -I scripts/reference_env_census.py check LIVE --committed tools/font-chain-reference/monkeyman-reference-env/census.txt",
+    "CARGO_TARGET_DIR=$CACHE/target-tip cargo test --release --offline -p rustuml --test pdf_contract --test pipe_mode",
+    "CARGO_TARGET_DIR=$CACHE/target-tip cargo test --release --offline -p rustuml-oracle --test doc_claims --test harness_guards --test golden_no_oracle --test golden_pairs --test parity_perturbations --no-fail-fast",
+    "CARGO_TARGET_DIR=$CACHE/target-base cargo test --release --offline -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards",
+    "cmp of -tsvg stdout for 18878 sources and a 64-source sample of -tpng -teps -ttxt between the two release binaries"
+  ],
+  "findings": [
+    "Rejected. record() stores a user-font symlink as lstat size plus the marker link and drops the target path and the target file's bytes (scripts/reference_env_census.py lines 472-473). A same-length retarget of Arial Unicode.ttf and a rewrite of the target file leave the census row unchanged, so check exits 0. The Supplemental Arial Unicode.ttf file is not in FONT_FILES. A longer target path changes the size and exits 1, which shows the gate only sees the link's path length.",
+    "The gate is not a loop. upload.py, seq_capture.py, and pull.py under ~/.cache/rustuml-relay-tools do not call reference_env_census.py. docs/reference-bootstrap.md lines 196-197 say check is the drift gate a relay runs before trusting a Java reference. The cargo test runs self-test against the committed file only. Wire it as the first step of seq_capture.py on Monkey Man, before new-worker, and abort on exit 1 and exit 2.",
+    "Exit 2 is still reachable. Blanking the committed FreeType hash, or setting a committed asset hash to -, makes check exit 2 while the live census keeps the real hash. The fully pinned baseline does not return 2 against a complete copy. Treating 2 as success accepts an unpinned baseline.",
+    "record's Python writes are the files under OUT listed in checker-grok/measurements.md, plus mkdir(parents=True), which creates missing ancestors of OUT. That ancestor create is a write outside OUT. The script does not write Homebrew or fonts. The reference JVM is a subprocess with a copied environment and DYLD_PRINT_LIBRARIES=1. It was not executed here. seq_capture does not pass -XX:-UsePerfData, so HotSpot can write /tmp/hsperfdata_<user>. That was not observed.",
+    "Listed-fact mutations exit 1: HarfBuzz keg, dylib hash, and opt target; FreeType hash; JDK hash and home; OS build and product version; user-font add, remove, and hash; MobileAsset add, remove, and hash; Helvetica.ttc; the .uuid row; a missing FreeType key. Reorder, comments, catalog xml/plist, extra scalars, and sidecar metadata exit 0. The committed census matches grok-g7-census2 and check of that directory exits 0. The historical grok-g7-census check-output is 64 plist/xml drifts. Against the new baseline that old directory exits 1 on 59 asset-font hashes.",
+    "PDF claim holds at the Java pin: TitledDiagram.java lines 336-346 comment out FileFormat.PDF, and TextBlockExporter12026.java:267 throws UnsupportedOperationException. pdf_contract exited 0. Probed diagrams were byte-stable across runs, cwd, pipe versus file, and an unset debug pin. The svg2pdf diff against crates.io 0.13.0 is the two sort sites plus RUSTUML-PATCH.md. LICENSE-APACHE, LICENSE-MIT, and NOTICE are in third_party/svg2pdf. Repo NOTICES already names svg2pdf and is outside the packet diff. -tpng and -teps do not use this crate.",
+    "Non-PDF output did not change on the measured set. -tsvg: 18878 sources, 0 mismatches (12550 golden, 6328 perturbation). -tpng, -teps, and -ttxt: 64 each, 0 mismatches. golden_no_oracle 11181/11251 on both trees, failure names identical. golden_pairs 10497 passed, 754 failed, 1299 skipped on both, failure names identical. Perturbation failure path sets are equal. Oracle crate diff against base is empty. Decimal ratchet deltas match. Clippy exits 0 on both; tip adds two warnings in unmodified third_party/svg2pdf/src/util/helper.rs (25 versus 23).",
+    "committed_census_matches_stored_face_extractions exited 0 with no network and no Monkey Man access. Workspace lib tests exited 0. The census README and the bootstrap hashes, OS 27.2 build 26B123, JDK 21.0.5, HarfBuzz 15.0.0_1 b04ab259, the 2026-10-28 link switch, and the brew-upgrade prohibition match the committed census. The bootstrap overstates the relay wiring, as finding 2 says.",
+    "No product .puml fixtures were added. This rejected review makes parity_review_records_are_complete worse after the commit, because the guard requires the latest verdict to be accepted and the perturbation paths named below were not created. harness_guards on the maker tip, before this record, failed only the pre-existing decimal ratchet and review-record tests."
+  ],
+  "verdict": "rejected",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/reference-environment-gate/symlink-retarget.puml",
+      "golden": "test-diagrams/perturbations/reference-environment-gate/symlink-retarget.svg",
+      "result": "fail",
+      "axes": ["user-font symlink target path and target bytes"]
+    },
+    {
+      "source": "test-diagrams/perturbations/reference-environment-gate/keg-and-dylib.puml",
+      "golden": "test-diagrams/perturbations/reference-environment-gate/keg-and-dylib.svg",
+      "result": "fail",
+      "axes": ["HarfBuzz keg and FreeType dylib hash"]
+    }
+  ],
+  "evidence": "docs/parity-reviews/reference-environment-gate/checker-grok/measurements.md"
+}

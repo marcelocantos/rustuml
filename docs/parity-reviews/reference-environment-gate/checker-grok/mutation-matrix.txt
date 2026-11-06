@@ -1,0 +1,38 @@
+committed 868a9072ecffd939c07e174b7c606679b5ac379a5ae7c1d48f2cf25336458ae6 bytes 50752
+0	identical-copy	pinned facts match
+relay2-bytes-identical True
+0	relay2-dir	pinned facts match
+1	old-relay-dir	59 pinned facts differ
+0	relay-copy-metadata-only	pinned facts match
+1	harfbuzz-keg	1 pinned facts differ
+1	harfbuzz-dylib-hash	1 pinned facts differ
+1	harfbuzz-opt-target	1 pinned facts differ
+1	freetype-hash	1 pinned facts differ
+1	jdk-hash	1 pinned facts differ
+1	jdk-home	1 pinned facts differ
+1	os-build	1 pinned facts differ
+1	os-product	1 pinned facts differ
+1	user-font-hash	1 pinned facts differ
+1	user-font-removed	1 pinned facts differ
+1	user-font-added	1 pinned facts differ
+1	asset-font-removed	1 pinned facts differ
+1	asset-font-hash	1 pinned facts differ
+1	asset-font-added	1 pinned facts differ
+0	reordered-asset-rows	pinned facts match
+0	comment-only	pinned facts match
+0	catalog-xml-plist	pinned facts match
+0	extra-live-scalar	pinned facts match
+0	symlink-row-unchanged-synthetic	pinned facts match
+1	symlink-size-changed	1 pinned facts differ
+0	symlink-same-length-retarget-invisible	pinned facts match
+2	exit2-blank-freetype-committed	pinned facts match; 1 hashes are not in the baseline yet
+2	exit2-asset-hash-dash-committed	pinned facts match; 1 hashes are not in the baseline yet
+1	system-font-helvetica-hash	1 pinned facts differ
+1	user-font-uuid-hash	1 pinned facts differ
+0	reordered-scalar-keys	pinned facts match
+1	live-missing-freetype-key	1 pinned facts differ
+OLD_RELAY_DRIFT_KINDS {'asset-font': 59} exit 1
+USER_FONT_SAMPLE /Users/marcelo/Library/Fonts/MesloLGS NF Italic.ttf
+ASSET_SAMPLE /System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+SCALAR_LINES 24
+MATRIX_DONE 31
