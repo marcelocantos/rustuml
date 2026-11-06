@@ -1,0 +1,23 @@
+# CQ held-out scored with compare_svg_strict
+# relay: /Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g3-menlo-bi-heldout/
+# reference-results.json SHA256 81223dfe8bcc275695047eefdab221bdc9c3862010fbd8c627c27908beecd4ff
+# 7 cases, each exit 0, stderr empty
+# tip predictions: rust-predictions/ rendered by b7c68efb… at dc6cc0799
+# base binary: ~/Library/Caches/rustuml-grok-g3/bin/rustuml-base SHA256 8c9aa063ed54347c21342f50aeb5d75c8c61527a67bace3009cf02b4dcd85f94
+# comparator: rustuml_oracle::compare::compare_svg_strict, Java SVG as expected
+
+Tip: 0/7 match, 7/7 fail. Each failure is two text-attribute mismatches.
+The class-name textLength matches Java (Menlo cell). The member textLength
+is the extracted Bold Italic fallback, and both texts carry font-style italic
+and font-weight 700. Java emits neither attribute. g3_bi_symbols member
+textLength is 9.2217 against Java 8.4287.
+
+Base: 0/7 match, 7/7 fail. The same italic and weight attributes are present.
+Name and member textLengths are not the Menlo cell (g3_bi_symbols name
+46.3682 against 42.1436, member 8.2305 against 8.4287), and the box width
+moves with them. Base does not match Java, so this batch is not a
+base-pass / tip-fail pair. The tip's new disagreement is the fallback
+advance on a face Java never selected.
+
+Java member textLengths are one Menlo cell (8.4287 at 14 pt, 7.2246 at 12 pt).
+g3_bi_mixed is three cells (25.2861).
