@@ -1,0 +1,6 @@
+@startuml
+Kea -> Tui : one
+\enduml
+@startuml
+Tui -> Kea : two
+@enduml

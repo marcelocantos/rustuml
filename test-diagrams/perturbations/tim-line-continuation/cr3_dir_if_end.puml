@@ -1,0 +1,6 @@
+@startuml
+Tui -> Kea : y
+Kea -> Tui : x %chr(92)
+!if 1
+!endif
+@enduml

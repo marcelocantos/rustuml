@@ -1,0 +1,124 @@
+{
+  "entries": 4,
+  "before_rejections": 0,
+  "after_rejections": 2,
+  "introduced_losses": [],
+  "after_false_accepts": [
+    "mc1_class_definelong.puml",
+    "mc1_seq_foreach_body.puml"
+  ],
+  "results": [
+    {
+      "source": "mc1_class_definelong.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "032e9ce59693bbd8c5a26fde0b977317da23d4f456a83654f799f6ccd5eebebd",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "dadd01751e713b954791a45b4513e876a7ed3be67fc3a2e9fced7ffc1da4335d",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "mc1_seq_before_enduml.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "adbea1af45e14f77f0c7089e0de2436d79a47ec3838fc0a7b7b723f99648a479",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "mc1_seq_at_eof.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "adbea1af45e14f77f0c7089e0de2436d79a47ec3838fc0a7b7b723f99648a479",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "mc1_seq_foreach_body.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "39c995cd5312ea6cbe6dd99bb01c944fda671a29013f3236e0c6feec9a901fd9",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "fa80fe3ae17aa6a93f5e4d08be7742253aa02c42e45293a6b8c7d4c31ee9f111",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    }
+  ]
+}

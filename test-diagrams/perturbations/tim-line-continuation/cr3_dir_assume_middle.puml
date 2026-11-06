@@ -1,0 +1,5 @@
+@startuml
+Kea -> Tui : x %chr(92)
+!assume transparent light
+Tui -> Kea : y
+@enduml
