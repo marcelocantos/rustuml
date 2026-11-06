@@ -13,7 +13,9 @@ and for the U+2580 control, on Menlo Bold and Menlo Bold Italic, with the
 same `Font.decode` / `deriveFont(PLAIN, 14)` / weight / posture construction
 as the previous probe. It then writes a C helper under `java.io.tmpdir`,
 compiles it with `cc`, `clang`, or `xcrun --find clang`, and runs it. The
-helper calls the same JRS entry `tools/FontChainExtract.swift` calls and
+C source is a Java text block, so each tab and newline in a C string is
+written with a doubled backslash. The helper calls the same JRS entry
+`tools/FontChainExtract.swift` calls and
 prints, per scalar, `OWN`, `FALLBACK`, or `MISSING`, the PostScript name,
 family, glyph id, point advance, units per em, advance in font units, and
 font path. It deletes the temporary source and binary before exit. It does

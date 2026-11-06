@@ -61,7 +61,7 @@ static void emit(const char *role, const char *kind, uint32_t cp, const char *di
     }
     unsigned upem = CTFontGetUnitsPerEm(font);
     double units = advance / 14.0 * (double)upem;
-    printf("JRS\t%s\t%s\t%04X\t%s\t%s\t%s\t%u\t%.17g\t%u\t%.17g\t%s\n",
+    printf("JRS\\t%s\\t%s\\t%04X\\t%s\\t%s\\t%s\\t%u\\t%.17g\\t%u\\t%.17g\\t%s\\n",
            role, kind, cp, disposition, ps, family, (unsigned)glyph, advance, upem, units, path);
 }
 
@@ -99,7 +99,7 @@ static void face(JrsFn jrs, const char *role, CFStringRef name) {
     CFStringRef psr = CTFontCopyPostScriptName(font);
     cstr(psr, ps, sizeof ps);
     if (psr) CFRelease(psr);
-    printf("# primary\t%s\t%s\n", role, ps);
+    printf("# primary\\t%s\\t%s\\n", role, ps);
     for (size_t i = 0; i < sizeof kControl / sizeof kControl[0]; i++) {
         one(jrs, role, font, "CONTROL", kControl[i]);
     }
@@ -113,13 +113,13 @@ int main(void) {
     void *h = dlopen("/System/Library/Frameworks/JavaRuntimeSupport.framework/JavaRuntimeSupport", RTLD_NOW);
     if (h == NULL) {
         const char *err = dlerror();
-        printf("JRS_LOAD_FAIL\t%s\n", err != NULL ? err : "dlopen failed");
+        printf("JRS_LOAD_FAIL\\t%s\\n", err != NULL ? err : "dlopen failed");
         return 2;
     }
     JrsFn jrs = (JrsFn)dlsym(h, "JRSFontCreateFallbackFontForCharacters");
     if (jrs == NULL) {
         const char *err = dlerror();
-        printf("JRS_SYMBOL_FAIL\t%s\n", err != NULL ? err : "dlsym failed");
+        printf("JRS_SYMBOL_FAIL\\t%s\\n", err != NULL ? err : "dlsym failed");
         return 3;
     }
     face(jrs, "BOLD", CFSTR("Menlo-Bold"));
