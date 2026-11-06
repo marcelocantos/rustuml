@@ -8,11 +8,11 @@
     "net.sourceforge.plantuml.klimt.font.UFontImpl#getUnderlayingFont (77-79)"
   ],
   "rust_locations": [
-    "crates/rustuml-render/src/text_render.rs HELVETICA_FACES and helvetica_text_width"
+    "crates/rustuml-render/src/text_render.rs HELVETICA_FACES, family_table_text_width and mapped_advance"
   ],
   "invariant": "A printable-ASCII character in a Helvetica style slot uses that slot's own glyph advance from Helvetica.ttc, scaled by point size / 2048.",
   "causal_divergence": "The old upright tables collapsed five face advances onto shared constants: plain % 1820 against 1821, apostrophe 455 against 391, W 1934 against 1933, bold k 1251 against 1139, bold z 1251 against 1024.",
-  "planned_change": "Replace the upright Helvetica tables with the four extracted ASCII faces and select the slot the way Verdana and Arial do. Keep U+00AB and U+00BB at the previous 1139 units until a checked cmap extraction replaces them. Do not retarget Times, Courier, Menlo or Lucida.",
+  "planned_change": "Replace the upright Helvetica tables with the four extracted ASCII faces and select the slot the way Verdana and Arial do. U+00AB and U+00BB stay at 1139 units because those advances are in the Helvetica plain and bold cmap rows, not a separate constant. Do not retarget Times, Courier, Menlo or Lucida.",
   "perturbation_axes": [
     "family Helvetica versus Verdana, Arial and SansSerif controls",
     "style plain, bold, italic and bold-italic",

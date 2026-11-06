@@ -73,7 +73,7 @@
       "comparator_constants_frozen": "ok",
       "no_golden_data_embedded_in_shipping_crates": "ok",
       "error_golden_census_is_frozen": "ok",
-      "decimal_literal_ratchet": "FAILED. At cb550c0d6 already: class.rs 578>383, deployment.rs 44>43, plantuml_metrics.rs 1055>1053, state.rs 62>53. This change adds text_render.rs 51->67, the 16 Java textLength strings in helvetica_faces_measure_java_widths. Baseline not rewritten.",
+      "decimal_literal_ratchet": "FAILED. At cb550c0d6 already: class.rs 578>383, deployment.rs 44>43, plantuml_metrics.rs 1055>1053, state.rs 62>53. The Helvetica ASCII commit adds text_render.rs 51->67. The later cmap commit adds one more literal, \"157.2197\", so the current count is 51->68. Baseline not rewritten.",
       "parity_review_records_are_complete": "FAILED at the base tree as well (latest checker reviews not accepted, across existing mechanisms). After the root account.json files, the only new lines are: helvetica-upright-advances and face-cmap-advances each 'account has no independent checker review'. No review.json was written."
     },
     "clippy_minus_D_warnings_no_deps": {
@@ -85,5 +85,6 @@
       "rustuml": "exit 0"
     }
   },
-  "held_out_probes": "g2a predictions were registered before any Java run of those eight sources. Java has not returned. Local tip versus base: quote/W/% and bold k/z moved; Alice, Verdana, Arial and SansSerif stayed byte-identical; the bold-italic k/z probe stayed byte-identical because that style block does not apply bold."
+  "held_out_probes": "g2a was relayed after the predictions were registered. The cmap-tip comparator result is in docs/parity-reviews/face-cmap-advances/maker-grok/measurement.json. This file's CLI sweep and strict counts are the Helvetica ASCII commit 794a50dac, binary f48c4a607dab6b31c193ed231c86189224d8c661524e77157620112e88db7abf, and are not the cmap tip.",
+  "cmap_tip": "The cmap remeasure supersedes shared-cohort counts. See face-cmap-advances/maker-grok/measurement.json."
 }

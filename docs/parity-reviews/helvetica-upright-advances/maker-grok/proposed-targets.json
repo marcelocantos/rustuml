@@ -4,16 +4,16 @@
     {
       "existing": "T14.49",
       "status": "not achieved",
-      "because": "Plain, italic and bold alphabet textLengths at 14 pt now equal the recorded Java strings, and c11a_of_comp_hv_b and c11a_of_part_hv_b became strict matches. The four c10a_ft_hv diagrams stay strict DIFF: the punctuation label is two text nodes (256.6758 and 25.2861) against Java's one node (240.0166 plain, 248.2881 bold), and the canvas is smaller. That split is present on the base binary."
+      "because": "On the cmap tip, plain and italic Helvetica alphabet textLengths at 14 pt equal the recorded Java strings (ABCDEFGHIJKLM 117.4619, NOPQRSTUVWXYZ 129.1172), and bold equals Java too (121.3311 and 129.1172). c11a_of_comp_hv_b and c11a_of_part_hv_b are strict matches. The four c10a_ft_hv diagrams stay strict DIFF ndiff 33: the punctuation label is two Rust text nodes (256.6758 and 25.2861) against Java's one node (240.0166 plain, 248.2881 bold and bold-italic)."
     },
     {
       "existing": "T14.55",
-      "status": "not achieved, blocked on the reference host",
-      "because": "No cmap advance TSV has been returned. m9a_vi_hebrew_italic is still DIFF and byte-identical to the base. The 1139-unit guillemet arm is retained on purpose."
+      "status": "not achieved",
+      "because": "Mapped non-ASCII now uses the face cmap. c10a_st_usec_vd and c10a_st_part_vd are strict matches, and «Ferrous gauge vista» is textLength 157.2197 on both the Java SVG and the tip. «marker» on custom_class and custom_grouped_class is now 61.2366 (base was 58.2214) but both whole SVGs stay DIFF. m9a_vi_hebrew_italic stays DIFF ndiff 7 and byte-identical to the base: Java textLength 63.3145, tip 62.0156. Verdana italic does not map U+05D0, U+1D167 or U+05D1, so the fallback chain is unchanged. Arial italic does map U+05D0 and U+05D1."
     },
     {
       "existing": "T14.46",
-      "note": "c10a_ft_hv_bolditalic still measures the italic face (ABCDEFGHIJKLM 117.4619, not Java's bold-italic 121.3311). Not edited. The style block sets FontStyle italic and FontWeight bold and the bold weight does not reach the advance table."
+      "note": "Not edited. g2_hv_bolditalic_kz is strict DIFF ndiff 11 on both base and tip, and the SVG bytes are identical. Java draws Helvetica italic with font-weight 700 and textLengths 63.0068 and 58.3447. The tip draws italic with no font-weight and textLengths 58.3584 and 54.4688. c10a_ft_hv_bolditalic alphabets stay on the italic face (117.4619 and 129.1172) while Java's bold-italic alphabets are 121.3311 and 129.1172. skinparam componentFontStyle bold does apply the bold face; a style block that sets FontStyle italic and FontWeight bold does not."
     },
     {
       "new_assertion": "A Helvetica component label that contains a backtick is one SVG text node, with Java's textLength, on the c10a_ft_hv punctuation label.",
