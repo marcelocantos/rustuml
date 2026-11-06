@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "mechanism": "jar-bundled-theme-sources",
+  "kind": "tip-measurement",
+  "target": "T14.30",
+  "status": "not-achieved",
+  "base": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "shipped_verbatim": [
+    "amiga",
+    "blueprint",
+    "carbon-gray",
+    "crt-amber",
+    "crt-green",
+    "mimeograph",
+    "mono",
+    "plain"
+  ],
+  "left_on_marker": ["sunlust"],
+  "not_tuned": "Theme files are byte copies of the pinned jar resources. No renderer constant was fitted. preprocess/mod.rs was not edited.",
+  "cohorts": {
+    "golden_no_oracle": {
+      "base": "11181/11251, 70 failure names, exit 0 against the previous lock",
+      "tip_before_lock": "11182/11251, exit 101 only because edge-cases 759 -> 760 was unlocked",
+      "failure_name_diff": {
+        "gained_passes": ["edge-cases/edge_theme_plain"],
+        "new_failures": []
+      },
+      "locked_baseline": "edge-cases 760/777. Other families unchanged. Headline 11182/11251."
+    },
+    "golden_pairs": {
+      "base_and_tip": "12550 total, 10497 passed, 754 failed, 1299 skipped, panics 0, xml diff 754, parked 0",
+      "skip_breakdown": "parse 0, golden_error 1199, unsupported_kw 0, other 100",
+      "per_directory_failures": {
+        "class": 437,
+        "combo": 113,
+        "edge-cases": 81,
+        "er": 52,
+        "preprocessing": 28,
+        "rendering": 17,
+        "deployment": 7,
+        "state": 7,
+        "creole": 4,
+        "skinparam": 4,
+        "component": 3,
+        "type-detection": 1
+      },
+      "lost_matches": 0,
+      "gains": 0
+    },
+    "parity_perturbations": {
+      "invocation": "release test binary from the repo root, the same cwd the base log used",
+      "base_divergences": 2717,
+      "tip_divergences": 2715,
+      "gains": [
+        "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-round2/theme_plain_state.puml",
+        "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-round2/theme_plain_variable.puml"
+      ],
+      "losses": [],
+      "panics_unchanged": [
+        "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+        "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+        "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+        "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+      ],
+      "cargo_package_cwd_note": "cargo test runs this binary with cwd crates/rustuml-oracle. That cwd cannot see repo-relative includes or from-path themes, so it adds 10 divergences that are absent when the same binary is started at the repo root. Those 10 are not product losses."
+    },
+    "harness_guards": {
+      "base_and_tip": "4 passed, 2 failed",
+      "failed_tests": ["decimal_literal_ratchet", "parity_review_records_are_complete"],
+      "decimal_literal_ratchet": "unchanged: class.rs 383 -> 578, deployment.rs 43 -> 44, plantuml_metrics.rs 1053 -> 1055, state.rs 53 -> 62",
+      "missing_root_account_json": "16 paths on base and 16 on tip. The set diff is empty. This mechanism's account is under maker-grok/, so the root account.json path is in both sets. No review.json was written."
+    },
+    "pipe_mode": "17 passed, 0 failed, after the help-text baseline update",
+    "doc_claims": "2 passed, 0 failed, after the headline moved to 11,182/11,251",
+    "workspace_lib": "LIB_EXIT 0. Crate results: 41, 10, 31, 665, 862 passed and 1 ignored. The ignored test is pre-existing. jar_themes_previously_omitted_now_ship_verbatim passed.",
+    "clippy": {
+      "rustuml-math": "exit 0",
+      "rustuml-layout": "exit 101, clippy::items_after_test_module at crates/rustuml-layout/src/graph.rs:2430. Not this change.",
+      "rustuml-parser": "exit 101, dead_code looks_like_description_bracket_command at crates/rustuml-parser/src/parse/component.rs:74. Not this change.",
+      "rustuml-render": "exit 101 with -D warnings because the parser dependency fails dead_code. --no-deps exits 101 with 19 pre-existing lib findings plus 1 lib-test finding. No render file was edited.",
+      "rustuml-oracle": "exit 101 with -D warnings because the parser dependency fails dead_code. --no-deps exits 101 on one pre-existing useless format! in the oracle lib. doc_claims.rs is not that error.",
+      "rustuml": "exit 101 with -D warnings because the parser dependency fails dead_code. --no-deps exits 0."
+    }
+  },
+  "fresh_probes": {
+    "count": 36,
+    "families": ["class", "sequence", "activity", "state"],
+    "themes": ["amiga", "blueprint", "carbon-gray", "crt-amber", "crt-green", "mimeograph", "mono", "plain", "sunlust"],
+    "tip_exit_0": 36,
+    "tip_stderr_empty": 36,
+    "stdout_changed_vs_base": 32,
+    "stdout_equal_base": ["g8_sunlust_class", "g8_sunlust_sequence", "g8_sunlust_activity", "g8_sunlust_state"],
+    "new_valid_input_errors": 0,
+    "panics": 0,
+    "java_comparison": "pending relay. These 36 have no validated Java SVG yet."
+  },
+  "pinned_existing_cases": {
+    "n": 17,
+    "whole_output_match_base": 0,
+    "whole_output_match_tip": 0,
+    "lost_whole_matches": 0,
+    "gained_whole_matches": 0,
+    "body_match_after_stripping_plantuml_pi": ["theme_plain_state"],
+    "tip_stdout_byte_equal_base": [
+      "theme_mono_inactive",
+      "mc1_class_theme_sketchy",
+      "mc1_state_theme_bluegray"
+    ],
+    "viewbox_width_height": {
+      "theme_plain_activity": {"java": "131x288", "tip": "141x298"},
+      "theme_mono_sequence": {"java": "191x151", "tip": "169x152"},
+      "theme_amiga_class": {"java": "111x175", "tip": "111x174"},
+      "theme_plain_state": {"java": "84x347", "tip": "84x347"},
+      "theme_mono_usecase": {"java": "102x190", "tip": "89x183"},
+      "theme_amiga_component": {"java": "116x180", "tip": "115x180"},
+      "theme_plain_variable": {"java": "93x175", "tip": "93x174"},
+      "theme_mono_inactive": {"java": "93x68", "tip": "93x68"},
+      "theme_plain_then_cerulean": {"java": "104x203", "tip": "104x203"},
+      "theme_mono_class": {"java": "95x171", "tip": "94x171"},
+      "theme_plain_class_note": {"java": "192x175", "tip": "192x174"},
+      "theme_plain_sequence": {"java": "172x124", "tip": "167x124"},
+      "cr2_seq_tail_then_theme": {"java": "145x153", "tip": "141x154"},
+      "cr2_seq_theme_then_continued": {"java": "172x124", "tip": "167x124"},
+      "mc1_seq_theme_plain": {"java": "191x154", "tip": "153x154"},
+      "mc1_class_theme_sketchy": {"java": "133x255", "tip": "113x218"},
+      "mc1_state_theme_bluegray": {"java": "150x352", "tip": "136x352"}
+    }
+  },
+  "residue_by_theme": {
+    "plain": "Bodies execute. theme_plain_state matches the Java SVG once <?plantuml?> and <?plantuml-src?> are removed; the whole CLI stream still differs by that processing instruction. Class and state viewBoxes are 1px short in height. Class notes stay #FEFFDD where Java is #FFFFFF. Sequence participants stay #E2E2F0 where Java is #FFFFFF, and the canvas is narrower (172x124 vs 167x124 on theme_plain_sequence; 191x154 vs 153x154 on mc1_seq_theme_plain). Activity keeps one sans-serif and fills #181818/#222222 that Java does not use, and grows from 131x288 to 141x298. cr2_seq_tail_then_theme now paints the messages before the directive in Verdana (6 faces) while Java stays sans-serif x5 plus one Verdana. That ordering lives in preprocess/mod.rs, which this lane does not edit.",
+    "mono": "Fonts become Hack on the active diagrams. Sequence and usecase fills stay #E2E2F0 against Java #FFFFFF. theme_mono_usecase is data-diagram-type SEQUENCE on both the base and tip binaries; Java is DESCRIPTION. theme_mono_inactive is inside !if 0 and the tip stdout is byte-equal to base. Class width is 94 vs Java 95.",
+    "amiga": "Class and component backgrounds and Verdana match the sampled fills and fonts. Class height is 174 vs 175. Component width is 115 vs 116. Both are data-diagram-type DESCRIPTION.",
+    "blueprint": "Four fresh probes exit 0 and their stdout differs from the marker-only base. No validated Java SVG yet.",
+    "carbon-gray": "Four fresh probes exit 0, including its !procedure and !startsub blocks. Stdout differs from base. No validated Java SVG yet.",
+    "crt-amber": "Four fresh probes exit 0 and stdout differs from base. No validated Java SVG yet.",
+    "crt-green": "Four fresh probes exit 0 and stdout differs from base. No validated Java SVG yet.",
+    "mimeograph": "Four fresh probes exit 0 and stdout differs from base. No validated Java SVG yet.",
+    "sunlust": "Not executed. get_theme_source returns None and try_theme still emits skinparam __theme sunlust. The four probes exit 0 with stdout byte-equal to base. Executing the jar file was measured earlier: exit 1, parse error line 127, Unknown built-in function %splitstr. %get_json_keys is the same kind of hole. See addendum-sunlust.json."
+  }
+}

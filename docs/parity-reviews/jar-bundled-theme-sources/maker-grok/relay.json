@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "mechanism": "jar-bundled-theme-sources",
+  "kind": "relay-request",
+  "note": "Parent relays these two immutable inputs. Rust predictions are pre-registered beside them. Do not run Java in this checkout.",
+  "reference-manifest.json": {
+    "path": "/Users/marcelo/Library/Caches/rustuml-grok-g8/g8-themes/reference-manifest.json",
+    "sha256": "09f9656ee1f9faf29238a8f9f5361f967e81ed72e20472f4cb1a7dd488b4a9a4"
+  },
+  "reference-input-bundle.json.gz": {
+    "path": "/Users/marcelo/Library/Caches/rustuml-grok-g8/g8-themes/reference-input-bundle.json.gz",
+    "sha256": "bc6b2f9f54aa6f3d2eb5321ea2cc9e909ec71acbcde47d080bd1e622fb55175d"
+  },
+  "rust-predictions.json": {
+    "path": "/Users/marcelo/Library/Caches/rustuml-grok-g8/g8-themes/rust-predictions.json",
+    "sha256": "4c07e9028c36806abe36a717af6f0ffb1b45d744d9a2d5f72b2e6ee5f695c0c7",
+    "tip_binary": "/Users/marcelo/Library/Caches/rustuml-grok-g8/bin/rustuml-tip",
+    "tip_binary_sha256": "5e2580f484987266e5250d6d99e684e4b53726165fb1e2ab0a1fc0df295cb506",
+    "base_binary": "/Users/marcelo/Library/Caches/rustuml-grok-g8/bin/rustuml-base",
+    "base_binary_sha256": "ae124c2e150eac5bd8b4a8ec3068a705e94c87bfaa9836e2255eb04f9a0fb253",
+    "sunlust": "four probes exit 0 and match the base marker-only stdout"
+  }
+}
