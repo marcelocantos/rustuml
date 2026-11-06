@@ -17,6 +17,8 @@ this extract and is not adopted.
 
 FreeType 2.15.0, every modelled face, every regular user font and every
 MobileAsset font file (`.ttf`, `.otf`, `.ttc`, `.dfont`) are content-hashed.
+The cascade faces named by stored `#slot` lines are not in this file yet.
+The next live record adds them.
 `/Library/Fonts/Arial Unicode.ttf` is a symlink. Its row pins target size
 23278008, sha256 `876af2cd4854644e7f3e7feb2f688997fdb3343c6df6693611209c9dfb47ccec`,
 the link path, and `/System/Library/Fonts/Supplemental/Arial Unicode.ttf`.
@@ -29,5 +31,5 @@ not asset fonts. Only `check` exit 0 passes.
 including the round-6 lstat row. It is not how this baseline is refreshed.
 
 The drift check is `reference_env_census.py check`. Only exit 0 passes.
-Exit 1 means a pinned fact moved. Exit 2 means a hash is still blank or
-`-`, and that is a failed gate.
+Exit 1 means a pinned fact moved. Exit 2 means a hash or a scalar is
+still blank or `-`, and that is a failed gate.

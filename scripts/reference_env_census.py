@@ -19,8 +19,8 @@ check LIVE_DIR --committed CENSUS
     Exit 0: every pinned fact matches.
     Exit 1: a pinned fact differs, or a font, user-font or asset path,
     size, hash or symlink target moved.
-    Exit 2: a committed hash is still blank or ``-``. This is a failed
-    gate, not a soft success.
+    Exit 2: a committed hash or scalar is still blank or ``-``. This is a
+    failed gate, not a soft success.
 assemble OUTFILE
     Rebuild the committed census from the stored reference artifacts in
     this checkout. Used to regenerate ``census.txt``; not run on Monkey Man.
@@ -46,13 +46,15 @@ SCHEMA = "1"
 PROBE = b"@startuml\nAlice -> Bob: census\n@enduml\n"
 REFERENCE = "/Users/marcelo/rustuml-reference/bin/reference"
 JDK_HOME = "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home"
+SCRATCH = Path("/Users/marcelo/rustuml-reference/scratch")
 
 # Faces the Rust font chain opens by absolute path (see font_chain_coverage.rs),
 # plus Times, Tahoma and Geeza Pro, which the stored extractions already hash.
-# This is not every face Core Text can open. A user-font symlink is pinned on
-# its own row (resolved target path and target-file hash) and is not copied
-# into this list. ``record`` hashes these paths; ``assemble`` copies their
-# hashes out of the stored records.
+# A user-font symlink is pinned on its own row (resolved target path and
+# target-file hash) and is not copied into this list. Cascade faces the
+# stored ``#slot`` lines name, and that these paths do not already cover,
+# are ``CASCADE_FONT_FILES``. ``record`` hashes both. ``assemble`` copies
+# only ``FONT_FILES`` out of the stored records.
 FONT_FILES = (
     "/System/Library/Fonts/GeezaPro.ttc",
     "/System/Library/Fonts/Helvetica.ttc",
@@ -76,6 +78,54 @@ FONT_FILES = (
     "/System/Library/Fonts/Supplemental/Verdana Bold.ttf",
     "/System/Library/Fonts/Supplemental/Verdana Italic.ttf",
     "/System/Library/Fonts/Supplemental/Verdana.ttf",
+)
+
+# Faces named by a stored ``#slot`` line and not already pinned by
+# ``FONT_FILES``, the user-font directories, or the MobileAsset walk.
+# ``derive_cascade_font_files`` reads the font-chain TSVs. ``self-test``
+# rejects this tuple when that derivation disagrees. Do not edit it by hand.
+CASCADE_FONT_FILES = (
+    "/System/Library/Fonts/Apple Color Emoji.ttc",
+    "/System/Library/Fonts/Apple Symbols.ttf",
+    "/System/Library/Fonts/AppleSDGothicNeo.ttc",
+    "/System/Library/Fonts/Hiragino Sans GB.ttc",
+    "/System/Library/Fonts/Kohinoor.ttc",
+    "/System/Library/Fonts/KohinoorBangla.ttc",
+    "/System/Library/Fonts/KohinoorGujarati.ttc",
+    "/System/Library/Fonts/KohinoorTelugu.ttc",
+    "/System/Library/Fonts/Monaco.ttf",
+    "/System/Library/Fonts/MuktaMahee.ttc",
+    "/System/Library/Fonts/NotoNastaliq.ttc",
+    "/System/Library/Fonts/NotoSansArmenian.ttc",
+    "/System/Library/Fonts/NotoSansKannada.ttc",
+    "/System/Library/Fonts/NotoSansMyanmar.ttc",
+    "/System/Library/Fonts/NotoSansOriya.ttc",
+    "/System/Library/Fonts/NotoSerifMyanmar.ttc",
+    "/System/Library/Fonts/Supplemental/AppleMyungjo.ttf",
+    "/System/Library/Fonts/Supplemental/Ayuthaya.ttf",
+    "/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc",
+    "/System/Library/Fonts/Supplemental/Galvji.ttc",
+    "/System/Library/Fonts/Supplemental/ITFDevanagari.ttc",
+    "/System/Library/Fonts/Supplemental/Kailasa.ttc",
+    "/System/Library/Fonts/Supplemental/Kannada MN.ttc",
+    "/System/Library/Fonts/Supplemental/KefaIII.ttf",
+    "/System/Library/Fonts/Supplemental/Khmer MN.ttc",
+    "/System/Library/Fonts/Supplemental/Khmer Sangam MN.ttf",
+    "/System/Library/Fonts/Supplemental/Kokonor.ttf",
+    "/System/Library/Fonts/Supplemental/Lao MN.ttc",
+    "/System/Library/Fonts/Supplemental/Lao Sangam MN.ttf",
+    "/System/Library/Fonts/Supplemental/Malayalam MN.ttc",
+    "/System/Library/Fonts/Supplemental/Malayalam Sangam MN.ttc",
+    "/System/Library/Fonts/Supplemental/Oriya MN.ttc",
+    "/System/Library/Fonts/Supplemental/STIXTwoMath.otf",
+    "/System/Library/Fonts/Supplemental/Sinhala MN.ttc",
+    "/System/Library/Fonts/Supplemental/Sinhala Sangam MN.ttc",
+    "/System/Library/Fonts/Supplemental/Songti.ttc",
+    "/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc",
+    "/System/Library/Fonts/Supplemental/Thonburi.ttc",
+    "/System/Library/Fonts/\u30d2\u30e9\u30ad\u3099\u30ce\u660e\u671d ProN.ttc",
+    "/System/Library/Fonts/\u30d2\u30e9\u30ad\u3099\u30ce\u89d2\u30b3\u3099\u30b7\u30c3\u30af W3.ttc",
+    "/System/Library/Fonts/\u30d2\u30e9\u30ad\u3099\u30ce\u89d2\u30b3\u3099\u30b7\u30c3\u30af W6.ttc",
 )
 
 # An asset font is a font file. Catalog XML and per-asset Info.plist
@@ -141,6 +191,45 @@ def default_committed() -> Path:
     if root is None:
         return Path(__file__).resolve().with_name("census.txt")
     return root / "tools/font-chain-reference/monkeyman-reference-env/census.txt"
+
+
+def slot_already_pinned(path: str) -> bool:
+    """True when ``FONT_FILES`` or a font walk already hashes this path."""
+    if path in FONT_FILES:
+        return True
+    as_path = Path(path)
+    covered = ASSET_FONT_DIRS + (Path("/Library/Fonts"), Path.home() / "Library" / "Fonts")
+    for directory in covered:
+        try:
+            as_path.relative_to(directory)
+        except ValueError:
+            continue
+        return True
+    return False
+
+
+def derive_cascade_font_files(chain: Path) -> tuple[str, ...]:
+    """``#slot`` paths the other walks do not pin, sorted, from the TSVs."""
+    paths: set[str] = set()
+    found = False
+    for tsv in chain.rglob("*.tsv"):
+        for line in tsv.read_text(encoding="utf-8").splitlines():
+            if not line.startswith("#slot\t"):
+                continue
+            found = True
+            fields = line.split("\t")
+            if len(fields) < 3 or not fields[2].startswith("/"):
+                raise SystemExit(f"bad #slot line in {tsv}")
+            paths.add(fields[2])
+    if not found:
+        raise SystemExit(f"no #slot lines under {chain}")
+    return tuple(path for path in sorted(paths) if not slot_already_pinned(path))
+
+
+def font_record_paths() -> tuple[str, ...]:
+    """Modelled faces, then cascade faces that are not already in that list."""
+    seen = set(FONT_FILES)
+    return FONT_FILES + tuple(path for path in CASCADE_FONT_FILES if path not in seen)
 
 
 def is_asset_font(path: Path) -> bool:
@@ -369,8 +458,30 @@ def gate_accepts(code: int) -> bool:
     return code == 0
 
 
-def prepare_record_dir(outdir: Path) -> None:
-    """Create OUT only. The parent must already exist. OUT is absent or empty."""
+def prepare_record_dir(outdir: Path, scratch: Path = SCRATCH) -> None:
+    """Create OUT only. The parent must already exist. OUT is absent or empty.
+
+    A symlink OUT is refused. A symlink in OUT's ancestry that lies under
+    ``scratch`` is refused. Following either one would write outside the
+    lexical path.
+    """
+    if outdir.is_symlink():
+        raise SystemExit(f"{outdir} is a symlink; record does not follow it")
+    ancestor = outdir.parent
+    while True:
+        if ancestor.is_symlink():
+            try:
+                ancestor.relative_to(scratch)
+            except ValueError:
+                pass
+            else:
+                raise SystemExit(
+                    f"{ancestor} is a symlink under {scratch}; record does not follow it"
+                )
+        parent = ancestor.parent
+        if parent == ancestor:
+            break
+        ancestor = parent
     parent = outdir.parent
     if not parent.is_dir():
         raise SystemExit(
@@ -508,7 +619,7 @@ def record(outdir: Path) -> None:
     if opt_ft.is_symlink():
         scalars["shaping.freetype.opt_target"] = os.readlink(opt_ft)
     rows: list[tuple[str, ...]] = []
-    for path in FONT_FILES:
+    for path in font_record_paths():
         rows.append(("font", sha256_file(Path(path)), path))
     for directory in USER_FONT_DIRS:
         if not directory.is_dir():
@@ -571,15 +682,15 @@ def check(live_dir: Path, committed_path: Path) -> int:
     drift: list[str] = []
     unpinned: list[str] = []
     for key, expected in sorted(committed_scalars.items()):
-        if key not in live_scalars:
-            drift.append(f"missing {key}")
-            continue
-        actual = live_scalars[key]
-        if expected == "":
-            if actual == "":
+        actual = live_scalars.get(key)
+        if expected in ("", "-"):
+            if actual is None or actual in ("", "-"):
                 unpinned.append(key)
             else:
                 unpinned.append(f"{key} live={actual}")
+            continue
+        if actual is None:
+            drift.append(f"missing {key}")
             continue
         if actual != expected:
             drift.append(f"{key}: committed {expected} live {actual}")
@@ -682,6 +793,7 @@ def self_test() -> None:
             )
         mutation_matrix(text, root / "matrix")
         symlink_mutations(root / "symlink")
+        cascade_slot_mutation(text, root / "cascade")
         outdir_guards(root / "outdir")
     print("self-test ok")
 
@@ -740,6 +852,18 @@ def mutation_matrix(text: str, root: Path) -> None:
         ("live-missing-freetype-key", text.replace(freetype + "\n", "", 1), text, 1),
         ("exit2-blank-freetype-committed", text, replace_once(text, freetype, "shaping.freetype.sha256="), 2),
         ("exit2-asset-hash-dash-committed", text, replace_once(text, asset, asset_dash), 2),
+        (
+            "exit2-scalar-dash-both",
+            replace_once(text, "host.product_version=27.2", "host.product_version=-"),
+            replace_once(text, "host.product_version=27.2", "host.product_version=-"),
+            2,
+        ),
+        (
+            "exit2-scalar-dash-committed",
+            text,
+            replace_once(text, "host.product_version=27.2", "host.product_version=-"),
+            2,
+        ),
     ]
     for name, live_text, committed_text, expected in cases:
         code = check_texts(live_text, committed_text, root / name)
@@ -816,6 +940,36 @@ def symlink_mutations(root: Path) -> None:
     expect("dangling-link", dangling, 1)
 
 
+def cascade_slot_mutation(text: str, root: Path) -> None:
+    """A cascade face named by a stored ``#slot`` line is a pinned font row."""
+    root.mkdir()
+    repo = repo_root()
+    if repo is None:
+        raise SystemExit("cascade derivation needs the checkout")
+    chain = repo / "tools/font-chain-reference"
+    derived = derive_cascade_font_files(chain)
+    if derived != CASCADE_FONT_FILES:
+        raise SystemExit(
+            f"CASCADE_FONT_FILES has {len(CASCADE_FONT_FILES)} paths, "
+            f"derivation has {len(derived)}"
+        )
+    round9 = derive_cascade_font_files(chain / "monkeyman-round9")
+    face = "/System/Library/Fonts/Apple Color Emoji.ttc"
+    if len(round9) != 29 or face not in round9 or face not in CASCADE_FONT_FILES:
+        raise SystemExit(f"round-9 cascade slots do not pin {face}: {len(round9)}")
+    if face not in font_record_paths():
+        raise SystemExit(f"record would not hash {face}")
+    if face in text:
+        raise SystemExit(f"{face} is already in the committed census")
+    pinned_hash = "ab" * 32
+    row = f"font\t{pinned_hash}\t{face}"
+    committed = text.rstrip("\n") + "\n" + row + "\n"
+    live = committed.replace(pinned_hash, "cd" * 32, 1)
+    code = check_texts(live, committed, root / "hash")
+    if code != 1 or gate_accepts(code):
+        raise SystemExit(f"cascade-slot hash exited {code}, expected 1")
+
+
 def outdir_guards(root: Path) -> None:
     root.mkdir()
     missing = root / "no-such-parent" / "out"
@@ -840,9 +994,38 @@ def outdir_guards(root: Path) -> None:
         raise SystemExit("record accepted a non-empty directory")
     fresh = present / "fresh"
     prepare_record_dir(fresh)
-    if not fresh.is_dir() or any(fresh.iterdir()):
+    if not fresh.is_dir() or fresh.is_symlink() or any(fresh.iterdir()):
         raise SystemExit("record did not create an empty OUT under an existing parent")
     prepare_record_dir(fresh)
+
+    outside = root / "outside-target"
+    outside.mkdir()
+    linked_out = present / "linked-out"
+    linked_out.symlink_to(outside, target_is_directory=True)
+    try:
+        prepare_record_dir(linked_out)
+    except SystemExit:
+        pass
+    else:
+        raise SystemExit("record followed a symlink OUT")
+    if any(outside.iterdir()):
+        raise SystemExit("record wrote through a symlink OUT")
+
+    scratch = root / "scratch"
+    scratch.mkdir()
+    real_parent = root / "real-parent"
+    real_parent.mkdir()
+    hop = scratch / "hop"
+    hop.symlink_to(real_parent, target_is_directory=True)
+    escaped = hop / "census-out"
+    try:
+        prepare_record_dir(escaped, scratch=scratch)
+    except SystemExit:
+        pass
+    else:
+        raise SystemExit("record followed a symlink under scratch")
+    if (real_parent / "census-out").exists():
+        raise SystemExit("record created OUT through a symlink under scratch")
 
 
 def main(argv: list[str]) -> int:

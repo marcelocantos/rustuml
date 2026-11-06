@@ -158,11 +158,13 @@ machine-local scratch evidence, not a portable checkout or a checker verdict.
 
 The owner chose to pin and gate, not to make the oracle hermetic. The
 Java oracle is Monkey Man as it stands: macOS 27.2 build 26B123, Homebrew
-OpenJDK 21.0.5 at `/opt/homebrew/Cellar/openjdk@21/21.0.5`, system fonts,
-downloaded MobileAsset fonts (PingFang, LiHei Pro) and the user fonts in
-`~/Library/Fonts` (Hack, MesloLGS NF, JetBrains Mono Nerd Font, and the
-rest of that directory). Do not `brew upgrade` on Monkey Man. A Homebrew
-upgrade changes the oracle.
+OpenJDK 21.0.5 at `/opt/homebrew/Cellar/openjdk@21/21.0.5`, the system
+fonts the reference JVM's cascade reaches, downloaded MobileAsset fonts
+(PingFang, LiHei Pro) and the user fonts in `~/Library/Fonts` (Hack,
+MesloLGS NF, JetBrains Mono Nerd Font, and the rest of that directory).
+The cascade faces are the `#slot` paths in
+`tools/font-chain-reference/`, not a hand-typed list. Do not `brew upgrade`
+on Monkey Man. A Homebrew upgrade changes the oracle.
 
 Shaping libraries the reference JVM loads, confirmed by
 `DYLD_PRINT_LIBRARIES` and by `lsof`/`vmmap` on a live reference JVM
@@ -195,23 +197,40 @@ plus `link`. An earlier record the same day
 listed catalog `.xml` and `Info.plist` files as asset fonts and left 59
 MobileAsset font-file hashes as `-`. An asset font is a `.ttf`, `.otf`,
 `.ttc` or `.dfont`. `record` and `check` share that rule, and this census
-hashes every asset font file, every user font, and the FreeType dylib.
+hashes every asset font file, every user font, every cascade face
+named by a stored `#slot` line, and the FreeType dylib.
 `scripts/reference_env_census.py check` is the drift gate. Only exit 0
-passes. Exit 1 means a pinned fact moved. Exit 2 means a hash is still
-blank or `-`, and that is a failed gate. A user-font symlink row pins
-the target file's size, the target file's SHA256, the link path and the
-resolved target path. `FONT_FILES` stays the modelled faces opened by
-absolute path. Other faces reached through a user-font symlink are pinned
-on that symlink row, not copied into `FONT_FILES`. The Arial Unicode
-row now pins target size 23278008, sha256
+passes. Exit 1 means a pinned fact moved. Exit 2 means a hash or a
+scalar is still blank or `-`, and that is a failed gate. A user-font
+symlink row pins the target file's size, the target file's SHA256, the
+link path and the resolved target path. `FONT_FILES` stays the modelled
+faces opened by absolute path. `CASCADE_FONT_FILES` is the other `#slot`
+paths, derived from the font-chain TSVs. Round-9 names 29 of them,
+including Apple Color Emoji. Round-6 names those and 12 more. A face
+with no `#slot` line stays outside the gate. The committed census does
+not yet contain these rows. A record made with this script exits 1
+against it, on those extra `font` rows, until the returned census
+replaces this file. The Arial Unicode row now pins target size 23278008,
+sha256
 `876af2cd4854644e7f3e7feb2f688997fdb3343c6df6693611209c9dfb47ccec`,
 the link path, and
 `/System/Library/Fonts/Supplemental/Arial Unicode.ttf`. Round-6
 `user-font-census.txt` still records that link's lstat size 52. It is
 not re-extracted: `ls` does not hash the target, and the census row is
-the fact the gate checks. `scripts/reference_env_gate.py` is what `seq_capture.py`
-calls immediately before `new-worker`. The parent installs it. This
-checkout does not edit the relay tools. The font-chain tests fail when
+the fact the gate checks.
+
+The gate is armed by the parent's relay install, not by merging this
+checkout. After the cascade record has been adopted, the parent copies
+these three files onto Monkey Man:
+
+- `/Users/marcelo/rustuml-reference/reference-env/reference_env_census.py`
+- `/Users/marcelo/rustuml-reference/reference-env/reference_env_gate.py`
+- `/Users/marcelo/rustuml-reference/reference-env/census.txt`
+
+`/Users/marcelo/rustuml-reference/scratch` must already exist. In
+`seq_capture.py`, immediately before `new-worker`, the parent inserts
+the `require_reference_env()` call from `scripts/reference_env_gate.py`.
+Only exit 0 passes. This checkout does not edit the relay tools. The font-chain tests fail when
 this census and the stored per-face extractions disagree. The round-6, round-8, round-9 and round-11
 captures remain the stored extractions (font-chain SHA256SUMS
 `1c345cc384f0edb939dac3b87cf135db67ed7b6f8ffb76b586a8f9fd8480a6ed`,

@@ -5,9 +5,10 @@
 
 ``seq_capture.py`` calls ``require_reference_env()`` after the batch has
 been validated and immediately before ``new-worker``. Only exit 0 passes.
-Exit 1 (a pinned fact moved) and exit 2 (a hash is still unpinned) both
-abort the capture. This hook does not install packages or create missing
-ancestors of its output directory.
+Exit 1 (a pinned fact moved) and exit 2 (a hash or scalar is still
+unpinned) both abort the capture. This hook does not install packages
+or create missing ancestors of its output directory. ``record`` refuses
+a symlink output directory and a symlink in its ancestry under scratch.
 
 Install
 -------
@@ -34,8 +35,9 @@ Call site, inserted in ``seq_capture.py`` immediately before ``new-worker``::
 
 When the census legitimately changes, replace ``census.txt`` at that path
 with the reviewed record. Replace the two scripts only when their source
-changes. Do not point this hook at a census recorded by an older symlink
-schema: ``check`` exits 1 until the new record is the installed census.
+changes. Do not point this hook at the census from ``grok-g7-census3``:
+that file has no cascade ``font`` rows, so ``check`` exits 1 until the
+new record is the installed census.
 """
 
 from __future__ import annotations
