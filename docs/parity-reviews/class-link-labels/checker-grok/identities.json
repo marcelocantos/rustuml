@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "reviewer": "grok-g4-class-link-labels-checker",
+  "model": "grok-4.7",
+  "base_commit": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "tip_commit": "e390e9c3d537410fc0da9af195f4524ad297c2d8",
+  "account_commit": "1bae6576943381bc7eb4a5ddb53f8745372725a3",
+  "implementation_commit": "49211784693128f10714d5a0c3638558dc81e903",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "binaries": {
+    "rustuml-base_sha256": "8295bde6c84eb8a3ae2f0a5b35ec7eb912946aa592dd6b62ba7118c82227ecf3",
+    "rustuml-tip_sha256": "3c1521f91fba545b69cba00ea3daf760e56e606bacdc6a24c1274aa226fc4fa9"
+  },
+  "heldout_batch": {
+    "directory": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g4-checker-heldout",
+    "reference_results_sha256": "74b934fdb6f8193cb686cf261ee1193da328cb696a4e1b510f2883b0e4964639",
+    "rust_predictions_sha256": "b4d5699d9f0376638780000929d632c92dba3645ccfa79ba2a0ceb1eacc79d73",
+    "results_gz_prefix": "8c3c2481",
+    "transport_prefix": "940fe896",
+    "worker": "worker.YgtpcW8Q",
+    "manifest_sha256": "2fe4fd8c073176e78cd4a2216c1c30231cba4d11171c2a6928cbfab744b9775c",
+    "bundle_sha256": "5f766f2425eeac33185b56681022555184171a9d4d68493c990fdce2075fdd64"
+  },
+  "comparator": "rustuml_oracle::compare::compare_svg_strict",
+  "cli": ["-pipe", "-tsvg"],
+  "env": {
+    "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+    "TZ": "GMT+11:00"
+  }
+}

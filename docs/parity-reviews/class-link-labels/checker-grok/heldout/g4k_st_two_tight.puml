@@ -1,0 +1,11 @@
+@startuml
+<style>
+arrow <<beta>> {
+  FontSize 22
+  FontName Courier New
+}
+</style>
+class Kiln
+class Glaze
+Kiln --> Glaze <<alpha>><<beta>> : which face
+@enduml

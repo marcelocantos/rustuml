@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+class Kiln
+class Glaze
+Kiln ||--o{ Glaze : firing\nshelf
+@enduml

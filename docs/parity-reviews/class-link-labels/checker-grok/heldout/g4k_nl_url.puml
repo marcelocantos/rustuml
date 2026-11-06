@@ -1,0 +1,5 @@
+@startuml
+class Kiln
+class Glaze
+Kiln --> Glaze : pre\n[[http://example.com/a\nb]]\npost
+@enduml

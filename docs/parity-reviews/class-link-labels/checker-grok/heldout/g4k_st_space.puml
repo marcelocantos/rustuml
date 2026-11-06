@@ -1,0 +1,11 @@
+@startuml
+<style>
+arrow <<foo bar>> {
+  FontSize 21
+  FontName Arial
+}
+</style>
+class Kiln
+class Glaze
+Kiln --> Glaze <<foo bar>> : spaced name
+@enduml

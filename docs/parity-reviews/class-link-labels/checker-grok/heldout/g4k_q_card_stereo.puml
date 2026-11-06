@@ -1,0 +1,26 @@
+@startuml
+<style>
+arrow {
+  FontSize 12
+  FontName Arial
+  cardinality {
+    FontSize 10
+    FontName Verdana
+  }
+}
+arrow <<batch>> {
+  FontSize 20
+  FontName Courier New
+  cardinality {
+    FontSize 8
+    FontName Verdana
+    FontStyle bold
+  }
+}
+</style>
+class Kiln
+class Glaze
+class Shelf
+Kiln "1" --> "n" Glaze <<batch>> : firing
+Kiln "0..1" --> "1" Shelf : spare
+@enduml

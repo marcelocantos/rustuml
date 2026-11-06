@@ -1,0 +1,14 @@
+@startuml
+<style>
+arrow <<batch>> {
+  FontSize 19
+  FontName Courier New
+  FontStyle italic
+}
+</style>
+class Kiln
+class Glaze
+class Shelf
+Kiln --> Glaze <<batch>> : firing
+Kiln --> Shelf : plain clay
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+class Kiln
+class Glaze
+Kiln --> Glaze : a\\nb
+@enduml

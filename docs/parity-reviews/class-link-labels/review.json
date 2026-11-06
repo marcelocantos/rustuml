@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-link-labels",
+  "account_commit": "1bae6576943381bc7eb4a5ddb53f8745372725a3",
+  "implementation_commit": "e390e9c3d537410fc0da9af195f4524ad297c2d8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewed_at": "2026-11-06T21:48:33+1100",
+  "reviewer": {
+    "task_id": "grok-g4-class-link-labels-checker",
+    "model": "grok-4.7",
+    "role": "independent checker"
+  },
+  "verdict": "rejected",
+  "accept_ready": false,
+  "commands": [
+    "cargo test --offline --release -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test doc_claims",
+    "cargo test --offline --release -p rustuml-oracle --test parity_perturbations --test harness_guards",
+    "cargo test --offline --release -p rustuml --test pipe_mode",
+    "cargo test --offline --release --workspace --lib",
+    "cargo clippy --offline --release -p rustuml-render -p rustuml-parser -p rustuml-layout -p rustuml -p rustuml-oracle --all-targets --message-format=short -- -W clippy::all",
+    "g4k-score relay rust-predictions.json reference-results.json relay-score.json"
+  ],
+  "findings": [
+    "Rejected. The packet is not accept-ready for a local merge. It is a real xlabel readback, not post-hoc coordinate surgery, and ORTHO_XLABEL_VERTICAL_INSET 5.0 is unchanged from base. Three valid held-out inputs are rendered further from Java because of the packet.",
+    "Horizontal skinparam linetype ortho plus Kiln ||--o{ Glaze skips the xlabel. ortho_route_rewritten in class.rs is true for every DoubleLine-to-CircleCrowFoot edge, while normalize_ortho_er_vertical_route returns immediately unless every point shares x. g4k_ortho_dl_cc_lr is valid Java (exit 0, viewBox 0 0 209 78, two label lines firing/shelf at y 44.5684 and 59.8789, classes at y 28.291). Base keeps the classes at y 28.291 and draws one unsplit label. Tip moves the classes to y 35.291 and paints the two lines at y 19.5684 and 34.8789. The reverse }o--|| case g4k_ortho_cc_dl matches. Vertical ||--o{ improves from DIFF 71 to DIFF 31 and is still not a match; the residue is the pre-existing synthesizer plus the untouched route deltas.",
+    "escaped_newline_lines splits every backslash-n with no escape state. g4k_nl_escaped is the source text a\\\\nb. Java draws one line whose text is a\\nb (viewBox 0 0 91 195). Base also draws one line, with an extra backslash. Tip draws two lines, a\\ and b, and grows the canvas to 91x210.",
+    "The same splitter runs inside a creole URL. g4k_nl_url Java draws four label lines: pre, http://example.com/a, b, post (viewBox 0 0 201 241). Base draws one unsplit string and drops the URL. Tip draws pre, a stray ], and post (viewBox 0 0 91 225). The packet destroys the link.",
+    "Mechanism 3 for <<a>> <<b>> and a space inside the stereotype is not established. g4k_st_two, g4k_st_two_tight, g4k_st_space, g4k_st_style, and g4k_q_card_stereo all die in Java at exit 200 with stderr 'Error in style definition: bad definition' because <style> arrow <<name>> is illegal. Java never parses the link. Both Rust sides emit a diagram instead of that error page, which is pre-existing; the tip also changes the bytes of g4k_st_two (viewBox 184x70 to 125x195), g4k_st_two_tight (same), g4k_st_space (184x70 to 141x195), g4k_st_style (188x195 to 197x195), and g4k_q_card_stereo (188x193 to 191x193). g4k_q_empty is a Java syntax error ('Syntax Error?') whose Rust diagram is byte-identical on base and tip (184x70), so that rendering is pre-existing and not caused by the packet. A single stereotype plus a direction keyword does work: g4k_st_dir keeps the link and draws 'goes east' at font-size 18, which base dropped entirely.",
+    "No lost strict matches on the held-out batch (0/100), the maker CK batch (0/13), c9a_af (0/38), or c11a_fc_kcls (0/8). No-oracle failure names go from 70 to 69 by removing only rendering/splines/splines_multilevel_inheritance, and that file is a compare_svg_strict match on the tip CLI. Golden byte sweep of 12550/12550 found 0 lost byte-matches and 0 panics. er/er_ecommerce_schema changes bytes but the strict diff text is identical (DIFF 298 both). splines_self_reference_ortho improves from DIFF 31 to DIFF 4 and still misses the 105px canvas (tip is 99px). Perturbation failure names go from 2727 to 2708 with 0 names only on the tip and 19 names only on the base, all c9a_af or c11a_fc_kcls matches. Out-of-lane object, usecase, component, deployment, and state probes are byte-identical and still DIFF. The four shared-svg dash panics at parse/class.rs:285 are on both binaries.",
+    "Decimal ratchet class.rs is 578 on base and 578 on tip against a baseline of 383. The same pre-existing misses are deployment.rs 43 to 44, plantuml_metrics.rs 1053 to 1055, and state.rs 53 to 62. The class.rs diff adds no 3-decimal literal. Clippy diagnostics on the touched crates are the same 23 warnings, moved by line number. harness_guards already fails on this tree before this review, including 'class-link-labels: account has no independent checker review', and this rejected verdict keeps the latest-review rule red. The verdict was not flipped to satisfy that guard."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_sz15_nl.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_sz15_nl.svg",
+      "result": "pass",
+      "axes": ["newline", "font-size-15"]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_fs_bi_token.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_fs_bi_token.svg",
+      "result": "pass",
+      "axes": ["arrow-font-style", "bold-italic-token"]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_st_skin.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_st_skin.svg",
+      "result": "pass",
+      "axes": ["stereotype", "skinparam"]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_q_both.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_q_both.svg",
+      "result": "pass",
+      "axes": ["quantifier", "both-ends"]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_ortho_tb_nl3.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_ortho_tb_nl3.svg",
+      "result": "pass",
+      "axes": ["ortho-xlabel", "multiline"]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_ortho_cc_dl.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_ortho_cc_dl.svg",
+      "result": "pass",
+      "axes": ["ortho-xlabel", "circle-crowfoot-to-double-line"]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_magic_sz11.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_magic_sz11.svg",
+      "result": "pass",
+      "axes": ["magic-arrow", "font-size-11"]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_st_dir_up.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_st_dir_up.svg",
+      "result": "pass",
+      "axes": ["stereotype", "direction-keyword"]
+    }
+  ]
+}
