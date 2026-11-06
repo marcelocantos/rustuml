@@ -1,0 +1,19 @@
+== hook exits ==
+check-1 status 1 stdout SYSTEMEXIT 'reference census check exited 1; only exit 0 passes' stderr reference census check exited 1; only exit 0 passes sentinel False temps [] escape True
+check-2 status 1 stdout SYSTEMEXIT 'reference census check exited 2; only exit 0 passes' stderr reference census check exited 2; only exit 0 passes sentinel False temps [] escape True
+record-1 status 1 stdout SYSTEMEXIT 'reference census record exited 1' stderr reference census record exited 1 sentinel False temps [] escape True
+both-0 status 0 stdout RETURNED stderr  sentinel True temps [] escape True
+== missing scratch ==
+missing-scratch 1 SYSTEMEXIT '/Users/marcelo/Library/Caches/rustuml-grok-g7-recheck/evidence/hook-record/missing-scratch does not exist; the gate does not create it' /Users/marcelo/Library/Caches/rustuml-grok-g7-recheck/evidence/hook-record/missing-scratch does not exist; the gate does not create it
+== record confinement ==
+MISSING_PARENT /Users/marcelo/Library/Caches/rustuml-grok-g7-recheck/evidence/hook-record/record-work/absent does not exist; record does not create ancestor directories exists False
+NONEMPTY /Users/marcelo/Library/Caches/rustuml-grok-g7-recheck/evidence/hook-record/record-work/parent/occupied is not an empty directory keep x
+FRESH True []
+FRESH_AGAIN []
+SYMLINK_OUT accepted True target /Users/marcelo/Library/Caches/rustuml-grok-g7-recheck/evidence/hook-record/record-work/outside-empty
+recorded /Users/marcelo/Library/Caches/rustuml-grok-g7-recheck/evidence/hook-record/record-work/parent/recorded/census.txt
+RECORD_RETURNED
+WRITE_COUNT 0
+OUTSIDE_WRITES []
+RECORD_FILES ['SHA256SUMS', 'census.txt', 'methodA.exit', 'methodA.jvm-not-run', 'methodA.loaded.txt', 'methodA.stderr', 'methodA.svg', 'static.txt', 'sw_vers.txt']
+ABSENT_PARENT False

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "mechanism": "reference-environment-gate",
+  "reviewer": {
+    "task_id": "t3 grok-g7 reference-environment recheck",
+    "model": "grok-4.7",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "account_commit": "a2c9e7e674a2d0c1532446025310d994e061d180",
+  "implementation_commit": "a2c9e7e674a2d0c1532446025310d994e061d180",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git switch -c review/grok-g7-recheck a2c9e7e674a2d0c1532446025310d994e061d180",
+    "git -c protocol.file.allow=always submodule update --init --reference /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden test-diagrams/golden",
+    "python3 -I scripts/reference_env_census.py self-test",
+    "independent check() mutation matrix on a mode-fixed copy of rustuml-relay-parent/grok-g7-census3",
+    "CARGO_TARGET_DIR=$CACHE/target-tip cargo test --release --offline --workspace --lib and the oracle, pdf_contract, pipe_mode, and per-crate clippy gates",
+    "CARGO_TARGET_DIR=$CACHE/target-base cargo test --release --offline on a git archive of cb550c0d67cc729ce764895005b7e86310c9f313",
+    "cmp of -tsvg stdout for 18878 sources and a 64-source sample of -tpng -teps -ttxt between rustuml-tip and rustuml-base"
+  ],
+  "findings": [
+    "Rejected. Twenty-nine system fonts named by tools/font-chain-reference/monkeyman-round9 #slot lines are not in FONT_FILES, not under the user-font directories, and not in the MobileAsset walk. They are absent from census.txt. Editing one of those files leaves check at exit 0. Adding a synthetic font row for Apple Color Emoji.ttc exits 1, so check would see the face if record emitted it. docs/reference-bootstrap.md still describes the owner pin as system fonts, MobileAsset fonts, and user fonts. FONT_FILES is the 22 modelled paths, and the script comment says that list is not every face Core Text can open. That narrowing is not justified against T14.6.8. The list is checker-grok-2/unpinned-cascade-slots.txt.",
+    "The three defects from the first rejection are fixed on the cases retested here. A user-font symlink row is kind, target size, target sha256, link path, and resolved target path. Same-length retarget, same bytes at another path, target-content edit, link replaced by a regular file, dangling, a chain to a different file, a relative link outside the census, a link into an outside directory, and a symlink loop all exit 1. A chain or a relative spelling that resolves to the same file and the same bytes exits 0, because user_font_row uses Path.resolve(strict=True) and does not store the immediate readlink text. A missing parent of OUT is refused and is not created. Exit 1 and exit 2 both raise SystemExit inside require_reference_env before the function returns.",
+    "The hook is scripts/reference_env_gate.py, sha256 7814afd02ffc30167aa469d0e9ad11f4db67b78aadf07cb084f8404de192353b, byte-identical to the census-request copy. A scratch copy pointed at a fake install aborted on record exit 1, check exit 1, and check exit 2, left no census-gate temporary directory, and did not create a missing scratch directory. The sentinel new-worker file was written only when both exits were 0. Live ~/.cache/rustuml-relay-tools/seq_capture.py (sha256 eaf70825a4a05e6bad0d2c65bfd3ba781bc7da65ab443e10594537ae7549bb3c) does not call the hook. Its only new-worker is line 68, after validation. Pasting the documented call immediately before that line is sufficient for exit 1 and exit 2, because nothing catches SystemExit. Merging this checkout does not arm the gate. After the paste, drift of an unpinned cascade face still returns 0, so the capture proceeds.",
+    "On a real empty directory, record with the JVM stubbed wrote SHA256SUMS, census.txt, methodA.exit, methodA.jvm-not-run, methodA.loaded.txt, methodA.stderr, methodA.svg, static.txt, and sw_vers.txt under that directory. A missing parent was refused and was not created. A non-empty directory was refused and its file kept. A fresh directory was created with mkdir(parents=False), and a second prepare on that still-empty directory was accepted. prepare_record_dir accepts a symlink OUT because exists and is_dir follow links. Calling record on a symlink to an empty directory outside the parent, with only the reference JVM stubbed, wrote methodA.exit, methodA.loaded.txt, methodA.stderr, methodA.svg, static.txt, and sw_vers.txt into the symlink target and then aborted because the stub produced no DYLD lines. The parent directory gained no real child other than the symlink. That is a write outside the lexical OUT. The hook uses TemporaryDirectory, which is a real directory, so the pasted call does not take this path. The reference command remains REFERENCE --cwd OUT --timezone GMT+11:00 -- -pipe -tsvg with DYLD_PRINT_LIBRARIES=1 and no -XX:-UsePerfData. Java was not run. HotSpot /tmp/hsperfdata_<user> remains untested residue.",
+    "A blank scalar exits 2. A row hash of blank or - exits 2 on both sides. A committed scalar of - against a live real hash exits 1. A scalar of - on both sides exits 0. record never emits -, so the hook against this baseline still fails a committed dash scalar (check exit 1, process status 1). The both-dash scalar path is a remaining hole, not the reason for this rejection.",
+    "The committed census sha256 is 3e5d4793194c9f385b9bd3500a06789614ab4d705d7656c774f32df57322b1b2, 50871 bytes, 22 font rows, 226 user-font rows, and 61 asset-font rows. The census-request copy and the immutable relay file rustuml-relay-parent/grok-g7-census3/census.txt are the same hash, mode r--r--r--. check of a mode-fixed copy exited 0. Rewriting a sidecar in that copy exited 0. self-test exited 0. committed_census_matches_stored_face_extractions passed inside the tip render lib tests: round-6 lstat size 52 for Arial Unicode.ttf, census size 23278008, the target hash, and the Supplemental path; the other 225 user-font sizes and 61 asset sizes match round-6. Keeping the round-6 ls listing is justified, because that listing has no target hash and rewriting it would erase the link length.",
+    "PDF files are unchanged since 79f1104c7f7570fa4026c8bcec26b0da695218f8: crates/rustuml/tests/pdf_contract.rs 367f92395c3e982fd81ae5ee4f21b31a914cde53, crates/rustuml/src/main.rs 7c8b697a187c5f6513b8ea3803f5ac6f67c5d323, and the svg2pdf context, resources, helper, and RUSTUML-PATCH blobs named in checker-grok-2/measurements.md. The diff from that commit to the tip is reference_env_census.rs, docs/reference-bootstrap.md, scripts/reference_env_census.py, and the new gate script. pdf_contract: 2 passed. pipe_mode: 17 passed. doc_claims: 2 passed.",
+    "Non-PDF output did not change. -tsvg: 18878 sources (12550 golden, 6328 perturbation), 0 mismatches. -tpng, -teps, and -ttxt: 64 sources each, 0 mismatches. golden_no_oracle passed on both trees against no_oracle_baseline.txt (11181 pass, 11251 eligible); failure-name files are identical, sha256 4ddf284a7f9133f8bf094f56c32b21be349e41821d52d51cdcb3015eaa1b4221, 70 lines. golden_pairs: 12550 total, 10497 passed, 754 failed, 1299 skipped on both; failure names identical, sha256 b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b. parity_perturbations failure-path sets are equal, 2727 paths. Workspace lib tests passed: tip render 863, base render 862, the extra test being the census test. Per-crate clippy exited 0 on both trees. The tip adds svg2pdf lib's 2 warnings in unmodified helper.rs; that crate is not in the base tree.",
+    "Addendum 518f3caa2448b6e853ff12549236956158bc01a1 is an ancestor of fix d5c1ed3fb2297ff5b858f8b95f60b858034a26f5. harness_guards.rs is identical to cb550c0d67cc729ce764895005b7e86310c9f313. Before this record, both trees failed the same two harness tests (decimal_literal_ratchet with the same four deltas, and parity_review_records_are_complete). Normalized violation lines: 2704 equal, of which 2300 are docs/parity-reviews lines. This rejected review-2.json is the latest review for the mechanism and names perturbation sources that were not created, so the guard is worse after the commit. No product .puml fixtures were added."
+  ],
+  "verdict": "rejected",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/reference-environment-gate/cascade-unpinned-slot.puml",
+      "golden": "test-diagrams/perturbations/reference-environment-gate/cascade-unpinned-slot.svg",
+      "result": "fail",
+      "axes": ["system font named by a round-9 #slot and absent from the census"]
+    },
+    {
+      "source": "test-diagrams/perturbations/reference-environment-gate/scalar-dash-both.puml",
+      "golden": "test-diagrams/perturbations/reference-environment-gate/scalar-dash-both.svg",
+      "result": "fail",
+      "axes": ["committed scalar dash matched by a live scalar dash"]
+    }
+  ],
+  "evidence": "docs/parity-reviews/reference-environment-gate/checker-grok-2/measurements.md"
+}

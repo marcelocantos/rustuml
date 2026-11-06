@@ -1,0 +1,29 @@
+/System/Library/Fonts/Apple Color Emoji.ttc
+/System/Library/Fonts/Apple Symbols.ttf
+/System/Library/Fonts/AppleSDGothicNeo.ttc
+/System/Library/Fonts/Hiragino Sans GB.ttc
+/System/Library/Fonts/Kohinoor.ttc
+/System/Library/Fonts/KohinoorBangla.ttc
+/System/Library/Fonts/KohinoorGujarati.ttc
+/System/Library/Fonts/KohinoorTelugu.ttc
+/System/Library/Fonts/Monaco.ttf
+/System/Library/Fonts/MuktaMahee.ttc
+/System/Library/Fonts/NotoNastaliq.ttc
+/System/Library/Fonts/NotoSansArmenian.ttc
+/System/Library/Fonts/NotoSansKannada.ttc
+/System/Library/Fonts/NotoSansMyanmar.ttc
+/System/Library/Fonts/NotoSansOriya.ttc
+/System/Library/Fonts/Supplemental/Ayuthaya.ttf
+/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc
+/System/Library/Fonts/Supplemental/Galvji.ttc
+/System/Library/Fonts/Supplemental/Kailasa.ttc
+/System/Library/Fonts/Supplemental/KefaIII.ttf
+/System/Library/Fonts/Supplemental/Khmer Sangam MN.ttf
+/System/Library/Fonts/Supplemental/Lao Sangam MN.ttf
+/System/Library/Fonts/Supplemental/Malayalam Sangam MN.ttc
+/System/Library/Fonts/Supplemental/STIXTwoMath.otf
+/System/Library/Fonts/Supplemental/Sinhala Sangam MN.ttc
+/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc
+/System/Library/Fonts/Supplemental/Thonburi.ttc
+/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc
+/System/Library/Fonts/ヒラギノ角ゴシック W6.ttc

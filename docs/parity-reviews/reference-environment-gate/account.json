@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "mechanism": "reference-environment-gate",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/TitledDiagram.java:exportDiagramNow",
+    "src/main/java/net/sourceforge/plantuml/core/TextBlockExporter12026.java:createUGraphic"
+  ],
+  "rust_locations": [
+    "scripts/reference_env_census.py",
+    "scripts/reference_env_gate.py",
+    "crates/rustuml-render/src/reference_env_census.rs",
+    "crates/rustuml/tests/pdf_contract.rs",
+    "third_party/svg2pdf/src/util/context.rs",
+    "third_party/svg2pdf/src/util/resources.rs"
+  ],
+  "invariant": "Before a Monkey Man reference batch is trusted, check exits 0 only when every font the reference cascade can open is pinned: the modelled FONT_FILES, user fonts (symlink rows pin the resolved target), MobileAsset font files, and the system faces named by the round-9 #slot list. OS, JDK, HarfBuzz, and FreeType pins stay in the same census. Rust PDF bytes are stable and are not counted as Java parity.",
+  "causal_divergence": "The census pins 22 FONT_FILES, 226 user-font rows, and 61 MobileAsset font files. Round-9 #slot lines name 29 further system fonts under /System/Library/Fonts. record never hashes those files, so a change to one of them leaves check at exit 0. A scalar whose committed value is - also matches a live value of - and exits 0, while a row hash of - exits 2.",
+  "planned_change": "Hash every round-9 #slot path that is outside FONT_FILES, the user-font walk, and the MobileAsset walk, and fail check when that hash moves. Treat a scalar - the same way as a row hash -. Keep the symlink target pin, the exit-0-only hook, and the PDF oracle as they are.",
+  "perturbation_axes": [
+    "Reference-host fact drift: HarfBuzz, FreeType, JDK, OS, user-font symlink target and bytes, MobileAsset font files, and cascade system faces outside FONT_FILES",
+    "PDF byte stability on its own oracle, with SVG, PNG, EPS, and TXT held identical to the pre-census tree"
+  ]
+}
