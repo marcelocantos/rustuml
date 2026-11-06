@@ -1,0 +1,9 @@
+@startuml
+skinparam defaultFontName Menlo
+class Zonal {
+  <font:monospace>Quill vx</font>
+  <font:monospaced>Quill vx</font>
+  <font:Monospaced>Quill vx</font>
+  <font:Courier>Quill vx</font>
+}
+@enduml
