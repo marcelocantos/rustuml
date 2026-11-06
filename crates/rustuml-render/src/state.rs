@@ -8057,6 +8057,7 @@ pub fn render_with_oracle(
                                 )
                             })
                             .sum::<f64>();
+                        let title_align = state_display(label).align;
                         let mut stripe_top = 0.0;
                         for line in &title_lines {
                             let line_w = state_text_width_with_family(
@@ -8067,7 +8068,20 @@ pub fn render_with_oracle(
                                 Some(&title_style.family),
                                 is_state_monospace_family(&title_style.family),
                             );
-                            let text_x = cx - text_w / 2.0 + (text_w - line_w) / 2.0;
+                            // The block is centered. Root alignment is left, so
+                            // each row starts on the block's left edge.
+                            let block_left = cx - text_w / 2.0;
+                            let text_x = match title_align {
+                                Some(rustuml_parser::display::DisplayAlign::Right) => {
+                                    block_left + text_w - line_w
+                                }
+                                Some(rustuml_parser::display::DisplayAlign::Center) => {
+                                    block_left + (text_w - line_w) / 2.0
+                                }
+                                Some(rustuml_parser::display::DisplayAlign::Left) | None => {
+                                    block_left
+                                }
+                            };
                             let text_y = box_y
                                 + (*bh - title_height) / 2.0
                                 + stripe_top
@@ -8207,20 +8221,23 @@ pub fn render_with_oracle(
                                 Some(&title_style.family),
                                 is_state_monospace_family(&title_style.family),
                             );
-                            let centered =
-                                cx - title_block_w / 2.0 + (title_block_w - line_w) / 2.0;
+                            // `EntityImageState.drawU` centers the title block,
+                            // then a left-aligned `TextBlock` draws every row
+                            // from that block's left edge. One row is the same
+                            // x as centering the line.
+                            let block_left = cx - title_block_w / 2.0;
                             let text_x = if title_display.lines.len() == 1 {
-                                orc_rect.and_then(|r| r.name_text_x).unwrap_or(centered)
+                                orc_rect.and_then(|r| r.name_text_x).unwrap_or(block_left)
                             } else {
                                 match title_display.align {
-                                    Some(rustuml_parser::display::DisplayAlign::Left) => {
-                                        box_x + 5.0 + global_padding
-                                    }
                                     Some(rustuml_parser::display::DisplayAlign::Right) => {
-                                        box_x + bw - 5.0 - global_padding - line_w
+                                        block_left + title_block_w - line_w
                                     }
-                                    Some(rustuml_parser::display::DisplayAlign::Center) | None => {
-                                        centered
+                                    Some(rustuml_parser::display::DisplayAlign::Center) => {
+                                        block_left + (title_block_w - line_w) / 2.0
+                                    }
+                                    Some(rustuml_parser::display::DisplayAlign::Left) | None => {
+                                        block_left
                                     }
                                 }
                             };

@@ -383,6 +383,11 @@ struct StateParser {
     /// this is global rather than per-frame. Holds the highest CONC index
     /// allocated so far (initially 1, so the first region becomes `CONC2`).
     conc_counter: usize,
+    /// Region ids created by a separator. `reset_after_predeclaration`
+    /// clears `State.concurrent_regions` so the full pass can record them
+    /// again for the renderer, but a link that appears before the separator
+    /// still has to see the group type Java recorded on the earlier pass.
+    region_ids: Vec<String>,
 }
 
 /// One enclosing-composite level on the scope stack.
@@ -408,6 +413,7 @@ impl StateParser {
             skinparam_block_prefix: None,
             scope_stack: Vec::new(),
             conc_counter: 1,
+            region_ids: Vec::new(),
         }
     }
 
@@ -540,15 +546,7 @@ impl StateParser {
     }
 
     fn concurrent_region_ids(&self) -> Vec<String> {
-        self.states
-            .iter()
-            .flat_map(|state| {
-                state
-                    .concurrent_regions
-                    .iter()
-                    .map(|region| region.id.clone())
-            })
-            .collect()
+        self.region_ids.clone()
     }
 
     fn resolve_state_id_in(
@@ -767,6 +765,9 @@ impl StateParser {
             self.conc_counter += 1;
             let n = self.conc_counter;
             frame.current = format!("{}.CONC{}", frame.base, n);
+            if !self.region_ids.iter().any(|id| id == &frame.current) {
+                self.region_ids.push(frame.current.clone());
+            }
             if let Some(state) = self.states.iter_mut().find(|state| state.id == frame.base) {
                 state
                     .concurrent_regions
@@ -1641,6 +1642,22 @@ mod tests {
         assert!(diagram.transitions.iter().any(|transition| {
             transition.from == "[*]" && transition.to == "CONCEPT.g5ckQuern"
         }));
+    }
+
+    #[test]
+    fn link_before_a_later_region_declaration_is_rejected() {
+        // Pass one creates `g5ckMidden` inside the separator's group.
+        // Pass two then refuses the earlier link, whose current group is
+        // not that concurrent parent.
+        let error = parse_err(
+            "state g5ckQuern {\n\
+             [*] --> g5ckMidden\n\
+             --\n\
+             state g5ckMidden\n\
+             }",
+        );
+        assert_eq!(error.line, 2);
+        assert_eq!(error.message, "The state g5ckMidden cannot be used here.");
     }
 
     #[test]
