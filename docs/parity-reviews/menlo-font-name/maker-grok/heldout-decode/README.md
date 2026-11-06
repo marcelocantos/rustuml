@@ -1,7 +1,8 @@
 # Held-out font decode (maker-grok)
 
-Pre-registered after the creole `Font.decode` correction. Java has not
-been run. Do not regenerate these SVGs after the Java run.
+Pre-registered after the creole `Font.decode` correction. Java has been
+run (relay `grok-g3-cx`). Do not regenerate these SVGs. The prediction
+bytes stay the pre-Java render.
 
 Rendered by release `rustuml` SHA256
 `0333eb3e4da55cf4f07a9c2a30c6552beeb6edba6ab5542484970f1c65b9e506`
@@ -53,3 +54,21 @@ The port claims, and these predictions record:
 | hn_class_attribute_font | 0 0 91 84 | Quay Courier 33.7148; Kelp NBSP wy Courier 59.001 |
 | hn_class_fontname_helvetica | 0 0 85 68 | Quay Helvetica 33.4619 |
 | hn_skin_courier_new_ps | 0 0 85 83 | Quay and Kelp CourierNewPS-ItalicMT 33.6055 |
+
+Scored with `compare_svg_strict` on the whole SVG. Tip `5ca278f72` is
+11/14. Merge base `0cd7743aa` is 7/14. The four gains are
+`hn_seq_honours_note`, `hn_seq_ignores_sequencefontname`,
+`hn_skin_monospace_word`, and `hn_skin_monospaced_word`. The three tip
+misses are the same misses on the base:
+
+- `hn_creole_faces` — family `SansSerif` versus Java `sans-serif`
+  (`UFontImpl.getFamily`). Width matches. 🎯T29.
+- `hn_skin_quoted_pad` — family `'Menlo'` versus `' Menlo '`. Widths
+  match. Already 🎯T14.94.
+- `hn_skin_quoted_single` — family `'Courier'` matches. Java measures
+  the default face (viewBox `0 0 86 84`). Rust measures the Menlo cell
+  and a NBSP. 🎯T30.
+
+`reference-results.json` SHA256
+`b333ba69cb4b54d4c214da93b6ee4a81b322e216dfb8d5075c80ce5a64930c94`.
+Recorded in `../addendum-heldout-decode.json`. No production change.
