@@ -1,0 +1,50 @@
+[
+  {
+    "cohort": "perturbations",
+    "name": "shared-svg-corrective/checker-independent-astra/dash_06",
+    "which": "base",
+    "exit": 101
+  },
+  {
+    "cohort": "perturbations",
+    "name": "shared-svg-corrective/checker-independent-astra/dash_06",
+    "which": "tip",
+    "exit": 101
+  },
+  {
+    "cohort": "perturbations",
+    "name": "shared-svg-corrective/checker-independent-astra/dash_07",
+    "which": "base",
+    "exit": 101
+  },
+  {
+    "cohort": "perturbations",
+    "name": "shared-svg-corrective/checker-independent-astra/dash_07",
+    "which": "tip",
+    "exit": 101
+  },
+  {
+    "cohort": "perturbations",
+    "name": "shared-svg-corrective/checker-independent-astra/dash_01",
+    "which": "base",
+    "exit": 101
+  },
+  {
+    "cohort": "perturbations",
+    "name": "shared-svg-corrective/checker-independent-astra/dash_01",
+    "which": "tip",
+    "exit": 101
+  },
+  {
+    "cohort": "perturbations",
+    "name": "shared-svg-corrective/checker-independent-astra/dash_03",
+    "which": "base",
+    "exit": 101
+  },
+  {
+    "cohort": "perturbations",
+    "name": "shared-svg-corrective/checker-independent-astra/dash_03",
+    "which": "tip",
+    "exit": 101
+  }
+]
