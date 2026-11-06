@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "status": "maker addendum before removing StateNodeFont.bold, written after measuring",
+  "answers": "account.json obligation_t14_56 planned_change",
+  "measured": {
+    "mutant": "state.rs layout_node_size_with_font passes false instead of font.bold. Private release binary sha256 5e17d3b47d7f9e9c443d0aa302127c0bd6092979fbf47e08e978657a6242a74a. Compared with the Arial-fixed binary that still reads the field, sha256 ad1cad404547b611ba2f5aeecb8cff813c7844f540a12b39b6a6f66d6275829c.",
+    "cohort": "Whole CLI stdout, exit status and panic flag for every .puml under test-diagrams/golden (12,550) and test-diagrams/perturbations (6,328). cwd is the source directory. RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100, the golden harness value.",
+    "result": "18,878/18,878 identical. stdout_changed 0, status_changed 0, panic_changed 0. Both binaries panic on the same 4 sources (pre-existing; the flag matches). Summary: bold-mutant-cli.json.",
+    "matches_structural_proof": "yes. stateFontStyle bold adds a style declaration (parse/style.rs FONT_PREFIXES state x fontstyle; Java FromSkinparamToStyle.addConFont 206 and 420-422), so the CLI never reaches layout_node_size_with_font with bold true. AutonomousTextStyle keeps its own bold."
+  },
+  "decision": "Remove StateNodeFont.bold and the stateFontStyle read that only filled it. layout_node_size_with_font measures the upright non-bold face this path can receive, the same literal false already used for italic. The autonomous path is unchanged."
+}
