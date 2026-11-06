@@ -132,7 +132,7 @@ fn preprocess_full_inner(
     let mut theme_tail = Vec::new();
     project_events(&events, &mut identity, &mut tim_lines, &mut theme_tail);
     let mut lines = if ctx.start_checks_ending_backslash {
-        collapse_post_tim_ending_backslashes(tim_lines, ctx.block_end.as_ref())
+        collapse_post_tim_ending_backslashes(tim_lines, ctx.block_end.as_ref(), false)
     } else {
         tim_texts(tim_lines)
     };
@@ -235,8 +235,18 @@ fn project_events(
                 )));
                 // Retain the parser's theme envelope contract. Only this
                 // projection flattens grouped properties or relocates them.
+                // UmlSource#loadInternal joins the theme body because those
+                // lines are in Java's result list. They never reach the
+                // top-level join: this projection parks them in theme_tail.
+                // A nested theme's lines sit between the outer body's lines
+                // in that list, so joining `expanded` alone would skip them.
+                let body_lines = if nested_tail.is_empty() {
+                    collapse_post_tim_ending_backslashes(expanded, None, true)
+                } else {
+                    tim_texts(expanded)
+                };
                 theme_tail.push(format!("skinparam __theme_body_start {name}"));
-                theme_tail.extend(themes::flatten_theme_output(&tim_texts(expanded)));
+                theme_tail.extend(themes::flatten_theme_output(&body_lines));
                 theme_tail.extend(nested_tail);
                 theme_tail.push(format!("skinparam __theme_body_end {name}"));
             }
@@ -1257,13 +1267,12 @@ impl PreprocessContext {
             return;
         }
 
-        // Java StringLocated.removeInnerComment leaves trailing apostrophes
-        // alone and removes only its supported block-comment forms.
-        let line_no_comment = if self.in_ebnf_block {
-            line.to_string()
-        } else {
-            remove_inner_comment(line).into_owned()
-        };
+        // CodeIteratorInnerComment (TContext#buildCodeIterator it40) applies
+        // StringLocated#removeInnerComment to every line that survives the
+        // long and short comment iterators. There is no diagram-type
+        // exemption: an EBNF line is stripped like any other. Trailing
+        // apostrophes are not comments; only the /' … '/ forms are.
+        let line_no_comment = remove_inner_comment(line).into_owned();
         let trimmed = line_no_comment.trim();
 
         // Handle @start/@end tags.
@@ -1373,7 +1382,9 @@ impl PreprocessContext {
             if trimmed == "!enddefinelong" {
                 self.collecting_definelong = None;
             } else if let Some(name) = self.collecting_definelong.clone() {
-                let buffered = self.current_buffered_line(line);
+                // CodeIteratorProcedure#peek adds the it40 line, which
+                // removeInnerComment has already rewritten.
+                let buffered = self.current_buffered_line(&line_no_comment);
                 if let Some(dl) = self.definelong_macros.get_mut(&name) {
                     dl.body.push(buffered);
                 }
@@ -4391,23 +4402,421 @@ fn read_line_reader_lines(content: &str) -> Vec<Cow<'_, str>> {
         .collect()
 }
 
+/// Inclusive BMP runs of Unicode 15.0 general category L* (Lu, Ll, Lt, Lm, Lo).
+/// Nd is `BMP_DECIMAL_DIGIT_ZEROS`, not this table.
+///
+/// Generated from UnicodeData.txt 15.0.0
+/// <https://www.unicode.org/Public/15.0.0/ucd/UnicodeData.txt>
+/// sha256 806e9aed65037197f1ec85e12be6e8cd870fc5608b4de0fffd990f689f376a73.
+/// 48,965 BMP letters, 380 runs. Unicode 17 adds sixteen BMP letters
+/// (sha256 2e1efc1dcb59c575eedf5ccae60f95229f706ee6d031835247d843c11d96470c)
+/// and removes none; those sixteen are absent here.
+const BMP_LETTER_RANGES: [(u16, u16); 380] = [
+    (0x0041, 0x005A),
+    (0x0061, 0x007A),
+    (0x00AA, 0x00AA),
+    (0x00B5, 0x00B5),
+    (0x00BA, 0x00BA),
+    (0x00C0, 0x00D6),
+    (0x00D8, 0x00F6),
+    (0x00F8, 0x02C1),
+    (0x02C6, 0x02D1),
+    (0x02E0, 0x02E4),
+    (0x02EC, 0x02EC),
+    (0x02EE, 0x02EE),
+    (0x0370, 0x0374),
+    (0x0376, 0x0377),
+    (0x037A, 0x037D),
+    (0x037F, 0x037F),
+    (0x0386, 0x0386),
+    (0x0388, 0x038A),
+    (0x038C, 0x038C),
+    (0x038E, 0x03A1),
+    (0x03A3, 0x03F5),
+    (0x03F7, 0x0481),
+    (0x048A, 0x052F),
+    (0x0531, 0x0556),
+    (0x0559, 0x0559),
+    (0x0560, 0x0588),
+    (0x05D0, 0x05EA),
+    (0x05EF, 0x05F2),
+    (0x0620, 0x064A),
+    (0x066E, 0x066F),
+    (0x0671, 0x06D3),
+    (0x06D5, 0x06D5),
+    (0x06E5, 0x06E6),
+    (0x06EE, 0x06EF),
+    (0x06FA, 0x06FC),
+    (0x06FF, 0x06FF),
+    (0x0710, 0x0710),
+    (0x0712, 0x072F),
+    (0x074D, 0x07A5),
+    (0x07B1, 0x07B1),
+    (0x07CA, 0x07EA),
+    (0x07F4, 0x07F5),
+    (0x07FA, 0x07FA),
+    (0x0800, 0x0815),
+    (0x081A, 0x081A),
+    (0x0824, 0x0824),
+    (0x0828, 0x0828),
+    (0x0840, 0x0858),
+    (0x0860, 0x086A),
+    (0x0870, 0x0887),
+    (0x0889, 0x088E),
+    (0x08A0, 0x08C9),
+    (0x0904, 0x0939),
+    (0x093D, 0x093D),
+    (0x0950, 0x0950),
+    (0x0958, 0x0961),
+    (0x0971, 0x0980),
+    (0x0985, 0x098C),
+    (0x098F, 0x0990),
+    (0x0993, 0x09A8),
+    (0x09AA, 0x09B0),
+    (0x09B2, 0x09B2),
+    (0x09B6, 0x09B9),
+    (0x09BD, 0x09BD),
+    (0x09CE, 0x09CE),
+    (0x09DC, 0x09DD),
+    (0x09DF, 0x09E1),
+    (0x09F0, 0x09F1),
+    (0x09FC, 0x09FC),
+    (0x0A05, 0x0A0A),
+    (0x0A0F, 0x0A10),
+    (0x0A13, 0x0A28),
+    (0x0A2A, 0x0A30),
+    (0x0A32, 0x0A33),
+    (0x0A35, 0x0A36),
+    (0x0A38, 0x0A39),
+    (0x0A59, 0x0A5C),
+    (0x0A5E, 0x0A5E),
+    (0x0A72, 0x0A74),
+    (0x0A85, 0x0A8D),
+    (0x0A8F, 0x0A91),
+    (0x0A93, 0x0AA8),
+    (0x0AAA, 0x0AB0),
+    (0x0AB2, 0x0AB3),
+    (0x0AB5, 0x0AB9),
+    (0x0ABD, 0x0ABD),
+    (0x0AD0, 0x0AD0),
+    (0x0AE0, 0x0AE1),
+    (0x0AF9, 0x0AF9),
+    (0x0B05, 0x0B0C),
+    (0x0B0F, 0x0B10),
+    (0x0B13, 0x0B28),
+    (0x0B2A, 0x0B30),
+    (0x0B32, 0x0B33),
+    (0x0B35, 0x0B39),
+    (0x0B3D, 0x0B3D),
+    (0x0B5C, 0x0B5D),
+    (0x0B5F, 0x0B61),
+    (0x0B71, 0x0B71),
+    (0x0B83, 0x0B83),
+    (0x0B85, 0x0B8A),
+    (0x0B8E, 0x0B90),
+    (0x0B92, 0x0B95),
+    (0x0B99, 0x0B9A),
+    (0x0B9C, 0x0B9C),
+    (0x0B9E, 0x0B9F),
+    (0x0BA3, 0x0BA4),
+    (0x0BA8, 0x0BAA),
+    (0x0BAE, 0x0BB9),
+    (0x0BD0, 0x0BD0),
+    (0x0C05, 0x0C0C),
+    (0x0C0E, 0x0C10),
+    (0x0C12, 0x0C28),
+    (0x0C2A, 0x0C39),
+    (0x0C3D, 0x0C3D),
+    (0x0C58, 0x0C5A),
+    (0x0C5D, 0x0C5D),
+    (0x0C60, 0x0C61),
+    (0x0C80, 0x0C80),
+    (0x0C85, 0x0C8C),
+    (0x0C8E, 0x0C90),
+    (0x0C92, 0x0CA8),
+    (0x0CAA, 0x0CB3),
+    (0x0CB5, 0x0CB9),
+    (0x0CBD, 0x0CBD),
+    (0x0CDD, 0x0CDE),
+    (0x0CE0, 0x0CE1),
+    (0x0CF1, 0x0CF2),
+    (0x0D04, 0x0D0C),
+    (0x0D0E, 0x0D10),
+    (0x0D12, 0x0D3A),
+    (0x0D3D, 0x0D3D),
+    (0x0D4E, 0x0D4E),
+    (0x0D54, 0x0D56),
+    (0x0D5F, 0x0D61),
+    (0x0D7A, 0x0D7F),
+    (0x0D85, 0x0D96),
+    (0x0D9A, 0x0DB1),
+    (0x0DB3, 0x0DBB),
+    (0x0DBD, 0x0DBD),
+    (0x0DC0, 0x0DC6),
+    (0x0E01, 0x0E30),
+    (0x0E32, 0x0E33),
+    (0x0E40, 0x0E46),
+    (0x0E81, 0x0E82),
+    (0x0E84, 0x0E84),
+    (0x0E86, 0x0E8A),
+    (0x0E8C, 0x0EA3),
+    (0x0EA5, 0x0EA5),
+    (0x0EA7, 0x0EB0),
+    (0x0EB2, 0x0EB3),
+    (0x0EBD, 0x0EBD),
+    (0x0EC0, 0x0EC4),
+    (0x0EC6, 0x0EC6),
+    (0x0EDC, 0x0EDF),
+    (0x0F00, 0x0F00),
+    (0x0F40, 0x0F47),
+    (0x0F49, 0x0F6C),
+    (0x0F88, 0x0F8C),
+    (0x1000, 0x102A),
+    (0x103F, 0x103F),
+    (0x1050, 0x1055),
+    (0x105A, 0x105D),
+    (0x1061, 0x1061),
+    (0x1065, 0x1066),
+    (0x106E, 0x1070),
+    (0x1075, 0x1081),
+    (0x108E, 0x108E),
+    (0x10A0, 0x10C5),
+    (0x10C7, 0x10C7),
+    (0x10CD, 0x10CD),
+    (0x10D0, 0x10FA),
+    (0x10FC, 0x1248),
+    (0x124A, 0x124D),
+    (0x1250, 0x1256),
+    (0x1258, 0x1258),
+    (0x125A, 0x125D),
+    (0x1260, 0x1288),
+    (0x128A, 0x128D),
+    (0x1290, 0x12B0),
+    (0x12B2, 0x12B5),
+    (0x12B8, 0x12BE),
+    (0x12C0, 0x12C0),
+    (0x12C2, 0x12C5),
+    (0x12C8, 0x12D6),
+    (0x12D8, 0x1310),
+    (0x1312, 0x1315),
+    (0x1318, 0x135A),
+    (0x1380, 0x138F),
+    (0x13A0, 0x13F5),
+    (0x13F8, 0x13FD),
+    (0x1401, 0x166C),
+    (0x166F, 0x167F),
+    (0x1681, 0x169A),
+    (0x16A0, 0x16EA),
+    (0x16F1, 0x16F8),
+    (0x1700, 0x1711),
+    (0x171F, 0x1731),
+    (0x1740, 0x1751),
+    (0x1760, 0x176C),
+    (0x176E, 0x1770),
+    (0x1780, 0x17B3),
+    (0x17D7, 0x17D7),
+    (0x17DC, 0x17DC),
+    (0x1820, 0x1878),
+    (0x1880, 0x1884),
+    (0x1887, 0x18A8),
+    (0x18AA, 0x18AA),
+    (0x18B0, 0x18F5),
+    (0x1900, 0x191E),
+    (0x1950, 0x196D),
+    (0x1970, 0x1974),
+    (0x1980, 0x19AB),
+    (0x19B0, 0x19C9),
+    (0x1A00, 0x1A16),
+    (0x1A20, 0x1A54),
+    (0x1AA7, 0x1AA7),
+    (0x1B05, 0x1B33),
+    (0x1B45, 0x1B4C),
+    (0x1B83, 0x1BA0),
+    (0x1BAE, 0x1BAF),
+    (0x1BBA, 0x1BE5),
+    (0x1C00, 0x1C23),
+    (0x1C4D, 0x1C4F),
+    (0x1C5A, 0x1C7D),
+    (0x1C80, 0x1C88),
+    (0x1C90, 0x1CBA),
+    (0x1CBD, 0x1CBF),
+    (0x1CE9, 0x1CEC),
+    (0x1CEE, 0x1CF3),
+    (0x1CF5, 0x1CF6),
+    (0x1CFA, 0x1CFA),
+    (0x1D00, 0x1DBF),
+    (0x1E00, 0x1F15),
+    (0x1F18, 0x1F1D),
+    (0x1F20, 0x1F45),
+    (0x1F48, 0x1F4D),
+    (0x1F50, 0x1F57),
+    (0x1F59, 0x1F59),
+    (0x1F5B, 0x1F5B),
+    (0x1F5D, 0x1F5D),
+    (0x1F5F, 0x1F7D),
+    (0x1F80, 0x1FB4),
+    (0x1FB6, 0x1FBC),
+    (0x1FBE, 0x1FBE),
+    (0x1FC2, 0x1FC4),
+    (0x1FC6, 0x1FCC),
+    (0x1FD0, 0x1FD3),
+    (0x1FD6, 0x1FDB),
+    (0x1FE0, 0x1FEC),
+    (0x1FF2, 0x1FF4),
+    (0x1FF6, 0x1FFC),
+    (0x2071, 0x2071),
+    (0x207F, 0x207F),
+    (0x2090, 0x209C),
+    (0x2102, 0x2102),
+    (0x2107, 0x2107),
+    (0x210A, 0x2113),
+    (0x2115, 0x2115),
+    (0x2119, 0x211D),
+    (0x2124, 0x2124),
+    (0x2126, 0x2126),
+    (0x2128, 0x2128),
+    (0x212A, 0x212D),
+    (0x212F, 0x2139),
+    (0x213C, 0x213F),
+    (0x2145, 0x2149),
+    (0x214E, 0x214E),
+    (0x2183, 0x2184),
+    (0x2C00, 0x2CE4),
+    (0x2CEB, 0x2CEE),
+    (0x2CF2, 0x2CF3),
+    (0x2D00, 0x2D25),
+    (0x2D27, 0x2D27),
+    (0x2D2D, 0x2D2D),
+    (0x2D30, 0x2D67),
+    (0x2D6F, 0x2D6F),
+    (0x2D80, 0x2D96),
+    (0x2DA0, 0x2DA6),
+    (0x2DA8, 0x2DAE),
+    (0x2DB0, 0x2DB6),
+    (0x2DB8, 0x2DBE),
+    (0x2DC0, 0x2DC6),
+    (0x2DC8, 0x2DCE),
+    (0x2DD0, 0x2DD6),
+    (0x2DD8, 0x2DDE),
+    (0x2E2F, 0x2E2F),
+    (0x3005, 0x3006),
+    (0x3031, 0x3035),
+    (0x303B, 0x303C),
+    (0x3041, 0x3096),
+    (0x309D, 0x309F),
+    (0x30A1, 0x30FA),
+    (0x30FC, 0x30FF),
+    (0x3105, 0x312F),
+    (0x3131, 0x318E),
+    (0x31A0, 0x31BF),
+    (0x31F0, 0x31FF),
+    (0x3400, 0x4DBF),
+    (0x4E00, 0xA48C),
+    (0xA4D0, 0xA4FD),
+    (0xA500, 0xA60C),
+    (0xA610, 0xA61F),
+    (0xA62A, 0xA62B),
+    (0xA640, 0xA66E),
+    (0xA67F, 0xA69D),
+    (0xA6A0, 0xA6E5),
+    (0xA717, 0xA71F),
+    (0xA722, 0xA788),
+    (0xA78B, 0xA7CA),
+    (0xA7D0, 0xA7D1),
+    (0xA7D3, 0xA7D3),
+    (0xA7D5, 0xA7D9),
+    (0xA7F2, 0xA801),
+    (0xA803, 0xA805),
+    (0xA807, 0xA80A),
+    (0xA80C, 0xA822),
+    (0xA840, 0xA873),
+    (0xA882, 0xA8B3),
+    (0xA8F2, 0xA8F7),
+    (0xA8FB, 0xA8FB),
+    (0xA8FD, 0xA8FE),
+    (0xA90A, 0xA925),
+    (0xA930, 0xA946),
+    (0xA960, 0xA97C),
+    (0xA984, 0xA9B2),
+    (0xA9CF, 0xA9CF),
+    (0xA9E0, 0xA9E4),
+    (0xA9E6, 0xA9EF),
+    (0xA9FA, 0xA9FE),
+    (0xAA00, 0xAA28),
+    (0xAA40, 0xAA42),
+    (0xAA44, 0xAA4B),
+    (0xAA60, 0xAA76),
+    (0xAA7A, 0xAA7A),
+    (0xAA7E, 0xAAAF),
+    (0xAAB1, 0xAAB1),
+    (0xAAB5, 0xAAB6),
+    (0xAAB9, 0xAABD),
+    (0xAAC0, 0xAAC0),
+    (0xAAC2, 0xAAC2),
+    (0xAADB, 0xAADD),
+    (0xAAE0, 0xAAEA),
+    (0xAAF2, 0xAAF4),
+    (0xAB01, 0xAB06),
+    (0xAB09, 0xAB0E),
+    (0xAB11, 0xAB16),
+    (0xAB20, 0xAB26),
+    (0xAB28, 0xAB2E),
+    (0xAB30, 0xAB5A),
+    (0xAB5C, 0xAB69),
+    (0xAB70, 0xABE2),
+    (0xAC00, 0xD7A3),
+    (0xD7B0, 0xD7C6),
+    (0xD7CB, 0xD7FB),
+    (0xF900, 0xFA6D),
+    (0xFA70, 0xFAD9),
+    (0xFB00, 0xFB06),
+    (0xFB13, 0xFB17),
+    (0xFB1D, 0xFB1D),
+    (0xFB1F, 0xFB28),
+    (0xFB2A, 0xFB36),
+    (0xFB38, 0xFB3C),
+    (0xFB3E, 0xFB3E),
+    (0xFB40, 0xFB41),
+    (0xFB43, 0xFB44),
+    (0xFB46, 0xFBB1),
+    (0xFBD3, 0xFD3D),
+    (0xFD50, 0xFD8F),
+    (0xFD92, 0xFDC7),
+    (0xFDF0, 0xFDFB),
+    (0xFE70, 0xFE74),
+    (0xFE76, 0xFEFC),
+    (0xFF21, 0xFF3A),
+    (0xFF41, 0xFF5A),
+    (0xFF66, 0xFFBE),
+    (0xFFC2, 0xFFC7),
+    (0xFFCA, 0xFFCF),
+    (0xFFD2, 0xFFD7),
+    (0xFFDA, 0xFFDC),
+];
+
 /// `Character#isLetterOrDigit(char)`: general category Lu, Ll, Lt, Lm, Lo
-/// or Nd of one UTF-16 unit. A supplementary code point reaches Java as two
-/// surrogate units, and a surrogate is neither a letter nor a digit.
+/// or Nd of one UTF-16 unit, under Unicode 15.0. A supplementary code point
+/// reaches Java as two surrogate units, and a surrogate is neither a letter
+/// nor a digit.
 fn java_is_letter_or_digit(c: char) -> bool {
-    use unicode_properties::{GeneralCategory, UnicodeGeneralCategory};
     let Ok(unit) = u16::try_from(u32::from(c)) else {
         return false;
     };
-    java_decimal_digit(unit).is_some()
-        || matches!(
-            c.general_category(),
-            GeneralCategory::UppercaseLetter
-                | GeneralCategory::LowercaseLetter
-                | GeneralCategory::TitlecaseLetter
-                | GeneralCategory::ModifierLetter
-                | GeneralCategory::OtherLetter
-        )
+    java_decimal_digit(unit).is_some() || bmp_letter(unit)
+}
+
+fn bmp_letter(unit: u16) -> bool {
+    BMP_LETTER_RANGES
+        .binary_search_by(|&(start, end)| {
+            if unit < start {
+                std::cmp::Ordering::Greater
+            } else if unit > end {
+                std::cmp::Ordering::Less
+            } else {
+                std::cmp::Ordering::Equal
+            }
+        })
+        .is_ok()
 }
 
 /// `StartUtils#beforeStartUml`: the text before a `[@\\]start` keyword that
@@ -4500,6 +4909,7 @@ fn tim_texts(lines: Vec<TimLine>) -> Vec<String> {
 fn collapse_post_tim_ending_backslashes(
     lines: Vec<TimLine>,
     block_end: Option<&(usize, String)>,
+    keep_open_tail: bool,
 ) -> Vec<String> {
     let end_continued = block_end.is_some_and(|(_, text)| ends_with_backslash(text));
     let continued = |line: &TimLine| match line {
@@ -4546,10 +4956,18 @@ fn collapse_post_tim_ending_backslashes(
     }
     if let Some((end_line, end_text)) = block_end
         && !end_continued
-        && let Some(mut joined) = pending
+        && let Some(mut joined) = pending.take()
     {
         joined.push_str(end_text);
         result.push(source_line_marker(*end_line, &joined));
+    }
+    // A theme body is only part of Java's result list. A continuation with
+    // no following line inside the body stays open: loadInternal would join
+    // it with the next line after the theme, which this call does not have.
+    if keep_open_tail && let Some(joined) = pending {
+        let mut open = joined;
+        open.push('\\');
+        result.push(open);
     }
     result
 }
@@ -7257,6 +7675,24 @@ $record(SaffronArchive)\n\
         assert_eq!(before_start_uml("\u{1d400}@startuml"), Some("\u{1d400}"));
         assert_eq!(before_start_uml("x @startuml"), None);
 
+        // Unicode 17's sixteen new BMP letters are not letters in Unicode 15.0.
+        // The four header probes are U+1C89, U+A7CB, U+A7CE and U+088F.
+        const UNICODE_17_ONLY_LETTERS: [char; 16] = [
+            '\u{088F}', '\u{0C5C}', '\u{0CDC}', '\u{1C89}', '\u{1C8A}', '\u{A7CB}', '\u{A7CC}',
+            '\u{A7CD}', '\u{A7CE}', '\u{A7CF}', '\u{A7D2}', '\u{A7D4}', '\u{A7DA}', '\u{A7DB}',
+            '\u{A7DC}', '\u{A7F1}',
+        ];
+        let covered: u32 = BMP_LETTER_RANGES
+            .iter()
+            .map(|&(start, end)| u32::from(end - start) + 1)
+            .sum();
+        assert_eq!(covered, 48_965);
+        for c in UNICODE_17_ONLY_LETTERS {
+            assert!(!java_is_letter_or_digit(c), "{c:?}");
+            let header = format!("{c}@startuml");
+            assert_eq!(before_start_uml(&header), Some(&header[..c.len_utf8()]));
+        }
+
         let dir = std::env::temp_dir().join(format!("rustuml-r4-include-{}", std::process::id()));
         std::fs::create_dir_all(&dir).unwrap();
         std::fs::write(
@@ -7285,6 +7721,53 @@ $record(SaffronArchive)\n\
         assert_eq!(
             texts("@startuml\n!include r.iuml!1\n@enduml"),
             vec!["Kea -> Tui : raw"]
+        );
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn inner_comment_is_stripped_in_ebnf_and_definelong_bodies() {
+        let ebnf = pp("@startebnf\na = \"x\" , b ; /' c '/\nb = \"y\" ;\n@endebnf");
+        assert!(
+            ebnf.iter()
+                .any(|line| line.contains("a = \"x\" , b ;") && !line.contains("/'")),
+            "{ebnf:?}"
+        );
+        let defined =
+            pp("@startuml\n!definelong DL()\nA -> B : dl /' c '/\n!enddefinelong\nDL()\n@enduml");
+        assert!(
+            defined
+                .iter()
+                .any(|line| line.contains("A -> B : dl") && !line.contains("/'")),
+            "{defined:?}"
+        );
+    }
+
+    #[test]
+    fn local_theme_body_continuation_joins_before_the_parser() {
+        let dir = std::env::temp_dir().join(format!("rustuml-r5-theme-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(
+            dir.join("puml-theme-grokr5.puml"),
+            "skinparam ArrowColor \\\n#DD0000\n",
+        )
+        .unwrap();
+        let lines = strip_source_line_markers(
+            preprocess_full_for_parse(
+                "@startuml\n!theme grokr5 from .\nKea -> Tui : hi\n@enduml",
+                Some(dir.clone()),
+            )
+            .lines,
+        );
+        assert!(
+            lines
+                .iter()
+                .any(|line| line.contains("skinparam ArrowColor #DD0000")),
+            "{lines:?}"
+        );
+        assert!(
+            lines.iter().all(|line| line.trim() != "#DD0000"),
+            "{lines:?}"
         );
         let _ = std::fs::remove_dir_all(&dir);
     }
