@@ -1,0 +1,9 @@
+[package]
+name = "opus-score"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+roxmltree = "=0.20.0"
+
+[workspace]

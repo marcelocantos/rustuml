@@ -1,0 +1,1262 @@
+{
+ "g4f_creole_bold": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_creole_italic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_creole_under": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_creole_url": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 15"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_esc_bsbsn": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 3"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_esc_bsn": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 3"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_esc_mixed": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_esc_tilde": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_bl_dl": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_bl_lb": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_bl_ob": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_bl_ol": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_bo_dl": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_bo_lb": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_bo_ob": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_bo_ol": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_dl_dl": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_dl_lb": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_dl_ob": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_dl_ol": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_lb_dl": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_lr_lb_lb": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_lr_lb_ob": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_lr_lb_ol": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_lr_lo_dl": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_lo_lb": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_lo_ob": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_lo_ol": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_lr_ob_dl": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_lr_ob_lb": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_lr_ob_ob": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_lr_ob_ol": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_lr_ol_dl": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_lr_ol_lb": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_lr_ol_ob": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_lr_ol_ol": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_tb_bl_dl": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 24"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_tb_bl_lb": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 25"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_tb_bl_ob": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 25"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_tb_bl_ol": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 24"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_tb_bo_dl": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 24"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_tb_bo_lb": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 25"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_tb_bo_ob": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 25"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_tb_bo_ol": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 24"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_tb_dl_dl": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 23"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_tb_dl_lb": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 24"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_tb_dl_ob": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 24"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 10"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 10"
+  }
+ },
+ "g4f_ortho_tb_dl_ol": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 23"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_tb_lb_dl": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_tb_lb_lb": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_tb_lb_ob": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_tb_lb_ol": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_tb_lo_dl": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 23"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_tb_lo_lb": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 24"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_tb_lo_ob": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 24"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_tb_lo_ol": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 23"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_ortho_tb_ob_dl": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_tb_ob_lb": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_tb_ob_ob": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_tb_ob_ol": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_tb_ol_dl": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_tb_ol_lb": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_tb_ol_ob": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_ortho_tb_ol_ol": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  },
+  "java_exit": 200,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "EXIT-MISMATCH"
+  }
+ },
+ "g4f_roles_esc": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 10"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_url_inline": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_url_neighbors": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_url_pipe": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_url_tip_label": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 11"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4f_url_tooltip": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 2"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ }
+}

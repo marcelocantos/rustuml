@@ -1,0 +1,506 @@
+{
+ "g2chk_arial_bold": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 73"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  }
+ },
+ "g2chk_arial_bolditalic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  }
+ },
+ "g2chk_arial_italic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 73"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  }
+ },
+ "g2chk_arial_plain": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 73"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  }
+ },
+ "g2chk_courier_bold": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 43"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 43"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 43"
+  }
+ },
+ "g2chk_courier_bolditalic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 52"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 52"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 52"
+  }
+ },
+ "g2chk_courier_italic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 53"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 53"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 53"
+  }
+ },
+ "g2chk_courier_plain": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 43"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 43"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 43"
+  }
+ },
+ "g2chk_helvetica_bold": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 30"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 84"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 30"
+  }
+ },
+ "g2chk_helvetica_bolditalic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  }
+ },
+ "g2chk_helvetica_italic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 30"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 72"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 30"
+  }
+ },
+ "g2chk_helvetica_plain": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 30"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 72"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 30"
+  }
+ },
+ "g2chk_lucida_bold": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 49"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 49"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 49"
+  }
+ },
+ "g2chk_lucida_bolditalic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  }
+ },
+ "g2chk_lucida_italic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 65"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 65"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 65"
+  }
+ },
+ "g2chk_lucida_plain": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 49"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 49"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 49"
+  }
+ },
+ "g2chk_menlo_bold": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  }
+ },
+ "g2chk_menlo_bolditalic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  }
+ },
+ "g2chk_menlo_italic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  }
+ },
+ "g2chk_menlo_plain": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  }
+ },
+ "g2chk_times_bold": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 49"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 49"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 49"
+  }
+ },
+ "g2chk_times_bolditalic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  }
+ },
+ "g2chk_times_italic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 65"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 65"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 65"
+  }
+ },
+ "g2chk_times_plain": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 49"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 49"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 49"
+  }
+ },
+ "g2chk_verdana_bold": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 30"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 79"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 30"
+  }
+ },
+ "g2chk_verdana_bolditalic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 89"
+  }
+ },
+ "g2chk_verdana_italic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 30"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 79"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 30"
+  }
+ },
+ "g2chk_verdana_plain": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 30"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 79"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 30"
+  }
+ }
+}
