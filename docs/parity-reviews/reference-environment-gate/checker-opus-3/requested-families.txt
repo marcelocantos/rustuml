@@ -1,0 +1,36 @@
+
+ monospace
+Arial
+Courier
+COURIER
+Courier New
+Courier/
+Dialog
+DialogInput
+Helvetica
+Liberation Mono
+Lucida Console
+Lucida Grande
+Menlo
+mono
+monospace
+MONOSPACE
+mOnOsPaCeD
+Monospaced
+must be inert
+NeverARealFont871
+Oak Ω𐐷
+Oak & Fir
+Oak & Pine
+Oak'Pine
+Oak«Fir»
+Quill & Reed
+Quill'
+Quill<Reed>é𐐀
+sans-serif
+SansSerif
+Serif
+Serif%substr(
+Times
+Times New Roman
+Verdana

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "reference-environment-gate",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/TitledDiagram.java:exportDiagramNow",
+    "src/main/java/net/sourceforge/plantuml/core/TextBlockExporter12026.java:createUGraphic",
+    "JDK java.desktop/sun/font/CFontManager.java:loadFonts,getFontPath,getOrCreateFallbackFont",
+    "JDK java.desktop/sun/font/CFont.java:createCompositeFont",
+    "JDK java.desktop/sun/font/SunFontManager.java:findFont2D"
+  ],
+  "rust_locations": [
+    "scripts/reference_env_census.py",
+    "scripts/reference_env_gate.py",
+    "crates/rustuml-render/src/reference_env_census.rs",
+    "crates/rustuml/tests/pdf_contract.rs",
+    "third_party/svg2pdf/src/util/context.rs",
+    "third_party/svg2pdf/src/util/resources.rs"
+  ],
+  "invariant": "Before a Monkey Man reference batch is trusted, the capture hook records a live census and proceeds only when check exits 0. Every face the reference JVM's font chain reaches for the corpus is pinned by content hash: the 22 modelled FONT_FILES, the 41 CASCADE_FONT_FILES derived from the stored #slot lines, every user font (a symlink row pins the resolved target and its bytes), and every MobileAsset font file. OS build, JDK, HarfBuzz and FreeType are pinned in the same census. A blank or - scalar or user/asset row hash exits 2, which fails. Rust PDF bytes are stable and are never counted as Java parity.",
+  "causal_divergence": "Before 0a36d0816 the census pinned 22 modelled faces, user fonts and MobileAsset fonts, but not the 29 round-9 (41 round-6 plus round-9) cascade faces the reference JVM's CFont.createCompositeFont reaches through CTFontCopyDefaultCascadeListForLanguages. A change to one of those files left check at exit 0. record followed a symlink OUT, and a scalar of - on both sides exited 0.",
+  "planned_change": "Derive CASCADE_FONT_FILES from the stored #slot lines and have record hash them as font rows; self-test rejects a tuple the derivation disagrees with. Refuse a symlink OUT and a symlink ancestor under scratch. Treat a blank or - committed scalar as unpinned (exit 2). Adopt the grok-g7-census4 record (284d5ef4) that pins the 41 cascade faces. The parent arms the gate by installing the three files and calling require_reference_env() immediately before new-worker.",
+  "perturbation_axes": [
+    "Reference-host fact drift: HarfBuzz, FreeType, JDK, OS, modelled and cascade system faces, user-font symlink targets and bytes, MobileAsset font files",
+    "Font-name resolution on the reference JVM: compatibility name Courier maps to logical Monospaced and the pinned Menlo, not to the hidden unpinned Courier.ttc",
+    "PDF byte stability on its own oracle, with SVG, PNG, EPS and TXT held identical to the pre-census tree"
+  ]
+}

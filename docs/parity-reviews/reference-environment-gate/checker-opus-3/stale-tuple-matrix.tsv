@@ -1,0 +1,18 @@
+exit	expected	status	case	last line
+0	0	ok	unchanged	self-test ok
+1	nonzero	ok	tuple-drop-songti	CASCADE_FONT_FILES has 40 paths, derivation has 41
+1	nonzero	ok	tuple-add-georgia	CASCADE_FONT_FILES has 42 paths, derivation has 41
+1	nonzero	ok	tuple-swap-order	CASCADE_FONT_FILES has 41 paths, derivation has 41
+1	nonzero	ok	tuple-nfc-hiragino	CASCADE_FONT_FILES has 41 paths, derivation has 41
+1	nonzero	ok	slot-add-new-path	CASCADE_FONT_FILES has 41 paths, derivation has 42
+1	nonzero	ok	slot-remove-round6-only-songti	CASCADE_FONT_FILES has 41 paths, derivation has 40
+1	nonzero	ok	slot-path-to-user-dir	CASCADE_FONT_FILES has 41 paths, derivation has 40
+1	nonzero	ok	slot-path-to-modelled-face	CASCADE_FONT_FILES has 41 paths, derivation has 40
+1	nonzero	ok	slot-path-relative	bad #slot line in /Users/marcelo/Library/Caches/rustuml-opus-g7-recheck3/stale/slot-path-relative/tools/font-chain-reference/monkeyman-round9/Helvetica.tsv
+1	nonzero	ok	slot-lines-all-removed	no #slot lines under /Users/marcelo/Library/Caches/rustuml-opus-g7-recheck3/stale/slot-lines-all-removed/tools/font-chain-reference
+1	nonzero	ok	round9-emoji-removed	CASCADE_FONT_FILES has 41 paths, derivation has 40
+0	0	ok	slot-lines-reordered	self-test ok
+0	0	ok	tsv-renamed	self-test ok
+0	0	ok	non-tsv-slot-file-added	self-test ok
+1	nonzero	ok	census-drop-emoji-row	StopIteration
+0	0	ok	census-drop-songti-row (stale census; gate fails closed at check)	self-test ok
