@@ -46,13 +46,20 @@ fn is_region_separator(line: &str) -> bool {
 
 /// How a command uses a state name.
 ///
-/// Java provenance: `CommandLinkStateCommon.getEntity` and
-/// `CommandCreateState.executeArg` call `StateDiagram.checkConcurrentStateOk`.
-/// `CommandAddField.executeArg` only calls `quarkInContext` and does not.
+/// Java provenance: `CommandLinkStateCommon.getEntity` returns the current
+/// group when its name equals the token (CommandLinkStateCommon.java:189-190),
+/// then calls `StateDiagram.checkConcurrentStateOk`. `CommandCreateState`
+/// calls the check with no short-circuit. `CommandAddField` takes the same
+/// short-circuit as `getEntity` (CommandAddField.java:82-85) and no check.
+/// `X[H]` / `X[H*]` reach `StateDiagram.getHistorical/getDeepHistory(location,
+/// X)` before the `getEntity` short-circuit (CommandLinkStateCommon.java:171-177),
+/// and those resolve X with plain `quarkInContext` and no check
+/// (StateDiagram.java:142-156, :177-191). Note anchors do the same.
 #[derive(Clone, Copy)]
 enum StateNameUse {
     Link,
     Declaration,
+    Field,
     Unchecked,
 }
 
@@ -91,7 +98,9 @@ fn concurrent_state_error(line: usize, use_kind: &StateNameUse, name: &str) -> P
         StateNameUse::Declaration => format!(
             "The state {name} has been created in a concurrent state : it cannot be used here."
         ),
-        StateNameUse::Unchecked => unreachable!("unchecked state names are not rejected"),
+        StateNameUse::Field | StateNameUse::Unchecked => {
+            unreachable!("field and unchecked state names are not rejected")
+        }
     };
     ParseError { line, message }
 }
@@ -601,12 +610,13 @@ impl StateParser {
         use_kind: StateNameUse,
     ) -> Result<String, ParseError> {
         let raw = raw.trim();
-        // `CommandLinkStateCommon.getEntity` returns the current group when
-        // its short name equals the token, before `quarkInContext` and
-        // `checkConcurrentStateOk`. A composite born in a concurrent region
-        // can still be the source of a link drawn inside itself.
-        // `CommandCreateState` has no such short-circuit.
-        if matches!(use_kind, StateNameUse::Link)
+        // `CommandLinkStateCommon.getEntity` and `CommandAddField` return the
+        // current group when its short name equals the token, before
+        // `quarkInContext` and `checkConcurrentStateOk`. A composite born in a
+        // concurrent region can still be the source of a link drawn inside
+        // itself. `CommandCreateState` and `getHistorical(location, X)` have
+        // no such short-circuit.
+        if matches!(use_kind, StateNameUse::Link | StateNameUse::Field)
             && let Some(scope) = scope
             && short_name(scope) == raw
         {
@@ -661,7 +671,7 @@ impl StateParser {
         scope: Option<&str>,
         use_kind: &StateNameUse,
     ) -> Result<(), ParseError> {
-        if matches!(use_kind, StateNameUse::Unchecked)
+        if matches!(use_kind, StateNameUse::Field | StateNameUse::Unchecked)
             || check_concurrent_state_ok(&self.concurrent_now, existing_parent, scope)
         {
             return Ok(());
@@ -693,13 +703,32 @@ impl StateParser {
     /// `CONCURRENT_STATE`, walking every level.
     fn nearest_concurrent_ancestor(&self, endpoint: &str) -> Option<String> {
         let mut parent = self.endpoint_parent(endpoint);
+        // Guard only: a quark tree has no cycle, so a repeated id means a
+        // malformed record, and the walk stops instead of looping.
+        let mut seen: Vec<String> = Vec::new();
         while let Some(id) = parent {
+            if seen.contains(&id) {
+                return None;
+            }
             if self.concurrent_now.contains(&id) {
                 return Some(id);
             }
             parent = self.quark_parent(&id);
+            seen.push(id);
         }
         None
+    }
+
+    /// The parent recorded for a quark when its `State` is first created.
+    /// A quark's parent is fixed by `Quark.child` at creation. The current
+    /// group reached through the name short-circuit already exists, so its
+    /// parent is its own (a synthetic region's owner), never itself.
+    fn parent_for_new_state(&self, id: &str) -> Option<String> {
+        let scope = self.current_scope();
+        if scope == Some(id) {
+            return self.quark_parent(id);
+        }
+        scope.map(String::from)
     }
 
     /// `StateDiagram.checkFinalError` (StateDiagram.java:232-254) refuses a
@@ -815,14 +844,17 @@ impl StateParser {
             return Ok(self.qualify(raw));
         }
         // CommandLinkStateCommon: `X[H]` / `X[H*]` call StateDiagram
-        // getHistorical/getDeepHistory(location, X), which resolve X with
-        // quarkInContext(true, ...), enter it as a STATE group and create the
-        // history pseudo-state inside it.
+        // getHistorical/getDeepHistory(location, X) before the current-group
+        // short-circuit (CommandLinkStateCommon.java:171-177). Those resolve X
+        // with quarkInContext(true, ...) and no concurrent check, enter it as a
+        // STATE group and create the history pseudo-state inside it
+        // (StateDiagram.java:142-156, :177-191). The region's own name therefore
+        // names the region's child, not the region.
         for marker in ["[H*]", "[H]"] {
             if let Some(base) = raw.strip_suffix(marker)
                 && !base.is_empty()
             {
-                let group = self.ensure_state(base, use_kind)?;
+                let group = self.ensure_state(base, StateNameUse::Unchecked)?;
                 self.mute_to_state(&group);
                 if let Some(state) = self.states.iter_mut().find(|state| state.id == group) {
                     state.composite = true;
@@ -831,7 +863,13 @@ impl StateParser {
             }
         }
         let id = self.resolve_state_id(raw, use_kind)?;
-        let parent = self.current_scope().map(String::from);
+        // `CommandAddField` adds the field to the current group itself. A
+        // synthetic region is drawn as a STATE_CONCURRENT image with no field
+        // block, so it gets no `State` here.
+        if matches!(use_kind, StateNameUse::Field) && self.is_synthetic_region(&id) {
+            return Ok(id);
+        }
+        let parent = self.parent_for_new_state(&id);
         if let Some(state) = self.states.iter_mut().find(|state| state.id == id) {
             if state.source_line == 0 {
                 state.source_line = self.current_line;
@@ -1255,7 +1293,7 @@ impl StateParser {
         static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^(\w+)\s*:\s*(.+)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            let id = self.ensure_state(&caps[1], StateNameUse::Unchecked)?;
+            let id = self.ensure_state(&caps[1], StateNameUse::Field)?;
             let desc = caps[2].trim().to_string();
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
                 state.descriptions.push(desc);
@@ -2381,5 +2419,82 @@ mod tests {
         );
         assert_eq!(error.line, 9);
         assert_eq!(error.message, "The state Pen cannot be used here.");
+    }
+
+    #[test]
+    fn history_by_the_region_name_enters_the_region_child() {
+        // getHistorical(location, X) resolves X by quarkInContext with no
+        // current-group short-circuit: the region's own name is the current
+        // group, so it names the region's child.
+        let diagram = parse(
+            "state Garth {\n\
+             state Byre\n\
+             --\n\
+             state Mew\n\
+             CONC2[H] --> Mew\n\
+             }\n",
+        );
+        let group = diagram
+            .states
+            .iter()
+            .find(|s| s.id == "Garth.CONC2.CONC2")
+            .expect("history group");
+        assert_eq!(group.parent.as_deref(), Some("Garth.CONC2"));
+        assert!(group.composite);
+        assert_eq!(diagram.transitions[0].from, "[H]Garth.CONC2.CONC2");
+        assert!(
+            diagram
+                .states
+                .iter()
+                .all(|s| s.parent.as_deref() != Some(s.id.as_str()))
+        );
+    }
+
+    #[test]
+    fn deep_history_by_a_nested_region_name_enters_its_child() {
+        let diagram = parse(
+            "state Croft {\n\
+             state Loom {\n\
+             state Weft\n\
+             --\n\
+             state Warp\n\
+             --\n\
+             state Heddle\n\
+             CONC3[H*] --> Heddle\n\
+             }\n\
+             }\n",
+        );
+        assert_eq!(diagram.transitions[0].from, "[H*]Croft.Loom.CONC3.CONC3");
+    }
+
+    #[test]
+    fn link_by_the_region_name_is_refused_by_the_final_check() {
+        // The getEntity short-circuit links the region group itself. Its
+        // parent is its owner, a plain state, so it has no concurrent
+        // ancestor, while Sill's is the region.
+        let error = parse_err(
+            "state Gable {\n\
+             state Eave\n\
+             --\n\
+             state Sill\n\
+             CONC2 --> Sill\n\
+             }\n",
+        );
+        assert_eq!(error.line, 1);
+        assert_eq!(error.message, "Syntax Error?");
+    }
+
+    #[test]
+    fn field_line_by_the_owner_name_stays_on_the_owner() {
+        // CommandAddField uses the current group when its name matches.
+        let diagram = parse(
+            "state Nave {\n\
+             state Aisle\n\
+             Nave : holds the pews\n\
+             }\n",
+        );
+        assert!(!diagram.states.iter().any(|s| s.id == "Nave.Nave"));
+        let nave = diagram.states.iter().find(|s| s.id == "Nave").unwrap();
+        assert_eq!(nave.descriptions, vec!["holds the pews"]);
     }
 }
