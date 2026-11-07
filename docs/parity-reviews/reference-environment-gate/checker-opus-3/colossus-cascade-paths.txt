@@ -1,0 +1,50 @@
+/System/Library/Fonts/ヒラギノ明朝 ProN.ttc
+/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc
+/System/Library/Fonts/ヒラギノ角ゴシック W6.ttc
+/System/Library/Fonts/Apple Color Emoji.ttc
+/System/Library/Fonts/Apple Symbols.ttf
+/System/Library/Fonts/AppleSDGothicNeo.ttc
+/System/Library/Fonts/GeezaPro.ttc
+/System/Library/Fonts/Helvetica.ttc
+/System/Library/Fonts/Hiragino Sans GB.ttc
+/System/Library/Fonts/Kohinoor.ttc
+/System/Library/Fonts/KohinoorBangla.ttc
+/System/Library/Fonts/KohinoorGujarati.ttc
+/System/Library/Fonts/KohinoorTelugu.ttc
+/System/Library/Fonts/LucidaGrande.ttc
+/System/Library/Fonts/Menlo.ttc
+/System/Library/Fonts/Monaco.ttf
+/System/Library/Fonts/MuktaMahee.ttc
+/System/Library/Fonts/NotoNastaliq.ttc
+/System/Library/Fonts/NotoSansArmenian.ttc
+/System/Library/Fonts/NotoSansKannada.ttc
+/System/Library/Fonts/NotoSansMyanmar.ttc
+/System/Library/Fonts/NotoSansOriya.ttc
+/System/Library/Fonts/NotoSerifMyanmar.ttc
+/System/Library/Fonts/Supplemental/AppleMyungjo.ttf
+/System/Library/Fonts/Supplemental/Ayuthaya.ttf
+/System/Library/Fonts/Supplemental/Courier New Bold Italic.ttf
+/System/Library/Fonts/Supplemental/Courier New Bold.ttf
+/System/Library/Fonts/Supplemental/Courier New Italic.ttf
+/System/Library/Fonts/Supplemental/Courier New.ttf
+/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc
+/System/Library/Fonts/Supplemental/Galvji.ttc
+/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
+/System/Library/Fonts/Supplemental/Kailasa.ttc
+/System/Library/Fonts/Supplemental/Kannada MN.ttc
+/System/Library/Fonts/Supplemental/KefaIII.ttf
+/System/Library/Fonts/Supplemental/Khmer MN.ttc
+/System/Library/Fonts/Supplemental/Khmer Sangam MN.ttf
+/System/Library/Fonts/Supplemental/Kokonor.ttf
+/System/Library/Fonts/Supplemental/Lao MN.ttc
+/System/Library/Fonts/Supplemental/Lao Sangam MN.ttf
+/System/Library/Fonts/Supplemental/Malayalam MN.ttc
+/System/Library/Fonts/Supplemental/Malayalam Sangam MN.ttc
+/System/Library/Fonts/Supplemental/Oriya MN.ttc
+/System/Library/Fonts/Supplemental/Sinhala MN.ttc
+/System/Library/Fonts/Supplemental/Sinhala Sangam MN.ttc
+/System/Library/Fonts/Supplemental/Songti.ttc
+/System/Library/Fonts/Supplemental/STIXTwoMath.otf
+/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc
+/System/Library/Fonts/Supplemental/Thonburi.ttc
+/System/Library/PrivateFrameworks/FontServices.framework/Resources/Reserved/PingFangUI.ttc

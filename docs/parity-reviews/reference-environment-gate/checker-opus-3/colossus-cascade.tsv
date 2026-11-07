@@ -1,0 +1,188 @@
+#face	Helvetica	Helvetica	/System/Library/Fonts/Helvetica.ttc	languages=631
+#slot	LucidaGrande	/System/Library/Fonts/LucidaGrande.ttc
+#slot	.AppleSymbolsFB	-
+#slot	GeezaPro	/System/Library/Fonts/GeezaPro.ttc
+#slot	HiraginoSans-W3	/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc
+#slot	HiraginoSansGB-W3	/System/Library/Fonts/Hiragino Sans GB.ttc
+#slot	AppleSDGothicNeo-Regular	/System/Library/Fonts/AppleSDGothicNeo.ttc
+#slot	NotoNastaliqUrdu	/System/Library/Fonts/NotoNastaliq.ttc
+#slot	NotoSansMyanmar-Regular	/System/Library/Fonts/NotoSansMyanmar.ttc
+#slot	PingFangSC-Regular	/System/Library/PrivateFrameworks/FontServices.framework/Resources/Reserved/PingFangUI.ttc
+#slot	PingFangTC-Regular	/System/Library/PrivateFrameworks/FontServices.framework/Resources/Reserved/PingFangUI.ttc
+#slot	PingFangHK-Regular	/System/Library/PrivateFrameworks/FontServices.framework/Resources/Reserved/PingFangUI.ttc
+#slot	PingFangSC-Regular	/System/Library/PrivateFrameworks/FontServices.framework/Resources/Reserved/PingFangUI.ttc
+#slot	PingFangTC-Regular	/System/Library/PrivateFrameworks/FontServices.framework/Resources/Reserved/PingFangUI.ttc
+#slot	PingFangSC-Regular	/System/Library/PrivateFrameworks/FontServices.framework/Resources/Reserved/PingFangUI.ttc
+#slot	PingFangMO-Regular	/System/Library/PrivateFrameworks/FontServices.framework/Resources/Reserved/PingFangUI.ttc
+#slot	PingFangSC-Regular	/System/Library/PrivateFrameworks/FontServices.framework/Resources/Reserved/PingFangUI.ttc
+#slot	NotoSansZawgyi-Regular	/System/Library/Fonts/NotoSansMyanmar.ttc
+#slot	Thonburi	/System/Library/Fonts/Supplemental/Thonburi.ttc
+#slot	KohinoorDevanagari-Regular	/System/Library/Fonts/Kohinoor.ttc
+#slot	Kailasa	/System/Library/Fonts/Supplemental/Kailasa.ttc
+#slot	KohinoorBangla-Regular	/System/Library/Fonts/KohinoorBangla.ttc
+#slot	KohinoorGujarati-Regular	/System/Library/Fonts/KohinoorGujarati.ttc
+#slot	MuktaMahee-Regular	/System/Library/Fonts/MuktaMahee.ttc
+#slot	NotoSansKannada-Regular	/System/Library/Fonts/NotoSansKannada.ttc
+#slot	KhmerSangamMN	/System/Library/Fonts/Supplemental/Khmer Sangam MN.ttf
+#slot	LaoSangamMN	/System/Library/Fonts/Supplemental/Lao Sangam MN.ttf
+#slot	MalayalamSangamMN	/System/Library/Fonts/Supplemental/Malayalam Sangam MN.ttc
+#slot	NotoSansOriya	/System/Library/Fonts/NotoSansOriya.ttc
+#slot	SinhalaSangamMN	/System/Library/Fonts/Supplemental/Sinhala Sangam MN.ttc
+#slot	TamilSangamMN	/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc
+#slot	KohinoorTelugu-Regular	/System/Library/Fonts/KohinoorTelugu.ttc
+#slot	NotoSansArmenian-Regular	/System/Library/Fonts/NotoSansArmenian.ttc
+#slot	EuphemiaUCAS	/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc
+#slot	Menlo-Regular	/System/Library/Fonts/Menlo.ttc
+#slot	AppleSymbols	/System/Library/Fonts/Apple Symbols.ttf
+#slot	STIXTwoMath-Regular	/System/Library/Fonts/Supplemental/STIXTwoMath.otf
+#slot	Galvji	/System/Library/Fonts/Supplemental/Galvji.ttc
+#slot	KefaIII-Regular	/System/Library/Fonts/Supplemental/KefaIII.ttf
+#slot	AppleColorEmoji	/System/Library/Fonts/Apple Color Emoji.ttc
+#face	TimesNewRomanPSMT	TimesNewRomanPSMT	/System/Library/Fonts/Supplemental/Times New Roman.ttf	languages=631
+#slot	.TimesFB	-
+#slot	.AppleSymbolsFB	-
+#slot	LucidaGrande	/System/Library/Fonts/LucidaGrande.ttc
+#slot	GeezaPro	/System/Library/Fonts/GeezaPro.ttc
+#slot	NotoNastaliqUrdu	/System/Library/Fonts/NotoNastaliq.ttc
+#slot	Kokonor	/System/Library/Fonts/Supplemental/Kokonor.ttf
+#slot	HiraMinProN-W3	/System/Library/Fonts/ヒラギノ明朝 ProN.ttc
+#slot	AppleMyungjo	/System/Library/Fonts/Supplemental/AppleMyungjo.ttf
+#slot	NotoSerifMyanmar-Regular	/System/Library/Fonts/NotoSerifMyanmar.ttc
+#slot	STSongti-SC-Regular	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	STSongti-TC-Regular	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	STSongti-TC-Regular	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	STSongti-TC-Regular	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	NotoSansZawgyi-Regular	/System/Library/Fonts/NotoSansMyanmar.ttc
+#slot	Thonburi	/System/Library/Fonts/Supplemental/Thonburi.ttc
+#slot	ITFDevanagari-Book	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
+#slot	KohinoorBangla-Regular	/System/Library/Fonts/KohinoorBangla.ttc
+#slot	KohinoorGujarati-Regular	/System/Library/Fonts/KohinoorGujarati.ttc
+#slot	MuktaMahee-Regular	/System/Library/Fonts/MuktaMahee.ttc
+#slot	KannadaMN	/System/Library/Fonts/Supplemental/Kannada MN.ttc
+#slot	KhmerMN	/System/Library/Fonts/Supplemental/Khmer MN.ttc
+#slot	LaoMN	/System/Library/Fonts/Supplemental/Lao MN.ttc
+#slot	MalayalamMN	/System/Library/Fonts/Supplemental/Malayalam MN.ttc
+#slot	OriyaMN	/System/Library/Fonts/Supplemental/Oriya MN.ttc
+#slot	SinhalaMN	/System/Library/Fonts/Supplemental/Sinhala MN.ttc
+#slot	TamilSangamMN	/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc
+#slot	KohinoorTelugu-Regular	/System/Library/Fonts/KohinoorTelugu.ttc
+#slot	NotoSansArmenian-Regular	/System/Library/Fonts/NotoSansArmenian.ttc
+#slot	EuphemiaUCAS	/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc
+#slot	Helvetica	/System/Library/Fonts/Helvetica.ttc
+#slot	Menlo-Regular	/System/Library/Fonts/Menlo.ttc
+#slot	AppleSymbols	/System/Library/Fonts/Apple Symbols.ttf
+#slot	STIXTwoMath-Regular	/System/Library/Fonts/Supplemental/STIXTwoMath.otf
+#slot	Galvji	/System/Library/Fonts/Supplemental/Galvji.ttc
+#slot	KefaIII-Regular	/System/Library/Fonts/Supplemental/KefaIII.ttf
+#slot	AppleColorEmoji	/System/Library/Fonts/Apple Color Emoji.ttc
+#face	TimesNewRomanPS-BoldMT	TimesNewRomanPS-BoldMT	/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf	languages=631
+#slot	.TimesFB-Bold	-
+#slot	.AppleSymbolsFB	-
+#slot	LucidaGrande-Bold	/System/Library/Fonts/LucidaGrande.ttc
+#slot	GeezaPro-Bold	/System/Library/Fonts/GeezaPro.ttc
+#slot	NotoNastaliqUrdu-Bold	/System/Library/Fonts/NotoNastaliq.ttc
+#slot	Kokonor	/System/Library/Fonts/Supplemental/Kokonor.ttf
+#slot	HiraMinProN-W6	/System/Library/Fonts/ヒラギノ明朝 ProN.ttc
+#slot	AppleMyungjo	/System/Library/Fonts/Supplemental/AppleMyungjo.ttf
+#slot	NotoSerifMyanmar-Bold	/System/Library/Fonts/NotoSerifMyanmar.ttc
+#slot	STSongti-SC-Bold	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	STSongti-TC-Bold	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	STSongti-TC-Bold	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	STSongti-TC-Bold	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	NotoSansZawgyi-Bold	/System/Library/Fonts/NotoSansMyanmar.ttc
+#slot	Thonburi-Bold	/System/Library/Fonts/Supplemental/Thonburi.ttc
+#slot	ITFDevanagari-Bold	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
+#slot	KohinoorBangla-Bold	/System/Library/Fonts/KohinoorBangla.ttc
+#slot	KohinoorGujarati-Bold	/System/Library/Fonts/KohinoorGujarati.ttc
+#slot	MuktaMahee-Bold	/System/Library/Fonts/MuktaMahee.ttc
+#slot	KannadaMN-Bold	/System/Library/Fonts/Supplemental/Kannada MN.ttc
+#slot	KhmerMN-Bold	/System/Library/Fonts/Supplemental/Khmer MN.ttc
+#slot	LaoMN-Bold	/System/Library/Fonts/Supplemental/Lao MN.ttc
+#slot	MalayalamMN-Bold	/System/Library/Fonts/Supplemental/Malayalam MN.ttc
+#slot	OriyaMN-Bold	/System/Library/Fonts/Supplemental/Oriya MN.ttc
+#slot	SinhalaMN-Bold	/System/Library/Fonts/Supplemental/Sinhala MN.ttc
+#slot	TamilSangamMN-Bold	/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc
+#slot	KohinoorTelugu-Bold	/System/Library/Fonts/KohinoorTelugu.ttc
+#slot	NotoSansArmenian-Bold	/System/Library/Fonts/NotoSansArmenian.ttc
+#slot	EuphemiaUCAS-Bold	/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc
+#slot	Helvetica-Bold	/System/Library/Fonts/Helvetica.ttc
+#slot	Menlo-Bold	/System/Library/Fonts/Menlo.ttc
+#slot	AppleSymbols	/System/Library/Fonts/Apple Symbols.ttf
+#slot	STIXTwoMath-Regular	/System/Library/Fonts/Supplemental/STIXTwoMath.otf
+#slot	Galvji-Bold	/System/Library/Fonts/Supplemental/Galvji.ttc
+#slot	KefaIII-Bold	/System/Library/Fonts/Supplemental/KefaIII.ttf
+#slot	AppleColorEmoji	/System/Library/Fonts/Apple Color Emoji.ttc
+#face	TimesNewRomanPS-ItalicMT	TimesNewRomanPS-ItalicMT	/System/Library/Fonts/Supplemental/Times New Roman Italic.ttf	languages=631
+#slot	.TimesFB-Italic	-
+#slot	.AppleSymbolsFB	-
+#slot	LucidaGrande	/System/Library/Fonts/LucidaGrande.ttc
+#slot	GeezaPro	/System/Library/Fonts/GeezaPro.ttc
+#slot	NotoNastaliqUrdu	/System/Library/Fonts/NotoNastaliq.ttc
+#slot	Kokonor	/System/Library/Fonts/Supplemental/Kokonor.ttf
+#slot	HiraMinProN-W3	/System/Library/Fonts/ヒラギノ明朝 ProN.ttc
+#slot	AppleMyungjo	/System/Library/Fonts/Supplemental/AppleMyungjo.ttf
+#slot	NotoSerifMyanmar-Regular	/System/Library/Fonts/NotoSerifMyanmar.ttc
+#slot	STSongti-SC-Regular	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	STSongti-TC-Regular	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	STSongti-TC-Regular	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	STSongti-TC-Regular	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	NotoSansZawgyi-Regular	/System/Library/Fonts/NotoSansMyanmar.ttc
+#slot	Thonburi	/System/Library/Fonts/Supplemental/Thonburi.ttc
+#slot	ITFDevanagari-Book	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
+#slot	KohinoorBangla-Regular	/System/Library/Fonts/KohinoorBangla.ttc
+#slot	KohinoorGujarati-Regular	/System/Library/Fonts/KohinoorGujarati.ttc
+#slot	MuktaMahee-Regular	/System/Library/Fonts/MuktaMahee.ttc
+#slot	KannadaMN	/System/Library/Fonts/Supplemental/Kannada MN.ttc
+#slot	KhmerMN	/System/Library/Fonts/Supplemental/Khmer MN.ttc
+#slot	LaoMN	/System/Library/Fonts/Supplemental/Lao MN.ttc
+#slot	MalayalamMN	/System/Library/Fonts/Supplemental/Malayalam MN.ttc
+#slot	OriyaMN	/System/Library/Fonts/Supplemental/Oriya MN.ttc
+#slot	SinhalaMN	/System/Library/Fonts/Supplemental/Sinhala MN.ttc
+#slot	TamilSangamMN	/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc
+#slot	KohinoorTelugu-Regular	/System/Library/Fonts/KohinoorTelugu.ttc
+#slot	NotoSansArmenian-Regular	/System/Library/Fonts/NotoSansArmenian.ttc
+#slot	EuphemiaUCAS-Italic	/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc
+#slot	Helvetica-Oblique	/System/Library/Fonts/Helvetica.ttc
+#slot	Menlo-Italic	/System/Library/Fonts/Menlo.ttc
+#slot	AppleSymbols	/System/Library/Fonts/Apple Symbols.ttf
+#slot	STIXTwoMath-Regular	/System/Library/Fonts/Supplemental/STIXTwoMath.otf
+#slot	Galvji-Oblique	/System/Library/Fonts/Supplemental/Galvji.ttc
+#slot	KefaIII-Regular	/System/Library/Fonts/Supplemental/KefaIII.ttf
+#slot	AppleColorEmoji	/System/Library/Fonts/Apple Color Emoji.ttc
+#face	TimesNewRomanPS-BoldItalicMT	TimesNewRomanPS-BoldItalicMT	/System/Library/Fonts/Supplemental/Times New Roman Bold Italic.ttf	languages=631
+#slot	.TimesFB-BoldItalic	-
+#slot	.AppleSymbolsFB	-
+#slot	LucidaGrande-Bold	/System/Library/Fonts/LucidaGrande.ttc
+#slot	GeezaPro-Bold	/System/Library/Fonts/GeezaPro.ttc
+#slot	NotoNastaliqUrdu-Bold	/System/Library/Fonts/NotoNastaliq.ttc
+#slot	Kokonor	/System/Library/Fonts/Supplemental/Kokonor.ttf
+#slot	HiraMinProN-W6	/System/Library/Fonts/ヒラギノ明朝 ProN.ttc
+#slot	AppleMyungjo	/System/Library/Fonts/Supplemental/AppleMyungjo.ttf
+#slot	NotoSerifMyanmar-Bold	/System/Library/Fonts/NotoSerifMyanmar.ttc
+#slot	STSongti-SC-Bold	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	STSongti-TC-Bold	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	STSongti-TC-Bold	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	STSongti-TC-Bold	/System/Library/Fonts/Supplemental/Songti.ttc
+#slot	NotoSansZawgyi-Bold	/System/Library/Fonts/NotoSansMyanmar.ttc
+#slot	Thonburi-Bold	/System/Library/Fonts/Supplemental/Thonburi.ttc
+#slot	ITFDevanagari-Bold	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
+#slot	KohinoorBangla-Bold	/System/Library/Fonts/KohinoorBangla.ttc
+#slot	KohinoorGujarati-Bold	/System/Library/Fonts/KohinoorGujarati.ttc
+#slot	MuktaMahee-Bold	/System/Library/Fonts/MuktaMahee.ttc
+#slot	KannadaMN-Bold	/System/Library/Fonts/Supplemental/Kannada MN.ttc
+#slot	KhmerMN-Bold	/System/Library/Fonts/Supplemental/Khmer MN.ttc
+#slot	LaoMN-Bold	/System/Library/Fonts/Supplemental/Lao MN.ttc
+#slot	MalayalamMN-Bold	/System/Library/Fonts/Supplemental/Malayalam MN.ttc
+#slot	OriyaMN-Bold	/System/Library/Fonts/Supplemental/Oriya MN.ttc
+#slot	SinhalaMN-Bold	/System/Library/Fonts/Supplemental/Sinhala MN.ttc
+#slot	TamilSangamMN-Bold	/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc
+#slot	KohinoorTelugu-Bold	/System/Library/Fonts/KohinoorTelugu.ttc
+#slot	NotoSansArmenian-Bold	/System/Library/Fonts/NotoSansArmenian.ttc
+#slot	EuphemiaUCAS-Bold	/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc
+#slot	Helvetica-BoldOblique	/System/Library/Fonts/Helvetica.ttc
+#slot	Menlo-BoldItalic	/System/Library/Fonts/Menlo.ttc
+#slot	AppleSymbols	/System/Library/Fonts/Apple Symbols.ttf
+#slot	STIXTwoMath-Regular	/System/Library/Fonts/Supplemental/STIXTwoMath.otf
+#slot	Galvji-BoldOblique	/System/Library/Fonts/Supplemental/Galvji.ttc
+#slot	KefaIII-Bold	/System/Library/Fonts/Supplemental/KefaIII.ttf
+#slot	AppleColorEmoji	/System/Library/Fonts/Apple Color Emoji.ttc

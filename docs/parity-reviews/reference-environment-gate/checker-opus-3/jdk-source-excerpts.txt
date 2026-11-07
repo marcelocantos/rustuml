@@ -1,0 +1,122 @@
+# Source: /opt/homebrew/Cellar/openjdk@21/21.0.13.0.2/libexec/openjdk.jdk/Contents/Home/lib/src.zip (JDK 21.0.13; the reference JVM is 21.0.5).
+
+## CFontManager.java:227-235
+  227             String defaultFont = "Lucida Grande";
+  228             String defaultFallback = "Lucida Grande";
+  229 
+  230             setupLogicalFonts("Dialog", defaultFont, defaultFallback);
+  231             setupLogicalFonts("Serif", "Times", "Times New Roman");
+  232             setupLogicalFonts("SansSerif", defaultFont, defaultFallback);
+  233             setupLogicalFonts("Monospaced", "Menlo", "Courier");
+  234             setupLogicalFonts("DialogInput", defaultFont, defaultFallback);
+  235         }
+
+## CFontManager.java:247-256
+  247     protected FontFamily getFontFamilyWithExtraTry(String logicalName, String realName, String fallbackName){
+  248         FontFamily family = getFontFamily(realName, fallbackName);
+  249         if (family != null) return family;
+  250 
+  251         // at this point, we recognize that we probably needed a fallback font
+  252         super.loadFonts();
+  253 
+  254         family = getFontFamily(realName, fallbackName);
+  255         if (family != null) return family;
+  256 
+
+## CFontManager.java:298-310
+  298     public String getFontPath(boolean noType1Fonts) {
+  299         // In the case of the Cocoa toolkit, since we go through NSFont, we don't need to register /Library/Fonts
+  300         Toolkit tk = Toolkit.getDefaultToolkit();
+  301         if (tk instanceof HeadlessToolkit) {
+  302             tk = ((HeadlessToolkit)tk).getUnderlyingToolkit();
+  303         }
+  304         if (tk instanceof LWCToolkit) {
+  305             return "";
+  306         }
+  307 
+  308         // X11 case
+  309         return "/Library/Fonts";
+  310     }
+
+## CFontManager.java:328-339
+  328     Font2D getOrCreateFallbackFont(String fontName) {
+  329         Font2D font2D = findFont2D(fontName, Font.PLAIN, FontManager.NO_FALLBACK);
+  330         if (font2D != null || fontName.startsWith(".")) {
+  331             return font2D;
+  332         } else {
+  333             // macOS doesn't list some system fonts in [NSFontManager availableFontFamilies] output,
+  334             // so they are not registered in font manager as part of 'loadNativeFonts'.
+  335             // These fonts are present in [NSFontManager availableFonts] output though,
+  336             // and can be accessed in the same way as other system fonts.
+  337             return fallbackFonts.computeIfAbsent(fontName, name -> new CFont(name, null));
+  338         }
+  339     }
+
+## SunFontManager.java:2126-2157
+ 2126 
+ 2127         /* Perhaps its a "compatibility" name - timesroman, helvetica,
+ 2128          * or courier, which 1.0 apps used for logical fonts.
+ 2129          * We look for these "late" after a loadFonts as we must not
+ 2130          * hide real fonts of these names.
+ 2131          * Map these appropriately:
+ 2132          * On windows this means according to the rules specified by the
+ 2133          * FontConfiguration : do it only for encoding==Cp1252
+ 2134          *
+ 2135          * REMIND: this is something we plan to remove.
+ 2136          */
+ 2137         if (FontUtilities.isWindows) {
+ 2138             String compatName =
+ 2139                 getFontConfiguration().getFallbackFamilyName(name, null);
+ 2140             if (compatName != null) {
+ 2141                 font = findFont2D(compatName, style, fallback);
+ 2142                 fontNameCache.put(mapName, font);
+ 2143                 return font;
+ 2144             }
+ 2145         } else if (lowerCaseName.equals("timesroman")) {
+ 2146             font = findFont2D("serif", style, fallback);
+ 2147             fontNameCache.put(mapName, font);
+ 2148             return font;
+ 2149         } else if (lowerCaseName.equals("helvetica")) {
+ 2150             font = findFont2D("sansserif", style, fallback);
+ 2151             fontNameCache.put(mapName, font);
+ 2152             return font;
+ 2153         } else if (lowerCaseName.equals("courier")) {
+ 2154             font = findFont2D("monospaced", style, fallback);
+ 2155             fontNameCache.put(mapName, font);
+ 2156             return font;
+ 2157         }
+
+## CFont.java:203-235
+  203     private CompositeFont createCompositeFont() {
+  204         ArrayList<String> listOfString = new ArrayList<String>();
+  205         getCascadeList(nativeFontPtr, listOfString);
+  206 
+  207         // In some italic cases the standard Mac cascade list is missing Arabic.
+  208         listOfString.add("GeezaPro");
+  209         CFontManager fm = (CFontManager) FontManagerFactory.getInstance();
+  210         int numFonts = 1 + listOfString.size();
+  211         PhysicalFont[] fonts = new PhysicalFont[numFonts];
+  212         fonts[0] = this;
+  213         int idx = 1;
+  214         if (FontUtilities.isLogging()) {
+  215             FontUtilities.logInfo("Cascading list for " + this + " :");
+  216         }
+  217         for (String s : listOfString) {
+  218             if (FontUtilities.isLogging()) {
+  219                 FontUtilities.logInfo("Fallback:" + s);
+  220             }
+  221             if (s.equals(".AppleSymbolsFB"))  {
+  222                 // Don't know why we get the weird name above .. replace.
+  223                 s = "AppleSymbols";
+  224             }
+  225             Font2D f2d = fm.getOrCreateFallbackFont(s);
+  226             if (f2d == null || f2d == this) {
+  227                 continue;
+  228             }
+  229             fonts[idx++] = (PhysicalFont)f2d;
+  230         }
+  231         if (idx < fonts.length) {
+  232             PhysicalFont[] orig = fonts;
+  233             fonts = new PhysicalFont[idx];
+  234             System.arraycopy(orig, 0, fonts, 0, idx);
+  235         }
