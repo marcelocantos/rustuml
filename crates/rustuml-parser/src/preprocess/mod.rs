@@ -126,7 +126,10 @@ fn preprocess_full_inner(
     // BlockUmlBuilder reads the block through ReadFilterMergeLines before TIM
     // (and so before every TIM comment stage) runs.
     let merged = merge_ending_backslash_lines(&input_lines);
-    ctx.pipe_start_mark_found = merged.pipe_start_mark_found;
+    // Every line is numbered from Pipe's text, so every content line carries
+    // its number instead of its parser-stream position.
+    ctx.mark_source_lines = merged.pipe_positions.is_some();
+    ctx.pipe_positions = merged.pipe_positions;
     let events = ctx.process_merged_lines(&merged.lines);
     let mut identity = Vec::new();
     let mut main_stream = JoinStream::default();
@@ -714,11 +717,9 @@ struct PreprocessContext {
     /// Rust's parse_block API supports definitions in a shared preamble and
     /// keeps their one-based file origins (source_with_original_line_offset).
     preamble_body: bool,
-    /// `Pipe#readSingleDiagram` found a line that `startsWith("@start")`
-    /// and numbers the block from it. When it found none it prepends
-    /// `@startuml` (Pipe.java:217), so an input line's number is its
-    /// position in that text.
-    pipe_start_mark_found: bool,
+    /// When Pipe found no start mark: each input line's position in Pipe's
+    /// text, which is its `data-source-line` (`pipe_text_positions`).
+    pipe_positions: Option<Vec<usize>>,
     base_dir: Option<PathBuf>,
     include_depth: usize,
     foreach_stack: Vec<ForEachState>,
@@ -981,7 +982,7 @@ impl PreprocessContext {
             in_ebnf_block: false,
             seen_start_tag: false,
             preamble_body: false,
-            pipe_start_mark_found: true,
+            pipe_positions: None,
             base_dir,
             include_depth: 0,
             foreach_stack: Vec::new(),
@@ -1035,10 +1036,19 @@ impl PreprocessContext {
 
     fn current_diagram_source_line(&self) -> usize {
         if self.include_depth == 0
+            && let Some(positions) = &self.pipe_positions
+        {
+            return self
+                .current_source_line
+                .checked_sub(1)
+                .and_then(|index| positions.get(index))
+                .copied()
+                .unwrap_or(self.current_source_line);
+        }
+        if self.include_depth == 0
             && self.in_diagram_block
             && self.seen_start_tag
             && !self.preamble_body
-            && self.pipe_start_mark_found
         {
             self.current_source_line.saturating_sub(1)
         } else {
@@ -4180,6 +4190,56 @@ pub(crate) fn start_directive_type(line: &str) -> Option<&str> {
         .filter(|kind| !kind.is_empty())
 }
 
+/// `DiagramType#getTypes` (core/DiagramType.java:94-216) on the text after
+/// `start`: a switch on `Character.toLowerCase` of its first character, then
+/// case-insensitive prefix tests (`check`, regionMatches(true, ...)) in
+/// Java's order. The result is the Rust dispatch key of the Java type; a
+/// Java type with no Rust parser keeps its Java name, and UNKNOWN (which
+/// PSystemBuilder turns into PSystemUnsupported) keeps the raw text, so
+/// neither is a dispatch key.
+pub(crate) fn java_start_type(kind: &str) -> Cow<'_, str> {
+    const TABLE: &[(char, &[(&str, &str)])] = &[
+        ('b', &[("bpm", "bpm"), ("board", "board")]),
+        (
+            'c',
+            &[
+                ("chart", "chart"),
+                ("creole", "creole"),
+                ("chronology", "chronology"),
+                ("chen", "chen"),
+            ],
+        ),
+        ('d', &[("dot", "dot"), ("ditaa", "ditaa"), ("def", "def")]),
+        ('e', &[("ebnf", "ebnf")]),
+        ('f', &[("flow", "flow"), ("files", "files")]),
+        ('g', &[("gantt", "gantt"), ("git", "git")]),
+        ('h', &[("hcl", "hcl")]),
+        ('j', &[("jcckit", "jcckit"), ("json", "json")]),
+        ('l', &[("latex", "latex")]),
+        ('m', &[("math", "math"), ("mindmap", "mindmap")]),
+        ('n', &[("nwdiag", "nwdiag")]),
+        ('p', &[("project", "gantt"), ("packetdiag", "packetdiag")]),
+        ('r', &[("regex", "regex")]),
+        ('s', &[("salt", "salt"), ("sprites", "sprites")]),
+        ('u', &[("uml", "uml")]),
+        ('w', &[("wire", "wire"), ("wbs", "wbs")]),
+        ('y', &[("yaml", "yaml")]),
+    ];
+    let Some(first) = kind.chars().next() else {
+        return Cow::Borrowed(kind);
+    };
+    let lower = first.to_lowercase().next().unwrap_or(first);
+    TABLE
+        .iter()
+        .find(|(c, _)| *c == lower)
+        .and_then(|(_, keys)| {
+            keys.iter()
+                .find(|(java, _)| start_type_is(kind, java))
+                .map(|(_, rust)| Cow::Borrowed(*rust))
+        })
+        .unwrap_or(Cow::Borrowed(kind))
+}
+
 fn start_type_is(kind: &str, name: &str) -> bool {
     kind.get(..name.len())
         .is_some_and(|prefix| prefix.eq_ignore_ascii_case(name))
@@ -4202,8 +4262,8 @@ struct MergedInput<'a> {
     /// the one `Pipe#readSingleDiagram` appends when the input has none), so
     /// `BlockUmlBuilder` creates no block for it.
     swallowed_end: bool,
-    /// `PipeDiagram::start_mark_found`.
-    pipe_start_mark_found: bool,
+    /// `pipe_text_positions` of the raw lines when Pipe found no start mark.
+    pipe_positions: Option<Vec<usize>>,
 }
 
 /// What `Pipe#readSingleDiagram` hands to `SourceStringReader` for one
@@ -4356,7 +4416,6 @@ fn read_filter_merge_lines<'a>(raw: &[Cow<'a, str>]) -> Vec<MergedInputLine<'a>>
 /// list, as it does in Java's TIM input.
 fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
     let pipe = pipe_single_diagram(input);
-    let pipe_start_mark_found = pipe.start_mark_found;
     let mut raw: Vec<Cow<'a, str>> = input[..pipe.kept]
         .iter()
         .map(|line| Cow::Borrowed(*line))
@@ -4364,13 +4423,78 @@ fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
     if let Some(end) = pipe.appended_end {
         raw.push(Cow::Owned(end));
     }
+    let pipe_positions = (!pipe.start_mark_found).then(|| pipe_text_positions(&raw));
+    // BlockUmlBuilder reads UncommentReadLine(ReadLineReader) through the
+    // Preprocessor's ReadFilterMergeLines (BlockUmlBuilder.java:91-95).
+    let mut reader = UncommentReadLine::default();
+    let raw: Vec<Cow<'a, str>> = raw.into_iter().map(|line| reader.read(line)).collect();
     let lines = read_filter_merge_lines(&raw);
     let swallowed_end = !lines.iter().any(|line| is_end_directive(&line.text));
     MergedInput {
         lines,
         swallowed_end,
-        pipe_start_mark_found,
+        pipe_positions,
     }
+}
+
+/// The position (0-based, as `LineLocation` counts it) of each input line in
+/// the text `Pipe#readSingleDiagram` returns when no line
+/// `startsWith("@start")`: `"@startuml\n" + sb` (Pipe.java:217), so the
+/// first appended line is position 1. `@@@format ` lines go to
+/// `manageFormat` and are not appended (188-189); while no content has been
+/// seen, a line whose `String#trim` is empty is not appended (191-192,
+/// 207-208). A line that is not appended gets the position the next
+/// appended line takes.
+fn pipe_text_positions(raw: &[Cow<'_, str>]) -> Vec<usize> {
+    let mut next = 1;
+    let mut content_seen = false;
+    raw.iter()
+        .map(|line| {
+            let position = next;
+            if !line.starts_with("@@@format ") {
+                content_seen |= !java_trim(line).is_empty();
+                if content_seen {
+                    next += 1;
+                }
+            }
+            position
+        })
+        .collect()
+}
+
+/// `UncommentReadLine#readLine` (preproc/UncommentReadLine.java:57-81),
+/// never paused: a line for which `StartUtils#beforeStartUml` finds a header
+/// sets the header to remove; a line that is a prefix of the header becomes
+/// empty, and a line that starts with it loses it.
+#[derive(Default)]
+struct UncommentReadLine {
+    header_to_remove: Option<String>,
+}
+
+impl UncommentReadLine {
+    fn read<'a>(&mut self, text: Cow<'a, str>) -> Cow<'a, str> {
+        if let Some(header) = before_start_uml(&text) {
+            self.header_to_remove = Some(header.to_string());
+        }
+        match &self.header_to_remove {
+            Some(header) if header.starts_with(text.as_ref()) => Cow::Borrowed(""),
+            Some(header) if !header.is_empty() && text.starts_with(header.as_str()) => {
+                Cow::Owned(text[header.len()..].to_string())
+            }
+            _ => text,
+        }
+    }
+}
+
+/// `pub(crate)` view of the main-block reader for `parse::split_blocks` and
+/// `parse::detect_type`: each input line as BlockUmlBuilder's
+/// `UncommentReadLine` returns it.
+pub(crate) fn uncommented_lines<'a>(input: &[&'a str]) -> Vec<Cow<'a, str>> {
+    let mut reader = UncommentReadLine::default();
+    input
+        .iter()
+        .map(|line| reader.read(Cow::Borrowed(*line)))
+        .collect()
 }
 
 /// `DiagramDetector#extractFromFile` (DiagramDetector.java:71-113) for a
@@ -4381,24 +4505,10 @@ fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
 /// piece's file line. `None` when the file holds no start directive: Java
 /// then reads it raw.
 fn wrapped_diagram_lines(raw: &[Cow<'_, str>]) -> Option<Vec<(usize, String)>> {
-    let mut header_to_remove: Option<String> = None;
+    let mut reader = UncommentReadLine::default();
     let lines: Vec<(usize, String)> = read_filter_merge_lines(raw)
         .into_iter()
-        .map(|line| {
-            // UncommentReadLine#readLine (never paused here).
-            let text = line.text.into_owned();
-            if let Some(header) = before_start_uml(&text) {
-                header_to_remove = Some(header.to_string());
-            }
-            let text = match &header_to_remove {
-                Some(header) if header.starts_with(text.as_str()) => String::new(),
-                Some(header) if text.starts_with(header.as_str()) => {
-                    text[header.len()..].to_string()
-                }
-                _ => text,
-            };
-            (line.source_line, text)
-        })
+        .map(|line| (line.source_line, reader.read(line.text).into_owned()))
         .collect();
     let start = lines
         .iter()
@@ -7773,6 +7883,63 @@ $record(SaffronArchive)\n\
                 .iter()
                 .any(|line| line.contains("A -> B : dl") && !line.contains("/'")),
             "{defined:?}"
+        );
+    }
+
+    #[test]
+    fn pipe_positions_number_lines_when_pipe_finds_no_mark() {
+        let raw: Vec<Cow<'_, str>> = [
+            "",
+            "  ",
+            "\\startuml",
+            "@@@format png",
+            "Kea -> Tui",
+            "\\enduml",
+        ]
+        .into_iter()
+        .map(Cow::Borrowed)
+        .collect();
+        assert_eq!(pipe_text_positions(&raw), [1, 1, 1, 2, 2, 3]);
+        let merged = merge_ending_backslash_lines(&["@startuml", "Kea -> Tui", "@enduml"]);
+        assert!(merged.pipe_positions.is_none());
+        let merged = merge_ending_backslash_lines(&["\\startuml", "Kea -> Tui", "\\enduml"]);
+        assert_eq!(merged.pipe_positions.as_deref(), Some(&[1, 2, 3, 4][..]));
+        let lines = preprocess_full_for_parse("\\startuml\nKea -> Tui : x\n\\enduml", None).lines;
+        assert!(
+            lines
+                .iter()
+                .any(|line| split_source_line_marker(line) == Some((2, "Kea -> Tui : x"))),
+            "{lines:?}"
+        );
+    }
+
+    #[test]
+    fn start_type_follows_diagram_type_get_types() {
+        for (kind, key) in [
+            ("uml", "uml"),
+            ("UML", "uml"),
+            ("umlish", "uml"),
+            ("uml(id=a)", "uml"),
+            ("project", "gantt"),
+            ("Gantt", "gantt"),
+            ("mindmap x", "mindmap"),
+            ("chen", "chen"),
+            ("ditaa", "ditaa"),
+            (" uml", " uml"),
+            ("zebra", "zebra"),
+        ] {
+            assert_eq!(java_start_type(kind), key, "{kind}");
+        }
+    }
+
+    #[test]
+    fn uncomment_read_line_strips_a_non_whitespace_header() {
+        let lines =
+            uncommented_lines(&["\u{a0}@startuml", "\u{a0}Kea -> Tui", "\u{a0}", "@enduml"]);
+        assert_eq!(lines, ["@startuml", "Kea -> Tui", "", "@enduml"]);
+        assert_eq!(
+            uncommented_lines(&["  @startuml", "  A"]),
+            ["  @startuml", "  A"]
         );
     }
 

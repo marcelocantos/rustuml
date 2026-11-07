@@ -357,13 +357,11 @@ fn resembles_allow_mixing_command(line: &str) -> bool {
 /// PlantUML allows embedding any `@start*` block inside `@startuml`.
 fn detect_type(input: &str) -> String {
     let mut first_type: Option<String> = None;
-    for line in input.lines() {
-        if let Some(rest) = preprocess::start_directive_type(line) {
-            let typ = rest
-                .split_whitespace()
-                .next()
-                .unwrap_or(rest)
-                .to_ascii_lowercase();
+    let input_lines: Vec<&str> = input.lines().collect();
+    // BlockUmlBuilder tests the lines UncommentReadLine returns.
+    for line in preprocess::uncommented_lines(&input_lines) {
+        if let Some(rest) = preprocess::start_directive_type(&line) {
+            let typ = preprocess::java_start_type(rest).into_owned();
             match first_type.as_deref() {
                 None => first_type = Some(typ),
                 // An inner @start inside @startuml overrides the outer uml type.
@@ -1010,6 +1008,8 @@ pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
     // ReadFilterMergeLines' output, so a line merged into a continued line
     // is block content, never a start or an end.
     let merged_away = preprocess::lines_merged_into_previous(&input_lines);
+    // BlockUmlBuilder tests start and end on UncommentReadLine's lines.
+    let uncommented = preprocess::uncommented_lines(&input_lines);
 
     for (line_idx, &line) in input_lines.iter().enumerate() {
         let source_line = line_idx + 1;
@@ -1017,7 +1017,7 @@ pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
 
         // StartUtils#isStartDirective and #isEndDirective, which accept `@`
         // or `\\` (BlockUmlBuilder.java:101 and 126).
-        if directive && let Some(rest) = preprocess::start_directive_type(line) {
+        if directive && let Some(rest) = preprocess::start_directive_type(&uncommented[line_idx]) {
             if current_start.is_none() {
                 // Starting a new top-level block.
                 let mut parts = rest.split_whitespace();
@@ -1036,7 +1036,7 @@ pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
                 block.lines.push(line);
                 block.depth += 1;
             }
-        } else if directive && preprocess::is_end_directive(line) {
+        } else if directive && preprocess::is_end_directive(&uncommented[line_idx]) {
             if let Some(block) = &mut current_start {
                 block.lines.push(line);
                 block.depth -= 1;
