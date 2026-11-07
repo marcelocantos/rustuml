@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "measurement": "db5105789 changes the CLI bytes of 12 goldens state/state_composite_oN_iM (N 2-5, M 2-4) against both 5e59b0421 and 9df351f58, and diff_one --no-oracle fails on them (the parity-recovery binary passes). In those goldens the second composite's IS1..ISn reuse the first composite's quarks (count 1), so Outer2 owns only its [*] pseudo-states and is non-autarkic at the root.",
+  "java": "Cluster.drawU inside a GroupMakerState image applies only when an ancestor is imaged by CucaDiagramSimplifierState (CucaDiagramSimplifierState.java:56-66). A non-autarkic group at the root is drawn by the root GraphvizImageBuilder cluster path, which render_non_autarkic_root_clusters models.",
+  "planned_change": "Apply the pseudo-only Cluster outcome only when some ancestor of the group is autarkic (a group the simplifier images, synthetic regions included). Root-level groups keep their previous path."
+}
