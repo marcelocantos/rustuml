@@ -1,0 +1,10 @@
+@startuml
+state Kestrel {
+  state Plover
+  --
+  Turnstone : flips the pebbles
+  state Turnstone
+  state Dunlin
+  Turnstone --> Dunlin
+}
+@enduml

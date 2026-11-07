@@ -1,0 +1,11 @@
+@startuml
+state Bailey {
+  [*] --> Solar
+  Solar --> [*]
+  --
+  [*] --> Pantry
+  Pantry --> Buttery
+}
+[*] --> Bailey
+Bailey --> Gable
+@enduml

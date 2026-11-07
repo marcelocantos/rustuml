@@ -1,0 +1,11 @@
+@startuml
+state Kestrel {
+  state Plover
+  --
+  state "Grey Dunlin" as GD {
+    state Sanderling
+  }
+  state Godwit
+  GD[H] --> Godwit
+}
+@enduml

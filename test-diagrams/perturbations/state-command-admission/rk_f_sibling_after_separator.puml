@@ -1,0 +1,8 @@
+@startuml
+state Kestrel {
+  state Plover
+  --
+  state Dunlin
+  Plover : wades in the shallows
+}
+@enduml

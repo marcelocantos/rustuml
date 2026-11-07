@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-command-admission",
+  "round": "checker 233daf5a5 correction",
+  "measurement_base": "2e12228bd6c8a59ec5eaf7fd83e3909a17b2bbe4",
+  "java_locations": [
+    "statediagram/StateDiagram.java:75-90 checkConcurrentStateOkInternal tests GroupType.CONCURRENT_STATE on the current group and on the quark's parent",
+    "statediagram/StateDiagram.java:58 CONCURRENT_PREFIX is the string CONC",
+    "statediagram/StateDiagram.java:194-208 concurrentState names the synthetic group with getUniqueSequence2(CONCURRENT_PREFIX); the prefix is only that name",
+    "statediagram/command/CommandLinkStateCommon.java:189-190 current-group short-circuit stays; it is not this miss"
+  ],
+  "causal_divergence": "parent_is_concurrent (parse/state.rs:55-59) is true when the last dotted segment starts with CONC. That rejects a user composite named CONCEPT or CONC2. Java rejects only a group whose type is CONCURRENT_STATE, which is the group the separator creates. The renderer pass-one UID walk (render/state.rs:1917-1932) repeats the prefix test and would still insert CONCEPT as a synthetic region after the parser fix.",
+  "planned_change": "A parent id is concurrent exactly when some state's concurrent_regions contains that id. Those ids are the ones advance_concurrent_region pushes. The UID fallback may still reconstruct a parent that is not itself a state id, so Foo.CONC2 models without metadata keep their order. A parent that is a declared state, including CONCEPT and CONC2, is not reconstructed. The Link current-group short-circuit stays.",
+  "must_pass": [
+    "g5ck_conc_prefix_external exits 0 and matches the preserved Java SVG",
+    "g5ck_conc2_prefix_external exits 0 and matches the preserved Java SVG"
+  ],
+  "not_this_round": [
+    "g5ck_color_note_rebeccapurple note colour rejection",
+    "g5ck_color_hex_forms bare #F",
+    "g5ck_qualified_into_region2",
+    "g5ck_color_name_case HColorAutomagic crash",
+    "g5ck_history_cross and g5ck_link_before_region, which fail before the concurrent check"
+  ],
+  "reenter_short_name": {
+    "symptom": "Both sides exit 0. Java canvas height 278, Rust 275. g5ckSpelt rect height 140.6 versus 137.72. g5ckLintel y 177.0883 versus 174.2083. The bottom gap from the lintel box to the cluster box is 24px on both. The painted divider stays at 21.48828125 and the title baseline offset is 17.53515625 on both, which is Cluster.drawUState's title height plus IEntityImage.MARGIN.",
+    "dot_probe": "A stand-in graph with the same a/p0/real/i/p1 nesting, title HEIGHT 11, and shape=point width=.01 solves the inner cluster at height 137.72 on graphviz 16.1.0. HEIGHT 14 solves 140.72. fixedsize on the point does not move it. ranksep 0.833333 changes the width and adds about 24px, which this SVG does not have: the arrow start stays about 36px above the lintel on both sides.",
+    "why_not_2_88": "ClusterDotString prints (int) titleAndAttributeHeight - 5. For a plain 14pt title of height 16.48828125 that is 11, and 11 reproduces Rust. Java's 140.6 is 0.04 inch above 137.72, while HEIGHT 14 on this graphviz is 140.72. GEOM_EPS is 0.02, so substituting 14 does not match 140.6. No coordinate constant will be added.",
+    "planned_change": "No geometry edit in this round. g5ck_reenter_short_name stays an open mismatch until the solved cluster input that produces 140.6 is named."
+  }
+}

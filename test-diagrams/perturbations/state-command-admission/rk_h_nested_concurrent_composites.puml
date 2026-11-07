@@ -1,0 +1,12 @@
+@startuml
+state Kestrel {
+  state Plover
+  --
+  state Merlin {
+    state Knot
+    --
+    state Ruff
+    Ruff --> CONC3[H*]
+  }
+}
+@enduml

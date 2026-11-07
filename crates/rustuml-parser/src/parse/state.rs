@@ -16,7 +16,7 @@ pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
     // PSystemCommandFactory#getCandidate never offers a line of a body that
     // an earlier-selected multiline command owns.
     let spans = super::command_spans::walk(lines, super::command_spans::Factory::State);
-    parser.predeclare_state_structure(lines, &spans);
+    parser.predeclare_state_structure(lines, &spans)?;
     parser.reset_after_predeclaration();
     let mut i = 0;
     while i < lines.len() {
@@ -31,6 +31,9 @@ pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
             continue;
         }
         parser.unrecognized = false;
+        if parser.first_content_line.is_none() && !trimmed.starts_with('\'') {
+            parser.first_content_line = Some(source_line);
+        }
         parser.parse_line(source_line, trimmed)?;
         // StateDiagramFactory#initCommandsList registers addCommonCommands1
         // (the sprite commands) after the state, link and note commands.
@@ -44,6 +47,7 @@ pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
     }
     // Flush any unclosed note buffer.
     parser.flush_note();
+    parser.check_final_error()?;
     Ok(parser.finish())
 }
 
@@ -53,6 +57,266 @@ pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
 fn is_region_separator(line: &str) -> bool {
     (line.len() >= 2 && line.bytes().all(|b| b == b'-'))
         || (line.len() >= 2 && line.bytes().all(|b| b == b'|'))
+}
+
+/// How a command uses a state name.
+///
+/// Java provenance: `CommandLinkStateCommon.getEntity` returns the current
+/// group when its name equals the token (CommandLinkStateCommon.java:189-190),
+/// then calls `StateDiagram.checkConcurrentStateOk`. `CommandCreateState`
+/// calls the check with no short-circuit. `CommandAddField` takes the same
+/// short-circuit as `getEntity` (CommandAddField.java:82-85) and no check.
+/// `X[H]` / `X[H*]` reach `StateDiagram.getHistorical/getDeepHistory(location,
+/// X)` before the `getEntity` short-circuit (CommandLinkStateCommon.java:171-177),
+/// and those resolve X with plain `quarkInContext` and no check
+/// (StateDiagram.java:142-156, :177-191). Note anchors do the same.
+#[derive(Clone, Copy)]
+enum StateNameUse {
+    Link,
+    Declaration,
+    Field,
+    Unchecked,
+}
+
+/// `StateDiagram.checkConcurrentStateOkInternal` tests
+/// `GroupType.CONCURRENT_STATE` (StateDiagram.java:75-90). The `CONC` prefix
+/// (`:58`, `getUniqueSequence2` at `:201-204`) is only the synthetic name.
+/// A group has that type while the last `gotoGroup` that entered it was a
+/// separator's `muteToGroupType(CONCURRENT_STATE)` (CucaDiagram.java:350-356).
+fn parent_is_concurrent(concurrent_now: &[String], parent: Option<&str>) -> bool {
+    parent.is_some_and(|parent| concurrent_now.iter().any(|id| id == parent))
+}
+
+/// `StateDiagram.checkConcurrentStateOkInternal` (StateDiagram.java:75-90).
+fn check_concurrent_state_ok(
+    concurrent_now: &[String],
+    existing_parent: Option<&str>,
+    scope: Option<&str>,
+) -> bool {
+    if parent_is_concurrent(concurrent_now, scope) && scope != existing_parent {
+        return false;
+    }
+    if parent_is_concurrent(concurrent_now, existing_parent) && scope != existing_parent {
+        return false;
+    }
+    true
+}
+
+/// The short name of a quark id: its last `.` segment.
+fn short_name(id: &str) -> &str {
+    id.rsplit('.').next().unwrap_or(id)
+}
+
+fn concurrent_state_error(line: usize, use_kind: &StateNameUse, name: &str) -> ParseError {
+    let message = match use_kind {
+        StateNameUse::Link => format!("The state {name} cannot be used here."),
+        StateNameUse::Declaration => format!(
+            "The state {name} has been created in a concurrent state : it cannot be used here."
+        ),
+        StateNameUse::Field | StateNameUse::Unchecked => {
+            unreachable!("field and unchecked state names are not rejected")
+        }
+    };
+    ParseError { line, message }
+}
+
+/// `HColorSet.parseSimpleColor` plus the symbolic colors `parseColor` accepts
+/// before it. Names are the pinned `ColorTrieNode` registry already listed by
+/// `sequence::valid_return_color`. `sequence.rs` is not edited from this slice.
+fn state_hcolor_simple(raw: &str) -> bool {
+    let color = raw.strip_prefix('#').unwrap_or(raw);
+    if matches!(color.len(), 1 | 3 | 6 | 8) && color.bytes().all(|byte| byte.is_ascii_hexdigit()) {
+        return true;
+    }
+    matches!(
+        color.to_ascii_lowercase().as_str(),
+        "aliceblue"
+            | "antiquewhite"
+            | "application"
+            | "aqua"
+            | "aquamarine"
+            | "automatic"
+            | "azure"
+            | "background"
+            | "beige"
+            | "bisque"
+            | "black"
+            | "blanchedalmond"
+            | "blue"
+            | "blueviolet"
+            | "brown"
+            | "burlywood"
+            | "business"
+            | "cadetblue"
+            | "chartreuse"
+            | "chocolate"
+            | "coral"
+            | "cornflowerblue"
+            | "cornsilk"
+            | "crimson"
+            | "cyan"
+            | "darkblue"
+            | "darkcyan"
+            | "darkgoldenrod"
+            | "darkgray"
+            | "darkgreen"
+            | "darkgrey"
+            | "darkkhaki"
+            | "darkmagenta"
+            | "darkolivegreen"
+            | "darkorange"
+            | "darkorchid"
+            | "darkred"
+            | "darksalmon"
+            | "darkseagreen"
+            | "darkslateblue"
+            | "darkslategray"
+            | "darkslategrey"
+            | "darkturquoise"
+            | "darkviolet"
+            | "deeppink"
+            | "deepskyblue"
+            | "dimgray"
+            | "dimgrey"
+            | "dodgerblue"
+            | "firebrick"
+            | "floralwhite"
+            | "forestgreen"
+            | "fuchsia"
+            | "gainsboro"
+            | "ghostwhite"
+            | "gold"
+            | "goldenrod"
+            | "gray"
+            | "green"
+            | "greenyellow"
+            | "grey"
+            | "honeydew"
+            | "hotpink"
+            | "implementation"
+            | "indianred"
+            | "indigo"
+            | "ivory"
+            | "khaki"
+            | "lavender"
+            | "lavenderblush"
+            | "lawngreen"
+            | "lemonchiffon"
+            | "lightblue"
+            | "lightcoral"
+            | "lightcyan"
+            | "lightgoldenrodyellow"
+            | "lightgray"
+            | "lightgreen"
+            | "lightgrey"
+            | "lightpink"
+            | "lightsalmon"
+            | "lightseagreen"
+            | "lightskyblue"
+            | "lightslategray"
+            | "lightslategrey"
+            | "lightsteelblue"
+            | "lightyellow"
+            | "lime"
+            | "limegreen"
+            | "linen"
+            | "magenta"
+            | "maroon"
+            | "mediumaquamarine"
+            | "mediumblue"
+            | "mediumorchid"
+            | "mediumpurple"
+            | "mediumseagreen"
+            | "mediumslateblue"
+            | "mediumspringgreen"
+            | "mediumturquoise"
+            | "mediumvioletred"
+            | "midnightblue"
+            | "mintcream"
+            | "mistyrose"
+            | "moccasin"
+            | "motivation"
+            | "navajowhite"
+            | "navy"
+            | "oldlace"
+            | "olive"
+            | "olivedrab"
+            | "orange"
+            | "orangered"
+            | "orchid"
+            | "palegoldenrod"
+            | "palegreen"
+            | "paleturquoise"
+            | "palevioletred"
+            | "papayawhip"
+            | "peachpuff"
+            | "peru"
+            | "physical"
+            | "pink"
+            | "plum"
+            | "powderblue"
+            | "purple"
+            | "red"
+            | "rosybrown"
+            | "royalblue"
+            | "saddlebrown"
+            | "salmon"
+            | "sandybrown"
+            | "seagreen"
+            | "seashell"
+            | "sienna"
+            | "silver"
+            | "skyblue"
+            | "slateblue"
+            | "slategray"
+            | "slategrey"
+            | "snow"
+            | "springgreen"
+            | "steelblue"
+            | "strategy"
+            | "tan"
+            | "teal"
+            | "technology"
+            | "thistle"
+            | "tomato"
+            | "transparent"
+            | "turquoise"
+            | "violet"
+            | "wheat"
+            | "white"
+            | "whitesmoke"
+            | "yellow"
+            | "yellowgreen"
+    )
+}
+
+/// `HColorSet.parseColor` (HColorSet.java:75-116) for a token the state
+/// declaration regex has already captured: a simple color, or the first
+/// `-`, `\`, `|`, or `/` gradient whose two sides are simple colors.
+fn state_hcolor_accepted(token: &str) -> bool {
+    let color = token.strip_prefix('#').unwrap_or(token);
+    if state_hcolor_simple(color) {
+        return true;
+    }
+    let bytes = color.as_bytes();
+    for (index, byte) in bytes.iter().enumerate() {
+        if matches!(byte, b'-' | b'\\' | b'|' | b'/') {
+            let left = &color[..index];
+            let right = &color[index + 1..];
+            return !left.is_empty()
+                && !right.is_empty()
+                && state_hcolor_simple(left)
+                && state_hcolor_simple(right);
+        }
+    }
+    false
+}
+
+fn state_color_error(line: usize) -> ParseError {
+    ParseError {
+        line,
+        message: "No such color".to_string(),
+    }
 }
 
 /// Parse PlantUML's bracketed state-link style into typed transition metadata.
@@ -155,6 +419,20 @@ struct StateParser {
     /// this is global rather than per-frame. Holds the highest CONC index
     /// allocated so far (initially 1, so the first region becomes `CONC2`).
     conc_counter: usize,
+    /// Region quarks created or reused by a separator. Java quarks persist
+    /// across passes (only the counter and the group stack are reset in
+    /// `CucaDiagram.startingPass`, CucaDiagram.java:159-165), and every quark
+    /// counts in `Plasma.countByName` (Plasma.java:63-72), so a synthetic
+    /// region that has no `State` entry still takes part in short-name
+    /// resolution.
+    region_ids: Vec<String>,
+    /// Quarks whose group type is `CONCURRENT_STATE` right now. A separator
+    /// mutes its region to that type; `state X {` and `X[H]` mute X back to
+    /// `STATE` (`gotoGroup` → `muteToGroupType`, CucaDiagram.java:350-356).
+    concurrent_now: Vec<String>,
+    /// Source line of the first content line. `StateDiagram.checkFinalError`
+    /// is located there (see `check_final_error`).
+    first_content_line: Option<usize>,
 }
 
 /// One enclosing-composite level on the scope stack.
@@ -181,6 +459,9 @@ impl StateParser {
             skinparam_block_prefix: None,
             scope_stack: Vec::new(),
             conc_counter: 1,
+            region_ids: Vec::new(),
+            concurrent_now: Vec::new(),
+            first_content_line: None,
         }
     }
 
@@ -200,7 +481,7 @@ impl StateParser {
         &mut self,
         lines: &[String],
         spans: &super::command_spans::CommandSpans,
-    ) {
+    ) -> Result<(), ParseError> {
         let mut in_note = false;
         let mut in_skinparam_block = false;
         let mut sprite_end: Option<usize> = None;
@@ -249,8 +530,8 @@ impl StateParser {
                 self.scope_stack.pop();
                 continue;
             }
-            if !self.try_state_decl(trimmed)
-                && !self.try_state_description(trimmed)
+            if !self.try_state_decl(trimmed)?
+                && !self.try_state_description(trimmed)?
                 && !spans.owned_by_other(i)
             {
                 // The main pass offers this line to the sprite commands; skip
@@ -258,6 +539,7 @@ impl StateParser {
                 sprite_end = super::sprite::complete_span(lines, i);
             }
         }
+        Ok(())
     }
 
     fn reset_after_predeclaration(&mut self) {
@@ -311,44 +593,199 @@ impl StateParser {
     ///
     /// Java provenance: `StateDiagram` installs `.` as its namespace
     /// separator, and every state/link command calls
-    /// `CucaDiagram.quarkInContextSafe(true, name)`. For an unqualified name,
-    /// that method reuses the sole existing quark with the same short name
-    /// before considering the current composite. State diagrams therefore
-    /// share an already-created `Inner` across later sibling composites.
+    /// `CucaDiagram.quarkInContextSafe(true, name)` (CucaDiagram.java:248-290).
+    /// For an unqualified name, that method reuses the quark when
+    /// `countByName(name) == 1` and that quark is not the current group.
+    /// Otherwise it takes the child of the current group. State diagrams
+    /// therefore share an already-created `Inner` across later sibling
+    /// composites.
     ///
-    /// `StateDiagram.checkConcurrentStateOk` rejects that reuse across
-    /// concurrent-region boundaries, so those scopes retain independent
-    /// children.
-    fn resolve_state_id(&self, raw: &str) -> String {
-        self.resolve_state_id_in(raw, self.current_scope())
+    /// `StateDiagram.checkConcurrentStateOk` rejects the resolved quark across
+    /// concurrent-region boundaries. Link and declaration commands report
+    /// the refusal. A field line does not.
+    fn resolve_state_id(&self, raw: &str, use_kind: StateNameUse) -> Result<String, ParseError> {
+        self.resolve_state_id_in(raw, self.current_scope(), use_kind)
     }
 
-    fn resolve_state_id_in(&self, raw: &str, scope: Option<&str>) -> String {
+    /// `Plasma.countByName` and `firstWithName` (Plasma.java:96-108) over the
+    /// quarks this parser models: every `State` plus every separator region.
+    fn quarks_named(&self, name: &str) -> Vec<&str> {
+        let mut ids: Vec<&str> = Vec::new();
+        let states = self.states.iter().map(|state| state.id.as_str());
+        for id in states.chain(self.region_ids.iter().map(String::as_str)) {
+            if short_name(id) == name && !ids.contains(&id) {
+                ids.push(id);
+            }
+        }
+        ids
+    }
+
+    /// The parent quark of a modelled quark. A `State` records its parent.
+    /// A synthetic region is `<owner>.CONCn`, created as a child of its owner.
+    fn quark_parent(&self, id: &str) -> Option<String> {
+        if let Some(state) = self.states.iter().find(|state| state.id == id) {
+            return state.parent.clone();
+        }
+        id.rsplit_once('.').map(|(parent, _)| parent.to_string())
+    }
+
+    fn is_synthetic_region(&self, id: &str) -> bool {
+        self.region_ids.iter().any(|region| region == id)
+            && !self.states.iter().any(|state| state.id == id)
+    }
+
+    fn resolve_state_id_in(
+        &self,
+        raw: &str,
+        scope: Option<&str>,
+        use_kind: StateNameUse,
+    ) -> Result<String, ParseError> {
         let raw = raw.trim();
-        if raw.starts_with('[') && raw.ends_with(']') || raw.contains('.') {
-            return self.qualify_in(raw, scope);
-        }
-
-        let mut matches = self.states.iter().filter(|state| {
-            let existing_is_concurrent = state
-                .parent
-                .as_deref()
-                .and_then(|parent| parent.rsplit('.').next())
-                .is_some_and(|segment| segment.starts_with("CONC"));
-            let current_is_concurrent = scope
-                .and_then(|scope| scope.rsplit('.').next())
-                .is_some_and(|segment| segment.starts_with("CONC"));
-            state.id.rsplit('.').next() == Some(raw)
-                && (!(existing_is_concurrent || current_is_concurrent)
-                    || state.parent.as_deref() == scope)
-        });
-        if let Some(sole) = matches.next()
-            && matches.next().is_none()
+        // `CommandLinkStateCommon.getEntity` and `CommandAddField` return the
+        // current group when its short name equals the token, before
+        // `quarkInContext` and `checkConcurrentStateOk`. A composite born in a
+        // concurrent region can still be the source of a link drawn inside
+        // itself. `CommandCreateState` and `getHistorical(location, X)` have
+        // no such short-circuit.
+        if matches!(use_kind, StateNameUse::Link | StateNameUse::Field)
+            && let Some(scope) = scope
+            && short_name(scope) == raw
         {
-            return sole.id.clone();
+            return Ok(scope.to_string());
+        }
+        if raw.starts_with('[') && raw.ends_with(']') || raw.contains('.') {
+            let id = self.qualify_in(raw, scope);
+            self.reject_resolved_state(&id, raw, scope, &use_kind)?;
+            return Ok(id);
         }
 
-        self.qualify_in(raw, scope)
+        // `CucaDiagram.quarkInContextSafe` (CucaDiagram.java:264-272): one
+        // quark of that short name, which is not the current group, is the
+        // quark, including one that lives in a concurrent region. The
+        // concurrent check then accepts or rejects it. Any other count takes
+        // the current group's child.
+        let named = self.quarks_named(raw);
+        if let [sole] = named.as_slice()
+            && Some(*sole) != scope
+            // A synthetic region has no `State` the renderer can draw as a
+            // link endpoint or leaf, so it is not handed out here. Java
+            // resolves to the region group itself. Declared residue.
+            && !self.is_synthetic_region(sole)
+        {
+            let parent = self.quark_parent(sole);
+            self.reject_parent(parent.as_deref(), raw, scope, &use_kind)?;
+            return Ok((*sole).to_string());
+        }
+
+        let id = self.qualify_in(raw, scope);
+        self.reject_resolved_state(&id, raw, scope, &use_kind)?;
+        Ok(id)
+    }
+
+    fn reject_resolved_state(
+        &self,
+        id: &str,
+        raw: &str,
+        scope: Option<&str>,
+        use_kind: &StateNameUse,
+    ) -> Result<(), ParseError> {
+        let Some(state) = self.states.iter().find(|state| state.id == id) else {
+            return Ok(());
+        };
+        self.reject_parent(state.parent.as_deref(), raw, scope, use_kind)
+    }
+
+    fn reject_parent(
+        &self,
+        existing_parent: Option<&str>,
+        raw: &str,
+        scope: Option<&str>,
+        use_kind: &StateNameUse,
+    ) -> Result<(), ParseError> {
+        if matches!(use_kind, StateNameUse::Field | StateNameUse::Unchecked)
+            || check_concurrent_state_ok(&self.concurrent_now, existing_parent, scope)
+        {
+            return Ok(());
+        }
+        Err(concurrent_state_error(self.current_line, use_kind, raw))
+    }
+
+    /// `gotoGroup(..., GroupType.STATE)` mutes a reopened quark back to a
+    /// plain state (CucaDiagram.java:350-356).
+    fn mute_to_state(&mut self, id: &str) {
+        self.concurrent_now.retain(|region| region != id);
+    }
+
+    /// The parent of a transition endpoint. A pseudo-state marker carries
+    /// the group it was created in (`getStart`/`getEnd`/`getHistorical`
+    /// create a child of the current group, StateDiagram.java:92-190).
+    fn endpoint_parent(&self, endpoint: &str) -> Option<String> {
+        if endpoint.starts_with('[')
+            && let Some(close) = endpoint.find(']')
+        {
+            let scope = &endpoint[close + 1..];
+            return (!scope.is_empty()).then(|| scope.to_string());
+        }
+        self.quark_parent(endpoint)
+    }
+
+    /// `StateDiagram.getGroupParentIfItIsConcurrentState`
+    /// (StateDiagram.java:256-266): the nearest ancestor whose group type is
+    /// `CONCURRENT_STATE`, walking every level.
+    fn nearest_concurrent_ancestor(&self, endpoint: &str) -> Option<String> {
+        let mut parent = self.endpoint_parent(endpoint);
+        // Guard only: a quark tree has no cycle, so a repeated id means a
+        // malformed record, and the walk stops instead of looping.
+        let mut seen: Vec<String> = Vec::new();
+        while let Some(id) = parent {
+            if seen.contains(&id) {
+                return None;
+            }
+            if self.concurrent_now.contains(&id) {
+                return Some(id);
+            }
+            parent = self.quark_parent(&id);
+            seen.push(id);
+        }
+        None
+    }
+
+    /// The parent recorded for a quark when its `State` is first created.
+    /// A quark's parent is fixed by `Quark.child` at creation. The current
+    /// group reached through the name short-circuit already exists, so its
+    /// parent is its own (a synthetic region's owner), never itself.
+    fn parent_for_new_state(&self, id: &str) -> Option<String> {
+        let scope = self.current_scope();
+        if scope == Some(id) {
+            return self.quark_parent(id);
+        }
+        scope.map(String::from)
+    }
+
+    /// `StateDiagram.checkFinalError` (StateDiagram.java:232-254) refuses a
+    /// link whose endpoints have different nearest concurrent ancestors.
+    ///
+    /// Java never shows its own message. `PSystemCommandFactory.finalizeDiagram`
+    /// locates the error at `it.next()` of the rewound iterator, the first
+    /// line after `@startuml` (PSystemCommandFactory.java:115-121), so its
+    /// trace holds two lines and `PSystemError.score` is 20
+    /// (PSystemError.java:379-382). `SequenceDiagramFactory` runs before
+    /// `StateDiagramFactory` (PSystemBuilder.java:131-135). It fails on a
+    /// leading state command with "Syntax Error?" and the same score, and
+    /// `PSystemErrorUtils.mergeV2` keeps the first maximum
+    /// (PSystemErrorUtils.java:85-92). The report is that line-1 syntax error.
+    fn check_final_error(&self) -> Result<(), ParseError> {
+        for transition in &self.transitions {
+            let from = self.nearest_concurrent_ancestor(&transition.from);
+            let to = self.nearest_concurrent_ancestor(&transition.to);
+            if from != to {
+                return Err(ParseError {
+                    line: self.first_content_line.unwrap_or(1),
+                    message: "Syntax Error?".to_string(),
+                });
+            }
+        }
+        Ok(())
     }
 
     /// Record where Java creates the newest note entity and resolve its
@@ -364,7 +801,7 @@ impl StateParser {
             _ => None,
         });
         let anchor_id = anchor
-            .map(|anchor| self.resolve_state_id(&anchor))
+            .and_then(|anchor| self.resolve_state_id(&anchor, StateNameUse::Unchecked).ok())
             .filter(|id| self.states.iter().any(|state| state.id == *id));
         if let Some(note) = self.notes.last_mut() {
             note.parent = parent;
@@ -410,7 +847,11 @@ impl StateParser {
                 }
                 _ => continue,
             };
-            let id = self.resolve_state_id_in(anchor, note.parent.as_deref());
+            let Ok(id) =
+                self.resolve_state_id_in(anchor, note.parent.as_deref(), StateNameUse::Unchecked)
+            else {
+                continue;
+            };
             if self.states.iter().any(|state| state.id == id) {
                 self.notes[index].anchor_id = Some(id);
             }
@@ -424,32 +865,42 @@ impl StateParser {
         }
     }
 
-    fn ensure_state(&mut self, raw: &str) -> String {
+    fn ensure_state(&mut self, raw: &str, use_kind: StateNameUse) -> Result<String, ParseError> {
         let raw = raw.trim();
         // Pseudo-states ([*], [H], [H*]) are handled by the renderer directly
         // and do not need a corresponding State entry in the states list. They
         // are still scope-qualified so the renderer can map them to the right
         // composite's start/end pseudo-state.
         if raw.starts_with('[') && raw.ends_with(']') {
-            return self.qualify(raw);
+            return Ok(self.qualify(raw));
         }
         // CommandLinkStateCommon: `X[H]` / `X[H*]` call StateDiagram
-        // getHistorical/getDeepHistory(location, X), which resolve X with
-        // quarkInContext(true, ...), enter it as a STATE group and create the
-        // history pseudo-state inside it.
+        // getHistorical/getDeepHistory(location, X) before the current-group
+        // short-circuit (CommandLinkStateCommon.java:171-177). Those resolve X
+        // with quarkInContext(true, ...) and no concurrent check, enter it as a
+        // STATE group and create the history pseudo-state inside it
+        // (StateDiagram.java:142-156, :177-191). The region's own name therefore
+        // names the region's child, not the region.
         for marker in ["[H*]", "[H]"] {
             if let Some(base) = raw.strip_suffix(marker)
                 && !base.is_empty()
             {
-                let group = self.ensure_state(base);
+                let group = self.ensure_state(base, StateNameUse::Unchecked)?;
+                self.mute_to_state(&group);
                 if let Some(state) = self.states.iter_mut().find(|state| state.id == group) {
                     state.composite = true;
                 }
-                return format!("{marker}{group}");
+                return Ok(format!("{marker}{group}"));
             }
         }
-        let id = self.resolve_state_id(raw);
-        let parent = self.current_scope().map(String::from);
+        let id = self.resolve_state_id(raw, use_kind)?;
+        // `CommandAddField` adds the field to the current group itself. A
+        // synthetic region is drawn as a STATE_CONCURRENT image with no field
+        // block, so it gets no `State` here.
+        if matches!(use_kind, StateNameUse::Field) && self.is_synthetic_region(&id) {
+            return Ok(id);
+        }
+        let parent = self.parent_for_new_state(&id);
         if let Some(state) = self.states.iter_mut().find(|state| state.id == id) {
             if state.source_line == 0 {
                 state.source_line = self.current_line;
@@ -463,29 +914,62 @@ impl StateParser {
                 ..State::default()
             });
         }
-        id
+        Ok(id)
     }
 
     fn advance_concurrent_region(&mut self, line: &str) {
-        if let Some(frame) = self.scope_stack.last_mut() {
-            // Java provenance: `StateDiagram.concurrentState` stores
-            // `direction` on both the owning state and each synthetic
-            // concurrent group. The renderer only needs the owner's value
-            // because all of its region images share one composition axis.
-            if let Some(state) = self.states.iter_mut().find(|state| state.id == frame.base) {
-                state.concurrent_separator = line.chars().next();
+        let Some(frame) = self.scope_stack.last() else {
+            return;
+        };
+        // `StateDiagram.concurrentState` (StateDiagram.java:194-208) first
+        // leaves a current concurrent group, so the current quark is the
+        // owning composite. Then it names the new group with
+        // `getUniqueSequence2("CONC")` (CucaDiagram.java:816-818): one
+        // counter per diagram, reset at each pass, advanced by every
+        // separator whether the name then reuses a quark or not. The letters
+        // are only that sequence. The region type is the group flag
+        // `gotoGroup` applies with `muteToGroupType(CONCURRENT_STATE)`.
+        let base = frame.base.clone();
+        let separator = line.chars().next();
+        if let Some(state) = self.states.iter_mut().find(|state| state.id == base) {
+            state.concurrent_separator = separator;
+        }
+        self.conc_counter += 1;
+        let sequence_name = format!("CONC{}", self.conc_counter);
+        // `quarkInContext(true, sequenceName)` (CucaDiagram.java:264-272):
+        // the sole quark of that short name is reused unless it is the owner.
+        // The count includes earlier regions, so a leaf declared inside a
+        // region under the same name does not capture the next pass's
+        // separator. Otherwise the owner's child is the region.
+        let named = self.quarks_named(&sequence_name);
+        let reused = match named.as_slice() {
+            [sole] if *sole != base => Some((*sole).to_string()),
+            _ => None,
+        };
+        let region_id = if let Some(id) = reused {
+            if let Some(state) = self.states.iter_mut().find(|state| state.id == id) {
+                state.composite = true;
+                state.concurrent_separator = separator;
             }
-            self.conc_counter += 1;
-            let n = self.conc_counter;
-            frame.current = format!("{}.CONC{}", frame.base, n);
-            if let Some(state) = self.states.iter_mut().find(|state| state.id == frame.base) {
-                state
-                    .concurrent_regions
-                    .push(crate::diagram::state::ConcurrentRegion {
-                        id: frame.current.clone(),
-                        source_line: self.current_line,
-                    });
-            }
+            id
+        } else {
+            format!("{base}.{sequence_name}")
+        };
+        let frame = self.scope_stack.last_mut().expect("scope frame");
+        frame.current = region_id.clone();
+        if !self.region_ids.iter().any(|id| id == &region_id) {
+            self.region_ids.push(region_id.clone());
+        }
+        if !self.concurrent_now.iter().any(|id| id == &region_id) {
+            self.concurrent_now.push(region_id.clone());
+        }
+        if let Some(state) = self.states.iter_mut().find(|state| state.id == base) {
+            state
+                .concurrent_regions
+                .push(crate::diagram::state::ConcurrentRegion {
+                    id: region_id,
+                    source_line: self.current_line,
+                });
         }
     }
 
@@ -587,13 +1071,13 @@ impl StateParser {
             return Ok(());
         }
 
-        if self.try_transition(line) {
+        if self.try_transition(line)? {
             return Ok(());
         }
-        if self.try_state_decl(line) {
+        if self.try_state_decl(line)? {
             return Ok(());
         }
-        if self.try_state_description(line) {
+        if self.try_state_description(line)? {
             return Ok(());
         }
         if self.try_hide(line) {
@@ -608,7 +1092,7 @@ impl StateParser {
         Ok(())
     }
 
-    fn try_transition(&mut self, line: &str) -> bool {
+    fn try_transition(&mut self, line: &str) -> Result<bool, ParseError> {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             // State IDs may include dots for substate references (e.g. `S.H`).
             // Pseudo-states: [*] (initial/final), [H] (shallow history), [H*] (deep history).
@@ -628,8 +1112,8 @@ impl StateParser {
         });
 
         if let Some(caps) = RE.captures(line) {
-            let from = self.ensure_state(&caps[1]);
-            let to = self.ensure_state(&caps[3]);
+            let from = self.ensure_state(&caps[1], StateNameUse::Link)?;
+            let to = self.ensure_state(&caps[3], StateNameUse::Link)?;
             let label = caps.get(4).map(|m| m.as_str().trim().to_string());
             let transition_style = parse_transition_style(&caps[2]);
             transition_style.record_in(&mut self.meta, self.transitions.len());
@@ -640,13 +1124,13 @@ impl StateParser {
                 arrow: parse_transition_arrow(&caps[2]),
                 source_line: self.current_line,
             });
-            true
+            Ok(true)
         } else {
-            false
+            Ok(false)
         }
     }
 
-    fn try_state_decl(&mut self, line: &str) -> bool {
+    fn try_state_decl(&mut self, line: &str) -> Result<bool, ParseError> {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             // Trailing decoration accepted in any order:
             //   `#color`        — fill colour
@@ -694,7 +1178,7 @@ impl StateParser {
                 .get(1)
                 .map_or_else(|| caps[2].to_string(), |m| m.as_str().to_string());
             let raw_id = caps[2].to_string();
-            let id = self.resolve_state_id(&raw_id);
+            let id = self.resolve_state_id(&raw_id, StateNameUse::Declaration)?;
             let parent = self.current_scope().map(String::from);
             let stereotype = caps.get(3).map(|m| m.as_str());
             // A trailing `{` opens a composite block; mark the state and push
@@ -745,6 +1229,16 @@ impl StateParser {
                     _ => {}
                 }
             }
+            if let Some(fill) = fill.as_deref()
+                && !state_hcolor_accepted(fill)
+            {
+                return Err(state_color_error(self.current_line));
+            }
+            if let Some(stroke) = stroke.as_deref()
+                && !state_hcolor_accepted(stroke)
+            {
+                return Err(state_color_error(self.current_line));
+            }
 
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
                 state.label = label;
@@ -791,17 +1285,18 @@ impl StateParser {
                 });
             }
             if is_composite {
+                self.mute_to_state(&id);
                 self.scope_stack.push(ScopeFrame {
                     base: id.clone(),
                     current: id,
                 });
             }
-            true
+            Ok(true)
         } else if let Some(caps) = RE_DESC.captures(line) {
             let label = caps
                 .get(1)
                 .map_or_else(|| caps[2].to_string(), |m| m.as_str().to_string());
-            let id = self.resolve_state_id(&caps[2]);
+            let id = self.resolve_state_id(&caps[2], StateNameUse::Declaration)?;
             let parent = self.current_scope().map(String::from);
             let desc = caps[3].trim().to_string();
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
@@ -821,17 +1316,17 @@ impl StateParser {
                     ..State::default()
                 });
             }
-            true
+            Ok(true)
         } else {
-            false
+            Ok(false)
         }
     }
 
-    fn try_state_description(&mut self, line: &str) -> bool {
+    fn try_state_description(&mut self, line: &str) -> Result<bool, ParseError> {
         static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^(\w+)\s*:\s*(.+)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            let id = self.ensure_state(&caps[1]);
+            let id = self.ensure_state(&caps[1], StateNameUse::Field)?;
             let desc = caps[2].trim().to_string();
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
                 state.descriptions.push(desc);
@@ -839,9 +1334,9 @@ impl StateParser {
                     state.decl_line = Some(self.current_line);
                 }
             }
-            true
+            Ok(true)
         } else {
-            false
+            Ok(false)
         }
     }
 
@@ -1306,25 +1801,127 @@ mod tests {
     }
 
     #[test]
-    fn concurrent_regions_keep_same_named_children_scope_local() {
-        let d = parse(
+    fn same_named_child_in_a_later_region_is_rejected() {
+        // The first `SharedRelay` is the sole quark, parented by the composite
+        // rather than by a concurrent group. The second link runs in
+        // `CONC2`, so `checkConcurrentStateOk` refuses it. A second quark is
+        // not created: `quarkInContextSafe` only mints a new child when
+        // `countByName` is not 1.
+        let error = parse_err(
             "state ParallelVault {\n\
              [*] --> SharedRelay\n\
              --\n\
              [*] --> SharedRelay\n\
              }",
         );
+        assert_eq!(error.line, 4);
+        assert_eq!(error.message, "The state SharedRelay cannot be used here.");
+    }
 
-        assert!(
-            d.states
-                .iter()
-                .any(|state| state.id == "ParallelVault.SharedRelay")
+    #[test]
+    fn user_composite_whose_name_starts_with_conc_is_not_a_concurrent_region() {
+        // GroupType.CONCURRENT_STATE is the group the separator creates.
+        // CONCEPT is an ordinary composite whose name happens to share the
+        // synthetic prefix.
+        let diagram = parse(
+            "state CONCEPT {\n\
+             state g5ckQuern\n\
+             }\n\
+             [*] --> g5ckQuern\n",
         );
+        assert!(diagram.states.iter().any(|state| state.id == "CONCEPT"));
         assert!(
-            d.states
+            diagram
+                .states
                 .iter()
-                .any(|state| state.id == "ParallelVault.CONC2.SharedRelay")
+                .any(|state| state.id == "CONCEPT.g5ckQuern")
         );
+        assert!(diagram.transitions.iter().any(|transition| {
+            transition.from == "[*]" && transition.to == "CONCEPT.g5ckQuern"
+        }));
+    }
+
+    #[test]
+    fn separator_reuses_the_sole_quark_of_the_sequence_name() {
+        // CW `region0_child_named_conc2`: the separator's sequence name is
+        // CONC2, and that quark already exists inside House. Java reuses it
+        // and mutes it, so Wing is its child and the later link names it.
+        let diagram = parse(
+            "state House {\n\
+             state CONC2\n\
+             --\n\
+             state Wing\n\
+             }\n\
+             [*] --> CONC2\n",
+        );
+        let house = diagram
+            .states
+            .iter()
+            .find(|state| state.id == "House")
+            .unwrap();
+        assert_eq!(
+            house
+                .concurrent_regions
+                .iter()
+                .map(|region| region.id.as_str())
+                .collect::<Vec<_>>(),
+            vec!["House.CONC2"]
+        );
+        let conc = diagram
+            .states
+            .iter()
+            .find(|state| state.id == "House.CONC2")
+            .unwrap();
+        assert!(conc.composite);
+        assert_eq!(
+            diagram
+                .states
+                .iter()
+                .filter(|state| state.id == "House.CONC2")
+                .count(),
+            1
+        );
+        assert!(diagram.states.iter().any(|state| {
+            state.id == "House.CONC2.Wing" && state.parent.as_deref() == Some("House.CONC2")
+        }));
+        assert_eq!(diagram.transitions[0].to, "House.CONC2");
+    }
+
+    #[test]
+    fn separator_beside_an_existing_conc_quark_rejects_the_outside_link() {
+        // CV `region_user_conc_beside_separator`, body lines without @startuml.
+        // The separator reuses the root CONC2 quark. Pier's parent is then a
+        // concurrent group, and the root link is refused.
+        let error = parse_err(
+            "state CONC2 {\n\
+             state Pier\n\
+             }\n\
+             state House {\n\
+             state Porch\n\
+             --\n\
+             state Wing\n\
+             }\n\
+             [*] --> Pier\n\
+             [*] --> Porch\n",
+        );
+        assert_eq!(error.line, 9);
+        assert_eq!(error.message, "The state Pier cannot be used here.");
+    }
+
+    #[test]
+    fn link_before_a_later_region_declaration_is_rejected() {
+        // Pass one creates `g5ckMidden` inside the separator's group.
+        // Pass two then refuses the earlier link, whose current group is
+        // not that concurrent parent.
+        let error = parse_err(
+            "state g5ckQuern {\n\
+             [*] --> g5ckMidden\n\
+             --\n\
+             state g5ckMidden\n\
+             }",
+        );
+        assert_eq!(error.line, 2);
+        assert_eq!(error.message, "The state g5ckMidden cannot be used here.");
     }
 
     #[test]
@@ -1594,5 +2191,343 @@ mod tests {
                 "{group}"
             );
         }
+    }
+
+    fn parse_err(input: &str) -> ParseError {
+        let lines: Vec<String> = input.lines().map(str::to_string).collect();
+        parse_state(&lines).unwrap_err()
+    }
+
+    #[test]
+    fn renamed_link_into_a_concurrent_region_is_rejected() {
+        let error = parse_err(
+            "state Kiln {\n\
+             Ash --> Coal\n\
+             --\n\
+             Flame --> Glow\n\
+             }\n\
+             Stoke --> Flame",
+        );
+        assert_eq!(error.line, 6);
+        assert_eq!(error.message, "The state Flame cannot be used here.");
+    }
+
+    #[test]
+    fn renamed_link_from_a_region_to_a_region_zero_sibling_is_rejected() {
+        let error = parse_err(
+            "state Kiln {\n\
+             Ash --> Coal\n\
+             --\n\
+             Flame --> Ash\n\
+             }",
+        );
+        assert_eq!(error.line, 4);
+        assert_eq!(error.message, "The state Ash cannot be used here.");
+    }
+
+    #[test]
+    fn renamed_declaration_of_a_concurrent_state_is_rejected() {
+        let error = parse_err(
+            "state Kiln {\n\
+             --\n\
+             state Flame\n\
+             }\n\
+             state Flame",
+        );
+        assert_eq!(error.line, 5);
+        assert_eq!(
+            error.message,
+            "The state Flame has been created in a concurrent state : it cannot be used here."
+        );
+    }
+
+    #[test]
+    fn renamed_description_of_a_concurrent_state_stays_on_that_quark() {
+        let diagram = parse(
+            "state Kiln {\n\
+             --\n\
+             state Flame\n\
+             }\n\
+             Flame : bright",
+        );
+        let flame = diagram
+            .states
+            .iter()
+            .find(|state| state.label == "Flame")
+            .unwrap();
+        assert_eq!(flame.parent.as_deref(), Some("Kiln.CONC2"));
+        assert_eq!(flame.descriptions, ["bright"]);
+        assert_eq!(
+            diagram
+                .states
+                .iter()
+                .filter(|state| state.id.rsplit('.').next() == Some("Flame"))
+                .count(),
+            1
+        );
+    }
+
+    #[test]
+    fn renamed_link_to_the_current_composite_stays_legal() {
+        let diagram = parse(
+            "state Envelope {\n\
+             state Head\n\
+             --\n\
+             state Mixed {\n\
+             state Leaf\n\
+             [*] --> Leaf\n\
+             Mixed --> Leaf : keep\n\
+             }\n\
+             }",
+        );
+        assert!(diagram.transitions.iter().any(|transition| {
+            transition.from == "Envelope.CONC2.Mixed"
+                && transition.to == "Envelope.CONC2.Mixed.Leaf"
+        }));
+    }
+
+    #[test]
+    fn renamed_link_to_a_region_zero_child_stays_legal() {
+        let diagram = parse(
+            "state Kiln {\n\
+             Ash --> Coal\n\
+             --\n\
+             Flame --> Glow\n\
+             }\n\
+             Stoke --> Ash",
+        );
+        assert!(
+            diagram
+                .transitions
+                .iter()
+                .any(|transition| { transition.from == "Stoke" && transition.to == "Kiln.Ash" })
+        );
+    }
+
+    #[test]
+    fn renamed_state_colors_follow_hcolorset() {
+        let diagram = parse("state Boil #lightblue ##red\nstate Calm #red-blue\nBoil --> Calm");
+        let boil = diagram
+            .states
+            .iter()
+            .find(|state| state.id == "Boil")
+            .unwrap();
+        assert_eq!(boil.fill.as_deref(), Some("lightblue"));
+        assert_eq!(boil.stroke.as_deref(), Some("red"));
+        let calm = diagram
+            .states
+            .iter()
+            .find(|state| state.id == "Calm")
+            .unwrap();
+        assert_eq!(calm.fill.as_deref(), Some("red-blue"));
+
+        for (source, line) in [
+            ("state Boil ##RebeccaPurple", 1),
+            ("state Boil #NotAColor", 1),
+            ("state Boil #GGGGGG", 1),
+        ] {
+            let error = parse_err(source);
+            assert_eq!(error.line, line, "{source}");
+            assert_eq!(error.message, "No such color");
+        }
+    }
+
+    #[test]
+    fn region_quark_counts_against_a_same_named_declaration() {
+        // Pass one: the separator creates Granary.CONC2, and `state CONC2`
+        // inside it becomes Granary.CONC2.CONC2. Pass two: two quarks are
+        // named CONC2, so the separator takes Granary's own child again and
+        // the root link creates a third quark instead of reusing either.
+        let diagram = parse(
+            "state Granary {\n\
+             --\n\
+             state CONC2\n\
+             state Silo\n\
+             }\n\
+             [*] --> CONC2\n",
+        );
+        let granary = diagram.states.iter().find(|s| s.id == "Granary").unwrap();
+        let regions: Vec<_> = granary
+            .concurrent_regions
+            .iter()
+            .map(|r| r.id.as_str())
+            .collect();
+        assert_eq!(regions, vec!["Granary.CONC2"]);
+        assert!(diagram.states.iter().any(|s| s.id == "Granary.CONC2.CONC2"));
+        assert!(diagram.states.iter().any(|s| s.id == "Granary.CONC2.Silo"));
+        assert_eq!(diagram.transitions[0].to, "CONC2");
+    }
+
+    #[test]
+    fn later_separator_compares_the_sole_quark_with_the_owner() {
+        // The third region is CONC4. Its only same-named quark is the leaf
+        // declared inside it on pass one, which is not the owner, but the
+        // region quark itself makes the count two.
+        let diagram = parse(
+            "state Mill {\n\
+             --\n\
+             --\n\
+             --\n\
+             state CONC4\n\
+             }\n\
+             [*] --> CONC4\n",
+        );
+        let mill = diagram.states.iter().find(|s| s.id == "Mill").unwrap();
+        let regions: Vec<_> = mill
+            .concurrent_regions
+            .iter()
+            .map(|r| r.id.as_str())
+            .collect();
+        assert_eq!(regions, vec!["Mill.CONC2", "Mill.CONC3", "Mill.CONC4"]);
+        assert!(diagram.states.iter().any(|s| s.id == "Mill.CONC4.CONC4"));
+        assert_eq!(diagram.transitions[0].to, "CONC4");
+    }
+
+    #[test]
+    fn link_to_a_state_under_a_deeper_concurrent_ancestor_is_a_final_error() {
+        // Loft's direct parent Attic is a plain state, so the link command
+        // passes. Attic sits in Keep.CONC2, so checkFinalError refuses the
+        // link. Java reports the sequence factory's line-1 syntax error.
+        let error = parse_err(
+            "state Keep {\n\
+             --\n\
+             state Attic {\n\
+             state Loft\n\
+             }\n\
+             }\n\
+             [*] --> Loft\n",
+        );
+        assert_eq!(error.line, 1);
+        assert_eq!(error.message, "Syntax Error?");
+    }
+
+    #[test]
+    fn link_inside_one_concurrent_ancestor_passes_the_final_check() {
+        let diagram = parse(
+            "state Keep {\n\
+             --\n\
+             state Attic {\n\
+             state Loft\n\
+             }\n\
+             [*] --> Attic\n\
+             }\n",
+        );
+        assert_eq!(diagram.transitions.len(), 1);
+    }
+
+    #[test]
+    fn reopening_a_reused_region_mutes_it_back_to_a_state() {
+        // The separator in Byre reuses the root composite CONC2 and mutes it
+        // to a concurrent group. The later `state CONC2 {` mutes it back to
+        // STATE, so on pass two the root link into its child Pen passes both
+        // the link check and the final check.
+        let diagram = parse(
+            "state CONC2 {\n\
+             state Pen\n\
+             }\n\
+             state Byre {\n\
+             state Stall\n\
+             --\n\
+             state Rack\n\
+             }\n\
+             state CONC2 {\n\
+             }\n\
+             [*] --> Pen\n",
+        );
+        assert!(diagram.transitions.iter().any(|t| t.to == "CONC2.Pen"));
+    }
+
+    #[test]
+    fn a_reused_region_left_concurrent_rejects_the_root_link() {
+        let error = parse_err(
+            "state CONC2 {\n\
+             state Pen\n\
+             }\n\
+             state Byre {\n\
+             state Stall\n\
+             --\n\
+             state Rack\n\
+             }\n\
+             [*] --> Pen\n",
+        );
+        assert_eq!(error.line, 9);
+        assert_eq!(error.message, "The state Pen cannot be used here.");
+    }
+
+    #[test]
+    fn history_by_the_region_name_enters_the_region_child() {
+        // getHistorical(location, X) resolves X by quarkInContext with no
+        // current-group short-circuit: the region's own name is the current
+        // group, so it names the region's child.
+        let diagram = parse(
+            "state Garth {\n\
+             state Byre\n\
+             --\n\
+             state Mew\n\
+             CONC2[H] --> Mew\n\
+             }\n",
+        );
+        let group = diagram
+            .states
+            .iter()
+            .find(|s| s.id == "Garth.CONC2.CONC2")
+            .expect("history group");
+        assert_eq!(group.parent.as_deref(), Some("Garth.CONC2"));
+        assert!(group.composite);
+        assert_eq!(diagram.transitions[0].from, "[H]Garth.CONC2.CONC2");
+        assert!(
+            diagram
+                .states
+                .iter()
+                .all(|s| s.parent.as_deref() != Some(s.id.as_str()))
+        );
+    }
+
+    #[test]
+    fn deep_history_by_a_nested_region_name_enters_its_child() {
+        let diagram = parse(
+            "state Croft {\n\
+             state Loom {\n\
+             state Weft\n\
+             --\n\
+             state Warp\n\
+             --\n\
+             state Heddle\n\
+             CONC3[H*] --> Heddle\n\
+             }\n\
+             }\n",
+        );
+        assert_eq!(diagram.transitions[0].from, "[H*]Croft.Loom.CONC3.CONC3");
+    }
+
+    #[test]
+    fn link_by_the_region_name_is_refused_by_the_final_check() {
+        // The getEntity short-circuit links the region group itself. Its
+        // parent is its owner, a plain state, so it has no concurrent
+        // ancestor, while Sill's is the region.
+        let error = parse_err(
+            "state Gable {\n\
+             state Eave\n\
+             --\n\
+             state Sill\n\
+             CONC2 --> Sill\n\
+             }\n",
+        );
+        assert_eq!(error.line, 1);
+        assert_eq!(error.message, "Syntax Error?");
+    }
+
+    #[test]
+    fn field_line_by_the_owner_name_stays_on_the_owner() {
+        // CommandAddField uses the current group when its name matches.
+        let diagram = parse(
+            "state Nave {\n\
+             state Aisle\n\
+             Nave : holds the pews\n\
+             }\n",
+        );
+        assert!(!diagram.states.iter().any(|s| s.id == "Nave.Nave"));
+        let nave = diagram.states.iter().find(|s| s.id == "Nave").unwrap();
+        assert_eq!(nave.descriptions, vec!["holds the pews"]);
     }
 }

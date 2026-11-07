@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-creole-text-blocks",
+  "batch": "CF",
+  "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-state/reference-results.json",
+  "reference_results_sha256": "972b23a6ac582160acb8d1e145739962ea8e27094c9558bc3fd25393366b2cfb",
+  "predictions": "/Users/marcelo/Library/Caches/rustuml-grok-g5/batch-g5/predictions",
+  "predictions_json_sha256": "670cd6d168aae1c7b77648e5bf59ba2ebc8b6cff5ae923f82dcbdd97dbf1fae6",
+  "comparator": "rustuml_oracle::compare::compare_svg_strict",
+  "predictions_edited": false,
+  "cases": [
+    {
+      "name": "creole_verdana_kiln",
+      "java_exit": 0,
+      "base": "mismatch, 4 diffs: title text is **Ember** without font-weight 700; description text is <i>glow</i> without font-style italic",
+      "tip": "match"
+    },
+    {
+      "name": "creole_courier_grate",
+      "java_exit": 0,
+      "base": "mismatch, 11 diffs: title text is **Hot** and description is //steam//, and the box, divider, and end-state x positions follow those wider literal strings",
+      "tip": "match"
+    },
+    {
+      "name": "creole_verdana_field",
+      "java_exit": 0,
+      "base": "mismatch, 9 diffs: one description element contains **warm** bricks; Java has a bold warm run and a following bricks run",
+      "tip": "match"
+    }
+  ],
+  "residue": [],
+  "trace": "EntityImageStateCommon builds the title and EntityImageState builds each field with Display.create8 and CreoleMode.FULL. The tip SVGs match that rendering under compare_svg_strict. No further port is indicated by these three probes."
+}

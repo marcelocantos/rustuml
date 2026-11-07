@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "base_revision": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "mechanism": "state-command-admission",
+  "java_locations": [
+    "statediagram/StateDiagram.java:70-90 checkConcurrentStateOk/checkConcurrentStateOkInternal: a quark with data is refused when the current group is CONCURRENT_STATE and is not the existing parent, or the existing parent is CONCURRENT_STATE and is not the current group",
+    "statediagram/StateDiagram.java:194-208 concurrentState: the first separator does not reparent region-0 children; later regions are GroupType.CONCURRENT_STATE named via getUniqueSequence2(\"CONC\")",
+    "statediagram/command/CommandCreateState.java:119-178 executeArg: quarkInContext(true) then checkConcurrentStateOk, error \"The state \" + quark.getName() + \" has been created in a concurrent state : it cannot be used here.\"; fill via ColorParser.simpleColor(ColorType.BACK) then HColorSet.getColor on LINECOLOR group 1",
+    "statediagram/command/CommandLinkStateCommon.java:83-97 and :167-203 getEntity: checkConcurrentStateOk failure returns null, error \"The state \" + ent + \" cannot be used here.\"",
+    "statediagram/command/CommandAddField.java:77-94 executeArg: quarkInContext(true) and addFieldOrMethod with no checkConcurrentStateOk",
+    "net/atmp/CucaDiagram.java:249-273 quarkInContextSafe: an unqualified name reuses the quark only when countByName == 1 and that quark is not the current group",
+    "klimt/color/HColorSet.java:66-155 getColor/parseColor/parseSimpleColor; klimt/color/Colors.java:96-117; command/SingleLineCommand2.java:142-145 and command/CommandExecutionResult.java:76 badColor() message \"No such color\"",
+    "klimt/color/ColorTrieNode.java named registry. CSS4 RebeccaPurple is absent. Gradients are the first of - \\ | / with both sides parseSimpleColor"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/state.rs::resolve_state_id_in filters a concurrent parent out of the sole-name search and then qualify_in creates a second state",
+    "crates/rustuml-parser/src/parse/state.rs::try_state_decl stores COLOR_RE fill and stroke with no HColorSet check",
+    "crates/rustuml-parser/src/parse/state.rs::try_state_description is the CommandAddField path and must stay unchecked",
+    "crates/rustuml-parser/src/parse/sequence.rs::valid_return_color is the pinned name list and is not edited"
+  ],
+  "invariant": "Link and state-declaration commands reuse one existing short-name quark only when StateDiagram.checkConcurrentStateOk is true. A failed check is a parse error naming that command's existing string, not a second state. A bare `name : field` line still attaches to the sole quark. A state fill or stroke token is accepted only when HColorSet.getColor would return a color. The message is the existing \"No such color\" contract.",
+  "causal_divergence": "Base cb550c0d6 renders batch AU cluster_concurrent_crossing (exit 0, two Blow texts) and stroke_per_state_css4 (exit 0, RebeccaPurple drawn). Java exits 200. Stderr for the crossing link is \"The state Blow cannot be used here.\" Stderr for the stroke is \"No such color\". Rust's sole-name filter drops the concurrent quark instead of rejecting the command, and the state stroke is stored for sequence::resolve_color, which maps RebeccaPurple to #663399.",
+  "planned_change": "In the state parser only: thread Link, Declaration, and Unchecked through resolve/ensure. Link and Declaration reject a resolved quark whose parent fails checkConcurrentStateOk. Unchecked (fields and note anchors) reuses a sole quark and does not reject. Validate the first stored fill and the first stored stroke with a parser-local HColorSet predicate (hex 1/3/6/8, the ColorTrieNode names already listed by valid_return_color, transparent/background/automatic, and one gradient separator). Do not edit sequence.rs, the renderer color fallback, syntax markers, or the error census.",
+  "perturbation_axes": [
+    "link into a post-separator child from outside the composite",
+    "link from inside a concurrent region to a region-0 sibling",
+    "second state declaration of a name born in a concurrent region",
+    "bare description of that name, which must not reject",
+    "link from outside to a region-0 child, which must not reject",
+    "sole short name shared by sibling composites, and the same short name in two regions",
+    "accepted #lightblue ##red and a gradient; refused RebeccaPurple, an unknown name, and a non-hex token",
+    "renamed held-out labels, not the AU fixture names"
+  ],
+  "verification": "Precommitted: base binary ~/Library/Caches/rustuml-grok-g5/bin/rustuml-base on the two AU sources exits 0. Java results already stored under ~/Library/Caches/rustuml-relay-parent/shared-svg-checker-c1/ (cluster_concurrent_crossing stderr sha256 c0de7834c06447b6bf3374fabd42b14eca7a7580902ddc2dacd3012b6baf2d21; stroke_per_state_css4 stderr sha256 3e435b9750d9cf8a4e923b5eaae618046307c524a66ffe89608e86e202796fb6). After the draft, those two inputs must be non-zero CLI parse errors with those messages, plus at least two renamed variants. No previously matching golden may be lost. Rejection is the existing ParseError contract, not Java's error-page SVG."
+}

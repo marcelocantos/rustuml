@@ -1,0 +1,68 @@
+{
+ "schema_version": 1,
+ "trees": {
+  "base": "5e59b0421cf75c676cdd264bc9edf8dddafe6b54",
+  "pr": "9df351f58933e7571cbd568782c954a2e15d2205",
+  "tip": "6e7fd0b27b0383d2d81dbf0e41fb6f5cc65b3fbd"
+ },
+ "binaries_sha256": {
+  "base": "6b88b14aac43e4ff8fc648fec344cb090157c56fd153eb88fa4c04d0cb34a348",
+  "pr": "63e4f84d37d1c26ad0b41ba68f9705b51231137dcd548952db54cbed5a13cd32",
+  "tip": "d7af4e4c89c3cdfd235294cf69b55865c359c88048f7fb07f47726e097d22e93",
+  "svgcmp": "11c143952b1b741ad34337f0adad59b953d1325b10e7e9156b6feae68cae5655"
+ },
+ "golden_no_oracle": {
+  "base": "11182/11251, state 897/901, exit 0",
+  "pr": "11182/11251, state 897/901, exit 0",
+  "tip": "11182/11251, state 897/901, exit 0",
+  "family_block": "identical on all three",
+  "failure_names": "69 on each; base, pr and tip lists byte-identical (test-diagrams/no_oracle_failure_names.txt)"
+ },
+ "golden_pairs": {
+  "all_three": "12550 total, 10497 passed, 754 failed, 1299 skipped, 0 panics; exit 101 on each (asserts empty failures, pre-existing)",
+  "per_directory_failures": "identical on all three",
+  "park_candidates": "746 on each; golden_ulp_candidates.txt byte-identical"
+ },
+ "golden_cli_bytes": {
+  "goldens": 12550,
+  "timeout_s": 20,
+  "timeouts": "0 on base, pr, tip",
+  "panics": "0 on each",
+  "tip_vs_pr": "12550/12550 identical (stdout sha256 + exit)",
+  "tip_vs_base": "12549/12550 identical; edge-cases/edge_state_entry_exit_actions differs (the field-line fix restores the 9df351f58 bytes; its Java golden is a Syntax Error? page, skipped by both tiers)"
+ },
+ "parity_perturbations": {
+  "base": "2556 failure lines",
+  "pr": "2621 failure lines",
+  "tip": "2556 failure lines, identical to base",
+  "tip_vs_pr": "65 fewer failure lines, 0 new",
+  "review_tree_with_42_new_pairs": "2556 failure lines, identical to tip; none of the 42 new pairs fails"
+ },
+ "harness_guards": {
+  "pass_on_all_three": [
+   "comparator_constants_frozen",
+   "error_golden_census_is_frozen",
+   "no_golden_data_embedded_in_shipping_crates",
+   "no_label_keyed_width_constants",
+   "parity_review_paths_reject_traversal"
+  ],
+  "decimal_literal_ratchet": "red on all three with the same five files; base and tip identical (render/state.rs 53 -> 66); pr has render/state.rs 53 -> 61. The +5 against pr predate round 2 and are one production comment ('one ULP (e.g. 142.0234 vs 142.0235)') and unit-test asserts/comments; no new high-precision production constant",
+  "parity_review_records_are_complete": "red on all three; base and tip violation lines identical after path normalisation; tip vs pr adds only 'account has no independent checker review' for state-command-admission and state-creole-text-blocks, which this review-3.json supplies"
+ },
+ "pipe_mode": {
+  "base": "17/17",
+  "tip": "17/17"
+ },
+ "doc_claims": {
+  "base": "2/2",
+  "tip": "2/2"
+ },
+ "workspace_lib": {
+  "base": "exit 0: 41, 10, 31, parser 685, render 880 (+1 ignored)",
+  "tip": "exit 0: 41, 10, 31, parser 689, render 880 (+1 ignored)"
+ },
+ "clippy": {
+  "strict_-D_warnings": "identical error counts and kinds per crate on base and tip: parser 3, render 2, layout 2, oracle 2, rustuml 2 (pre-existing: dead_code parse/component.rs:74, items-after-test-module layout/graph.rs:2458), math 0",
+  "with_-A_dead_code": "parser 0 on both; render 23 on both at the same locations, two state.rs locations shifted +49 lines (6328->6377, 8367->8416)"
+ }
+}

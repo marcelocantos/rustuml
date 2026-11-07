@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-creole-text-blocks",
+  "round": "checker 233daf5a5 correction",
+  "measurement_base": "2e12228bd6c8a59ec5eaf7fd83e3909a17b2bbe4",
+  "java_locations": [
+    "klimt/creole/Display.java:258-341 getWithNewlines. legacyReplaceBackslashNByNewline is true (skin/Pragma.java:90-92). Outside <math>, <latex>, and [[...]], \\n \\r and \\l break the line; \\\\ becomes one backslash; \\t becomes a tab",
+    "statediagram/command/CommandCreateState.java:139 and :148 call getWithNewlines before the description Display. The state name is the entity Display, already split, then EntityImageStateCommon.java:74-75 create8 with CreoleMode.FULL",
+    "svek/image/EntityImageState.java:88-97 calculateDimensionSlow merges title and fields, then adds MARGIN*2 + 2*MARGIN_LINE, minimum 50. drawU places the divider at MARGIN + titleHeight + MARGIN_LINE and the fields at that line plus MARGIN_LINE",
+    "klimt/creole/Sea.java:72-79 doAlign places each atom at -height + startingAltitude. SheetBlock1 stacks stripes by that height",
+    "klimt/font metrics already ported: Verdana height ratio 1.21533203125 and ascent 1.00537109375; Courier New height 1.1328125; monospace height 1.1640625. A line's stripe height is the max atom height"
+  ],
+  "arial_markup": "After d6288df1a, state_text_width_with_family calls measure_with_family_and_face, which parses Creole before the Arial face table. g5ck_creole_arial_markup will be rendered from the merge base before any second width path. Face tables, arial_text_width, and StateNodeFont stay untouched.",
+  "newline_prediction": "g5ck_creole_escape_and_newline splits the name into g5ckMidden and fold before Creole. Verdana 14 stripe height is 17.0146484375. Two stripes plus 20px of MARGIN and MARGIN_LINE are 54.029296875, which is the Java rect height 54.0293. The tilde-escaped title stays one Creole line.",
+  "baseline_prediction": "Description y of line j is divider + 5 + the sum of label_height_with_family of earlier lines + label_first_baseline_ascent_with_family of line j. DESC_LINE_SPACING (14.1328125) is the sans 12pt stripe, so sans lines do not move. Verdana 12 is 14.583984375, which is the 14.584 stride of g5ck_creole_multiline_desc. The size-16 run in g5ck_creole_mixed_verdana is already bottom-aligned inside its line by 0.83984375; only the previous stripe was short. g5ck_creole_decorations_courier line 0 mixes monospace height 13.96875 and Courier height 13.59375, so the stripe is 13.96875. That is 0.1640625 below DESC_LINE_SPACING and lands the Verdana byre run on Java's 64.3301. No fitted offset.",
+  "planned_change": "Split state names and fields with getWithNewlines on the state measure and emit paths only. Stack each following description on the previous line's stripe height. Leave a one-line plain run on the single text element.",
+  "must_stay": [
+    "g5ck_creole_plain_star_slash",
+    "g5ck_creole_composite_title",
+    "g5ck_field_from_outside",
+    "CF and AU matches"
+  ]
+}

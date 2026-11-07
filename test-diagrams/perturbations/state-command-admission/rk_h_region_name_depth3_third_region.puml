@@ -1,0 +1,14 @@
+@startuml
+state Fen {
+  state Moor {
+    state Kestrel {
+      state Plover
+      --
+      state Dunlin
+      --
+      state Godwit
+      CONC3[H] --> Godwit
+    }
+  }
+}
+@enduml

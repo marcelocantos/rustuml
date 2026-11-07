@@ -1,0 +1,8 @@
+@startuml
+state Quarry {
+  state Slate
+  state Ledge {
+    Slate --> [*]
+  }
+}
+@enduml

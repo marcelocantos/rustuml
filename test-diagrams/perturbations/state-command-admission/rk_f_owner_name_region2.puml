@@ -1,0 +1,8 @@
+@startuml
+state Kestrel {
+  state Plover
+  --
+  state Dunlin
+  Kestrel : hovers over the dune
+}
+@enduml

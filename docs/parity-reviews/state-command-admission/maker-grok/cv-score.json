@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-command-admission",
+  "batch": "CV",
+  "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-cv/reference-results.json",
+  "reference_results_sha256": "f206e324c7cc70028daee62887afc231669fd66c1644dfe97b4863a88dde1957",
+  "reference_results_gz_sha256": "77f97e03a7e8876672ef783312e3358b5f30dd7cfc4c535f834e8e6ffdd5ec44",
+  "manifest_sha256": "7eab88b694e3fd97ac78e1c8f365ec11c1be66729da04da304c8be5e63f61975",
+  "bundle_sha256": "611cff793e04cb9330a2378668356f478f0159593b2336aed94980a37c377649",
+  "predictions_sha256": "629ad96bb8920c76ddd2869bcdc93a63831f00471b74b38784def48be2397dda",
+  "predictions_edited": false,
+  "comparator": "rustuml_oracle::compare::compare_svg_strict via diff_one --no-oracle",
+  "tip": "52505aef02ea2ae140e22a18b1ebca877a3eec0c",
+  "base": "6eab153ea",
+  "base_note": "Docs-only addendum on merge 2e12228bd. Same Rust as the measurement base.",
+  "tip_counts": {
+    "match": 11,
+    "both_reject_same_message": 1,
+    "under_rejection": 1
+  },
+  "base_counts": {
+    "match": 3,
+    "both_reject_same_message": 2,
+    "mismatch": 6,
+    "over_rejection": 2
+  },
+  "cases": [
+    {
+      "name": "region_user_concourse",
+      "java_exit": 0,
+      "base": "over_rejection",
+      "tip": "match"
+    },
+    {
+      "name": "region_user_conc4",
+      "java_exit": 0,
+      "base": "over_rejection",
+      "tip": "match"
+    },
+    {
+      "name": "region_user_concurrent_hall",
+      "java_exit": 0,
+      "base": "match",
+      "tip": "match"
+    },
+    {
+      "name": "region_synthetic_repeat",
+      "java_exit": 200,
+      "java_line": 4,
+      "java_message": "The state Bolt has been created in a concurrent state : it cannot be used here.",
+      "base": "both_reject_same_message",
+      "tip": "both_reject_same_message"
+    },
+    {
+      "name": "region_user_conc_beside_separator",
+      "java_exit": 200,
+      "java_line": 9,
+      "java_message": "The state Pier cannot be used here.",
+      "base": "both_reject_same_message",
+      "base_stderr": "parse error: line 9: The state Pier cannot be used here.",
+      "tip": "under_rejection",
+      "tip_exit": 0,
+      "attribution": "lost_rejection"
+    },
+    {
+      "name": "newline_bold_second_row",
+      "java_exit": 0,
+      "base": "mismatch",
+      "tip": "match"
+    },
+    {
+      "name": "newline_tilde_then_plain",
+      "java_exit": 0,
+      "base": "mismatch",
+      "tip": "match"
+    },
+    {
+      "name": "newline_right_aligned_row",
+      "java_exit": 0,
+      "base": "mismatch",
+      "tip": "match"
+    },
+    {
+      "name": "desc_newline_italic",
+      "java_exit": 0,
+      "base": "mismatch",
+      "tip": "match"
+    },
+    {
+      "name": "baseline_courier_three",
+      "java_exit": 0,
+      "base": "mismatch",
+      "tip": "match"
+    },
+    {
+      "name": "baseline_arial_size_mix",
+      "java_exit": 0,
+      "base": "match",
+      "tip": "match"
+    },
+    {
+      "name": "baseline_verdana_back_and_font",
+      "java_exit": 0,
+      "base": "mismatch",
+      "tip": "match"
+    },
+    {
+      "name": "baseline_sans_two_rows",
+      "java_exit": 0,
+      "base": "match",
+      "tip": "match"
+    }
+  ],
+  "beside_separator": {
+    "verdict": "The input is invalid in Java. This is a lost rejection, not a rejection the merge base already missed.",
+    "why": "StateDiagram.concurrentState (StateDiagram.java:201-204) asks quarkInContext for the short name from getUniqueSequence2, whose first value is CONC2 (CucaDiagram.java:816-818). quarkInContext reuses the one existing quark of that short name when it is not the current group (CucaDiagram.java:266-272). gotoGroup then muteToGroupType(CONCURRENT_STATE) on that quark (CucaDiagram.java:355-356). The top-level state CONC2, which already contains Pier, becomes the concurrent group. The root link on line 9 fails checkConcurrentStateOkInternal (StateDiagram.java:84-87) because Pier's parent is now a concurrent region and the current group is the root.",
+    "why_base_matched": "The merge base rejected the same link because parent_is_concurrent tested a CONC name prefix on the parent id CONC2. It did not reuse the quark or change the group's type.",
+    "why_tip_accepts": "The tip records region ids created by the separator. The synthetic id is House.CONC2, so the user state CONC2 is an ordinary composite and the link to Pier is allowed.",
+    "not_fixed_here": "Restoring the prefix test would reject region_user_concourse and region_user_conc4 again. Those now match Java. The rejection Java actually performs is the quark reuse above, which is the same unfixed identity collision as the region-0 CONC2 panic."
+  },
+  "conc2_region0_child": {
+    "source": "state House { state CONC2 -- state Wing } then [*] --> CONC2",
+    "tip_exit": 101,
+    "tip_panic": "crates/rustuml-render/src/state.rs:6893 positions[index], len 4 index 4",
+    "base_exit": 101,
+    "base_panic": "crates/rustuml-render/src/state.rs:6842 on the merge-base binary, same len 4 index 4",
+    "attribution": "pre-existing",
+    "mechanism": "The user id House.CONC2 is the same string as the synthetic region id. layout_index_of finds that id in layout_node_ids and indexes node_positions one past the end. Java does not allocate a second entity: countByName(\"CONC2\") is 1, so the separator reuses the child quark and mutes it to CONCURRENT_STATE.",
+    "proposed_target": "A separator reuses the single existing quark of the synthetic short name and mutes that quark to GroupType.CONCURRENT_STATE, as quarkInContext and gotoGroup do, and layout does not panic when a region-0 child carries that short name.",
+    "next_batch_probe": "region0_child_named_conc2"
+  }
+}

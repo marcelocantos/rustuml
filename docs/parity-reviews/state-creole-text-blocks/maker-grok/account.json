@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "base_revision": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "mechanism": "state-creole-text-blocks",
+  "java_locations": [
+    "svek/image/EntityImageStateCommon.java:65-76 constructor builds the title with entity.getDisplay().create8(..., CreoleMode.FULL, wrapWidth()) from getStyleStateTitle",
+    "svek/image/EntityImageState.java:70-84 builds the field TextBlock with Display.create(entity.getBodier().getRawBody()).create8(..., CreoleMode.FULL)",
+    "klimt/creole/Display.java:621 create8 is the FULL Creole entry used by both blocks",
+    "The composite/autonomous title path already draws through the same Creole TextBlock. This slice is the flat simple-state name and description"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs flat entity path around the title_style.family != \"sans-serif\" branches: name and description are escape_text_content of the raw string",
+    "crates/rustuml-render/src/state.rs::state_text_width_with_family monospace arm calls mono_text_width_styled on the raw string, so tags occupy cells",
+    "crates/rustuml-render/src/state.rs::arial_text_width and StateNodeFont are another maker's lane and are not edited",
+    "crates/rustuml-render/src/text_render.rs::emit_text already draws Creole runs for sans-serif and for composite titles. Per-face tables there are not edited",
+    "Default sans-serif simple states already call emit_text. Base renders of state_bold_state_name, state_italic_state_name, and creole_bold_in_state already strip the tags; their remaining golden delta is the version processing instruction"
+  ],
+  "invariant": "A simple state's name and each description line are CreoleMode.FULL TextBlocks in the state title and attribute font. Markup is parsed into runs. The drawn characters are the runs, and a monospace box measures those runs.",
+  "causal_divergence": "Base rustuml-base with skinparam stateFontName Verdana or Courier draws the bytes **Hot** and <i>steam</i> (escaped) inside one <text> element. The same strings on the default sans-serif path and on an Arial composite title already go through emit_text and draw Hot / steam as styled runs. The flat custom-family branch is the literal-tag path named in review-12 finding (f).",
+  "planned_change": "When Creole parsing changes the name or description, draw that flat text with text_render::emit_text in the style's family, weight, style, and size, and count baselines with emitted_baseline_count. A single unstyled run keeps the existing one-element emitter so plain Courier NBSP and plain Arial textLength bytes stay put. The monospace arm of state_text_width_with_family measures with measure_with_family_and_face. Do not change arial_text_width, StateNodeFont, or the font tables.",
+  "perturbation_axes": [
+    "wiki ** // __ and HTML <b> <i> <u> in a simple-state name and in a description",
+    "Verdana and Courier via stateFontName, plus the default sans-serif path",
+    "plain labels in those families, which must keep their current text element",
+    "a composite title, which already uses emit_text and must not move"
+  ],
+  "verification": "Precommitted base behaviour: Courier and Verdana simple states contain the literal markup; default-font creole goldens do not. After the draft, renamed Verdana and Courier probes must draw the stripped runs, and no previously matching golden may be lost. Arial face-table textLength versus arial_text_width box width stays out of this slice."
+}

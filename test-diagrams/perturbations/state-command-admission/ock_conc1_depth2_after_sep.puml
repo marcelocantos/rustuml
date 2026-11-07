@@ -1,0 +1,11 @@
+@startuml
+state Tympanum {
+  state Buttress {
+    state Parapet
+    --
+    state Crenel
+  }
+}
+state CONC1
+CONC1 --> Tympanum
+@enduml

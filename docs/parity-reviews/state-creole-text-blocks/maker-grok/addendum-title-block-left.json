@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "measurement": "CL g5ck_creole_escape_and_newline against commit 670815699. compare_svg_strict reports one difference: the second name row x is 59.932, Java is 31.18. y 153.0898 and textLength 25.9834 already match. The first row is at 31.18 on both.",
+  "java": "EntityImageState.drawU places the title at xDesc = (dimTotal.getWidth() - dimDesc.getWidth()) / 2 (EntityImageState.java:129-131). EntityImageStateCommon builds that block with getStyleState().getHorizontalAlignment() (EntityImageStateCommon.java:73-75). Root HorizontalAlignment is left (plantuml.skin:12). A left TextBlock draws every row from the block's left edge. Display.getWithNewlines sets a natural alignment only for \\l and \\r.",
+  "planned_change": "A state name with no natural alignment keeps one x, the left edge of the centered title block. \\r uses that block's right edge. A one-row name stays cx - width/2, which is the same point."
+}

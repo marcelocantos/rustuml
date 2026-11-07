@@ -1,0 +1,336 @@
+{
+ "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-state",
+ "reference_results_sha256": "972b23a6ac582160acb8d1e145739962ea8e27094c9558bc3fd25393366b2cfb",
+ "trees": {
+  "base": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-base",
+   "sha256": "6b88b14aac43e4ff8fc648fec344cb090157c56fd153eb88fa4c04d0cb34a348"
+  },
+  "pr": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-pr",
+   "sha256": "63e4f84d37d1c26ad0b41ba68f9705b51231137dcd548952db54cbed5a13cd32"
+  },
+  "tip": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-tip",
+   "sha256": "d7af4e4c89c3cdfd235294cf69b55865c359c88048f7fb07f47726e097d22e93"
+  }
+ },
+ "cases": [
+  {
+   "name": "creole_verdana_kiln",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "f9c1c27129d5d3153794f21eb1a224a47a07fd5869b03117fc3b92558c15c2e2",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "6d4532f94ea8823d82658e1d98c1539cbb8a73abeadd93d08ce07da5e72f3f2e",
+    "stderr": "",
+    "differences": "4",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "f9c1c27129d5d3153794f21eb1a224a47a07fd5869b03117fc3b92558c15c2e2",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "creole_courier_grate",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "974e3284e47a6a6fe866db0c92b79f5c4f639bb8f68894853f73980a912406e6",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "e7cda17faed11627af7aaec3e6780200ea31e48657c15bbd058f44840166fad6",
+    "stderr": "",
+    "differences": "11",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "974e3284e47a6a6fe866db0c92b79f5c4f639bb8f68894853f73980a912406e6",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "creole_verdana_field",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "b3c6d712e2b43bea00f88783ede725874d599731e48fecc31cdc2f5b193b5321",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "eedeeab90849ea9602360e5c4c8cdd1efdbebc5d681ddb0a1127486145265c46",
+    "stderr": "",
+    "differences": "9",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "b3c6d712e2b43bea00f88783ede725874d599731e48fecc31cdc2f5b193b5321",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "holdout_crossing_stoke",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n6\nThe state Flame cannot be used here. (Assumed diagram type: state)",
+   "java_line": "6",
+   "java_message": "The state Flame cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state Flame cannot be used here.",
+    "line": "6",
+    "message": "The state Flame cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "b1a3228fe3fc1606a875adac1b3107359c7b16305fb45614e57f102a7defe80b",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state Flame cannot be used here.",
+    "line": "6",
+    "message": "The state Flame cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "holdout_decl_flame",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n5\nThe state Flame has been created in a concurrent state : it cannot be used here. (Assumed diagram type: state)",
+   "java_line": "5",
+   "java_message": "The state Flame has been created in a concurrent state : it cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 5: The state Flame has been created in a concurrent state : it cannot be used here.",
+    "line": "5",
+    "message": "The state Flame has been created in a concurrent state : it cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "e25970132c1cb7a71309b91d7a7a69dca4441d4896bbff3b32c4e9dbb4284fd0",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 5: The state Flame has been created in a concurrent state : it cannot be used here.",
+    "line": "5",
+    "message": "The state Flame has been created in a concurrent state : it cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "holdout_region_sibling",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n4\nThe state Ash cannot be used here. (Assumed diagram type: state)",
+   "java_line": "4",
+   "java_message": "The state Ash cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 4: The state Ash cannot be used here.",
+    "line": "4",
+    "message": "The state Ash cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "cb53937098a7cd318582fc03a62ae07a4965a5a12d45b25c7c78117010beac06",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 4: The state Ash cannot be used here.",
+    "line": "4",
+    "message": "The state Ash cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "holdout_stroke_rebeccapurple",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nNo such color (Assumed diagram type: state)",
+   "java_line": "1",
+   "java_message": "No such color",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "3cd8c31d1d164d1f4eafdb10b37d0462cab41e185c16701345c205077457b9b4",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "holdout_fill_unknown",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nNo such color (Assumed diagram type: state)",
+   "java_line": "1",
+   "java_message": "No such color",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "ffd298c0269ad257d3b1c4b496e85e3bdfd0e8df7498e35437d9f9cc2601128b",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "holdout_valid_colors",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "341fb61f6702991f0465f4b028e23c1324bf11be5eeb6274c5a7a42f1feb6826",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "341fb61f6702991f0465f4b028e23c1324bf11be5eeb6274c5a7a42f1feb6826",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "341fb61f6702991f0465f4b028e23c1324bf11be5eeb6274c5a7a42f1feb6826",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "holdout_field_on_concurrent",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "f6a25c7e790b0a12c212645d56890515f292ca9c1baaa300a301f2eb49ffa640",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "60b0466f1e9e1b2fca82d29f93ec478178a2594bbe6f0e8377eace8e58172f32",
+    "stderr": "",
+    "differences": "5",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "f6a25c7e790b0a12c212645d56890515f292ca9c1baaa300a301f2eb49ffa640",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  }
+ ],
+ "counts": {
+  "base": {
+   "match": 5,
+   "both_reject_same_message": 5
+  },
+  "pr": {
+   "mismatch": 4,
+   "under_rejection": 5,
+   "match": 1
+  },
+  "tip": {
+   "match": 5,
+   "both_reject_same_message": 5
+  }
+ },
+ "total": 10
+}

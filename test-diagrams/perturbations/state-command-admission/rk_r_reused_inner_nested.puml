@@ -1,0 +1,14 @@
+@startuml
+state Basin {
+  state Upper {
+    state Riffle
+    state Pool
+    [*] --> Riffle
+    Riffle --> Pool
+  }
+  state Lower {
+    [*] --> Riffle
+    Pool --> [*]
+  }
+}
+@enduml
