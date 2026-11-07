@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-line-continuation",
+  "target": "T14.22",
+  "round": 5,
+  "maker": "claude-opus-5-5",
+  "branch": "maker/opus-tim-continuation-round5",
+  "kind": "pre-change addendum to ../maker-round5-grok/account.json, committed before any code change of this maker and before any measurement",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "base": "Draft 790726291 (account 10c9fe37b) on merged base 021e4c555, merged with parity-recovery-2026-11-03 at 32684f81e in 9dc1af5f9 (no conflicts; bullseye.yaml takes parity-recovery's text, the draft line made no bullseye edit). 9dc1af5f9 is the new merged base for measurement.",
+  "draft_review": {
+    "1_inner_comment_every_line": "The draft matches the Java trace. TContext#buildCodeIterator (tim/TContext.java:325-330) builds it40 = CodeIteratorInnerComment over it30 = CodeIteratorShortComment; CodeIteratorInnerComment#peek (tim/iterator/CodeIteratorInnerComment.java:46-53) returns removeInnerComment() with no diagram-type test, and the procedure, legacy-define, while and foreach iterators (it61..it100) read it40's lines. execute_one_line now computes line_no_comment = remove_inner_comment(line) unconditionally, and the definelong, function, sub, while and foreach collectors all buffer line_no_comment. No change planned.",
+    "2_theme_body_join": "The draft joins every local-theme body, whatever the start type. Java joins only when checkEndingBackslash: PSystemBuilder#createPSystem (PSystemBuilder.java:210-212) passes types.contains(DiagramType.SEQUENCE), and UmlSource#loadInternal (core/UmlSource.java:118-134) otherwise copies the list unchanged. TContext#executeTheme (tim/TContext.java:725-745) runs the theme body through executeLines into the same result list, so the theme body is joined exactly when the top-level list is. The draft therefore joins theme continuations in, e.g., @startmindmap, where Java does not.",
+    "3_unicode_15_letters": "Verified. support/gen_bmp_letters.py regenerates the table from UnicodeData.txt 15.0.0 (sha256 806e9aed65037197f1ec85e12be6e8cd870fc5608b4de0fffd990f689f376a73, fetched from https://www.unicode.org/Public/15.0.0/ucd/UnicodeData.txt) and reports 48,965 BMP letters in 380 runs, equal to BMP_LETTER_RANGES. Against UnicodeData.txt 17.0.0 (sha256 2e1efc1dcb59c575eedf5ccae60f95229f706ee6d031835247d843c11d96470c) it lists exactly the sixteen added BMP letters U+088F U+0C5C U+0CDC U+1C89 U+1C8A U+A7CB U+A7CC U+A7CD U+A7CE U+A7CF U+A7D2 U+A7D4 U+A7DA U+A7DB U+A7DC U+A7F1, and none removed. BMP Nd is 370 code points in both versions, so BMP_DECIMAL_DIGIT_ZEROS (37 runs of 10) is unaffected. unicode-properties leaves rustuml-parser; Cargo.lock keeps it only as rustybuzz's own dependency (text shaping, not the header test).",
+    "4_lock": "Not done by the draft. Done after measurement, per the precommitted rule below."
+  },
+  "planned_change": [
+    "A. project_events takes the checkEndingBackslash flag (ctx.start_checks_ending_backslash) and joins a theme body only when it is set; otherwise the body is tim_texts as before the draft. Java: PSystemBuilder.java:210-212, UmlSource.java:118-134, TContext.java:725-745.",
+    "B. The BMP_LETTER_RANGES doc comment names its generator, docs/parity-reviews/tim-line-continuation/maker-round5-opus/support/gen_bmp_letters.py. No table change.",
+    "C. A unit test pins the gate: a continued local-theme property is joined under @startuml and is not joined under @startmindmap."
+  ],
+  "residue_not_planned": [
+    "A theme body's last continued line: Java joins it with the next result-list line after the !theme line. Rust parks the body in theme_tail, so it keeps its backslash (draft keep_open_tail). Proposed target, not this round.",
+    "A body containing a nested theme is not joined (draft). Java joins across the nested body. Proposed target, not this round."
+  ],
+  "precommitted_measurement": {
+    "builds": "Fresh git-archive release builds under ~/Library/Caches/rustuml-opus-tim-r5, one CARGO_TARGET_DIR each, target and export deleted once the binary is saved: merged base 9dc1af5f9, the tip, round-3 tip d28dd64a9, round-4 code 9ed52f435, parity-recovery 32684f81e. compare_cli from the unchanged docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs, linked against 32684f81e's rustuml_oracle.",
+    "method": "Unchanged replay.py, classify.py and rejection_contract.py from the round-4 checker (copied, hashes recorded), whole output, 4 modes, each case from its recorded cwd, over the round-4 checker's prepared manifests: CC, CB, CA, BZ, BY, BW, BU, BD, BA, AY, AZ, AX, AV, AT, the 915 (AS, AQ, 790, 28), retained 4,174, golden 12,550. Outcome = classify.outcome with the validity adjustment and the T14.63 welcome-match overlay.",
+    "three_way": "Every case and mode: tip against 9ed52f435 and against 32684f81e; every case where the tip is worse than either parent (lost match, lost rejection, lost welcome match, new valid-input error, panic, timeout) is listed.",
+    "bar": "Zero lost matches, lost rejections, new valid-input errors and panics against 9dc1af5f9 and against each parent, except cases where that parent's outcome was already lost at the merged base for a cause outside this packet, which are listed by name. ck4_ebnf_trailing and ck4_tim_definelong_body match; tc1_seq_theme_local_postjoin matches or is no worse than at cb550c0d6; cr4_hdr_u16_cyrillic_tje, cr4_hdr_u16_latin_a7cb, cr4_hdr_u17_latin_a7ce, cr4_hdr_u17_arabic_088f match.",
+    "lock": "Lock in test-diagrams/no_oracle_baseline.txt only names the tip's golden_no_oracle reports as new passes with no new failure; move the help text, README, STABILITY and doc_claims pins in that commit, only if the total moves.",
+    "gates": "Workspace lib, pipe_mode (17/17), golden_no_oracle failure-name diff, golden_pairs, parity_perturbations, harness_guards by category, doc_claims, rejection_contract.py."
+  }
+}
