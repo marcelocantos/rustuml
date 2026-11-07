@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "mechanism": "creole-image-fallback-style",
+  "reviewer": {
+    "task_id": "review/grok-g6-recheck held-out g6r3",
+    "model": "grok-4.7",
+    "independence": "Recheck that the carrier-range packet leaves the image-font half unchanged. No production edits, no children, no other worktrees, no local JVM.",
+    "branch": "review/grok-g6-recheck"
+  },
+  "account_commit": "f977806cef5a90a868175e8e707a89d4d791d29d",
+  "implementation_commit": "3f6bf7a7332da0ad85dbc514d4af665f82920632",
+  "evidence_tip": "69cbdf829cda28642b7983de6632a7a51018e2da",
+  "base_revision": "8d294442f4d88aed3f1c353a9766045fc90f2a7c",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git archive 8d294442f4d88aed3f1c353a9766045fc90f2a7c | tar -x && cargo build --release -p rustuml --bin rustuml  # rustuml-base sha256 789d263012cd97cb85da8d8d3ab3c49f64d2af66fb7b32c9e7bd00887ffac16b",
+    "git archive 3f6bf7a7332da0ad85dbc514d4af665f82920632 | tar -x && cargo build --release -p rustuml --bin rustuml  # rustuml-tip sha256 25acb3fe25aafaf5fb3377f88b8aed598ddd6f7278fc9eccff251025878ab175",
+    "RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 TZ=GMT+11:00 PLANTUML_STDLIB=$HOME/work/github.com/plantuml/plantuml-stdlib/stdlib <bin> -pipe -tsvg  # cwd is the source directory",
+    "g6cmp: rustuml_oracle::compare::compare_svg_strict, GEOM_EPS 0.02, whole SVG",
+    "Parent relay Java: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.6b0TcP97/new --timezone GMT+11:00 -- -pipe -tsvg",
+    "compare_svg_strict of all 18 creole-image-fallback-style probes (checker-independent-ae47 and maker16) against their committed SVGs, tip and merge-base binaries"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_activity_base_bold.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_activity_base_bold.svg",
+      "axes": [
+        "checker-independent-ae47 image activity base bold"
+      ],
+      "result": "pass",
+      "source_sha256": "009046ba5be27184f806f47ac1d043b03c79908dd19f9729fd621e0060d872a8",
+      "golden_sha256": "71f0f6c555717ad2b357017d3b54e556f7321ed2c15e81a7a6b65fd6ec742632",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_activity_plain_base.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_activity_plain_base.svg",
+      "axes": [
+        "checker-independent-ae47 image activity plain base"
+      ],
+      "result": "pass",
+      "source_sha256": "f5e5311a8041cd880bd94051032cf51db4470411a0690aa988090c71b141f6e4",
+      "golden_sha256": "43e792beb7b52cc0eb78cb016865b44a0a221e1769d97c3136854d00feeb851a",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_class_base_bold.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_class_base_bold.svg",
+      "axes": [
+        "checker-independent-ae47 image class base bold"
+      ],
+      "result": "pass",
+      "source_sha256": "43f801ec04786342000713ff11666c8d02a15bd566056666574548ee13f1047c",
+      "golden_sha256": "b79eca3afe71b4e3fb4d4b51e170c7b8d49e4036cc0a148d2684f8240ce6dc70",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_class_plain_base.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_class_plain_base.svg",
+      "axes": [
+        "checker-independent-ae47 image class plain base"
+      ],
+      "result": "pass",
+      "source_sha256": "d87badd3677ac829c2438ed394bfd65d73f213f0f24b6c69306bf39a0d23c52e",
+      "golden_sha256": "e193c77179d47eb49af9c12b3f6f6db4706009428e067c5ff1cd851affdd038d",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_note_plain_base.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_note_plain_base.svg",
+      "axes": [
+        "checker-independent-ae47 image note plain base"
+      ],
+      "result": "pass",
+      "source_sha256": "eea4e7a09a5b824c28efec9a80b7d9a947d7d3fa8d88771fb8fb3b2a786358d4",
+      "golden_sha256": "782c7efcf5cec791a6aaf1ff13cae316987e138a2d7babb96a06248c0a38ef5b",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_sequence_base_bold.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_sequence_base_bold.svg",
+      "axes": [
+        "checker-independent-ae47 image sequence base bold"
+      ],
+      "result": "pass",
+      "source_sha256": "0bebae3bcc758d24301ee7d4a617395c33e181afaadb563f504a8995545e4fab",
+      "golden_sha256": "e4cdcb20144988cb6a730d39bf784a847f21a746d2404bb58cabd6f27f293b6d",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_sequence_base_italic.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_sequence_base_italic.svg",
+      "axes": [
+        "checker-independent-ae47 image sequence base italic"
+      ],
+      "result": "pass",
+      "source_sha256": "f90ec6bed88f1238211d96f5ae8735d86760ef8bfbff9f3b87e978b51c6598e0",
+      "golden_sha256": "1140564c537d3ee966c12661da85eccd0a8a7aaedc09efa3a68a30f68e5edeb2",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_sequence_plain_base.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_sequence_plain_base.svg",
+      "axes": [
+        "checker-independent-ae47 image sequence plain base"
+      ],
+      "result": "pass",
+      "source_sha256": "b224d38f3883968d61e783d63b7f374e72ced4cc886f825743aecba1af7dd4bb",
+      "golden_sha256": "1492c90bbc8aae69f86b9b033e7694a5f63c4b769082414f6025fb9c6d18d87f",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_state_base_bold.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_state_base_bold.svg",
+      "axes": [
+        "checker-independent-ae47 image state base bold"
+      ],
+      "result": "pass",
+      "source_sha256": "e0adf80051f9dcceca8becc8c80a43b6376247a20e1d40a9215b000328b5b9f5",
+      "golden_sha256": "3e8c2296ab3b0106058b4b2b40c3178a3bb766b014f54cf9e097f8711d7ba883",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_state_plain_base.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_state_plain_base.svg",
+      "axes": [
+        "checker-independent-ae47 image state plain base"
+      ],
+      "result": "pass",
+      "source_sha256": "65a7b924005f93530854b9af4cb33da19cc61dfc2a4895a19e615d27e0fa5df6",
+      "golden_sha256": "66e278c24a4f82699da23f48f6eb6a2c6f8bd4b3382362fbd6cb74a4fa1a2e3e",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_title_default_bold.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_title_default_bold.svg",
+      "axes": [
+        "checker-independent-ae47 image title default bold"
+      ],
+      "result": "pass",
+      "source_sha256": "ad980a873e3b266e0729e6c358f5ae76c6aec27d98186aa3f12c4a7d4b3675f8",
+      "golden_sha256": "c436ab5a04150913afef89c7db21542c36bd44a423d1efa6049d3653116029fe",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_wbs_base_bold.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_wbs_base_bold.svg",
+      "axes": [
+        "checker-independent-ae47 image wbs base bold"
+      ],
+      "result": "pass",
+      "source_sha256": "9ac441c1f6b0ab27e80ed825f76d9d335a5e3d3904f5043cbee1f1af00fa8560",
+      "golden_sha256": "e50003166c420605e4bf881a6a4425b648a479ba9db623183e08c31348d13e29",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_wbs_plain_base.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/checker-independent-ae47/image_wbs_plain_base.svg",
+      "axes": [
+        "checker-independent-ae47 image wbs plain base"
+      ],
+      "result": "pass",
+      "source_sha256": "1440800567d035d24d95072fcc3821840b2b24f9983956dba730433e012365a5",
+      "golden_sha256": "ee593674215e1ec847f6ec127bf2e6e9f9aa8064052e10ff30bb466466deeb36",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_base_bold.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_base_bold.svg",
+      "axes": [
+        "maker16 image base bold"
+      ],
+      "result": "pass",
+      "source_sha256": "270fca6287a1f4716d4929c38f823a0639479a480bca851cfd22fe79a156e65f",
+      "golden_sha256": "c7435ce305b268ab1a919f5df6370f2b601934e080c354d02c1d93c426ed2f10",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_markup_config.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_markup_config.svg",
+      "axes": [
+        "maker16 image markup config"
+      ],
+      "result": "pass",
+      "source_sha256": "3d4f0c5f06e2ae25fc6bc498576df0376dfd37464a4aad439c4201918343c65f",
+      "golden_sha256": "40ba008959e3010ecfd79b5bcd46f79f34e0d586b08f16c1fe6b257b9e9c2003",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_markup_faces.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_markup_faces.svg",
+      "axes": [
+        "maker16 image markup faces"
+      ],
+      "result": "pass",
+      "source_sha256": "a8a6039e04ecf49723c23499b9ee81d94659242a5339358219e0eaaaaafee943",
+      "golden_sha256": "ee7c129cad942f5334dac191c6ee6d787e7954859ac1cefe5833c65d0139bdc0",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_plain_scale.puml",
+      "golden": "test-diagrams/perturbations/creole-image-fallback-style/maker16/image_plain_scale.svg",
+      "axes": [
+        "maker16 image plain scale"
+      ],
+      "result": "pass",
+      "source_sha256": "886a2bf358b2cd6a50f70302f3c5ae30e8f0a12b83c307a30eed7ac4452c5117",
+      "golden_sha256": "e9596720c5a6b243e386cfc29582c839018e72d03ad9bfaea929b9642cd32b96",
+      "tip_equals_base_stdout": true,
+      "comparison": "compare_svg_strict MATCH"
+    }
+  ],
+  "findings": [
+    "The production diff 8d294442f..3f6bf7a73 does not touch the image fallback arm. All 18 image probes have identical stdout and exit 0 on the merge base and the tip.",
+    "17/18 probes match their committed SVGs under compare_svg_strict. The four maker16 probes were absent from review.json and are named here; each matches.",
+    "image_note_base_bold still differs by 8 attributes on both trees: three fallback letters lose font-weight 700, their following x positions move, and the note is 343px wide instead of 345px. That is the recorded NoteFontStyle consumer gap, not this packet. It stays out of this review's perturbation list because a latest review cannot record a failing pair, and it remains named by review.json."
+  ],
+  "verdict": "accepted",
+  "verdict_basis": "This packet does not change image-fallback output. The rechecked probes that match are recorded as passes. The one pre-existing note miss is unchanged and is not claimed fixed."
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "mechanism": "face-cmap-advances",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sun.font.CCompositeGlyphMapper and CTFontGetGlyphsForCharacters, the own-glyph test PrimaryFaceExtract records as P runs",
+    "sun.font.CStrike#getGlyphAdvance via CTFontGetAdvancesForGlyphs"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/text_render.rs mapped_advance and family_table_text_width",
+    "crates/rustuml-render/src/face_cmap_tables.rs ARIAL_CMAP, VERDANA_CMAP and HELVETICA_CMAP"
+  ],
+  "invariant": "A character that a measured face's cmap maps is measured with that face's own advance. A character the face does not map keeps the current fallback chain.",
+  "causal_divergence": "Verdana, Arial and Helvetica own-closures cover printable ASCII only, so mapped non-ASCII characters fall through to SansSerif. The known gaps are Verdana italic «Ferrous gauge vista» (Java 157.2197), «marker» (Java 61.2366) and Latin+Hebrew m9a_vi_hebrew_italic.",
+  "planned_change": "Measure mapped non-ASCII on Helvetica, Arial and Verdana from the extracted cmap rows, and leave an unmapped character on the existing fallback chain. The retained 1139-unit guillemet arm is gone; U+00AB and U+00BB are in the Helvetica plain and bold cmap rows. Do not invent an advance for a scalar the face does not map, and do not retarget Times, Courier, Menlo or Lucida.",
+  "perturbation_axes": [
+    "mapped non-ASCII on Verdana, Arial and Helvetica, including guillemets and Hebrew",
+    "a character the face does not map, which must keep today's fallback"
+  ]
+}

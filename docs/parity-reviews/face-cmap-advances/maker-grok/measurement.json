@@ -1,0 +1,80 @@
+{
+  "status": "measured. T14.55 is not achieved. Mapped non-ASCII on Helvetica, Arial and Verdana uses the extracted cmap. Unmapped scalars stay on the fallback chain.",
+  "base_commit": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "renderer_commit": "52bda70a6dc2040949f0567e87de992b7c9b74c5",
+  "tip_binary_sha256": "0686e458d8dbf486a498ab82cb3e7f31cb6e839ef7e82e2ba9f25cb8b490d88f",
+  "base_binary_sha256": "fdec459c22ab0beafe7fee3303be856f4e2d348690424a520fb8f8dcc0393c48",
+  "comparator": "rustuml_oracle::compare::compare_svg_strict. Private binary sha256 e6e7d956350be7a085c10c56862c6c9edae2525846791af54bab87950557b9bc.",
+  "cli_env": "binary -pipe -tsvg, cwd = source parent, RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100, TZ=GMT+11:00, PLANTUML_STDLIB set",
+  "extractor": {
+    "script_sha256": "954cc456f4eaf527d383c4eb0f0fe3199eac35749f5237a5a0c7b50cf9cacc6c",
+    "run_sh_sha256": "d05f35e00dac5aa0c06e93525e4ce26a14f98fb50f633d381b55dc285f9b7844",
+    "output": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g2-mm-cmap/out/",
+    "sha256sums": "1b1e9a8eeca7aeb326e825c8c583129de2c4eb846aba3c62e15aacea8e4d20fe",
+    "not_run_locally": "The Swift extractor was not executed on this machine. Java was not run on this machine."
+  },
+  "cli_sweep_versus_base": {
+    "sources": 18878,
+    "golden": 12550,
+    "perturbations": 6328,
+    "status_changes": 0,
+    "stdout_changes": 107,
+    "golden_stdout_changes": 0,
+    "stderr_changes": 4,
+    "panic_flips": 0,
+    "panics_on_both": 4,
+    "panic_site": "crates/rustuml-parser/src/parse/class.rs:285. The four dash_01, dash_03, dash_06 and dash_07 sources under shared-svg-corrective/checker-independent-astra. Stderr differs only by thread id.",
+    "stdout_areas": {
+      "tim-builtin-value-boundaries": 104,
+      "class-current-spot-cascade": 2,
+      "tim-expression-event-sink": 1
+    }
+  },
+  "strict_versus_base": {
+    "lost_match": 0,
+    "lost_rejection": 0,
+    "new_valid_input_error": 0,
+    "panics": 0,
+    "batches": [
+      {"name": "shared-svg-round10-c10a", "valid": "159 -> 163 of 379", "gained_match": ["c10a_st_usec_ar", "c10a_st_usec_vd", "c10a_st_part_ar", "c10a_st_part_vd"], "bytes_changed": 12},
+      {"name": "shared-svg-round10-m10a", "valid": "221 -> 221 of 374", "gained_match": [], "bytes_changed": 0},
+      {"name": "shared-svg-round11-c11a", "valid": "237 -> 253 of 515", "gained_match": ["c11a_of_comp_hv_b", "c11a_of_part_hv_b", "c11a_st_part_vd_p", "c11a_st_part_vd_i", "c11a_st_part_ar_p", "c11a_st_part_ar_i", "c11a_st_usec_vd_p", "c11a_st_usec_vd_i", "c11a_st_usec_ar_p", "c11a_st_usec_ar_i", "c11a_qu_stereo_vd_p", "c11a_qu_multist_vd_p", "c11a_na_guil_vd_p", "c11a_na_guil_vd_i", "c11a_na_acc_vd_p", "c11a_na_acc_vd_i"], "bytes_changed": 32},
+      {"name": "shared-svg-round11-m11a", "valid": "79 -> 79 of 100", "gained_match": [], "bytes_changed": 0},
+      {"name": "shared-svg-round9-c9a", "valid": "98 -> 106 of 288", "gained_match": ["c9a_sp_seqnote_pdf_N", "c9a_sp_seqnote_pdf_N_ctrl", "c9a_sp_seqnote_mk_N", "c9a_sp_seqnote_mx_N", "c9a_sp_seqnote_mx_N_ctrl", "c9a_sp_seqnote_left_sp_N", "c9a_sp_actmid_rr_N", "c9a_sp_actmid_rr_N_ctrl"], "bytes_changed": 38},
+      {"name": "shared-svg-round9-m9a", "valid": "24 -> 24 of 50", "invalid": 10, "gained_match": [], "valid_bytes_changed": 0, "invalid_bytes_changed": ["m9a_bidi_p2029_pdf_verdana", "m9a_bidi_p2029_pdf_verdana_ctrl", "m9a_bidi_p2029_pdf_space_verdana", "m9a_bidi_p2029_pdf_space_verdana_ctrl", "m9a_bidi_p2029_mixed_verdana", "m9a_bidi_p2029_mixed_verdana_ctrl"], "lost_rejection": 0},
+      {"name": "grok-g2-g2a", "valid": "4 -> 7 of 8", "gained_match": ["g2_hv_plain_quote_w", "g2_hv_bold_kz", "g2_hv_italic_quote_w"], "bytes_changed": 3}
+    ]
+  },
+  "acceptance": {
+    "ferrous_gauge_vista": "c10a_st_usec_vd and c10a_st_part_vd are strict MATCH. Java and tip textLength are both 157.2197 (one node on usec, two nodes on part).",
+    "marker": "custom_class and custom_grouped_class textLength moved from 58.2214 on the base binary to 61.2366 on the tip. Both whole SVGs stay DIFF. theme_interface is not this case.",
+    "hebrew": "m9a_vi_hebrew_italic and its control stay DIFF ndiff 7 and byte-identical to the base. Java textLength 63.3145, tip and base 62.0156, for the field Quay plus U+05D0 U+1D167 U+05D1. Verdana italic does not map those three scalars. Arial italic does map U+05D0 and U+05D1.",
+    "held_out_g2a": "Three Helvetica probes became strict MATCH. g2_hv_bolditalic_kz stays DIFF ndiff 11 on base and tip, bytes identical. Java emits font-style italic, font-weight 700, textLengths 63.0068 and 58.3447. The tip emits italic with no font-weight and textLengths 58.3584 and 54.4688.",
+    "helvetica_ft": "c10a_ft_hv_plain, italic, bold and bolditalic stay DIFF ndiff 33. Plain and italic alphabets are 117.4619 and 129.1172, matching Java. Bold alphabets are 121.3311 and 129.1172, matching Java. Bold-italic alphabets stay on the italic face, 117.4619 and 129.1172, against Java 121.3311 and 129.1172. The punctuation label is two Rust nodes, 256.6758 and 25.2861, against Java's one node, 240.0166 plain and 248.2881 bold."
+  },
+  "harness_guards_parity_review": {
+    "base_lines": 2704,
+    "tip_lines": 2706,
+    "only_added": [
+      "docs/parity-reviews/face-cmap-advances: account has no independent checker review",
+      "docs/parity-reviews/helvetica-upright-advances: account has no independent checker review"
+    ],
+    "only_removed": [],
+    "category_delta": "account has no independent checker review 9 -> 11. Every other category count is unchanged. No schema-violation line was added.",
+    "lists": [
+      "maker-grok/harness-parity-review-base.txt",
+      "maker-grok/harness-parity-review-tip.txt"
+    ],
+    "review_json": "Not written. An independent checker owns that file."
+  },
+  "gates": {
+    "decimal_literal_ratchet": "FAILED, same files as the base plus text_render.rs 51 -> 68. The last literal is the ferrous test string 157.2197. Baseline not rewritten.",
+    "golden_no_oracle": "passed on the cmap tip. The locked baseline still matches, so the count did not move. Failure names match the base list (70 names) after the saved base copy's golden/ prefix is stripped.",
+    "golden_pairs": "FAILED, unchanged: 12550 total, 10497 passed, 754 failed, 1299 skipped, panics 0. Per-directory failures: class 437, combo 113, edge-cases 81, er 52, preprocessing 28, rendering 17, deployment 7, state 7, creole 4, skinparam 4, component 3, type-detection 1.",
+    "parity_perturbations": "FAILED. Failure lines 2725 on the pre-cmap tip log, 2686 on the cmap tip. 39 lines left and none were added. The suite still fails on the pre-existing remainder.",
+    "pipe_mode": "passed. 17 passed, 0 failed, finished in 203.96s.",
+    "doc_claims": "passed. 2 passed, 0 failed.",
+    "render_lib": "release, passed. 865 passed, 0 failed, 1 ignored. Other workspace crates were not re-run; they were not edited after the earlier release lib run.",
+    "clippy_render": "exit 101, 19 errors, none in text_render.rs or face_cmap_tables.rs. The other crates were not re-run."
+  }
+}

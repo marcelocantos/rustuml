@@ -1,0 +1,97 @@
+{
+  "summary": {
+    "grok-g2-g2a": {
+      "total": 8,
+      "stdout_changed": 3,
+      "java_valid": 8,
+      "tip_match": 7,
+      "gain": 3,
+      "base_match": 4
+    },
+    "shared-svg-round9-c9a": {
+      "total": 288,
+      "java_valid": 288,
+      "base_match": 98,
+      "tip_match": 106,
+      "stdout_changed": 38,
+      "better_residual": 5,
+      "gain": 8,
+      "worse_ndiff": 1
+    },
+    "shared-svg-round9-m9a": {
+      "total": 60,
+      "java_valid": 50,
+      "base_match": 24,
+      "tip_match": 24,
+      "stdout_changed": 6,
+      "java_invalid": 10
+    },
+    "shared-svg-round10-c10a": {
+      "total": 379,
+      "java_valid": 379,
+      "stdout_changed": 12,
+      "tip_match": 163,
+      "gain": 4,
+      "base_match": 159,
+      "better_residual": 1
+    },
+    "shared-svg-round10-m10a": {
+      "total": 374,
+      "java_valid": 374,
+      "base_match": 221,
+      "tip_match": 221
+    },
+    "shared-svg-round11-c11a": {
+      "total": 515,
+      "java_valid": 515,
+      "base_match": 237,
+      "tip_match": 253,
+      "stdout_changed": 32,
+      "gain": 16,
+      "better_residual": 3
+    },
+    "shared-svg-round11-m11a": {
+      "total": 100,
+      "java_valid": 100,
+      "base_match": 79,
+      "tip_match": 79
+    },
+    "grok-g2-checker-heldout": {
+      "total": 28,
+      "stdout_changed": 12,
+      "java_valid": 28,
+      "better_residual": 9
+    },
+    "golden": {
+      "total": 12550,
+      "java_valid": 11251,
+      "base_match": 11181,
+      "tip_match": 11181,
+      "java_invalid": 1299
+    },
+    "perturbations": {
+      "total": 6328,
+      "java_valid": 6015,
+      "base_match": 3621,
+      "tip_match": 3662,
+      "java_invalid": 313,
+      "base_byte": 19,
+      "tip_byte": 19,
+      "stdout_changed": 107,
+      "better_residual": 13,
+      "retained": 85,
+      "gain": 41,
+      "worse_ndiff": 1,
+      "panic_base": 4,
+      "panic_tip": 4
+    }
+  },
+  "lost_match_count": 0,
+  "loss_rows": 0,
+  "gain_count": 72,
+  "worse_count": 2,
+  "panic_count": 8,
+  "timeout_count": 0,
+  "heldout_caused": [],
+  "byte_changed_still_strict": 0
+}

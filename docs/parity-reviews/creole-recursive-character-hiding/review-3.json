@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "mechanism": "creole-recursive-character-hiding",
+  "reviewer": {
+    "task_id": "review/grok-g6-recheck held-out g6r3",
+    "model": "grok-4.7",
+    "independence": "Recheck of the rejected G6 carrier packet. No production edits, no children, no other worktrees, no local JVM.",
+    "branch": "review/grok-g6-recheck"
+  },
+  "account_commit": "5d039c21c9374ee91904fe4da430c22ff6e2c4f3",
+  "implementation_commit": "3f6bf7a7332da0ad85dbc514d4af665f82920632",
+  "evidence_tip": "69cbdf829cda28642b7983de6632a7a51018e2da",
+  "base_revision": "8d294442f4d88aed3f1c353a9766045fc90f2a7c",
+  "addendum_commit": "b8c8b793d328df80547e1434f046e5fabc5a4dba",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_results_sha256": "0ea48490cd8c54e84e29c467c1c8d94782021b69398386bc691978bf050a4c49",
+  "predictions_sha256": "ebf76057e5f7befdaa55822e3fb7c9a01ef226cfb27aa258f9a26f611913089b",
+  "commands": [
+    "git archive 8d294442f4d88aed3f1c353a9766045fc90f2a7c | tar -x && cargo build --release -p rustuml --bin rustuml  # rustuml-base sha256 789d263012cd97cb85da8d8d3ab3c49f64d2af66fb7b32c9e7bd00887ffac16b",
+    "git archive 3f6bf7a7332da0ad85dbc514d4af665f82920632 | tar -x && cargo build --release -p rustuml --bin rustuml  # rustuml-tip sha256 25acb3fe25aafaf5fb3377f88b8aed598ddd6f7278fc9eccff251025878ab175",
+    "RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 TZ=GMT+11:00 PLANTUML_STDLIB=$HOME/work/github.com/plantuml/plantuml-stdlib/stdlib <bin> -pipe -tsvg  # cwd is the source directory",
+    "g6cmp: rustuml_oracle::compare::compare_svg_strict, GEOM_EPS 0.02, whole SVG",
+    "Parent relay Java: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.6b0TcP97/new --timezone GMT+11:00 -- -pipe -tsvg",
+    "Sweep both binaries over test-diagrams/golden (12550) and test-diagrams/perturbations (6365), cwd=source parent, timeout 45s"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-3/g6r3_class_raw_span.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-3/g6r3_class_raw_span.svg",
+      "axes": [
+        "raw reserved scalar in a class name"
+      ],
+      "result": "pass",
+      "source_sha256": "fc247727aad84b05a09e4d24589b315146141cebcbc022b061e2a2123d9c8c8c",
+      "golden_sha256": "1cb72d1aaaad73b9f5b40f0f8dc4ef0ff8684ea84149498302bd8096eb2e9c6a",
+      "reference_exit": 0,
+      "reference_stderr_bytes": 0,
+      "tip_exit": 0,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-3/g6r3_high_then_raw.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-3/g6r3_high_then_raw.svg",
+      "axes": [
+        "carried high surrogate beside a raw scalar"
+      ],
+      "result": "pass",
+      "source_sha256": "b972f58e71833c79d381812397b931a3b8c6b03f020f24c9bb38afbfe724c485",
+      "golden_sha256": "ddb736829bad2b46a99f493f07afddfb17327864d42660be1c6fdd0484b434f9",
+      "reference_exit": 0,
+      "reference_stderr_bytes": 0,
+      "tip_exit": 0,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-3/g6r3_activity_note.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-3/g6r3_activity_note.svg",
+      "axes": [
+        "decimal reference in an activity note"
+      ],
+      "result": "pass",
+      "source_sha256": "edd771ca8991a9372ec38ee2bab55016591caf9b079ad920efdd2c23bb16fb38",
+      "golden_sha256": "e29d39ae827998570ba85ee2d33a2e390a7912795a408bf750507a17c5799c8f",
+      "reference_exit": 0,
+      "reference_stderr_bytes": 0,
+      "tip_exit": 0,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-3/g6r3_class_ref_bounds.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-3/g6r3_class_ref_bounds.svg",
+      "axes": [
+        "decimal reference at the Unicode maximum in a class"
+      ],
+      "result": "pass",
+      "source_sha256": "7afd78155781c17373dfd92ea1f59302ef995d5ea3e4ff8a1ba0a225bcf67879",
+      "golden_sha256": "0cc8c980b1c17a131ea08c743a21bdccb31c0505329f2c05d54ce9dd02ed820e",
+      "reference_exit": 0,
+      "reference_stderr_bytes": 0,
+      "tip_exit": 0,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-3/g6r3_seq_note_title_tip.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-3/g6r3_seq_note_title_tip.svg",
+      "axes": [
+        "decimal reference in a sequence title and note"
+      ],
+      "result": "pass",
+      "source_sha256": "cbef01d690446a8faa7cb1a70e6e560f28b5a908536ca72a295f6ed65984a1ce",
+      "golden_sha256": "6c878233f3f50ed48a4cec464e42220639e580dada98e73462e01f0c5bf73c04",
+      "reference_exit": 0,
+      "reference_stderr_bytes": 0,
+      "tip_exit": 0,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-3/g6r3_triple_adjacent.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-3/g6r3_triple_adjacent.svg",
+      "axes": [
+        "adjacent decimal references"
+      ],
+      "result": "pass",
+      "source_sha256": "e6ede8ce5d8c568069074211c799b5a029c700ac9e12dc6cb4e9bbfb365fbdde",
+      "golden_sha256": "77cc60f40d33fb16523c7c435655ea36c368591569c500abf14798fa1925de4e",
+      "reference_exit": 0,
+      "reference_stderr_bytes": 0,
+      "tip_exit": 0,
+      "comparison": "compare_svg_strict MATCH"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-3/g6r3_uplus_max_beside.puml",
+      "golden": "test-diagrams/perturbations/creole-recursive-character-hiding/checker-grok-3/g6r3_uplus_max_beside.svg",
+      "axes": [
+        "five-digit U+ notation beside a decimal reference"
+      ],
+      "result": "pass",
+      "source_sha256": "380c550d6bf6100979cbc6d9fe415499301f953be3c1c3796dd4d09cc954cbd9",
+      "golden_sha256": "4fecaa988764e4e38fb0807f27fd6f19120abe1a7968efb9ff0a674ca508e50f",
+      "reference_exit": 0,
+      "reference_stderr_bytes": 0,
+      "tip_exit": 0,
+      "comparison": "compare_svg_strict MATCH"
+    }
+  ],
+  "findings": [
+    "push_decoded_scalar escapes a decoded scalar at or above U+10F7FF with the same ESCAPE prefix as java_utf16::escape. The addendum b8c8b793d is the parent of the fix 3f6bf7a73. The production diff against 8d294442f is creole.rs only, with no fixture-keyed branch. java_utf16.rs, svg_export.rs, compare.rs, and the no-oracle and decimal baselines are unchanged.",
+    "Held-out g6r3 has 18 cases, 13 of them Java-valid. The tip matches 7/13 and the merge base matches 2/13. Gains are g6r3_activity_note, g6r3_class_ref_bounds, g6r3_seq_note_title_tip, g6r3_triple_adjacent, and g6r3_uplus_max_beside. Lost matches: 0. Lost rejections: 0. New valid-input errors: 0.",
+    "g6r3_high_then_ref is a Java exit-0 exception page (stderr non-empty) whose text is Invalid UTF-16 surrogate detected: d83d dbff. The tip exits 1 with that same pair. The merge base exits 0 and draws a diagram. The tip change is a gained rejection of Java-invalid input.",
+    "g6r3_d800_beside_last and g6r3_dollar_aborts are Java exception pages. Both Rust trees emit the same exit-0 diagram. g6r3_low_then_escape_ref and g6r3_ref_then_low exit 1 on both trees; the tip's diagnostic is Unicode 0xde80, which is the character named on the Java page.",
+    "g6r3_invalid_utf8_high (Java SVG 1640 bytes) and g6r3_invalid_utf8_low_beside_ref (635 bytes) are normal diagrams. Both Rust trees panic at crates/rustuml/src/main.rs:91 because -pipe reads stdin with read_to_string. The panic is identical on the merge base and is not caused by this packet.",
+    "The four Java-valid tip misses are outside the packet. g6r3_bmp_emoji_control is the same two-attribute diff on both trees (U+00C6 advance, target T14.55). g6r3_class_mixed is five width diffs of that same advance after the tip starts exporting. g6r3_styled_mono is the derived-italic +2.707 gap (T14.41); the mono and bold carrier textLengths match. g6r3_state_note is one fill, #F1F1F1 versus #FFFFFF, because parse/state.rs:709 takes the # in &#1114111; as a state colour.",
+    "cr_ent_dec_10fffd.puml is the only corpus file whose bytes differ. The merge base exits 1 with invalid XML character 0xdffd. The tip exits 0. compare_svg_strict against the committed golden has one difference: the class rect fill is #1114109 instead of #F1F1F1 (T14.80). Width 111.5156 matches.",
+    "Goldens are 12550/12550 stdout-and-exit identical, including 142/142 non-ASCII sources. Perturbations are 6364/6365 identical. Retained names are 173/173 identical. Non-ASCII perturbations are 1075/1075 identical. Panics are 4/6365 on both trees, all class.rs:285 on the dash probes. Timeouts are 0/6365 and 0/12550.",
+    "Checker batch CM is 15/40 Java-valid matches at the tip and 14/40 at the base. The only change is ckg6_amp_last_scalar, from an export error to a match. CH is 13/17 on both trees. CS is 25/25 at the tip and 12/25 at the base, 13 gains, no losses.",
+    "Image probes are 17/18 compare_svg_strict matches, and the tip stdout equals the merge base on all 18. image_note_base_bold keeps the same 8 diffs on both trees (missing font-weight 700 and a 2px note width). T14.19 is unchanged by this packet."
+  ],
+  "verdict": "accepted",
+  "verdict_basis": "No held-out or corpus loss is caused by the packet. The previous export failures on &#1114111; and &#1114109; now export, and the fresh matches pass compare_svg_strict. Residues that remain are already filed or proposed separately."
+}

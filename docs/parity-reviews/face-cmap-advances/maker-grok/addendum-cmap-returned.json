@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "mechanism": "face-cmap-advances",
+  "written_before": "the renderer change that consumes the cmap advances",
+  "source": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g2-mm-cmap/out/",
+  "sha256sums_sha256": "1b1e9a8eeca7aeb326e825c8c583129de2c4eb846aba3c62e15aacea8e4d20fe",
+  "host": "macOS 27.2 build 26B123, the same reference-host build as monkeyman-round9",
+  "extractor": "CmapAdvanceExtract.swift sha256 954cc456f4eaf527d383c4eb0f0fe3199eac35749f5237a5a0c7b50cf9cacc6c, copied byte-identically. run.sh exited 0. cae-stderr.txt is empty.",
+  "checks_before_the_draft": [
+    "The nine face files hashed in font-hashes.txt match tools/font-chain-reference/monkeyman-round9/font-hashes.txt.",
+    "Every advance is an integer number of font units at 2048 units per em.",
+    "The printable-ASCII column of each of the 12 TSVs equals the corresponding ascii-advances-round11 file (0 differences).",
+    "The scalars in each TSV equal that face's monkeyman-round9 P runs (0 scalars present on only one side, surrogates excluded and none were present).",
+    "Helvetica U+00AB and U+00BB are 1139 units on the plain and bold faces, the same value as the retained arm.",
+    "Verdana italic units of «Ferrous gauge vista» at 14 pt format as 157.2197, the recorded Java textLength."
+  ],
+  "draft": "For Helvetica, Arial and Verdana, a character the face maps is measured with that row's advance, including the non-ASCII rows. A character the face does not map still goes through chain_text_width's current fallback. The 1139-unit special case is deleted because the Helvetica rows now carry those advances. Times, Courier, Menlo and Lucida are not retargeted."
+}

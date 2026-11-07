@@ -1,0 +1,10 @@
+{
+  "workspace_lib": "release, exit 0. rustuml-render 865 passed, 0 failed, 1 ignored. Other lib binaries 665, 41, 31 and 10 passed.",
+  "golden_no_oracle": "exit 0 on tip and on base cb550c0d. 70 failure names, byte-identical lists.",
+  "golden_pairs": "exit 101, unchanged from the maker: 12550 total, 10497 passed, 754 failed, 1299 skipped, panics 0.",
+  "parity_perturbations": "exit 101. 2686 failing diagrams, the maker's cmap-tip count. None of the seven new pairs are in that list.",
+  "harness_guards": "exit 101 on both. The only category delta versus base is text_render.rs 51 -> 68. The pre-existing over-baseline files are class.rs 383 -> 578, deployment.rs 43 -> 44, plantuml_metrics.rs 1053 -> 1055 and state.rs 53 -> 62. Neither new review adds a violation. Baseline not rewritten.",
+  "doc_claims": "exit 0. 2 passed.",
+  "pipe_mode": "exit 0. 17 passed, 0 failed, 74.37s.",
+  "clippy": "cargo clippy --release --no-deps -p <crate> --all-targets -- -D warnings. rustuml and rustuml-math exit 0 on both trees. rustuml-parser, rustuml-render, rustuml-layout and rustuml-oracle exit 101 on both, at the same source locations. rustuml-render has 20 errors, none in text_render.rs or face_cmap_tables.rs. The packet adds no clippy finding."
+}

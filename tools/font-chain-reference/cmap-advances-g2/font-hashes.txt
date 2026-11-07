@@ -1,0 +1,10 @@
+## font files
+658718d77497145281cb0ec45ff2fe7c6e18062b2a38f837d0d792d9be3a9ba3  /System/Library/Fonts/Helvetica.ttc
+525979822591a3447cfc49d943d6f7683508e25543407871c0ed8fed05fd2bd9  /System/Library/Fonts/Supplemental/Arial.ttf
+d72db21f9242aedd6b917d8549ad5921766b24d5f8d0becfda2ff4c620b3c2e0  /System/Library/Fonts/Supplemental/Arial Bold.ttf
+ce1d2f1ab89db45f9796100eee960f5702a40e84c225c2b48c3ec3e81d153f98  /System/Library/Fonts/Supplemental/Arial Italic.ttf
+374b0190a9844343110d8f8ed1818117a4591803d022bbb2bd189d63a681e731  /System/Library/Fonts/Supplemental/Arial Bold Italic.ttf
+0da8c12f3e15d95585434d2cf294b3113a3e3fc84bf9ba9d64f2ef834ef4bd98  /System/Library/Fonts/Supplemental/Verdana.ttf
+480f66b66430bdfa6e9a2199e4bf8f79d915221e60d58e7a32b4ff50645de2e0  /System/Library/Fonts/Supplemental/Verdana Bold.ttf
+a1149e84da9e5c0a9b4cad68b62542b8503cb16ed8d1d7efd2640b36ce202b44  /System/Library/Fonts/Supplemental/Verdana Italic.ttf
+252ef50efa09218d77d83311b531c14d7c0d45230e79389bd3db78448bc942f4  /System/Library/Fonts/Supplemental/Verdana Bold Italic.ttf

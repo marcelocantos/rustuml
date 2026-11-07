@@ -1,0 +1,40 @@
+{
+  "theme_comment_origin": {
+    "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_comment_origin.puml",
+    "cause": "Cerulean sets defaultFontName Verdana. U+00C9 in Érable now uses the Verdana cmap advance.",
+    "java_textLength": "36.1262",
+    "base_textLength": "35.0911",
+    "tip_textLength": "36.1262",
+    "ndiff_base": 20,
+    "ndiff_tip": 2,
+    "judgment": "gain toward Java. Still DIFF because Oak's x/y differ by a few thousandths and the character is emitted as É rather than a numeric reference."
+  },
+  "marker": {
+    "paths": [
+      "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_class.puml",
+      "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_grouped_class.puml"
+    ],
+    "units": 10033,
+    "at_12_5": 61.236572265625,
+    "fmt_coord": "61.2366",
+    "base_textLength": "58.2214",
+    "java_textLength": "61.2366",
+    "tip_textLength": "61.2366",
+    "ndiff_custom_class": "16 on base and tip",
+    "ndiff_grouped": "21 on base and tip",
+    "judgment": "The claimed textLength is Java's. Whole SVG is not better on the strict difference count. Fill stays #FFFFFF against Java #343A40 and y stays 40.21 against 40.6921."
+  },
+  "worse_ndiff": {
+    "name": "c9a_sp_seqnote_mx_P",
+    "also": "tim-builtin-value-boundaries/checker-claude-round9/c9a_sp_seqnote_mx_P",
+    "ndiff": "4 to 9",
+    "textLength": "Java 74.8071, base 76.21, tip 73.6011",
+    "canvas": "Java 111, base 113, tip 110",
+    "cause": "The note mixes Verdana-mapped Hebrew with unmapped U+2029 and U+1D167. The closer width recenters Ann from x 39 to x 38."
+  },
+  "heldout_farther_textlengths": {
+    "count": "13 of 420 text nodes",
+    "same_style": "Helvetica bold labels containing unmapped U+05D0 and U+2764+U+FE0F moved by -0.7656, the ASCII-prefix correction. The ASCII-only label equals Java.",
+    "bolditalic_token": "Java's SVG for classFontStyle bolditalic has neither font-style nor font-weight and matches the plain face. Rust applies both flags. Verdana bold-italic café on the tip equals Java's bold diagram (106.7363), not that plain file."
+  }
+}
