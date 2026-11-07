@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "mechanism": "menlo-font-name",
+  "maker": "maker-grok",
+  "account_commit": "bf5fc5b94dd24682d94e3291f7a6dc57700c47a1",
+  "rejected_review": "9c88c612bb9951ca23c94d9394ec107b65db0e00",
+  "supersedes": "addendum-creole-monospace.json",
+  "java_evidence": {
+    "cn_reference_results_sha256": "7d1c1dadc323875f15b5ed15bb06a84a238bb57f1a279e1f7d0dc4bc16efdcd1",
+    "name_probe_stdout_sha256": "dd457c41021bf92545e0c4e7c5ca897fba4815f30e79968bdc0a3855f59a37ce",
+    "plantuml_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "kept": "Font.decode, the logical fonts Monospaced/SansSerif/Dialog/Serif, and the courier and timesroman compatibility names stay. CG 6/6, the eight c9a_ns_menlo_* cases, and the unchanged goldens stay. The surrounding-face exception in 23982a58f is withdrawn.",
+  "cause": "modelled_family treats the user string monospace as the logical Monospaced face, and explicit_monospace_font_uses_surrounding_metrics then measures <font:monospace> and <font:monospaced> with whatever face is already in scope. That matched activity/act_creole_monospace only because the surrounding face was already Dialog. The JDK name probe shows Font.decode(\"monospace\") is Dialog (51.966796875 for \"Quill vx\") and Font.decode(\"Monospaced\") is Monospaced (67.4296875). sequenceFontName is applied as if it were defaultFontName. It is not a FontParam name and it is not a FromSkinparamToStyle key. SkinParam.cleanForKeySlow lowercases, strips '_' and '.', rewrites sequence(participant|actor) to the captured word, and rewrites a diagram-prefix arrow key to arrow. It does not strip a bare sequence prefix, so sequenceFontName stays sequencefontname and Java keeps the family already chosen. sequenceParticipantFontName becomes participantfontname and stays honoured.",
+  "change": "A creole <font:X> measures Font.decode(X). monospace measures Dialog and the SVG family stays monospace. monospaced and Monospaced measure the Monospaced cell, and SvgGraphics' equalsIgnoreCase rewrite emits the family as monospace. Courier stays family Courier with Monospaced metrics. A bare backtick run stays the logical Monospaced face. NBSP for the names monospace, monospaced, and courier stays; it is the SVG spacing rule, not the metric family. sequencefontname becomes a no-op. Every PostScript row already in the table is checked against tools/font-chain-reference/monkeyman-round6/census.tsv (family) and Font2D.setStyle (bold, and italic or oblique). Callers that mean the logical monospaced face pass Monospaced into the measurer. The SVG spelling monospace is only the emitted family.",
+  "residue": "Helvetica-Light and Helvetica-LightOblique are census rows and the probe measures them (\"!!!!\" at 18.648000717163086), but no advance table was extracted for those faces. They are not given a special case. A quoted family \" Menlo \" still loses its inner spaces in canonical_class_font_family. Both are pre-existing and out of this correction."
+}

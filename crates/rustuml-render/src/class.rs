@@ -2956,9 +2956,11 @@ impl ClassFontOverrides {
             font.attr_font_size = Some(value);
         }
         if let Some(value) = class_style.property("fontStyle") {
-            let value = value.to_ascii_lowercase();
-            font.attr_font_bold = value.contains("bold");
-            font.attr_font_italic = value.contains("italic");
+            // ValueImpl.asFontFace: only bold, italic, plain/normal, or a CSS
+            // weight. "bolditalic" and "bold italic" are the normal face.
+            let (bold, italic) = crate::style_cascade::font_face(value);
+            font.attr_font_bold = bold;
+            font.attr_font_italic = italic;
         }
 
         font.header_background = header_paint_style
@@ -2974,9 +2976,9 @@ impl ClassFontOverrides {
             font.font_size = Some(value);
         }
         if let Some(value) = header_style.property("fontStyle") {
-            let value = value.to_ascii_lowercase();
-            font.font_bold = value.contains("bold");
-            font.font_italic = value.contains("italic");
+            let (bold, italic) = crate::style_cascade::font_face(value);
+            font.font_bold = bold;
+            font.font_italic = italic;
         }
         font.root_line_color = root_style.property("lineColor").map(str::to_string);
         font.root_font_color = root_style.property("fontColor").map(str::to_string);
@@ -3054,6 +3056,8 @@ impl ClassFontOverrides {
             .or(default_font_size)
             .unwrap_or(CIRCLED_CHARACTER_DEFAULT_SIZE);
         let default_font_color = find(&["defaultFontColor"]);
+        let (font_bold, font_italic) = crate::style_cascade::font_face(&style);
+        let (attr_font_bold, attr_font_italic) = crate::style_cascade::font_face(&attr_style);
         Self {
             text_padding: params
                 .iter()
@@ -3073,13 +3077,13 @@ impl ClassFontOverrides {
                 .or(default_font_size),
             family,
             name_family,
-            font_bold: style.contains("bold"),
-            font_italic: style.contains("italic"),
+            font_bold,
+            font_italic,
             stereotype_font_styles,
             stereotype_colors,
             attr_font_size: class_attribute_font_size.or(default_font_size),
-            attr_font_bold: attr_style.contains("bold"),
-            attr_font_italic: attr_style.contains("italic"),
+            attr_font_bold,
+            attr_font_italic,
             attr_icon_size: find(&["ClassAttributeIconSize"])
                 .and_then(|v| v.trim().parse::<u32>().ok()),
             // The CIRCLED_CHARACTER font ignores ClassFontSize; it follows
@@ -3256,11 +3260,11 @@ fn stereotype_font_style_param(
     if stereotype.is_empty() {
         return None;
     }
-    let style = sp.value.trim().to_ascii_lowercase();
+    let (bold, italic) = crate::style_cascade::font_face(&sp.value);
     Some(ClassStereotypeFontStyle {
         stereotype: stereotype.to_string(),
-        bold: style.contains("bold"),
-        italic: style.contains("italic"),
+        bold,
+        italic,
     })
 }
 
@@ -14597,7 +14601,7 @@ fn note_code_line_width(line: &str, font_size: f64) -> f64 {
 }
 
 fn note_code_line_height(font_size: f64) -> f64 {
-    text_render::label_height_with_family("", font_size, "monospace").max(10.0)
+    text_render::label_height_with_family("", font_size, "Monospaced").max(10.0)
 }
 
 fn parse_note_body_separator(line: &str) -> Option<NoteBodySeparator<'_>> {
@@ -15133,7 +15137,7 @@ fn emit_note_code(svg: &mut String, lines: &[&str], x: f64, y: f64, style: &Reso
         let indent_width = crate::plantuml_metrics::mono_text_width(&" ".repeat(indent), font_size);
         let content_width = crate::plantuml_metrics::mono_text_width(content, font_size);
         let baseline =
-            row_top + text_render::label_ascent_with_family(content, font_size, "monospace");
+            row_top + text_render::label_ascent_with_family(content, font_size, "Monospaced");
         let escaped = crate::creole::escape_creole_text(content).replace(' ', "&#160;");
         write!(
             svg,
@@ -19531,6 +19535,60 @@ mod tests {
             );
         }
         assert!(!svg.contains(r#"id="FreshSource953-FreshTarget967-2""#));
+    }
+
+    fn text_open<'a>(svg: &'a str, content: &str) -> &'a str {
+        let end = svg.find(&format!(">{content}</text>")).expect(content);
+        let start = svg[..end].rfind("<text ").expect(content);
+        &svg[start..end]
+    }
+
+    #[test]
+    fn class_font_style_bolditalic_is_the_normal_face() {
+        // ValueImpl.asFontFace returns normal for both spellings. The CQ
+        // batch used the one-word token and Java measured the plain Menlo cell.
+        let input = "@startuml\n\
+            skinparam defaultFontName Menlo\n\
+            skinparam ClassFontStyle bolditalic\n\
+            skinparam ClassAttributeFontStyle bold italic\n\
+            class Comet\n\
+            Comet : x\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let name = text_open(&svg, "Comet");
+        let member = text_open(&svg, "x");
+        assert!(!name.contains("font-style"), "{name}");
+        assert!(!name.contains("font-weight"), "{name}");
+        assert!(!member.contains("font-style"), "{member}");
+        assert!(!member.contains("font-weight"), "{member}");
+        // One Menlo cell: 1233/2048 of the 14 pt size, formatted like the SVG.
+        let cell = super::fmt_tl(14.0 * 1233.0 / 2048.0);
+        assert!(
+            member.contains(&format!("textLength=\"{cell}\"")),
+            "{member}"
+        );
+    }
+
+    #[test]
+    fn abstract_member_keeps_the_bold_attribute_weight() {
+        // MethodsOrFieldsArea calls config.italic() on the class style face.
+        // FontStyle.ITALIC.mutateFont keeps the weight, so bold plus abstract
+        // is Menlo Bold Italic. The class name inherits the bold weight only.
+        let input = "@startuml\n\
+            skinparam defaultFontName Menlo\n\
+            skinparam ClassAttributeFontStyle bold\n\
+            class Comet\n\
+            Comet : {abstract} x\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let name = text_open(&svg, "Comet");
+        let member = text_open(&svg, "x");
+        assert!(!name.contains("font-style"), "{name}");
+        assert!(name.contains("font-weight=\"700\""), "{name}");
+        assert!(member.contains("font-style=\"italic\""), "{member}");
+        assert!(member.contains("font-weight=\"700\""), "{member}");
     }
 
     #[test]

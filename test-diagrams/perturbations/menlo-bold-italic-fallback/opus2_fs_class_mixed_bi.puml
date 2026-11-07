@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Times
+skinparam defaultFontSize 14
+skinparam ClassFontStyle BoldItalic
+class Zedvex
+@enduml

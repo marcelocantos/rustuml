@@ -1,0 +1,2043 @@
+// Copyright 2026 Marcelo Cantos
+// SPDX-License-Identifier: Apache-2.0
+
+//! Menlo Bold Italic simple-path fallback advances.
+//!
+//! When that face has no glyph, JDK 21 measures the face
+//! `JRSFontCreateFallbackFontForCharacters` returns. Each row is one such
+//! scalar and the PostScript name and advance the reference host returned.
+//! Provenance: relay `grok-g3-menlo-jrs-probe2` stdout SHA256
+//! `31bd13b0e4b68737e067f807360c4c77ad8ef6e3c6a5fb79774a44df79125407`,
+//! from `MenloJrsFaceProbe.java` SHA256
+//! `c8b15325b33cfb5f4ae5795e9f5f1e4830a2c7799fc10699462fbe2c9d5a8c9f`,
+//! recorded in `fallback-advances.tsv` SHA256
+//! `725db0d5d90a7e51c397d6d6772a6aa3a8f668eaecaa5b9314f48c3f2e4b14b6`.
+//!
+//! Width at `font_size` points is `units / units_den / upem * font_size`.
+//! Outline rows store an integer advance over the face's unitsPerEm.
+//! Apple Color Emoji is 7600/7 units of its 800-unit em: both Core Text and
+//! `getStringBounds` returned 19 points at 14 points.
+
+#[derive(Clone, Copy, Debug)]
+pub(crate) struct FallbackAdvance {
+    pub(crate) scalar: u32,
+    pub(crate) face: &'static str,
+    pub(crate) units: u32,
+    pub(crate) units_den: u16,
+    pub(crate) upem: u16,
+}
+
+const FALLBACK: &[FallbackAdvance] = &[
+    FallbackAdvance {
+        scalar: 0x01F0,
+        face: "Monaco",
+        units: 1229,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x0220,
+        face: "Monaco",
+        units: 1229,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2060,
+        face: "Monaco",
+        units: 0,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2601,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2602,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2603,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2604,
+        face: "AppleSymbols",
+        units: 1349,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2605,
+        face: "PingFangSC-Semibold",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2606,
+        face: "PingFangSC-Semibold",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2607,
+        face: "AppleSymbols",
+        units: 1034,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2608,
+        face: "AppleSymbols",
+        units: 1539,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2609,
+        face: "PingFangSC-Semibold",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x260A,
+        face: "AppleSymbols",
+        units: 1524,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x260B,
+        face: "AppleSymbols",
+        units: 1524,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x260C,
+        face: "AppleSymbols",
+        units: 1102,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x260D,
+        face: "AppleSymbols",
+        units: 1492,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x260E,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x260F,
+        face: "AppleSDGothicNeo-Bold",
+        units: 865,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2610,
+        face: "AppleSymbols",
+        units: 1700,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2611,
+        face: "AppleSymbols",
+        units: 1700,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2612,
+        face: "AppleSymbols",
+        units: 1700,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2613,
+        face: "AppleSymbols",
+        units: 1700,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2614,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x2615,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x2616,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2617,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2618,
+        face: "AppleSymbols",
+        units: 1470,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2619,
+        face: "AppleSymbols",
+        units: 1354,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x261A,
+        face: "AppleSymbols",
+        units: 1935,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x261B,
+        face: "AppleSymbols",
+        units: 1935,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x261C,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x261D,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x261E,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x261F,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2620,
+        face: "AppleSymbols",
+        units: 1612,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2621,
+        face: "AppleSymbols",
+        units: 1338,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2622,
+        face: "AppleSymbols",
+        units: 1544,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2623,
+        face: "AppleSymbols",
+        units: 1513,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2624,
+        face: "AppleSymbols",
+        units: 1895,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2625,
+        face: "AppleSymbols",
+        units: 1282,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2626,
+        face: "AppleSymbols",
+        units: 1266,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2627,
+        face: "AppleSymbols",
+        units: 1462,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2628,
+        face: "AppleSymbols",
+        units: 1225,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2629,
+        face: "AppleSymbols",
+        units: 1724,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x262A,
+        face: "AppleSymbols",
+        units: 1580,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x262B,
+        face: "AppleSymbols",
+        units: 1781,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x262C,
+        face: "MuktaMahee-Bold",
+        units: 795,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x262D,
+        face: "AppleSymbols",
+        units: 1534,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x262E,
+        face: "AppleSymbols",
+        units: 1662,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x262F,
+        face: "AppleSDGothicNeo-Bold",
+        units: 865,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x263D,
+        face: "AppleSymbols",
+        units: 1225,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x263E,
+        face: "AppleSymbols",
+        units: 1195,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2648,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x2649,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x264A,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x264B,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x264C,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x264D,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x264E,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x264F,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x2650,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x2651,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x2652,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x2653,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x2654,
+        face: "AppleSymbols",
+        units: 1600,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2655,
+        face: "AppleSymbols",
+        units: 1756,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2656,
+        face: "AppleSymbols",
+        units: 1626,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2657,
+        face: "AppleSymbols",
+        units: 1713,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2658,
+        face: "AppleSymbols",
+        units: 1647,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2659,
+        face: "AppleSymbols",
+        units: 1710,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x265A,
+        face: "AppleSymbols",
+        units: 1609,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x265B,
+        face: "AppleSymbols",
+        units: 1688,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x265C,
+        face: "AppleSymbols",
+        units: 1574,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x265D,
+        face: "AppleSymbols",
+        units: 1760,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x265E,
+        face: "AppleSymbols",
+        units: 1578,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x265F,
+        face: "AppleSymbols",
+        units: 1563,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2668,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2670,
+        face: "AppleSymbols",
+        units: 1585,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2671,
+        face: "AppleSymbols",
+        units: 1503,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2672,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2673,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2674,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2675,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2676,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2677,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2678,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x2679,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x267A,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x267B,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x267C,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x267D,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x267E,
+        face: "AppleSymbols",
+        units: 1697,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x267F,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x2680,
+        face: "AppleSymbols",
+        units: 1400,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2681,
+        face: "AppleSymbols",
+        units: 1400,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2682,
+        face: "AppleSymbols",
+        units: 1400,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2683,
+        face: "AppleSymbols",
+        units: 1400,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2684,
+        face: "AppleSymbols",
+        units: 1400,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2685,
+        face: "AppleSymbols",
+        units: 1400,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2686,
+        face: "AppleSymbols",
+        units: 1400,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2687,
+        face: "AppleSymbols",
+        units: 1400,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2688,
+        face: "AppleSymbols",
+        units: 1400,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2689,
+        face: "AppleSymbols",
+        units: 1400,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x268A,
+        face: "AppleSymbols",
+        units: 1255,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x268B,
+        face: "AppleSymbols",
+        units: 1759,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2690,
+        face: "AppleSymbols",
+        units: 1491,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2691,
+        face: "AppleSymbols",
+        units: 1491,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2692,
+        face: "AppleSymbols",
+        units: 1435,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2693,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x2694,
+        face: "AppleSymbols",
+        units: 1374,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2695,
+        face: "AppleSymbols",
+        units: 667,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2696,
+        face: "AppleSymbols",
+        units: 1693,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2697,
+        face: "AppleSymbols",
+        units: 1713,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2698,
+        face: "AppleSymbols",
+        units: 1285,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2699,
+        face: "AppleSymbols",
+        units: 1292,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x269A,
+        face: "AppleSymbols",
+        units: 1663,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x269B,
+        face: "AppleSymbols",
+        units: 1527,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x269C,
+        face: "AppleSymbols",
+        units: 1367,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x26A0,
+        face: "HiraginoSans-W6",
+        units: 1000,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x26A1,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x26B0,
+        face: "AppleSymbols",
+        units: 1790,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x26B1,
+        face: "AppleSymbols",
+        units: 974,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2701,
+        face: "ZapfDingbatsITC",
+        units: 1995,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2702,
+        face: "ZapfDingbatsITC",
+        units: 1968,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2703,
+        face: "ZapfDingbatsITC",
+        units: 1995,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2704,
+        face: "ZapfDingbatsITC",
+        units: 2007,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2706,
+        face: "ArialUnicodeMS",
+        units: 1616,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2707,
+        face: "ArialUnicodeMS",
+        units: 1618,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2708,
+        face: "AppleColorEmoji",
+        units: 7600,
+        units_den: 7,
+        upem: 800,
+    },
+    FallbackAdvance {
+        scalar: 0x2709,
+        face: "STIXTwoMath-Regular",
+        units: 706,
+        units_den: 1,
+        upem: 1000,
+    },
+    FallbackAdvance {
+        scalar: 0x270C,
+        face: "ZapfDingbatsITC",
+        units: 1124,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x270D,
+        face: "ZapfDingbatsITC",
+        units: 1751,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x270E,
+        face: "ZapfDingbatsITC",
+        units: 1866,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x270F,
+        face: "ZapfDingbatsITC",
+        units: 1911,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2710,
+        face: "ZapfDingbatsITC",
+        units: 1866,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2711,
+        face: "ZapfDingbatsITC",
+        units: 1935,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2712,
+        face: "ZapfDingbatsITC",
+        units: 1995,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2713,
+        face: "ZapfDingbatsITC",
+        units: 1546,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2714,
+        face: "ZapfDingbatsITC",
+        units: 1733,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2715,
+        face: "ZapfDingbatsITC",
+        units: 1561,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2716,
+        face: "ZapfDingbatsITC",
+        units: 1559,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2717,
+        face: "ZapfDingbatsITC",
+        units: 1169,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2718,
+        face: "ZapfDingbatsITC",
+        units: 1386,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2719,
+        face: "ZapfDingbatsITC",
+        units: 1563,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x271A,
+        face: "ZapfDingbatsITC",
+        units: 1556,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x271B,
+        face: "ZapfDingbatsITC",
+        units: 1554,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x271C,
+        face: "ZapfDingbatsITC",
+        units: 1544,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x271D,
+        face: "ZapfDingbatsITC",
+        units: 1012,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x271E,
+        face: "ZapfDingbatsITC",
+        units: 1130,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x271F,
+        face: "ZapfDingbatsITC",
+        units: 1100,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2720,
+        face: "ZapfDingbatsITC",
+        units: 1182,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2721,
+        face: "ZapfDingbatsITC",
+        units: 1417,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2722,
+        face: "ZapfDingbatsITC",
+        units: 1610,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2723,
+        face: "ZapfDingbatsITC",
+        units: 1614,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2724,
+        face: "ZapfDingbatsITC",
+        units: 1614,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2725,
+        face: "ZapfDingbatsITC",
+        units: 1618,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2726,
+        face: "ZapfDingbatsITC",
+        units: 1624,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2727,
+        face: "ZapfDingbatsITC",
+        units: 1626,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2729,
+        face: "ZapfDingbatsITC",
+        units: 1686,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x272A,
+        face: "ZapfDingbatsITC",
+        units: 1616,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x272B,
+        face: "ZapfDingbatsITC",
+        units: 1722,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x272C,
+        face: "ZapfDingbatsITC",
+        units: 1686,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x272D,
+        face: "ZapfDingbatsITC",
+        units: 1706,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x272E,
+        face: "ZapfDingbatsITC",
+        units: 1671,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x272F,
+        face: "ZapfDingbatsITC",
+        units: 1702,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2730,
+        face: "ZapfDingbatsITC",
+        units: 1890,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2731,
+        face: "ZapfDingbatsITC",
+        units: 1524,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2732,
+        face: "ZapfDingbatsITC",
+        units: 1481,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2733,
+        face: "ZapfDingbatsITC",
+        units: 1534,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2734,
+        face: "ZapfDingbatsITC",
+        units: 1618,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2735,
+        face: "ZapfDingbatsITC",
+        units: 1622,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2736,
+        face: "ZapfDingbatsITC",
+        units: 1423,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2737,
+        face: "ZapfDingbatsITC",
+        units: 1589,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2738,
+        face: "ZapfDingbatsITC",
+        units: 1573,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2739,
+        face: "ZapfDingbatsITC",
+        units: 1622,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x273A,
+        face: "ZapfDingbatsITC",
+        units: 1554,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x273B,
+        face: "ZapfDingbatsITC",
+        units: 1448,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x273C,
+        face: "ZapfDingbatsITC",
+        units: 1450,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x273D,
+        face: "ZapfDingbatsITC",
+        units: 1397,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x273E,
+        face: "ZapfDingbatsITC",
+        units: 1436,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x273F,
+        face: "ZapfDingbatsITC",
+        units: 1692,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2740,
+        face: "ZapfDingbatsITC",
+        units: 1669,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2741,
+        face: "ZapfDingbatsITC",
+        units: 1616,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2742,
+        face: "ZapfDingbatsITC",
+        units: 1616,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2743,
+        face: "ZapfDingbatsITC",
+        units: 1448,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2744,
+        face: "ZapfDingbatsITC",
+        units: 1407,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2745,
+        face: "ZapfDingbatsITC",
+        units: 1425,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2746,
+        face: "ZapfDingbatsITC",
+        units: 1411,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2747,
+        face: "ZapfDingbatsITC",
+        units: 1610,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2748,
+        face: "ZapfDingbatsITC",
+        units: 1612,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2749,
+        face: "ZapfDingbatsITC",
+        units: 1460,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x274A,
+        face: "ZapfDingbatsITC",
+        units: 1620,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x274B,
+        face: "ZapfDingbatsITC",
+        units: 1608,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x274D,
+        face: "ZapfDingbatsITC",
+        units: 1788,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x274F,
+        face: "ZapfDingbatsITC",
+        units: 1561,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2750,
+        face: "ZapfDingbatsITC",
+        units: 1561,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2751,
+        face: "ZapfDingbatsITC",
+        units: 1554,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2752,
+        face: "ZapfDingbatsITC",
+        units: 1554,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2756,
+        face: "ZapfDingbatsITC",
+        units: 1606,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2758,
+        face: "ZapfDingbatsITC",
+        units: 283,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2759,
+        face: "ZapfDingbatsITC",
+        units: 567,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x275A,
+        face: "ZapfDingbatsITC",
+        units: 850,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x275B,
+        face: "ZapfDingbatsITC",
+        units: 803,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x275C,
+        face: "ZapfDingbatsITC",
+        units: 803,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x275D,
+        face: "ZapfDingbatsITC",
+        units: 1368,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x275E,
+        face: "ZapfDingbatsITC",
+        units: 1368,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2761,
+        face: "ZapfDingbatsITC",
+        units: 1499,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2762,
+        face: "ZapfDingbatsITC",
+        units: 1114,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2763,
+        face: "ZapfDingbatsITC",
+        units: 1114,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2764,
+        face: "ZapfDingbatsITC",
+        units: 1864,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2765,
+        face: "ZapfDingbatsITC",
+        units: 1366,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2766,
+        face: "ZapfDingbatsITC",
+        units: 1556,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2767,
+        face: "ZapfDingbatsITC",
+        units: 1556,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2768,
+        face: "ZapfDingbatsITC",
+        units: 799,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2769,
+        face: "ZapfDingbatsITC",
+        units: 799,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x276A,
+        face: "ZapfDingbatsITC",
+        units: 649,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x276B,
+        face: "ZapfDingbatsITC",
+        units: 649,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x276C,
+        face: "ZapfDingbatsITC",
+        units: 565,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x276D,
+        face: "ZapfDingbatsITC",
+        units: 565,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x276E,
+        face: "ZapfDingbatsITC",
+        units: 1042,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x276F,
+        face: "ZapfDingbatsITC",
+        units: 1042,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2770,
+        face: "ZapfDingbatsITC",
+        units: 840,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2771,
+        face: "ZapfDingbatsITC",
+        units: 840,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2772,
+        face: "ZapfDingbatsITC",
+        units: 479,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2773,
+        face: "ZapfDingbatsITC",
+        units: 479,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2774,
+        face: "ZapfDingbatsITC",
+        units: 684,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2775,
+        face: "ZapfDingbatsITC",
+        units: 684,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2794,
+        face: "ZapfDingbatsITC",
+        units: 1831,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2798,
+        face: "ZapfDingbatsITC",
+        units: 1532,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x2799,
+        face: "ZapfDingbatsITC",
+        units: 1892,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x279A,
+        face: "ZapfDingbatsITC",
+        units: 1532,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x279B,
+        face: "ZapfDingbatsITC",
+        units: 1880,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x279C,
+        face: "ZapfDingbatsITC",
+        units: 1898,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x279D,
+        face: "ZapfDingbatsITC",
+        units: 1901,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x279E,
+        face: "ZapfDingbatsITC",
+        units: 1901,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x279F,
+        face: "ZapfDingbatsITC",
+        units: 1708,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27A0,
+        face: "ZapfDingbatsITC",
+        units: 1788,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27A1,
+        face: "ZapfDingbatsITC",
+        units: 1696,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27A2,
+        face: "ZapfDingbatsITC",
+        units: 1892,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27A3,
+        face: "ZapfDingbatsITC",
+        units: 1892,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27A4,
+        face: "ZapfDingbatsITC",
+        units: 1878,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27A5,
+        face: "ZapfDingbatsITC",
+        units: 1905,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27A6,
+        face: "ZapfDingbatsITC",
+        units: 1907,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27A7,
+        face: "ZapfDingbatsITC",
+        units: 948,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27A8,
+        face: "ZapfDingbatsITC",
+        units: 1808,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27A9,
+        face: "ZapfDingbatsITC",
+        units: 1712,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27AA,
+        face: "ZapfDingbatsITC",
+        units: 1712,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27AB,
+        face: "ZapfDingbatsITC",
+        units: 1776,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27AC,
+        face: "ZapfDingbatsITC",
+        units: 1776,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27AD,
+        face: "ZapfDingbatsITC",
+        units: 1425,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27AE,
+        face: "ZapfDingbatsITC",
+        units: 1425,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27AF,
+        face: "ZapfDingbatsITC",
+        units: 1790,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27B1,
+        face: "ZapfDingbatsITC",
+        units: 1790,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27B2,
+        face: "ZapfDingbatsITC",
+        units: 1556,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27B3,
+        face: "ZapfDingbatsITC",
+        units: 1937,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27B4,
+        face: "ZapfDingbatsITC",
+        units: 1579,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27B5,
+        face: "ZapfDingbatsITC",
+        units: 1772,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27B6,
+        face: "ZapfDingbatsITC",
+        units: 1579,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27B7,
+        face: "ZapfDingbatsITC",
+        units: 1819,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27B8,
+        face: "ZapfDingbatsITC",
+        units: 1980,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27B9,
+        face: "ZapfDingbatsITC",
+        units: 1819,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27BA,
+        face: "ZapfDingbatsITC",
+        units: 1702,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27BB,
+        face: "ZapfDingbatsITC",
+        units: 1788,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27BC,
+        face: "ZapfDingbatsITC",
+        units: 1898,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27BD,
+        face: "ZapfDingbatsITC",
+        units: 1987,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0x27BE,
+        face: "ZapfDingbatsITC",
+        units: 1880,
+        units_den: 1,
+        upem: 2048,
+    },
+    FallbackAdvance {
+        scalar: 0xFEFF,
+        face: "Monaco",
+        units: 0,
+        units_den: 1,
+        upem: 2048,
+    },
+];
+
+/// Advance of `ch` when Menlo Bold Italic falls it back, in points.
+pub(crate) fn advance(ch: char, font_size: f64) -> Option<f64> {
+    let idx = FALLBACK
+        .binary_search_by_key(&(ch as u32), |row| row.scalar)
+        .ok()?;
+    let row = &FALLBACK[idx];
+    // Every extracted row names the PostScript face. An empty name is not a row.
+    if row.face.is_empty() {
+        return None;
+    }
+    Some(f64::from(row.units) * font_size / (f64::from(row.units_den) * f64::from(row.upem)))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::plantuml_metrics::mono_text_width_styled;
+
+    fn row(scalar: u32) -> &'static FallbackAdvance {
+        let idx = FALLBACK
+            .binary_search_by_key(&scalar, |row| row.scalar)
+            .unwrap();
+        &FALLBACK[idx]
+    }
+
+    #[test]
+    fn table_is_the_probe_census() {
+        assert_eq!(FALLBACK.len(), 267);
+        assert!(FALLBACK.windows(2).all(|w| w[0].scalar < w[1].scalar));
+        assert!(advance('\u{2580}', 14.0).is_none());
+        let mut counts = std::collections::BTreeMap::<&str, usize>::new();
+        for row in FALLBACK {
+            *counts.entry(row.face).or_default() += 1;
+            assert!(row.units_den >= 1);
+            assert!(row.upem >= 1);
+        }
+        assert_eq!(
+            counts,
+            [
+                ("AppleColorEmoji", 18),
+                ("AppleSDGothicNeo-Bold", 2),
+                ("AppleSymbols", 72),
+                ("ArialUnicodeMS", 2),
+                ("HiraginoSans-W6", 24),
+                ("Monaco", 4),
+                ("MuktaMahee-Bold", 1),
+                ("PingFangSC-Semibold", 3),
+                ("STIXTwoMath-Regular", 1),
+                ("ZapfDingbatsITC", 140),
+            ]
+            .into_iter()
+            .collect()
+        );
+        assert_eq!(FALLBACK.iter().map(|r| r.scalar).sum::<u32>(), 2_692_226);
+        assert_eq!(FALLBACK.iter().map(|r| r.units).sum::<u32>(), 491_621);
+        assert_eq!(
+            FALLBACK.iter().map(|r| u32::from(r.upem)).sum::<u32>(),
+            491_864
+        );
+        assert_eq!(row(0x01F0).face, "Monaco");
+        assert_eq!((row(0x01F0).units, row(0x01F0).upem), (1229, 2048));
+        assert_eq!((row(0x0220).units, row(0x0220).face), (1229, "Monaco"));
+        assert_eq!(row(0x2060).units, 0);
+        assert_eq!(row(0xFEFF).units, 0);
+        assert_eq!(row(0x2601).face, "HiraginoSans-W6");
+        assert_eq!(row(0x2604).face, "AppleSymbols");
+        assert_eq!(row(0x2604).units, 1349);
+        assert_eq!(row(0x27B2).face, "ZapfDingbatsITC");
+        assert_eq!(row(0x27B2).units, 1556);
+        assert_eq!(row(0x2614).face, "AppleColorEmoji");
+        assert_eq!(
+            (row(0x2614).units, row(0x2614).units_den, row(0x2614).upem),
+            (7600, 7, 800)
+        );
+        assert_eq!(row(0x2706).face, "ArialUnicodeMS");
+        assert_eq!(row(0x2706).units, 1616);
+        assert_eq!(row(0x2709).face, "STIXTwoMath-Regular");
+        assert_eq!(row(0x2709).units, 706);
+    }
+
+    fn cell(size: f64) -> f64 {
+        size * 1233.0 / 2048.0
+    }
+
+    #[test]
+    fn bold_italic_uses_the_fallback_advance() {
+        let size = 14.0;
+        assert_eq!(
+            mono_text_width_styled("\u{2580}", size, true, true),
+            cell(size)
+        );
+        assert_eq!(mono_text_width_styled("A", size, true, true), cell(size));
+        assert_eq!(
+            mono_text_width_styled("\u{2601}", size, true, false),
+            cell(size)
+        );
+        assert_eq!(
+            mono_text_width_styled("\u{2601}", size, false, true),
+            cell(size)
+        );
+        assert_eq!(
+            mono_text_width_styled("\u{2601}", size, false, false),
+            cell(size)
+        );
+        assert_eq!(mono_text_width_styled("\u{2601}", size, true, true), size);
+        assert_eq!(mono_text_width_styled("\u{2060}", size, true, true), 0.0);
+        assert_eq!(mono_text_width_styled("\u{FEFF}", size, true, true), 0.0);
+        assert_eq!(
+            mono_text_width_styled("\u{01F0}", size, true, true),
+            1229.0 / 2048.0 * size
+        );
+        assert_eq!(
+            mono_text_width_styled("\u{2604}", size, true, true),
+            1349.0 / 2048.0 * size
+        );
+        assert_eq!(
+            mono_text_width_styled("\u{27B2}", size, true, true),
+            1556.0 / 2048.0 * size
+        );
+        assert_eq!(mono_text_width_styled("\u{2614}", size, true, true), 19.0);
+        assert_eq!(
+            mono_text_width_styled("\u{2614}", 12.0, true, true),
+            19.0 * 12.0 / 14.0
+        );
+        assert_eq!(
+            mono_text_width_styled("\u{27B2}", 12.0, true, true),
+            1556.0 / 2048.0 * 12.0
+        );
+        assert_eq!(
+            mono_text_width_styled("A\u{27B2}Z", size, true, true),
+            cell(size) + 1556.0 / 2048.0 * size + cell(size)
+        );
+        assert_eq!(
+            mono_text_width_styled("\u{260F}", size, true, true),
+            865.0 / 1000.0 * size
+        );
+        assert_eq!(
+            mono_text_width_styled("\u{2709}", size, true, true),
+            706.0 / 1000.0 * size
+        );
+    }
+}

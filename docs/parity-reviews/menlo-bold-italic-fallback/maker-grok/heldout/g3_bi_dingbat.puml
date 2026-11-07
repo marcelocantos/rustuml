@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Menlo
+skinparam ClassFontStyle bolditalic
+skinparam ClassAttributeFontStyle bolditalic
+skinparam defaultFontSize 14
+class Arrow
+Arrow : ➲
+@enduml

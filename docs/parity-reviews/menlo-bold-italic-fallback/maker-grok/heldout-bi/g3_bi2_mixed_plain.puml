@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Menlo
+skinparam defaultFontSize 14
+class Wharf
+Wharf : A➲Z
+@enduml

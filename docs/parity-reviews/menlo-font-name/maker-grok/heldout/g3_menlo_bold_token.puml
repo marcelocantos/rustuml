@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Menlo-Bold
+class Berth
+Berth : Pier x
+@enduml

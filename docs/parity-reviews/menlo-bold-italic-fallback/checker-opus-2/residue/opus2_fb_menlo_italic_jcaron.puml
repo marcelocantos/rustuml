@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Menlo
+skinparam ClassAttributeFontStyle plain
+skinparam defaultFontSize 14
+class Host
+Host : {abstract} ǰ
+@enduml

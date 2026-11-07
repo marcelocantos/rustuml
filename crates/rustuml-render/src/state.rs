@@ -2270,10 +2270,16 @@ struct AutonomousStateStyle {
 }
 
 fn is_state_monospace_family(family: &str) -> bool {
+    // `monospace` is Font.decode → Dialog, so it is not a fixed-advance face.
+    // NBSP for that spelling is `state_family_uses_nbsp`.
     matches!(
         family.to_ascii_lowercase().as_str(),
-        "courier" | "monospaced" | "monospace" | "consolas" | "lucida console"
+        "courier" | "monospaced" | "consolas" | "lucida console"
     )
+}
+
+fn state_family_uses_nbsp(family: &str) -> bool {
+    is_state_monospace_family(family) || family.eq_ignore_ascii_case("monospace")
 }
 
 fn state_skinparam_value(diagram: &StateDiagram, keys: &[&str]) -> Option<String> {
@@ -6390,12 +6396,7 @@ pub fn render_with_oracle(
         .map(|n| {
             matches!(
                 n.to_ascii_lowercase().as_str(),
-                "courier"
-                    | "courier new"
-                    | "monospaced"
-                    | "monospace"
-                    | "consolas"
-                    | "lucida console"
+                "courier" | "courier new" | "monospaced" | "consolas" | "lucida console"
             )
         })
         .unwrap_or(false);
@@ -8202,8 +8203,7 @@ pub fn render_with_oracle(
                                 } else {
                                     ""
                                 };
-                                let content = if is_state_monospace_family(&attribute_style.family)
-                                {
+                                let content = if state_family_uses_nbsp(&attribute_style.family) {
                                     desc.replace(' ', "\u{00a0}")
                                 } else {
                                     desc.clone()
