@@ -1,0 +1,582 @@
+[
+ {
+  "name": "q7_num_bs_seq_cont",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "mismatch",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_bs_class_cont",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "mismatch",
+  "9ed52f435": "match",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_bs_state_cont",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "mismatch",
+  "9ed52f435": "match",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_ideo_blank_bs_class",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "match",
+  "9fc567332": "match"
+ },
+ {
+  "name": "q7_num_nbsp_blank_bs_seq",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "valid-error",
+  "9fc567332": "match"
+ },
+ {
+  "name": "q7_num_us_blank_bs_seq",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "valid-error",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_format_mid_class",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "mismatch",
+  "9ed52f435": "mismatch",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_format_mid_marked",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "mismatch",
+  "c25ccbf3c": "mismatch",
+  "9ed52f435": "mismatch",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_comment_blank_bs_obj",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "mismatch",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_crlf_tab_blank_bs_state",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "mismatch",
+  "9ed52f435": "mismatch",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_nomark_plain_class",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "match",
+  "9fc567332": "match"
+ },
+ {
+  "name": "q7_num_bs_usecase_blank_inside",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "mismatch",
+  "9ed52f435": "match",
+  "9fc567332": "match"
+ },
+ {
+  "name": "q7_num_bs_activity_if",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "match",
+  "9fc567332": "match"
+ },
+ {
+  "name": "q7_num_ws_at_component",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "mismatch",
+  "9ed52f435": "mismatch",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_inc_before_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "mismatch",
+  "c25ccbf3c": "mismatch",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_def_before_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "mismatch",
+  "c25ccbf3c": "mismatch",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_timing_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "match",
+  "9fc567332": "match"
+ },
+ {
+  "name": "q7_num_gantt_blank_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "mismatch",
+  "c25ccbf3c": "mismatch",
+  "9ed52f435": "mismatch",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_ws_json",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "match",
+  "9fc567332": "match"
+ },
+ {
+  "name": "q7_num_bs_wbs_cont",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_bs_mindmap_crlf",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_tim_func_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "mismatch",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_tim_if_bs_class",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "mismatch",
+  "9ed52f435": "mismatch",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_num_inc_raw_crlf",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "valid-error",
+  "9fc567332": "match"
+ },
+ {
+  "name": "q7_num_inc_nbsp_wrapped",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "valid-error",
+  "9fc567332": "match"
+ },
+ {
+  "name": "q7_err_bs_class_line",
+  "java_exit": 200,
+  "java_valid": false,
+  "predicted_valid": false,
+  "7e13632cd": "nonpositive-accepted",
+  "c25ccbf3c": "nonpositive-accepted",
+  "9ed52f435": "nonpositive-accepted",
+  "9fc567332": "nonpositive-accepted"
+ },
+ {
+  "name": "q7_err_nbsp_hdr_seq",
+  "java_exit": 200,
+  "java_valid": false,
+  "predicted_valid": false,
+  "7e13632cd": "nonpositive-rejected",
+  "c25ccbf3c": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "9fc567332": "nonpositive-accepted"
+ },
+ {
+  "name": "q7_type_bs_regexp",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "mismatch",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_type_bs_ebnfx",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_type_at_salt_mixed",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "valid-error",
+  "9fc567332": "valid-error"
+ },
+ {
+  "name": "q7_type_bs_nwdiagram",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_type_bs_yamlfile",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "mismatch",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_type_bs_umm",
+  "java_exit": 200,
+  "java_valid": false,
+  "predicted_valid": false,
+  "7e13632cd": "valid-error",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_type_bare_bs_start",
+  "java_exit": 200,
+  "java_valid": false,
+  "predicted_valid": false,
+  "7e13632cd": "nonpositive-rejected",
+  "c25ccbf3c": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "9fc567332": "nonpositive-accepted"
+ },
+ {
+  "name": "q7_type_at_tab_uml",
+  "java_exit": 200,
+  "java_valid": false,
+  "predicted_valid": false,
+  "7e13632cd": "valid-error",
+  "c25ccbf3c": "mismatch",
+  "9ed52f435": "mismatch",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_type_bs_umlupper_diag",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "match"
+ },
+ {
+  "name": "q7_type_bs_dotless_mindmap",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "valid-error",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_type_inner_jsonx",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "valid-error"
+ },
+ {
+  "name": "q7_type_inner_quote_mindmap",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_type_bs_project_upper",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "mismatch",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_type_bs_wbs_name",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_hdr_figsp_at",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "mismatch",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_hdr_nnbsp_bs_class",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "match",
+  "9fc567332": "match"
+ },
+ {
+  "name": "q7_hdr_quote_start",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "mismatch",
+  "9ed52f435": "mismatch",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_hdr_quote_comment_live",
+  "java_exit": 200,
+  "java_valid": false,
+  "predicted_valid": false,
+  "7e13632cd": "nonpositive-rejected",
+  "c25ccbf3c": "nonpositive-accepted",
+  "9ed52f435": "nonpositive-accepted",
+  "9fc567332": "nonpositive-accepted"
+ },
+ {
+  "name": "q7_hdr_quote_continuation",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_hdr_tag_continuation",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_hdr_nbsp_end_only",
+  "java_exit": 200,
+  "java_valid": false,
+  "predicted_valid": false,
+  "7e13632cd": "nonpositive-rejected",
+  "c25ccbf3c": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "9fc567332": "nonpositive-accepted"
+ },
+ {
+  "name": "q7_hdr_nbsp_tab",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_hdr_zwsp_class",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_hdr_bom_content",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "valid-error",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_hdr_nbsp_state",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "match",
+  "9fc567332": "match"
+ },
+ {
+  "name": "q7_hdr_tilde",
+  "java_exit": 200,
+  "java_valid": false,
+  "predicted_valid": false,
+  "7e13632cd": "nonpositive-rejected",
+  "c25ccbf3c": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "9fc567332": "nonpositive-accepted"
+ },
+ {
+  "name": "q7_hdr_dash_space",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_hdr_nested_angle",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_hdr_angle_unclosed",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "valid-error",
+  "9ed52f435": "valid-error",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_ctl_marked_seq_cont",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "match",
+  "9fc567332": "mismatch"
+ },
+ {
+  "name": "q7_ctl_marked_class_crlf",
+  "java_exit": 0,
+  "java_valid": true,
+  "predicted_valid": true,
+  "7e13632cd": "match",
+  "c25ccbf3c": "match",
+  "9ed52f435": "match",
+  "9fc567332": "match"
+ }
+]
