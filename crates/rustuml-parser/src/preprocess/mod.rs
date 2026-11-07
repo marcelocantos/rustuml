@@ -4183,11 +4183,36 @@ fn is_pragma_directive(line: &str) -> bool {
 /// `start` and the type name with `regionMatches(true, ...)`).
 pub(crate) fn start_directive_type(line: &str) -> Option<&str> {
     let tail = directive_tail(line)?;
-    let keyword = tail.get(..5)?;
-    keyword
-        .eq_ignore_ascii_case("start")
-        .then(|| &tail[5..])
-        .filter(|kind| !kind.is_empty())
+    java_region_matches_ignore_case(tail, "start").filter(|kind| !kind.is_empty())
+}
+
+/// The non-ASCII BMP units that `String#regionMatches(true, ...)` matches
+/// against an ASCII letter: per unit it compares `Character.toUpperCase`
+/// and then `Character.toLowerCase` of those (Java's simple mappings,
+/// UnicodeData fields 12 and 13). Generated from UnicodeData.txt 15.0.0
+/// (sha256 806e9aed65037197f1ec85e12be6e8cd870fc5608b4de0fffd990f689f376a73) by
+/// `docs/parity-reviews/tim-line-continuation/maker-round5-opus/support/gen_ascii_fold.py`.
+const JAVA_ASCII_CASE_FOLDS: [(char, char); 4] = [
+    ('\u{0130}', 'i'),
+    ('\u{0131}', 'i'),
+    ('\u{017F}', 's'),
+    ('\u{212A}', 'k'),
+];
+
+/// `text.regionMatches(true, 0, key, 0, key.length())` for an ASCII `key`:
+/// the rest of `text` after the matched units, or `None`. A supplementary
+/// character is two units and never matches an ASCII letter.
+fn java_region_matches_ignore_case<'a>(text: &'a str, key: &str) -> Option<&'a str> {
+    let mut chars = text.char_indices();
+    for k in key.chars() {
+        let (_, c) = chars.next()?;
+        let folds = c.eq_ignore_ascii_case(&k)
+            || JAVA_ASCII_CASE_FOLDS.contains(&(c, k.to_ascii_lowercase()));
+        if !folds {
+            return None;
+        }
+    }
+    Some(chars.next().map_or("", |(index, _)| &text[index..]))
 }
 
 /// `DiagramType#getTypes` (core/DiagramType.java:94-216) on the text after
@@ -4241,8 +4266,7 @@ pub(crate) fn java_start_type(kind: &str) -> Cow<'_, str> {
 }
 
 fn start_type_is(kind: &str, name: &str) -> bool {
-    kind.get(..name.len())
-        .is_some_and(|prefix| prefix.eq_ignore_ascii_case(name))
+    java_region_matches_ignore_case(kind, name).is_some()
 }
 
 /// One line of the block input after `preproc2.ReadFilterMergeLines`.
@@ -4423,12 +4447,24 @@ fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
     if let Some(end) = pipe.appended_end {
         raw.push(Cow::Owned(end));
     }
-    let pipe_positions = (!pipe.start_mark_found).then(|| pipe_text_positions(&raw));
-    // BlockUmlBuilder reads UncommentReadLine(ReadLineReader) through the
-    // Preprocessor's ReadFilterMergeLines (BlockUmlBuilder.java:91-95).
+    let appended = pipe_appended(&raw);
+    let pipe_positions = (!pipe.start_mark_found).then(|| pipe_text_positions(&appended));
+    // Only the lines Pipe appends are in the text BlockUmlBuilder reads, as
+    // UncommentReadLine(ReadLineReader) through the Preprocessor's
+    // ReadFilterMergeLines (BlockUmlBuilder.java:91-95). Each keeps its
+    // input index, so line numbers still count input lines.
+    let kept: Vec<usize> = (0..raw.len()).filter(|&index| appended[index]).collect();
     let mut reader = UncommentReadLine::default();
-    let raw: Vec<Cow<'a, str>> = raw.into_iter().map(|line| reader.read(line)).collect();
-    let lines = read_filter_merge_lines(&raw);
+    let text: Vec<Cow<'a, str>> = raw
+        .into_iter()
+        .zip(&appended)
+        .filter(|(_, appended)| **appended)
+        .map(|(line, _)| reader.read(read_line_reader_line(line)))
+        .collect();
+    let mut lines = read_filter_merge_lines(&text);
+    for line in &mut lines {
+        line.source_line = kept[line.source_line - 1] + 1;
+    }
     let swallowed_end = !lines.iter().any(|line| is_end_directive(&line.text));
     MergedInput {
         lines,
@@ -4445,19 +4481,31 @@ fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
 /// seen, a line whose `String#trim` is empty is not appended (191-192,
 /// 207-208). A line that is not appended gets the position the next
 /// appended line takes.
-fn pipe_text_positions(raw: &[Cow<'_, str>]) -> Vec<usize> {
+fn pipe_text_positions(appended: &[bool]) -> Vec<usize> {
     let mut next = 1;
+    appended
+        .iter()
+        .map(|&appended| {
+            let position = next;
+            next += usize::from(appended);
+            position
+        })
+        .collect()
+}
+
+/// Whether `Pipe#readSingleDiagram` appends each input line to its text:
+/// never a `@@@format ` line (manageFormat, Pipe.java:188-189), and not a
+/// line whose `String#trim` is empty while no content has been seen
+/// (191-192, 207-208).
+fn pipe_appended(raw: &[Cow<'_, str>]) -> Vec<bool> {
     let mut content_seen = false;
     raw.iter()
         .map(|line| {
-            let position = next;
-            if !line.starts_with("@@@format ") {
-                content_seen |= !java_trim(line).is_empty();
-                if content_seen {
-                    next += 1;
-                }
+            if line.starts_with("@@@format ") {
+                return false;
             }
-            position
+            content_seen |= !java_trim(line).is_empty();
+            content_seen
         })
         .collect()
 }
@@ -4493,7 +4541,7 @@ pub(crate) fn uncommented_lines<'a>(input: &[&'a str]) -> Vec<Cow<'a, str>> {
     let mut reader = UncommentReadLine::default();
     input
         .iter()
-        .map(|line| reader.read(Cow::Borrowed(*line)))
+        .map(|line| reader.read(read_line_reader_line(Cow::Borrowed(*line))))
         .collect()
 }
 
@@ -4528,15 +4576,25 @@ fn wrapped_diagram_lines(raw: &[Cow<'_, str>]) -> Option<Vec<(usize, String)>> {
 fn read_line_reader_lines(content: &str) -> Vec<Cow<'_, str>> {
     content
         .lines()
-        .map(|line| {
-            let line = line.strip_prefix('\u{FEFF}').unwrap_or(line);
-            if line.contains('\u{2013}') {
-                Cow::Owned(line.replace('\u{2013}', "-"))
-            } else {
-                Cow::Borrowed(line)
-            }
-        })
+        .map(|line| read_line_reader_line(Cow::Borrowed(line)))
         .collect()
+}
+
+/// One line through `ReadLineReader#readLine`: one leading U+FEFF dropped,
+/// every U+2013 replaced by '-'.
+fn read_line_reader_line(line: Cow<'_, str>) -> Cow<'_, str> {
+    let line = match line {
+        Cow::Borrowed(text) => Cow::Borrowed(text.strip_prefix('\u{FEFF}').unwrap_or(text)),
+        Cow::Owned(text) => match text.strip_prefix('\u{FEFF}') {
+            Some(rest) => Cow::Owned(rest.to_string()),
+            None => Cow::Owned(text),
+        },
+    };
+    if line.contains('\u{2013}') {
+        Cow::Owned(line.replace('\u{2013}', "-"))
+    } else {
+        line
+    }
 }
 
 /// Inclusive BMP runs of Unicode 15.0 general category L* (Lu, Ll, Lt, Lm, Lo).
@@ -7899,7 +7957,11 @@ $record(SaffronArchive)\n\
         .into_iter()
         .map(Cow::Borrowed)
         .collect();
-        assert_eq!(pipe_text_positions(&raw), [1, 1, 1, 2, 2, 3]);
+        assert_eq!(pipe_appended(&raw), [false, false, true, false, true, true]);
+        assert_eq!(
+            pipe_text_positions(&pipe_appended(&raw)),
+            [1, 1, 1, 2, 2, 3]
+        );
         let merged = merge_ending_backslash_lines(&["@startuml", "Kea -> Tui", "@enduml"]);
         assert!(merged.pipe_positions.is_none());
         let merged = merge_ending_backslash_lines(&["\\startuml", "Kea -> Tui", "\\enduml"]);
@@ -7909,6 +7971,67 @@ $record(SaffronArchive)\n\
             lines
                 .iter()
                 .any(|line| split_source_line_marker(line) == Some((2, "Kea -> Tui : x"))),
+            "{lines:?}"
+        );
+    }
+
+    #[test]
+    fn lines_pipe_does_not_append_reach_neither_tim_nor_parser() {
+        for input in [
+            "@@@format svg\n\\startuml\nKea -> Tui : f\n\\enduml",
+            "\u{1f}\n\\startuml\nKea -> Tui : f\n\\enduml",
+            "\\startuml\nKea -> Tui : f\n@@@format png\n\\enduml",
+        ] {
+            let out = preprocess_full_for_parse(input, None);
+            let lines = strip_source_line_markers(out.lines.clone());
+            assert!(
+                lines
+                    .iter()
+                    .all(|line| !line.contains("@@@format") && !line.contains('\u{1f}')),
+                "{lines:?}"
+            );
+            assert!(
+                out.lines
+                    .iter()
+                    .any(|line| split_source_line_marker(line) == Some((2, "Kea -> Tui : f"))),
+                "{input:?}: {:?}",
+                out.lines
+            );
+        }
+    }
+
+    #[test]
+    fn region_matches_ignore_case_folds_java_units_only() {
+        for (text, key, rest) in [
+            ("m\u{131}ndmap", "mindmap", Some("")),
+            ("\u{17F}alt x", "salt", Some(" x")),
+            ("\u{212A}", "k", Some("")),
+            ("\u{130}", "i", Some("")),
+            ("\u{DF}alt", "salt", None),
+            ("UML", "uml", Some("")),
+        ] {
+            assert_eq!(java_region_matches_ignore_case(text, key), rest, "{text:?}");
+        }
+        assert_eq!(
+            java_start_type(start_directive_type("\\startm\u{131}ndmap").unwrap()),
+            "mindmap"
+        );
+        assert_eq!(start_directive_type("@\u{17F}tartuml"), Some("uml"));
+    }
+
+    #[test]
+    fn main_block_lines_go_through_read_line_reader() {
+        let out = preprocess_full_for_parse(
+            "@startuml\n\u{feff}Kea -> Tui : bom\nTui \u{2013}> Kea : d\n@enduml",
+            None,
+        );
+        let lines = strip_source_line_markers(out.lines);
+        assert!(
+            lines.iter().any(|line| line == "Kea -> Tui : bom"),
+            "{lines:?}"
+        );
+        assert!(
+            lines.iter().any(|line| line == "Tui -> Kea : d"),
             "{lines:?}"
         );
     }
