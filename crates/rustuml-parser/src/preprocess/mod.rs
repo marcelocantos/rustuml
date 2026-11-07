@@ -128,20 +128,18 @@ fn preprocess_full_inner(
     let merged = merge_ending_backslash_lines(&input_lines);
     let events = ctx.process_merged_lines(&merged.lines);
     let mut identity = Vec::new();
-    let mut tim_lines = Vec::new();
+    let mut main_stream = JoinStream::default();
     let mut theme_tail = Vec::new();
+    let mut join = PostTimJoin::new(ctx.start_checks_ending_backslash);
     project_events(
         &events,
-        ctx.start_checks_ending_backslash,
+        &mut join,
         &mut identity,
-        &mut tim_lines,
+        &mut main_stream,
         &mut theme_tail,
     );
-    let mut lines = if ctx.start_checks_ending_backslash {
-        collapse_post_tim_ending_backslashes(tim_lines, ctx.block_end.as_ref(), false)
-    } else {
-        tim_texts(tim_lines)
-    };
+    join.finish(&mut main_stream, ctx.block_end.as_ref());
+    let mut lines = main_stream.out;
     // UmlSource#loadInternal joins with `checkEndingBackslash` exactly when
     // the start line's DiagramType#findStartTypes contains SEQUENCE.
     let uml_source = uml_source_string(&identity, ctx.start_checks_ending_backslash);
@@ -204,15 +202,16 @@ enum EvaluatedEvent {
     },
 }
 
-/// `check_ending_backslash` is `UmlSource#loadInternal`'s flag
-/// (PSystemBuilder#createPSystem passes `findStartTypes` containing
-/// SEQUENCE). It joins a theme body's continued lines only when it is set,
-/// as Java joins the whole result list only then.
+/// Project the events into the identity list and the parser streams, in
+/// Java's result-list order: a theme's body comes in place of its `!theme`
+/// line (TContext#executeTheme runs it into the same list), and a nested
+/// theme's body in place of its own. `join` is the one post-TIM join over
+/// that list, so a pending continuation crosses from one stream to the next.
 fn project_events(
     events: &[EvaluatedEvent],
-    check_ending_backslash: bool,
+    join: &mut PostTimJoin,
     identity: &mut Vec<String>,
-    lines: &mut Vec<TimLine>,
+    lines: &mut JoinStream,
     theme_tail: &mut Vec<String>,
 ) {
     for event in events {
@@ -223,49 +222,39 @@ fn project_events(
                         .map_or(line.as_str(), |(_, text)| text)
                         .to_string(),
                 );
-                lines.push(TimLine::Text(line.clone()));
+                join.push(lines, TimLine::Text(line.clone()));
             }
             EvaluatedEvent::Boundary(line) => identity.push(line.clone()),
-            EvaluatedEvent::ParserOnly(line) => lines.push(TimLine::RustOnly(line.clone())),
+            EvaluatedEvent::ParserOnly(line) => join.push(lines, TimLine::RustOnly(line.clone())),
             EvaluatedEvent::Executed(line) => {
                 identity.push(line.clone());
-                lines.push(TimLine::Executed(line.clone()));
+                join.push(lines, TimLine::Executed(line.clone()));
             }
-            EvaluatedEvent::JavaOnlyLines(marker) => lines.push(TimLine::RustOnly(marker.clone())),
+            EvaluatedEvent::JavaOnlyLines(marker) => {
+                join.push(lines, TimLine::RustOnly(marker.clone()))
+            }
             EvaluatedEvent::Theme {
                 name,
                 source_line,
                 body,
             } => {
-                let mut expanded = Vec::new();
+                // The body joins in list order with the lines around it: its
+                // last continued line folds into the next list line after the
+                // `!theme` line, in whichever stream that line is.
+                let mut expanded = JoinStream::default();
                 let mut nested_tail = Vec::new();
-                project_events(
-                    body,
-                    check_ending_backslash,
-                    identity,
-                    &mut expanded,
-                    &mut nested_tail,
+                project_events(body, join, identity, &mut expanded, &mut nested_tail);
+                join.push(
+                    lines,
+                    TimLine::RustOnly(source_line_marker(
+                        *source_line,
+                        &format!("skinparam __theme {name}"),
+                    )),
                 );
-                lines.push(TimLine::RustOnly(source_line_marker(
-                    *source_line,
-                    &format!("skinparam __theme {name}"),
-                )));
                 // Retain the parser's theme envelope contract. Only this
                 // projection flattens grouped properties or relocates them.
-                // UmlSource#loadInternal joins the theme body because those
-                // lines are in Java's result list. They never reach the
-                // top-level join: this projection parks them in theme_tail.
-                // A nested theme's lines sit between the outer body's lines
-                // in that list, so joining `expanded` alone would skip them.
-                // Without checkEndingBackslash, loadInternal copies the list
-                // (UmlSource.java:118-134), so the body is not joined.
-                let body_lines = if check_ending_backslash && nested_tail.is_empty() {
-                    collapse_post_tim_ending_backslashes(expanded, None, true)
-                } else {
-                    tim_texts(expanded)
-                };
                 theme_tail.push(format!("skinparam __theme_body_start {name}"));
-                theme_tail.extend(themes::flatten_theme_output(&body_lines));
+                theme_tail.extend(themes::flatten_theme_output(&expanded.out));
                 theme_tail.extend(nested_tail);
                 theme_tail.push(format!("skinparam __theme_body_end {name}"));
             }
@@ -4903,94 +4892,92 @@ enum TimLine {
     RustOnly(String),
 }
 
-/// The parser stream for a projection: every entry becomes its text, and an
-/// executed directive its stand-in.
-fn tim_texts(lines: Vec<TimLine>) -> Vec<String> {
-    lines
-        .into_iter()
-        .map(|line| match line {
-            TimLine::Text(text) | TimLine::RustOnly(text) => text,
-            TimLine::Executed(_) => String::new(),
-        })
-        .collect()
+/// One parser stream of the post-TIM join: the top-level stream, or one theme
+/// body. `len` counts its entries (a line's default source line is its
+/// one-based position); `shifted` is set once an entry of this stream is
+/// folded into a later line, after which its content lines carry explicit
+/// source-line markers, because positions no longer equal source lines.
+#[derive(Default)]
+struct JoinStream {
+    out: Vec<String>,
+    len: usize,
+    shifted: bool,
 }
 
-/// `UmlSource#loadInternal` with `checkEndingBackslash` (true for
-/// `@startuml`, whose `DiagramType#findStartTypes` contains SEQUENCE) on the
-/// parser stream: after TIM, a line that `endsWithBackslash` is joined with
-/// the following ones, and the joined line takes the last piece's location.
-/// Rust-only lines are not TIM lines and are passed over; an executed
-/// directive is a TIM line whose text joins like any other. The parser
-/// stream omits the block's end line, which Java's list ends with, so a tail
-/// still pending at the end joins with `block_end` (diagram source line and
-/// TIM text), as `pending.append(s)` does with the end line in Java. An end
-/// line that itself ends with a backslash stays pending and, being last, is
-/// never added (UmlSource.java:118-134). The line count is taken from the
-/// identity projection (`uml_source_line_count`), not from this stream.
-fn collapse_post_tim_ending_backslashes(
-    lines: Vec<TimLine>,
-    block_end: Option<&(usize, String)>,
-    keep_open_tail: bool,
-) -> Vec<String> {
-    let end_continued = block_end.is_some_and(|(_, text)| ends_with_backslash(text));
-    let continued = |line: &TimLine| match line {
-        TimLine::Text(text) | TimLine::Executed(text) => {
-            ends_with_backslash(split_source_line_marker(text).map_or(text, |(_, t)| t))
+/// `UmlSource#loadInternal` (UmlSource.java:118-134) on the parser streams,
+/// with `checkEndingBackslash` (PSystemBuilder.java:210-212: true for
+/// `@startuml`, whose `DiagramType#findStartTypes` contains SEQUENCE). Java
+/// joins one list, the TIM result list; Rust lays that list out over several
+/// streams, so the one `pending` join is carried from stream to stream in
+/// list order. After TIM, a line that `endsWithBackslash` is folded into the
+/// following ones, and the joined line takes the last piece's location and
+/// stream. Rust-only lines are not TIM lines and are passed over; an executed
+/// directive is a TIM line whose text joins like any other, and otherwise the
+/// parser sees its empty stand-in. Without the flag every entry is its text.
+/// The line count is taken from the identity projection
+/// (`uml_source_line_count`), not from these streams.
+struct PostTimJoin {
+    check_ending_backslash: bool,
+    pending: Option<String>,
+}
+
+impl PostTimJoin {
+    fn new(check_ending_backslash: bool) -> Self {
+        Self {
+            check_ending_backslash,
+            pending: None,
         }
-        TimLine::RustOnly(_) => false,
-    };
-    if !end_continued && !lines.iter().any(continued) {
-        return tim_texts(lines);
     }
-    let mut result = Vec::with_capacity(lines.len());
-    let mut pending: Option<String> = None;
-    // Once an entry is folded into a later one, output positions no longer
-    // equal source lines; later content lines carry explicit markers.
-    let mut shifted = false;
-    for (index, line) in lines.into_iter().enumerate() {
+
+    fn push(&mut self, stream: &mut JoinStream, line: TimLine) {
+        stream.len += 1;
         let (line, executed) = match line {
             TimLine::Text(line) => (line, false),
             TimLine::Executed(line) => (line, true),
             TimLine::RustOnly(text) => {
-                result.push(text);
-                continue;
+                stream.out.push(text);
+                return;
             }
         };
-        let (source_line, text) = split_source_line_marker(&line).unwrap_or((index + 1, &line));
+        if !self.check_ending_backslash {
+            stream.out.push(if executed { String::new() } else { line });
+            return;
+        }
+        let (source_line, text) = split_source_line_marker(&line).unwrap_or((stream.len, &line));
         if ends_with_backslash(text) {
-            pending
+            self.pending
                 .get_or_insert_with(String::new)
                 .push_str(&text[..text.len() - 1]);
-            shifted = true;
-            continue;
+            stream.shifted = true;
+            return;
         }
-        if let Some(mut joined) = pending.take() {
+        if let Some(mut joined) = self.pending.take() {
             joined.push_str(text);
-            result.push(source_line_marker(source_line, &joined));
+            stream.out.push(source_line_marker(source_line, &joined));
         } else if executed {
-            result.push(String::new());
-        } else if shifted && !text.is_empty() && split_source_line_marker(&line).is_none() {
-            result.push(source_line_marker(source_line, text));
+            stream.out.push(String::new());
+        } else if stream.shifted && !text.is_empty() && split_source_line_marker(&line).is_none() {
+            stream.out.push(source_line_marker(source_line, text));
         } else {
-            result.push(line);
+            stream.out.push(line);
         }
     }
-    if let Some((end_line, end_text)) = block_end
-        && !end_continued
-        && let Some(mut joined) = pending.take()
-    {
-        joined.push_str(end_text);
-        result.push(source_line_marker(*end_line, &joined));
+
+    /// The parser stream omits the block's end line, which Java's list ends
+    /// with, so a tail still pending at the end joins with `block_end`
+    /// (diagram source line and TIM text), as `pending.append(s)` does with
+    /// the end line in Java. An end line that itself ends with a backslash
+    /// stays pending and, being last, is never added; so is a tail with no
+    /// end line.
+    fn finish(self, stream: &mut JoinStream, block_end: Option<&(usize, String)>) {
+        if let Some((end_line, end_text)) = block_end
+            && !ends_with_backslash(end_text)
+            && let Some(mut joined) = self.pending
+        {
+            joined.push_str(end_text);
+            stream.out.push(source_line_marker(*end_line, &joined));
+        }
     }
-    // A theme body is only part of Java's result list. A continuation with
-    // no following line inside the body stays open: loadInternal would join
-    // it with the next line after the theme, which this call does not have.
-    if keep_open_tail && let Some(joined) = pending {
-        let mut open = joined;
-        open.push('\\');
-        result.push(open);
-    }
-    result
 }
 
 const SPECIAL_COMMENT_OPEN: &str = "/'''";
@@ -5162,9 +5149,9 @@ mod tests {
         let mut identity = Vec::new();
         project_events(
             &events,
-            false,
+            &mut PostTimJoin::new(false),
             &mut identity,
-            &mut Vec::new(),
+            &mut JoinStream::default(),
             &mut Vec::new(),
         );
         assert_eq!(identity, ["class Head", "class Tail"]);
@@ -7795,6 +7782,53 @@ $record(SaffronArchive)\n\
         assert!(
             lines.iter().all(|line| line.trim() != "#DD0000"),
             "{lines:?}"
+        );
+        // One list: a theme's last continued line joins the next main line,
+        // and an outer body joins across a nested body in list order.
+        std::fs::write(
+            dir.join("puml-theme-grokr5open.puml"),
+            "skinparam ArrowColor #00AA00\nskinparam ArrowThickness \\\n",
+        )
+        .unwrap();
+        std::fs::write(
+            dir.join("puml-theme-grokr5outer.puml"),
+            "!theme grokr5 from .\nskinparam SequenceLifeLineBorderColor \\\n#AA0000\n",
+        )
+        .unwrap();
+        let open = strip_source_line_markers(
+            preprocess_full_for_parse(
+                "@startuml\n!theme grokr5open from .\n2\nKea -> Tui : hi\n@enduml",
+                Some(dir.clone()),
+            )
+            .lines,
+        );
+        assert!(
+            open.iter()
+                .any(|line| line.trim() == "skinparam ArrowThickness 2"),
+            "{open:?}"
+        );
+        assert!(open.iter().all(|line| line.trim() != "2"), "{open:?}");
+        let nested = strip_source_line_markers(
+            preprocess_full_for_parse(
+                "@startuml\n!theme grokr5outer from .\nKea -> Tui : hi\n@enduml",
+                Some(dir.clone()),
+            )
+            .lines,
+        );
+        for joined in [
+            "skinparam ArrowColor #DD0000",
+            "skinparam SequenceLifeLineBorderColor #AA0000",
+        ] {
+            assert!(
+                nested.iter().any(|line| line.contains(joined)),
+                "{joined}: {nested:?}"
+            );
+        }
+        assert!(
+            nested
+                .iter()
+                .all(|line| line.trim() != "#AA0000" && line.trim() != "#DD0000"),
+            "{nested:?}"
         );
         // Without SEQUENCE in findStartTypes, loadInternal does not join.
         let mindmap = strip_source_line_markers(
