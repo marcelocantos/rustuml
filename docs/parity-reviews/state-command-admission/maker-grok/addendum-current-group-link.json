@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-command-admission",
+  "measured_after_draft": {
+    "input": "test-diagrams/perturbations/state-recursive-group-simplification/review3_concurrent_region_mixed_live_and_image_outcomes.puml",
+    "tip_result": "parse failed: line 25: The state MixedRegion4421 cannot be used here.",
+    "offending_command": "MixedRegion4421 --> RegionLeafBefore4427 : keep_region_live",
+    "why_line_25": "The perturbation harness reports body lines after @startuml. The command is file line 26.",
+    "java_accepts": "docs/parity-reviews/state-recursive-group-simplification/review-3.json records a Java SVG for this source (xmllint and an error-page search). It is already a standing SVG mismatch in docs/parity-reviews/shared-svg-corrective/maker-support/standing-failure-names.txt, so this is not a lost golden match. It is a new valid-input parse error.",
+    "cohorts_unchanged": "golden_no_oracle failure names identical to base (70). golden_pairs failure names identical to base (754). Both families stay state 897/901 and creole 639/639."
+  },
+  "java_locations": [
+    "statediagram/command/CommandLinkStateCommon.java:189-190 getEntity returns diagram.getCurrentGroup() when getCurrentGroup().getName().equals(code), before quarkInContext and checkConcurrentStateOk",
+    "abel/Entity.java:682-684 getName delegates to the quark short name",
+    "plasma/Quark.java:84-86 getName returns name, not the qualified name",
+    "statediagram/command/CommandCreateState.java:119-135 has no current-group short-circuit; a repeated declaration still calls checkConcurrentStateOk"
+  ],
+  "causal_divergence": "Link resolution treats the sole short-name quark as the endpoint and then runs checkConcurrentStateOk. MixedRegion4421's parent is a CONCURRENT_STATE group, and the link is parsed while the current group is MixedRegion4421 itself, so the check refuses a token Java returns as the current group.",
+  "planned_change": "On the Link path only, when the raw token equals the current scope's short name, return that scope id and do not call checkConcurrentStateOk. Declaration and field paths stay as accounted. No grammar change, no sequence.rs edit, no error-census edit."
+}

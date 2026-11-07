@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "measurement": "CL g5ck_forward_decl_other_region against commit 670815699 exits 0. Java exits 200, line 2, message 'The state g5ckMidden cannot be used here.' The previous tip rejected that link. g5ck_link_before_region also exits 0; the previous tip rejected it with a different message from Java's sequence syntax error.",
+  "java": "PSystemCommandFactory rewinds the source per ParserPass. Declarations and concurrentState run before CommandLinkStateCommon. checkConcurrentStateOkInternal then sees a parent whose GroupType is already CONCURRENT_STATE (StateDiagram.java:75-90). reset_after_predeclaration clears state.concurrent_regions, so a link that appears before the separator no longer sees the group type. The CONC prefix used to survive on the parent id. That is the synthetic name, not the type.",
+  "planned_change": "Record each separator's region id on the parser when the group is created, and do not clear that set in reset_after_predeclaration. parent_is_concurrent tests the set. User states named CONC* stay ordinary because a separator never records them."
+}

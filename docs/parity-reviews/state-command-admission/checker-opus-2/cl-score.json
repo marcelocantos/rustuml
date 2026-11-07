@@ -1,0 +1,1684 @@
+{
+ "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-checker-heldout",
+ "reference_results_sha256": "38737f4f0526bee52cd04311c8787adb109c6eb0b41ba4a6bdae4de8f3cc8a05",
+ "trees": {
+  "base": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-base",
+   "sha256": "6b88b14aac43e4ff8fc648fec344cb090157c56fd153eb88fa4c04d0cb34a348"
+  },
+  "pr": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-pr",
+   "sha256": "63e4f84d37d1c26ad0b41ba68f9705b51231137dcd548952db54cbed5a13cd32"
+  },
+  "tip": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-tip",
+   "sha256": "d7af4e4c89c3cdfd235294cf69b55865c359c88048f7fb07f47726e097d22e93"
+  }
+ },
+ "cases": [
+  {
+   "name": "g5ck_alias_cross",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n5\nThe state g5ckSpelt cannot be used here. (Assumed diagram type: state)",
+   "java_line": "5",
+   "java_message": "The state g5ckSpelt cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 5: The state g5ckSpelt cannot be used here.",
+    "line": "5",
+    "message": "The state g5ckSpelt cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "965190c224f5db4c8f047a2dc1f32bfae87d02489ca0396394ab728119d88aae",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 5: The state g5ckSpelt cannot be used here.",
+    "line": "5",
+    "message": "The state g5ckSpelt cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_alias_same_region",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "2c0653569682878ef65aa97069719e051c6264400bd756e75c91f7123860cbc2",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "2c0653569682878ef65aa97069719e051c6264400bd756e75c91f7123860cbc2",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "2c0653569682878ef65aa97069719e051c6264400bd756e75c91f7123860cbc2",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_choice_cross",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n5\nThe state g5ckChoice cannot be used here. (Assumed diagram type: state)",
+   "java_line": "5",
+   "java_message": "The state g5ckChoice cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 5: The state g5ckChoice cannot be used here.",
+    "line": "5",
+    "message": "The state g5ckChoice cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "dbba192158f603ef9e42280cd7835a8394ecdeaf983252c511240255608f8e41",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 5: The state g5ckChoice cannot be used here.",
+    "line": "5",
+    "message": "The state g5ckChoice cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_color_bad_gradient",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nNo such color (Assumed diagram type: state)",
+   "java_line": "1",
+   "java_message": "No such color",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "b15b43c7cac8f9c37dfc93aba0014b7f37ec2289163d67e09f95174203680528",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_color_bad_hex",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nNo such color (Assumed diagram type: state)",
+   "java_line": "1",
+   "java_message": "No such color",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "568bc8101381fe5ccb4a057a96430eab3db8838529614aa416b7a68c93c2cb56",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_color_dashed_stroke",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "88dc1abef3654cbe477aa92b9ee2c42a17e2b8f023b8fe3c5e66d02c80dc9e14",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "88dc1abef3654cbe477aa92b9ee2c42a17e2b8f023b8fe3c5e66d02c80dc9e14",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "88dc1abef3654cbe477aa92b9ee2c42a17e2b8f023b8fe3c5e66d02c80dc9e14",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_color_gradients",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "514b141a2eb4686967b14651c53655f125afa912572b1704860a5a953807f16c",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "514b141a2eb4686967b14651c53655f125afa912572b1704860a5a953807f16c",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "514b141a2eb4686967b14651c53655f125afa912572b1704860a5a953807f16c",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_color_hex_forms",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)",
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "403e0a470a7f2e86fd3e6d4483606dabc3c496f107b6eaf7df8f357e9bdccbac",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "403e0a470a7f2e86fd3e6d4483606dabc3c496f107b6eaf7df8f357e9bdccbac",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "403e0a470a7f2e86fd3e6d4483606dabc3c496f107b6eaf7df8f357e9bdccbac",
+    "stderr": "",
+    "class": "under_rejection"
+   }
+  },
+  {
+   "name": "g5ck_color_line_text_sub",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "7cd0a0cf7a28fbbb0e0e0e29ae1f464ef96a7a402e50c2d868b38ff4a553da4e",
+    "stderr": "",
+    "differences": "2",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "7cd0a0cf7a28fbbb0e0e0e29ae1f464ef96a7a402e50c2d868b38ff4a553da4e",
+    "stderr": "",
+    "differences": "2",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "7cd0a0cf7a28fbbb0e0e0e29ae1f464ef96a7a402e50c2d868b38ff4a553da4e",
+    "stderr": "",
+    "differences": "2",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "g5ck_color_name_case",
+   "java_exit": 0,
+   "java_stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRecta",
+   "java_error_page": true,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "d232267b36c02027d79bb386121426bbebc954445352b84fbf80505e7c4fce78",
+    "stderr": "",
+    "byte_identical": false,
+    "class": "java_error_page_exit_0"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "d232267b36c02027d79bb386121426bbebc954445352b84fbf80505e7c4fce78",
+    "stderr": "",
+    "byte_identical": false,
+    "class": "java_error_page_exit_0"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "d232267b36c02027d79bb386121426bbebc954445352b84fbf80505e7c4fce78",
+    "stderr": "",
+    "byte_identical": false,
+    "class": "java_error_page_exit_0"
+   }
+  },
+  {
+   "name": "g5ck_color_note_named",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "0565656a940f8cabaf5d20646709acad21f94e8fe5fececb99e33d47d18060d1",
+    "stderr": "",
+    "differences": "2",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "0565656a940f8cabaf5d20646709acad21f94e8fe5fececb99e33d47d18060d1",
+    "stderr": "",
+    "differences": "2",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "0565656a940f8cabaf5d20646709acad21f94e8fe5fececb99e33d47d18060d1",
+    "stderr": "",
+    "differences": "2",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "g5ck_color_note_rebeccapurple",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n2\nNo such color (Assumed diagram type: state)",
+   "java_line": "2",
+   "java_message": "No such color",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "0565656a940f8cabaf5d20646709acad21f94e8fe5fececb99e33d47d18060d1",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "0565656a940f8cabaf5d20646709acad21f94e8fe5fececb99e33d47d18060d1",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "0565656a940f8cabaf5d20646709acad21f94e8fe5fececb99e33d47d18060d1",
+    "stderr": "",
+    "class": "under_rejection"
+   }
+  },
+  {
+   "name": "g5ck_color_rebeccapurple_fill",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nNo such color (Assumed diagram type: state)",
+   "java_line": "1",
+   "java_message": "No such color",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "568bc8101381fe5ccb4a057a96430eab3db8838529614aa416b7a68c93c2cb56",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_color_rebeccapurple_stroke",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nNo such color (Assumed diagram type: state)",
+   "java_line": "1",
+   "java_message": "No such color",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "520d527b15eb12fc90144335028e31fb03dc4cf3af282a7f062d9cf7238f100b",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_color_skinparam_rebeccapurple",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "568bc8101381fe5ccb4a057a96430eab3db8838529614aa416b7a68c93c2cb56",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "568bc8101381fe5ccb4a057a96430eab3db8838529614aa416b7a68c93c2cb56",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "568bc8101381fe5ccb4a057a96430eab3db8838529614aa416b7a68c93c2cb56",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_color_style_rebeccapurple",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "568bc8101381fe5ccb4a057a96430eab3db8838529614aa416b7a68c93c2cb56",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "568bc8101381fe5ccb4a057a96430eab3db8838529614aa416b7a68c93c2cb56",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "568bc8101381fe5ccb4a057a96430eab3db8838529614aa416b7a68c93c2cb56",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_color_unknown_name",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nNo such color (Assumed diagram type: state)",
+   "java_line": "1",
+   "java_message": "No such color",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "568bc8101381fe5ccb4a057a96430eab3db8838529614aa416b7a68c93c2cb56",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_conc2_prefix_external",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "60290dfd978f5c601b482c869e0ce0ff68d23a5d6477cf96505a5236c6e059d7",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "c385886667151ae69ce44ad50fb9c5fd0af49b904cb4b5971c54aaabe950f273",
+    "stderr": "",
+    "differences": "16",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "60290dfd978f5c601b482c869e0ce0ff68d23a5d6477cf96505a5236c6e059d7",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_conc_prefix_external",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "6975c527d3ce73f32fed45327498a4de7ed7b9ebcf981c64ee5182751ec2bc20",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "c4faf8a59337200df35b79afa9d20935b56fb836bcab9e2ca9a6d8a1d2282a8f",
+    "stderr": "",
+    "differences": "16",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "6975c527d3ce73f32fed45327498a4de7ed7b9ebcf981c64ee5182751ec2bc20",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_conc_prefix_internal",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "ef14663e538570a03a506954b3f93d91488a42b74aa8e0752f7ad5233b7294f4",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "69a10aa50e1a9459aa44cd97be05eb86c8670157455ba064dcff845af61f0d78",
+    "stderr": "",
+    "differences": "2",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "ef14663e538570a03a506954b3f93d91488a42b74aa8e0752f7ad5233b7294f4",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_creole_arial_markup",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "40bf29d2fd891bc711f6a2c498c256b975a4089e15eca63d5f1f83daf27c33b8",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "c926ff38af8532af163552bd7dcf3f3e19a7fbf9bcd7b2accce10bda3b94eaaf",
+    "stderr": "",
+    "differences": "4",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "40bf29d2fd891bc711f6a2c498c256b975a4089e15eca63d5f1f83daf27c33b8",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_creole_composite_title",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "bc3a40f3bb8b0b132462d822dbfbf8c52d63e7bb0105ebf03aa354ad63c1ae0f",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "bc3a40f3bb8b0b132462d822dbfbf8c52d63e7bb0105ebf03aa354ad63c1ae0f",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "bc3a40f3bb8b0b132462d822dbfbf8c52d63e7bb0105ebf03aa354ad63c1ae0f",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_creole_decorations_courier",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "1722cb72ce96c67cbf9e7715772d11222abe7110b2b874fba820fe456fca0685",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "85b6b1391be7d3426a40d062d1bc6f8e1614a277db6c85e0525abf4600f6737a",
+    "stderr": "",
+    "differences": "15",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "1722cb72ce96c67cbf9e7715772d11222abe7110b2b874fba820fe456fca0685",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_creole_escape_and_newline",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "53fbd2438b95a72342f4bc67e94622437cd5661bddfd20dd5956d505aeb09021",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "2974f1a6ac97c5cd67c06aa76b70cb7b4e980a827f2f4617b3c42b329b113672",
+    "stderr": "",
+    "differences": "13",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "53fbd2438b95a72342f4bc67e94622437cd5661bddfd20dd5956d505aeb09021",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_creole_mixed_verdana",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "dfc6d5b6b955dcca36bc2280897619cb91a123f16f1747c1da8044738850600c",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "b52833b4425b105b32e6b431f6a3e38a83815a0705eecc04a74241ac33ab3796",
+    "stderr": "",
+    "differences": "13",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "dfc6d5b6b955dcca36bc2280897619cb91a123f16f1747c1da8044738850600c",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_creole_multiline_desc",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "fd72cd074459d52a42befeb01f08d030c6f2460277e8da803dbbf23fd6372f22",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "c2b61660aa9cd9e5a5f7e3c4d46a9670c98c4cca7819f66f5cafa3610b62487b",
+    "stderr": "",
+    "differences": "4",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "fd72cd074459d52a42befeb01f08d030c6f2460277e8da803dbbf23fd6372f22",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_creole_plain_arial",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "11831a12f7c52cbe152278568f706065a4daf53e5d7c124a65604072fe495542",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "11831a12f7c52cbe152278568f706065a4daf53e5d7c124a65604072fe495542",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "11831a12f7c52cbe152278568f706065a4daf53e5d7c124a65604072fe495542",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_creole_plain_courier",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "0e89dd660ff844ae1f4a4b742ea483a1ff8914defcd17d798d47ce82d89843dd",
+    "stderr": "",
+    "differences": "1",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "0e89dd660ff844ae1f4a4b742ea483a1ff8914defcd17d798d47ce82d89843dd",
+    "stderr": "",
+    "differences": "1",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "0e89dd660ff844ae1f4a4b742ea483a1ff8914defcd17d798d47ce82d89843dd",
+    "stderr": "",
+    "differences": "1",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "g5ck_creole_plain_star_slash",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "1b629cddb26ac562be6b52c39eaecd674d82316287250de7d7531c6d44334f6e",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "1b629cddb26ac562be6b52c39eaecd674d82316287250de7d7531c6d44334f6e",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "1b629cddb26ac562be6b52c39eaecd674d82316287250de7d7531c6d44334f6e",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_cross_after_separator",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n6\nThe state g5ckSpelt cannot be used here. (Assumed diagram type: state)",
+   "java_line": "6",
+   "java_message": "The state g5ckSpelt cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state g5ckSpelt cannot be used here.",
+    "line": "6",
+    "message": "The state g5ckSpelt cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "63f689d2658f41364523746860daa6f7b23028d0e50433955ec6f246d1000e16",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state g5ckSpelt cannot be used here.",
+    "line": "6",
+    "message": "The state g5ckSpelt cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_cross_sibling_regions",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n5\nThe state g5ckMidden cannot be used here. (Assumed diagram type: state)",
+   "java_line": "5",
+   "java_message": "The state g5ckMidden cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 5: The state g5ckMidden cannot be used here.",
+    "line": "5",
+    "message": "The state g5ckMidden cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "d3785c7abb5c07c957b1d3a22e5d3e83b58c47a54eaa20eaf73250661e48753a",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 5: The state g5ckMidden cannot be used here.",
+    "line": "5",
+    "message": "The state g5ckMidden cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_dash_separator_intra",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "bf53d66998b18680ee8de21b78bd0e415a7f97d8f011ff3e8e376e5b052a7b98",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "bf53d66998b18680ee8de21b78bd0e415a7f97d8f011ff3e8e376e5b052a7b98",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "bf53d66998b18680ee8de21b78bd0e415a7f97d8f011ff3e8e376e5b052a7b98",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_decl_again_outside",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n5\nThe state g5ckMidden has been created in a concurrent state : it cannot be used here. (Assumed diagram type: state)",
+   "java_line": "5",
+   "java_message": "The state g5ckMidden has been created in a concurrent state : it cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 5: The state g5ckMidden has been created in a concurrent state : it cannot be used here.",
+    "line": "5",
+    "message": "The state g5ckMidden has been created in a concurrent state : it cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "0f628f4c075e7ff26e279e9d249f41377666444a095569bf5c2afc4a045ab9ae",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 5: The state g5ckMidden has been created in a concurrent state : it cannot be used here.",
+    "line": "5",
+    "message": "The state g5ckMidden has been created in a concurrent state : it cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_field_from_outside",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "1a325a9c8539455501cc9885da46658c842e9fe544ed27ee619288929872e001",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "1e9faddc18aa546867bf2cec984f87b783e75e3fd0689e838da618392b97f809",
+    "stderr": "",
+    "differences": "5",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "1a325a9c8539455501cc9885da46658c842e9fe544ed27ee619288929872e001",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_fork_cross_region",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n6\nThe state g5ckFork cannot be used here. (Assumed diagram type: state)",
+   "java_line": "6",
+   "java_message": "The state g5ckFork cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state g5ckFork cannot be used here.",
+    "line": "6",
+    "message": "The state g5ckFork cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "f06dd6dfc7586f46b097d758144faf4259135ef87f6db41dac345275fcf6eb68",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state g5ckFork cannot be used here.",
+    "line": "6",
+    "message": "The state g5ckFork cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_fork_join_choice_inside",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "90d2d6abf1b55a0ee972557a5a63727875240f14ac3616e8492a6773b3cfca35",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "90d2d6abf1b55a0ee972557a5a63727875240f14ac3616e8492a6773b3cfca35",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "90d2d6abf1b55a0ee972557a5a63727875240f14ac3616e8492a6773b3cfca35",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_forward_decl_other_region",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n2\nThe state g5ckMidden cannot be used here. (Assumed diagram type: state)",
+   "java_line": "2",
+   "java_message": "The state g5ckMidden cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: The state g5ckMidden cannot be used here.",
+    "line": "2",
+    "message": "The state g5ckMidden cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "425e2371fbf7df3ad0ed2f5524fbf2c64a4ee676398b2560db2af72d0db4ddf2",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: The state g5ckMidden cannot be used here.",
+    "line": "2",
+    "message": "The state g5ckMidden cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_forward_same_region",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "c0c287b531daea1fadf943cd33a5f5465278d0c3f706bac386a93f504812e6d1",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "c0c287b531daea1fadf943cd33a5f5465278d0c3f706bac386a93f504812e6d1",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "c0c287b531daea1fadf943cd33a5f5465278d0c3f706bac386a93f504812e6d1",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_history_cross",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)",
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 5: The state g5ckMidden cannot be used here.",
+    "line": "5",
+    "message": "The state g5ckMidden cannot be used here.",
+    "class": "both_reject_different_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "3e8c2dea9b03081e1f0e199c211485cc1fd87b0237d9c189826f5d28d26e53b3",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: Syntax Error?",
+    "line": "1",
+    "message": "Syntax Error?",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_history_inside_region",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "0b25f35ed535b561bc9c2b6536a7dc8be2f8e920a4c5af57ee65b1d2c59a67ab",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "0b25f35ed535b561bc9c2b6536a7dc8be2f8e920a4c5af57ee65b1d2c59a67ab",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "0b25f35ed535b561bc9c2b6536a7dc8be2f8e920a4c5af57ee65b1d2c59a67ab",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_link_after_region0",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "8084d585bbb61f87dd6a526b116b38e37649aa3f0352a4662826e98edfd7e2d3",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "de50b2966aaabaa318d6b777275c73ef60c17a196e3f79188d6289ecbc5b180d",
+    "stderr": "",
+    "differences": "20",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "8084d585bbb61f87dd6a526b116b38e37649aa3f0352a4662826e98edfd7e2d3",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_link_before_plain_composite",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "bd472b15d9a4aaf5a357e99ea539a0f8bf0b2ccc2727d65be2b791710e9f57d3",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "bd472b15d9a4aaf5a357e99ea539a0f8bf0b2ccc2727d65be2b791710e9f57d3",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "bd472b15d9a4aaf5a357e99ea539a0f8bf0b2ccc2727d65be2b791710e9f57d3",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_link_before_region",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)",
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: The state g5ckSpelt cannot be used here.",
+    "line": "1",
+    "message": "The state g5ckSpelt cannot be used here.",
+    "class": "both_reject_different_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "6c3320eeb64ca9b61b6b9f8e881e93af44c22a9b7826c6c65ddc56f72575bf1e",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: The state g5ckSpelt cannot be used here.",
+    "line": "1",
+    "message": "The state g5ckSpelt cannot be used here.",
+    "class": "both_reject_different_message"
+   }
+  },
+  {
+   "name": "g5ck_nested_cross_to_deep",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n7\nThe state g5ckDeep cannot be used here. (Assumed diagram type: state)",
+   "java_line": "7",
+   "java_message": "The state g5ckDeep cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 7: The state g5ckDeep cannot be used here.",
+    "line": "7",
+    "message": "The state g5ckDeep cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "36ef6cf06e3b8ae93ea0b52db97a1951cd160b6504f2ba845e3f0a02c683b56c",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 7: The state g5ckDeep cannot be used here.",
+    "line": "7",
+    "message": "The state g5ckDeep cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_nested_inside_region",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "36b48f76b207fafc187854e03eb43f6fc6723cf46e24eda97ef8882c8bdd7a5c",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "36b48f76b207fafc187854e03eb43f6fc6723cf46e24eda97ef8882c8bdd7a5c",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "36b48f76b207fafc187854e03eb43f6fc6723cf46e24eda97ef8882c8bdd7a5c",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_note_inside_region",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "aa13d6a02a9b4df54dcee5c7a4df119fd7e157438a9ce414405048f7a352d5d2",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "aa13d6a02a9b4df54dcee5c7a4df119fd7e157438a9ce414405048f7a352d5d2",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "aa13d6a02a9b4df54dcee5c7a4df119fd7e157438a9ce414405048f7a352d5d2",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_pipe_cross",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n6\nThe state g5ckSpelt cannot be used here. (Assumed diagram type: state)",
+   "java_line": "6",
+   "java_message": "The state g5ckSpelt cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state g5ckSpelt cannot be used here.",
+    "line": "6",
+    "message": "The state g5ckSpelt cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "07400bd8206508f9af69ba450635848de16b2f3870b29dcbbd30842ce18906eb",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state g5ckSpelt cannot be used here.",
+    "line": "6",
+    "message": "The state g5ckSpelt cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_pipe_separator_intra",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "88d641d88e876181024ddb530fc843caa175eb390fe30fd562473ad4ee2fec4a",
+    "stderr": "",
+    "differences": "1",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "88d641d88e876181024ddb530fc843caa175eb390fe30fd562473ad4ee2fec4a",
+    "stderr": "",
+    "differences": "1",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "88d641d88e876181024ddb530fc843caa175eb390fe30fd562473ad4ee2fec4a",
+    "stderr": "",
+    "differences": "1",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "g5ck_qualified_into_region2",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "3e5b75b169271ff7631fe96d746cb79fe29206aafd9832736d4e8a63498f600a",
+    "stderr": "",
+    "differences": "21",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "3e5b75b169271ff7631fe96d746cb79fe29206aafd9832736d4e8a63498f600a",
+    "stderr": "",
+    "differences": "21",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "3e5b75b169271ff7631fe96d746cb79fe29206aafd9832736d4e8a63498f600a",
+    "stderr": "",
+    "differences": "21",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "g5ck_qualified_region0",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "fcdc53e3a287d0ed7d4e8e9dec09572260b3ec646d8bf58263f199ae465aa519",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "0691c507cbd7b6012d85223eccee74d49968ef92a9444392bc014c98b7f13266",
+    "stderr": "",
+    "differences": "19",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "fcdc53e3a287d0ed7d4e8e9dec09572260b3ec646d8bf58263f199ae465aa519",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_reenter_from_region2",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n4\nThe state g5ckQuern cannot be used here. (Assumed diagram type: state)",
+   "java_line": "4",
+   "java_message": "The state g5ckQuern cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 4: The state g5ckQuern cannot be used here.",
+    "line": "4",
+    "message": "The state g5ckQuern cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "856ceec53ee04b5ccf6c3ff67a5a38a7f85d05efd4e3051a22b70fff9e0c779f",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 4: The state g5ckQuern cannot be used here.",
+    "line": "4",
+    "message": "The state g5ckQuern cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "g5ck_reenter_region0_group",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "7d3d5089f238e34e6a978a9270bc923e0f7da005906bda08cba14bb32eae80cb",
+    "stderr": "",
+    "differences": "10",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "166ff14acc10927d1b6b8db505966473d5c00ce874edb019e7662c39fccfca20",
+    "stderr": "",
+    "differences": "17",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "7d3d5089f238e34e6a978a9270bc923e0f7da005906bda08cba14bb32eae80cb",
+    "stderr": "",
+    "differences": "10",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "g5ck_reenter_short_name",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "1fe45d0fb32ed1aaec777835c6d60160b128c72d97c1644836eb06d2c424a32e",
+    "stderr": "",
+    "differences": "10",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "5d8799d600e4b7fe64d7669d56fafc705aea325635ea8683656f4a5ea4d1f9b2",
+    "stderr": "",
+    "differences": "22",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "1fe45d0fb32ed1aaec777835c6d60160b128c72d97c1644836eb06d2c424a32e",
+    "stderr": "",
+    "differences": "10",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "g5ck_region0_from_outside",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "fcdc53e3a287d0ed7d4e8e9dec09572260b3ec646d8bf58263f199ae465aa519",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "0691c507cbd7b6012d85223eccee74d49968ef92a9444392bc014c98b7f13266",
+    "stderr": "",
+    "differences": "19",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "fcdc53e3a287d0ed7d4e8e9dec09572260b3ec646d8bf58263f199ae465aa519",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "g5ck_star_both_regions",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "506f511ea9dd9cf5df7b4e4984a7c8e3f885d20ab53dceba537705831310ffde",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "506f511ea9dd9cf5df7b4e4984a7c8e3f885d20ab53dceba537705831310ffde",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "506f511ea9dd9cf5df7b4e4984a7c8e3f885d20ab53dceba537705831310ffde",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  }
+ ],
+ "counts": {
+  "base": {
+   "both_reject_same_message": 15,
+   "match": 28,
+   "under_rejection": 2,
+   "mismatch": 7,
+   "java_error_page_exit_0": 1,
+   "both_reject_different_message": 2
+  },
+  "pr": {
+   "under_rejection": 19,
+   "match": 16,
+   "mismatch": 19,
+   "java_error_page_exit_0": 1
+  },
+  "tip": {
+   "both_reject_same_message": 16,
+   "match": 28,
+   "under_rejection": 2,
+   "mismatch": 7,
+   "java_error_page_exit_0": 1,
+   "both_reject_different_message": 1
+  }
+ },
+ "total": 55
+}

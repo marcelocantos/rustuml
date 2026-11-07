@@ -1,0 +1,10 @@
+@startuml
+state Moor {
+  state Kestrel {
+    state Plover
+    --
+    state Dunlin
+    Dunlin --> CONC2[H*]
+  }
+}
+@enduml

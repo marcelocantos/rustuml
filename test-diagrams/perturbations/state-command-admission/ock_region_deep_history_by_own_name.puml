@@ -1,0 +1,13 @@
+@startuml
+state Chancel {
+  state Tympanum {
+    state Solar
+    --
+    state Pantry
+    --
+    state Buttery
+    CONC3[H*] --> Buttery
+  }
+}
+[*] --> Chancel
+@enduml

@@ -1,0 +1,291 @@
+{
+ "schema_version": 1,
+ "mechanism": "state-command-admission",
+ "base_merge": "2971000d4 (parity-recovery-2026-11-03 32684f81e merged into bb2f3822a; bullseye.yaml byte-identical to 32684f81e)",
+ "tip_code": "53111c9c7",
+ "commits": {
+  "2971000d4": "merge parity-recovery-2026-11-03 (new measurement base)",
+  "2e1d6a9a5": "addendum: region quark count and the state final error",
+  "366dd2ab1": "fix: count region quarks by name, separator compares the owner, Java count-not-1 rule, group-type mutes, checkFinalError",
+  "5beb4a30e": "addendum: synthetic regions as image leaves of a cluster owner",
+  "57accc2b3": "fix: materialize a non-autarkic owner's synthetic regions so the reused-quark cluster path draws them",
+  "53111c9c7": "style: clippy contains() in the ancestor walk (no behaviour change)"
+ },
+ "binaries": {
+  "rustuml-base": "d44439865a290399b25613c9b34fee3e9ca087b9c8ab4b894904935eb5ca4f71",
+  "diff-one-base": "998f27411690207c590458fcb37efb3137a35fb9c15fdd1fc868e60d57e2f632",
+  "rustuml-tip": "8374cfaff55db0084933b869fe2456bd513f1dd9c65a821f94ccc8b10d35e0e2",
+  "diff-one-tip": "e42fec2d6b647e28a354e71325a8cf2cfe5c05f3702eef29bec5e66562ce3437"
+ },
+ "comparator": "rustuml_oracle::compare::compare_svg_strict via diff_one --no-oracle, whole output. Rejections compare the CLI 'parse error: line N: message' with Java stderr line 2 and line 3 minus the '(Assumed diagram type: ...)' suffix.",
+ "db_pairs": [
+  {
+   "name": "conc1_root_before_separator",
+   "base": "match",
+   "tip": "match",
+   "java_exit": 0,
+   "rust_exit": 0
+  },
+  {
+   "name": "conc1_after_separator",
+   "base": "both_reject_same_message",
+   "tip": "both_reject_same_message",
+   "java_exit": 200,
+   "rust_exit": 1,
+   "java_line": "6",
+   "java_message": "The state CONC1 cannot be used here.",
+   "rust_line": "6",
+   "rust_message": "The state CONC1 cannot be used here."
+  },
+  {
+   "name": "conc2_nested_link_muted",
+   "base": "match",
+   "tip": "match",
+   "java_exit": 0,
+   "rust_exit": 0
+  },
+  {
+   "name": "conc2_declared_after_separator",
+   "base": "over_rejection",
+   "tip": "match",
+   "java_exit": 0,
+   "rust_exit": 0
+  },
+  {
+   "name": "conc3_not_selected_by_sequence",
+   "base": "mismatch",
+   "tip": "match",
+   "java_exit": 0,
+   "rust_exit": 0
+  },
+  {
+   "name": "conc3_selected_at_inner_depth",
+   "base": "under_rejection",
+   "tip": "both_reject_same_message",
+   "java_exit": 200,
+   "rust_exit": 1,
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "rust_line": "1",
+   "rust_message": "Syntax Error?"
+  },
+  {
+   "name": "conc3_after_two_separators",
+   "base": "over_rejection",
+   "tip": "match",
+   "java_exit": 0,
+   "rust_exit": 0
+  },
+  {
+   "name": "two_separators_mute_conc2_and_conc3",
+   "base": "both_reject_same_message",
+   "tip": "both_reject_same_message",
+   "java_exit": 200,
+   "rust_exit": 1,
+   "java_line": "12",
+   "java_message": "The state Dock cannot be used here.",
+   "rust_line": "12",
+   "rust_message": "The state Dock cannot be used here."
+  },
+  {
+   "name": "nested_concurrent_composites",
+   "base": "mismatch",
+   "tip": "match",
+   "java_exit": 0,
+   "rust_exit": 0
+  },
+  {
+   "name": "link_from_next_region_into_muted",
+   "base": "both_reject_same_message",
+   "tip": "both_reject_same_message",
+   "java_exit": 200,
+   "rust_exit": 1,
+   "java_line": "8",
+   "java_message": "The state CONC2 cannot be used here.",
+   "rust_line": "8",
+   "rust_message": "The state CONC2 cannot be used here."
+  }
+ ],
+ "cohorts": {
+  "CL": {
+   "relay": "grok-g5-checker-heldout",
+   "reference_results_sha256": "38737f4f0526bee52cd04311c8787adb109c6eb0b41ba4a6bdae4de8f3cc8a05",
+   "total": 55,
+   "base_counts": {
+    "both_reject_same_message": 15,
+    "match": 25,
+    "under_rejection": 2,
+    "mismatch": 11,
+    "both_reject_different_message": 2
+   },
+   "tip_counts": {
+    "both_reject_same_message": 15,
+    "match": 28,
+    "under_rejection": 2,
+    "mismatch": 8,
+    "both_reject_different_message": 2
+   },
+   "lost_matches": [],
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics": [],
+   "gains": [
+    "g5ck_link_after_region0",
+    "g5ck_qualified_region0",
+    "g5ck_region0_from_outside"
+   ]
+  },
+  "CV": {
+   "relay": "grok-g5-cv",
+   "reference_results_sha256": "f206e324c7cc70028daee62887afc231669fd66c1644dfe97b4863a88dde1957",
+   "total": 13,
+   "base_counts": {
+    "match": 11,
+    "both_reject_same_message": 2
+   },
+   "tip_counts": {
+    "match": 11,
+    "both_reject_same_message": 2
+   },
+   "lost_matches": [],
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics": [],
+   "gains": []
+  },
+  "CW": {
+   "relay": "grok-g5-cw",
+   "reference_results_sha256": "1fad4e1c1460cb2b14e052cf3f8ea7426862c02e94507eb8b1d4091e5e6d45d6",
+   "total": 1,
+   "base_counts": {
+    "match": 1
+   },
+   "tip_counts": {
+    "match": 1
+   },
+   "lost_matches": [],
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics": [],
+   "gains": []
+  },
+  "CF": {
+   "relay": "grok-g5-state",
+   "reference_results_sha256": "972b23a6ac582160acb8d1e145739962ea8e27094c9558bc3fd25393366b2cfb",
+   "total": 10,
+   "base_counts": {
+    "match": 5,
+    "both_reject_same_message": 5
+   },
+   "tip_counts": {
+    "match": 5,
+    "both_reject_same_message": 5
+   },
+   "lost_matches": [],
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics": [],
+   "gains": []
+  },
+  "DB": {
+   "relay": "grok-g5-db",
+   "reference_results_sha256": "37b6743791a6dba4a7445540605b649624d5519f220e464573e3ede68e7385b6",
+   "total": 10,
+   "base_counts": {
+    "match": 2,
+    "both_reject_same_message": 3,
+    "over_rejection": 2,
+    "mismatch": 2,
+    "under_rejection": 1
+   },
+   "tip_counts": {
+    "match": 6,
+    "both_reject_same_message": 4
+   },
+   "lost_matches": [],
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics": [],
+   "gains": [
+    "conc2_declared_after_separator",
+    "conc3_not_selected_by_sequence",
+    "conc3_selected_at_inner_depth",
+    "conc3_after_two_separators",
+    "nested_concurrent_composites"
+   ]
+  },
+  "AU": {
+   "relay": "shared-svg-checker-c1",
+   "reference_results_sha256": "44959f34ee5ecaa773827942b7e46fa98a66de7821a0abe946b66808f2a51c60",
+   "total": 32,
+   "base_counts": {
+    "both_reject_same_message": 2,
+    "match": 20,
+    "mismatch": 9,
+    "under_rejection": 1
+   },
+   "tip_counts": {
+    "both_reject_same_message": 2,
+    "match": 20,
+    "mismatch": 9,
+    "under_rejection": 1
+   },
+   "lost_matches": [],
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics": [],
+   "gains": []
+  }
+ },
+ "goldens": {
+  "no_oracle": "11181/11251 on base and tip, state 897/901, creole 639/639, exit 0 both",
+  "no_oracle_failure_names": "70 on both, identical",
+  "golden_pairs": "12550 total, 10497 passed, 754 failed, 1299 skipped, 0 panics on both; exit 101 on both (asserts an empty failure list)",
+  "golden_pairs_failure_names": "754 on both, identical",
+  "baseline_bumped": false
+ },
+ "perturbations": {
+  "sources": 6379,
+  "failure_lines_base": 2597,
+  "failure_lines_tip": 2597,
+  "tip_only": 0,
+  "base_only": 0,
+  "panics": "7 'panicked at' lines on both: 4 at parse/class.rs:285 plus the test's own assertion panics; none in state code",
+  "retained": "The whole perturbation tree is the retained corpus. Zero lost matches."
+ },
+ "gates": {
+  "harness_guards": {
+   "pass_both": [
+    "comparator_constants_frozen",
+    "error_golden_census_is_frozen",
+    "no_golden_data_embedded_in_shipping_crates",
+    "no_label_keyed_width_constants",
+    "parity_review_paths_reject_traversal"
+   ],
+   "decimal_literal_ratchet": "red on both, same five deltas (class.rs 383->578, deployment.rs 43->44, plantuml_metrics.rs 1053->1055, state.rs 53->66, text_render.rs 51->68); this change adds no 3+ place literal",
+   "parity_review_records_are_complete": "red on both; 193 'latest checker review must be accepted' and 11 'no independent checker review' on each; violation lines identical"
+  },
+  "pipe_mode": "17/17 on both, exit 0",
+  "doc_claims": "2/2 on both",
+  "workspace_lib": "exit 0 on both; parser 677 -> 683 (six new mechanism tests), render 872 + 1 ignored on both",
+  "clippy": "-D warnings: parser, render, layout, oracle, rustuml exit 101 on both trees, math exit 0. Strict failures stop at the pre-existing dead_code at parse/component.rs:74. With -A dead_code the error locations are the same on both trees, except state.rs:8304 -> 8366 (the same pre-existing lint, moved by the inserted function). A new contains() lint in state.rs was fixed in 53111c9c7."
+ },
+ "lane_deviation": "57accc2b3 edits render/state.rs outside the name/description text lane (entity set handed to the cluster path). The obligation asks for whole-output matches on all DB renders, and two of them needed it.",
+ "residue": [
+  "Pass three (declarations and separators re-run with no links) is not modelled.",
+  "The final error copies the sequence factory's line-1 report. When an earlier factory accepts the leading lines, Java reports a later line.",
+  "A short name whose only quark is a synthetic region resolves to that region in Java; Rust creates a scope-local state.",
+  "The renderer reads the separator's region list, not the final group type, so a region muted back to STATE is still drawn as a region.",
+  "Top-level separators: Java creates a root CONCURRENT_STATE group; Rust ignores the line (unchanged, not probed).",
+  "CommandCreatePackageState ('state X {') runs no checkConcurrentStateOk in Java; Rust checks it as a declaration (unchanged, not probed)."
+ ],
+ "held_out_batch": {
+  "path": "/Users/marcelo/Library/Caches/rustuml-opus-g5/batch-g5h",
+  "manifest_sha256": "3570fa936666e7ff0ca513eac0a471e8441c191219c66ccf483196e6e8e7e101",
+  "bundle_sha256": "0ffe915f29ab63e60f8293d7fc43ebf1487ae29098add47f0b617e220a1b14e7",
+  "predictions": "/Users/marcelo/Library/Caches/rustuml-opus-g5/batch-g5h-predictions/rust-predictions.json",
+  "predictions_sha256": "498a9e37cf759c979c78ae3b46190d6cbcce8f818486c75500168a46d38c3a9a",
+  "cases": 13,
+  "java": "not run"
+ }
+}

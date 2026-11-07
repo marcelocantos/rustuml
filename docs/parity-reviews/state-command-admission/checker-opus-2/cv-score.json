@@ -1,0 +1,427 @@
+{
+ "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-cv",
+ "reference_results_sha256": "f206e324c7cc70028daee62887afc231669fd66c1644dfe97b4863a88dde1957",
+ "trees": {
+  "base": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-base",
+   "sha256": "6b88b14aac43e4ff8fc648fec344cb090157c56fd153eb88fa4c04d0cb34a348"
+  },
+  "pr": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-pr",
+   "sha256": "63e4f84d37d1c26ad0b41ba68f9705b51231137dcd548952db54cbed5a13cd32"
+  },
+  "tip": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-tip",
+   "sha256": "d7af4e4c89c3cdfd235294cf69b55865c359c88048f7fb07f47726e097d22e93"
+  }
+ },
+ "cases": [
+  {
+   "name": "region_user_concourse",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "0e3643ffe06a23815500c409146b5daf5a3b5036f62659ac0e5533832c777e71",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "63d4dbe0386f2c0e8a59a9014d4fb57add910c99f693b04259dcdbbf89fc464b",
+    "stderr": "",
+    "differences": "16",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "0e3643ffe06a23815500c409146b5daf5a3b5036f62659ac0e5533832c777e71",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "region_user_conc4",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "610d1fcb7637cd8af24b3959b469397898d6d23eea07b3bfd65dae2fb1d354c6",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "493bbc09a8d2265d091582337fd7000b6af84823761bb96c4e5a10f89906b064",
+    "stderr": "",
+    "differences": "16",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "610d1fcb7637cd8af24b3959b469397898d6d23eea07b3bfd65dae2fb1d354c6",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "region_user_concurrent_hall",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "0016ae63458e0493acfe68c88fbb5cca60776ee1a9087c886e4d5b249b68ee3d",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "0016ae63458e0493acfe68c88fbb5cca60776ee1a9087c886e4d5b249b68ee3d",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "0016ae63458e0493acfe68c88fbb5cca60776ee1a9087c886e4d5b249b68ee3d",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "region_synthetic_repeat",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n4\nThe state Bolt has been created in a concurrent state : it cannot be used here. (Assumed diagram type: state)",
+   "java_line": "4",
+   "java_message": "The state Bolt has been created in a concurrent state : it cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 4: The state Bolt has been created in a concurrent state : it cannot be used here.",
+    "line": "4",
+    "message": "The state Bolt has been created in a concurrent state : it cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "7838e9d9f1a4123ad720aa1c2b2b8dbb0a4d042fdfad549929216e39de264375",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 4: The state Bolt has been created in a concurrent state : it cannot be used here.",
+    "line": "4",
+    "message": "The state Bolt has been created in a concurrent state : it cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "region_user_conc_beside_separator",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n9\nThe state Pier cannot be used here. (Assumed diagram type: state)",
+   "java_line": "9",
+   "java_message": "The state Pier cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 9: The state Pier cannot be used here.",
+    "line": "9",
+    "message": "The state Pier cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "thread 'main' (118776880) panicked at crates/rustuml-render/src/state.rs:6814:62:\nindex out of bounds: the len is 7 but the index is 7\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+    "class": "panic"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 9: The state Pier cannot be used here.",
+    "line": "9",
+    "message": "The state Pier cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "newline_bold_second_row",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "2951df29ec9f8f914a42da8b76bad66a9bc6e791c881440dd7e099bb9a0a8486",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "2f83e7bc21d4b91571f82cc3d448c0d5ad766def2285188e29f692a87f051e90",
+    "stderr": "",
+    "differences": "11",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "2951df29ec9f8f914a42da8b76bad66a9bc6e791c881440dd7e099bb9a0a8486",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "newline_tilde_then_plain",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "7112242db57569aa070215847179f2e3955c6aaab8a94ac05e0509dab519befb",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "5513da12389dcfbad539207896f0241526068c688c0caa78fb5a42a2207ec31f",
+    "stderr": "",
+    "differences": "11",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "7112242db57569aa070215847179f2e3955c6aaab8a94ac05e0509dab519befb",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "newline_right_aligned_row",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "c729cfdc632ad15e69405fc861f681feccddfa4227affe4cb9930625b73a54fe",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "75c77bb14aab16e27a20408a1754ba0aecfb69e9936515c6f48c3092a348931a",
+    "stderr": "",
+    "differences": "11",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "c729cfdc632ad15e69405fc861f681feccddfa4227affe4cb9930625b73a54fe",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "desc_newline_italic",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "d8cff8ce460cc3f4ca20f9aa4ac56160b8114eb6928916e77c4103c19d11c894",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "b4386805ff2d1eace0e8b5d82c4009439da1aa2366442bed9788bf176d9e1c75",
+    "stderr": "",
+    "differences": "12",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "d8cff8ce460cc3f4ca20f9aa4ac56160b8114eb6928916e77c4103c19d11c894",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "baseline_courier_three",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "7c643f389da3f9c16c54391836f4eaf0d231c9200bcacfd6d54877722daa8a26",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "b6be0c83eb29a02cf7fd6d2acf032021b1eaaea0975b92024bf5ab6c31972ca4",
+    "stderr": "",
+    "differences": "11",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "7c643f389da3f9c16c54391836f4eaf0d231c9200bcacfd6d54877722daa8a26",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "baseline_arial_size_mix",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "baf792a04a0da0b063e3d72abcc696762559833e0ba19679de7b1aaad1953a11",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "7cfb9e789ffc8acfb53f92534a3eed70274a33a9f7f342cb9fd4b078296b28dc",
+    "stderr": "",
+    "differences": "8",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "baf792a04a0da0b063e3d72abcc696762559833e0ba19679de7b1aaad1953a11",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "baseline_verdana_back_and_font",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "ad21df21e900033e8bf92a08fe19f333dfd46885675713f329525116d490bcdd",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "0fdd924c05f695f0ec713b9a57c3f376b407aefbb5cd682bec75b1289baa5d04",
+    "stderr": "",
+    "differences": "13",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "ad21df21e900033e8bf92a08fe19f333dfd46885675713f329525116d490bcdd",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "baseline_sans_two_rows",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "b815d46a1e738da1ccee1571c97a702ee784e629dd42973c8fe3ce0598495ad8",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "b815d46a1e738da1ccee1571c97a702ee784e629dd42973c8fe3ce0598495ad8",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "b815d46a1e738da1ccee1571c97a702ee784e629dd42973c8fe3ce0598495ad8",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  }
+ ],
+ "counts": {
+  "base": {
+   "match": 11,
+   "both_reject_same_message": 2
+  },
+  "pr": {
+   "mismatch": 9,
+   "match": 2,
+   "under_rejection": 1,
+   "panic": 1
+  },
+  "tip": {
+   "match": 11,
+   "both_reject_same_message": 2
+  }
+ },
+ "total": 13
+}

@@ -1,0 +1,11 @@
+@startuml
+state CONC3 {
+  state Merlon
+  --
+  state Oriel
+  --
+  state Soffit
+  Soffit --> [*]
+}
+[*] --> CONC3
+@enduml

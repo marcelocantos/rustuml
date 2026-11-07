@@ -1,0 +1,10 @@
+@startuml
+state Kestrel {
+  state Plover
+  --
+  state Dunlin
+  --
+  state Godwit
+  CONC2[H] --> Godwit
+}
+@enduml

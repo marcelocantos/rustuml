@@ -1,0 +1,416 @@
+{
+ "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/opus-g5-dg",
+ "reference_results_sha256": "737285037bb0ce11b18e8be8ce3f980e1db6809af179f9d72c5e88df1febfe18",
+ "trees": {
+  "base": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-base",
+   "sha256": "6b88b14aac43e4ff8fc648fec344cb090157c56fd153eb88fa4c04d0cb34a348"
+  },
+  "pr": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-pr",
+   "sha256": "63e4f84d37d1c26ad0b41ba68f9705b51231137dcd548952db54cbed5a13cd32"
+  },
+  "tip": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-tip",
+   "sha256": "d7af4e4c89c3cdfd235294cf69b55865c359c88048f7fb07f47726e097d22e93"
+  }
+ },
+ "cases": [
+  {
+   "name": "ock_owner_field_by_own_name",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "190fd36aa93ff9f48660a0cedf6fc0c32e6aef57ec5162b6bf3b64fdc8abc43d",
+    "stderr": "",
+    "differences": "17",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "3b9ed8e7bec1334a27c3ec95b59e0189e179ef2f11852ece2cd526faa768d5ad",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "3b9ed8e7bec1334a27c3ec95b59e0189e179ef2f11852ece2cd526faa768d5ad",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "r_deep_history_own_region_depth2",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 124,
+    "class": "hang",
+    "stderr": "killed after 20 s"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "4927b20d9711401af8d8de801cec51ae2974c389b19b3e6790d92391ff55d73a",
+    "stderr": "",
+    "differences": "41",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "bad5185a5619b3495c9d0d035da3e7f07ce7cdfbae81d0e72ce5038053394a4c",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "r_field_owner_name_depth2",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "30073cb96cc050d717bc3a46d9d9d126b2bc30d1c6dea9e09efa84000eab9b1b",
+    "stderr": "",
+    "differences": "21",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "59d327b6d664852e4865a380c025f959856bc1c6afe7dcc510e26d84e8e56e44",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "59d327b6d664852e4865a380c025f959856bc1c6afe7dcc510e26d84e8e56e44",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "r_field_owner_name_in_region",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "a41aa96830b2328b6c972215cd46c40218701113d5c81e7cdc9e211c3eb21bf1",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "392132a8109f9aa882d71f00548394bebe3bbd03078418075e9c250dd66b72f9",
+    "stderr": "",
+    "differences": "23",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "a41aa96830b2328b6c972215cd46c40218701113d5c81e7cdc9e211c3eb21bf1",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "r_field_owner_name_region0",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "6d0593cb45ca8c4056a25e64884deeea8a0fb2fed4ca6cea22da2ff5eb967a25",
+    "stderr": "",
+    "differences": "24",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "f14983923eeb54d9bfe98204704492189d05e62784088a69666c9343294884e9",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "f14983923eeb54d9bfe98204704492189d05e62784088a69666c9343294884e9",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "r_field_region_own_name",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "c32c4ff51cafb46c70249c213aa955b38281100cce5872a4c846ef2ca33517ce",
+    "stderr": "",
+    "differences": "15",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "c32c4ff51cafb46c70249c213aa955b38281100cce5872a4c846ef2ca33517ce",
+    "stderr": "",
+    "differences": "15",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "55b7cd14222b3ad3fe96c48d5700130e8c120fb2392879d9f0c8728d6d7bf00d",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "r_history_own_region_after_two_separators",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 124,
+    "class": "hang",
+    "stderr": "killed after 20 s"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "dcc591a1fc858000b2d3b925b65abff9da8a2fc2766475449efe20d7dac30704",
+    "stderr": "",
+    "differences": "36",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "4b7a091f1a3126ad6e22118c3258bc332139d969c2e89b4ab7f4a997c294af98",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "r_history_own_region_depth1",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 124,
+    "class": "hang",
+    "stderr": "killed after 20 s"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "0bd1752534b03e9ba1a96fc05dbbf3d4ff5cd18a994ef3af47985925e51a9552",
+    "stderr": "",
+    "differences": "34",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "c95cd75c600e26180198b1966a93308b573b583934cba3c6e2b49ef4e20e0f19",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "r_history_own_region_depth3",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 124,
+    "class": "hang",
+    "stderr": "killed after 20 s"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "e44292fe12a75d289a3b2a321df040301908b0327e12da70ea2339ad31eed114",
+    "stderr": "",
+    "differences": "48",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "e299ef57bfbaa3be9f73b793c29cb9b9abd573df2ddcd7bf01ba617e27fabd28",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "r_history_owner_name_from_region",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)",
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 5: The state Hold cannot be used here.",
+    "line": "5",
+    "message": "The state Hold cannot be used here.",
+    "class": "both_reject_different_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "00ad38fd994917824e4fd786ab3643a7a68c55d4e09f050befcc8c17ab02afec",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: Syntax Error?",
+    "line": "1",
+    "message": "Syntax Error?",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "r_link_region_name_depth2",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)",
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "56a16a64f7b309ea7a41bea57c1ace2a850e1e6735d138d8ecaf7ec99641cfe0",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "32aff81c0f5411727a1e06e7fe5cd111a95ceb2facbdd46363bfc0cb09f93fb4",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: Syntax Error?",
+    "line": "1",
+    "message": "Syntax Error?",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "r_nested_regions_cross_level_link",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n6\nThe state Borough cannot be used here. (Assumed diagram type: state)",
+   "java_line": "6",
+   "java_message": "The state Borough cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state Borough cannot be used here.",
+    "line": "6",
+    "message": "The state Borough cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "4faf2cacf41d3d263dc41ffd1005d63e8cc25a8f176fc97ebbadfcfa16b1b3b0",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state Borough cannot be used here.",
+    "line": "6",
+    "message": "The state Borough cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "r_nested_regions_inner_link",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "9d4245e81fa94e2e92702a5038749d31b894d4c25033459e4c8a4bc0709b6841",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "9d4245e81fa94e2e92702a5038749d31b894d4c25033459e4c8a4bc0709b6841",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "9d4245e81fa94e2e92702a5038749d31b894d4c25033459e4c8a4bc0709b6841",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  }
+ ],
+ "counts": {
+  "base": {
+   "mismatch": 4,
+   "hang": 4,
+   "match": 2,
+   "both_reject_different_message": 1,
+   "under_rejection": 1,
+   "both_reject_same_message": 1
+  },
+  "pr": {
+   "match": 4,
+   "mismatch": 6,
+   "under_rejection": 3
+  },
+  "tip": {
+   "match": 10,
+   "both_reject_same_message": 3
+  }
+ },
+ "total": 13
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-creole-text-blocks",
+  "base_revision": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "lost_matches": 0,
+  "lost_rejections": 0,
+  "new_valid_input_errors": 0,
+  "panics": 0,
+  "gains": 0,
+  "no_oracle": {
+    "result": "exact baseline 11181/11251",
+    "creole": "639/639",
+    "state": "897/901",
+    "failure_names_vs_base": "identical, 70 names"
+  },
+  "golden_pairs": {
+    "creole_directory_failures": 4,
+    "state_directory_failures": 7,
+    "failure_names_vs_base": "identical, 754 names"
+  },
+  "probes": {
+    "creole_verdana_kiln": "tip draws Ember and glow as separate runs with font-weight 700 and font-style italic. Base keeps the literal ** and <i> tags. Both exit 0.",
+    "creole_courier_grate": "tip draws Hot and steam as bold and italic runs. Base keeps ** and //steam//. Both exit 0.",
+    "creole_verdana_field": "tip draws warm as bold and bricks as a following run. Base keeps **. Both exit 0."
+  },
+  "not_claimed": "Pinned Java SVG equality for these three probes is not measured. The relay bundle is pending. Arial box width versus the Arial face table is untouched (arial_text_width and StateNodeFont). Plain custom-family text with no Creole markup stays on the single-element emitter.",
+  "java_trace": "EntityImageStateCommon title and EntityImageState field bodies use Display.create8 with CreoleMode.FULL. Rust routes a flat custom-family string through text_render::emit_text only when creole::parse_segments is not one default-style run whose unescaped text equals the source."
+}

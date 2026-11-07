@@ -1,0 +1,8 @@
+@startuml
+state Heath {
+  state Dunlin
+  state Godwit
+  Dunlin --> Godwit
+  Wraith[H*] --> Godwit
+}
+@enduml

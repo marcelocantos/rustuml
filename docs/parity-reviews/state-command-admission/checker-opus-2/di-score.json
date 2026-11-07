@@ -1,0 +1,1129 @@
+{
+ "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/opus-g5-recheck-heldout",
+ "reference_results_sha256": "1ad65d15fdeb28f0a02f198bf9657d4c90865bfc4023a45226ef9136a1c1f302",
+ "trees": {
+  "base": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-base",
+   "sha256": "6b88b14aac43e4ff8fc648fec344cb090157c56fd153eb88fa4c04d0cb34a348"
+  },
+  "pr": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-pr",
+   "sha256": "63e4f84d37d1c26ad0b41ba68f9705b51231137dcd548952db54cbed5a13cd32"
+  },
+  "tip": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-tip",
+   "sha256": "d7af4e4c89c3cdfd235294cf69b55865c359c88048f7fb07f47726e097d22e93"
+  }
+ },
+ "cases": [
+  {
+   "name": "rk_f_later_declared_composite_root",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "42343eb9bf1504f8d787ae3ddf925fd4a66ead3a69c77d909dc745ea62cc6b61",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "42343eb9bf1504f8d787ae3ddf925fd4a66ead3a69c77d909dc745ea62cc6b61",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "42343eb9bf1504f8d787ae3ddf925fd4a66ead3a69c77d909dc745ea62cc6b61",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_f_later_declared_other_region",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n6\nThe state Turnstone has been created in a concurrent state : it cannot be used here. (Assumed diagram type: state)",
+   "java_line": "6",
+   "java_message": "The state Turnstone has been created in a concurrent state : it cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state Turnstone has been created in a concurrent state : it cannot be used here.",
+    "line": "6",
+    "message": "The state Turnstone has been created in a concurrent state : it cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "7491a7b5e7b8b9367d8f1f861ea7e9fd4e4f00679dfb8027dc535c8b848b36a3",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state Turnstone has been created in a concurrent state : it cannot be used here.",
+    "line": "6",
+    "message": "The state Turnstone has been created in a concurrent state : it cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "rk_f_later_declared_same_region",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "ca339f5dd5ac1f58b78aa12a53105e12cf73d502e28c3baf33b62c4c42d2f381",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "ca339f5dd5ac1f58b78aa12a53105e12cf73d502e28c3baf33b62c4c42d2f381",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "ca339f5dd5ac1f58b78aa12a53105e12cf73d502e28c3baf33b62c4c42d2f381",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_f_owner_name_nosep_nested",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "e8706a83df5393f72c9ff1399e7571311ed7e5b7cb046bdccaf82aa51bf544e3",
+    "stderr": "",
+    "differences": "21",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "c98499f7dc8b99fac793bd32cfbd709d3f365d3158ae8258938aaf9594135920",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "c98499f7dc8b99fac793bd32cfbd709d3f365d3158ae8258938aaf9594135920",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_f_owner_name_region0",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "7cf1d479c0b86a0008d6bbce53cdff35feeb912c021947055f29f92814b43079",
+    "stderr": "",
+    "differences": "19",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "a1a462fa05338ea21698651cdab4f7d832fe3d068a66b980650d0ec6c0086368",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "a1a462fa05338ea21698651cdab4f7d832fe3d068a66b980650d0ec6c0086368",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_f_owner_name_region2",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "c373ce8e2845683671c395a674648a77a136dac708aaa94d0d582a217bdeaa1b",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "793236616b2b5082264ba49d1b618ba3824472917a2d3e698d2e28b42c97bc99",
+    "stderr": "",
+    "differences": "18",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "c373ce8e2845683671c395a674648a77a136dac708aaa94d0d582a217bdeaa1b",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_f_region_name_inside",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "8206bb85bbe75d9300ed47801cb733dd0e630dabf89aad88f17528b4d2262366",
+    "stderr": "",
+    "differences": "10",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "8206bb85bbe75d9300ed47801cb733dd0e630dabf89aad88f17528b4d2262366",
+    "stderr": "",
+    "differences": "10",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "8e99e3b915630a5fb3737e1cc03bedf32d582c7dc9a24ef73373374b8ea54976",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_f_sibling_after_separator",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "54f7ed082de404059936057756a4d145e55c50b6e1f7110c14f6afc874da6431",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "40fbb9d0b4bd36e62ede26f1227a0a7a67cb44f3298530007c22e0eeb7d52673",
+    "stderr": "",
+    "differences": "15",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "54f7ed082de404059936057756a4d145e55c50b6e1f7110c14f6afc874da6431",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_h_alias_in_region",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "bcb38801ebbca7ccf1061b61f6644d115d4ea5a369cf3433ab41c536732b2655",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "bcb38801ebbca7ccf1061b61f6644d115d4ea5a369cf3433ab41c536732b2655",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "bcb38801ebbca7ccf1061b61f6644d115d4ea5a369cf3433ab41c536732b2655",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_h_ancestor_name_from_region",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)",
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state Moor cannot be used here.",
+    "line": "6",
+    "message": "The state Moor cannot be used here.",
+    "class": "both_reject_different_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "15af6a4a25a16d62119b8a48e749d030b36ca7d96854ddf67aeb0f634b2a2c21",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: Syntax Error?",
+    "line": "1",
+    "message": "Syntax Error?",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "rk_h_control_declared_composite_root",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "572cb9fefadccdc5cb715bae6a16f6e199a1f6bde32e23e8c4fae1473f51abab",
+    "stderr": "",
+    "differences": "12",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "572cb9fefadccdc5cb715bae6a16f6e199a1f6bde32e23e8c4fae1473f51abab",
+    "stderr": "",
+    "differences": "12",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "572cb9fefadccdc5cb715bae6a16f6e199a1f6bde32e23e8c4fae1473f51abab",
+    "stderr": "",
+    "differences": "12",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "rk_h_declared_composite_in_region",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "0b2b28cc5729c9c04267024dd5d13a1e2408485bbb761450dc09638dadafdd74",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "0b2b28cc5729c9c04267024dd5d13a1e2408485bbb761450dc09638dadafdd74",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "0b2b28cc5729c9c04267024dd5d13a1e2408485bbb761450dc09638dadafdd74",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_h_nested_concurrent_composites",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 124,
+    "class": "hang",
+    "stderr": "killed after 20 s"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "7c6d92a82a00e063a1ac1e0fe18e7916f972c27a6ac8063ca7180de912294cd7",
+    "stderr": "",
+    "differences": "35",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "2223552d3e99e01619d7697b9a942f07b4be5748ac5986f282758b07e1f19972",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_h_owner_name_from_region2",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)",
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 5: The state Kestrel cannot be used here.",
+    "line": "5",
+    "message": "The state Kestrel cannot be used here.",
+    "class": "both_reject_different_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "aafff44b228b47c4ee95e5ff7c877209c654a80277d4788956108c9815f362fc",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: Syntax Error?",
+    "line": "1",
+    "message": "Syntax Error?",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "rk_h_owner_name_region0_nosep",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "7cd28fd3a94d58d90c78ca0df0c479bfd7f2db1cc0451029b4f0eb6ba861adda",
+    "stderr": "",
+    "differences": "19",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "7cd28fd3a94d58d90c78ca0df0c479bfd7f2db1cc0451029b4f0eb6ba861adda",
+    "stderr": "",
+    "differences": "19",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "e5c70685c32ad61ad778a018c5266f98f6a2a7da66c7b496ab7a4150a1665a87",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_h_owner_name_region0_withsep",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "5e3553aec57b68662fbdff93286a2e836c44ab65fa4c5de66bbb72aac7c992cd",
+    "stderr": "",
+    "differences": "18",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "5e3553aec57b68662fbdff93286a2e836c44ab65fa4c5de66bbb72aac7c992cd",
+    "stderr": "",
+    "differences": "18",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "f5cbe2b42b45087b30c01a2a861393437ae830d8004ff766f8a24220551edf06",
+    "stderr": "",
+    "differences": "17",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "rk_h_plain_in_region",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "392081a3d48274a6f193d3566878fdc3624ae07982524a35e4cd50fbb37d9302",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "392081a3d48274a6f193d3566878fdc3624ae07982524a35e4cd50fbb37d9302",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "392081a3d48274a6f193d3566878fdc3624ae07982524a35e4cd50fbb37d9302",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_h_region_name_both_dirs",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 124,
+    "class": "hang",
+    "stderr": "killed after 20 s"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "b6aa2292bfc3b7e63a3a918150274018ce99fe7e684043e9709dd003dddecb8c",
+    "stderr": "",
+    "differences": "37",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "4b89cad2e52ee821c6cdfb01f19c213ff23d2436a9af873cb0a4b8e9da7198fa",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_h_region_name_depth2_deep_target",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 124,
+    "class": "hang",
+    "stderr": "killed after 20 s"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "37c85eb356cf461967c713b86496e4993039ec8b2f9f801e986be505bffde7d4",
+    "stderr": "",
+    "differences": "36",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "128b444ee31c68f353d2ae2754ef6dd17ceaf2f5c4c426d110b97f712111df07",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_h_region_name_depth3_third_region",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 124,
+    "class": "hang",
+    "stderr": "killed after 20 s"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "ab1843f2580c8b8ee31425325d90b86d33de5ad0997e91a3eab994cfed9639cb",
+    "stderr": "",
+    "differences": "45",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "747d81c0fc9e4363a2a5b97552d82d38ad8959b83e93f76fa704b7c9d8170458",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_h_region_name_target",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 124,
+    "class": "hang",
+    "stderr": "killed after 20 s"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "f7a97db978feb4c719cd6f2923bc6bec2e7f15a5dda2bee3439d493f90613463",
+    "stderr": "",
+    "differences": "29",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "ea68617baa9ac0eb86a3ad640b6a33562c098b205587fb3ffc319212125df760",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_h_root_link_to_region_history",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)",
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "edb4b1b1cadd87eab42f220fa82544e25a38850c0cc9940911c9c8036efe57b8",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "edb4b1b1cadd87eab42f220fa82544e25a38850c0cc9940911c9c8036efe57b8",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "6a2e633e27dd1478218c383e2d8cd50333b61266f17c0125c1f50bd6a1daf09e",
+    "stderr": "",
+    "class": "under_rejection"
+   }
+  },
+  {
+   "name": "rk_h_sibling_region_name",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)",
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "fae141bfa37bb2a67360081b9881c396b22619c337b4ec2e9d491a357e35063a",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "fae141bfa37bb2a67360081b9881c396b22619c337b4ec2e9d491a357e35063a",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "5a4bd7a44fd3d92d07b70c578aede564f8816c80ee509e8ef54bb5d993faed45",
+    "stderr": "",
+    "class": "under_rejection"
+   }
+  },
+  {
+   "name": "rk_h_unknown_name_in_composite_nosep",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "42c0890259213e19741fb985fa7712c6637801ea00f54460f84720668a47006d",
+    "stderr": "",
+    "differences": "30",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "42c0890259213e19741fb985fa7712c6637801ea00f54460f84720668a47006d",
+    "stderr": "",
+    "differences": "30",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "9e3da1dbef8d93356695979c16c4e18b1fd576ed55eddc13ba34c938dfd7082e",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_h_unknown_name_in_region",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "c83c1024081540d6c085417f206b11ee2f140a6e8e3c51c6fa1721737ca8e352",
+    "stderr": "",
+    "differences": "29",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "c83c1024081540d6c085417f206b11ee2f140a6e8e3c51c6fa1721737ca8e352",
+    "stderr": "",
+    "differences": "29",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "175ac6781e0323726843a4a8e952b5a6b1e133d97df9aa2c78e5ada8425c416e",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_h_unknown_name_root_nosep",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "665e0cc6d47eb3edeabd790a742530163b01316f3829b0157f785db65d499e22",
+    "stderr": "",
+    "differences": "2",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "665e0cc6d47eb3edeabd790a742530163b01316f3829b0157f785db65d499e22",
+    "stderr": "",
+    "differences": "2",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "dccc5f6d99fe55a8bf9bc2012edc39a8b361045f92d1b644cba7634ba65965cb",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_h_unknown_name_two_links_root",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "fee7eae4a43aea7938ac09cc6a731fff11ec7ffe2db891d698a5ae35f8528ae1",
+    "stderr": "",
+    "differences": "4",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "fee7eae4a43aea7938ac09cc6a731fff11ec7ffe2db891d698a5ae35f8528ae1",
+    "stderr": "",
+    "differences": "4",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "d4648ca24451cb2cd6c855b81e168379535af27698efa15a7db533f29a6b0748",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_r_control_real_children",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "cd7864be7b72c1140a78dcb28b5ea726ce4e897ca3e29bee106d9260f0882a1a",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "cd7864be7b72c1140a78dcb28b5ea726ce4e897ca3e29bee106d9260f0882a1a",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "cd7864be7b72c1140a78dcb28b5ea726ce4e897ca3e29bee106d9260f0882a1a",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_r_end_only_box_in_owner",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "123a80cae68065ac6203265b6cff2f2fdbf8a7d9b1d5f7b56cab330f461347ab",
+    "stderr": "",
+    "differences": "23",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "123a80cae68065ac6203265b6cff2f2fdbf8a7d9b1d5f7b56cab330f461347ab",
+    "stderr": "",
+    "differences": "23",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "2d9e1e37490973c51bbac05691122ccd4edf29cdef2be8edd5d9d8258de0922e",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_r_history_only_box_in_owner",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "323acabb3ca3a5567bf6a3b38ee92c407283d24f69da5dc2d302b1fa0d7ff98e",
+    "stderr": "",
+    "differences": "23",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "323acabb3ca3a5567bf6a3b38ee92c407283d24f69da5dc2d302b1fa0d7ff98e",
+    "stderr": "",
+    "differences": "23",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "fd855089004e9482c753478a2bfda37dc9f4888634dedefaa616617e81739797",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_r_mixed_pseudo_box_in_owner",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "7ce2d958d5ba2703bbcbae1d44fcbdfa941c96c540f4271dcfd409716bd19919",
+    "stderr": "",
+    "differences": "31",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "7ce2d958d5ba2703bbcbae1d44fcbdfa941c96c540f4271dcfd409716bd19919",
+    "stderr": "",
+    "differences": "31",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "fa32dccfe847e10914fe6af59b5d481ccd1e6567ba884380de88756e45763b83",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_r_nested_pseudo_box",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "e0cc1462f9c9457ca787f098150941aa17021fc25b6e9b0f538e75794861d6a8",
+    "stderr": "",
+    "differences": "27",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "e0cc1462f9c9457ca787f098150941aa17021fc25b6e9b0f538e75794861d6a8",
+    "stderr": "",
+    "differences": "27",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "8da51a8564b596d5473dbcff597a94636100f4d4b2f96817e8749d9d38b82a25",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_r_pseudo_box_in_region",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n6\nThe state Dunlin cannot be used here. (Assumed diagram type: state)",
+   "java_line": "6",
+   "java_message": "The state Dunlin cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state Dunlin cannot be used here.",
+    "line": "6",
+    "message": "The state Dunlin cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "3a5161be662be2735618cf7a8db5d47cedcae3aeba0e7b7b5105e03be268c3e1",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state Dunlin cannot be used here.",
+    "line": "6",
+    "message": "The state Dunlin cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "rk_r_pseudo_box_nonautarkic_owner",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "3f0ade6c8ef56e73609fe95c300e777dc9a0186ab36cdaeffcb260be125d221f",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "3f0ade6c8ef56e73609fe95c300e777dc9a0186ab36cdaeffcb260be125d221f",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "3f0ade6c8ef56e73609fe95c300e777dc9a0186ab36cdaeffcb260be125d221f",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_r_reused_inner_nested",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "d9459bd90d4a66695da08802936de441a937815292984aef40890ba49dc5fadf",
+    "stderr": "",
+    "differences": "45",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "d9459bd90d4a66695da08802936de441a937815292984aef40890ba49dc5fadf",
+    "stderr": "",
+    "differences": "45",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "5268e3625f45059d79d25732875fd5bd81a3c965b52c2e7894205df87bdc36fe",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_r_star_only_box_in_owner",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "0a6fc68bc78e451dccf01dee8cf3c42d53386b5460d70dca9e5da9c9e5aae615",
+    "stderr": "",
+    "differences": "23",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "0a6fc68bc78e451dccf01dee8cf3c42d53386b5460d70dca9e5da9c9e5aae615",
+    "stderr": "",
+    "differences": "23",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "f30204281e84a5d71741b3bc167f85266fa289c73d6e516598ac3321f19eeb46",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "rk_r_star_only_box_root",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "cecd0ffcd4ea6c053ee337ea10706cf2b155b96b8f9358939917f0d0cb685493",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "cecd0ffcd4ea6c053ee337ea10706cf2b155b96b8f9358939917f0d0cb685493",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "cecd0ffcd4ea6c053ee337ea10706cf2b155b96b8f9358939917f0d0cb685493",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  }
+ ],
+ "counts": {
+  "base": {
+   "match": 10,
+   "both_reject_same_message": 2,
+   "mismatch": 16,
+   "both_reject_different_message": 2,
+   "hang": 5,
+   "under_rejection": 2
+  },
+  "pr": {
+   "match": 10,
+   "under_rejection": 6,
+   "mismatch": 21
+  },
+  "tip": {
+   "match": 29,
+   "both_reject_same_message": 4,
+   "mismatch": 2,
+   "under_rejection": 2
+  }
+ },
+ "total": 37
+}

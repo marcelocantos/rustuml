@@ -3,6 +3,81 @@
 
 //! Shared PlantUML `Display` source handling.
 
+/// Natural alignment set by `\r` or `\l` in `Display.getWithNewlines`.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum DisplayAlign {
+    Left,
+    Center,
+    Right,
+}
+
+/// One PlantUML `Display`: rows after newline controls, plus an optional
+/// natural alignment that overrides the style alignment.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct DisplayText {
+    pub lines: Vec<String>,
+    pub align: Option<DisplayAlign>,
+}
+
+/// `Display.getWithNewlines` (`Display.java:258-341`).
+///
+/// `Pragma.legacyReplaceBackslashNByNewline` is true. Outside `<math>`,
+/// `<latex>`, and `[[...]]`, `\n`, `\r`, and `\l` end a row. `\r` selects
+/// right alignment and `\l` selects left. `\\` becomes one backslash and
+/// `\t` becomes a tab. A source with no backslash is returned unchanged.
+pub fn display_with_newlines(source: &str) -> DisplayText {
+    if !source.contains('\\') {
+        return DisplayText {
+            lines: vec![source.to_string()],
+            align: None,
+        };
+    }
+
+    let mut lines = Vec::new();
+    let mut current = String::new();
+    let mut align = None;
+    let mut raw_mode = false;
+    let mut chars = source.char_indices().peekable();
+    while let Some((offset, ch)) = chars.next() {
+        let rest = &source[offset..];
+        if rest.starts_with("<math>") || rest.starts_with("<latex>") || rest.starts_with("[[") {
+            raw_mode = true;
+        } else if rest.starts_with("</math>")
+            || rest.starts_with("</latex>")
+            || rest.starts_with("]]")
+        {
+            raw_mode = false;
+        }
+
+        if !raw_mode && ch == '\\' {
+            let Some((_, next)) = chars.next() else {
+                current.push(ch);
+                break;
+            };
+            match next {
+                'n' | 'r' | 'l' => {
+                    if next == 'r' {
+                        align = Some(DisplayAlign::Right);
+                    } else if next == 'l' {
+                        align = Some(DisplayAlign::Left);
+                    }
+                    lines.push(std::mem::take(&mut current));
+                }
+                't' => current.push('\t'),
+                '\\' => current.push('\\'),
+                other => {
+                    current.push('\\');
+                    current.push(other);
+                }
+            }
+            continue;
+        }
+        current.push(ch);
+    }
+    lines.push(current);
+    DisplayText { lines, align }
+}
+
 /// Split literal `\n` row controls while preserving raw Creole blocks.
 ///
 /// Java `Display.getWithNewlines` disables newline interpretation inside URL,
@@ -68,6 +143,24 @@ mod tests {
                 "<latex>p\\nq</latex>"
             ]
         );
+    }
+
+    #[test]
+    fn newlines_split_outside_raw_blocks_and_keep_escapes() {
+        use super::{DisplayAlign, display_with_newlines};
+
+        let split = display_with_newlines("g5ckMidden\\nfold");
+        assert_eq!(split.lines, ["g5ckMidden", "fold"]);
+        assert_eq!(split.align, None);
+
+        let aligned = display_with_newlines("left\\rright");
+        assert_eq!(aligned.lines, ["left", "right"]);
+        assert_eq!(aligned.align, Some(DisplayAlign::Right));
+
+        let raw = display_with_newlines("pre [[https://example.com/a\\nb]]\\nafter");
+        assert_eq!(raw.lines, ["pre [[https://example.com/a\\nb]]", "after"]);
+        assert_eq!(display_with_newlines("a\\\\b").lines, ["a\\b"]);
+        assert_eq!(display_with_newlines("plain").lines, ["plain"]);
     }
 
     #[test]

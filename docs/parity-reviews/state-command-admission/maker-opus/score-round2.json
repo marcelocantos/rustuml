@@ -1,0 +1,487 @@
+{
+ "schema_version": 1,
+ "mechanism": "state-command-admission",
+ "round": 2,
+ "base_merge": "5e59b0421 (parity-recovery-2026-11-03 9df351f58 merged into 9c98a0b0e; bullseye.yaml identical to 9df351f58)",
+ "second_reference": "9df351f58 (parity-recovery head without this packet)",
+ "tip_code": "a0b830007",
+ "commits": {
+  "5e59b0421": "merge parity-recovery head (measurement base); conflict in render/state.rs resolved by keeping the Creole description path and taking upstream's state_family_uses_nbsp",
+  "3ba286126": "addendum: history by own name, field short-circuit, group parents",
+  "96abb4231": "fix (parser): X[H]/X[H*] resolve with no short-circuit and no check; Field use keeps CommandAddField's short-circuit; new State parent is the quark's own parent; ancestor walk stops on a repeated id",
+  "9e16808fe": "addendum: pass-two history group as a cluster and its uid",
+  "db5105789": "fix (renderer): pseudo-only non-autarkic group is a Cluster; getHistorical's pass-two group takes the uid before its pseudo-state; render doc comment restored",
+  "4618ead54": "addendum: restrict the pseudo-only cluster rule to image interiors",
+  "a0b830007": "fix (renderer): the rule needs an autarkic ancestor (db5105789 had changed 12 state_composite goldens)"
+ },
+ "binaries": {
+  "rustuml-base": "4bcebef23f4d199e3e05a56b670c90a5ce82f128b4c966d890c84a00974eb566",
+  "diff-one-base": "4e40dd2c733e4838425bb3972c38becc6173a2e7d74f915ee6aa8a06f0a1609b",
+  "rustuml-pr": "01568b9b4278228d8a222545c0f76ff86e84509ca82c7ba90eb099e8cb1c07f2",
+  "diff-one-pr": "8ada17a2ca833dd1e45de5a80b701faada517148ed47bc3ae968ac1b609f25e5",
+  "rustuml-tip": "6dddffed2b9928651552702cde561ae333d37c5143196fd5250a7a9271584be4",
+  "diff-one-tip": "b1d8c172523ec302bb2c13b85fa68e16dadaaf42153f4bd25ddcb98bb6f03e72"
+ },
+ "comparator": "compare_svg_strict via diff_one --no-oracle, whole output; CLI replays and compares under 20 s / 30 s timeouts (exit 124 = hang).",
+ "next_round_required": [
+  {
+   "name": "ock_region_history_by_own_name",
+   "java_exit": 0,
+   "base": "hang",
+   "tip": "match",
+   "rust_exit": 0,
+   "rust_line": null,
+   "rust_message": null
+  },
+  {
+   "name": "ock_region_deep_history_by_own_name",
+   "java_exit": 0,
+   "base": "hang",
+   "tip": "match",
+   "rust_exit": 0,
+   "rust_line": null,
+   "rust_message": null
+  },
+  {
+   "name": "ock_conc2_declared_in_region_depth2",
+   "java_exit": 200,
+   "base": "under_rejection",
+   "tip": "both_reject_same_message",
+   "rust_exit": 1,
+   "rust_line": "1",
+   "rust_message": "Syntax Error?"
+  },
+  {
+   "name": "ock_region_named_link_inside",
+   "java_exit": 200,
+   "base": "under_rejection",
+   "tip": "both_reject_same_message",
+   "rust_exit": 1,
+   "rust_line": "1",
+   "rust_message": "Syntax Error?"
+  },
+  {
+   "name": "ock_owner_field_by_own_name",
+   "java": "not relayed; staged in batch-g5r",
+   "tip": "exit 0; the field stays on Chancel (no Chancel.Chancel)"
+  }
+ ],
+ "cohorts": {
+  "CL": {
+   "base": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": [
+     "g5ck_history_cross"
+    ]
+   },
+   "pr": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": [
+     "g5ck_alias_cross",
+     "g5ck_choice_cross",
+     "g5ck_color_bad_gradient",
+     "g5ck_color_bad_hex",
+     "g5ck_color_rebeccapurple_fill",
+     "g5ck_color_rebeccapurple_stroke",
+     "g5ck_color_unknown_name",
+     "g5ck_conc2_prefix_external",
+     "g5ck_conc_prefix_external",
+     "g5ck_conc_prefix_internal",
+     "g5ck_creole_arial_markup",
+     "g5ck_creole_decorations_courier",
+     "g5ck_creole_escape_and_newline",
+     "g5ck_creole_mixed_verdana",
+     "g5ck_creole_multiline_desc",
+     "g5ck_cross_after_separator",
+     "g5ck_cross_sibling_regions",
+     "g5ck_decl_again_outside",
+     "g5ck_field_from_outside",
+     "g5ck_fork_cross_region",
+     "g5ck_forward_decl_other_region",
+     "g5ck_history_cross",
+     "g5ck_link_after_region0",
+     "g5ck_nested_cross_to_deep",
+     "g5ck_pipe_cross",
+     "g5ck_qualified_region0",
+     "g5ck_reenter_from_region2",
+     "g5ck_region0_from_outside"
+    ]
+   },
+   "counts": {
+    "base": {
+     "both_reject_same_message": 15,
+     "match": 28,
+     "under_rejection": 2,
+     "mismatch": 8,
+     "both_reject_different_message": 2
+    },
+    "pr": {
+     "under_rejection": 19,
+     "match": 16,
+     "mismatch": 20
+    },
+    "tip": {
+     "both_reject_same_message": 16,
+     "match": 28,
+     "under_rejection": 2,
+     "mismatch": 8,
+     "both_reject_different_message": 1
+    }
+   },
+   "reference_results_sha256": "38737f4f0526bee52cd04311c8787adb109c6eb0b41ba4a6bdae4de8f3cc8a05",
+   "total": 55
+  },
+  "CV": {
+   "base": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": []
+   },
+   "pr": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": [
+     "region_user_concourse",
+     "region_user_conc4",
+     "region_synthetic_repeat",
+     "region_user_conc_beside_separator",
+     "newline_bold_second_row",
+     "newline_tilde_then_plain",
+     "newline_right_aligned_row",
+     "desc_newline_italic",
+     "baseline_courier_three",
+     "baseline_arial_size_mix",
+     "baseline_verdana_back_and_font"
+    ]
+   },
+   "counts": {
+    "base": {
+     "match": 11,
+     "both_reject_same_message": 2
+    },
+    "pr": {
+     "mismatch": 9,
+     "match": 2,
+     "under_rejection": 1,
+     "panic": 1
+    },
+    "tip": {
+     "match": 11,
+     "both_reject_same_message": 2
+    }
+   },
+   "reference_results_sha256": "f206e324c7cc70028daee62887afc231669fd66c1644dfe97b4863a88dde1957",
+   "total": 13
+  },
+  "CW": {
+   "base": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": []
+   },
+   "pr": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": [
+     "region0_child_named_conc2"
+    ]
+   },
+   "counts": {
+    "base": {
+     "match": 1
+    },
+    "pr": {
+     "panic": 1
+    },
+    "tip": {
+     "match": 1
+    }
+   },
+   "reference_results_sha256": "1fad4e1c1460cb2b14e052cf3f8ea7426862c02e94507eb8b1d4091e5e6d45d6",
+   "total": 1
+  },
+  "CF": {
+   "base": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": []
+   },
+   "pr": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": [
+     "creole_verdana_kiln",
+     "creole_courier_grate",
+     "creole_verdana_field",
+     "holdout_crossing_stoke",
+     "holdout_decl_flame",
+     "holdout_region_sibling",
+     "holdout_stroke_rebeccapurple",
+     "holdout_fill_unknown",
+     "holdout_field_on_concurrent"
+    ]
+   },
+   "counts": {
+    "base": {
+     "match": 5,
+     "both_reject_same_message": 5
+    },
+    "pr": {
+     "mismatch": 4,
+     "under_rejection": 5,
+     "match": 1
+    },
+    "tip": {
+     "match": 5,
+     "both_reject_same_message": 5
+    }
+   },
+   "reference_results_sha256": "972b23a6ac582160acb8d1e145739962ea8e27094c9558bc3fd25393366b2cfb",
+   "total": 10
+  },
+  "AU": {
+   "base": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": []
+   },
+   "pr": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": [
+     "cluster_concurrent_crossing",
+     "stroke_per_state_css4"
+    ]
+   },
+   "counts": {
+    "base": {
+     "both_reject_same_message": 2,
+     "match": 20,
+     "mismatch": 9,
+     "under_rejection": 1
+    },
+    "pr": {
+     "under_rejection": 3,
+     "match": 20,
+     "mismatch": 9
+    },
+    "tip": {
+     "both_reject_same_message": 2,
+     "match": 20,
+     "mismatch": 9,
+     "under_rejection": 1
+    }
+   },
+   "reference_results_sha256": "44959f34ee5ecaa773827942b7e46fa98a66de7821a0abe946b66808f2a51c60",
+   "total": 32
+  },
+  "DB": {
+   "base": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": []
+   },
+   "pr": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": [
+     "conc1_after_separator",
+     "conc2_nested_link_muted",
+     "conc3_not_selected_by_sequence",
+     "conc3_selected_at_inner_depth",
+     "two_separators_mute_conc2_and_conc3",
+     "nested_concurrent_composites",
+     "link_from_next_region_into_muted"
+    ]
+   },
+   "counts": {
+    "base": {
+     "match": 6,
+     "both_reject_same_message": 4
+    },
+    "pr": {
+     "match": 3,
+     "under_rejection": 3,
+     "panic": 2,
+     "mismatch": 2
+    },
+    "tip": {
+     "match": 6,
+     "both_reject_same_message": 4
+    }
+   },
+   "reference_results_sha256": "37b6743791a6dba4a7445540605b649624d5519f220e464573e3ede68e7385b6",
+   "total": 10
+  },
+  "DC": {
+   "base": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": []
+   },
+   "pr": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": [
+     "h_counter_advances_on_reuse",
+     "h_counter_not_per_depth",
+     "h_final_error_from_region0",
+     "h_final_error_three_levels",
+     "h_region0_nested_cluster_link",
+     "h_region_link_into_nested_child",
+     "h_reuse_root_quark_at_depth"
+    ]
+   },
+   "counts": {
+    "base": {
+     "both_reject_same_message": 6,
+     "match": 3,
+     "both_reject_different_message": 1,
+     "mismatch": 3
+    },
+    "pr": {
+     "under_rejection": 7,
+     "match": 2,
+     "mismatch": 4
+    },
+    "tip": {
+     "both_reject_same_message": 6,
+     "match": 3,
+     "both_reject_different_message": 1,
+     "mismatch": 3
+    }
+   },
+   "reference_results_sha256": "63b8d020830c719d66a62feb30aef6944b71f64854d6a0e24eeba0bc7c66de39",
+   "total": 13
+  },
+  "DE": {
+   "base": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": [
+     "ock_conc2_declared_in_region_depth2",
+     "ock_region_deep_history_by_own_name",
+     "ock_region_history_by_own_name",
+     "ock_region_named_link_inside"
+    ]
+   },
+   "pr": {
+    "lost_matches": [],
+    "lost_rejections": [],
+    "new_valid_input_errors": [],
+    "panics_or_hangs": [],
+    "gains": [
+     "ock_alias_region1_from_root",
+     "ock_cluster_owner_region_composite",
+     "ock_conc2_declared_in_region_depth2",
+     "ock_final_error_after_block_comment",
+     "ock_final_error_after_comment_blank",
+     "ock_final_error_link_first_line",
+     "ock_final_error_region0_to_region1_deep",
+     "ock_nested_owner_clusters_region0",
+     "ock_owner_named_conc2_one_sep",
+     "ock_owner_named_conc3_two_seps",
+     "ock_region0_link_into_region1",
+     "ock_region1_link_left_back",
+     "ock_region_deep_history_by_own_name",
+     "ock_region_history_by_own_name",
+     "ock_region_named_link_inside",
+     "ock_two_owners_counter_spans",
+     "ock_two_owners_one_crossed"
+    ]
+   },
+   "counts": {
+    "base": {
+     "mismatch": 14,
+     "both_reject_same_message": 8,
+     "match": 11,
+     "under_rejection": 5,
+     "both_reject_different_message": 2,
+     "hang": 2
+    },
+    "pr": {
+     "mismatch": 21,
+     "under_rejection": 15,
+     "match": 6
+    },
+    "tip": {
+     "mismatch": 14,
+     "both_reject_same_message": 10,
+     "match": 13,
+     "both_reject_different_message": 2,
+     "under_rejection": 3
+    }
+   },
+   "reference_results_sha256": "76776af3d64657c2b003e8d44efa47f2fce7ee5ac47a84ee4f4534be899b7b64",
+   "total": 42
+  }
+ },
+ "checker_perturbation_pairs": {
+  "count": 11,
+  "base": "11/11 pass",
+  "tip": "11/11 pass",
+  "parity_recovery_head": "6/11 pass"
+ },
+ "goldens": {
+  "no_oracle": "11182/11251 on base and tip, state 897/901; 69 failure names identical",
+  "golden_pairs": "12550 total, 10497 passed, 754 failed, 1299 skipped, 0 panics on both; 754 names identical; exit 101 on both",
+  "cli_bytes": "12550 goldens replayed with a 20 s timeout on base and tip: 0 timeouts; bytes differ only for edge_state_entry_exit_actions (the field fix; tip bytes equal the parity-recovery head's) and edge_seq_title_with_variables (%date(); identical on rerun)",
+  "state_goldens_vs_parity_recovery": "1273 state-like goldens: tip CLI bytes identical to 9df351f58"
+ },
+ "perturbations": {
+  "failure_lines": "2556 on both, identical",
+  "retained": "zero lost matches"
+ },
+ "gates": {
+  "harness_guards": "5 pass on both; decimal_literal_ratchet and parity_review_records_are_complete red on both with identical violation lines (same five decimal deltas, state.rs 53 -> 66)",
+  "pipe_mode": "17/17 on both",
+  "doc_claims": "2/2 on both",
+  "workspace_lib": "exit 0 on both; parser 685 -> 689 (four new tests), render 880 on both",
+  "clippy": "identical error locations per crate on both trees (strict stops at the pre-existing dead_code parse/component.rs:74; with -A dead_code the same lints, state.rs locations shifted by 49 lines)"
+ },
+ "residue": [
+  "Filed by the parent and left alone: top-level separator root region, root link to a region's synchro bar, pass three, final-error line after an earlier factory, synthetic-region-only name from outside.",
+  "A field line by a synthetic region's own name adds no State in Rust; Java adds the field to the region group (reasoned not drawn; probed in batch-g5r)."
+ ],
+ "held_out_batch": {
+  "path": "/Users/marcelo/Library/Caches/rustuml-opus-g5/batch-g5r",
+  "manifest_sha256": "5f7f48509435eabcd6d950ed4605578ff319fb04602b293db22b69116158f95c",
+  "bundle_sha256": "921e3c7b86a81006f8fa496273c51d4f549868545f4e8329535a848f9793899c",
+  "predictions": "/Users/marcelo/Library/Caches/rustuml-opus-g5/batch-g5r-predictions/rust-predictions.json",
+  "predictions_sha256": "f48ba101599fb1464c19ed0c937a10f537d8ecda6717bf2c0cef2a34fb578cff",
+  "cases": 13,
+  "java": "not run"
+ }
+}

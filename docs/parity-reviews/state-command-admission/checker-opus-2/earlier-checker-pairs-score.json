@@ -1,0 +1,112 @@
+{
+ "ock_cluster_owner_region_composite": {
+  "base": "pass",
+  "pr": "fail:28",
+  "tip": "pass"
+ },
+ "ock_conc1_depth2_after_sep": {
+  "base": "pass",
+  "pr": "pass",
+  "tip": "pass"
+ },
+ "ock_control_autarkic_regions": {
+  "base": "pass",
+  "pr": "pass",
+  "tip": "pass"
+ },
+ "ock_control_no_separator_crossing": {
+  "base": "pass",
+  "pr": "pass",
+  "tip": "pass"
+ },
+ "ock_nested_owner_clusters_region0": {
+  "base": "pass",
+  "pr": "fail:34",
+  "tip": "pass"
+ },
+ "ock_owner_named_conc2_one_sep": {
+  "base": "pass",
+  "pr": "fail:3",
+  "tip": "pass"
+ },
+ "ock_owner_named_conc3_two_seps": {
+  "base": "pass",
+  "pr": "fail:4",
+  "tip": "pass"
+ },
+ "ock_root_link_one_region_deep": {
+  "base": "pass",
+  "pr": "pass",
+  "tip": "pass"
+ },
+ "ock_two_owners_one_crossed": {
+  "base": "pass",
+  "pr": "fail:34",
+  "tip": "pass"
+ },
+ "ock_fork_join_choice_in_region": {
+  "base": "pass",
+  "pr": "pass",
+  "tip": "pass"
+ },
+ "ock_history_inside_regions": {
+  "base": "pass",
+  "pr": "pass",
+  "tip": "pass"
+ },
+ "g5ck_conc2_prefix_external": {
+  "base": "pass",
+  "pr": "fail:16",
+  "tip": "pass"
+ },
+ "g5ck_conc_prefix_external": {
+  "base": "pass",
+  "pr": "fail:16",
+  "tip": "pass"
+ },
+ "g5ck_field_from_outside": {
+  "base": "pass",
+  "pr": "fail:5",
+  "tip": "pass"
+ },
+ "g5ck_reenter_short_name": {
+  "base": "fail:10",
+  "pr": "fail:22",
+  "tip": "fail:10"
+ },
+ "g5ck_creole_arial_markup": {
+  "base": "pass",
+  "pr": "fail:4",
+  "tip": "pass"
+ },
+ "g5ck_creole_composite_title": {
+  "base": "pass",
+  "pr": "pass",
+  "tip": "pass"
+ },
+ "g5ck_creole_decorations_courier": {
+  "base": "pass",
+  "pr": "fail:15",
+  "tip": "pass"
+ },
+ "g5ck_creole_escape_and_newline": {
+  "base": "pass",
+  "pr": "fail:13",
+  "tip": "pass"
+ },
+ "g5ck_creole_mixed_verdana": {
+  "base": "pass",
+  "pr": "fail:13",
+  "tip": "pass"
+ },
+ "g5ck_creole_multiline_desc": {
+  "base": "pass",
+  "pr": "fail:4",
+  "tip": "pass"
+ },
+ "g5ck_creole_plain_star_slash": {
+  "base": "pass",
+  "pr": "pass",
+  "tip": "pass"
+ }
+}

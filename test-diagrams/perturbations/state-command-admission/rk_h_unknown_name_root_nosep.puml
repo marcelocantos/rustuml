@@ -1,0 +1,6 @@
+@startuml
+state Dunlin
+state Godwit
+Dunlin --> Godwit
+Wraith[H] --> Dunlin
+@enduml

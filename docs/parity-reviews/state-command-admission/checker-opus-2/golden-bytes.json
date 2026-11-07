@@ -1,0 +1,35 @@
+{
+ "goldens": 12550,
+ "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+ "timeout_s": 20,
+ "invocation": "<tree bin> -pipe -tsvg < golden.puml (stdout sha256 prefix and exit code)",
+ "full_table_sha256": "2a80a5f59a63fba5206d5049d4b05dd27d84e41fa06651cc4aad5ab845ed20e0",
+ "full_table_path": "~/Library/Caches/rustuml-opus-g5-recheck/scores/golden-bytes.json (checker cache; regenerate with tools/golden_bytes.py)",
+ "timeouts": {
+  "base": 0,
+  "pr": 0,
+  "tip": 0
+ },
+ "panics": {
+  "base": 0,
+  "pr": 0,
+  "tip": 0
+ },
+ "differ_base_vs_tip": {
+  "edge-cases/edge_state_entry_exit_actions.puml": {
+   "base": [
+    0,
+    "d716793fa48c1334"
+   ],
+   "pr": [
+    0,
+    "32484838e2168312"
+   ],
+   "tip": [
+    0,
+    "32484838e2168312"
+   ]
+  }
+ },
+ "differ_pr_vs_tip": {}
+}

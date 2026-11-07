@@ -1,0 +1,9 @@
+@startuml
+state Moor {
+  state Kestrel {
+    state Plover
+    Kestrel : nests in the bank
+  }
+  Moor : wet ground
+}
+@enduml

@@ -1,0 +1,335 @@
+{
+ "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-db",
+ "reference_results_sha256": "37b6743791a6dba4a7445540605b649624d5519f220e464573e3ede68e7385b6",
+ "trees": {
+  "base": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-base",
+   "sha256": "6b88b14aac43e4ff8fc648fec344cb090157c56fd153eb88fa4c04d0cb34a348"
+  },
+  "pr": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-pr",
+   "sha256": "63e4f84d37d1c26ad0b41ba68f9705b51231137dcd548952db54cbed5a13cd32"
+  },
+  "tip": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-tip",
+   "sha256": "d7af4e4c89c3cdfd235294cf69b55865c359c88048f7fb07f47726e097d22e93"
+  }
+ },
+ "cases": [
+  {
+   "name": "conc1_root_before_separator",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "c14c13688ff42622d1693fdf188c2f95311e2873290efc960e6a09b49d8d7e39",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "c14c13688ff42622d1693fdf188c2f95311e2873290efc960e6a09b49d8d7e39",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "c14c13688ff42622d1693fdf188c2f95311e2873290efc960e6a09b49d8d7e39",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "conc1_after_separator",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n6\nThe state CONC1 cannot be used here. (Assumed diagram type: state)",
+   "java_line": "6",
+   "java_message": "The state CONC1 cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state CONC1 cannot be used here.",
+    "line": "6",
+    "message": "The state CONC1 cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "d6a1d1f2f1595dc90984a39f2f5437e3de45fc41412714927b0d9f040f8695df",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state CONC1 cannot be used here.",
+    "line": "6",
+    "message": "The state CONC1 cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "conc2_nested_link_muted",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "2c3bb319d0914f0cebad0a7c784122a3ac13ed233e57aeb944efd31093b01062",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "thread 'main' (118785005) panicked at crates/rustuml-render/src/state.rs:6814:62:\nindex out of bounds: the len is 5 but the index is 5\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+    "class": "panic"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "2c3bb319d0914f0cebad0a7c784122a3ac13ed233e57aeb944efd31093b01062",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "conc2_declared_after_separator",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "2844722400abd276604101dc7dfeacf1e550722bb69b48d24f5abe5832fa9e9a",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "2844722400abd276604101dc7dfeacf1e550722bb69b48d24f5abe5832fa9e9a",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "2844722400abd276604101dc7dfeacf1e550722bb69b48d24f5abe5832fa9e9a",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "conc3_not_selected_by_sequence",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "3b87b740bdf45697bc14c9e0ce59805cc13980b96014ae2d0c8421d8fa2e605e",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "19567f169f03066c6a0e60febde9e8f8a8936028240ab5ac3bc90a2af8562882",
+    "stderr": "",
+    "differences": "19",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "3b87b740bdf45697bc14c9e0ce59805cc13980b96014ae2d0c8421d8fa2e605e",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "conc3_selected_at_inner_depth",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)",
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: Syntax Error?",
+    "line": "1",
+    "message": "Syntax Error?",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "thread 'main' (118786628) panicked at crates/rustuml-render/src/state.rs:6814:62:\nindex out of bounds: the len is 6 but the index is 6\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+    "class": "panic"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: Syntax Error?",
+    "line": "1",
+    "message": "Syntax Error?",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "conc3_after_two_separators",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "bc811dfe39aa0e92118a8f2f56653544a926c6204fcfd5fc6c24138fdd235f93",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "bc811dfe39aa0e92118a8f2f56653544a926c6204fcfd5fc6c24138fdd235f93",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "bc811dfe39aa0e92118a8f2f56653544a926c6204fcfd5fc6c24138fdd235f93",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "two_separators_mute_conc2_and_conc3",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n12\nThe state Dock cannot be used here. (Assumed diagram type: state)",
+   "java_line": "12",
+   "java_message": "The state Dock cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 12: The state Dock cannot be used here.",
+    "line": "12",
+    "message": "The state Dock cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "debc80cd3fe38182f12c5439a266c8959c36fc9bb2fc02d7a4dbdb905b5da78b",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 12: The state Dock cannot be used here.",
+    "line": "12",
+    "message": "The state Dock cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "nested_concurrent_composites",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "5beea76e26946dbc41c8576b5b149ad60fb3ef06d1e29f29d47ea6bacab621c8",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "dd14aef01c8f462a117a5eafabd9b8fbedb802dfba53943d513b9e4a63dbe4c2",
+    "stderr": "",
+    "differences": "27",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "5beea76e26946dbc41c8576b5b149ad60fb3ef06d1e29f29d47ea6bacab621c8",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "link_from_next_region_into_muted",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n8\nThe state CONC2 cannot be used here. (Assumed diagram type: state)",
+   "java_line": "8",
+   "java_message": "The state CONC2 cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 8: The state CONC2 cannot be used here.",
+    "line": "8",
+    "message": "The state CONC2 cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "148111e0cb06f8e82bdee58feba01521be07d482720c19a9b4b9ece4273c7e2c",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 8: The state CONC2 cannot be used here.",
+    "line": "8",
+    "message": "The state CONC2 cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  }
+ ],
+ "counts": {
+  "base": {
+   "match": 6,
+   "both_reject_same_message": 4
+  },
+  "pr": {
+   "match": 3,
+   "under_rejection": 3,
+   "panic": 2,
+   "mismatch": 2
+  },
+  "tip": {
+   "match": 6,
+   "both_reject_same_message": 4
+  }
+ },
+ "total": 10
+}

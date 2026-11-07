@@ -1,0 +1,17 @@
+@startuml
+state Undercroft {
+  state Solar
+  --
+  state fk <<fork>>
+  state jn <<join>>
+  state ch <<choice>>
+  [*] --> fk
+  fk --> Pantry
+  fk --> Buttery
+  Pantry --> jn
+  Buttery --> jn
+  jn --> ch
+  ch --> [*] : done
+  ch --> Pantry : again
+}
+@enduml

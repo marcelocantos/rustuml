@@ -1,0 +1,60 @@
+{
+ "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-cw",
+ "reference_results_sha256": "1fad4e1c1460cb2b14e052cf3f8ea7426862c02e94507eb8b1d4091e5e6d45d6",
+ "trees": {
+  "base": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-base",
+   "sha256": "6b88b14aac43e4ff8fc648fec344cb090157c56fd153eb88fa4c04d0cb34a348"
+  },
+  "pr": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-pr",
+   "sha256": "63e4f84d37d1c26ad0b41ba68f9705b51231137dcd548952db54cbed5a13cd32"
+  },
+  "tip": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-tip",
+   "sha256": "d7af4e4c89c3cdfd235294cf69b55865c359c88048f7fb07f47726e097d22e93"
+  }
+ },
+ "cases": [
+  {
+   "name": "region0_child_named_conc2",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "226e443c2f1bf0d1d7a8904351b4f9f6332df933131deeefa1377dc2cf1eadb2",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "thread 'main' (118780039) panicked at crates/rustuml-render/src/state.rs:6814:62:\nindex out of bounds: the len is 4 but the index is 4\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+    "class": "panic"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "226e443c2f1bf0d1d7a8904351b4f9f6332df933131deeefa1377dc2cf1eadb2",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  }
+ ],
+ "counts": {
+  "base": {
+   "match": 1
+  },
+  "pr": {
+   "panic": 1
+  },
+  "tip": {
+   "match": 1
+  }
+ },
+ "total": 1
+}

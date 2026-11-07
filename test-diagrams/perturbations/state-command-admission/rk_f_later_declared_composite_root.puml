@@ -1,0 +1,8 @@
+@startuml
+Heron : stalks the reeds
+state Heron {
+  state Egret
+  state Bittern
+  Egret --> Bittern
+}
+@enduml

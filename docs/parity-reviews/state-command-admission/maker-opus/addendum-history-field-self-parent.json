@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "base": "5e59b0421 (parity-recovery-2026-11-03 9df351f58 merged into 9c98a0b0e; bullseye.yaml identical to 9df351f58)",
+  "measurement": "Checker review eaadbd284 (batch DE, relay opus-g5-checker-heldout). ock_region_history_by_own_name and ock_region_deep_history_by_own_name: Java exit 0; the tip never terminates. ock_conc2_declared_in_region_depth2 and ock_region_named_link_inside: Java exit 200, line 1, 'Syntax Error?'; the tip renders. Golden edge_state_entry_exit_actions: the tip adds an entity Connected.Connected for a field line naming its own composite.",
+  "java": {
+    "history_by_name": "CommandLinkStateCommon.getEntity tests code.endsWith(\"[H]\") and \"[H*]\" (CommandLinkStateCommon.java:171-177) before the current-group short-circuit (:189-190), and calls StateDiagram.getHistorical(location, idShort) / getDeepHistory(location, idShort) (StateDiagram.java:142-156, :177-191). Those call quarkInContext(true, X) and gotoGroup(..., STATE) with no checkConcurrentStateOk. Inside region Bailey.CONC2, 'CONC2' has count 1 and that quark is the current group, so quarkInContextSafe returns the current group's child Bailey.CONC2.CONC2 (CucaDiagram.java:264-272). gotoGroup creates it as a STATE group under the region, holding the history pseudo-state.",
+    "group_parent": "A quark's parent is fixed when Quark.child creates it. getGroupParentIfItIsConcurrentState starts the walk at ent.getParentContainer() (StateDiagram.java:256-266), so a region linked by its own name through the getEntity short-circuit has no concurrent ancestor of its own when its owner is a plain state, while the region's members have the region. checkFinalError then fails (StateDiagram.java:232-254).",
+    "field_line": "CommandAddField uses the current group when its name equals the code, before quarkInContext (CommandAddField.java:82-85). It runs no checkConcurrentStateOk."
+  },
+  "rust_divergence": "ensure_state resolves the X of X[H] with StateNameUse::Link, so the getEntity short-circuit returns the current region itself. It then pushes a State for that synthetic region with parent = current_scope(), its own id. mute_to_state removes it from concurrent_now, and nearest_concurrent_ancestor loops forever, because quark_parent returns the id itself. The same self-parent record makes both ends of 'CONC2 --> Crenel' report the region, so check_final_error passes. Field lines resolve with StateNameUse::Unchecked, which has no short-circuit. Since 366dd2ab1 the count-1 rule refuses the current group, so 'Chancel : text' inside Chancel takes the child Chancel.Chancel.",
+  "planned_change": "Parser only. (1) Split the name uses: Link (short-circuit and check), Declaration (check), Field (CommandAddField short-circuit, no check), and Unchecked (neither) for X[H], X[H*] and note anchors. (2) When a State is first recorded for a quark, its parent is that quark's own parent: quark_parent for the current scope reached by the short-circuit (a synthetic region's owner), never its own id. (3) nearest_concurrent_ancestor starts from the parent and stops on a repeated id; that is a guard, not the port. (4) A field line that reaches a synthetic region through the short-circuit adds no State: Java adds the field to the region group, and the region is drawn as a STATE_CONCURRENT image with no field block. Also move render's doc comment back onto render.",
+  "perturbation_axes": [
+    "history by the region's own name at depths 1, 2 and 3",
+    "deep history by the region's own name",
+    "history by an owner's name from inside its region 0",
+    "field line by the owner's own name, with and without separators",
+    "field line by the region's own name",
+    "link by the region's own name inside the region at depth 1 and 2"
+  ]
+}
