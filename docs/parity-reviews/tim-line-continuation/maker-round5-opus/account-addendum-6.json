@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-line-continuation",
+  "target": "T14.22",
+  "round": 7,
+  "maker": "claude-opus-5-5",
+  "kind": "round-7 correction account after re-check review-7 (a80bb440f), committed after the parity-recovery merge 6d195c178 (bullseye.yaml only; code identical to 59d78989f) and before any round-7 code change",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "corrections_of_record": [
+    "Round 6 said 43 worse than 9fc567332. Over every cohort it is 48 (review-7): 45 on my own cohorts once DK's Java results exist (DK o6n_format_line_bs_seq, and BY cr2_seq_two_blocks_first_swallowed, which I wrongly said 'equals the head'), plus DL's q7_num_us_blank_bs_seq, q7_type_bs_dotless_mindmap and q7_hdr_bom_content. BY cr2_seq_two_blocks_first_swallowed is inherited by parent decision: tip, merged base and 9ed52f435 report 'No valid @start/@end found' (exit 1); 9fc567332 produces output the comparator cannot score (exit 3); Java exits 0 with the 'No valid @start/@end found' page. This round leaves it alone.",
+    "Addendum 5 said every golden carries a Pipe mark. False: the ten type-detection/noheader_* goldens have none. They match at every build because PicoWebServer (picoweb/PicoWebServer.java:278-279), which produced the goldens, wraps a source not starting with '@start' in '@startuml'/'@enduml' as Pipe does, so their numbering agrees with Pipe's."
+  ],
+  "obligation_1_pipe_drops_lines": {
+    "java": "Pipe#readSingleDiagram (Pipe.java:180-225) never appends a line that startsWith(\"@@@format \") (188-189, any position) nor, while NO_CONTENT, a line whose String#trim is empty (191-192, 207-208). Those lines are not in the text BlockUmlBuilder reads, so they reach neither TIM nor a factory.",
+    "rust_divergence": "59d78989f skips them only in pipe_text_positions; merge_ending_backslash_lines keeps input[..pipe.kept] whole, so '@@@format svg' and a U+001F lead line reach the strict sequence admission (DK o6n_format_line_bs_seq, DL q7_num_us_blank_bs_seq).",
+    "planned_change": "merge_ending_backslash_lines builds the block text from the lines Pipe appends only (same rule as pipe_text_positions), keeping each kept line's original input index; MergedInputLine.source_line is mapped back to that index, so the no-mark Pipe positions and the marked inputs' existing file-line numbering are unchanged. No golden contains a '@@@format ' line or a trim-empty control-character lead line (review-7)."
+  },
+  "obligation_2_case_fold": {
+    "java": "DiagramType#check (DiagramType.java:218-220) is String#regionMatches(true, p, key, 0, len): per UTF-16 unit, equal, or Character.toUpperCase equal, or Character.toLowerCase of those equal. findStartTypes checks 'start' the same way; getTypes switches on Character.toLowerCase of the first unit after 'start' (94-95) before its checks.",
+    "rust_divergence": "start_directive_type and start_type_is compare an ASCII byte prefix with eq_ignore_ascii_case, so '\\startm\\u0131ndmap' (dotless i) is not MINDMAP (DL q7_type_bs_dotless_mindmap).",
+    "planned_change": "A per-unit port of regionMatches(ignoreCase) against the ASCII keys ('start' and the getTypes keys): a text unit matches key letter k when it is k, or its Java simple uppercase or lowercase equals k's. Java's simple case mappings (Character#toUpperCase(char), #toLowerCase(char)) are UnicodeData fields 12/13; over Unicode 15.0 the non-ASCII BMP units that match an ASCII letter under that rule are exactly U+0130 (i), U+0131 (i), U+017F (s) and U+212A (k). support/gen_ascii_fold.py derives this set from UnicodeData.txt 15.0.0 (sha256 806e9aed...6a73) and a unit test pins it. No full Unicode case fold: U+00DF (sharp s) does not match 's' (its simple uppercase is itself). The switch character keeps Character.toLowerCase semantics (U+212A -> 'k', U+0130 -> 'i'; dotless i and long s stay themselves, so they never select a case)."
+  },
+  "obligation_3_read_line_reader": {
+    "java": "BlockUmlBuilder reads UncommentReadLine(ReadLineReader.create(...)) (BlockUmlBuilder.java:91). ReadLineReader#readLine (preproc/ReadLineReader.java:89-103) drops one leading U+FEFF from every line and replaces U+2013 with '-'. Pipe's start-mark test runs before it, on the raw line.",
+    "rust_divergence": "The main block is not read through the ReadLineReader port (read_line_reader_lines, used for includes), so a content line starting with U+FEFF reaches the parser with it (DL q7_hdr_bom_content).",
+    "planned_change": "The main-block lines Pipe appends go through the ReadLineReader port before UncommentReadLine (Java's order); parse::split_blocks and parse::detect_type see the same text through uncommented_lines. The port is the whole stage, so U+2013 -> '-' comes with it (also round-4 residue cr4_main_endash_arrow, on review-5's approved list; and cr4_main_bom_line2 / cr4_main_bom_before_directive)."
+  },
+  "measurement": "Fresh git-archive build of the tip; the merged base 6d195c178 and the head f6a738af1 have code identical to 59d78989f and 9fc567332 (git diff over Cargo.toml, Cargo.lock, crates, vendor, third_party is empty), so those fresh round-6 binaries are their builds (hashes recorded); 9ed52f435 reused. Unchanged replay.py/compare_cli/classify.py, every cohort including DK and DL, 4 modes, replay timeouts, review-6's validity overlay and the T14.63 Welcome overlay. Bar: 0 worse than 6d195c178; worse than 9ed52f435 only r5b_start_bs_chen; worse than f6a738af1 only review-5's 38, the 4 named inherited, BY cr2_seq_two_blocks_first_swallowed and chen. Must pass: o6n_format_line_bs_seq, q7_num_us_blank_bs_seq, q7_type_bs_dotless_mindmap, q7_hdr_bom_content."
+}
