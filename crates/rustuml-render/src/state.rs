@@ -2878,6 +2878,24 @@ fn autonomous_scope_parent<'a>(diagram: &'a StateDiagram, scope: &str) -> Option
     })
 }
 
+/// Whether some ancestor of `group` is a group `CucaDiagramSimplifierState`
+/// images, so `group` is drawn inside that image.
+fn has_autarkic_ancestor(diagram: &StateDiagram, group: &str) -> bool {
+    let mut current = autonomous_scope_parent(diagram, group);
+    let mut remaining = diagram.states.len() + 1;
+    while let Some(scope) = current {
+        if remaining == 0 {
+            return false;
+        }
+        remaining -= 1;
+        if java_state_group_is_autarkic(diagram, scope) {
+            return true;
+        }
+        current = autonomous_scope_parent(diagram, scope);
+    }
+    false
+}
+
 fn autonomous_scope_is_inside(diagram: &StateDiagram, scope: &str, group: &str) -> bool {
     let mut current = Some(scope);
     let mut remaining = diagram.states.len() + 1;
@@ -3764,12 +3782,14 @@ fn build_state_group_outcome<'a>(
         .collect();
     // A group whose only leaf is a pseudo-state, as the group `getHistorical`
     // creates for `X[H]`: its link leaves the group, so `Entity.isAutarkic` is
-    // false (Entity.java:702-704) and the enclosing image draws it with
-    // `Cluster.drawU` instead of imaging it.
+    // false (Entity.java:702-704) and the enclosing ancestor's GroupMakerState
+    // image draws it with `Cluster.drawU` instead of imaging it. A root-level
+    // group of that kind stays on render_non_autarkic_root_clusters.
     if direct_children.is_empty()
         && composite.concurrent_separator.is_none()
         && state_group_has_children(diagram, &composite.id)
         && !java_state_group_is_autarkic(diagram, &composite.id)
+        && has_autarkic_ancestor(diagram, &composite.id)
     {
         return Some(StateGroupOutcome::Cluster {
             state: composite,
