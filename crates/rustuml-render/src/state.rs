@@ -2045,6 +2045,21 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
     transitions.sort_by_key(|(index, transition)| (transition.source_line, *index));
     for (idx, transition) in transitions {
         for (endpoint, is_source) in [(&transition.from, true), (&transition.to, false)] {
+            // `getHistorical/getDeepHistory(location, X)` enter X with
+            // `gotoGroup`, which creates the group when it has no data, and
+            // only then create the pseudo-state (StateDiagram.java:142-156,
+            // :177-191). A group first created that way takes the pass-two
+            // uid just before its pseudo-state.
+            if let Some(group) = ["[H*]", "[H]"]
+                .into_iter()
+                .find_map(|marker| endpoint.strip_prefix(marker))
+                .filter(|group| !group.is_empty())
+                && state_ids.iter().any(|state_id| state_id == group)
+                && !entity_ids.iter().any(|(seen, _)| seen == group)
+            {
+                entity_ids.push((group.to_string(), format!("ent{pass_two_counter:04}")));
+                pass_two_counter += 1;
+            }
             let mapped_id = state_endpoint_layout_id(endpoint, is_source);
             let id = if state_ids.iter().any(|state_id| state_id == &mapped_id) {
                 mapped_id
@@ -3747,6 +3762,20 @@ fn build_state_group_outcome<'a>(
                 && !diagram.states.iter().any(|other| other.id == parent)
         })
         .collect();
+    // A group whose only leaf is a pseudo-state, as the group `getHistorical`
+    // creates for `X[H]`: its link leaves the group, so `Entity.isAutarkic` is
+    // false (Entity.java:702-704) and the enclosing image draws it with
+    // `Cluster.drawU` instead of imaging it.
+    if direct_children.is_empty()
+        && composite.concurrent_separator.is_none()
+        && state_group_has_children(diagram, &composite.id)
+        && !java_state_group_is_autarkic(diagram, &composite.id)
+    {
+        return Some(StateGroupOutcome::Cluster {
+            state: composite,
+            children: Vec::new(),
+        });
+    }
     if direct_children.is_empty()
         || direct_children.iter().any(|state| {
             !(supports_autonomous_state_image(state) || border_point_inside_image(diagram, state))
@@ -6381,10 +6410,6 @@ fn simulate_state_compound(
     result
 }
 
-/// Build a PlantUML-compatible SVG for a state diagram.
-///
-/// The output uses inline formatting (no extra whitespace) to match PlantUML's
-/// single-line SVG output as closely as possible.
 /// Give each synthetic region of a non-autarkic owner the `State` that Java's
 /// region group is.
 ///
@@ -6441,6 +6466,10 @@ fn materialize_cluster_owner_regions(diagram: &StateDiagram) -> Option<StateDiag
     })
 }
 
+/// Build a PlantUML-compatible SVG for a state diagram.
+///
+/// The output uses inline formatting (no extra whitespace) to match PlantUML's
+/// single-line SVG output as closely as possible.
 pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
     render_with_oracle(diagram, theme, None)
 }
