@@ -1,0 +1,1 @@
+crates/rustuml-parser/src/parse/component.rs: warning: function `looks_like_description_bracket_command` is never used

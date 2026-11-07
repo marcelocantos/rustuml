@@ -1,0 +1,47 @@
+monospace	not-installed	-
+arial	installed	/System/Library/Fonts/Supplemental/Arial Bold Italic.ttf
+arial	installed	/System/Library/Fonts/Supplemental/Arial Bold.ttf
+arial	installed	/System/Library/Fonts/Supplemental/Arial Italic.ttf
+arial	installed	/System/Library/Fonts/Supplemental/Arial.ttf
+courier	not-installed	-
+courier	not-installed	-
+courier new	installed	/System/Library/Fonts/Supplemental/Courier New Bold Italic.ttf
+courier new	installed	/System/Library/Fonts/Supplemental/Courier New Bold.ttf
+courier new	installed	/System/Library/Fonts/Supplemental/Courier New Italic.ttf
+courier new	installed	/System/Library/Fonts/Supplemental/Courier New.ttf
+courier/	not-installed	-
+dialog	not-installed	-
+dialoginput	not-installed	-
+helvetica	installed	/System/Library/Fonts/Helvetica.ttc
+liberation mono	not-installed	-
+lucida console	not-installed	-
+lucida grande	installed	/System/Library/Fonts/LucidaGrande.ttc
+menlo	installed	/System/Library/Fonts/Menlo.ttc
+mono	not-installed	-
+monospace	not-installed	-
+monospace	not-installed	-
+monospaced	not-installed	-
+monospaced	not-installed	-
+must be inert	not-installed	-
+neverarealfont871	not-installed	-
+oak ω𐐷	not-installed	-
+oak & fir	not-installed	-
+oak & pine	not-installed	-
+oak'pine	not-installed	-
+oak«fir»	not-installed	-
+quill & reed	not-installed	-
+quill'	not-installed	-
+quill<reed>é𐐨	not-installed	-
+sans-serif	not-installed	-
+sansserif	not-installed	-
+serif	not-installed	-
+serif%substr(	not-installed	-
+times	not-installed	-
+times new roman	installed	/System/Library/Fonts/Supplemental/Times New Roman Bold Italic.ttf
+times new roman	installed	/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf
+times new roman	installed	/System/Library/Fonts/Supplemental/Times New Roman Italic.ttf
+times new roman	installed	/System/Library/Fonts/Supplemental/Times New Roman.ttf
+verdana	installed	/System/Library/Fonts/Supplemental/Verdana Bold Italic.ttf
+verdana	installed	/System/Library/Fonts/Supplemental/Verdana Bold.ttf
+verdana	installed	/System/Library/Fonts/Supplemental/Verdana Italic.ttf
+verdana	installed	/System/Library/Fonts/Supplemental/Verdana.ttf

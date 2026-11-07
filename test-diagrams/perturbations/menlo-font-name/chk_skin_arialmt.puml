@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName ArialMT
+class Zonal
+Zonal : !!!!
+@enduml

@@ -52,6 +52,7 @@ mod java_bidi_data;
 pub mod json_diagram;
 pub mod layout_oracle;
 pub mod math;
+mod menlo_bi_fallback;
 pub mod metrics;
 pub mod mindmap;
 mod non_ascii_widths;
@@ -61,6 +62,8 @@ pub mod openiconic;
 pub mod pdf;
 pub mod plantuml_metrics;
 pub mod png;
+#[cfg(test)]
+mod reference_env_census;
 pub mod regex_diagram;
 pub mod salt;
 pub mod scale;

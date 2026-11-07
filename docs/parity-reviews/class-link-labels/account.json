@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-link-labels",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java:116-130,229-241 getDefaultStyleDefinitionArrow, getStyleArrowCardinality, and the per-link FontConfiguration passed to SvekEdge",
+    "src/main/java/net/sourceforge/plantuml/style/Style.java:203-228 Style.getUFont and getFontConfiguration",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:279-349,356-366 label TextBlock, addVisibilityModifier margin, quantifier and role blocks",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:423-431,734-741,944-971 appendLine xlabel for ortho, getXY of the label table, drawU",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java:258-300,710-721 getWithNewlines and hasSeveralGuideLines",
+    "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockArrow2.java:50-77 square is the font size, triangle is (int)(size * 0.80)",
+    "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandLinkClass.java:161-245 optional STEREOTYPE between the second entity and the label",
+    "src/main/java/net/sourceforge/plantuml/stereo/StereotypePattern.java:45-69 optional chevrons and removeChevronBrackets",
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/LinkConstraint.java:82-102 cited constraint caption; not the ordinary Svek label path"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/class.rs:279-284 Relationship.stereotypes",
+    "crates/rustuml-parser/src/parse/class.rs:1046-1084 stereotype capture before the label",
+    "crates/rustuml-render/src/class.rs:2501-2539 ortho xlabel request, except the post-layout ER rewrite",
+    "crates/rustuml-render/src/class.rs:12844-12910 newline split, center block, arrow square only when a guide arrow exists",
+    "crates/rustuml-render/src/class.rs:12987-13059 arrow and cardinality signatures, FontStyle and FontWeight",
+    "crates/rustuml-render/src/class.rs:13070-13083 synthesize_ortho_edge_labels skips a solved xlabel",
+    "crates/rustuml-layout/src/graph.rs:859-861,1363,1649-1652 xlabel emission and ED_xlabel readback",
+    "vendor/graphviz/lib/rustuml_helpers.c:82 kind 3 reads ED_xlabel"
+  ],
+  "invariant": "A class link label is one TextBlock built from the arrow style's FontConfiguration, and its quantifiers are a second TextBlock built from the cardinality font. Display.getWithNewlines splits the two-character sequence \\n before either block is measured, and class message alignment centers each line in the max line width. The magic-arrow square is the resolved font size and is reserved only when a guide arrow exists. A <<stereotype>> between the second entity and the label is stored on the link and selects the arrow style; it is not drawn. Orthogonal center labels are sent as Graphviz xlabel, and the painted origin is the center of that table after postproc centerPt. The vertical double-line / circle-crowfoot route is rewritten after layout, so that route still has no xlabel and keeps the synthesizer. LinkConstraint.drawMe is a different caption and is not this path.",
+  "causal_divergence": "Before this port the center label was one unsplit string measured in sans-serif 13, ArrowFontStyle was ignored, a stereotype token between the target and the label failed the relationship parse so the link was dropped, quantifiers used the center font, the arrow square of 13 was applied even when no guide arrow existed so size 9 tables were 15 instead of 12, and class ortho labels were invented with ORTHO_XLABEL_VERTICAL_INSET 5.0 instead of reading the xlabel Graphviz solves.",
+  "planned_change": "Carry the inner stereotype on Relationship. Resolve arrow and cardinality fonts from the link stereotype, including FontStyle via font_face and a FontWeight override only when the CSS weight is not 400. Split center and endpoint labels on \\n, center each line, and max the center height with the font size only when a magic arrow is present. Send class ortho center labels as xlabel and read ED_xlabel when ED_label is absent, except the ER route that normalize_ortho_er_vertical_route rewrites. Do not change the inset, the ER route deltas, the font tables, or GEOM_EPS.",
+  "perturbation_axes": [
+    "newline count and line length at sizes outside the 10-14 metric table",
+    "ArrowFontStyle plain, bold, italic, and bold italic",
+    "Courier New italic with and without an unmapped mark",
+    "link stereotype selecting ArrowFontSize versus a global arrow font",
+    "quantifier text at a non-default ArrowFontSize",
+    "orthogonal xlabel versus the post-layout ER rewrite"
+  ]
+}

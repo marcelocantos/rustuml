@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "mechanism": "menlo-bold-italic-fallback",
+  "reviewer": {
+    "task_id": "opus-g3-recheck (T3 Code review sub-agent, branch review/opus-g3-recheck)",
+    "model": "claude-opus-5-5 / Claude Code in T3 Code",
+    "independence": "Separate review task. No production, comparator, baseline, allow-list, or bullseye edits. No child agents, no other worktrees."
+  },
+  "account_commit": "a0dca233c38251c0233dfb85179d0eb9aa127f0f",
+  "implementation_commit": "358b6e285e6511fafb28af4f4527b4e3b1e2bf80",
+  "base_commit": "0cd7743aa8fe66a01e0be1e5b1c2a66aae34feaa",
+  "pre_packet_commit": "505999cac2e0ddd6913046d6c6a9bc15eb8dea45",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git archive <rev> -- Cargo.toml Cargo.lock crates vendor; CARGO_TARGET_DIR=<private> cargo build --release -p rustuml, for 505999cac, 0cd7743aa and 0063e0e77. Binary SHA256: {\"pre 505999cac (parity-recovery parent of the merge base)\": \"53500c49004da9b9a68af6661a3a1a8ab6950a239e00ce9f68b44e491125409c\", \"base 0cd7743aa\": \"f20b16ce8bcded9cfc7edcca5ff3e794e4c17ad6be49b150d05ae80189bdf934\", \"tip 0063e0e77 (code of 358b6e285)\": \"d629984ffe7e661d8e481290412909f1c99369146ff5855f8320a25b56c7329d\"}",
+    "rustuml -pipe -tsvg < case.puml, cwd = the source directory, for every case of each relayed manifest (CZ grok-g3-recheck-heldout, CN, CG, CQ, CR, CX, shared-svg-round9-c9a) and all 18,921 .puml under test-diagrams/golden and test-diagrams/perturbations",
+    "opus-cmp: a stdin driver calling rustuml_oracle::compare::compare_svg_strict(java, rust) per case; plus an element-by-element (tag, attributes, text) loss check on every case whose stdout differs between trees",
+    "cargo test --offline --release -p rustuml-oracle --test golden_no_oracle -- --nocapture (base and tip); --test golden_pairs; --test parity_perturbations; --test harness_guards --no-fail-fast (base and tip)",
+    "cargo test --offline --release -p rustuml --test pipe_mode; -p rustuml-oracle --test doc_claims; --workspace --lib --no-fail-fast (tip)",
+    "cargo clippy --offline --release -p <crate> --all-targets -- -W clippy::all for all six crates at base and tip",
+    "python3 diff of every FALLBACK row in crates/rustuml-render/src/menlo_bi_fallback.rs against the JRS BOLDITALIC FALLBACK rows of relay grok-g3-menlo-jrs-probe2/probe.stdout"
+  ],
+  "findings": [
+    "Accepted. The fallback data is extraction data: probe.stdout SHA256 31bd13b0e4b68737e067f807360c4c77ad8ef6e3c6a5fb79774a44df79125407 and MenloJrsFaceProbe.java c8b15325b33cfb5f4ae5795e9f5f1e4830a2c7799fc10699462fbe2c9d5a8c9f match the module header and the committed copies; fallback-advances.tsv is 725db0d5d90a7e51c397d6d6772a6aa3a8f668eaecaa5b9314f48c3f2e4b14b6. All 267 table rows equal the probe's 267 BOLDITALIC FALLBACK rows: same scalar set, same PostScript face, same unitsPerEm, same integer advance units (0 mismatches), and none is keyed to a fixture. The only non-integer row family is Apple Color Emoji (18 rows), stored as 7600/7 of an 800-unit em: the probe's JRS column is 1085.714..., i.e. 19 pt observed at 14 pt.",
+    "Scope: the table is applied only when ChainFace::for_style(Menlo, bold, italic) is MenloBoldItalic (plantuml_metrics::mono_text_width_styled), and only for scalars in the table; Menlo Bold of the same scalars stays one cell, which CZ confirms (g3r2_fb_menlo_bold_cloud/jcaron, g3r2_fb_menlo_regular_cloud/jcaron match Java). Courier New Bold Italic and Monaco do not reach the table. Logical Monospaced bold italic reaches the same Menlo face; the c9a_fs_mo_bi_* perturbations keep their widths at the tip and their remaining differences are NBSP and style attributes, not widths.",
+    "asFontFace: style_cascade::font_face matches ValueImpl.asFontFace plus UFontFace.fromCssWeight for every input in CZ: bold, italic, plain, normal, bolditalic, BoldItalic, bold italic, 400, 700, bolder and lighter all give Java's widths. 5ff5f2dd2 only re-routes the four ClassFontOverrides readers and stereotype_font_style_param in class.rs; style_cascade.rs is unchanged in 505999cac..358b6e285, and the CLI corpus shows no golden stdout change, so no other family moves. bolder and lighter still fail only on the emitted font-weight (Java 800 and 300; Rust 700 and none), identically before the change.",
+    "Residue, none caused by the packet (each tip value equals or improves on pre): (a) Apple Color Emoji advances are integers per size: Java gives 19 at 14 pt, 17 at 13 pt (CZ g3r2_fb_menlo_bi_emoji13) and 16 at 12 pt (CR g3_bi2_emoji_12); Rust scales 19 linearly (17.6429, 16.2857). This widens 🎯T14.50.2 beyond 12 pt. (b) An astral scalar Menlo lacks in every face (U+1F4A1) measures one cell, Java 19 (g3r2_fb_menlo_bi_astral); the account's invariant covers it but the 267-scalar table does not. (c) A combining mark after a base (e + U+0301) is two cells, Java one (g3r2_fb_menlo_bi_combining). (d) Menlo Italic falls back too: U+2602 is 14 and U+01F0 is 8.4014 (Monaco) in Java, one cell in Rust (g3r2_fb_menlo_italic_cloud/jcaron). (e) Courier New Bold Italic U+2602 is 14 in Java, one Courier New cell in Rust. These five sources and Java SVGs are in checker-opus-2/residue/ rather than the executable walk, because the latest accepted review may not list failing pairs.",
+    "8ba8b98ff replaces the test literal 8.4287 with fmt_tl(14.0 * 1233.0 / 2048.0), the Menlo cell from the extraction; class.rs stays at 578 high-precision literals at pre, base and tip.",
+    "68 cases x 2 trees: my rebuilt binaries reproduce rust-predictions.json (SHA256 debbce39468e70f19d6398e171d72ab18cba45496fca59aacc203e487cba3db9) byte-for-byte on exit code, stdout SHA256 and stderr SHA256, 136/136. The predictions file (10:25:29) predates the relayed reference-results.json (10:28:17, SHA256 3fb752b346049d34339c9f7d88697a695df59ac21e86525ae71ecd1cac07c925); the manifest dbf5e1c8 and bundle 82163bc6 match in the checker cache and the relay directory. My binary hashes differ from the earlier checker's (316d8776, 396a4d35) because Cargo embeds the build path; stdout does not.",
+    "Whole-SVG compare_svg_strict, pre 505999cac / base 0cd7743aa / tip: CZ 24/47/51 of 68; CN 8/29/38 of 46; CG 1/6/6 of 6; CQ 0/7/7 of 7; CR 0/13/13 of 14; CX 3/7/11 of 14; c9a 100/108/112 of 288 (c9a_ns_menlo 0/8/8 of 8). Losses base->tip 0 and pre->tip 0 in every batch, at whole-SVG and at element level.",
+    "CLI over 12,550 goldens and 6,371 perturbations: 0 golden stdouts change in any pair of trees. 79 perturbation stdouts change pre->tip (56 base->tip): 0 whole-file losses, 0 element-level losses. 4 shared-svg-corrective dash_0{1,3,6,7} panic (exit 101, empty stdout) in all three trees; their stderr differs only by the embedded build path. Exit codes are identical per tree (18,667 x 0, 250 x 1, 4 x 101).",
+    "golden_no_oracle passes at base and tip with byte-identical per-family counts, 11181/11251; with no golden stdout change, the failure names are the same. golden_pairs 10497 pass / 754 fail / 1299 skip / 0 panics at both, identical per-directory failures. parity_perturbations fails at both (pre-existing): 2693 failing paths at base, 2689 at the tip; on the common set the tip is 2688, i.e. 5 gains and 0 losses; the extra tip failure is the pre-existing chk_skin_helvetica_light pair that only exists at the tip. pipe_mode 17/17. doc_claims 2/2. Workspace lib: layout 41, math 10, oracle 31, parser 665, render 868 passed + 1 ignored, 0 failed. Clippy warning sets are identical per crate at base and tip (render 21, parser 1, layout 1, math 0, oracle 21, rustuml 20). harness_guards: comparator_constants_frozen, no_golden_data_embedded_in_shipping_crates, no_label_keyed_width_constants, error_golden_census_is_frozen, parity_review_paths_reject_traversal pass at both; parity_review_records_are_complete fails at both (pre-existing records in other mechanisms); decimal_literal_ratchet fails at both, see the ratchet finding.",
+    "Every commit in 0cd7743aa..358b6e285 other than 221a17da0 touches only docs/ and bullseye.yaml; 221a17da0 touches crates/rustuml-render/src and test-diagrams/perturbations/menlo-font-name. bullseye.yaml at 358b6e285 is byte-identical to 0cd7743aa. Addendum 7a2b02604 (09:11) precedes fix 221a17da0 (09:21); addendum 6c17ffacf (08:30) precedes fix 5ff5f2dd2 (08:37). No change under crates/rustuml-oracle, test-diagrams/golden, test-diagrams/no_oracle_baseline.txt, test-diagrams/ulp_parked.txt, tools, scripts or Cargo files in 505999cac..358b6e285. Added non-test string literals are font, face and logical-font names; fixture words (Comet, Wharf qr, code here) appear only in #[cfg(test)] code.",
+    "Packet status: this mechanism is accept-ready, but it ships in the same packet as menlo-font-name, whose review-2 is rejected on the decimal-ratchet regression; the packet as a whole is not accept-ready for local merge until that is fixed."
+  ],
+  "verdict": "accepted",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bi_jcaron.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bi_jcaron.svg",
+      "axes": [
+        "JRS fallback Monaco advance (U+01F0)"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_fb_menlo_bi_jcaron",
+      "source_sha256": "939366aff396541efef134db108f2010ff29f60fed2336e54419d2b79bb07a4f",
+      "golden_sha256": "0340ae57d5c9f4198e509d33efeb764fb70c85bf2b2c9ffd6a32603d190bd106"
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bi_ncap.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bi_ncap.svg",
+      "axes": [
+        "JRS fallback Monaco advance (U+0220)"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_fb_menlo_bi_ncap",
+      "source_sha256": "6ad797021cf5eb8a65e60472c4842a8600398a84f50e8fccbc267d7b1c007466",
+      "golden_sha256": "f0ca0174a52bd1115a00ea8d552eaae32ccbf2e503ce9b4af5c62627435eb689"
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bi_cloud.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bi_cloud.svg",
+      "axes": [
+        "JRS fallback Hiragino advance (U+2602)"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_fb_menlo_bi_cloud",
+      "source_sha256": "2e6b0168cb5c8acfdd16b29ce3a534eef393e77210356b467eef5b0fe5ef73fe",
+      "golden_sha256": "974e34db0f1fb29ce804ea5dc2aa972b77b52b8f2bbe75f84957172bea94c665"
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bold_cloud.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bold_cloud.svg",
+      "axes": [
+        "Menlo Bold owns the glyph: no fallback"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_fb_menlo_bold_cloud",
+      "source_sha256": "5999dc62421a153bb429f163550ff59270e3ba3da3c97a010875a5803728ea75",
+      "golden_sha256": "795189f3c770fc28bff0cedc802abc3cb063ef7e64600a69ad5568df257ea43d"
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fs_class_bolditalic.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fs_class_bolditalic.svg",
+      "axes": [
+        "asFontFace bolditalic is normal"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_fs_class_bolditalic",
+      "source_sha256": "518e7b1e6ab7dc7b22382037eea06c0398cdf4441fbfb88e58b9014bba6493fa",
+      "golden_sha256": "ce570963238290ad170887ee884ff5080703835196048c7dbb8f0ce8e3d6c08d"
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fs_class_mixed_bi.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fs_class_mixed_bi.svg",
+      "axes": [
+        "asFontFace BoldItalic, case"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_fs_class_mixed_bi",
+      "source_sha256": "ed9750676cd2d6b9c09ebf7897c2f8c72492aca987ac98a1c9c0711a05869ac3",
+      "golden_sha256": "0ae74857b7a7db4418467f475de54932c141d700582111a6baf32cc2cfb15a76"
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fs_class_css700.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fs_class_css700.svg",
+      "axes": [
+        "asFontFace CSS weight 700"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_fs_class_css700",
+      "source_sha256": "05bc189b1ff8b1f6d16c2f9056dff4ee627fe34efc614b481d3a2291ba35a90a",
+      "golden_sha256": "945c661a6dff8ee984a1fc200767f6d44ee47dbff0c1babbed608ddab5c6b56f"
+    }
+  ]
+}

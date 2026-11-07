@@ -266,7 +266,7 @@ fn print_agent_guide() {
     println!(
         "Product truth is the no-oracle product tier: `cargo test --test golden_no_oracle --release`."
     );
-    println!("Current no-oracle baseline: 11,181/11,251 eligible SVG goldens pass (99.4%).");
+    println!("Current no-oracle baseline: 11,182/11,251 eligible SVG goldens pass (99.4%).");
     println!(
         "The strict tier is oracle-assisted: `cargo test --test golden_pairs` currently passes 11,130/11,251 eligible SVG goldens."
     );
@@ -276,6 +276,9 @@ fn print_agent_guide() {
     println!("- SVG (default): `rustuml -tsvg input.puml`");
     println!("- PNG: `rustuml -tpng input.puml > output.png`");
     println!("- PDF: `rustuml -tpdf input.puml > output.pdf`");
+    println!(
+        "  PDF is a RustUML extension. Pinned Java comments out the PDF route in TitledDiagram and rejects `-tpdf`. Parity tiers do not compare it to Java."
+    );
     println!("- EPS: `rustuml -teps input.puml > output.eps`");
     println!("- ASCII text: `rustuml -ttxt input.puml` (sequence diagrams only)");
     println!();

@@ -1,0 +1,5 @@
+@startuml
+class Ledger
+class Hopper
+Ledger "0\\n1" --> "1\t*" Hopper : count
+@enduml

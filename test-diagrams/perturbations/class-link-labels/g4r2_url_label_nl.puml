@@ -1,0 +1,5 @@
+@startuml
+class Ledger
+class Hopper
+Ledger --> Hopper : pre\n[[https://ledger.example/item bin\nhex]]\npost
+@enduml

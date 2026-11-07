@@ -1,0 +1,39 @@
+# Zero-loss remeasure after the Menlo Bold Italic fallback port
+# tree dc6cc0799 (port 23a2e42ad plus the face-name guard)
+# release, CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g3/target-t1450
+# binary SHA256 b7c68efb448db3f26a27ab925f572263c5dbbf80ad3d462458d45f09a7f67fb4
+# logs ~/Library/Caches/rustuml-grok-g3/t1450-gates/
+
+Lost matches: 0. Lost rejections: 0. New valid-input errors: 0. Panics: 0 new.
+The four perturbation panics at crates/rustuml-parser/src/parse/class.rs:285
+(dash_01, dash_03, dash_06, dash_07) are on both this tree and the previous tip.
+
+no-oracle: 11181/11251 eligible. Failure-name set 70, identical to base and to
+the previous tip. Lost vs base 0, gained vs base 0, lost vs previous tip 0.
+
+golden_pairs: 12550 total, 10497 passed, 754 failed, 1299 skipped.
+panics 0, xml diff 754, other 0. The suite exits 101 because it asserts zero
+golden failures. The locked counts match the previous tip.
+
+parity_perturbations: 2714 failures, equal to the previous tip, 13 fewer than
+base (2727). Lost vs tip 0, gained vs tip 0, lost vs base 0. The 13 gains were
+already present at the T14.45 tip. Suite exits 101 on the locked mismatch.
+
+harness_guards: 4 passed, 2 failed, exit 101. decimal_literal_ratchet still
+names only the pre-existing files (class.rs 383→578, deployment.rs 43→44,
+plantuml_metrics.rs 1053→1055, state.rs 53→62). menlo_bi_fallback.rs is absent.
+parity_review_records_are_complete still expects "account has no independent
+checker review" for this mechanism. No review.json was written.
+
+workspace --lib: layout 41, math 10, oracle 31, parser 665, render 865 passed
+and 1 ignored, 0 failed. pipe_mode 17 passed. doc_claims 2 passed.
+clippy -p rustuml-render --all-targets -- --no-deps: 20 warnings, none in
+menlo_bi_fallback.rs.
+
+Residue, not a change to the port: a class diagram whose only style cue is
+the PostScript name Menlo-BoldItalic still measures the plain Menlo cell.
+Class measurement passes italic from ClassAttributeFontStyle or abstract, and
+resolve_modelled_face strips the style token before the PostScript table.
+The held-out sources set ClassFontStyle and ClassAttributeFontStyle. The
+width function is the extracted advance for any caller that passes bold and
+italic. class.rs and text_render.rs were not edited.

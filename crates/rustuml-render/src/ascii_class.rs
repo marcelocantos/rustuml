@@ -350,6 +350,7 @@ mod tests {
                 label_arrow: LinkArrow::None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                stereotypes: Vec::new(),
                 from_decor: None,
                 to_decor: None,
                 decorated_end: RelationshipEnd::From,

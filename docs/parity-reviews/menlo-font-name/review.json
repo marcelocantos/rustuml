@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "mechanism": "menlo-font-name",
+  "reviewer": {
+    "task_id": "01a1b048-f5f4-70e1-995e-eb54e8d4c63d",
+    "model": "grok-4.7 / Grok harness in T3 Code",
+    "independence": "Separate review task. No production, comparator, baseline, allow-list, or bullseye edits."
+  },
+  "account_commit": "bf5fc5b94dd24682d94e3291f7a6dc57700c47a1",
+  "implementation_commit": "11d1edbf8948ff660b98bba210fda0990f5b5b75",
+  "base_commit": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "rustuml -pipe -tsvg < case.puml  (binaries fc6ce8201290898b8cf34437939aa42b0b5dc2fff960cdb12a41f596277c78b2 and 8e22ad04a0bfc439cf56d0a4fa7c7c954aca045aafd6165912602bb40bd35244, cwd = the source directory)",
+    "compare_files calling rustuml_oracle::compare::compare_svg_strict on batch CN (46) and batch CG (6)",
+    "cargo test --offline --release -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test doc_claims",
+    "cargo test --offline --release --workspace --no-fail-fast --lib --test parity_perturbations --test harness_guards --test pipe_mode",
+    "cargo clippy --offline --release -p <crate> --all-targets -- -W clippy::all for all six workspace crates, and again for rustuml-render at cb550c0d"
+  ],
+  "findings": [
+    "Rejected. The decoder is a real Font.decode port plus a hand-typed family and PostScript table, and it is not a fixture lookup. It is not accept-ready: modelled_family maps the user string monospace to Menlo, and creole monospace and monospaced are forced onto the surrounding face. The JDK probe (stdout dd457c41, OpenJDK 21.0.5) shows Font.decode(monospace) is Dialog at 51.966796875 and Font.decode(Monospaced) is Monospaced at 67.4296875.",
+    "Batch CN, compare_svg_strict on the relayed Java SVG (results 7d1c1dad, 46/46 exit 0, empty stderr): base 8/46, tip 29/46, 21 gains, 0 lost whole-SVG matches. Batch CG: base 1/6 (g3_times_dialog), tip 6/6, 0 losses. The eight c9a_ns_menlo controls go from miss to strict match.",
+    "chk_creole_menlo_class is a packet-caused metric loss inside an already-failing diagram. Java measures <font:monospace>Quill vx as family monospace, textLength 51.9668 (Dialog) and <font:monospaced> / <font:Monospaced> as family monospace, textLength 67.4297. Base matched the monospace width (51.9668) because the surrounding face was still Lucida Grande. Tip measures that span as Menlo 67.4297. The surrounding-face exception matches an activity golden only when the surrounding face is already Dialog.",
+    "chk_elem_seqfont_helvetica_bold: sequenceFontName is not a FontParam, so Java ignores it and keeps Times (viewBox 0 0 112 123, Alice textLength 32.7236, message 16.4531). Base stamped family Helvetica-Bold but kept those Times widths. Tip resolves Helvetica-Bold, drops the Bold token, and measures Helvetica regular (viewBox 0 0 109 115, Alice 30.3447, message 14.4473).",
+    "chk_skin_monospace_word is base-equal and tip-equal and both disagree with Java: viewBox 0 0 99 84 and textLength 67.4297 against Java 0 0 89 84 and 51.9668. The new table re-encodes the alias. Helvetica-Light and Helvetica-LightOblique stay registered faces in the probe (18.648000717163086) and in census.tsv, and both trees fall through to Lucida Grande 17.7188. Quoted defaultFontName \" Menlo \" measures Menlo at the tip, but the SVG family is 'Menlo' rather than ' Menlo '.",
+    "CLI base versus tip, whole stdout: goldens 12474/12550 byte-identical exit 0 and 76/12550 both exit 1 with identical stdout and stderr; 0 differences, 0 new errors, 0 panics, 0 timeouts. Perturbations 6136/6328 identical, 174/6328 both exit 1 identical, 4/6328 both panic 101 with empty stdout. Of the 14 stdout changes, strict compare gains 13 and loses 0. alias_courier_trailing stays a mismatch and improves from 17 differences to 3. The in-process perturbation test reports 2718 failing paths; without the four new failing pairs added here that is 2714, the maker's after count, down 13 from 2727.",
+    "Gates. golden_no_oracle passes at both trees, 11181/11251, and the 70 failure names are byte-identical. golden_pairs on the tip is 10497 pass, 754 fail, 1299 skip, 0 panics, of 12550. pipe_mode 17/17. doc_claims 2/2. Workspace lib tests: layout 41/41, math 10/10, oracle 31/31, parser 665/665, render 863 passed and 1 ignored. rustuml-render clippy warning lines are 24 at the tip and 24 at base, the same lines. text_render.rs high-precision literals stay 51 against the baseline of 51. The decimal ratchet remains red on class.rs, deployment.rs, plantuml_metrics.rs and state.rs, which are byte-identical to cb550c0d. parity_review_records_are_complete was already red, including this account having no review; committing this rejected review keeps that guard red because the latest review must be accepted and must not contain failing perturbations.",
+    "Process. Account bf5fc5b94 precedes the port 6d17122b7. The crate diff against cb550c0d is only crates/rustuml-render/src/text_render.rs. Commits after 6b9a796ed are documentation. The comparator, baselines, and allow-lists are unchanged."
+  ],
+  "verdict": "rejected",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_skin_menlo_bold_space.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_skin_menlo_bold_space.svg",
+      "axes": ["Font.decode style token"],
+      "result": "pass",
+      "before_match": false,
+      "source_sha256": "091c7ede8d39fa171e0aad2d0ad40dc668568cd5235799373611c9efcb8270c2",
+      "golden_sha256": "7d03925f5f78028949bf6a1a7db24797f09eca6c96e08f1f2801e85d013e8f5c"
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_skin_arialmt.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_skin_arialmt.svg",
+      "axes": ["PostScript full name"],
+      "result": "pass",
+      "before_match": false,
+      "source_sha256": "9749378d5cf2d475c0f2d16c5052114975ce1edf0b2377307714f09df9514c4a",
+      "golden_sha256": "28d2774fcd6084bf24b7dc0f1a7992f5c5c1dd50c7d60af68f94502c257d2791"
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_creole_menlo_class.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_creole_menlo_class.svg",
+      "axes": ["creole family versus surrounding face"],
+      "result": "fail",
+      "before_match": false,
+      "source_sha256": "de7e83f1465234f76a3be8ab1f5c6f23435f27474d9d774dcf99f8dd68daf7f0",
+      "golden_sha256": "c2811d0d696fe4a33611ebdbe2930de52e862831045518c97bd34218b7dcb10c",
+      "loss": "<font:monospace> textLength 51.9668 at base, 67.4297 at tip; Java is 51.9668"
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_elem_seqfont_helvetica_bold.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_elem_seqfont_helvetica_bold.svg",
+      "axes": ["unrecognized skinparam key"],
+      "result": "fail",
+      "before_match": false,
+      "source_sha256": "23fa150b637da168a9bfae2ce76a8c85e057963e0f01ba9635376d917306501d",
+      "golden_sha256": "95b4c5e4fd0c0b4558706382b320f033fb5d5bb18725101d7603e5fed5af14f4",
+      "loss": "Times widths and viewBox 0 0 112 123 become Helvetica regular, viewBox 0 0 109 115"
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_skin_monospace_word.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_skin_monospace_word.svg",
+      "axes": ["SVG spelling versus logical font"],
+      "result": "fail",
+      "before_match": false,
+      "source_sha256": "eb8e07c1203240a967b812915c9676b9fd1e0412a9ffd61c247176436756aa30",
+      "golden_sha256": "86f3c5f5229620fc49a68512e947c580f842234e7c59dd268b93292bd6bd5e66",
+      "loss": "base and tip both measure Menlo; Java Font.decode(monospace) is Dialog"
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_skin_helvetica_light.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_skin_helvetica_light.svg",
+      "axes": ["registered PostScript name absent from the hand table"],
+      "result": "fail",
+      "before_match": false,
+      "source_sha256": "41fb3b6792f400d3613f949b51bc58c86a6fef1cb1e2dd569298f9a2e81759c7",
+      "golden_sha256": "f58cb9d393b31f08658ae35851a3e4ec15bcafed178943f4aa759e1f9b107ecb",
+      "loss": "pre-existing: base stdout equals tip stdout; both use Lucida Grande instead of Helvetica-Light"
+    }
+  ]
+}

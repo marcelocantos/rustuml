@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Menlo-
+skinparam defaultFontSize 14
+class Zedvex
+@enduml

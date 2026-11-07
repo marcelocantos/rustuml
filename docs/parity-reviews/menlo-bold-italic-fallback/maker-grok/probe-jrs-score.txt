@@ -1,0 +1,61 @@
+# JRS face probe scored against Java getStringBounds from the same run
+# relay: /Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g3-menlo-jrs-probe2/
+# probe.stdout SHA256 31bd13b0e4b68737e067f807360c4c77ad8ef6e3c6a5fb79774a44df79125407
+# 1077 lines, exit 0, JRS_EXIT 0, stderr empty
+# staged MenloJrsFaceProbe.java c8b15325b33cfb5f4ae5795e9f5f1e4830a2c7799fc10699462fbe2c9d5a8c9f
+# staged README.md 1bc6d0ac921c59c9630e88f1a9bd713d3b57a423a9b23548eec25fcf73694f2e
+# joined on (role, scalar). 536 WIDTH rows and 536 JRS rows, same keys.
+
+Agreement of the Core Text point advance with Java getStringBounds width:
+- 532 / 536 bitwise equal
+- 4 / 536 differ, all Menlo Bold Italic fallbacks on 1000-unit faces
+- 0 / 536 differ after 4-decimal HALF_UP, and 0 / 536 differ after Rust {:.4} HALF_EVEN
+- units/upem*14 reproduces the Core Text advance within 1e-9 on all 536 rows
+
+The four gaps are the float32 widening of an integer font-unit advance.
+Java's printed width equals float32(units/upem*14). Core Text printed the f64.
+
+| Scalar | Face | Units / upem | f64 advance | Java width | abs delta |
+|---|---|---|---|---|---|
+| U+260F | AppleSDGothicNeo-Bold | 865/1000 | 12.109999999999999 | 12.109999656677246 | 3.43e-7 |
+| U+262F | AppleSDGothicNeo-Bold | 865/1000 | 12.109999999999999 | 12.109999656677246 | 3.43e-7 |
+| U+262C | MuktaMahee-Bold | 795/1000 | 11.130000000000001 | 11.130000114440918 | 1.14e-7 |
+| U+2709 | STIXTwoMath-Regular | 706/1000 | 9.8840000000000003 | 9.883999824523926 | 1.75e-7 |
+
+No other disagreement. AWTStrike does not apply a further transform on this set.
+Both 4-decimal SVG roundings of each pair are identical (12.1100, 12.1100, 11.1300, 9.8840).
+
+Disposition, 268 scalars per role (267 fallbacks plus control U+2580). No MISSING row.
+
+| Count | Role | Disposition | PostScript name |
+|---|---|---|---|
+| 268 | BOLD | OWN | Menlo-Bold |
+| 1 | BOLDITALIC | OWN | Menlo-BoldItalic |
+| 140 | BOLDITALIC | FALLBACK | ZapfDingbatsITC |
+| 72 | BOLDITALIC | FALLBACK | AppleSymbols |
+| 24 | BOLDITALIC | FALLBACK | HiraginoSans-W6 |
+| 18 | BOLDITALIC | FALLBACK | AppleColorEmoji |
+| 4 | BOLDITALIC | FALLBACK | Monaco |
+| 3 | BOLDITALIC | FALLBACK | PingFangSC-Semibold |
+| 2 | BOLDITALIC | FALLBACK | AppleSDGothicNeo-Bold |
+| 2 | BOLDITALIC | FALLBACK | ArialUnicodeMS |
+| 1 | BOLDITALIC | FALLBACK | STIXTwoMath-Regular |
+| 1 | BOLDITALIC | FALLBACK | MuktaMahee-Bold |
+
+Bold: all 268 Java widths equal the Menlo cell 1233/2048*14 = 8.4287109375.
+Bold italic OWN is only U+2580, Menlo-BoldItalic, the same cell.
+The earlier unnamed probe's 1229-unit widths are Monaco, not Courier New:
+U+01F0 glyph 535 and U+0220 glyph 1454, both 1229/2048. U+2060 glyph 1189
+and U+FEFF glyph 496 are Monaco with advance 0. Arial Unicode is U+2706
+(1616/2048) and U+2707 (1618/2048).
+
+Eighteen Apple Color Emoji rows (U+2614, U+2615, U+2648–U+2653, U+267F,
+U+2693, U+26A1, U+2708) are exactly 19 points on both sides. Their recovered
+units are 7600/7 of upem 800, not an integer. Rounding to 1086 units gives
+19.005 points, which is not the measured width.
+
+Extracted table, one row per fallback scalar, no font file and no host path:
+probe-jrs-face/fallback-advances.tsv
+SHA256 725db0d5d90a7e51c397d6d6772a6aa3a8f668eaecaa5b9314f48c3f2e4b14b6
+267 data rows. sum of scalars 2692226. sum of unit numerators 491621.
+sum of upem 491864.

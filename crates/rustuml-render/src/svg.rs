@@ -54,10 +54,17 @@ pub(crate) fn comment_text(body: &str) -> String {
     result
 }
 
-/// UFontImpl.getFamily(SVG) replaces definition quotes before DOM emission.
-/// This deliberately does not change the family used for font measurement.
+/// UFontImpl.getFamily(SVG) replaces definition quotes, then SvgGraphics
+/// rewrites an equalsIgnoreCase `monospaced` family to `monospace`.
+/// Measurement still sees the original name.
 pub(crate) fn font_family_attribute(value: &str) -> String {
-    escape_attribute(&value.replace('"', "'"))
+    let quoted = value.replace('"', "'");
+    let family = if quoted.eq_ignore_ascii_case("monospaced") {
+        "monospace"
+    } else {
+        quoted.as_str()
+    };
+    escape_attribute(family)
 }
 
 pub(crate) fn fill_opacity_attribute(alpha: Option<u8>) -> String {
@@ -1021,6 +1028,11 @@ mod tests {
             "&amp;&lt;&gt;&quot;'&#10;&#13;&#9;&#160;&#233;&#66615;"
         );
         assert_eq!(font_family_attribute("\"Oak & Fir\""), "'Oak &amp; Fir'");
+        assert_eq!(font_family_attribute("monospaced"), "monospace");
+        assert_eq!(font_family_attribute("MONOSPACED"), "monospace");
+        assert_eq!(font_family_attribute("monospace"), "monospace");
+        assert_eq!(font_family_attribute("MONOSPACE"), "MONOSPACE");
+        assert_eq!(font_family_attribute("\"monospaced\""), "'monospaced'");
         // Values in the numeric/path attribute domain must be byte-identical.
         let safe: String = (' '..='~').filter(|c| !"&<>\"".contains(*c)).collect();
         assert_eq!(escape_attribute(&safe), safe);

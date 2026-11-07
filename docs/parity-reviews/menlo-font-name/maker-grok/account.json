@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "mechanism": "menlo-font-name",
+  "maker": "maker-grok",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jdk": "OpenJDK 21.0.5 (jdk-21.0.5-ga), macOS 27.2",
+  "java_locations": [
+    "net.sourceforge.plantuml.klimt.font.FontStack#getFonts (60-66): Font.decode per comma-separated name",
+    "net.sourceforge.plantuml.klimt.font.FontStack#getFont(String,UFontFace,int) (109-121): deriveFont(PLAIN) then UFontFace.deriveFont, so the decoded style and size are discarded",
+    "net.sourceforge.plantuml.klimt.font.UFontImpl#getFamily (118-121): SVG keeps the original definition (sansserif rewritten to sans-serif); measurement uses the decoded AWT font",
+    "java.awt.Font#decode (1702-1771, jdk21u jdk-21.0.5-ga): split a trailing PLAIN/BOLD/ITALIC/BOLDITALIC token or a positive point size on the last '-' or ' '",
+    "sun.font.SunFontManager#findFont2D (1867-2166): English-lowercase family, then full name; a PLAIN request keeps the full-name face, any other style is OR-ed with that face's style",
+    "sun.font.Font2D#setStyle (151-175): style bits from the full name (bolditalic before italic before bold; oblique counts as italic)",
+    "sun.font.FontFamily#getFamily (59-61) and #getFont (320-360)",
+    "sun.font.CFontManager#loadFonts / #setupLogicalFonts (228-232, 248-252): Monospaced clones Menlo, else Courier; SansSerif and Dialog clone Lucida Grande; Serif clones Times, else Times New Roman",
+    "sun.font.CFontManager#registerFont (155-157) via AWTFont.m GetFilteredFonts (231-276): each NSFontManager family member's PostScript name (availableMembers index 0) is the registered full name",
+    "sun.font.SunFontManager#findFont2D (2145-2156): after real families are loaded, timesroman maps to serif, and courier maps to monospaced only when no face of that name was registered"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/text_render.rs::metric_family",
+    "crates/rustuml-render/src/text_render.rs::resolve_modelled_face"
+  ],
+  "invariant": "A skinparam or creole font name is measured with the face JDK 21 returns for that name on macOS, for every family Rust already models (Lucida Grande, Arial, Helvetica, Verdana, Menlo, Courier New, Times New Roman), including English case-folding and the PostScript names the JDK registers.",
+  "causal_divergence": "metric_family maps only Courier, monospace and Monospaced onto the Menlo cell. The family name Menlo, and every PostScript name of a modelled face, falls through to Lucida Grande. The round-9 face probe (Menlo plain, Menlo-Regular) measures Pier x at 14 pt as 50.572265625, which is 6 * 1233/2048 * 14. Rust measures the same string as Lucida Grande.",
+  "planned_change": "Decode the name the way Font.decode does, then resolve a modelled family (requested bold/italic kept) or a registered PostScript name (findFont2D's PLAIN-keeps-the-face rule, otherwise OR the styles). Unmodelled names stay on the Dialog fallback, Lucida Grande. Do not retarget the physical name Times: the reference census has no Times family, and the goldens that say defaultFontName Times already match Dialog.",
+  "precommitted_measurement": {
+    "source": "Menlo's cell is plantuml_metrics MONO_WIDTH_PER_SIZE = 1233/2048, the advance of Menlo-Regular's .notdef and of its ASCII glyphs (tools/font-chain-reference/monkeyman-round9/Menlo-Regular.tsv and ascii-advances-round11). The relayed face probe shared-svg-round9-face-probe records Menlo plain getPSName Menlo-Regular and getStringBounds(Pier x) = 50.572265625 at 14 pt.",
+    "wharf_qr_14": "8 * 1233/2048 * 14 = 67.4296875. Java's reported 67.4297 is that value. Rust at the base commit measures Lucida Grande, 58.2422.",
+    "pier_x_14": "6 * 1233/2048 * 14 = 50.572265625, equal to the relayed probe for every Menlo style."
+  },
+  "perturbation_axes": [
+    "font name case",
+    "PostScript name versus family name",
+    "Font.decode style token versus a PostScript name that merely contains bold",
+    "requested face style combined with the resolved face"
+  ]
+}

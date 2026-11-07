@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Arial-BoldMT
+class Mark
+Mark : !
+@enduml

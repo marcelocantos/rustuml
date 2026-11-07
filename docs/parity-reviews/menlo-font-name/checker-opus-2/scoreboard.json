@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "comparator": "rustuml_oracle::compare::compare_svg_strict, whole SVG",
+  "trees": {
+    "pre": "505999cac2e0ddd6913046d6c6a9bc15eb8dea45",
+    "base": "0cd7743aa8fe66a01e0be1e5b1c2a66aae34feaa",
+    "tip": "0063e0e77a66e457bf37aa21e93d19b1bc480283 (code of 358b6e285e6511fafb28af4f4527b4e3b1e2bf80)"
+  },
+  "binaries_sha256": {
+    "pre": "53500c49004da9b9a68af6661a3a1a8ab6950a239e00ce9f68b44e491125409c",
+    "base": "f20b16ce8bcded9cfc7edcca5ff3e794e4c17ad6be49b150d05ae80189bdf934",
+    "tip": "d629984ffe7e661d8e481290412909f1c99369146ff5855f8320a25b56c7329d"
+  },
+  "batches": {
+    "CZ": {
+      "relay": "grok-g3-recheck-heldout",
+      "reference_results_sha256": "3fb752b346049d34339c9f7d88697a695df59ac21e86525ae71ecd1cac07c925",
+      "total": 68,
+      "pre": 24,
+      "base": 47,
+      "tip": 51,
+      "losses_base_to_tip": [],
+      "losses_pre_to_tip": [],
+      "element_losses": 0,
+      "tip_misses": [
+        "g3r2_creole_decode_edges",
+        "g3r2_fb_courier_bi_cloud",
+        "g3r2_fb_menlo_bi_astral",
+        "g3r2_fb_menlo_bi_combining",
+        "g3r2_fb_menlo_bi_emoji13",
+        "g3r2_fb_menlo_bi_mix",
+        "g3r2_fb_menlo_italic_cloud",
+        "g3r2_fb_menlo_italic_jcaron",
+        "g3r2_fb_monaco_bi_cloud",
+        "g3r2_fb_monaco_bi_jcaron",
+        "g3r2_fs_class_bolder",
+        "g3r2_fs_class_lighter",
+        "g3r2_fs_seq_arrow_bold_italic_words",
+        "g3r2_fs_seq_arrow_bolditalic",
+        "g3r2_fs_seq_arrow_css700",
+        "g3r2_sk_empty",
+        "g3r2_sta_ignore_stereotypefont"
+      ]
+    },
+    "CN": {
+      "relay": "grok-g3-checker-heldout",
+      "reference_results_sha256": "7d1c1dadc323875f15b5ed15bb06a84a238bb57f1a279e1f7d0dc4bc16efdcd1",
+      "total": 46,
+      "pre": 8,
+      "base": 29,
+      "tip": 38,
+      "losses_base_to_tip": [],
+      "losses_pre_to_tip": [],
+      "element_losses": 0,
+      "tip_misses": [
+        "chk_creole_arial_deployment",
+        "chk_creole_arial_object",
+        "chk_creole_arial_state",
+        "chk_creole_arial_title",
+        "chk_creole_arial_usecase",
+        "chk_skin_helvetica_light",
+        "chk_skin_helvetica_lightoblique",
+        "chk_skin_menlo_quoted_pad"
+      ]
+    },
+    "CG": {
+      "relay": "grok-g3-menlo-name",
+      "reference_results_sha256": "087039ee0737a5084c2953de6665190848331ff69969bc1ec3bc0465ce5ab710",
+      "total": 6,
+      "pre": 1,
+      "base": 6,
+      "tip": 6,
+      "losses_base_to_tip": [],
+      "losses_pre_to_tip": [],
+      "element_losses": 0,
+      "tip_misses": []
+    },
+    "CQ": {
+      "relay": "grok-g3-menlo-bi-heldout",
+      "reference_results_sha256": "81223dfe8bcc275695047eefdab221bdc9c3862010fbd8c627c27908beecd4ff",
+      "total": 7,
+      "pre": 0,
+      "base": 7,
+      "tip": 7,
+      "losses_base_to_tip": [],
+      "losses_pre_to_tip": [],
+      "element_losses": 0,
+      "tip_misses": []
+    },
+    "CR": {
+      "relay": "grok-g3-menlo-bi-heldout2",
+      "reference_results_sha256": "292acc63242f916a470e0a704c2cf6da0916b83d64abfde33a538820524d982c",
+      "total": 14,
+      "pre": 0,
+      "base": 13,
+      "tip": 13,
+      "losses_base_to_tip": [],
+      "losses_pre_to_tip": [],
+      "element_losses": 0,
+      "tip_misses": [
+        "g3_bi2_emoji_12"
+      ]
+    },
+    "CX": {
+      "relay": "grok-g3-cx",
+      "reference_results_sha256": "b333ba69cb4b54d4c214da93b6ee4a81b322e216dfb8d5075c80ce5a64930c94",
+      "total": 14,
+      "pre": 3,
+      "base": 7,
+      "tip": 11,
+      "losses_base_to_tip": [],
+      "losses_pre_to_tip": [],
+      "element_losses": 0,
+      "tip_misses": [
+        "hn_creole_faces",
+        "hn_skin_quoted_pad",
+        "hn_skin_quoted_single"
+      ]
+    },
+    "c9a": {
+      "relay": "shared-svg-round9-c9a",
+      "reference_results_sha256": "957a7f5fdf19b39e9e0bb7147e86101215c8334cad8636bd40b2bcffbc7d8b06",
+      "total": 288,
+      "pre": 100,
+      "base": 108,
+      "tip": 112,
+      "losses_base_to_tip": [],
+      "losses_pre_to_tip": [],
+      "element_losses": 0,
+      "tip_misses": 176
+    }
+  },
+  "corpus": {
+    "goldens": 12550,
+    "perturbations": 6371,
+    "golden_stdout_changes": 0,
+    "perturbation_stdout_changes_pre_to_tip": 79,
+    "perturbation_stdout_changes_base_to_tip": 56,
+    "whole_file_losses": 0,
+    "element_losses": 0,
+    "panics_all_trees": [
+      "shared-svg-corrective/checker-independent-astra/dash_01",
+      "dash_03",
+      "dash_06",
+      "dash_07"
+    ]
+  },
+  "decimal_ratchet": {
+    "text_render.rs": {
+      "cb550c0d6": 51,
+      "505999cac": 51,
+      "0cd7743aa": 51,
+      "358b6e285": 52,
+      "baseline": 51
+    },
+    "class.rs": {
+      "505999cac": 578,
+      "0cd7743aa": 578,
+      "358b6e285": 578,
+      "baseline": 383
+    },
+    "state.rs": {
+      "505999cac": 61,
+      "0cd7743aa": 61,
+      "358b6e285": 61,
+      "baseline": 53
+    }
+  },
+  "cz_registration": {
+    "rust_predictions_sha256": "debbce39468e70f19d6398e171d72ab18cba45496fca59aacc203e487cba3db9",
+    "reproduced": "136/136 (exit, stdout SHA256, stderr SHA256)"
+  }
+}

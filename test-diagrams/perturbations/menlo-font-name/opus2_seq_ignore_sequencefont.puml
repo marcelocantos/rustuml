@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Times
+skinparam defaultFontSize 14
+skinparam sequenceFontName Menlo
+Vireo -> Quindle: Nimblex
+@enduml

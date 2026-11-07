@@ -25,7 +25,7 @@ nwdiag 89 89
 object 155 155
 preprocessing 286 307
 regex 45 45
-rendering 95 98
+rendering 96 98
 salt 103 103
 sequence 1411 1411
 skinparam 409 410

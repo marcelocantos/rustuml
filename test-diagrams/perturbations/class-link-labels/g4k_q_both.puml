@@ -1,0 +1,5 @@
+@startuml
+class Kiln
+class Glaze
+Kiln "1" --> "0..*" Glaze : owns
+@enduml

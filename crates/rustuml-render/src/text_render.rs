@@ -654,10 +654,8 @@ fn trim_text_for_emit(text: &str, style: &Style, base: &TextBase<'_>) -> (f64, S
         return (0.0, text.to_string(), w);
     }
     let trimmed = &text[lead..text.len() - trail];
-    let bold = effective_bold(style, base);
-    let italic = effective_italic(style, base);
     let font_size = effective_font_size_for_style(style, base);
-    let family = style_metric_family(style, base);
+    let (family, bold, italic) = style_face(style, base);
     let lead_w = family_text_width(&" ".repeat(lead), font_size, bold, italic, family);
     let trimmed_w = family_text_width(
         &unescape_for_metrics(trimmed),
@@ -678,16 +676,9 @@ fn segment_width(seg: &Segment, base: &TextBase<'_>) -> f64 {
 
 fn text_width_for_style(text: &str, style: &Style, base: &TextBase<'_>) -> f64 {
     let raw = unescape_for_metrics(text);
-    let bold = effective_bold(style, base);
-    let italic = effective_italic(style, base);
     let font_size = effective_font_size_for_style(style, base);
-    family_text_width(
-        &raw,
-        font_size,
-        bold,
-        italic,
-        style_metric_family(style, base),
-    )
+    let (family, bold, italic) = style_face(style, base);
+    family_text_width(&raw, font_size, bold, italic, family)
 }
 
 fn segment_advance(seg: &Segment, base: &TextBase<'_>, start: f64) -> f64 {
@@ -753,14 +744,13 @@ fn emit_tabbed_segment(
 
 fn tab_stop_width(style: &Style, base: &TextBase<'_>) -> f64 {
     let font_size = effective_font_size_for_style(style, base);
-    let bold = effective_bold(style, base);
-    let italic = effective_italic(style, base);
+    let (family, bold, italic) = style_face(style, base);
     family_text_width(
         &" ".repeat(TAB_STOP_SPACES),
         font_size,
         bold,
         italic,
-        style_metric_family(style, base),
+        family,
     )
 }
 
@@ -785,79 +775,304 @@ enum MetricFamily {
 }
 
 fn segment_metric_family(seg: &Segment, base: &TextBase<'_>) -> MetricFamily {
-    if seg.style.monospace {
-        if explicit_monospace_font_uses_surrounding_metrics(&seg.style) {
-            metric_family(base.font_family)
-        } else {
-            MetricFamily::Mono
-        }
-    } else {
-        seg.style
-            .font_family
-            .as_deref()
-            .map(metric_family)
-            .unwrap_or_else(|| metric_family(base.font_family))
-    }
+    style_face(&seg.style, base).0
 }
 
 fn segment_metric_family_for_family(seg: &Segment, font_family: &str) -> MetricFamily {
-    if seg.style.monospace {
-        if explicit_monospace_font_uses_surrounding_metrics(&seg.style) {
-            metric_family(font_family)
-        } else {
-            MetricFamily::Mono
-        }
+    if seg.style.monospace && seg.style.font_family.is_none() {
+        MetricFamily::Mono
     } else {
-        seg.style
-            .font_family
-            .as_deref()
-            .map(metric_family)
-            .unwrap_or_else(|| metric_family(font_family))
+        let name = seg.style.font_family.as_deref().unwrap_or(font_family);
+        resolve_modelled_face(name, false, false).0
     }
 }
 
 fn style_metric_family(style: &Style, base: &TextBase<'_>) -> MetricFamily {
-    if style.monospace {
-        if explicit_monospace_font_uses_surrounding_metrics(style) {
-            metric_family(base.font_family)
-        } else {
-            MetricFamily::Mono
-        }
-    } else {
-        style
-            .font_family
-            .as_deref()
-            .map(metric_family)
-            .unwrap_or_else(|| metric_family(base.font_family))
-    }
+    style_face(style, base).0
 }
 
-fn explicit_monospace_font_uses_surrounding_metrics(style: &Style) -> bool {
-    style.monospace
-        && style.font_family.as_deref().is_some_and(|family| {
-            matches!(
-                family
-                    .trim_matches(|c| c == '"' || c == '\'')
-                    .to_ascii_lowercase()
-                    .as_str(),
-                "monospace" | "monospaced"
-            )
-        })
+/// Family and face bits for a width measurement.
+///
+/// A bare creole monospace run (`` ` `` / `""`) is the logical Monospaced
+/// face. A named `<font:X>` is `Font.decode(X)`, including the user string
+/// `monospace`, which is Dialog rather than Monospaced.
+fn style_face(style: &Style, base: &TextBase<'_>) -> (MetricFamily, bool, bool) {
+    // An atom that owns its FontConfiguration (AtomImg) does not take the
+    // consumer's base bold/italic (G6, T14.19).
+    let bold = effective_bold(style, base);
+    let italic = effective_italic(style, base);
+    if style.monospace && style.font_family.is_none() {
+        return (MetricFamily::Mono, bold, italic);
+    }
+    let name = style.font_family.as_deref().unwrap_or(base.font_family);
+    resolve_modelled_face(name, bold, italic)
 }
 
 fn metric_family(font_family: &str) -> MetricFamily {
-    let normalized = font_family
-        .trim_matches(|c| c == '"' || c == '\'')
-        .to_ascii_lowercase();
-    match normalized.as_str() {
+    resolve_modelled_face(font_family, false, false).0
+}
+
+/// The name `Font.decode` leaves after stripping a trailing style token or
+/// point size. `FontStack.getFonts` decodes the skinparam string, then
+/// `getFont` calls `deriveFont(PLAIN)` and `UFontFace.deriveFont`, so the
+/// decoded style is not the face that is measured. Indices follow Java
+/// `String` (UTF-16). Every name the JDK registers for a modelled face is
+/// BMP, so a scalar index is a code unit.
+fn decoded_font_name(name: &str) -> &str {
+    let chars: Vec<(usize, char)> = name.char_indices().collect();
+    let len = chars.len();
+    if len == 0 {
+        return name;
+    }
+    let last = |sep: char| -> isize {
+        chars
+            .iter()
+            .rposition(|(_, c)| *c == sep)
+            .map(|i| i as isize)
+            .unwrap_or(-1)
+    };
+    let last_from = |sep: char, from: isize| -> isize {
+        if from < 0 {
+            return -1;
+        }
+        chars[..=from as usize]
+            .iter()
+            .rposition(|(_, c)| *c == sep)
+            .map(|i| i as isize)
+            .unwrap_or(-1)
+    };
+    let last_hyphen = last('-');
+    let last_space = last(' ');
+    let sep = if last_hyphen > last_space { '-' } else { ' ' };
+    let mut size_index = last(sep);
+    let mut style_index = last_from(sep, size_index - 1);
+    if size_index > 0 && (size_index as usize) + 1 < len {
+        let tail = &name[chars[(size_index as usize) + 1].0..];
+        if tail.parse::<i32>().is_ok() {
+            // A parsed size is consumed even when it is not positive
+            // (`Font.decode` then substitutes 12).
+        } else {
+            style_index = size_index;
+            size_index = len as isize;
+            if chars[(size_index as usize) - 1].1 == sep {
+                size_index -= 1;
+            }
+        }
+    }
+    let byte_at = |index: isize| -> usize {
+        if index <= 0 {
+            0
+        } else if index as usize >= len {
+            name.len()
+        } else {
+            chars[index as usize].0
+        }
+    };
+    if style_index >= 0 && (style_index as usize) + 1 < len {
+        let style_name = name[byte_at(style_index + 1)..byte_at(size_index)].to_ascii_lowercase();
+        let style_end = if matches!(
+            style_name.as_str(),
+            "bolditalic" | "italic" | "bold" | "plain"
+        ) {
+            style_index
+        } else {
+            let mut end = size_index;
+            if end > 0 && chars[(end as usize) - 1].1 == sep {
+                end -= 1;
+            }
+            end
+        };
+        return &name[..byte_at(style_end)];
+    }
+    let mut font_end = len as isize;
+    if style_index > 0 {
+        font_end = style_index;
+    } else if size_index > 0 {
+        font_end = size_index;
+    }
+    if font_end > 0 && chars[(font_end as usize) - 1].1 == sep {
+        font_end -= 1;
+    }
+    &name[..byte_at(font_end)]
+}
+
+/// Family and face JDK 21 measures for `name` on macOS, for the families
+/// Rust models.
+///
+/// `requested_bold` / `requested_italic` are the skinparam and creole face
+/// (`UFontFace`), not the style `Font.decode` parsed out of the name.
+/// Family lookup keeps that requested face (`FontFamily.getFont`). A
+/// PostScript name keeps its own face when the request is plain or already
+/// equal, and otherwise uses the OR of the two styles (`findFont2D`).
+/// Anything else is Dialog, whose macOS face is Lucida Grande.
+fn resolve_modelled_face(
+    name: &str,
+    requested_bold: bool,
+    requested_italic: bool,
+) -> (MetricFamily, bool, bool) {
+    let trimmed = name.trim().trim_matches(|c| c == '"' || c == '\'');
+    let decoded = decoded_font_name(trimmed);
+    let lower = decoded.to_lowercase();
+    if let Some(family) = modelled_family(&lower) {
+        return (family, requested_bold, requested_italic);
+    }
+    if let Some((family, face_bold, face_italic)) = modelled_postscript_name(&lower) {
+        let face = u8::from(face_bold) | (u8::from(face_italic) << 1);
+        let requested = u8::from(requested_bold) | (u8::from(requested_italic) << 1);
+        // Font.PLAIN is 0, BOLD is 1, ITALIC is 2. A plain request does not
+        // unbold a face found by its full name.
+        let merged = if face == requested || requested == 0 {
+            face
+        } else {
+            face | requested
+        };
+        return (family, merged & 1 != 0, merged & 2 != 0);
+    }
+    (MetricFamily::Sans, requested_bold, requested_italic)
+}
+
+/// Families registered by `loadNativeFonts`, plus the logical fonts
+/// `CFontManager.setupLogicalFonts` clones onto a modelled face. `courier`
+/// and `timesroman` are the JDK 1.0 compatibility names, applied only once
+/// no real family of that name exists (the reference census has neither).
+/// `sans-serif` is the SVG spelling of SansSerif and measures the same
+/// Dialog face. The user string `monospace` is not a logical font and is
+/// not registered, so `Font.decode` leaves it on Dialog; callers that mean
+/// the logical face pass `Monospaced`. `SvgGraphics` still writes that
+/// face's family attribute as `monospace`.
+fn modelled_family(lower: &str) -> Option<MetricFamily> {
+    Some(match lower {
+        "sansserif" | "sans-serif" | "dialog" | "dialoginput" | "default" | "lucida grande" => {
+            MetricFamily::Sans
+        }
+        "menlo" | "monospaced" | "courier" => MetricFamily::Mono,
         "courier new" => MetricFamily::CourierNew,
-        "courier" | "monospace" | "monospaced" => MetricFamily::Mono,
         "arial" => MetricFamily::Arial,
         "helvetica" => MetricFamily::Helvetica,
         "verdana" => MetricFamily::Verdana,
-        "times new roman" => MetricFamily::TimesNewRoman,
-        _ => MetricFamily::Sans,
-    }
+        "times new roman" | "serif" | "timesroman" => MetricFamily::TimesNewRoman,
+        _ => return None,
+    })
+}
+
+struct RegisteredPostScriptFace {
+    postscript: &'static str,
+    family: MetricFamily,
+    bold: bool,
+    italic: bool,
+}
+
+/// PostScript names `GetFilteredFonts` registers for the modelled faces
+/// (census `tools/font-chain-reference/monkeyman-round6/census.tsv`). The
+/// style bits are `Font2D.setStyle` on that full name. Names `Font.decode`
+/// reduces to the family (`Menlo-Bold`, `Verdana-Italic`, `Helvetica-Bold`)
+/// are not listed: the family arm already measures them. `Helvetica-Light`
+/// and `Helvetica-LightOblique` are census rows with no extracted advances,
+/// so they are absent here and fall through to Dialog.
+const REGISTERED_POSTSCRIPT_FACES: &[RegisteredPostScriptFace] = &[
+    RegisteredPostScriptFace {
+        postscript: "lucidagrande",
+        family: MetricFamily::Sans,
+        bold: false,
+        italic: false,
+    },
+    RegisteredPostScriptFace {
+        postscript: "arialmt",
+        family: MetricFamily::Arial,
+        bold: false,
+        italic: false,
+    },
+    RegisteredPostScriptFace {
+        postscript: "arial-boldmt",
+        family: MetricFamily::Arial,
+        bold: true,
+        italic: false,
+    },
+    RegisteredPostScriptFace {
+        postscript: "arial-italicmt",
+        family: MetricFamily::Arial,
+        bold: false,
+        italic: true,
+    },
+    RegisteredPostScriptFace {
+        postscript: "arial-bolditalicmt",
+        family: MetricFamily::Arial,
+        bold: true,
+        italic: true,
+    },
+    RegisteredPostScriptFace {
+        postscript: "helvetica-oblique",
+        family: MetricFamily::Helvetica,
+        bold: false,
+        italic: true,
+    },
+    RegisteredPostScriptFace {
+        postscript: "helvetica-boldoblique",
+        family: MetricFamily::Helvetica,
+        bold: true,
+        italic: true,
+    },
+    RegisteredPostScriptFace {
+        postscript: "menlo-regular",
+        family: MetricFamily::Mono,
+        bold: false,
+        italic: false,
+    },
+    RegisteredPostScriptFace {
+        postscript: "couriernewpsmt",
+        family: MetricFamily::CourierNew,
+        bold: false,
+        italic: false,
+    },
+    RegisteredPostScriptFace {
+        postscript: "couriernewps-boldmt",
+        family: MetricFamily::CourierNew,
+        bold: true,
+        italic: false,
+    },
+    RegisteredPostScriptFace {
+        postscript: "couriernewps-italicmt",
+        family: MetricFamily::CourierNew,
+        bold: false,
+        italic: true,
+    },
+    RegisteredPostScriptFace {
+        postscript: "couriernewps-bolditalicmt",
+        family: MetricFamily::CourierNew,
+        bold: true,
+        italic: true,
+    },
+    RegisteredPostScriptFace {
+        postscript: "timesnewromanpsmt",
+        family: MetricFamily::TimesNewRoman,
+        bold: false,
+        italic: false,
+    },
+    RegisteredPostScriptFace {
+        postscript: "timesnewromanps-boldmt",
+        family: MetricFamily::TimesNewRoman,
+        bold: true,
+        italic: false,
+    },
+    RegisteredPostScriptFace {
+        postscript: "timesnewromanps-italicmt",
+        family: MetricFamily::TimesNewRoman,
+        bold: false,
+        italic: true,
+    },
+    RegisteredPostScriptFace {
+        postscript: "timesnewromanps-bolditalicmt",
+        family: MetricFamily::TimesNewRoman,
+        bold: true,
+        italic: true,
+    },
+];
+
+fn modelled_postscript_name(lower: &str) -> Option<(MetricFamily, bool, bool)> {
+    REGISTERED_POSTSCRIPT_FACES
+        .iter()
+        .find(|face| face.postscript == lower)
+        .map(|face| (face.family, face.bold, face.italic))
 }
 
 /// Compute the effective rendered font size for a segment. PlantUML's
@@ -1809,12 +2024,10 @@ mod tests {
     }
 
     #[test]
-    fn explicit_font_monospace_inherits_surrounding_metrics() {
+    fn explicit_font_monospace_decodes_to_dialog() {
         let content = "<font:monospace>code here</font>";
-        assert_eq!(
-            pm::fmt_coord(measure(content, 12.0, false)),
-            pm::fmt_coord(pm::text_width("code\u{00a0}here", 12.0, false))
-        );
+        let dialog = pm::fmt_coord(pm::text_width("code\u{00a0}here", 12.0, false));
+        assert_eq!(pm::fmt_coord(measure(content, 12.0, false)), dialog);
         assert_eq!(
             pm::fmt_coord(label_height(content, 12.0)),
             pm::fmt_coord(pm::text_height(12.0))
@@ -1825,11 +2038,24 @@ mod tests {
         );
 
         let mut buf = String::new();
-        let width = emit_text(&mut buf, content, &base(26.0, 76.6016));
+        let dialog_base = base(26.0, 76.6016);
+        let width = emit_text(&mut buf, content, &dialog_base);
         assert_eq!(pm::fmt_coord(width), "57.2813");
         assert!(buf.contains(r#"font-family="monospace""#));
         assert!(buf.contains(r#"textLength="57.2813""#));
         assert!(buf.contains(">code&#160;here</text>"));
+
+        // Same origin as `dialog_base`; only the surrounding family changes.
+        let mut menlo = dialog_base;
+        menlo.font_family = "Menlo";
+        let mut on_menlo = String::new();
+        let menlo_width = emit_text(&mut on_menlo, content, &menlo);
+        assert_eq!(pm::fmt_coord(menlo_width), dialog);
+        assert!(on_menlo.contains(r#"font-family="monospace""#));
+        assert!(!on_menlo.contains(&format!(
+            r#"textLength="{}""#,
+            pm::fmt_coord(pm::mono_text_width("code\u{00a0}here", 12.0))
+        )));
     }
 
     #[test]
@@ -2607,5 +2833,193 @@ mod tests {
                 }
             }
         }
+    }
+
+    /// JDK 21 on macOS resolves a skinparam font name before measuring it
+    /// (`Font.decode`, then `SunFontManager.findFont2D`). "Wharf qr" at 14 pt
+    /// is eight Menlo cells, `8 * 1233/2048 * 14`.
+    #[test]
+    fn jdk_font_name_resolves_every_modelled_family() {
+        let wharf = "Wharf qr";
+        let menlo = pm::mono_text_width(wharf, 14.0);
+        let cell = 8.0 * 1233.0 / 2048.0 * 14.0;
+        assert!((menlo - cell).abs() < 1e-9, "{menlo} vs {cell}");
+        for name in [
+            "Menlo",
+            "MENLO",
+            " menlo ",
+            "\"Menlo\"",
+            "'Menlo'",
+            "Menlo-14",
+            "Menlo-Bold",
+            "Menlo Bold",
+            "Menlo-Bold-14",
+            "menlo plain",
+            "Menlo-Regular",
+            "menlo-regular",
+        ] {
+            let width = measure_with_family(wharf, 14.0, false, name);
+            assert!(
+                (width - menlo).abs() < 1e-9,
+                "{name}: {width} vs Menlo {menlo}"
+            );
+        }
+        let lucida = measure_with_family(wharf, 14.0, false, "sans-serif");
+        assert!(
+            (lucida - menlo).abs() > 1.0,
+            "Menlo collapsed onto Lucida Grande ({lucida})"
+        );
+        assert_eq!(
+            measure_with_family(wharf, 14.0, false, "Times"),
+            measure_with_family(wharf, 14.0, false, "Dialog")
+        );
+        assert_eq!(measure_with_family(wharf, 14.0, false, "NotAFont"), lucida);
+
+        let bang = "!";
+        assert_eq!(
+            measure_with_family(bang, 14.0, false, "Arial-BoldMT"),
+            measure_with_family_and_face(bang, 14.0, true, false, "Arial")
+        );
+        assert_ne!(
+            measure_with_family(bang, 14.0, false, "Arial-BoldMT"),
+            measure_with_family(bang, 14.0, false, "Arial")
+        );
+        assert_eq!(
+            measure_with_family(bang, 14.0, false, "Arial-Bold"),
+            measure_with_family(bang, 14.0, false, "Arial")
+        );
+        assert_eq!(
+            measure_with_family(bang, 14.0, false, "courier"),
+            measure_with_family(bang, 14.0, false, "Monospaced")
+        );
+        assert_eq!(
+            measure_with_family(bang, 14.0, false, "serif"),
+            measure_with_family(bang, 14.0, false, "Times New Roman")
+        );
+        assert_eq!(
+            measure_with_family(bang, 14.0, false, "timesroman"),
+            measure_with_family(bang, 14.0, false, "Times New Roman")
+        );
+        assert_eq!(
+            measure_with_family("<font:Menlo>Wharf qr", 14.0, false, "sans-serif"),
+            menlo
+        );
+        // Font.decode("monospace") is Dialog on a Menlo surrounding face too.
+        // Font.decode("monospaced") stays the logical Monospaced cell, and
+        // SvgGraphics writes that family as "monospace".
+        let dialog = measure_with_family("code here", 14.0, false, "Dialog");
+        let creole_mono = measure_with_family("<font:monospace>code here", 14.0, false, "Menlo");
+        assert!(
+            (creole_mono - dialog).abs() < 1e-9,
+            "creole monospace {creole_mono} vs Dialog {dialog}"
+        );
+        assert!((measure_with_family("code here", 14.0, false, "monospace") - dialog).abs() < 1e-9);
+        assert!(
+            (measure_with_family("<font:monospaced>code here", 14.0, false, "sans-serif")
+                - pm::mono_text_width("code\u{00a0}here", 14.0))
+            .abs()
+                < 1e-9
+        );
+        let mut spelled = String::new();
+        let mut spelled_base = base(0.0, 20.0);
+        spelled_base.font_family = "sans-serif";
+        emit_text(
+            &mut spelled,
+            "<font:Monospaced>code here</font>",
+            &spelled_base,
+        );
+        assert!(spelled.contains(r#"font-family="monospace""#), "{spelled}");
+
+        assert_eq!(
+            resolve_modelled_face("Helvetica-Oblique", false, false),
+            (MetricFamily::Helvetica, false, true)
+        );
+        assert_eq!(
+            resolve_modelled_face("Helvetica-BoldOblique", false, false),
+            (MetricFamily::Helvetica, true, true)
+        );
+        assert_eq!(
+            resolve_modelled_face("Menlo-Regular", true, true),
+            (MetricFamily::Mono, true, true)
+        );
+        assert_eq!(
+            resolve_modelled_face("LucidaGrande", false, false),
+            (MetricFamily::Sans, false, false)
+        );
+        assert_eq!(
+            resolve_modelled_face("CourierNewPS-ItalicMT", false, false),
+            (MetricFamily::CourierNew, false, true)
+        );
+        assert_eq!(
+            resolve_modelled_face("TimesNewRomanPS-BoldMT", false, true),
+            (MetricFamily::TimesNewRoman, true, true)
+        );
+        assert_eq!(decoded_font_name("Arial-BoldMT"), "Arial-BoldMT");
+        assert_eq!(decoded_font_name("Menlo-Bold"), "Menlo");
+        assert_eq!(
+            decoded_font_name("Helvetica-BoldOblique"),
+            "Helvetica-BoldOblique"
+        );
+        assert_eq!(decoded_font_name("Courier New"), "Courier New");
+        assert_eq!(decoded_font_name("Lucida Grande"), "Lucida Grande");
+
+        let mut buf = String::new();
+        let mut drawn = base(0.0, 20.0);
+        drawn.font_family = "Menlo";
+        emit_text(&mut buf, wharf, &drawn);
+        assert!(buf.contains(r#"font-family="Menlo""#), "{buf}");
+    }
+
+    /// Every PostScript row is a census full name whose family and
+    /// `Font2D.setStyle` bits (bold, and italic or oblique) match the table.
+    #[test]
+    fn registered_postscript_faces_match_the_census() {
+        let census_path = concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../tools/font-chain-reference/monkeyman-round6/census.tsv"
+        );
+        let census = std::fs::read_to_string(census_path).expect(census_path);
+        let mut families = std::collections::HashMap::<String, String>::new();
+        for line in census.lines() {
+            if line.is_empty() || line.starts_with('#') {
+                continue;
+            }
+            let mut columns = line.split('\t');
+            let Some(postscript) = columns.next() else {
+                continue;
+            };
+            let Some(family) = columns.next() else {
+                continue;
+            };
+            families.insert(postscript.to_ascii_lowercase(), family.to_string());
+        }
+        assert!(
+            !REGISTERED_POSTSCRIPT_FACES.is_empty(),
+            "the PostScript table is empty"
+        );
+        for face in REGISTERED_POSTSCRIPT_FACES {
+            let census_family = families.get(face.postscript).unwrap_or_else(|| {
+                panic!("{} is not a PostScript name in the census", face.postscript)
+            });
+            let mapped = modelled_family(&census_family.to_ascii_lowercase());
+            assert_eq!(
+                mapped,
+                Some(face.family),
+                "{} census family {census_family}",
+                face.postscript
+            );
+            let lower = face.postscript.to_ascii_lowercase();
+            let bold = lower.contains("bold");
+            let italic = lower.contains("italic") || lower.contains("oblique");
+            assert_eq!(
+                (face.bold, face.italic),
+                (bold, italic),
+                "{}",
+                face.postscript
+            );
+        }
+        assert!(families.contains_key("helvetica-light"));
+        assert!(modelled_postscript_name("helvetica-light").is_none());
+        assert!(modelled_postscript_name("helvetica-lightoblique").is_none());
     }
 }

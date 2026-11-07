@@ -1,0 +1,54 @@
+{
+ "g4p_label_pipe": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 11"
+  },
+  "java_exit": 0,
+  "tip": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4p_pipe_inline": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  },
+  "java_exit": 0,
+  "tip": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4p_pipe_neighbors": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 12"
+  },
+  "java_exit": 0,
+  "tip": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g4p_pipe_two": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 11"
+  },
+  "java_exit": 0,
+  "tip": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ }
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "mechanism": "menlo-font-name",
+  "verdict": "rejected",
+  "accept_ready": false,
+  "implementation_commit": "11d1edbf8948ff660b98bba210fda0990f5b5b75",
+  "account_commit": "bf5fc5b94dd24682d94e3291f7a6dc57700c47a1",
+  "base_commit": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "binaries": {
+    "base_sha256": "fc6ce8201290898b8cf34437939aa42b0b5dc2fff960cdb12a41f596277c78b2",
+    "tip_sha256": "8e22ad04a0bfc439cf56d0a4fa7c7c954aca045aafd6165912602bb40bd35244",
+    "command": "rustuml -pipe -tsvg"
+  },
+  "relay": {
+    "cn_results_sha256": "7d1c1dadc323875f15b5ed15bb06a84a238bb57f1a279e1f7d0dc4bc16efdcd1",
+    "cn_cases": 46,
+    "cn_exit_zero_empty_stderr": 46,
+    "probe_stdout_sha256": "dd457c41021bf92545e0c4e7c5ca897fba4815f30e79968bdc0a3855f59a37ce",
+    "probe_source_sha256": "cb2f5d81b347e20123bc270f8b50f304e1b5e9c1441ef4fd5d95ade4f888eabd"
+  },
+  "cn_compare_svg_strict": {
+    "base_match": "8/46",
+    "tip_match": "29/46",
+    "gains": 21,
+    "lost_matches": 0,
+    "tip_still_fail": 17,
+    "new_whole_svg_failures": 0
+  },
+  "cg_compare_svg_strict": {
+    "base_match": "1/6",
+    "tip_match": "6/6",
+    "gains": 5,
+    "lost_matches": 0,
+    "base_only_match": "g3_times_dialog"
+  },
+  "cli_base_vs_tip": {
+    "goldens": {"pairs": 12550, "byte_identical_exit0": 12474, "both_exit_1_identical_streams": 76, "differ": 0, "panic": 0, "timeout": 0, "byte_match_against_golden_svg": "0/12550 both trees"},
+    "perturbations": {"pairs": 6328, "byte_identical_exit0": 6136, "both_exit_1_identical_streams": 174, "both_panic_101": 4, "stdout_differs": 14},
+    "perturbation_diffs_strict": {"cases": 14, "base_match": 0, "tip_match": 13, "lost_matches": 0, "still_fail": ["alias_courier_trailing.puml (17 diffs at base, 3 at tip)"]}
+  },
+  "gates": {
+    "golden_no_oracle": "11181/11251 both trees; 70 failure names byte-identical",
+    "golden_pairs_tip": "10497 pass, 754 fail, 1299 skip, 0 panics, of 12550",
+    "parity_perturbations_tip": "2718 failing paths, including 4 new menlo-font-name pairs; 2714 without those pairs",
+    "pipe_mode": "17/17",
+    "doc_claims": "2/2",
+    "lib": {"layout": "41/41", "math": "10/10", "oracle": "31/31", "parser": "665/665", "render": "863 passed, 1 ignored"},
+    "clippy_warning_lines": {"rustuml": 22, "rustuml-parser": 3, "rustuml-render": "24 tip and 24 base, same lines", "rustuml-layout": 2, "rustuml-math": 0, "rustuml-oracle": 25},
+    "decimal_ratchet": "still red on class.rs, deployment.rs, plantuml_metrics.rs, state.rs, all byte-identical to base; text_render.rs stays 51 against baseline 51",
+    "harness_guards": "4/6 pass. decimal_literal_ratchet and parity_review_records_are_complete were already red. This rejected review keeps the review guard red."
+  }
+}
