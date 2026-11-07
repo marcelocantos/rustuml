@@ -22,11 +22,18 @@ holds the immutable Java references), target/ in each T3 worktree under
 Evidence, manifests, relay bundles, predictions and built binaries are
 never touched.
 
+T3 worktrees themselves are removed too (except under --only), when they
+have no uncommitted changes, no process is running inside them, and
+nothing in them or their git metadata changed within --min-age. A
+worktree's only value is uncommitted work; its branch keeps every commit
+and is never deleted. Dirty worktrees are reported and left alone.
+
 Dry run by default; pass --apply to delete.
 """
 
 import argparse
 import shutil
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -125,6 +132,57 @@ def search_roots():
         yield tmp, MAX_SEARCH_DEPTH - 1
 
 
+def git(*args: str) -> subprocess.CompletedProcess:
+    return subprocess.run(["git", *args], capture_output=True, text=True)
+
+
+def busy_dirs() -> set[Path]:
+    """Directories some process has as its working directory."""
+    out = subprocess.run(["lsof", "-Fn", "-d", "cwd"], capture_output=True, text=True).stdout
+    return {Path(line[1:]) for line in out.splitlines() if line.startswith("n")}
+
+
+def clean_worktrees(cutoff: float, apply: bool) -> tuple[int, int]:
+    """Remove clean, idle T3 worktrees; return (removed, kept)."""
+    if not WORKTREE_ROOT.is_dir():
+        return 0, 0
+    busy = busy_dirs()
+    removed = kept = 0
+    repos = set()
+    for wt in sorted(WORKTREE_ROOT.iterdir()):
+        if not (wt / ".git").is_file():  # not a linked worktree
+            continue
+        gitdir = git("-C", str(wt), "rev-parse", "--absolute-git-dir")
+        common = git("-C", str(wt), "rev-parse", "--path-format=absolute", "--git-common-dir")
+        if gitdir.returncode != 0 or common.returncode != 0:
+            continue
+        meta = Path(gitdir.stdout.strip())
+        repo = Path(common.stdout.strip()).parent
+        recent = max(newest_mtime(wt), newest_mtime(meta)) > cutoff
+        in_use = any(d == wt or wt in d.parents for d in busy)
+        status = git("-C", str(wt), "status", "--porcelain")
+        dirty = status.returncode != 0 or status.stdout.strip() != ""
+        if recent or in_use or dirty:
+            kept += 1
+            reason = "uncommitted changes" if dirty else "in use" if in_use else "recent"
+            print(f"keep worktree ({reason})  {wt}")
+            continue
+        print(f"{'remove' if apply else 'would remove'} worktree  {wt}")
+        if apply:
+            # Clean was verified above, so --force only bypasses git's refusal
+            # for worktrees holding submodules.
+            res = git("-C", str(repo), "worktree", "remove", "--force", str(wt))
+            if res.returncode != 0 and wt.exists():
+                # Evidence directories are often made read-only.
+                subprocess.run(["chmod", "-R", "u+w", str(wt)])
+                shutil.rmtree(wt, ignore_errors=True)
+            repos.add(repo)
+        removed += 1
+    for repo in repos:
+        git("-C", str(repo), "worktree", "prune")
+    return removed, kept
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--apply", action="store_true", help="delete (default: report only)")
@@ -165,6 +223,9 @@ def main() -> int:
                 removed += 1
     verb = "removed" if args.apply else "reclaimable"
     print(f"{verb}: {total / BYTES_PER_GB:.1f} GB in {removed if args.apply else '-'} dirs; skipped {skipped} recent")
+    if not args.only:
+        wt_removed, wt_kept = clean_worktrees(cutoff, args.apply)
+        print(f"worktrees {'removed' if args.apply else 'removable'}: {wt_removed}; kept {wt_kept}")
     return 0
 
 

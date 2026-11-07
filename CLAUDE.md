@@ -86,7 +86,9 @@ Maker/checker rounds build several release trees each (base, merge, tip, drill v
 - **After the run.** Before ending your final turn, clean your own cache:
   `python3 scripts/clean_agent_caches.py --only ~/Library/Caches/<your-cache> --min-age 0 --apply`
   It removes only regenerable directories (Cargo targets identified by `CACHEDIR.TAG`, and `git archive` exports: `Cargo.toml` + `crates/`, no `.git`). It never touches `rustuml-relay-parent` (the immutable Java references), evidence, relay bundles, predictions or binaries.
-- **Backstop.** The parent (or a scheduled job) runs `python3 scripts/clean_agent_caches.py --apply` across all caches; it skips anything modified within the last 120 minutes so running delegates are safe. Dry run by default.
+- **Commit before you stop.** Work in progress is committed to the run's branch before the final turn ends, even if it is unfinished or rejected. A worktree must never be the only copy of anything.
+- **Worktrees are disposable.** A worktree's only value is changes not in the repository. Once its work is committed, nothing is lost by removing it: the branch keeps the commits, whether or not they are merged or pushed. When a delegate finishes, the parent removes its worktree (`git worktree remove`, then `git worktree prune`) in the same turn. Branches are kept. A worktree with uncommitted changes is never removed. Commit them to its branch first.
+- **Backstop.** The parent (or a scheduled job) runs `python3 scripts/clean_agent_caches.py --apply` across all caches. It also removes clean T3 worktrees under `~/.t3/worktrees/rustuml`, leaving dirty ones and their branches in place. Anything modified within the last 120 minutes is skipped, so running delegates are safe. Dry run by default.
 
 ## Code Style
 
