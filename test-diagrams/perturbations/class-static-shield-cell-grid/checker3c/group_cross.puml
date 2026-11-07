@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+package Bay {
+component A
+interface "Alpha port" as P
+}
+component B
+interface "Beta longer port" as Q
+A --> Q
+B --> P
+P --> Q
+@enduml

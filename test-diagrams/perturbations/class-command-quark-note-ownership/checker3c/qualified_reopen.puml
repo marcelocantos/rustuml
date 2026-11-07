@@ -1,0 +1,8 @@
+@startuml
+class Seed
+note "remote memo" as Bay.Memo
+package Bay {
+class Birch
+}
+Bay.Memo .. Bay.Birch
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+allowmixing
+class Seed
+actor "Garden keeper\nx" as A
+A --> Seed
+@enduml

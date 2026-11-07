@@ -1,0 +1,18 @@
+@startuml
+<style>
+title {
+FontSize 23
+FontName sans-serif
+FontStyle italic
+FontColor blue
+HorizontalAlignment center
+}
+</style>
+title
+Long ribbon annotation
+x
+end title
+package Bay {
+class Seed
+}
+@enduml

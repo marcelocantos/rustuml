@@ -1,0 +1,7 @@
+@startuml
+allowmixing
+left to right direction
+class Linden
+queue "Wide dispatch label\nshort" as Relay <<service>>
+Linden --> Relay
+@enduml

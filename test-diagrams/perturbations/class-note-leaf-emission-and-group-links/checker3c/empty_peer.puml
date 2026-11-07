@@ -1,0 +1,8 @@
+@startuml
+package Empty {
+}
+class Seed
+note right of Empty : blank peer
+note "label" as N
+N .. Empty
+@enduml

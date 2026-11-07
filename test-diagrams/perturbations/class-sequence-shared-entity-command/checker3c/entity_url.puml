@@ -1,0 +1,4 @@
+@startuml
+entity "Dock" as E [[https://example.com/dock]] #yellow
+E -> E : pulse
+@enduml

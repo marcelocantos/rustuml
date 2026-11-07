@@ -1,0 +1,8 @@
+@startuml
+allowmixing
+node Grove {
+class Linden
+database "Wide dispatch label\nshort" as Relay <<service>>
+Relay --> Linden
+}
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+allowmixing
+skinparam componentStyle uml1
+cloud Bay {
+class Seed
+component "Short\nlong service" as C
+Seed --> C
+}
+note top of Bay : frontier note
+@enduml

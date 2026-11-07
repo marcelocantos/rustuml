@@ -1,0 +1,8 @@
+@startuml
+node "Envelope with a longer name" as Envelope {
+class Linden
+note left of Linden : owned memo
+}
+note "Outside record" as Memo
+Memo .. Envelope
+@enduml

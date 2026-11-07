@@ -1,0 +1,11 @@
+@startuml
+allowmixing
+<style>
+rectangle {
+HorizontalAlignment left
+}
+</style>
+class Seed
+rectangle "Wide symbolic display\nx" as A <<service>>
+A --> Seed
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+rectangle "An empty instrument store" as Store {
+}
+rectangle Dock {
+}
+Store --> Dock
+@enduml

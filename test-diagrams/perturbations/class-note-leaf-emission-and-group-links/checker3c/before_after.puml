@@ -1,0 +1,8 @@
+@startuml
+class Seed
+note left of Seed : first
+note "floating" as N
+class Sprout
+note bottom of Sprout : last
+N .. Sprout
+@enduml

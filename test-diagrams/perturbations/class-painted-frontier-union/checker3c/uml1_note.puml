@@ -1,0 +1,11 @@
+@startuml
+
+allowmixing
+skinparam componentStyle uml1
+node Bay {
+class Seed
+component "Short\nlong service" as C
+Seed --> C
+}
+note bottom of Bay : frontier note
+@enduml

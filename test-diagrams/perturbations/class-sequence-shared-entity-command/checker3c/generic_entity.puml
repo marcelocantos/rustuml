@@ -1,0 +1,4 @@
+@startuml
+entity Gate<T>
+Gate --> Gate
+@enduml

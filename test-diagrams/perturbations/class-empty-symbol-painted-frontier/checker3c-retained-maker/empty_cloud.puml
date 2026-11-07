@@ -1,0 +1,7 @@
+@startuml
+cloud "An empty instrument store" as Store {
+}
+cloud Dock {
+}
+Store --> Dock
+@enduml

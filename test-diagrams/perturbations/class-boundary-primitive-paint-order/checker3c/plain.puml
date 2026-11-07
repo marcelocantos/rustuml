@@ -1,0 +1,5 @@
+@startuml
+allowmixing
+class Seed
+boundary "Wide boundary\nx" as B
+@enduml

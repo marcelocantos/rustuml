@@ -1,0 +1,8 @@
+@startuml
+allowmixing
+class Seed
+package Bay {
+boundary "Nested gate\nx" as B <<adapter>>
+}
+Seed <-- B
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+allowmixing
+skinparam componentStyle uml1
+<style>
+component {
+HorizontalAlignment right
+}
+</style>
+class Seed
+component "Wide component display\nx" as C <<adapter>>
+C --> Seed
+@enduml

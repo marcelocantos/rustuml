@@ -1,0 +1,18 @@
+@startuml
+<style>
+footer {
+FontSize 17
+FontName Serif
+FontStyle italic
+FontColor blue
+HorizontalAlignment right
+}
+</style>
+footer
+Long ribbon annotation
+x
+end footer
+package Bay {
+class Seed
+}
+@enduml

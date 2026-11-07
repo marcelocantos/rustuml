@@ -1,0 +1,6 @@
+@startuml
+class Tree
+note right of Tree <<review>> #pink {
+component inside text
+}
+@enduml
