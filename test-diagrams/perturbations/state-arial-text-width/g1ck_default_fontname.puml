@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Arial
+state "G1ckcinder" as G1ckDef
+@enduml

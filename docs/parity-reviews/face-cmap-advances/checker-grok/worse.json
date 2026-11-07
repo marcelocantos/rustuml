@@ -1,0 +1,26 @@
+[
+  {
+    "cohort": "shared-svg-round9-c9a",
+    "name": "c9a_sp_seqnote_mx_P",
+    "base": "DIFF",
+    "tip": "DIFF",
+    "base_ndiff": 4,
+    "tip_ndiff": 9,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "base_panic": false,
+    "tip_panic": false
+  },
+  {
+    "cohort": "perturbations",
+    "name": "tim-builtin-value-boundaries/checker-claude-round9/c9a_sp_seqnote_mx_P",
+    "base": "DIFF",
+    "tip": "DIFF",
+    "base_ndiff": 4,
+    "tip_ndiff": 9,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "base_panic": false,
+    "tip_panic": false
+  }
+]

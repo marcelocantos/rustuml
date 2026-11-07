@@ -1,0 +1,9 @@
+@startuml
+title G6R3 act 􏿿
+start
+:G6R3 action &#1114111;&#1112063;Q;
+note right
+G6R3 act note 􏠀&#1112064;
+end note
+stop
+@enduml

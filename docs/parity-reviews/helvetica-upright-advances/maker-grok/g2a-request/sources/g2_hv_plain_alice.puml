@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Helvetica
+component "Alice" as E0
+component "Bob" as E1
+@enduml

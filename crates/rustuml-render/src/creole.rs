@@ -841,6 +841,12 @@ pub struct Style {
     /// case `#RRGGBB`. The renderer emits an SVG `<filter>` per unique value
     /// and references it via `filter="url(#...)"` on the matching `<text>`.
     pub background: Option<String>,
+    /// `AtomImg.create` builds `FontConfiguration.blackBlueTrue(monospaced(14))`
+    /// (`UFontFace.normal`) instead of copying the consumer configuration.
+    /// Measurement and emission must not OR the consumer's bold, italic, or
+    /// underline into this atom. Ordinary creole atoms leave this false and
+    /// keep the consumer OR.
+    pub owns_font_configuration: bool,
 }
 
 /// A contiguous run of uniformly-styled text.
@@ -941,19 +947,135 @@ fn push_segment(out: &mut Vec<Segment>, text: &str, style: &Style) {
     });
 }
 
-/// Emit a literal-character run, applying XML escaping and (for monospace)
-/// space-to-NBSP conversion.
+/// Emit a literal-character run. `AtomText` unhides, then
+/// `StringUtils.manageAmpDiese` and `manageUnicodeNotationUplus`, then the
+/// SVG writer escapes the stored characters.
 fn push_literal(out: &mut Vec<Segment>, text: &str, style: &Style) {
     if text.is_empty() {
         return;
     }
-    let escaped = escape_creole_text(&restore_hidden_characters(text));
+    let restored = restore_hidden_characters(text);
+    let special = atom_text_specials(&restored);
+    let escaped = escape_creole_text(&special);
     let final_text = if style.monospace {
         escaped.replace(' ', "\u{00a0}")
     } else {
         escaped
     };
     push_segment(out, &final_text, style);
+}
+
+/// `AtomText`'s `manageSpecialChars` pair, in Java's order.
+///
+/// A match that would throw (`Integer.parseInt`, `Character.toChars`, or
+/// `appendReplacement` on an unquoted `$` or `\`) discards the whole
+/// conversion. Replacements are not scanned again.
+fn atom_text_specials(text: &str) -> String {
+    if !text.contains("&#") && !text.contains("<U+") {
+        return text.to_string();
+    }
+    match apply_amp_diese(text).and_then(|converted| apply_uplus(&converted)) {
+        Some(converted) => converted,
+        None => text.to_string(),
+    }
+}
+
+/// `StringUtils.manageAmpDiese`: `&#([0-9]+);`, then `appendReplacement`
+/// without `quoteReplacement`.
+fn apply_amp_diese(text: &str) -> Option<String> {
+    let bytes = text.as_bytes();
+    let mut out = String::with_capacity(text.len());
+    let mut index = 0;
+    while index < bytes.len() {
+        if bytes[index] == b'&' && index + 1 < bytes.len() && bytes[index + 1] == b'#' {
+            let start = index + 2;
+            let mut end = start;
+            while end < bytes.len() && bytes[end].is_ascii_digit() {
+                end += 1;
+            }
+            if end > start && end < bytes.len() && bytes[end] == b';' {
+                let value = java_parse_int_decimal(&text[start..end])?;
+                let ch = java_to_chars(value)?;
+                if ch == '$' || ch == '\\' {
+                    return None;
+                }
+                push_decoded_scalar(&mut out, ch);
+                index = end + 1;
+                continue;
+            }
+        }
+        let ch = text[index..].chars().next().unwrap();
+        out.push(ch);
+        index += ch.len_utf8();
+    }
+    Some(out)
+}
+
+/// `StringUtils.manageUnicodeNotationUplus`: `<U+` plus 4 or 5 hex digits.
+/// `quoteReplacement` makes `$` and `\` legal here.
+fn apply_uplus(text: &str) -> Option<String> {
+    let bytes = text.as_bytes();
+    let mut out = String::with_capacity(text.len());
+    let mut index = 0;
+    while index < bytes.len() {
+        if bytes[index..].starts_with(b"<U+") {
+            let hex_at = index + 3;
+            let mut matched = None;
+            for len in [5usize, 4] {
+                let close = hex_at + len;
+                if close < bytes.len()
+                    && bytes[hex_at..close].iter().all(u8::is_ascii_hexdigit)
+                    && bytes[close] == b'>'
+                {
+                    matched = Some(len);
+                    break;
+                }
+            }
+            if let Some(len) = matched {
+                let value = i32::from_str_radix(&text[hex_at..hex_at + len], 16).ok()?;
+                push_decoded_scalar(&mut out, java_to_chars(value)?);
+                index = hex_at + len + 1;
+                continue;
+            }
+        }
+        let ch = text[index..].chars().next().unwrap();
+        out.push(ch);
+        index += ch.len_utf8();
+    }
+    Some(out)
+}
+
+fn java_parse_int_decimal(digits: &str) -> Option<i32> {
+    let significant = digits.trim_start_matches('0');
+    if significant.is_empty() {
+        return Some(0);
+    }
+    // More than ten significant digits cannot fit in a signed 32-bit int.
+    // Leading zeros do not count: Java's `parseInt` keeps a zero accumulator.
+    if significant.len() > 10 {
+        return None;
+    }
+    let mut value: i64 = 0;
+    for byte in significant.bytes() {
+        value = value * 10 + i64::from(byte - b'0');
+    }
+    i32::try_from(value).ok()
+}
+
+fn java_to_chars(value: i32) -> Option<char> {
+    u32::try_from(value).ok().and_then(char::from_u32)
+}
+
+/// Store one scalar `Character.toChars` accepted.
+///
+/// `ESCAPE`..=U+10FFFF is also the unpaired-surrogate carrier range.
+/// `java_utf16::escape` prefixes a legitimate scalar there so `tokens`
+/// reads a character and the exporter does not see a lone unit.
+fn push_decoded_scalar(out: &mut String, ch: char) {
+    if rustuml_parser::java_utf16::reserved(ch) {
+        out.push(rustuml_parser::java_utf16::ESCAPE);
+    }
+    out.push(ch);
 }
 
 // CharHidder.hideChar/unhideChar reserve E000..E0FF for hidden syntax.
@@ -1512,6 +1634,7 @@ fn handle_tag(
                     monospace: true,
                     size: Some(14),
                     fill: Some("#000000".to_string()),
+                    owns_font_configuration: true,
                     ..Style::default()
                 };
                 out.push(Segment {
@@ -1924,8 +2047,118 @@ mod tests {
                 monospace: true,
                 size: Some(14),
                 fill: Some("#000000".to_string()),
+                owns_font_configuration: true,
                 ..Style::default()
             }
+        );
+    }
+
+    #[test]
+    fn atom_text_converts_amp_then_uplus_inside_one_literal() {
+        assert_eq!(parse_segments("&#65;"), vec![seg("A", Style::default())]);
+        assert_eq!(parse_segments("<U+0042>"), vec![seg("B", Style::default())]);
+        assert_eq!(
+            parse_segments("&#60;U+0041>"),
+            vec![seg("A", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("<U+0026>#65;"),
+            vec![seg("&amp;#65;", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("&#38;#65;"),
+            vec![seg("&amp;#65;", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("<U+10FFFD>"),
+            vec![seg("&lt;U+10FFFD&gt;", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("<U+041>"),
+            vec![seg("&lt;U+041&gt;", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("<U+00e9>"),
+            vec![seg("\u{00e9}", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("<u+0041>"),
+            vec![seg("&lt;u+0041&gt;", Style::default())]
+        );
+        assert_eq!(parse_segments("&#0065;"), vec![seg("A", Style::default())]);
+        assert_eq!(
+            parse_segments("&#x41;"),
+            vec![seg("&amp;#x41;", Style::default())]
+        );
+        assert_eq!(parse_segments("<U+0024>"), vec![seg("$", Style::default())]);
+        assert_eq!(
+            parse_segments("<U+005C>"),
+            vec![seg(r"\", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("&#36;"),
+            vec![seg("&amp;#36;", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("&#92;"),
+            vec![seg("&amp;#92;", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("<U+D800>"),
+            vec![seg("&lt;U+D800&gt;", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("<U+110000>"),
+            vec![seg("&lt;U+110000&gt;", Style::default())]
+        );
+        assert_eq!(parse_segments("**<U+0041>**"), vec![seg("A", bold_style())]);
+        assert_eq!(
+            parse_segments("<U+2028>"),
+            vec![seg("\u{2028}", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("&#8232;"),
+            vec![seg("\u{2028}", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("e<U+0301>"),
+            vec![seg("e\u{0301}", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("&#2147483648;"),
+            vec![seg("&amp;#2147483648;", Style::default())]
+        );
+        let linked = parse_segments("[[https://example.com{<U+0041>} visible]]");
+        assert_eq!(linked[0].text, "visible");
+        assert_eq!(linked[0].style.link_title.as_deref(), Some("<U+0041>"));
+    }
+
+    #[test]
+    fn decoded_scalars_in_the_carrier_range_stay_characters() {
+        use rustuml_parser::java_utf16::{self, Token};
+        // Decimal form only: `<U+HHHHHH>` is six digits, and Java's `{4,5}`
+        // pattern leaves it literal. Five hex digits stop at U+FFFFF, below
+        // ESCAPE (U+10F7FF).
+        let cases = [
+            ("&#1112062;", '\u{10F7FE}', false),
+            ("&#1112063;", '\u{10F7FF}', true),
+            ("&#1112064;", '\u{10F800}', true),
+            ("&#1114109;", '\u{10FFFD}', true),
+            ("&#1114111;", '\u{10FFFF}', true),
+            ("&#128640;", '\u{1F680}', false),
+            ("<U+1F680>", '\u{1F680}', false),
+            ("&#233;", '\u{00e9}', false),
+        ];
+        for (source, scalar, reserved) in cases {
+            let text = &parse_segments(source)[0].text;
+            let tokens: Vec<_> = java_utf16::tokens(text).collect();
+            assert_eq!(tokens, vec![Token::Char(scalar)], "{source} -> {text:?}");
+            assert_eq!(text.contains(java_utf16::ESCAPE), reserved, "{source}");
+        }
+        assert_eq!(parse_segments("<U+10FFFF>")[0].text, "&lt;U+10FFFF&gt;");
+        assert_eq!(
+            parse_segments("Edge &#1114111; tail")[0].text,
+            format!("Edge {}\u{10FFFF} tail", java_utf16::ESCAPE)
         );
     }
 
@@ -2276,6 +2509,7 @@ mod tests {
         style.size = Some(14);
         // AtomImg.create uses blackBlueTrue, not inherited text color.
         style.fill = Some("#000000".to_string());
+        style.owns_font_configuration = true;
         assert_eq!(
             parse_segments("<img:sprite.png>"),
             vec![seg("(Cannot\u{00a0}decode)", style)]

@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "mechanism": "face-cmap-advances",
+  "written_before": "the mechanism-root account.json that harness_guards reads",
+  "why": "No cmap advance table was written. The Monkey Man extraction has not returned. harness_guards reads docs/parity-reviews/face-cmap-advances/account.json, not maker-grok/account.json. The root file repeats the pre-draft claim with planned_change as one string.",
+  "no_production_edit": "Unmapped characters stay on the current fallback chain. The Helvetica guillemet arm of 1139 units stays until a checked cmap TSV replaces it."
+}

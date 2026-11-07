@@ -1,0 +1,6 @@
+@startuml
+title G6R3 state 􏟿
+state "G6R3 Nest &#1114111;" as N
+N : G6R3 row 􏿿&#1112063;Q
+note right of N : G6R3 state note &#1114109;
+@enduml

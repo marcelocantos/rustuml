@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "mechanism": "helvetica-upright-advances",
+  "account_commit": "4784eddedde7e60198b199356d212ab2c81ca5fc",
+  "implementation_commit": "b8d4d3921a4b10a2ef3fd071d5b5446c51e38ade",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "CARGO_TARGET_DIR=$HOME/Library/Caches/rustuml-grok-g2-checker/target-tip cargo build --release -p rustuml",
+    "python3 $HOME/Library/Caches/rustuml-grok-g2-checker/regenerate_tables.py",
+    "bin/rustuml-tip and bin/rustuml-base -pipe -tsvg, cwd=source parent, TZ=GMT+11:00, RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100, then bin/g2cmp over rustuml_oracle::compare::compare_svg_strict"
+  ],
+  "findings": [
+    "Accepted as a partial step. The four Helvetica ASCII arrays rebuild exactly from tools/font-chain-reference/ascii-advances-round11, and those columns match the cmap TSV ASCII rows. The 17 new high-precision literals in text_render.rs are test strings (alphabet runs and 157.2197). Production literals stay at 6. Each test string equals fmt_coord of the extracted units at 14pt. No production literal was fitted to a golden.",
+    "CLI strict compare of the tip (3ed312cd5c0ac389565024a98639d899b351115838fb0e3f3cd2df085d1d686c) against the base (89107fa9897bb9d863daabb35d3ccd7cfa18095e4087cd18794271c4319a7d82): 0 lost matches, 0 lost rejections, 0 new valid-input errors, 0 timeouts, 4 pre-existing panics on both binaries. Goldens 11181/11251 strict on both and 0/12550 stdout bytes changed. Perturbations 3621/6015 to 3662/6015. Held-out g2chk 28/28 valid Java SVGs stayed strict DIFF, and no held-out ndiff rose. Helvetica plain and bold ASCII labels, including g2chkN7 Wq, now equal the Java textLength.",
+    "checker2_theme_comment_origin.puml changed because cerulean sets Verdana and U+00C9 is now that face's cmap advance. Érable textLength moved to Java's 36.1262. Whole-SVG ndiff fell from 20 to 2. «marker» textLength moved from 58.2214 to 61.2366, which is Verdana italic's 10033 units at the emitted 12.5pt size and equals the Java golden. custom_class and custom_grouped_class stay DIFF at the same ndiff because fill and y still differ. g2_hv_bolditalic_kz is unchanged and still DIFF: a component style block does not select the bold-italic slot.",
+    "Not achieved: the four c10a_ft_hv punctuation diagrams still split one Java text node into two, and classFontStyle bolditalic is applied by Rust while the Java SVG for that token carries neither font-style nor font-weight. Times, Menlo, Lucida Grande and Courier held-out SVGs are byte-identical to the base and still differ from Java."
+  ],
+  "verdict": "accepted",
+  "reviewer": {
+    "task_id": "grok-g2-checker",
+    "model": "grok-4.7"
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/helvetica-upright-advances/g2_hv_plain_quote_w.puml",
+      "golden": "test-diagrams/perturbations/helvetica-upright-advances/g2_hv_plain_quote_w.svg",
+      "result": "pass",
+      "axes": ["family Helvetica", "style plain", "code points percent apostrophe and W"]
+    },
+    {
+      "source": "test-diagrams/perturbations/helvetica-upright-advances/g2_hv_italic_quote_w.puml",
+      "golden": "test-diagrams/perturbations/helvetica-upright-advances/g2_hv_italic_quote_w.svg",
+      "result": "pass",
+      "axes": ["style italic", "code points percent apostrophe and W"]
+    },
+    {
+      "source": "test-diagrams/perturbations/helvetica-upright-advances/g2_hv_bold_kz.puml",
+      "golden": "test-diagrams/perturbations/helvetica-upright-advances/g2_hv_bold_kz.svg",
+      "result": "pass",
+      "axes": ["style bold", "code points k and z"]
+    },
+    {
+      "source": "test-diagrams/perturbations/helvetica-upright-advances/c11a_of_comp_hv_b.puml",
+      "golden": "test-diagrams/perturbations/helvetica-upright-advances/c11a_of_comp_hv_b.svg",
+      "result": "pass",
+      "axes": ["family Helvetica", "style bold"]
+    }
+  ]
+}
