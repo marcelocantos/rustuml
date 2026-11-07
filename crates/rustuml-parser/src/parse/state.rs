@@ -25,10 +25,14 @@ pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
             }
             continue;
         }
+        if parser.first_content_line.is_none() && !trimmed.starts_with('\'') {
+            parser.first_content_line = Some(source_line);
+        }
         parser.parse_line(source_line, trimmed)?;
     }
     // Flush any unclosed note buffer.
     parser.flush_note();
+    parser.check_final_error()?;
     Ok(parser.finish())
 }
 
@@ -55,24 +59,30 @@ enum StateNameUse {
 /// `StateDiagram.checkConcurrentStateOkInternal` tests
 /// `GroupType.CONCURRENT_STATE` (StateDiagram.java:75-90). The `CONC` prefix
 /// (`:58`, `getUniqueSequence2` at `:201-204`) is only the synthetic name.
-/// A parent is that group type when a separator recorded its id.
-fn parent_is_concurrent(region_ids: &[String], parent: Option<&str>) -> bool {
-    parent.is_some_and(|parent| region_ids.iter().any(|id| id == parent))
+/// A group has that type while the last `gotoGroup` that entered it was a
+/// separator's `muteToGroupType(CONCURRENT_STATE)` (CucaDiagram.java:350-356).
+fn parent_is_concurrent(concurrent_now: &[String], parent: Option<&str>) -> bool {
+    parent.is_some_and(|parent| concurrent_now.iter().any(|id| id == parent))
 }
 
 /// `StateDiagram.checkConcurrentStateOkInternal` (StateDiagram.java:75-90).
 fn check_concurrent_state_ok(
-    region_ids: &[String],
+    concurrent_now: &[String],
     existing_parent: Option<&str>,
     scope: Option<&str>,
 ) -> bool {
-    if parent_is_concurrent(region_ids, scope) && scope != existing_parent {
+    if parent_is_concurrent(concurrent_now, scope) && scope != existing_parent {
         return false;
     }
-    if parent_is_concurrent(region_ids, existing_parent) && scope != existing_parent {
+    if parent_is_concurrent(concurrent_now, existing_parent) && scope != existing_parent {
         return false;
     }
     true
+}
+
+/// The short name of a quark id: its last `.` segment.
+fn short_name(id: &str) -> &str {
+    id.rsplit('.').next().unwrap_or(id)
 }
 
 fn concurrent_state_error(line: usize, use_kind: &StateNameUse, name: &str) -> ParseError {
@@ -383,11 +393,20 @@ struct StateParser {
     /// this is global rather than per-frame. Holds the highest CONC index
     /// allocated so far (initially 1, so the first region becomes `CONC2`).
     conc_counter: usize,
-    /// Region ids created by a separator. `reset_after_predeclaration`
-    /// clears `State.concurrent_regions` so the full pass can record them
-    /// again for the renderer, but a link that appears before the separator
-    /// still has to see the group type Java recorded on the earlier pass.
+    /// Region quarks created or reused by a separator. Java quarks persist
+    /// across passes (only the counter and the group stack are reset in
+    /// `CucaDiagram.startingPass`, CucaDiagram.java:159-165), and every quark
+    /// counts in `Plasma.countByName` (Plasma.java:63-72), so a synthetic
+    /// region that has no `State` entry still takes part in short-name
+    /// resolution.
     region_ids: Vec<String>,
+    /// Quarks whose group type is `CONCURRENT_STATE` right now. A separator
+    /// mutes its region to that type; `state X {` and `X[H]` mute X back to
+    /// `STATE` (`gotoGroup` → `muteToGroupType`, CucaDiagram.java:350-356).
+    concurrent_now: Vec<String>,
+    /// Source line of the first content line. `StateDiagram.checkFinalError`
+    /// is located there (see `check_final_error`).
+    first_content_line: Option<usize>,
 }
 
 /// One enclosing-composite level on the scope stack.
@@ -414,6 +433,8 @@ impl StateParser {
             scope_stack: Vec::new(),
             conc_counter: 1,
             region_ids: Vec::new(),
+            concurrent_now: Vec::new(),
+            first_content_line: None,
         }
     }
 
@@ -532,21 +553,45 @@ impl StateParser {
     ///
     /// Java provenance: `StateDiagram` installs `.` as its namespace
     /// separator, and every state/link command calls
-    /// `CucaDiagram.quarkInContextSafe(true, name)`. For an unqualified name,
-    /// that method reuses the sole existing quark with the same short name
-    /// before considering the current composite. State diagrams therefore
-    /// share an already-created `Inner` across later sibling composites.
+    /// `CucaDiagram.quarkInContextSafe(true, name)` (CucaDiagram.java:248-290).
+    /// For an unqualified name, that method reuses the quark when
+    /// `countByName(name) == 1` and that quark is not the current group.
+    /// Otherwise it takes the child of the current group. State diagrams
+    /// therefore share an already-created `Inner` across later sibling
+    /// composites.
     ///
-    /// `StateDiagram.checkConcurrentStateOk` rejects that reuse across
+    /// `StateDiagram.checkConcurrentStateOk` rejects the resolved quark across
     /// concurrent-region boundaries. Link and declaration commands report
-    /// the refusal. A field line does not. A second quark appears only when
-    /// more than one short name already exists.
+    /// the refusal. A field line does not.
     fn resolve_state_id(&self, raw: &str, use_kind: StateNameUse) -> Result<String, ParseError> {
         self.resolve_state_id_in(raw, self.current_scope(), use_kind)
     }
 
-    fn concurrent_region_ids(&self) -> Vec<String> {
-        self.region_ids.clone()
+    /// `Plasma.countByName` and `firstWithName` (Plasma.java:96-108) over the
+    /// quarks this parser models: every `State` plus every separator region.
+    fn quarks_named(&self, name: &str) -> Vec<&str> {
+        let mut ids: Vec<&str> = Vec::new();
+        let states = self.states.iter().map(|state| state.id.as_str());
+        for id in states.chain(self.region_ids.iter().map(String::as_str)) {
+            if short_name(id) == name && !ids.contains(&id) {
+                ids.push(id);
+            }
+        }
+        ids
+    }
+
+    /// The parent quark of a modelled quark. A `State` records its parent.
+    /// A synthetic region is `<owner>.CONCn`, created as a child of its owner.
+    fn quark_parent(&self, id: &str) -> Option<String> {
+        if let Some(state) = self.states.iter().find(|state| state.id == id) {
+            return state.parent.clone();
+        }
+        id.rsplit_once('.').map(|(parent, _)| parent.to_string())
+    }
+
+    fn is_synthetic_region(&self, id: &str) -> bool {
+        self.region_ids.iter().any(|region| region == id)
+            && !self.states.iter().any(|state| state.id == id)
     }
 
     fn resolve_state_id_in(
@@ -556,7 +601,6 @@ impl StateParser {
         use_kind: StateNameUse,
     ) -> Result<String, ParseError> {
         let raw = raw.trim();
-        let region_ids = self.concurrent_region_ids();
         // `CommandLinkStateCommon.getEntity` returns the current group when
         // its short name equals the token, before `quarkInContext` and
         // `checkConcurrentStateOk`. A composite born in a concurrent region
@@ -564,7 +608,7 @@ impl StateParser {
         // `CommandCreateState` has no such short-circuit.
         if matches!(use_kind, StateNameUse::Link)
             && let Some(scope) = scope
-            && scope.rsplit('.').next() == Some(raw)
+            && short_name(scope) == raw
         {
             return Ok(scope.to_string());
         }
@@ -574,36 +618,27 @@ impl StateParser {
             return Ok(id);
         }
 
-        // `CucaDiagram.quarkInContextSafe`: one existing short name is the
+        // `CucaDiagram.quarkInContextSafe` (CucaDiagram.java:264-272): one
+        // quark of that short name, which is not the current group, is the
         // quark, including one that lives in a concurrent region. The
-        // concurrent check then accepts or rejects that quark. Several
-        // short names stay scope-local.
-        let mut same_name = self
-            .states
-            .iter()
-            .filter(|state| state.id.rsplit('.').next() == Some(raw));
-        if let Some(sole) = same_name.next()
-            && same_name.next().is_none()
+        // concurrent check then accepts or rejects it. Any other count takes
+        // the current group's child.
+        let named = self.quarks_named(raw);
+        if let [sole] = named.as_slice()
+            && Some(*sole) != scope
+            // A synthetic region has no `State` the renderer can draw as a
+            // link endpoint or leaf, so it is not handed out here. Java
+            // resolves to the region group itself. Declared residue.
+            && !self.is_synthetic_region(sole)
         {
-            self.reject_parent(sole.parent.as_deref(), raw, scope, &use_kind)?;
-            return Ok(sole.id.clone());
+            let parent = self.quark_parent(sole);
+            self.reject_parent(parent.as_deref(), raw, scope, &use_kind)?;
+            return Ok((*sole).to_string());
         }
 
-        let mut matches = self.states.iter().filter(|state| {
-            let existing_is_concurrent = parent_is_concurrent(&region_ids, state.parent.as_deref());
-            let current_is_concurrent = parent_is_concurrent(&region_ids, scope);
-            state.id.rsplit('.').next() == Some(raw)
-                && (!(existing_is_concurrent || current_is_concurrent)
-                    || state.parent.as_deref() == scope)
-        });
-        if let Some(sole) = matches.next()
-            && matches.next().is_none()
-        {
-            self.reject_parent(sole.parent.as_deref(), raw, scope, &use_kind)?;
-            return Ok(sole.id.clone());
-        }
-
-        Ok(self.qualify_in(raw, scope))
+        let id = self.qualify_in(raw, scope);
+        self.reject_resolved_state(&id, raw, scope, &use_kind)?;
+        Ok(id)
     }
 
     fn reject_resolved_state(
@@ -627,11 +662,70 @@ impl StateParser {
         use_kind: &StateNameUse,
     ) -> Result<(), ParseError> {
         if matches!(use_kind, StateNameUse::Unchecked)
-            || check_concurrent_state_ok(&self.concurrent_region_ids(), existing_parent, scope)
+            || check_concurrent_state_ok(&self.concurrent_now, existing_parent, scope)
         {
             return Ok(());
         }
         Err(concurrent_state_error(self.current_line, use_kind, raw))
+    }
+
+    /// `gotoGroup(..., GroupType.STATE)` mutes a reopened quark back to a
+    /// plain state (CucaDiagram.java:350-356).
+    fn mute_to_state(&mut self, id: &str) {
+        self.concurrent_now.retain(|region| region != id);
+    }
+
+    /// The parent of a transition endpoint. A pseudo-state marker carries
+    /// the group it was created in (`getStart`/`getEnd`/`getHistorical`
+    /// create a child of the current group, StateDiagram.java:92-190).
+    fn endpoint_parent(&self, endpoint: &str) -> Option<String> {
+        if endpoint.starts_with('[')
+            && let Some(close) = endpoint.find(']')
+        {
+            let scope = &endpoint[close + 1..];
+            return (!scope.is_empty()).then(|| scope.to_string());
+        }
+        self.quark_parent(endpoint)
+    }
+
+    /// `StateDiagram.getGroupParentIfItIsConcurrentState`
+    /// (StateDiagram.java:256-266): the nearest ancestor whose group type is
+    /// `CONCURRENT_STATE`, walking every level.
+    fn nearest_concurrent_ancestor(&self, endpoint: &str) -> Option<String> {
+        let mut parent = self.endpoint_parent(endpoint);
+        while let Some(id) = parent {
+            if self.concurrent_now.iter().any(|region| *region == id) {
+                return Some(id);
+            }
+            parent = self.quark_parent(&id);
+        }
+        None
+    }
+
+    /// `StateDiagram.checkFinalError` (StateDiagram.java:232-254) refuses a
+    /// link whose endpoints have different nearest concurrent ancestors.
+    ///
+    /// Java never shows its own message. `PSystemCommandFactory.finalizeDiagram`
+    /// locates the error at `it.next()` of the rewound iterator, the first
+    /// line after `@startuml` (PSystemCommandFactory.java:115-121), so its
+    /// trace holds two lines and `PSystemError.score` is 20
+    /// (PSystemError.java:379-382). `SequenceDiagramFactory` runs before
+    /// `StateDiagramFactory` (PSystemBuilder.java:131-135). It fails on a
+    /// leading state command with "Syntax Error?" and the same score, and
+    /// `PSystemErrorUtils.mergeV2` keeps the first maximum
+    /// (PSystemErrorUtils.java:85-92). The report is that line-1 syntax error.
+    fn check_final_error(&self) -> Result<(), ParseError> {
+        for transition in &self.transitions {
+            let from = self.nearest_concurrent_ancestor(&transition.from);
+            let to = self.nearest_concurrent_ancestor(&transition.to);
+            if from != to {
+                return Err(ParseError {
+                    line: self.first_content_line.unwrap_or(1),
+                    message: "Syntax Error?".to_string(),
+                });
+            }
+        }
+        Ok(())
     }
 
     /// Record where Java creates the newest note entity and resolve its
@@ -729,6 +823,7 @@ impl StateParser {
                 && !base.is_empty()
             {
                 let group = self.ensure_state(base, use_kind)?;
+                self.mute_to_state(&group);
                 if let Some(state) = self.states.iter_mut().find(|state| state.id == group) {
                     state.composite = true;
                 }
@@ -757,32 +852,30 @@ impl StateParser {
         let Some(frame) = self.scope_stack.last() else {
             return;
         };
-        let base = frame.base.clone();
-        let current = frame.current.clone();
-        // `StateDiagram.concurrentState` (StateDiagram.java:201-204) names the
-        // new group with `getUniqueSequence2("CONC")` (CucaDiagram.java:816-818).
-        // The letters are only that sequence. The region type is the group flag
+        // `StateDiagram.concurrentState` (StateDiagram.java:194-208) first
+        // leaves a current concurrent group, so the current quark is the
+        // owning composite. Then it names the new group with
+        // `getUniqueSequence2("CONC")` (CucaDiagram.java:816-818): one
+        // counter per diagram, reset at each pass, advanced by every
+        // separator whether the name then reuses a quark or not. The letters
+        // are only that sequence. The region type is the group flag
         // `gotoGroup` applies with `muteToGroupType(CONCURRENT_STATE)`.
+        let base = frame.base.clone();
         let separator = line.chars().next();
         if let Some(state) = self.states.iter_mut().find(|state| state.id == base) {
             state.concurrent_separator = separator;
         }
         self.conc_counter += 1;
-        let short_name = format!("CONC{}", self.conc_counter);
-        // `quarkInContext(true, shortName)` (CucaDiagram.java:266-272): one
-        // existing quark of that short name is reused, unless it is the
-        // current group. Otherwise the child is created under the owner.
-        let mut same_name = self
-            .states
-            .iter()
-            .filter(|state| state.id.rsplit('.').next() == Some(short_name.as_str()));
-        let reused = if let Some(sole) = same_name.next()
-            && same_name.next().is_none()
-            && sole.id != current
-        {
-            Some(sole.id.clone())
-        } else {
-            None
+        let sequence_name = format!("CONC{}", self.conc_counter);
+        // `quarkInContext(true, sequenceName)` (CucaDiagram.java:264-272):
+        // the sole quark of that short name is reused unless it is the owner.
+        // The count includes earlier regions, so a leaf declared inside a
+        // region under the same name does not capture the next pass's
+        // separator. Otherwise the owner's child is the region.
+        let named = self.quarks_named(&sequence_name);
+        let reused = match named.as_slice() {
+            [sole] if *sole != base => Some((*sole).to_string()),
+            _ => None,
         };
         let region_id = if let Some(id) = reused {
             if let Some(state) = self.states.iter_mut().find(|state| state.id == id) {
@@ -791,12 +884,15 @@ impl StateParser {
             }
             id
         } else {
-            format!("{base}.{short_name}")
+            format!("{base}.{sequence_name}")
         };
         let frame = self.scope_stack.last_mut().expect("scope frame");
         frame.current = region_id.clone();
         if !self.region_ids.iter().any(|id| id == &region_id) {
             self.region_ids.push(region_id.clone());
+        }
+        if !self.concurrent_now.iter().any(|id| id == &region_id) {
+            self.concurrent_now.push(region_id.clone());
         }
         if let Some(state) = self.states.iter_mut().find(|state| state.id == base) {
             state
@@ -1118,6 +1214,7 @@ impl StateParser {
                 });
             }
             if is_composite {
+                self.mute_to_state(&id);
                 self.scope_stack.push(ScopeFrame {
                     base: id.clone(),
                     current: id,
@@ -2162,5 +2259,127 @@ mod tests {
             assert_eq!(error.line, line, "{source}");
             assert_eq!(error.message, "No such color");
         }
+    }
+
+    #[test]
+    fn region_quark_counts_against_a_same_named_declaration() {
+        // Pass one: the separator creates Granary.CONC2, and `state CONC2`
+        // inside it becomes Granary.CONC2.CONC2. Pass two: two quarks are
+        // named CONC2, so the separator takes Granary's own child again and
+        // the root link creates a third quark instead of reusing either.
+        let diagram = parse(
+            "state Granary {\n\
+             --\n\
+             state CONC2\n\
+             state Silo\n\
+             }\n\
+             [*] --> CONC2\n",
+        );
+        let granary = diagram.states.iter().find(|s| s.id == "Granary").unwrap();
+        let regions: Vec<_> = granary
+            .concurrent_regions
+            .iter()
+            .map(|r| r.id.as_str())
+            .collect();
+        assert_eq!(regions, vec!["Granary.CONC2"]);
+        assert!(diagram.states.iter().any(|s| s.id == "Granary.CONC2.CONC2"));
+        assert!(diagram.states.iter().any(|s| s.id == "Granary.CONC2.Silo"));
+        assert_eq!(diagram.transitions[0].to, "CONC2");
+    }
+
+    #[test]
+    fn later_separator_compares_the_sole_quark_with_the_owner() {
+        // The third region is CONC4. Its only same-named quark is the leaf
+        // declared inside it on pass one, which is not the owner, but the
+        // region quark itself makes the count two.
+        let diagram = parse(
+            "state Mill {\n\
+             --\n\
+             --\n\
+             --\n\
+             state CONC4\n\
+             }\n\
+             [*] --> CONC4\n",
+        );
+        let mill = diagram.states.iter().find(|s| s.id == "Mill").unwrap();
+        let regions: Vec<_> = mill
+            .concurrent_regions
+            .iter()
+            .map(|r| r.id.as_str())
+            .collect();
+        assert_eq!(regions, vec!["Mill.CONC2", "Mill.CONC3", "Mill.CONC4"]);
+        assert!(diagram.states.iter().any(|s| s.id == "Mill.CONC4.CONC4"));
+        assert_eq!(diagram.transitions[0].to, "CONC4");
+    }
+
+    #[test]
+    fn link_to_a_state_under_a_deeper_concurrent_ancestor_is_a_final_error() {
+        // Loft's direct parent Attic is a plain state, so the link command
+        // passes. Attic sits in Keep.CONC2, so checkFinalError refuses the
+        // link. Java reports the sequence factory's line-1 syntax error.
+        let error = parse_err(
+            "state Keep {\n\
+             --\n\
+             state Attic {\n\
+             state Loft\n\
+             }\n\
+             }\n\
+             [*] --> Loft\n",
+        );
+        assert_eq!(error.line, 1);
+        assert_eq!(error.message, "Syntax Error?");
+    }
+
+    #[test]
+    fn link_inside_one_concurrent_ancestor_passes_the_final_check() {
+        let diagram = parse(
+            "state Keep {\n\
+             --\n\
+             state Attic {\n\
+             state Loft\n\
+             }\n\
+             [*] --> Attic\n\
+             }\n",
+        );
+        assert_eq!(diagram.transitions.len(), 1);
+    }
+
+    #[test]
+    fn reopening_a_reused_region_mutes_it_back_to_a_state() {
+        // The separator in Byre reuses the root composite CONC2 and mutes it
+        // to a concurrent group. The later `state CONC2 {` mutes it back to
+        // STATE, so on pass two the root link into its child Pen passes both
+        // the link check and the final check.
+        let diagram = parse(
+            "state CONC2 {\n\
+             state Pen\n\
+             }\n\
+             state Byre {\n\
+             state Stall\n\
+             --\n\
+             state Rack\n\
+             }\n\
+             state CONC2 {\n\
+             }\n\
+             [*] --> Pen\n",
+        );
+        assert!(diagram.transitions.iter().any(|t| t.to == "CONC2.Pen"));
+    }
+
+    #[test]
+    fn a_reused_region_left_concurrent_rejects_the_root_link() {
+        let error = parse_err(
+            "state CONC2 {\n\
+             state Pen\n\
+             }\n\
+             state Byre {\n\
+             state Stall\n\
+             --\n\
+             state Rack\n\
+             }\n\
+             [*] --> Pen\n",
+        );
+        assert_eq!(error.line, 9);
+        assert_eq!(error.message, "The state Pen cannot be used here.");
     }
 }
