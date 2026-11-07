@@ -126,6 +126,7 @@ fn preprocess_full_inner(
     // BlockUmlBuilder reads the block through ReadFilterMergeLines before TIM
     // (and so before every TIM comment stage) runs.
     let merged = merge_ending_backslash_lines(&input_lines);
+    ctx.pipe_start_mark_found = merged.pipe_start_mark_found;
     let events = ctx.process_merged_lines(&merged.lines);
     let mut identity = Vec::new();
     let mut main_stream = JoinStream::default();
@@ -713,6 +714,11 @@ struct PreprocessContext {
     /// Rust's parse_block API supports definitions in a shared preamble and
     /// keeps their one-based file origins (source_with_original_line_offset).
     preamble_body: bool,
+    /// `Pipe#readSingleDiagram` found a line that `startsWith("@start")`
+    /// and numbers the block from it. When it found none it prepends
+    /// `@startuml` (Pipe.java:217), so an input line's number is its
+    /// position in that text.
+    pipe_start_mark_found: bool,
     base_dir: Option<PathBuf>,
     include_depth: usize,
     foreach_stack: Vec<ForEachState>,
@@ -975,6 +981,7 @@ impl PreprocessContext {
             in_ebnf_block: false,
             seen_start_tag: false,
             preamble_body: false,
+            pipe_start_mark_found: true,
             base_dir,
             include_depth: 0,
             foreach_stack: Vec::new(),
@@ -1031,6 +1038,7 @@ impl PreprocessContext {
             && self.in_diagram_block
             && self.seen_start_tag
             && !self.preamble_body
+            && self.pipe_start_mark_found
         {
             self.current_source_line.saturating_sub(1)
         } else {
@@ -4194,6 +4202,8 @@ struct MergedInput<'a> {
     /// the one `Pipe#readSingleDiagram` appends when the input has none), so
     /// `BlockUmlBuilder` creates no block for it.
     swallowed_end: bool,
+    /// `PipeDiagram::start_mark_found`.
+    pipe_start_mark_found: bool,
 }
 
 /// What `Pipe#readSingleDiagram` hands to `SourceStringReader` for one
@@ -4203,6 +4213,8 @@ struct PipeDiagram {
     /// Number of input lines kept: reading stops after Pipe's end line.
     kept: usize,
     appended_end: Option<String>,
+    /// A line `startsWith("@start")`: Pipe numbers the diagram from it.
+    start_mark_found: bool,
 }
 
 /// Port of `Pipe#readSingleDiagram`'s start and end recognition
@@ -4247,11 +4259,13 @@ fn pipe_single_diagram(input: &[&str]) -> PipeDiagram {
             return PipeDiagram {
                 kept: index + 1,
                 appended_end: None,
+                start_mark_found: true,
             };
         }
     }
     PipeDiagram {
         kept: input.len(),
+        start_mark_found: state == State::StartMarkFound,
         appended_end: match state {
             // Pipe returns null: there is no diagram to end.
             State::NoContent => None,
@@ -4342,6 +4356,7 @@ fn read_filter_merge_lines<'a>(raw: &[Cow<'a, str>]) -> Vec<MergedInputLine<'a>>
 /// list, as it does in Java's TIM input.
 fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
     let pipe = pipe_single_diagram(input);
+    let pipe_start_mark_found = pipe.start_mark_found;
     let mut raw: Vec<Cow<'a, str>> = input[..pipe.kept]
         .iter()
         .map(|line| Cow::Borrowed(*line))
@@ -4354,6 +4369,7 @@ fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
     MergedInput {
         lines,
         swallowed_end,
+        pipe_start_mark_found,
     }
 }
 

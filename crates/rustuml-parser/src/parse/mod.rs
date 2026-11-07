@@ -2469,6 +2469,22 @@ Policy --> Retry
     }
 
     #[test]
+    fn backslash_start_directives_open_main_blocks() {
+        // StartUtils#isStartDirective / #isEndDirective accept '\\'.
+        let seq = "\\startuml\nRuru -> Weka : hi\n\\enduml";
+        assert_eq!(split_blocks(seq).len(), 1);
+        assert_eq!(detect_type(seq), "uml");
+        assert!(matches!(parse_block(seq, 0), Ok(Diagram::Sequence(_))));
+        let mindmap = "\\startmindmap\n* Rimu\n** Miro\n\\endmindmap";
+        assert_eq!(detect_type(mindmap), "mindmap");
+        assert!(matches!(parse_block(mindmap, 0), Ok(Diagram::MindMap(_))));
+        // The start is case-insensitive, the end is not: '@ENDUML' is a
+        // content line, as Java reads it.
+        assert_eq!(detect_type("@STARTUML\nA -> B\n@ENDUML"), "uml");
+        assert!(parse("@STARTUML\nRuru -> Weka : hi\n@ENDUML").is_err());
+    }
+
+    #[test]
     fn split_three_blocks_mixed_types() {
         let input = concat!(
             "@startuml\nAlice -> Bob\n@enduml\n",
