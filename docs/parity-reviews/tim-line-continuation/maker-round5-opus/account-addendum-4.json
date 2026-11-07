@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-line-continuation",
+  "target": "T14.22",
+  "round": 5,
+  "maker": "claude-opus-5-5",
+  "kind": "post-measurement addendum, committed before the change it plans. The addendum-3 start test was built (uncommitted worktree) and run on three DF cases.",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "observation": "With the addendum-3 start test, cr5o_scope_uml_backslash_start renders (exit 0) and differs from Java only in data-source-line: Java 3 for 'Pukeko -> Takahe' (input line 3), Rust 2. cr5o_scope_uml_leading_ws_start ('  @startuml') has the same one-line difference at every build (c4b5a8436, 32684f81e), as review-5 records. cr5o_scope_uml_upper_start stays a Syntax Error ('@ENDUML' is content), as in Java.",
+  "java_trace": "data-source-line is the LineLocation position in the text BlockUmlBuilder reads, 0-based. In -pipe mode that text is Pipe#readSingleDiagram's (Pipe.java:180-225): when a line startsWith(\"@start\") (literal, column 0) Pipe discards everything before it (sb.setLength(0), line 195), so that line is position 0; when no line does, Pipe returns \"@startuml\\n\" + input + \"@enduml\\n\" (line 217), so input line n (1-based) is position n. A '\\startuml', '  @startuml' or '@STARTUML' start line is a start directive for BlockUmlBuilder but no start mark for Pipe, so its block's lines are numbered from Pipe's prepended line.",
+  "rust_divergence": "PreprocessContext#current_diagram_source_line returns current_source_line - 1 inside the block (input line n gives n - 1), which is Java's number when Pipe's mark is on input line 1, and the input line itself when no block is open (unmarked input already numbers as Java's wrapped text). It does not know whether Pipe found its mark.",
+  "planned_change": "pipe_single_diagram reports whether Pipe found its start mark; MergedInput carries it; the context keeps it. Inside the block, current_diagram_source_line subtracts 1 only when Pipe found the mark. When it did not, a line keeps its input number, which is its position in Pipe's wrapped text. Inputs whose Pipe mark is found (every golden: the census finds 0 goldens with a backslash, leading-whitespace or upper-case first start line) are unchanged, including preamble inputs (Rust keeps their existing numbering).",
+  "acceptance": "cr5o_scope_uml_backslash_start and cr5o_scope_uml_leading_ws_start match Java; cr5o_scope_uml_upper_start stays rejected; 0 worse against the merged base and 9ed52f435 in every cohort."
+}
