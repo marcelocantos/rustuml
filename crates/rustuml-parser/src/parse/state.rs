@@ -423,6 +423,54 @@ impl StateParser {
         self.scope_stack.last().map(|f| f.current.as_str())
     }
 
+    /// Short-name quarks, including a separator group that has no state row.
+    ///
+    /// `Plasma.countByName` counts every quark of that short name
+    /// (Plasma.java:103-108). `gotoGroup` creates the separator's group, so
+    /// it counts beside a child that reuses the sequence name.
+    fn short_name_quarks(&self, short_name: &str) -> Vec<String> {
+        let mut ids = Vec::new();
+        for state in &self.states {
+            if state.id.rsplit('.').next() == Some(short_name) {
+                ids.push(state.id.clone());
+            }
+        }
+        for region in &self.region_ids {
+            if region.rsplit('.').next() == Some(short_name) && !ids.iter().any(|id| id == region) {
+                ids.push(region.clone());
+            }
+        }
+        ids
+    }
+
+    fn parent_of(&self, id: &str) -> Option<String> {
+        if let Some(state) = self.states.iter().find(|state| state.id == id) {
+            return state.parent.clone();
+        }
+        if self.region_ids.iter().any(|region| region == id) {
+            return id.rsplit_once('.').map(|(parent, _)| parent.to_string());
+        }
+        None
+    }
+
+    /// `getGroupParentIfItIsConcurrentState` (StateDiagram.java:256-264).
+    /// The entity itself is not its own concurrent container.
+    fn concurrent_container(&self, id: &str) -> Option<String> {
+        let mut parent = self.parent_of(id);
+        let mut guard = 0;
+        while let Some(next) = parent {
+            if self.region_ids.iter().any(|region| region == &next) {
+                return Some(next);
+            }
+            parent = self.parent_of(&next);
+            guard += 1;
+            if guard > 64 {
+                return None;
+            }
+        }
+        None
+    }
+
     /// Populate the quark-equivalent state tree before transition parsing.
     ///
     /// Java provenance: `PSystemCommandFactory.createSystem` rewinds the full
@@ -574,19 +622,16 @@ impl StateParser {
             return Ok(id);
         }
 
-        // `CucaDiagram.quarkInContextSafe`: one existing short name is the
-        // quark, including one that lives in a concurrent region. The
-        // concurrent check then accepts or rejects that quark. Several
-        // short names stay scope-local.
-        let mut same_name = self
-            .states
-            .iter()
-            .filter(|state| state.id.rsplit('.').next() == Some(raw));
-        if let Some(sole) = same_name.next()
-            && same_name.next().is_none()
-        {
-            self.reject_parent(sole.parent.as_deref(), raw, scope, &use_kind)?;
-            return Ok(sole.id.clone());
+        // `CucaDiagram.quarkInContextSafe` (CucaDiagram.java:266-273): one
+        // quark of this short name is reused, unless that quark is the
+        // current group. The separator's group counts even when it was not
+        // declared as a state. Several quarks stay scope-local: the child of
+        // the current group.
+        let quarks = self.short_name_quarks(raw);
+        if quarks.len() == 1 && scope != Some(quarks[0].as_str()) {
+            let parent = self.parent_of(&quarks[0]);
+            self.reject_parent(parent.as_deref(), raw, scope, &use_kind)?;
+            return Ok(quarks[0].clone());
         }
 
         let mut matches = self.states.iter().filter(|state| {
@@ -769,18 +814,19 @@ impl StateParser {
         }
         self.conc_counter += 1;
         let short_name = format!("CONC{}", self.conc_counter);
-        // `quarkInContext(true, shortName)` (CucaDiagram.java:266-272): one
-        // existing quark of that short name is reused, unless it is the
-        // current group. Otherwise the child is created under the owner.
-        let mut same_name = self
-            .states
-            .iter()
-            .filter(|state| state.id.rsplit('.').next() == Some(short_name.as_str()));
-        let reused = if let Some(sole) = same_name.next()
-            && same_name.next().is_none()
-            && sole.id != current
-        {
-            Some(sole.id.clone())
+        // `concurrentState` endGroups before the lookup when the current
+        // group is already concurrent (StateDiagram.java:198-199), so the
+        // lookup runs in the owner. `getUniqueSequence2` has already
+        // advanced (CucaDiagram.java:816-818); reuse does not skip it.
+        // One quark of the new short name is reused unless it is that group.
+        let lookup_current = if self.region_ids.iter().any(|id| id == &current) {
+            base.clone()
+        } else {
+            current
+        };
+        let quarks = self.short_name_quarks(&short_name);
+        let reused = if quarks.len() == 1 && quarks[0] != lookup_current {
+            Some(quarks[0].clone())
         } else {
             None
         };
@@ -947,6 +993,17 @@ impl StateParser {
         if let Some(caps) = RE.captures(line) {
             let from = self.ensure_state(&caps[1], StateNameUse::Link)?;
             let to = self.ensure_state(&caps[3], StateNameUse::Link)?;
+            // `StateDiagram.checkFinalError` (StateDiagram.java:232-264)
+            // rejects a link whose ends have different concurrent ancestors.
+            // The pass loop has rewound the iterator, so that error's trace
+            // loses to the sequence factory's syntax error on the first line.
+            // The merged report is position 1, `Syntax Error?`.
+            if self.concurrent_container(&from) != self.concurrent_container(&to) {
+                return Err(ParseError {
+                    line: 1,
+                    message: "Syntax Error?".to_string(),
+                });
+            }
             let label = caps.get(4).map(|m| m.as_str().trim().to_string());
             let transition_style = parse_transition_style(&caps[2]);
             transition_style.record_in(&mut self.meta, self.transitions.len());
