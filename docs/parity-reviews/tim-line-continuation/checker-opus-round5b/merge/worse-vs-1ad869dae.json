@@ -1,0 +1,63 @@
+{
+ "note": "Every case where tip 6fd071169 is worse than 1ad869dae (T14.63 overlay plus the declared validity overlay).",
+ "total": 8,
+ "outside_approved": 8,
+ "rows": [
+  {
+   "cohort": "r5b",
+   "case": "r5b_num_bs_state",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_num_bs_object",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_num_bs_deployment",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_start_bs_chen",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "attribution": "PACKET: b24935a2d detect_type takes the first whitespace word after start, not DiagramType#getTypes at the next character"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_start_bs_project",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "attribution": "PACKET: b24935a2d detect_type takes the first whitespace word after start, not DiagramType#getTypes at the next character"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_start_nbsp",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "attribution": "PACKET: b24935a2d start test (java_is_whitespace) makes the NBSP line content; Java renders it, base rendered it"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_start_bs_space_uml",
+   "kind": "lost_rejection",
+   "in_review5_approved": false,
+   "attribution": "PACKET: b24935a2d detect_type takes the first whitespace word after start, not DiagramType#getTypes at the next character"
+  },
+  {
+   "cohort": "dh",
+   "case": "o5s_bs_uml_class",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  }
+ ]
+}

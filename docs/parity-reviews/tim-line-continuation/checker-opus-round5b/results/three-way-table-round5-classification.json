@@ -1,0 +1,1380 @@
+{
+ "r5b": {
+  "n": 57,
+  "tip_match": 17,
+  "tip_welcome_match": 1,
+  "java_welcome": 2,
+  "1ad869dae": {
+   "worse": 7,
+   "better_or_other": 22,
+   "worse_cases": [
+    "r5b_num_bs_deployment",
+    "r5b_num_bs_object",
+    "r5b_num_bs_state",
+    "r5b_start_bs_chen",
+    "r5b_start_bs_project",
+    "r5b_start_in_note",
+    "r5b_start_nbsp"
+   ],
+   "worse_by_kind": {
+    "lost_match": [
+     "r5b_num_bs_state",
+     "r5b_num_bs_object",
+     "r5b_num_bs_deployment"
+    ],
+    "new_valid_error": [
+     "r5b_start_bs_chen",
+     "r5b_start_bs_project",
+     "r5b_start_nbsp",
+     "r5b_start_in_note"
+    ]
+   },
+   "other_kinds": {
+    "other:valid-error->mismatch": 11,
+    "gain": 10,
+    "welcome_match_gain": 1
+   },
+   "svg_byte_changes": 29,
+   "model_changes": {
+    "ast": 29,
+    "ascii": 23,
+    "yaml": 29
+   }
+  },
+  "9ed52f435": {
+   "worse": 7,
+   "better_or_other": 22,
+   "worse_cases": [
+    "r5b_num_bs_deployment",
+    "r5b_num_bs_object",
+    "r5b_num_bs_state",
+    "r5b_start_bs_chen",
+    "r5b_start_bs_project",
+    "r5b_start_in_note",
+    "r5b_start_nbsp"
+   ],
+   "worse_by_kind": {
+    "lost_match": [
+     "r5b_num_bs_state",
+     "r5b_num_bs_object",
+     "r5b_num_bs_deployment"
+    ],
+    "new_valid_error": [
+     "r5b_start_bs_chen",
+     "r5b_start_bs_project",
+     "r5b_start_nbsp",
+     "r5b_start_in_note"
+    ]
+   },
+   "other_kinds": {
+    "other:valid-error->mismatch": 11,
+    "gain": 10,
+    "welcome_match_gain": 1
+   },
+   "svg_byte_changes": 29,
+   "model_changes": {
+    "ast": 29,
+    "ascii": 23,
+    "yaml": 29
+   }
+  },
+  "28af44ab3": {
+   "worse": 21,
+   "better_or_other": 16,
+   "worse_cases": [
+    "r5b_crlf_bs_seq",
+    "r5b_end_bs_bare",
+    "r5b_multi_bs_then_bs_mindmap",
+    "r5b_nest_uml_content_bs_json",
+    "r5b_num_bs_blank_inside",
+    "r5b_num_bs_deployment",
+    "r5b_num_bs_object",
+    "r5b_num_bs_seq_three",
+    "r5b_num_bs_state",
+    "r5b_num_unmarked_bs_end_only",
+    "r5b_num_upper_at_seq",
+    "r5b_num_us_bs_seq",
+    "r5b_start_bom",
+    "r5b_start_bs_chen",
+    "r5b_start_bs_creole",
+    "r5b_start_bs_files",
+    "r5b_start_bs_name",
+    "r5b_start_bs_project",
+    "r5b_start_bs_umlish",
+    "r5b_start_in_note",
+    "r5b_start_nbsp"
+   ],
+   "worse_by_kind": {
+    "lost_match": [
+     "r5b_num_bs_seq_three",
+     "r5b_num_upper_at_seq",
+     "r5b_num_us_bs_seq",
+     "r5b_num_bs_blank_inside",
+     "r5b_num_unmarked_bs_end_only",
+     "r5b_num_bs_state",
+     "r5b_num_bs_object",
+     "r5b_num_bs_deployment",
+     "r5b_start_bs_umlish",
+     "r5b_start_bs_name",
+     "r5b_start_bom",
+     "r5b_end_bs_bare",
+     "r5b_multi_bs_then_bs_mindmap",
+     "r5b_crlf_bs_seq"
+    ],
+    "new_valid_error": [
+     "r5b_start_bs_chen",
+     "r5b_start_bs_files",
+     "r5b_start_bs_creole",
+     "r5b_start_bs_project",
+     "r5b_start_nbsp",
+     "r5b_start_in_note",
+     "r5b_nest_uml_content_bs_json"
+    ]
+   },
+   "other_kinds": {
+    "gain": 12,
+    "newly_rejected": 4
+   },
+   "svg_byte_changes": 39,
+   "model_changes": {
+    "ast": 51,
+    "yaml": 40,
+    "ascii": 22
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "dh": {
+  "n": 28,
+  "tip_match": 14,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "1ad869dae": {
+   "worse": 1,
+   "better_or_other": 21,
+   "worse_cases": [
+    "o5s_bs_uml_class"
+   ],
+   "worse_by_kind": {
+    "lost_match": [
+     "o5s_bs_uml_class"
+    ]
+   },
+   "other_kinds": {
+    "gain": 11,
+    "other:valid-error->mismatch": 10
+   },
+   "svg_byte_changes": 22,
+   "model_changes": {
+    "ast": 22,
+    "yaml": 22,
+    "ascii": 19
+   }
+  },
+  "9ed52f435": {
+   "worse": 1,
+   "better_or_other": 21,
+   "worse_cases": [
+    "o5s_bs_uml_class"
+   ],
+   "worse_by_kind": {
+    "lost_match": [
+     "o5s_bs_uml_class"
+    ]
+   },
+   "other_kinds": {
+    "gain": 11,
+    "other:valid-error->mismatch": 10
+   },
+   "svg_byte_changes": 22,
+   "model_changes": {
+    "ast": 22,
+    "yaml": 22,
+    "ascii": 19
+   }
+  },
+  "28af44ab3": {
+   "worse": 6,
+   "better_or_other": 12,
+   "worse_cases": [
+    "o5s_bs_uml_class",
+    "o5s_case_at_upper_start_lower_end",
+    "o5s_case_bs_upper_start",
+    "o5s_mix_bs_start_at_end",
+    "o5s_ws_bs_end_indented",
+    "o5s_ws_tab_bs"
+   ],
+   "worse_by_kind": {
+    "lost_match": [
+     "o5s_bs_uml_class",
+     "o5s_mix_bs_start_at_end",
+     "o5s_ws_tab_bs",
+     "o5s_ws_bs_end_indented",
+     "o5s_case_bs_upper_start",
+     "o5s_case_at_upper_start_lower_end"
+    ]
+   },
+   "other_kinds": {
+    "gain": 10,
+    "newly_rejected": 2
+   },
+   "svg_byte_changes": 22,
+   "model_changes": {
+    "ast": 27,
+    "yaml": 24,
+    "ascii": 11
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "df": {
+  "n": 72,
+  "tip_match": 45,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 2,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 2
+   },
+   "svg_byte_changes": 2,
+   "model_changes": {
+    "ast": 2,
+    "yaml": 2,
+    "ascii": 1
+   }
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 12,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 11,
+    "other:valid-error->mismatch": 1
+   },
+   "svg_byte_changes": 13,
+   "model_changes": {
+    "ast": 15,
+    "yaml": 15,
+    "ascii": 12
+   }
+  },
+  "28af44ab3": {
+   "worse": 1,
+   "better_or_other": 28,
+   "worse_cases": [
+    "cr5o_scope_uml_usecase_theme"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "cr5o_scope_uml_usecase_theme"
+    ]
+   },
+   "other_kinds": {
+    "gain": 22,
+    "newly_rejected": 6
+   },
+   "svg_byte_changes": 31,
+   "model_changes": {
+    "ast": 49,
+    "ascii": 16,
+    "yaml": 34
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "dd": {
+  "n": 13,
+  "tip_match": 10,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 9,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 9
+   },
+   "svg_byte_changes": 9,
+   "model_changes": {
+    "ast": 10,
+    "ascii": 5,
+    "yaml": 10
+   }
+  },
+  "28af44ab3": {
+   "worse": 0,
+   "better_or_other": 9,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 9
+   },
+   "svg_byte_changes": 9,
+   "model_changes": {
+    "ast": 10,
+    "yaml": 10,
+    "ascii": 2
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "cc": {
+  "n": 74,
+  "tip_match": 18,
+  "tip_welcome_match": 8,
+  "java_welcome": 9,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 4,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 4
+   },
+   "svg_byte_changes": 4,
+   "model_changes": {
+    "ast": 4,
+    "ascii": 4,
+    "yaml": 4
+   }
+  },
+  "28af44ab3": {
+   "worse": 10,
+   "better_or_other": 18,
+   "worse_cases": [
+    "cr4_cnt_exit_alone",
+    "cr4_cnt_pragma_continued_end",
+    "cr4_exit_mid",
+    "cr4_inc_cr_only_lines",
+    "cr4_inc_yaml_header_raw",
+    "cr4_main_bom_before_directive",
+    "cr4_main_bom_line2",
+    "cr4_main_endash_arrow",
+    "cr4_sfx_include_many",
+    "cr4_ws_ideo_exit"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "cr4_cnt_pragma_continued_end",
+     "cr4_exit_mid",
+     "cr4_ws_ideo_exit",
+     "cr4_main_bom_line2",
+     "cr4_main_bom_before_directive",
+     "cr4_main_endash_arrow",
+     "cr4_inc_cr_only_lines",
+     "cr4_sfx_include_many"
+    ],
+    "lost_welcome_match": [
+     "cr4_cnt_exit_alone"
+    ],
+    "lost_match": [
+     "cr4_inc_yaml_header_raw"
+    ]
+   },
+   "other_kinds": {
+    "newly_rejected": 7,
+    "gain": 9,
+    "welcome_match_gain": 2
+   },
+   "svg_byte_changes": 30,
+   "model_changes": {
+    "ast": 56,
+    "yaml": 37,
+    "ascii": 19
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "cb": {
+  "n": 39,
+  "tip_match": 24,
+  "tip_welcome_match": 6,
+  "java_welcome": 6,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "28af44ab3": {
+   "worse": 0,
+   "better_or_other": 36,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 23,
+    "welcome_match_gain": 5,
+    "newly_rejected": 8
+   },
+   "svg_byte_changes": 37,
+   "model_changes": {
+    "ast": 38,
+    "ascii": 33,
+    "yaml": 37
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "ca": {
+  "n": 88,
+  "tip_match": 49,
+  "tip_welcome_match": 17,
+  "java_welcome": 19,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 1,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "welcome_match_gain": 1
+   },
+   "svg_byte_changes": 1,
+   "model_changes": {
+    "ast": 1,
+    "ascii": 1,
+    "yaml": 1
+   }
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 1,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "welcome_match_gain": 1
+   },
+   "svg_byte_changes": 1,
+   "model_changes": {
+    "ast": 1,
+    "ascii": 1,
+    "yaml": 1
+   }
+  },
+  "28af44ab3": {
+   "worse": 3,
+   "better_or_other": 71,
+   "worse_cases": [
+    "cr3_end_tim_chr64_enduml",
+    "cr3_end_tim_chr92_enduml",
+    "cr3_wrap_first_is_mindmap"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "cr3_end_tim_chr64_enduml",
+     "cr3_end_tim_chr92_enduml",
+     "cr3_wrap_first_is_mindmap"
+    ]
+   },
+   "other_kinds": {
+    "welcome_match_gain": 16,
+    "gain": 45,
+    "newly_rejected": 10
+   },
+   "svg_byte_changes": 79,
+   "model_changes": {
+    "ast": 86,
+    "ascii": 74,
+    "yaml": 82
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "bz": {
+  "n": 23,
+  "tip_match": 13,
+  "tip_welcome_match": 5,
+  "java_welcome": 5,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {
+    "ast": 1
+   }
+  },
+  "28af44ab3": {
+   "worse": 0,
+   "better_or_other": 18,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "newly_rejected": 4,
+    "welcome_match_gain": 4,
+    "gain": 10
+   },
+   "svg_byte_changes": 19,
+   "model_changes": {
+    "ast": 22,
+    "ascii": 17,
+    "yaml": 19
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "by": {
+  "n": 53,
+  "tip_match": 27,
+  "tip_welcome_match": 5,
+  "java_welcome": 5,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 2,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 1,
+    "other:valid-error->compare-101": 1
+   },
+   "svg_byte_changes": 2,
+   "model_changes": {
+    "ast": 2,
+    "ascii": 2,
+    "yaml": 2
+   }
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 2,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 1,
+    "other:valid-error->compare-101": 1
+   },
+   "svg_byte_changes": 2,
+   "model_changes": {
+    "ast": 2,
+    "ascii": 2,
+    "yaml": 2
+   }
+  },
+  "28af44ab3": {
+   "worse": 5,
+   "better_or_other": 34,
+   "worse_cases": [
+    "cr2_seq_endumlx_col0_swallow",
+    "cr2_seq_named_start_col0_endother_swallow",
+    "cr2_seq_pre_start_backslash_text",
+    "cr2_seq_trailing_space_start_endother_swallow",
+    "cr2_seq_two_blocks_first_swallowed"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "cr2_seq_named_start_col0_endother_swallow",
+     "cr2_seq_trailing_space_start_endother_swallow",
+     "cr2_seq_endumlx_col0_swallow",
+     "cr2_seq_two_blocks_first_swallowed",
+     "cr2_seq_pre_start_backslash_text"
+    ]
+   },
+   "other_kinds": {
+    "gain": 21,
+    "welcome_match_gain": 5,
+    "newly_rejected": 7,
+    "other:valid-error->compare-101": 1
+   },
+   "svg_byte_changes": 42,
+   "model_changes": {
+    "ast": 49,
+    "ascii": 36,
+    "yaml": 43
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "bw": {
+  "n": 23,
+  "tip_match": 15,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {
+    "ast": 2
+   }
+  },
+  "28af44ab3": {
+   "worse": 2,
+   "better_or_other": 17,
+   "worse_cases": [
+    "r2_component_include_tail_then_variable",
+    "r2_seq_col0_end_swallowed_then_indented"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "r2_seq_col0_end_swallowed_then_indented",
+     "r2_component_include_tail_then_variable"
+    ]
+   },
+   "other_kinds": {
+    "gain": 15,
+    "newly_rejected": 2
+   },
+   "svg_byte_changes": 20,
+   "model_changes": {
+    "ast": 20,
+    "ascii": 17,
+    "yaml": 20
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "bu": {
+  "n": 40,
+  "tip_match": 32,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 1,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 1
+   },
+   "svg_byte_changes": 1,
+   "model_changes": {
+    "ast": 4,
+    "ascii": 1,
+    "yaml": 1
+   }
+  },
+  "28af44ab3": {
+   "worse": 2,
+   "better_or_other": 29,
+   "worse_cases": [
+    "tc1_inv_seq_long_comment_unterminated_tail",
+    "tc1_inv_seq_quote_comment_then_end"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "tc1_inv_seq_long_comment_unterminated_tail",
+     "tc1_inv_seq_quote_comment_then_end"
+    ]
+   },
+   "other_kinds": {
+    "gain": 29
+   },
+   "svg_byte_changes": 34,
+   "model_changes": {
+    "ast": 37,
+    "ascii": 25,
+    "yaml": 35
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "bd": {
+  "n": 33,
+  "tip_match": 25,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {
+    "ast": 3
+   }
+  },
+  "28af44ab3": {
+   "worse": 3,
+   "better_or_other": 20,
+   "worse_cases": [
+    "mc1_seq_at_eof",
+    "mc1_seq_before_enduml",
+    "mc1_usecase_continued"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "mc1_usecase_continued",
+     "mc1_seq_before_enduml",
+     "mc1_seq_at_eof"
+    ]
+   },
+   "other_kinds": {
+    "gain": 20
+   },
+   "svg_byte_changes": 27,
+   "model_changes": {
+    "ast": 33,
+    "ascii": 19,
+    "yaml": 30
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "ba": {
+  "n": 64,
+  "tip_match": 52,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 2,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 2
+   },
+   "svg_byte_changes": 2,
+   "model_changes": {
+    "ast": 4,
+    "yaml": 2,
+    "ascii": 1
+   }
+  },
+  "28af44ab3": {
+   "worse": 1,
+   "better_or_other": 12,
+   "worse_cases": [
+    "ck4_usecase_leading_actor_line"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "ck4_usecase_leading_actor_line"
+    ]
+   },
+   "other_kinds": {
+    "newly_rejected": 4,
+    "gain": 8
+   },
+   "svg_byte_changes": 13,
+   "model_changes": {
+    "ast": 44,
+    "ascii": 6,
+    "yaml": 14
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "ay": {
+  "n": 48,
+  "tip_match": 36,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {
+    "ast": 1
+   }
+  },
+  "28af44ab3": {
+   "worse": 0,
+   "better_or_other": 1,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "newly_rejected": 1
+   },
+   "svg_byte_changes": 1,
+   "model_changes": {
+    "ast": 14,
+    "yaml": 1
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "az": {
+  "n": 8,
+  "tip_match": 5,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "28af44ab3": {
+   "worse": 1,
+   "better_or_other": 0,
+   "worse_cases": [
+    "mk4b_theme_trailing_comment_usecase"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "mk4b_theme_trailing_comment_usecase"
+    ]
+   },
+   "other_kinds": {},
+   "svg_byte_changes": 1,
+   "model_changes": {
+    "ast": 2,
+    "yaml": 1
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "ax": {
+  "n": 77,
+  "tip_match": 27,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {
+    "ast": 2
+   }
+  },
+  "28af44ab3": {
+   "worse": 2,
+   "better_or_other": 7,
+   "worse_cases": [
+    "ck3_class_enum_upper_body",
+    "ck3_usecase_note_top_of_paren"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "ck3_usecase_note_top_of_paren",
+     "ck3_class_enum_upper_body"
+    ]
+   },
+   "other_kinds": {
+    "other:valid-error->mismatch": 1,
+    "gain": 5,
+    "newly_rejected": 1
+   },
+   "svg_byte_changes": 12,
+   "model_changes": {
+    "ast": 41,
+    "yaml": 14,
+    "ascii": 2
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "av": {
+  "n": 63,
+  "tip_match": 20,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "28af44ab3": {
+   "worse": 2,
+   "better_or_other": 10,
+   "worse_cases": [
+    "mk3_deployment_archimate_body",
+    "mk3_usecase_right_header_body"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "mk3_usecase_right_header_body",
+     "mk3_deployment_archimate_body"
+    ]
+   },
+   "other_kinds": {
+    "gain": 7,
+    "newly_rejected": 3
+   },
+   "svg_byte_changes": 15,
+   "model_changes": {
+    "ast": 28,
+    "ascii": 4,
+    "yaml": 17
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "at": {
+  "n": 45,
+  "tip_match": 20,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "28af44ab3": {
+   "worse": 1,
+   "better_or_other": 8,
+   "worse_cases": [
+    "ck_usecase_header_body"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "ck_usecase_header_body"
+    ]
+   },
+   "other_kinds": {
+    "newly_rejected": 3,
+    "gain": 5
+   },
+   "svg_byte_changes": 10,
+   "model_changes": {
+    "ast": 20,
+    "ascii": 4,
+    "yaml": 10
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "fresh": {
+  "n": 915,
+  "tip_match": 249,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {
+    "ast": 11
+   }
+  },
+  "28af44ab3": {
+   "worse": 2,
+   "better_or_other": 334,
+   "worse_cases": [
+    "mk2_proc_uninvoked_svg_usecase",
+    "mk2_usecase_note_upper"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "mk2_proc_uninvoked_svg_usecase",
+     "mk2_usecase_note_upper"
+    ]
+   },
+   "other_kinds": {
+    "newly_rejected": 289,
+    "gain": 45
+   },
+   "svg_byte_changes": 459,
+   "model_changes": {
+    "ast": 854,
+    "ascii": 392,
+    "yaml": 488
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "retained": {
+  "n": 4174,
+  "tip_match": 2744,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 3,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 3
+   },
+   "svg_byte_changes": 3,
+   "model_changes": {
+    "ast": 262
+   }
+  },
+  "28af44ab3": {
+   "worse": 13,
+   "better_or_other": 331,
+   "worse_cases": [
+    "test-diagrams/perturbations/class-native-container-factory-precedence/case_tabs.puml",
+    "test-diagrams/perturbations/class-package-full-symbol-model/hexagon_empty_tb.puml",
+    "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+    "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_plain_state_paint_control.puml"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "test-diagrams/perturbations/class-native-container-factory-precedence/case_tabs.puml",
+     "test-diagrams/perturbations/class-package-full-symbol-model/hexagon_empty_tb.puml",
+     "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+     "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_plain_state_paint_control.puml"
+    ]
+   },
+   "other_kinds": {
+    "newly_rejected": 253,
+    "gain": 78
+   },
+   "svg_byte_changes": 379,
+   "model_changes": {
+    "ast": 3235,
+    "yaml": 376,
+    "ascii": 310
+   }
+  },
+  "panics_tip": {
+   "yaml": 63
+  },
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ },
+ "golden": {
+  "n": 12550,
+  "tip_match": 11183,
+  "tip_welcome_match": 17,
+  "java_welcome": 17,
+  "1ad869dae": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {
+    "ast": 6,
+    "yaml": 7
+   }
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 1,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 1
+   },
+   "svg_byte_changes": 6,
+   "model_changes": {
+    "ast": 1653,
+    "yaml": 6
+   }
+  },
+  "28af44ab3": {
+   "worse": 0,
+   "better_or_other": 126,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "newly_rejected": 125,
+    "gain": 1
+   },
+   "svg_byte_changes": 138,
+   "model_changes": {
+    "ast": 2460,
+    "yaml": 145,
+    "ascii": 124
+   }
+  },
+  "panics_tip": {
+   "yaml": 148
+  },
+  "timeouts": {
+   "6fd071169": {},
+   "1ad869dae": {},
+   "9ed52f435": {},
+   "28af44ab3": {}
+  }
+ }
+}

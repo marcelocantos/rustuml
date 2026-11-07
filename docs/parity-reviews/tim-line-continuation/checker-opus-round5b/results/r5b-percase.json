@@ -1,0 +1,819 @@
+[
+ {
+  "name": "r5b_num_bs_seq_three",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "r5b_num_ws_at_seq",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "r5b_num_upper_at_seq",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "r5b_num_emsp_seq",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "r5b_num_us_bs_seq",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "r5b_num_two_blank_bs_seq",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 1
+ },
+ {
+  "name": "r5b_num_comment_bs_seq",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "r5b_num_comment_at_seq",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 1
+ },
+ {
+  "name": "r5b_num_bs_blank_inside",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "r5b_num_unmarked_bs_end_only",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "valid-error",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"\\\\enduml\""
+ },
+ {
+  "name": "r5b_num_bs_activity",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "match",
+   "9ed52f435": "match",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_num_bs_state",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "match",
+   "9ed52f435": "match",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "r5b_num_bs_object",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "match",
+   "9ed52f435": "match",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "r5b_num_bs_deployment",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "match",
+   "9ed52f435": "match",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "r5b_num_tab_at_state",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "r5b_num_pipe_nostart_blank_ws",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 1
+ },
+ {
+  "name": "r5b_num_startsub_in_bs_main",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_start_upper_type_mindmap",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "valid-error"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_start_bs_yaml",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_start_bs_nwdiag",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_start_bs_regex",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_start_bs_chen",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "valid-error",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "parse error: line 1: unsupported diagram type: @startchen"
+ },
+ {
+  "name": "r5b_start_bs_files",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "valid-error",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "parse error: line 1: unsupported diagram type: @startfiles"
+ },
+ {
+  "name": "r5b_start_bs_creole",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "valid-error",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "parse error: line 1: unsupported diagram type: @startcreole"
+ },
+ {
+  "name": "r5b_start_bs_project",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "valid-error",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "parse error: line 1: unsupported diagram type: @startproject"
+ },
+ {
+  "name": "r5b_start_bs_json_mixed",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_start_bs_umlish",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "valid-error",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "parse error: line 1: unsupported diagram type: @startumlish"
+ },
+ {
+  "name": "r5b_start_at_umlx",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "valid-error",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "valid-error"
+  },
+  "tip_stderr": "parse error: line 1: unsupported diagram type: @startumlx"
+ },
+ {
+  "name": "r5b_start_paren_id",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "valid-error",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "valid-error"
+  },
+  "tip_stderr": "parse error: line 1: unsupported diagram type: @startuml(id=gull)"
+ },
+ {
+  "name": "r5b_start_bs_name",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "r5b_start_bs_space_uml",
+  "java_exit": 200,
+  "prepare_observed_valid": true,
+  "overlay_valid": false,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_start_at_space_uml",
+  "java_exit": 200,
+  "prepare_observed_valid": true,
+  "overlay_valid": false,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_start_at_bare",
+  "java_exit": 100,
+  "prepare_observed_valid": true,
+  "overlay_valid": false,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "valid-error",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "valid-error"
+  },
+  "tip_stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"@start\""
+ },
+ {
+  "name": "r5b_start_nbsp",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "valid-error",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{a0}@startuml\""
+ },
+ {
+  "name": "r5b_start_bom",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "valid-error",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{feff}@startuml\""
+ },
+ {
+  "name": "r5b_start_ideosp_bs_mindmap",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_start_in_note",
+  "java_exit": 200,
+  "prepare_observed_valid": true,
+  "overlay_valid": false,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "valid-error",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "parse error: line 1: unsupported diagram type: @started"
+ },
+ {
+  "name": "r5b_end_other_suffix",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "match",
+   "9ed52f435": "match",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_end_bs_bare",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "r5b_end_mixed_case",
+  "java_exit": 200,
+  "prepare_observed_valid": false,
+  "overlay_valid": false,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "nonpositive-rejected",
+   "1ad869dae": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "28af44ab3": "nonpositive-accepted"
+  },
+  "tip_stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"@Enduml\""
+ },
+ {
+  "name": "r5b_end_in_note",
+  "java_exit": 200,
+  "prepare_observed_valid": false,
+  "overlay_valid": false,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "nonpositive-rejected",
+   "1ad869dae": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "28af44ab3": "nonpositive-accepted"
+  },
+  "tip_stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"note over Otter\""
+ },
+ {
+  "name": "r5b_end_without_start_tail",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 1
+ },
+ {
+  "name": "r5b_end_first_then_content",
+  "java_exit": 0,
+  "prepare_observed_valid": false,
+  "overlay_valid": false,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "nonpositive-accepted",
+   "1ad869dae": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "28af44ab3": "nonpositive-accepted"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_empty_bs_block",
+  "java_exit": 0,
+  "prepare_observed_valid": false,
+  "overlay_valid": false,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "nonpositive-accepted",
+   "1ad869dae": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "28af44ab3": "nonpositive-accepted"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_mix_at_bs_end_tail",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "match",
+   "9ed52f435": "match",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_multi_at_then_bs_mindmap",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "match",
+   "9ed52f435": "match",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_multi_bs_then_bs_mindmap",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "r5b_multi_bs_mindmap_then_uml",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_nest_uml_bs_mindmap",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_nest_uml_content_bs_json",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "valid-error",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "parse error: line 1: JSON parse error: expected value at line 1 column 1"
+ },
+ {
+  "name": "r5b_inc_block_index",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "match",
+   "9ed52f435": "match",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_inc_block_id",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "match",
+   "9ed52f435": "match",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_inc_sub_from_bs",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "match",
+   "9ed52f435": "match",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "r5b_err_bs_seq_line",
+  "java_exit": 200,
+  "prepare_observed_valid": false,
+  "overlay_valid": false,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "nonpositive-rejected",
+   "1ad869dae": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "28af44ab3": "nonpositive-accepted"
+  },
+  "tip_stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"this is not (( valid\""
+ },
+ {
+  "name": "r5b_err_ws_at_seq_line",
+  "java_exit": 200,
+  "prepare_observed_valid": false,
+  "overlay_valid": false,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "nonpositive-rejected",
+   "1ad869dae": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "28af44ab3": "nonpositive-accepted"
+  },
+  "tip_stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"%%% broken\""
+ },
+ {
+  "name": "r5b_crlf_bs_seq",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "r5b_crlf_bs_mindmap",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ }
+]

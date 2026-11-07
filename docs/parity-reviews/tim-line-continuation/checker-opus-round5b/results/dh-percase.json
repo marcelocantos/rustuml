@@ -1,0 +1,406 @@
+[
+ {
+  "name": "o5s_bs_uml_class",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "match",
+   "9ed52f435": "match",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "o5s_bs_uml_activity",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "match",
+   "9ed52f435": "match",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "o5s_bs_mindmap",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "o5s_bs_wbs",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "o5s_bs_json",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "o5s_bs_gantt",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "o5s_bs_salt",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "o5s_bs_ebnf",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "o5s_mix_bs_start_at_end",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "o5s_mix_at_start_bs_end",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "match",
+   "9ed52f435": "match",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "o5s_mix_bs_mindmap_at_end",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "o5s_nest_at_then_bs",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 1
+ },
+ {
+  "name": "o5s_nest_bs_then_at",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 1
+ },
+ {
+  "name": "o5s_two_blocks_bs",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "o5s_inc_wrapped_bs",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "match",
+   "9ed52f435": "match",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "o5s_inc_plain_in_bs",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "o5s_ws_tab_bs",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "o5s_ws_bs_end_indented",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "o5s_ws_leading_blank_line",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 1
+ },
+ {
+  "name": "o5s_ws_leading_blank_at",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": true,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "mismatch",
+   "9ed52f435": "mismatch",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 1
+ },
+ {
+  "name": "o5s_case_bs_upper_start",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "o5s_case_at_upper_start_lower_end",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "match"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "o5s_case_bs_mixed_type",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "o5s_neg_bs_start_bare",
+  "java_exit": 200,
+  "prepare_observed_valid": false,
+  "overlay_valid": false,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "nonpositive-rejected",
+   "1ad869dae": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "28af44ab3": "nonpositive-accepted"
+  },
+  "tip_stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\start\""
+ },
+ {
+  "name": "o5s_neg_bs_upper_end",
+  "java_exit": 200,
+  "prepare_observed_valid": false,
+  "overlay_valid": false,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "nonpositive-rejected",
+   "1ad869dae": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "28af44ab3": "nonpositive-accepted"
+  },
+  "tip_stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\ENDUML\""
+ },
+ {
+  "name": "o5s_bs_seq_continuation",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "mismatch",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": "",
+  "tip_plus1_line_shift_compare_exit": 0
+ },
+ {
+  "name": "o5s_bs_uml_theme_continued",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ },
+ {
+  "name": "o5s_bs_mindmap_continuation",
+  "java_exit": 0,
+  "prepare_observed_valid": true,
+  "overlay_valid": true,
+  "pipe_column0_mark": false,
+  "outcome": {
+   "6fd071169": "match",
+   "1ad869dae": "valid-error",
+   "9ed52f435": "valid-error",
+   "28af44ab3": "mismatch"
+  },
+  "tip_stderr": ""
+ }
+]

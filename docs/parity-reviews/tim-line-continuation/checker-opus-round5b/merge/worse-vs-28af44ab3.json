@@ -1,0 +1,462 @@
+{
+ "note": "Every case where tip 6fd071169 is worse than 28af44ab3 (T14.63 overlay plus the declared validity overlay).",
+ "total": 65,
+ "outside_approved": 27,
+ "rows": [
+  {
+   "cohort": "r5b",
+   "case": "r5b_num_bs_seq_three",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_num_upper_at_seq",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_num_us_bs_seq",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_num_bs_blank_inside",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_num_unmarked_bs_end_only",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "inherited: tip outcome equals 1ad869dae and 9ed52f435 (sprite/participant and earlier TIM rounds); 28af44ab3 differs"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_num_bs_state",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_num_bs_object",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_num_bs_deployment",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_start_bs_umlish",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "inherited: tip outcome equals 1ad869dae and 9ed52f435 (sprite/participant and earlier TIM rounds); 28af44ab3 differs"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_start_bs_name",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_start_bom",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "inherited: tip outcome equals 1ad869dae and 9ed52f435 (sprite/participant and earlier TIM rounds); 28af44ab3 differs"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_end_bs_bare",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_multi_bs_then_bs_mindmap",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_crlf_bs_seq",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_start_bs_chen",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "attribution": "PACKET: b24935a2d detect_type takes the first whitespace word after start, not DiagramType#getTypes at the next character"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_start_bs_files",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "attribution": "inherited: tip outcome equals 1ad869dae and 9ed52f435 (sprite/participant and earlier TIM rounds); 28af44ab3 differs"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_start_bs_creole",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "attribution": "inherited: tip outcome equals 1ad869dae and 9ed52f435 (sprite/participant and earlier TIM rounds); 28af44ab3 differs"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_start_bs_project",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "attribution": "PACKET: b24935a2d detect_type takes the first whitespace word after start, not DiagramType#getTypes at the next character"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_start_nbsp",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "attribution": "PACKET: b24935a2d start test (java_is_whitespace) makes the NBSP line content; Java renders it, base rendered it"
+  },
+  {
+   "cohort": "r5b",
+   "case": "r5b_nest_uml_content_bs_json",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "attribution": "inherited: tip outcome equals 1ad869dae and 9ed52f435 (sprite/participant and earlier TIM rounds); 28af44ab3 differs"
+  },
+  {
+   "cohort": "dh",
+   "case": "o5s_bs_uml_class",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "dh",
+   "case": "o5s_mix_bs_start_at_end",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "dh",
+   "case": "o5s_ws_tab_bs",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "dh",
+   "case": "o5s_ws_bs_end_indented",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "dh",
+   "case": "o5s_case_bs_upper_start",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "dh",
+   "case": "o5s_case_at_upper_start_lower_end",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "attribution": "PACKET: ea5375293 numbers only marker-carrying lines from Pipe's prepended @startuml; plain lines keep n-1"
+  },
+  {
+   "cohort": "df",
+   "case": "cr5o_scope_uml_usecase_theme",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_cnt_exit_alone",
+   "kind": "lost_welcome_match",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_exit_mid",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_ws_ideo_exit",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_main_bom_line2",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_main_bom_before_directive",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_main_endash_arrow",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_inc_cr_only_lines",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_sfx_include_many",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_inc_yaml_header_raw",
+   "kind": "lost_match",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "ca",
+   "case": "cr3_end_tim_chr64_enduml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "ca",
+   "case": "cr3_end_tim_chr92_enduml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "ca",
+   "case": "cr3_wrap_first_is_mindmap",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "by",
+   "case": "cr2_seq_two_blocks_first_swallowed",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "attribution": "inherited: tip outcome equals 1ad869dae and 9ed52f435 (sprite/participant and earlier TIM rounds); 28af44ab3 differs"
+  },
+  {
+   "cohort": "by",
+   "case": "cr2_seq_pre_start_backslash_text",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "bw",
+   "case": "r2_component_include_tail_then_variable",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "bd",
+   "case": "mc1_usecase_continued",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "ba",
+   "case": "ck4_usecase_leading_actor_line",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "az",
+   "case": "mk4b_theme_trailing_comment_usecase",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "ax",
+   "case": "ck3_usecase_note_top_of_paren",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "ax",
+   "case": "ck3_class_enum_upper_body",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "av",
+   "case": "mk3_usecase_right_header_body",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "av",
+   "case": "mk3_deployment_archimate_body",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "at",
+   "case": "ck_usecase_header_body",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "fresh",
+   "case": "mk2_proc_uninvoked_svg_usecase",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "fresh",
+   "case": "mk2_usecase_note_upper",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/class-native-container-factory-precedence/case_tabs.puml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/class-package-full-symbol-model/hexagon_empty_tb.puml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.puml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_plain_state_paint_control.puml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "attribution": "approved (review-5 merge/worse-vs-32684f81e.json)"
+  }
+ ]
+}

@@ -1,0 +1,129 @@
+{
+ "note": "Tip SVG with every data-source-line and codeLine incremented by 1 (Pipe.java:217 prepends @startuml when no line startsWith('@start')), compared with Java by the unchanged compare_cli. 0 = match.",
+ "cases": {
+  "r5b:r5b_num_bs_seq_three": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "r5b:r5b_num_ws_at_seq": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "r5b:r5b_num_upper_at_seq": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "r5b:r5b_num_emsp_seq": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "r5b:r5b_num_us_bs_seq": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "r5b:r5b_num_two_blank_bs_seq": {
+   "pipe_column0_mark": false,
+   "compare_exit": 1
+  },
+  "r5b:r5b_num_comment_bs_seq": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "r5b:r5b_num_comment_at_seq": {
+   "pipe_column0_mark": true,
+   "compare_exit": 1
+  },
+  "r5b:r5b_num_bs_blank_inside": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "r5b:r5b_num_bs_state": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "r5b:r5b_num_bs_object": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "r5b:r5b_num_bs_deployment": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "r5b:r5b_num_tab_at_state": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "r5b:r5b_num_pipe_nostart_blank_ws": {
+   "pipe_column0_mark": false,
+   "compare_exit": 1
+  },
+  "r5b:r5b_start_bs_name": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "r5b:r5b_end_bs_bare": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "r5b:r5b_end_without_start_tail": {
+   "pipe_column0_mark": false,
+   "compare_exit": 1
+  },
+  "r5b:r5b_multi_bs_then_bs_mindmap": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "r5b:r5b_crlf_bs_seq": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "dh:o5s_bs_uml_class": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "dh:o5s_mix_bs_start_at_end": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "dh:o5s_nest_at_then_bs": {
+   "pipe_column0_mark": true,
+   "compare_exit": 1
+  },
+  "dh:o5s_nest_bs_then_at": {
+   "pipe_column0_mark": true,
+   "compare_exit": 1
+  },
+  "dh:o5s_two_blocks_bs": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "dh:o5s_ws_tab_bs": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "dh:o5s_ws_bs_end_indented": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "dh:o5s_ws_leading_blank_line": {
+   "pipe_column0_mark": false,
+   "compare_exit": 1
+  },
+  "dh:o5s_ws_leading_blank_at": {
+   "pipe_column0_mark": true,
+   "compare_exit": 1
+  },
+  "dh:o5s_case_bs_upper_start": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "dh:o5s_case_at_upper_start_lower_end": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  },
+  "dh:o5s_bs_seq_continuation": {
+   "pipe_column0_mark": false,
+   "compare_exit": 0
+  }
+ }
+}
