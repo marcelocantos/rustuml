@@ -1,0 +1,2512 @@
+{
+ "note": "Rust outputs recorded before any Java result for batch CR5O; java_prediction_valid is the checker's prediction.",
+ "builds": [
+  "c4b5a8436",
+  "9dc1af5f9",
+  "9ed52f435",
+  "32684f81e"
+ ],
+ "cases": [
+  {
+   "name": "cr5o_scope_uml_usecase_theme",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "@startuml usecase",
+    "theme join"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"(Fly) as F\"\n",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"(Fly) as F\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"(Fly) as F\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "1edfe100166fa422cf17d94e73e0dba89e4ebf749d221a7a4ba13030b4a79b4e",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_uml_component_theme",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "@startuml component",
+    "theme join"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "569a1b5b7501873fbe1f19704927d3799a979f644d84cbf1ba7754ff96532696",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "569a1b5b7501873fbe1f19704927d3799a979f644d84cbf1ba7754ff96532696",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "dc2f9f4c1164f1f84a9256d8a69a8514ae72e70ad889b1ed4ba1e0a6035a4939",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "dc2f9f4c1164f1f84a9256d8a69a8514ae72e70ad889b1ed4ba1e0a6035a4939",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_uml_timing_theme",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "@startuml timing",
+    "theme join"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "1d9020d4fefdb7ece834b2a4009c14f8a09ab5a9a7ba4015b2d39fcd833e5f04",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "1d9020d4fefdb7ece834b2a4009c14f8a09ab5a9a7ba4015b2d39fcd833e5f04",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "1d9020d4fefdb7ece834b2a4009c14f8a09ab5a9a7ba4015b2d39fcd833e5f04",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "1d9020d4fefdb7ece834b2a4009c14f8a09ab5a9a7ba4015b2d39fcd833e5f04",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_uml_upper_start",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "@STARTUML (findStartTypes ignores case)",
+    "unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"@STARTUML\"\n",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"@STARTUML\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"@STARTUML\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "8facf6ecd8e2525aa280b770242d9f91cee74d11492a2d9672826c5a83b2a7c3",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_uml_leading_ws_start",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "leading whitespace before @startuml"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "e3f70d6e03240651c627cc77b1b96624a19f7cdf4dedba0200655e71ea4f14aa",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "e3f70d6e03240651c627cc77b1b96624a19f7cdf4dedba0200655e71ea4f14aa",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"#DDEEDD\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "f5114673705877380326b3b0a988f73c330e2a912b8f812b51b6fe899221041b",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_uml_backslash_start",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "\\startuml",
+    "unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "1f794b89b5abd5c7c7cffbd4b599fc017a73fb9995366b6e6cf84d0c2eba898a",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_mindmap_flat_ctrl",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "mindmap",
+    "control"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "17b479b6293b7ea35e59c2ec2fd51af4b7fbd8ffd15f3f2c3e82550266f73cdd",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "17b479b6293b7ea35e59c2ec2fd51af4b7fbd8ffd15f3f2c3e82550266f73cdd",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "17b479b6293b7ea35e59c2ec2fd51af4b7fbd8ffd15f3f2c3e82550266f73cdd",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "17b479b6293b7ea35e59c2ec2fd51af4b7fbd8ffd15f3f2c3e82550266f73cdd",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_mindmap_title_theme",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "mindmap",
+    "theme title not joined",
+    "unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "399195b5ae086a479358c348b60c75952e73e6c743455a7d12176f2f4066736f",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "0087a28bbec10cf5567c955469ec47ed6caffbf51e3e84e72de25d8efd1363bc",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "399195b5ae086a479358c348b60c75952e73e6c743455a7d12176f2f4066736f",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "399195b5ae086a479358c348b60c75952e73e6c743455a7d12176f2f4066736f",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_gantt_theme",
+   "java_prediction_valid": false,
+   "axes": [
+    "scope",
+    "gantt",
+    "no join: #DDEEDD line",
+    "unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "3f3674959c8f77a13005b7df2aa63ad2e242b70930251f1af59b2be751ea5a2c",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "3f3674959c8f77a13005b7df2aa63ad2e242b70930251f1af59b2be751ea5a2c",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "3f3674959c8f77a13005b7df2aa63ad2e242b70930251f1af59b2be751ea5a2c",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "3f3674959c8f77a13005b7df2aa63ad2e242b70930251f1af59b2be751ea5a2c",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_json_theme",
+   "java_prediction_valid": false,
+   "axes": [
+    "scope",
+    "json",
+    "no join",
+    "unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: JSON parse error: trailing characters at line 2 column 1\n",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: JSON parse error: trailing characters at line 2 column 1\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: JSON parse error: trailing characters at line 2 column 1\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: JSON parse error: expected value at line 1 column 1\n",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_yaml_theme",
+   "java_prediction_valid": false,
+   "axes": [
+    "scope",
+    "yaml",
+    "no join",
+    "unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 3: YAML parse error: could not find expected ':' at line 3 column 1, while scanning a simple key at line 2 column 1\n",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 3: YAML parse error: could not find expected ':' at line 3 column 1, while scanning a simple key at line 2 column 1\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 3: YAML parse error: could not find expected ':' at line 3 column 1, while scanning a simple key at line 2 column 1\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: YAML parse error: control characters are not allowed\n",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_ebnf_theme",
+   "java_prediction_valid": false,
+   "axes": [
+    "scope",
+    "ebnf",
+    "no join",
+    "unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: expected '=' in EBNF rule: skinparam __theme_body_start cr5obg skinparam BackgroundColor \\ #DDEEDD skinparam __theme_body_end cr5obg skinparam __svgIdSeed eciitqlj1zcf\n",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: expected '=' in EBNF rule: skinparam __theme_body_start cr5obg skinparam BackgroundColor #DDEEDD skinparam __theme_body_end cr5obg skinparam __svgIdSeed eciitqlj1zcf\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: expected '=' in EBNF rule: skinparam __theme_body_start cr5obg skinparam BackgroundColor \\ #DDEEDD skinparam __theme_body_end cr5obg skinparam __svgIdSeed eciitqlj1zcf\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: expected '=' in EBNF rule: skinparam __theme_body_start cr5obg skinparam BackgroundColor \\ #DDEEDD skinparam __theme_body_end cr5obg skinparam __svgIdSeed eciitqlj1zcf\n",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_salt_theme",
+   "java_prediction_valid": false,
+   "axes": [
+    "scope",
+    "salt",
+    "no join",
+    "unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: expected '{' to open Salt block, got: \"skinparam __theme cr5obg\"\n",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: expected '{' to open Salt block, got: \"skinparam __theme cr5obg\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: expected '{' to open Salt block, got: \"skinparam __theme cr5obg\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: expected '{' to open Salt block, got: \"\\u{1e}RSL:1\\u{1f}skinparam __theme cr5obg\"\n",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_nwdiag_theme",
+   "java_prediction_valid": false,
+   "axes": [
+    "scope",
+    "nwdiag",
+    "no join",
+    "unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "f22a0db08268103424c3df2a3266cf841442862575d5a81c46c1e880d6ec19d7",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "f22a0db08268103424c3df2a3266cf841442862575d5a81c46c1e880d6ec19d7",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "f22a0db08268103424c3df2a3266cf841442862575d5a81c46c1e880d6ec19d7",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "0485dddec1d3fb20221b41b2c501877aa11028a9e1126c9cc4a5f5bdb560bd2e",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_wbs_flat_ctrl",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "wbs",
+    "control"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "b47612b9ab3969013d607fe1e85d328214fbb34c65f87c23b8e956d253c77c0a",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "b47612b9ab3969013d607fe1e85d328214fbb34c65f87c23b8e956d253c77c0a",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "b47612b9ab3969013d607fe1e85d328214fbb34c65f87c23b8e956d253c77c0a",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "b47612b9ab3969013d607fe1e85d328214fbb34c65f87c23b8e956d253c77c0a",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_mindmap_raw_include",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "mindmap",
+    "raw include not merged nor joined"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "e35436284d8face544fd2ba3e7ac0ab549afdabcb6ad5e3373770dd07a9b031f",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "e35436284d8face544fd2ba3e7ac0ab549afdabcb6ad5e3373770dd07a9b031f",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "e35436284d8face544fd2ba3e7ac0ab549afdabcb6ad5e3373770dd07a9b031f",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e35436284d8face544fd2ba3e7ac0ab549afdabcb6ad5e3373770dd07a9b031f",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_uml_raw_include",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "@startuml",
+    "raw include joined post-TIM"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "6be8488e693f78e326e2077571055b8852814c9b783a22daa157f439777ee3e0",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "6be8488e693f78e326e2077571055b8852814c9b783a22daa157f439777ee3e0",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "6be8488e693f78e326e2077571055b8852814c9b783a22daa157f439777ee3e0",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "9a8ce0f52b3c7121e880425be0bf4a6b9a3e0570b15403d63e5cb266ec19353a",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_mindmap_wrapped_include",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "mindmap",
+    "wrapped include: DiagramDetector merges"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "29b985b4ed0a51a41f7028a092f4d918477ddbc251ba3452d402744e8d826d0a",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "29b985b4ed0a51a41f7028a092f4d918477ddbc251ba3452d402744e8d826d0a",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "29b985b4ed0a51a41f7028a092f4d918477ddbc251ba3452d402744e8d826d0a",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "c70caa80226a99f8e8589656eab399dddfb8f1f8e7a91a1eff1809531496a0e4",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_mindmap_tim_bs",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "mindmap",
+    "TIM-produced backslash, no join"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "e35436284d8face544fd2ba3e7ac0ab549afdabcb6ad5e3373770dd07a9b031f",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "e35436284d8face544fd2ba3e7ac0ab549afdabcb6ad5e3373770dd07a9b031f",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "e35436284d8face544fd2ba3e7ac0ab549afdabcb6ad5e3373770dd07a9b031f",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e35436284d8face544fd2ba3e7ac0ab549afdabcb6ad5e3373770dd07a9b031f",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_wbs_tim_bs",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "wbs",
+    "TIM-produced backslash, no join"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "271398bc36317f248d1182a9c1da6bd2758f9a70d9e31da107c35f3838f57503",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "271398bc36317f248d1182a9c1da6bd2758f9a70d9e31da107c35f3838f57503",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "271398bc36317f248d1182a9c1da6bd2758f9a70d9e31da107c35f3838f57503",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "271398bc36317f248d1182a9c1da6bd2758f9a70d9e31da107c35f3838f57503",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_uml_tim_bs",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "@startuml",
+    "TIM-produced backslash joined"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "04ad52e5c42d8d5c0749b4e2666152afdfaae1e9436ef16efc88545de832beb7",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "04ad52e5c42d8d5c0749b4e2666152afdfaae1e9436ef16efc88545de832beb7",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "04ad52e5c42d8d5c0749b4e2666152afdfaae1e9436ef16efc88545de832beb7",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "839b9b32660cc1d5111c8faf93f31a8c253665d8d730d5ac0d121cbf05ffcde5",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_class_tim_bs",
+   "java_prediction_valid": true,
+   "axes": [
+    "scope",
+    "@startuml class",
+    "TIM backslash joins a class header",
+    "unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "18c08d99234a4cca5622cd951b89a79a9fe186f016c8bbce322fb49120451d46",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "18c08d99234a4cca5622cd951b89a79a9fe186f016c8bbce322fb49120451d46",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "18c08d99234a4cca5622cd951b89a79a9fe186f016c8bbce322fb49120451d46",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "764ffc5069d047cdd1a8544a0ae0f5f963c94d0c192f552082f1d27d85a7a765",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_scope_gantt_tim_bs",
+   "java_prediction_valid": false,
+   "axes": [
+    "scope",
+    "gantt",
+    "no join: '[Dig] lasts \\' alone",
+    "unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "ac846c9239bd06038e575d73c074734ba9f58da27e68827f12dfd04e48fc60e9",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "ac846c9239bd06038e575d73c074734ba9f58da27e68827f12dfd04e48fc60e9",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "ac846c9239bd06038e575d73c074734ba9f58da27e68827f12dfd04e48fc60e9",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "ac846c9239bd06038e575d73c074734ba9f58da27e68827f12dfd04e48fc60e9",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_join_main_into_theme",
+   "java_prediction_valid": true,
+   "axes": [
+    "join",
+    "main pending folds into the theme's first line"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "fa1cee8ea3276419e6ddb42cfb1653efbd73d03feafbb4ad66c84788e7706c53",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "37256ef0c4433a1f5881f719de5ad8f9e614913892c9a100e55d79806f6ab4c5",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "37256ef0c4433a1f5881f719de5ad8f9e614913892c9a100e55d79806f6ab4c5",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "b0869898b50dbeb9d3a8ffef6ab18161f05fa5f7630a32061d6d1fe707e52b91",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_join_theme_open_then_end",
+   "java_prediction_valid": true,
+   "axes": [
+    "join",
+    "theme open tail joins @enduml",
+    "unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "505501be864f881487468e3c59224e9a863e72845f7eb8420008230871cd60c4",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "505501be864f881487468e3c59224e9a863e72845f7eb8420008230871cd60c4",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "505501be864f881487468e3c59224e9a863e72845f7eb8420008230871cd60c4",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "505501be864f881487468e3c59224e9a863e72845f7eb8420008230871cd60c4",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_join_nested_open_into_outer",
+   "java_prediction_valid": true,
+   "axes": [
+    "join",
+    "nested open tail joins outer body line",
+    "outer open joins main line"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "eb6bd9f4fb0b2ef9d0e83cf32dd3ef4376f80a28dc6557dea65c9e86993ae266",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"3\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"3\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "f45ff993191452a8538f40cf81368fa09291620f03f15fd00bd93fc8cc5ff14c",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_join_theme_tim_bs",
+   "java_prediction_valid": true,
+   "axes": [
+    "join",
+    "TIM-produced backslash inside a theme body"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "61e0dfe88630d1bce033bc4e8e95329bd81408f531ffe5c9fdce9894a014e04a",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "61e0dfe88630d1bce033bc4e8e95329bd81408f531ffe5c9fdce9894a014e04a",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"#AA5500\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "57eadcc504225c88ae9ac5fb28a77d07dd65ca2d1c702d81d832abd49706a545",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_join_two_themes",
+   "java_prediction_valid": true,
+   "axes": [
+    "join",
+    "theme A open tail joins theme B first line"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "54b5708381ffea70c0d93181194fba86843888151ddd0bf25ee5f61007f65d5b",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 9: Syntax error: no registered sequence command accepts \"#AA00AA\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 9: Syntax error: no registered sequence command accepts \"#AA00AA\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "54b5708381ffea70c0d93181194fba86843888151ddd0bf25ee5f61007f65d5b",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_join_include_open_into_theme",
+   "java_prediction_valid": true,
+   "axes": [
+    "join",
+    "raw include open tail joins theme first line"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "0f9c09921e593cad85992dcf0a5c6b17f1b6e1e7bf140c3cce6dd47c52dfc5d1",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"#AA00AA\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"#AA00AA\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "3d4706792b5e851ec5868dc29f38e868d18a4e860b9033f5849c9bf41cdc7fb9",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_join_theme_open_then_directive",
+   "java_prediction_valid": true,
+   "axes": [
+    "join",
+    "a TIM directive is not a result line"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "84e4b92688303967fb25c833a60550e2e50e5ce8eb7c3641e7565ffbce40dbee",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"4\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"4\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "4778e5169ec46c8dcb0b3b8f893274d8266da887b083512194d732d31eaba41c",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_join_proc_bs_line",
+   "java_prediction_valid": true,
+   "axes": [
+    "join",
+    "procedure output line ends with TIM backslash"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "ef565a35ef2bf4eb2922a7850c997766d4cec0aa51413c1e5133331ddd8e4825",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "ef565a35ef2bf4eb2922a7850c997766d4cec0aa51413c1e5133331ddd8e4825",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "ef565a35ef2bf4eb2922a7850c997766d4cec0aa51413c1e5133331ddd8e4825",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "c493fc8f79dedb48bd3e4f9f571a0094b3d86e6404ff5a2bdc49080689ae13a9",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_seq_string_inner",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "trailing inner comment after a quoted /' '/"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "0d58d48433091e5932cb22858a335d218de58824993f3e22150b83ab744af24c",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "0d58d48433091e5932cb22858a335d218de58824993f3e22150b83ab744af24c",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "0d58d48433091e5932cb22858a335d218de58824993f3e22150b83ab744af24c",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "0d58d48433091e5932cb22858a335d218de58824993f3e22150b83ab744af24c",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_seq_nested",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "leading: text after the first '/"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "2e7a86116b693612c4ecd06e0d323cdf0d8dd071e0a307d44aeb87cbd0bac1b6",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "2e7a86116b693612c4ecd06e0d323cdf0d8dd071e0a307d44aeb87cbd0bac1b6",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "2e7a86116b693612c4ecd06e0d323cdf0d8dd071e0a307d44aeb87cbd0bac1b6",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "2e7a86116b693612c4ecd06e0d323cdf0d8dd071e0a307d44aeb87cbd0bac1b6",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_seq_open_only",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "no inner comment without both ends"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "98bc5c052621d0f326559de85d4874cf230e4d622b0a946ad22f1d2a8f8ba86d",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "98bc5c052621d0f326559de85d4874cf230e4d622b0a946ad22f1d2a8f8ba86d",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "98bc5c052621d0f326559de85d4874cf230e4d622b0a946ad22f1d2a8f8ba86d",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "98bc5c052621d0f326559de85d4874cf230e4d622b0a946ad22f1d2a8f8ba86d",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_seq_tab_lead",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "tab before a leading inner comment"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "a33f64301ccd9ae9ca006866cf5fbcfff23750f808c29fa71b22833ac6495661",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "a33f64301ccd9ae9ca006866cf5fbcfff23750f808c29fa71b22833ac6495661",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "a33f64301ccd9ae9ca006866cf5fbcfff23750f808c29fa71b22833ac6495661",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "a33f64301ccd9ae9ca006866cf5fbcfff23750f808c29fa71b22833ac6495661",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_special_only_line",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "special-only line is a whole-line comment (TLineType COMMENT_SIMPLE2)"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "aa43c0ca252dbb7858cc4ab337c29c1f40dd770e1336a28fac88e1353ce53cfa",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "aa43c0ca252dbb7858cc4ab337c29c1f40dd770e1336a28fac88e1353ce53cfa",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "aa43c0ca252dbb7858cc4ab337c29c1f40dd770e1336a28fac88e1353ce53cfa",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "aa43c0ca252dbb7858cc4ab337c29c1f40dd770e1336a28fac88e1353ce53cfa",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_special_in_assign",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "special inner comment inside a quoted assignment"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "bb6c99b121f3508399610b361836496f94e3a09933dbf3677d8ab584a6a63315",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "bb6c99b121f3508399610b361836496f94e3a09933dbf3677d8ab584a6a63315",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "bb6c99b121f3508399610b361836496f94e3a09933dbf3677d8ab584a6a63315",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "bb6c99b121f3508399610b361836496f94e3a09933dbf3677d8ab584a6a63315",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_assign_trailing",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "trailing inner comment on an assignment"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "b2a28c727fe11131d4a726101bc6a254017efbcf6abbd4e4d16abc9b2cb29ede",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "b2a28c727fe11131d4a726101bc6a254017efbcf6abbd4e4d16abc9b2cb29ede",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "b2a28c727fe11131d4a726101bc6a254017efbcf6abbd4e4d16abc9b2cb29ede",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "b2a28c727fe11131d4a726101bc6a254017efbcf6abbd4e4d16abc9b2cb29ede",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_if_trailing",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "inner comments on !if/!endif"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "a77770b722ccfdf063987c327a367fa4601d22a4868355b5818dab10feb3ada7",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "a77770b722ccfdf063987c327a367fa4601d22a4868355b5818dab10feb3ada7",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "a77770b722ccfdf063987c327a367fa4601d22a4868355b5818dab10feb3ada7",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "a77770b722ccfdf063987c327a367fa4601d22a4868355b5818dab10feb3ada7",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_procedure_body",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "procedure body"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "b7fc4eb7a65d8dc80a2d835d3b1d67f136bc11fffbac9eaab8ea6ca3fb0172f4",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "b7fc4eb7a65d8dc80a2d835d3b1d67f136bc11fffbac9eaab8ea6ca3fb0172f4",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "b7fc4eb7a65d8dc80a2d835d3b1d67f136bc11fffbac9eaab8ea6ca3fb0172f4",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "b7fc4eb7a65d8dc80a2d835d3b1d67f136bc11fffbac9eaab8ea6ca3fb0172f4",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_function_return",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "function !return"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "063e6e84bda78366a9eefe6134b38bedf638f03b30e0403140b13232914e82e2",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "063e6e84bda78366a9eefe6134b38bedf638f03b30e0403140b13232914e82e2",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "063e6e84bda78366a9eefe6134b38bedf638f03b30e0403140b13232914e82e2",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "063e6e84bda78366a9eefe6134b38bedf638f03b30e0403140b13232914e82e2",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_while_body",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "while body"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "6d797f89346a190fb3784e4a554bf78e24dbc83b605ad5b6de7545ad522c7f70",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "6d797f89346a190fb3784e4a554bf78e24dbc83b605ad5b6de7545ad522c7f70",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "6d797f89346a190fb3784e4a554bf78e24dbc83b605ad5b6de7545ad522c7f70",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "6d797f89346a190fb3784e4a554bf78e24dbc83b605ad5b6de7545ad522c7f70",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_foreach_body",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "foreach body"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "ab17656f2385d5e8f797b1aa76c6d129b1d05ab689f008f6972917ae3fc37b6b",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "ab17656f2385d5e8f797b1aa76c6d129b1d05ab689f008f6972917ae3fc37b6b",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "ab17656f2385d5e8f797b1aa76c6d129b1d05ab689f008f6972917ae3fc37b6b",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "ab17656f2385d5e8f797b1aa76c6d129b1d05ab689f008f6972917ae3fc37b6b",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_sub_body",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "includesub body"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "c79742f41be0fb4e233bdd7013e01726d5dbe38e6767b3695e93e2dcafb7686b",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "c79742f41be0fb4e233bdd7013e01726d5dbe38e6767b3695e93e2dcafb7686b",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "c79742f41be0fb4e233bdd7013e01726d5dbe38e6767b3695e93e2dcafb7686b",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "c79742f41be0fb4e233bdd7013e01726d5dbe38e6767b3695e93e2dcafb7686b",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_include_body",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "raw include body"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "eb57103a4c1e689f2ecfc63674df01c12c4f4985c9a9be63996dd20641ccfaea",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "eb57103a4c1e689f2ecfc63674df01c12c4f4985c9a9be63996dd20641ccfaea",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "eb57103a4c1e689f2ecfc63674df01c12c4f4985c9a9be63996dd20641ccfaea",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "eb57103a4c1e689f2ecfc63674df01c12c4f4985c9a9be63996dd20641ccfaea",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_theme_body",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "theme body: inner and short comments"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "3c643cb7789fa3c521b14a1c1fcdef465cea3d7795ffeac4804968fe766fbf4d",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "3c643cb7789fa3c521b14a1c1fcdef465cea3d7795ffeac4804968fe766fbf4d",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "3c643cb7789fa3c521b14a1c1fcdef465cea3d7795ffeac4804968fe766fbf4d",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "3c643cb7789fa3c521b14a1c1fcdef465cea3d7795ffeac4804968fe766fbf4d",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_ebnf_short_line",
+   "java_prediction_valid": false,
+   "axes": [
+    "comment",
+    "ebnf",
+    "^\\s*' is COMMENT_SIMPLE: the 'b' line is dropped",
+    "unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "e4034523972862b28e7c1485e9fed8d64ef3fa57b6671add900ddff00bef3e9b",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "e4034523972862b28e7c1485e9fed8d64ef3fa57b6671add900ddff00bef3e9b",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "e4034523972862b28e7c1485e9fed8d64ef3fa57b6671add900ddff00bef3e9b",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e4034523972862b28e7c1485e9fed8d64ef3fa57b6671add900ddff00bef3e9b",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_ebnf_short_indented",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "ebnf",
+    "indented short comment dropped"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unexpected character in EBNF: ';'\n",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unexpected character in EBNF: ';'\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unexpected character in EBNF: ';'\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unexpected character in EBNF: ';'\n",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_ebnf_trailing_multi",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "ebnf",
+    "trailing: text before the last /'"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unexpected character in EBNF: '/'\n",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unexpected character in EBNF: '/'\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unexpected character in EBNF: '/'\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unexpected character in EBNF: '/'\n",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_mindmap_inner",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "mindmap"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "17b479b6293b7ea35e59c2ec2fd51af4b7fbd8ffd15f3f2c3e82550266f73cdd",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "17b479b6293b7ea35e59c2ec2fd51af4b7fbd8ffd15f3f2c3e82550266f73cdd",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "17b479b6293b7ea35e59c2ec2fd51af4b7fbd8ffd15f3f2c3e82550266f73cdd",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "17b479b6293b7ea35e59c2ec2fd51af4b7fbd8ffd15f3f2c3e82550266f73cdd",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_wbs_inner",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "wbs"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "b47612b9ab3969013d607fe1e85d328214fbb34c65f87c23b8e956d253c77c0a",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "b47612b9ab3969013d607fe1e85d328214fbb34c65f87c23b8e956d253c77c0a",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "b47612b9ab3969013d607fe1e85d328214fbb34c65f87c23b8e956d253c77c0a",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "b47612b9ab3969013d607fe1e85d328214fbb34c65f87c23b8e956d253c77c0a",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_json_inner",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "json"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "c89b6cac68bb1da1db6b586bec32133615fbeac17bcf3d01594a67e68d6a2743",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "c89b6cac68bb1da1db6b586bec32133615fbeac17bcf3d01594a67e68d6a2743",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "c89b6cac68bb1da1db6b586bec32133615fbeac17bcf3d01594a67e68d6a2743",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "c89b6cac68bb1da1db6b586bec32133615fbeac17bcf3d01594a67e68d6a2743",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_yaml_inner",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "yaml"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: YAML parse error: mapping values are not allowed in this context at line 2 column 7\n",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: YAML parse error: mapping values are not allowed in this context at line 2 column 7\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: YAML parse error: mapping values are not allowed in this context at line 2 column 7\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: YAML parse error: mapping values are not allowed in this context at line 2 column 7\n",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_yaml_quote_key",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "yaml",
+    "'quoted key line is COMMENT_SIMPLE: dropped"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "6bc61465bcb2e22bc831fa721cb971751ce7db6aded393186ee315997ba97de9",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "6bc61465bcb2e22bc831fa721cb971751ce7db6aded393186ee315997ba97de9",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "6bc61465bcb2e22bc831fa721cb971751ce7db6aded393186ee315997ba97de9",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "6bc61465bcb2e22bc831fa721cb971751ce7db6aded393186ee315997ba97de9",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_gantt_inner",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "gantt"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "3f3674959c8f77a13005b7df2aa63ad2e242b70930251f1af59b2be751ea5a2c",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "3f3674959c8f77a13005b7df2aa63ad2e242b70930251f1af59b2be751ea5a2c",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "3f3674959c8f77a13005b7df2aa63ad2e242b70930251f1af59b2be751ea5a2c",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "3f3674959c8f77a13005b7df2aa63ad2e242b70930251f1af59b2be751ea5a2c",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_salt_inner",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "salt"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "528c1a1ab83abf02dca5b1857f6ca34fb75fec881236a337f4d6be0adb363a0a",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "528c1a1ab83abf02dca5b1857f6ca34fb75fec881236a337f4d6be0adb363a0a",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "528c1a1ab83abf02dca5b1857f6ca34fb75fec881236a337f4d6be0adb363a0a",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "528c1a1ab83abf02dca5b1857f6ca34fb75fec881236a337f4d6be0adb363a0a",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_cmt_class_inner",
+   "java_prediction_valid": true,
+   "axes": [
+    "comment",
+    "class body"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "0b948b58e11966b595d65ac1da6a12ac34cefd2b630d91a889847f6d5a7b38d3",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "0b948b58e11966b595d65ac1da6a12ac34cefd2b630d91a889847f6d5a7b38d3",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "0b948b58e11966b595d65ac1da6a12ac34cefd2b630d91a889847f6d5a7b38d3",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "0b948b58e11966b595d65ac1da6a12ac34cefd2b630d91a889847f6d5a7b38d3",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "cr5o_hdr_0c5c",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "U+0C5C Unicode 17 Lo -> header",
+    "raw-include validity unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"౜ @startuml\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "cr5o_hdr_0cdc",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "U+0CDC Unicode 17 Lo -> header",
+    "raw-include validity unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"೜ @startuml\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "cr5o_hdr_a7f1",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "U+A7F1 Unicode 17 Lm -> header",
+    "raw-include validity unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"꟱ @startuml\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "cr5o_hdr_1c8a",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "U+1C8A Unicode 16 Ll -> header",
+    "raw-include validity unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"ᲊ @startuml\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "cr5o_hdr_a7c0",
+   "java_prediction_valid": false,
+   "axes": [
+    "header",
+    "U+A7C0 Unicode 14 Lu -> raw include",
+    "raw-include validity unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"Ꟁ @startuml\"\n",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"Ꟁ @startuml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"Ꟁ @startuml\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "cr5o_hdr_0870",
+   "java_prediction_valid": false,
+   "axes": [
+    "header",
+    "U+0870 Unicode 14 Lo -> raw include",
+    "raw-include validity unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"ࡰ @startuml\"\n",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"ࡰ @startuml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"ࡰ @startuml\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "cr5o_hdr_0cf3",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "U+0CF3 Unicode 15 Mc -> header",
+    "raw-include validity unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "cr5o_hdr_02b0",
+   "java_prediction_valid": false,
+   "axes": [
+    "header",
+    "U+02B0 Lm -> raw include",
+    "raw-include validity unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"ʰ @startuml\"\n",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"ʰ @startuml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"ʰ @startuml\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "cr5o_hdr_0301",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "U+0301 Mn -> header",
+    "raw-include validity unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "cr5o_hdr_2160",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "U+2160 Nl -> header",
+    "raw-include validity unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "cr5o_hdr_00b2",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "U+00B2 No -> header",
+    "raw-include validity unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "cr5o_hdr_0966",
+   "java_prediction_valid": false,
+   "axes": [
+    "header",
+    "U+0966 Nd -> raw include",
+    "raw-include validity unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"० @startuml\"\n",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"० @startuml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"० @startuml\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "cr5o_hdr_ac00",
+   "java_prediction_valid": false,
+   "axes": [
+    "header",
+    "U+AC00 Lo -> raw include",
+    "raw-include validity unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"가 @startuml\"\n",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"가 @startuml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"가 @startuml\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "cr5o_hdr_1d400",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "U+1D400 supplementary -> surrogates -> header",
+    "raw-include validity unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "cr5o_hdr_0378",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "U+0378 Cn -> header",
+    "raw-include validity unsure"
+   ],
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "048282e1e3c1695a816fdb419cb14e43f39bd63143368bc75ef5054b970cae49",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  }
+ ]
+}
