@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "mechanism": "reference-environment-gate",
+  "reviewer": {
+    "task_id": "t3-0f350db2 opus G7 reference-environment recheck 3",
+    "model": "claude-opus-5-5",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "account_commit": "2ea341238b3f058e2088a3dddb8d48bf07ef51ee",
+  "implementation_commit": "2ea341238b3f058e2088a3dddb8d48bf07ef51ee",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git switch -c review/opus-g7-recheck3 2ea341238b3f058e2088a3dddb8d48bf07ef51ee",
+    "git -c protocol.file.allow=always submodule update --init --reference /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden test-diagrams/golden",
+    "python3 -I scripts/reference_env_census.py self-test",
+    "python3 -I scripts/reference_env_census.py check /Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g7-census4 --committed tools/font-chain-reference/monkeyman-reference-env/census.txt",
+    "python3 -I checker-opus-3/tools/matrix.py, record_matrix.py, stale.py, hook_sim.py and run_record.py (JVM stubbed; Java never run)",
+    "swift cascade.swift / resolve*.swift / adv.swift on colossus (macOS 27.2 26B123): Core Text cascades, family enumeration and advances",
+    "CARGO_TARGET_DIR=$CACHE/target-tip cargo test --release --offline -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards --test doc_claims; -p rustuml --test pdf_contract --test pipe_mode; --workspace --lib; cargo clippy --offline -p <each crate>",
+    "the same on a git archive of cb550c0d67cc729ce764895005b7e86310c9f313 with CARGO_TARGET_DIR=$CACHE/target-base",
+    "python3 -I checker-opus-3/tools/cmp_outputs.py: -tsvg on 18878 sources and -tpng -teps -ttxt -tpdf on 64, rustuml-tip against rustuml-base"
+  ],
+  "findings": [
+    "Accepted. The three defects from review f34f37bed are fixed. 1) All 29 cascade slots in unpinned-cascade-slots.txt, and all 50 distinct #slot paths in the stored chain data, are pinned. That is 22 FONT_FILES plus 41 CASCADE_FONT_FILES as font rows, and PingFang as an asset-font row. 2) A symlink OUT, a symlink ancestor under scratch, and a symlinked scratch are refused, and nothing is written. 3) A committed blank or - scalar exits 2 against every live value, including dash on both sides.",
+    "Coverage. JDK sources were read and Java was not run. They show that the reference JVM registers only the fonts Core Text enumerates, plus the logical fonts. getFontPath returns an empty path under LWCToolkit. createCompositeFont uses CTFontCopyDefaultCascadeListForLanguages plus GeezaPro, and dot-names are dropped. The corpus names 36 families. Every installed family among them resolves to a pinned file. Courier and Times resolve in Core Text to the hidden, unpinned Courier.ttc and Times.ttc, but Java cannot register them. findFont2D maps courier to monospaced, which is Menlo. The Java goldens prove it: Vault at 14 px is 42.1436, where Menlo gives 42.14355 and Courier.ttc 42.00684. Local cascades over all 25 reachable styles, with 631 languages as stored, reach no unpinned path except colossus's Reserved PingFangUI. On Monkey Man that slot is the pinned MobileAsset copy. Other system faces sit on the sealed system volume, which host.build_version pins, and all 63 font hashes are identical on colossus. The documented scope is therefore justified, though the sealed-volume reason is not written down (proposed target 3).",
+    "derive_cascade_font_files is deterministic. It gives the same 41-tuple under four PYTHONHASHSEED values. self-test rejects every stale tuple and every changed #slot dataset in stale-tuple-matrix.tsv: dropping, adding, swapping or renormalizing an entry; adding, removing or moving a slot path; a relative path; no slot lines. It accepts reordered or renamed TSVs. A census missing a non-Emoji cascade row still passes self-test, but the gate fails closed on it with check exit 1.",
+    "The check mutation matrix has 117 cases (17 exit 0, 63 exit 1, 37 exit 2). Every earlier case and every new cascade case behaves as specified: cascade faces added, removed, rehashed or renamed to NFC; census3 against census4. So do the full scalar grid and the user-font, asset-font and symlink-row hash grids. One gap remains: font rows do not apply the unpinned rule. A committed blank or - font hash exits 1 against a real live hash, and 0 when the live hash is also blank or -. record always writes a 64-hex font hash or crashes, and the Rust test rejects a short committed font hash, so no real drift is missed through the hook. The README's exit-2 wording is still wrong for font rows (proposed target 1).",
+    "Record matrix: 27 of 27 as expected. It runs the real record() with only the JVM stubbed and a write audit hook. A cascade face edited, or turned into a symlink to other bytes, exits 1 at check. A removed or dangling cascade face makes record exit 1. A symlink to identical bytes exits 0, because content and path are unchanged. No accepted case writes outside realpath(OUT). The ancestry rule is lexical: an outside alias of scratch followed by a scratch symlink is accepted and writes into that symlink's target. The hook never builds such a path (proposed target 2).",
+    "Script version. 47e68059 (which recorded census4) and the committed d4f9a562 differ only in the self-test function cascade_slot_mutation. record, its callees and CASCADE_FONT_FILES are identical. With the JVM stubbed, both versions recorded colossus to byte-identical census.txt (11dda102) and sidecars, through identical writes. That record shows no font-row drift against census4. A fresh record by the committed script on an unchanged Monkey Man therefore reproduces census4 (284d5ef4), and no request directory was needed. The relay matches SHA256SUMS and PARENT-SHA256SUMS, it is byte-identical to the committed census, and check of it exits 0.",
+    "Hook. reference_env_gate.py (d9288913) was run against a fake install, with only path constants changed. It returned only when record and check both exited 0. It aborted on check exit 1, check exit 2, record exit 1, a missing census, a missing scratch (not created), scratch as a file, and a symlinked scratch (record refuses). No temporary directory remained in any case. The documented call block was pasted before line 68 of the live seq_capture.py (eaf70825). It stops the capture before new-worker on exit 1, exit 2 and record exit 1, and lets new-worker run on a pass. The install step is exact and sufficient. The only write outside scratch is Python's __pycache__ in the install directory (proposed target 4). HotSpot hsperfdata is still untested residue.",
+    "No loss. -tsvg matches on 18878 sources: 12550 golden and 6328 perturbation, 0 mismatches. -tpng, -teps and -ttxt match on 64 sources each. -tpdf on the tip is byte-stable across runs, 64/64; base differs on 8/64. pdf_contract: 2 passed. The svg2pdf diff from crates.io 0.13.0 is the two sort sites plus RUSTUML-PATCH.md. Gates are identical on both trees:\n- golden_no_oracle: exit 0, 70 failure names 4ddf284a.\n- golden_pairs: 10497 passed, 754 failed, 1299 skipped; names b92f592c.\n- parity_perturbations: the same 2727 failing paths, fc5d0f7c.\n- pipe_mode: 17. doc_claims: 2.\n- Workspace lib passes; render has 863 tests on the tip and 862 on base, the extra being the census test.\n- Clippy exits 0 per crate. The tip adds only svg2pdf's 2 upstream warnings in helper.rs.",
+    "Process. Addendum 2315197ab touches only ADDENDUM-2.md and is an ancestor of fix 0a36d0816. The adopt commit later rewrote the addendum's status paragraph, but kept the planned-change list unchanged. Before this record, the diff against base for crates/rustuml-oracle, test-diagrams and tests is empty, so the frozen items are unchanged. harness_guards fails the same two tests on both trees, with equal violation lines (2711, ac887e42). This record adds account.json and two Java-backed perturbation pairs, copied byte for byte from Monkey Man relay captures of 2026-11-05: tim-builtin-value-boundaries w_courier_pua_b_ctl (relay batch c4a/BF) and creole-parameter alias_courier_upper (checker e6a64f42). They make this mechanism's review record complete."
+  ],
+  "verdict": "accepted",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/reference-environment-gate/courier-skinparam-monospaced-menlo.puml",
+      "golden": "test-diagrams/perturbations/reference-environment-gate/courier-skinparam-monospaced-menlo.svg",
+      "result": "pass",
+      "axes": ["skinparam defaultFontName Courier resolves through logical Monospaced to the pinned Menlo, not the hidden Courier.ttc"],
+      "provenance": "byte copy of test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/w_courier_pua_b_ctl.{puml,svg}, relay batch c4a (BF); source 9831288c, golden 7b88715e"
+    },
+    {
+      "source": "test-diagrams/perturbations/reference-environment-gate/courier-creole-upper-monospaced-menlo.puml",
+      "golden": "test-diagrams/perturbations/reference-environment-gate/courier-creole-upper-monospaced-menlo.svg",
+      "result": "pass",
+      "axes": ["creole <font:COURIER> in an activity label at 12 px, mixed with Dialog (Lucida Grande) runs"],
+      "provenance": "byte copy of test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_courier_upper.{puml,svg}; source d23e20a1, golden ce339fb6"
+    }
+  ],
+  "evidence": "docs/parity-reviews/reference-environment-gate/checker-opus-3/measurements.md"
+}

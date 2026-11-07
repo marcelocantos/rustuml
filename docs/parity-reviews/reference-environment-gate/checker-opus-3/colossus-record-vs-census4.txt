@@ -1,0 +1,497 @@
+DRIFT host.hostname: committed MacBookPro live colossus.lan
+DRIFT jdk.fontmanager: committed /opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib live /opt/homebrew/Cellar/openjdk@21/21.0.13.0.2/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib
+DRIFT jdk.fontmanager.sha256: committed 80488062f9ab885f1860b0e3b8fc3d13030a0a05765c06d12301668d7404812c live beb13460b131b9e3b3b67ccb164c64d8049d14763df532290b44b12ea00d8aad
+DRIFT jdk.home: committed /opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home live /opt/homebrew/Cellar/openjdk@21/21.0.13.0.2/libexec/openjdk.jdk/Contents/Home
+DRIFT jdk.java: committed /opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java live /opt/homebrew/Cellar/openjdk@21/21.0.13.0.2/libexec/openjdk.jdk/Contents/Home/bin/java
+DRIFT jdk.java.sha256: committed ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9 live eadb74f89889a4c2299dadc0e33c67a571f8e20c5c8b8fb7a2c5ea7a03de6e76
+DRIFT jdk.reference_wrapper: committed /Users/marcelo/rustuml-reference/bin/reference live /Users/marcelo/Library/Caches/rustuml-opus-g7-recheck3/tools/stub/reference
+DRIFT jdk.reference_wrapper.sha256: committed 6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e live 996b6122c50a3a2347d65689d1938382fdd9a43def1e7ea5f90877b29ff2bf44
+DRIFT shaping.fontmanager.loaded: committed /opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib live /opt/homebrew/Cellar/openjdk@21/21.0.13.0.2/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib
+DRIFT shaping.freetype.link_current: committed 27.2.0 live 27.7.0
+DRIFT shaping.freetype.sha256: committed 1bf70387c4ef59accba8116c847cb87d2018ded2672db551686b95dce4c5d931 live 9c99ad47dbf9f90b5cc1732a58fbcf62bc7b7175f75a431ddd7207e7457e00d7
+DRIFT shaping.harfbuzz.kegs: committed 10.1.0,13.2.1,15.0.0_1 live 15.0.0_1
+DRIFT shaping.harfbuzz.link_switched: committed 2026-10-28 live 2026-10-26
+DRIFT shaping.harfbuzz.sha256: committed b04ab259a343ba51a50db8d1df637160f31d342a66c4192e18dba63ea42ed04a live 4c2ba2b4f6780c7f799f661dd5a6c3121b393e1079a4b3e5103119775b094bc1
+DRIFT missing user-font /Library/Fonts/.uuid
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Bold.ttf: committed 2205756 live 2491512
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Bold.ttf: committed 862f86daf42668149d814d116f645f46655b9325fd09207c5cd6332d0e478b36 live 104897b8ff7f74674c8d6d81b6dbe9138e5c249b54d6c08c8b21600f75d3c5c1
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-BoldItalic.ttf: committed 2208864 live 2494624
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-BoldItalic.ttf: committed 6e9e26aa77342f02de02c867c7a11e54d785405dc8d1cf33b6b202faee114567 live 8d5892b455cc166f8aac459182aa7a0d7df6cf2d70d61047deb8783fbd2b5d67
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraBold.ttf: committed 2208228 live 2493984
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraBold.ttf: committed acbbfe7e762c8fdd3b23eff5bf88e17362c404e17a33e969d10f17cca5201832 live a30da5101038f9efa128c87c7508e262d79d9709feadf43cf69a201cfc13ac2f
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraBoldItalic.ttf: committed 2210204 live 2495964
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraBoldItalic.ttf: committed a7e71d35d76ca65b2312993b24b445eb8ba9290dc62838fce9cf68aea905a499 live 4d79abe68d10d5013f15e3bf69efd643d8a163c4d7824d1e1d473c13f7ae56b5
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraLight.ttf: committed 2203944 live 2489700
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraLight.ttf: committed b1464ca51beaa101443323db6080029758171212c43b462a093f462506c0971f live cff82d2ede085403fbe6cef49848291b884559a329af6dd5c62b5a894c9e91d9
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraLightItalic.ttf: committed 2204684 live 2490444
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ExtraLightItalic.ttf: committed 514a1a3ff2636662e96ca57dba71e73940d6f0c3a1c785f04478d398684e3f92 live 54340639d79d1bd21132cda67ef092dd206f3a783f5168f8184b18b496db7cc8
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Italic.ttf: committed 2206324 live 2492084
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Italic.ttf: committed dd12f40915404d11647cbfb43ef5b64fcf53e09648973a59c01fdba0d281a477 live dd76e7fe83fd2b1ae8e416efb3af8348d975b004648eb28e9a836e1fc4dd72a0
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Light.ttf: committed 2205628 live 2491384
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Light.ttf: committed 7c10dbd2bb3f577219e8a228ca0d413d049322307a5327b058a21fc9770d905b live f19b9cc0516482aea93ff3f526aead1cbf4376cf0835cad5824ee6ed97f2583c
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-LightItalic.ttf: committed 2207044 live 2492804
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-LightItalic.ttf: committed 55601b756ffde5cb11af02ef4e9bfd5d0d995104f666f4b8eb183f155a18829d live 16386351d580fc3dd3e6b94d341e77cc8c04ed29821b5c4206c3f8396fb5a73a
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Medium.ttf: committed 2203100 live 2488856
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Medium.ttf: committed 03540cf2063a99cb5e322c9f45e7fdd73202a2f395e2211fe07fd5c7e5552300 live 158ff61f4229aa13048715789222048dd54c25e2ccd9d0d860c96ab68f9baba9
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-MediumItalic.ttf: committed 2206328 live 2492088
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-MediumItalic.ttf: committed 0e41901c5f1cc94267c0b23d8f4254af539fe754ab138e4f257cf631b8804e48 live 3c58ca4df4cdfc2276b4090d99e98cc19af37a089634859a4a36c7b41484a705
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Regular.ttf: committed 2203372 live 2489128
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Regular.ttf: committed 4399c87547080266f3384c1e12d78d24364e907f7950eb12153f6e98ece053d5 live f726c0fb0db90a00920e8fa9ef281ccf9f5f848785ebcaca09bade9d15d38b58
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-SemiBold.ttf: committed 2204680 live 2490436
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-SemiBold.ttf: committed db6177a9337982106cac7f4501a46d1a9193e15a71922307bdaceb7e61909653 live c6c436277646003b578a6c9ac2f4377dfb72f12cd24af9f760787ec241571bf9
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-SemiBoldItalic.ttf: committed 2208780 live 2494540
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-SemiBoldItalic.ttf: committed dd4b110743a6e89041232ad482f15179aade4f66f1680b944c6edc48fef72aae live fd3271efe445c6b5e801a38ede34fd7b143c4668f8b9d63fb7263291e75e2e74
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Thin.ttf: committed 2200848 live 2486604
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-Thin.ttf: committed 77076336c1d9e34798d4ebb628928613507dcf0f00825b29ffe3001a5a1608a9 live 4eb3d68ab21744deaa6cff1353b6df67013a83e04437d1fdf6ce90c1b4c7afa5
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ThinItalic.ttf: committed 2203880 live 2489640
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFont-ThinItalic.ttf: committed 4a9af93f0ec44db80cd51547f9449546a5f306a36ff8d786654c92972efac6b9 live 68620b30c95256b3a81dcd6ebad3545cc222ee146575175e7116b53520bb1548
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Bold.ttf: committed 2158480 live 2493472
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Bold.ttf: committed 1cc886f7bf7446438b3be0e7a78a01ce42ddd83083e9ca55350b0bc22d395274 live f799fc4b215c7b7254bf6cee51c0bce122ac684b53b46fd3cb83d408a0ccf385
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-BoldItalic.ttf: committed 2161620 live 2496612
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-BoldItalic.ttf: committed 1811aec6ddcfe94de336909a0f6fc49d732a1dc0cd9fda3b96f93b32cab9f129 live 28ce03bcaf808f7fa64dcce6facb00319083bdb04cc4f61d41b9f6ad8f20c3e8
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraBold.ttf: committed 2160952 live 2495944
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraBold.ttf: committed 4bf6bd4367c7ac5be2bb3a74db6185c7884565f19c1ffa735b7b0583115d92ee live 7027b92cbe1536d4bbe56eca416e64baa64b32fea4497fd4673cf1715cf7ae85
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraBoldItalic.ttf: committed 2162960 live 2497952
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraBoldItalic.ttf: committed abd7d33931df69b2bfaeee99aadc91e3a4df9a4292d301ab6c086d679a57837a live 844e2f7cf51d433fb44be420ecdf4d4ecf9fb4400fe8263db135708d034df526
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraLight.ttf: committed 2156672 live 2491664
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraLight.ttf: committed 636dbee33f02b8f6b3f246848eb9de4bf0029d08493dc0a61b50d0a8075dcfc9 live 3f1abb0ab790ec72fcd25f340bfcc246357638b9d95f717293e634d6cb2ea405
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraLightItalic.ttf: committed 2157444 live 2492436
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ExtraLightItalic.ttf: committed 26e8d705819100cf6cd82ab3dac565266fed5298abd4f2fe71651fa7099314d8 live 0f814da728de434928b1acaf8144ee413c401224605ad4dfe0e4ce1c5cf6fac8
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Italic.ttf: committed 2159080 live 2494072
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Italic.ttf: committed a496860da7b82566e27e9965f98dc531d705f08519237d8117d9ddee73791016 live 336a3cef8770dab01c0fc9c6bb0c0473bfa82f90a4033fde2cc52d8aa410528c
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Light.ttf: committed 2158352 live 2493344
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Light.ttf: committed 6d24de467c56c6c1b1b36dcc32c673b77ec6e2c202b18f2f983db39ba55a7ef2 live 17c9522cf593213aa99c3eb0fb706df2fe84332eea99e943c0df267a84274350
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-LightItalic.ttf: committed 2159800 live 2494792
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-LightItalic.ttf: committed 88879a485ca93336e0b439d8f1da237c934a4d6bf0b72bebfa58c5584ec8b14a live dd023898a54265068c77fff5aa71d9835ea394349c7c9a3e9ca381d5f704f02e
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Medium.ttf: committed 2155828 live 2490820
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Medium.ttf: committed 669c24d467bd5075842e6e0f136e92600d3df72610cb51334369331136afc800 live 609259fa79a9e08721a2af1e71f7fa3009d374f890372c9d2816994cef683283
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-MediumItalic.ttf: committed 2159088 live 2494080
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-MediumItalic.ttf: committed a62c72160de9db88caea8e0dbebc452f633a35a51ecbd6f2630cddfdf38c4ac4 live 7bc728ba1152a5f420055fc44ae286b51c39c89d74f96dfb017b00f46952979f
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Regular.ttf: committed 2156096 live 2491088
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Regular.ttf: committed f5abf7f5d4447f16ee51edfed58659cac4f1d3bf5a178b233d42d5357aabf391 live d9a80146bbf2ff23b187316a3e82ee2a2ceab8220267fe09ac150ca46ab2c3bd
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-SemiBold.ttf: committed 2157404 live 2492396
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-SemiBold.ttf: committed 1d7afede4b26daf2d13ac397deb0055d3908cedcb8d797a9086041d969047323 live 1aa9684d0157dfad4bcfdcff6cde8f4c86b0929437502892dfa643901f8b878c
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-SemiBoldItalic.ttf: committed 2161536 live 2496528
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-SemiBoldItalic.ttf: committed 06e1e07b15e87e765f03b91d8241f4f95ce2339ce4b4b7a2633f93279731b820 live 6326e5f936bc5aa5e7146007123a9d794fc72cd99cd2cb7c907f0b008b28f4c8
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Thin.ttf: committed 2153572 live 2488564
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-Thin.ttf: committed f1cc5bffbfc3e00d3665d4a9bd21a0e03e87d715533a3e7a87a41343c2c25a75 live 7fd38e32651ee24659497203f6912b4d7912488b760bb577d9142339e7e86ff0
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ThinItalic.ttf: committed 2156636 live 2491628
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontMono-ThinItalic.ttf: committed 2caa37cb2436572c92690ca8077d93cb9781591af9994d49c8665cbc8d88ed09 live 6133bfcb4e514e55437715e4b7ac750130d8f1c66a5308677115a9bdb4c78ae4
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Bold.ttf: committed 2205548 live 2491328
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Bold.ttf: committed 70419b1149f9000fd4c4e63434e56db58142014d32ac5594c15be3807f5ac248 live f9480ead3e45a21f61a9a0bc25f7e20a7ac4782644414b91375e9fdb76fd2095
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-BoldItalic.ttf: committed 2208656 live 2494440
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-BoldItalic.ttf: committed 87c03b9b726ed9f461ccc41e5b97b5740b93207c94469da3789c0d3844692835 live 7ffde5e1dbb5b6b8484c6b129caf71959a6fca070612b215fdd54055d2c3889c
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraBold.ttf: committed 2208020 live 2493800
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraBold.ttf: committed 46e579cbce69555fe8d7128b9655088ba93cdce20eefbaeb0b4d17a4dad777b1 live f059818f3fdd78e03af6a6070279ac19bf9fef348353b425cf8fd0300fbf9eb6
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraBoldItalic.ttf: committed 2209996 live 2495780
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraBoldItalic.ttf: committed ca04a0d06400f88ce8f2a96f27867b607e87e98270fbd1881c2a8901d6edd44d live e11dbf74b5bcab87451550b5bec9395ce00da62e2ce0690853b4621ad64736e4
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraLight.ttf: committed 2203736 live 2489516
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraLight.ttf: committed d5946091b7d91d1a0bca71977b9955a68530a97df25ea18e1f1ae7f6d9ed0480 live d217c1bd022c9755d8e7759d790e98f255669d17202c77a2bafc9d721db4b9ec
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraLightItalic.ttf: committed 2204476 live 2490260
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ExtraLightItalic.ttf: committed c88966e1139dc6968f9f37ca3b62c08fdb84936ebfd181fc19115f6c3d18fec8 live 41eccbbdd380c01ad418d105112f83b986ab84d399a21efee94bb1f7df984f42
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Italic.ttf: committed 2206116 live 2491900
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Italic.ttf: committed f829c758ef9a937d9ab1a629cbaee1b2308169ee4d14649c8db671d38468b97c live a75147d8354b7fc1a0b0c8dede8f8169014c8fc7263505d085419975e8e21404
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Light.ttf: committed 2205420 live 2491200
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Light.ttf: committed 34dac6d289fe8c6dee55b8630af21236080f92dbdfa601d441d5164064325be2 live fb9bf3749444db1da314af2f3ecefeb5d95cf09c5389f3be6a1aeb66659a81d7
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-LightItalic.ttf: committed 2206836 live 2492620
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-LightItalic.ttf: committed 0525f434dcc552c68a6e87b2240691b78ecea23f2b6484bf4296e1c795f2b833 live c91128f49e7a6f5cb8636e9834f2fcadb15a21bb1b2b82044cb10e6cb592ece4
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Medium.ttf: committed 2202892 live 2488672
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Medium.ttf: committed b729d175757ea5005224d82d0449fb91e6019ea1a96ada14537779de4c049487 live 711599c10ccd331cc3f012a2b3978bf330ff64e2986195894c3e00437f0c373f
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-MediumItalic.ttf: committed 2206120 live 2491904
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-MediumItalic.ttf: committed 447dcf33177f3c3b8363be1e2de98da4252c867162de741a3f1819f0a73c4f9d live 90c630b04b2042db73176918e2231176de03f3b96f2e077bd714ceeb45daef98
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Regular.ttf: committed 2203164 live 2488944
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Regular.ttf: committed c8b4e66bb4a238774b28f2e44633574ed46cd10d66c3a4f1cac9bff8f5c298c0 live a4588a46f132fbfd5c43a5f1e4184bda0101dfea7d86c2a0f8a0feb4b47f18da
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-SemiBold.ttf: committed 2204472 live 2490252
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-SemiBold.ttf: committed 3c8adf7997a3f16b7c2cb69906f42092989ae9e725f048ce5fd4e430e98fe556 live bcf68d438b7d99181bd67f94357fabf4405603dc03f4ad2f2d2e20a5b0c2b70a
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-SemiBoldItalic.ttf: committed 2208572 live 2494356
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-SemiBoldItalic.ttf: committed df01d384c74dea6f751022a62a4ed8a2eb5cee1027e33d1b548c32e3d3eeef12 live 0255c14137cb95899dc44048f2b2c2324932b3d1a94020d88e505820e0878f6a
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Thin.ttf: committed 2200640 live 2486420
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-Thin.ttf: committed d15584201366108ea2f779cbf1d37520b2135825d375cdfa7abcab29ab7762f6 live 4bf9ad031a77226d1e0fee0d6e1b035ba179105ad302f95d2b087e7391fd76f2
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ThinItalic.ttf: committed 2203672 live 2489456
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNLNerdFontPropo-ThinItalic.ttf: committed 01f58558fcdbc9169b9174a0cac5b43ba6111f7f983f50808416db0ca72c3c71 live c1cad1d83247a48a4bf759f23a2628613af8bbaaf0b5359a8ffad2c5c3f50e71
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Bold.ttf: committed 2289604 live 2575364
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Bold.ttf: committed ece02baa478a98f3b6ea0c276c1a9207c6bbdcbde04b8010542f2b0671432438 live e490660ad75e0b152c93b1604c2ea1a4ea675f1b8a3fe0d005b1998568f99f1f
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-BoldItalic.ttf: committed 2290832 live 2576592
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-BoldItalic.ttf: committed a70e3862b5d186548b8cc0badc65016ac8040205cc9753f31329c4b51dd131e3 live 19a2e3af8ccf99954941ea07e0a29df27574500f12016d86d6c4c059b825ffe1
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraBold.ttf: committed 2291368 live 2577128
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraBold.ttf: committed 9a88ad320ce2264913dd1ca595d50a8504766cf688d1fc4b5b85c7e1674a63ff live 8af99acce860533a64926ebff131aa9f37806ffef9636798f36c3a4a526f9e32
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraBoldItalic.ttf: committed 2292852 live 2578612
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraBoldItalic.ttf: committed 7cee9cda1bee952042e5eea168869bd55f8daa319b3e0ca296a3facb4ce1c11e live 75971b5b5eebb295298c4d1872e2a8906c3023cb98480c42ed4a9496ad16fd79
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraLight.ttf: committed 2285972 live 2571732
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraLight.ttf: committed 719e13af2177916947ddb61b2b196ca0b3823bb44059d7158ce6b8cf053c62be live e5a2b97faa48e7597022f61da03d754f1f8be0cac290942781b27a4525307d75
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraLightItalic.ttf: committed 2285268 live 2571028
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraLightItalic.ttf: committed 7866bbc5c716e6120e05dc807c38e429ea0e7fc90e13c34b68b34605bae725a0 live 2789601fa34509d4d5991a3c8ae5afc8e28ac09147e8769d9578662a39dcf20f
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Italic.ttf: committed 2287924 live 2573684
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Italic.ttf: committed 7fab948d4bea3441d6dbff7f726b4fa1e27087e98286902b53ddf523be7a20fc live 71d5466cc3ab31bee38b4e2c5cc99c2b41a749c4973ed4579b814ec992b0738e
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Light.ttf: committed 2288260 live 2574020
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Light.ttf: committed 5e89006b926ad4df820a1ba0db415cff5a39628fcd8e8a4beba65228ee33ac11 live c9f9fc2d79825d3cee9817e29b1a79ddcb30bfef5d8061120ee024d1f4a96228
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-LightItalic.ttf: committed 2288152 live 2573912
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-LightItalic.ttf: committed cabb1075a66507db18e9c8b542b2c1cfa44b5322e1200e874d26d8ed58961b2e live 96d97618018ed4d7b27321904c0bed37c2df7b746c772a2a0515124c582e39c6
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Medium.ttf: committed 2285708 live 2571468
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Medium.ttf: committed 74f537e5f2c4298b53fd137b9507023a80e623230f59ed7e5fc81f7f0baedbb7 live c9405e11b36d071176e318263e7251e96e60f3804dfc5ac8b2806f1f8085b066
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-MediumItalic.ttf: committed 2287872 live 2573632
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-MediumItalic.ttf: committed 36a55618c5221b65546365f84b9a590cf059079ce33f76e4e593f61faef88ff1 live 27693c0aa1c56ea46a8978d042772a81da184d3aae7fe7b6a2394b5dc51cd296
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Regular.ttf: committed 2285836 live 2571596
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Regular.ttf: committed a2f4268a1719b95d1f1448376173a42317919cb598423f18ea327eaca13dd916 live 1c680e8cde9fcf8b88a5605ce8d1fb94dd3fb15841f7ca7bf4c55664855e5611
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-SemiBold.ttf: committed 2288944 live 2574704
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-SemiBold.ttf: committed 27cea30aefb5bce77ec779292f212e1d68cf606a924065a8278ce835737ab964 live d987f2994fa3000512ea6442e4b3fa8c96e0724262e2c5c9646f1ee02cae675e
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-SemiBoldItalic.ttf: committed 2290940 live 2576700
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-SemiBoldItalic.ttf: committed b56ad36865d27c0ab3c02c625b70e711e2a49e37b762ebbce5be71ffa947beae live 60571c34def77959bff1b8661e1cbce1bc0dee8e006ea78358b2af9990fd8587
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Thin.ttf: committed 2281972 live 2567732
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-Thin.ttf: committed 1a20779338d82426272b72a6cfab81f637a579c3dce9681d2f8e7ae9792e5a56 live 87a846220f9470d78b66d3fdf2e108156c68ac89a2fa5f058a90ef5be9f0e322
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ThinItalic.ttf: committed 2284072 live 2569832
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ThinItalic.ttf: committed 1c734eef83a0e735c578957041af70d9538216307eb4f7b144959176b7749c0d live 5c5935377631c86646e6fef3b0a739d4ff3771f632dc48f6963a727ad1b21063
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Bold.ttf: committed 2242024 live 2577016
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Bold.ttf: committed 1a606ae3e30091c91bf1c587764ee9a99b1cc9190fe03f01e8282b4cb4aa5b6a live bfcf9a917276ffc058867d87cbc8a5b2f1ab0f4b710e9170dc02763ccb80bd4b
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-BoldItalic.ttf: committed 2243284 live 2578280
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-BoldItalic.ttf: committed 8c248e2049571ca4e36982ebab415b99e5c0b9ca74b45e50033fc2affe85a998 live 9dba502e00e35209f6ed2a151c7376c051657b067cdebbc6e52d06cb9002cf31
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraBold.ttf: committed 2243788 live 2578780
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraBold.ttf: committed d3b3766c1b930c7a00f9c28fb19a4c8636271f08cc2489553d0662e36bb5ae8a live 1c4ccf0d5fb2d45f04d3efd50f60951fb63281b0375ede992d2b4beb694d2daa
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraBoldItalic.ttf: committed 2245300 live 2580296
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraBoldItalic.ttf: committed 058fb197ecae8670c366c72fc99843c856bf7ccee5bdcc6e80dc689c67e6fae6 live 0315f5729d19d7c4846ea06503850b0fed785263fc0d7f5bc636563782cbde42
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraLight.ttf: committed 2238392 live 2573384
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraLight.ttf: committed f3efa8f7f85a5d8b4fc29c9f71a8b8b4c3eded4fe497e8db82f46a71df4ff0cc live 2ed4462e0332123bccd6d0e3ecfb92e9a9d9c02d7e7cacf2d272d5e4bae85e25
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraLightItalic.ttf: committed 2237716 live 2572712
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ExtraLightItalic.ttf: committed 8c8cf4064d0ebf699985d0daf1f472f550fdf884d17df2ea369a41d94d715cc7 live 5a7bc5b7fa3005977be87a7171361e41ff999d65e79b2f47796e4f062dccd56a
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Italic.ttf: committed 2240372 live 2575368
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Italic.ttf: committed 6e53aafd4af95a8217a2c40bcf9865df96dc59611a002dab470063404f0771ab live 31efd6ead98746f5b0afa1ee6dba60267ad48db36428360bee327bec10621f97
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Light.ttf: committed 2240680 live 2575672
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Light.ttf: committed e712a65b6939f077d6d996d4bc730eb4030509e93132757849f0e2fd5ae932d7 live d34f186f256c853a651d222bfad3afa942d4755b47eff70c13660cf94c24b20e
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-LightItalic.ttf: committed 2240600 live 2575596
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-LightItalic.ttf: committed b41cc3718665322d6b723d9b851fa15d1570cac66363971d9b74bdc2996c2b36 live 8711d3a15e10e7552bc62dfb8d99dac681eca80c9f4dd59142b27785117c9250
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Medium.ttf: committed 2238128 live 2573120
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Medium.ttf: committed 38df8cb54b5e61872c40f1196db726083aa8172f814584cc80493d1e20a3dd23 live a736c04959f32b69487956c9ccffa90e71903d3c85952886d42ecead0ca6cb1d
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-MediumItalic.ttf: committed 2240320 live 2575316
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-MediumItalic.ttf: committed d7f4ac72e70f9ff677d0f7ff7e0cda2fbba80b3424e0be1ef8afba3880cea6e7 live f21eb76516348ffa152a9727fe4e99fe8baedbb7359c38aeefd1f123d5f6d0fe
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Regular.ttf: committed 2238256 live 2573248
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Regular.ttf: committed 276cf05fa44937c906a34ad5f7473cddbc220dcd9f7d335afa7511a0c603f0f9 live f2a5ea6cfab397445ffab00c0370927b66d61e560a05db5db271b42006381c1a
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-SemiBold.ttf: committed 2241368 live 2576360
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-SemiBold.ttf: committed 56e25d82b4de58dbb3f258c1a1114ec15681b5243f5e724cbbce7f5be5069da9 live d3955c56fca699f37ebc153d0a6e331b8784f66fd8a3af5e20c30b90869201c4
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-SemiBoldItalic.ttf: committed 2243392 live 2578388
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-SemiBoldItalic.ttf: committed 75c0e3eb27bae61706b273d4bbccddac3283ac93b81b843755ea4c824b5e6890 live 0d2aa4c3955f612986e22d08f08b9c255b75107c07a6128ac24dc80281cc9d9c
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Thin.ttf: committed 2234396 live 2569388
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-Thin.ttf: committed a6f26ed1a1dfa0c818f99a33743523b633dcae729ec865d9a35329524940ed1a live 734de2d7f2c70d2a02006ee219fbbe897b09fe83b15861f0f887c717a02695cf
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ThinItalic.ttf: committed 2236524 live 2571520
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontMono-ThinItalic.ttf: committed ffa73924be8f348384ba217419ba073d5d686f211ed3610cd2a37b5946566690 live 2c4e01f8eba50c6293a6c1084e807f5d33ef8b17e55e5d2c9bb677475c41da83
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Bold.ttf: committed 2289396 live 2575180
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Bold.ttf: committed 986fcde1221dc30c04f58b636b87dee06579a84cc224124db9a91a6a2e955517 live a391d2887d63add54d87a715fe257e522120eb4f1df52d104fa17984fcb68021
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-BoldItalic.ttf: committed 2290624 live 2576408
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-BoldItalic.ttf: committed 0639fffa7db515213e26d150d6f569d5023251dacdeb8b11e101f3261d9f51e8 live 2118f3a6119e8967b20b71b6b8a6072711ef76ae0d10c4522a06323ac8935d5d
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraBold.ttf: committed 2291160 live 2576944
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraBold.ttf: committed 5ef09bee0ef6fe5f14b112471a51eb8aecd3c153ca15bcd00bb06fd824be7a3d live 80200df33ea31cd6185bde7c970fb86190b6670060475c1a1f069d0b2d8f0bb3
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraBoldItalic.ttf: committed 2292644 live 2578428
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraBoldItalic.ttf: committed a1013e4d8344f726f16396c583a4302b613d18f85c501e402bbd14e096fb6a16 live df117705e411fbe80bb7c2e4f25e350328aa255e65d8368fb04016afaeeca853
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraLight.ttf: committed 2285764 live 2571548
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraLight.ttf: committed 986067e4c6ccbd3c734af1c1a4f433902a9f32e6f1d3b7745ad27cde116cdb28 live 8cc4e91cb99b5e3bc96e5ffaecc38fc18232ed7687962644f212da2cf661f484
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraLightItalic.ttf: committed 2285060 live 2570844
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraLightItalic.ttf: committed 8236f1f46aed7b1b6c8f6dde27b4bc3816e853219a685ea206d97347d70b6960 live 4a03c9b8eb41004a164e668483edf08081b818f76f24f889b6b2c35f73f05b86
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Italic.ttf: committed 2287716 live 2573500
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Italic.ttf: committed d2bf9aa3a37253a5367c5decfca29813b14094ff550393f24fe9a496469d08c6 live 904c69ce413b3c678b7762a94328b14077461db16b5d63b82c8370b9907387ff
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Light.ttf: committed 2288052 live 2573836
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Light.ttf: committed a44cb3f9db8af321a6bfeea77d999f39965d70a1ea2db17c7b94686d84faf161 live 134069560904365335981ab7332e655db816fb5298849bb0dbe9ed61e3f00610
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-LightItalic.ttf: committed 2287944 live 2573728
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-LightItalic.ttf: committed afac49d91c20f820950f723eba768ee3e4bbcac093cb886db2a47c8b57fc9fb5 live 1e7070062baaa9327d666b7217bad601c2bc42b638b81e12f2e95baa81c78f30
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Medium.ttf: committed 2285500 live 2571284
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Medium.ttf: committed 1f5b45bb93c910aa55ddb1e2f4edf5afbcb75332a7561641adb59334251f17c2 live d60c8788140e939247f7af54a1ddc197d3099eecca77fff51880d678c029d98c
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-MediumItalic.ttf: committed 2287664 live 2573448
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-MediumItalic.ttf: committed 729c6ecbce9eddba1277b44b209ab557aa4b4f0a1fbdd53ab5821bc5ec9d8770 live 3b4fa1bc30e72a30fd7b2f6921d67f7c864b1d15be72ebec04821ad2709e8778
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Regular.ttf: committed 2285628 live 2571412
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Regular.ttf: committed 5417cbb22f895ce1e937172f21d31f0faaadae19ca45f8a0ca0640b74a916c90 live 8a2803de76ad18ed82f465dfd17130032c34c031b263179d3047a547c7caa460
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-SemiBold.ttf: committed 2288736 live 2574520
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-SemiBold.ttf: committed b2d65f454b3d1d2c2b8c21af1d9a87d434d2bf4d33c42329a96a926e0d203f79 live b0c766130c81e328e1b31c7d1036574d7ce91f503c9856a4ec73565a44a32899
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-SemiBoldItalic.ttf: committed 2290732 live 2576516
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-SemiBoldItalic.ttf: committed 95f785906bc4a1eaab798c5f3246892043dccf7cb552d7386afc768cf8d8b84e live 97d0da5da9a227398a1da7aa16214cf7146696b3b56fcb63ea7385e853fa45ba
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Thin.ttf: committed 2281764 live 2567548
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-Thin.ttf: committed da3fe73a34ef3b727ef73fa6231789d50e35b871d40700178046e77988233206 live bb093be10f5406765ccea2a25d7adb4ce43840268e034e21dcd9d39c0bf76059
+DRIFT user-font size /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ThinItalic.ttf: committed 2283864 live 2569648
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ThinItalic.ttf: committed df07f5ac754ba393a46a74045aa8b53187a2a44ec3192018e9ff68df2e56ea47 live 8889eb97cf2a4f39159a99a07ddcc38c7d2f60eb678fa9d4e99e72185ededf82
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-Bold.ttf: committed 2630044 live 2983092
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-Bold.ttf: committed 1ef75d8d5d47e8d1dc6a8955a40b04177ee5abf1ca45a5072c440444c51a7c9f live 4e4656bcae82ed8871882d8c5ea42e395bf36a8f3eae20e979dfe00d0d607dd0
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-BoldItalic.ttf: committed 2588004 live 2941052
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-BoldItalic.ttf: committed 8e868739abcfc7045dc2544fffb66b033f7c6b6a40c7aa5f614bb4c5691ae68c live 534191bf81299f0617bcd236137ea2e9e647ebbf1d9094eaead9e5036b27bc45
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-Italic.ttf: committed 2571620 live 2924640
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-Italic.ttf: committed 7006895276c91570fb04235336f72e326db2df7e808e28b2552adae5eb1d31c6 live 5ddfad03425bae917750082e61c1994846b0b452dc6d6ecc1e6c04036f960a0e
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-Regular.ttf: committed 2612864 live 2965884
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLDZNerdFont-Regular.ttf: committed ab403d1d32b51c2823ce7033d5656d99a37b4e84793184a2f2a6af056ec7bfcf live 592ecc0dc490480885fe08ab8e57e33950fedcd6fe2de8b00707087b57a97c72
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-Bold.ttf: committed 2543360 live 2961916
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-Bold.ttf: committed 80cf7dff25dd2a5cbd3f091f6f6d60a4f9f7e4a207904afcaab09425e422a2b5 live ecb1d1bcf486103093379bf78b89f27757f544006312b72b237c713bff2d0a76
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-BoldItalic.ttf: committed 2501836 live 2920396
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-BoldItalic.ttf: committed 38a9f49bc47c035ea02b4766e6fe9056b46909c95f46138fc1a4692e9ae3dced live ba3493e87dc996e5434cccc430bf124a05f7b82f420103e7489cd1278102e0d9
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-Italic.ttf: committed 2485456 live 2903984
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-Italic.ttf: committed 42b45e1a47045d6a2e139c98aa34c8fc70348b895996587bc2546ba7d7a458ac live 09cc4f374001c2b7a8d25a7972b586e7f88f1049644980efa23626f13ebd2ce9
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-Regular.ttf: committed 2526180 live 2944712
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontMono-Regular.ttf: committed 7b4ec52e7314fd685eb39414c3d80a9d0b6c85adafa4ad3c32f9dca90af705a1 live ac2203e1440e9ff50043b493ffa591f398c61b6b43c29beba30f0abaafa709f7
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-Bold.ttf: committed 2629836 live 2982916
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-Bold.ttf: committed b7bfa9180fb77b84a2bc9fa8ee4134f8f452d5af0b00ee99a67828138355d578 live d4066880a4e70500bc173b4057b990d2bc854c2b32a516d8c762cd7778be6e16
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-BoldItalic.ttf: committed 2587792 live 2940872
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-BoldItalic.ttf: committed 63fa774158490c06a6939064cf971bd8ada983a24653962a94feaad3d53ad136 live ee0e2257c78566a5c815feffb4dc45c921826d86ec88f159873c5ad61444b694
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-Italic.ttf: committed 2571412 live 2924464
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-Italic.ttf: committed 0431a81067990c572b463388b3bb807e82088c3040459c05d80478667eb67f7e live 224cb3f50b2ef01402bdfa8c4400e41f1ad1b7b4f16dbef2cf5d37b5cb81738f
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-Regular.ttf: committed 2612656 live 2965708
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLDZNerdFontPropo-Regular.ttf: committed 97be984dc805f6d0030c324c881dfc8f122cfa762b5b4fbd0527b4748ccd0c4d live 836aa8db9da79f9994eaa70e18275cf56dcf27c2c58b2e4237121cc4f1d395cf
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLNerdFont-Bold.ttf: committed 2630008 live 2983056
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLNerdFont-Bold.ttf: committed 57b5f9b739bf208c3a436b355362c35d5c94731120c39f287c659bbe08b74cf5 live f21572cdeac0688fe3727445d88f82f2e2647ebd0667d47c78fbb1b75a1f27a8
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLNerdFont-BoldItalic.ttf: committed 2587972 live 2941020
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLNerdFont-BoldItalic.ttf: committed 43b739aa361758e27189966269ca81c5a19803fc84da26b5bff920907098fdab live 6da0dedb464e6f3dca63c7d76cc7c99b15a327644ba4a8ae1af55f971eee7e0b
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLNerdFont-Italic.ttf: committed 2571580 live 2924600
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLNerdFont-Italic.ttf: committed bfaf296f7259241091ea7c1b376aec317bf53ba2a2edc2e4642aa7befc70dba0 live 9dbfee828c5772653556deff9ed1602e3e5983300d1b15f1d90d33eca681a10b
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLNerdFont-Regular.ttf: committed 2612828 live 2965848
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLNerdFont-Regular.ttf: committed ac829834a62c30ad5aa63d1f8b0fadcda6897795f71112ef593111d7541a16ae live 6c680892d577e70aa3f2c9a0aa230a0c9990ca08eed3e9c7fe8b3c07ac4f509f
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-Bold.ttf: committed 2543324 live 2961880
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-Bold.ttf: committed e5ee26a4b487404023fc5fa2f68653f68709968cc31199888a9a5c12ce683e5f live c023eccf780e91ad60fa913a3224b56803189ee03a08ad6228f2f4cb33a4b0a5
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-BoldItalic.ttf: committed 2501804 live 2920364
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-BoldItalic.ttf: committed 993b9414425d89f1537215b40d84ea64386e8d4c04ec99ab3575a841205ac832 live 9f9da8d2782a20af4c48cf2115f5bc3156be4efa4a6f83e633823e80d4d92228
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-Italic.ttf: committed 2485416 live 2903944
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-Italic.ttf: committed 53a9fe60ffa7f1cb3dcc1748ccd669def15ed128b1526a8a61ed72bf7c58e9ad live a70df79b67dbe4725bcc95e3a644b08db960378584c8827ab02c039cc76204da
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-Regular.ttf: committed 2526144 live 2944676
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLNerdFontMono-Regular.ttf: committed 15224654c8bbe90df228d0c20cb97a0b5b1cc8e259d725f6445f2fef77b4631e live 5fe1c4c978a647c791044ea79b393320601073383df623c6395f2287f63358f0
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-Bold.ttf: committed 2629800 live 2982880
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-Bold.ttf: committed 54025d7852824e086bdda3c7f33cec63b07b249d9c148b3e2fb156e86820a74f live 46669146c19ed1e8afb5021b2a91b341e61763a69f8c6929bd8b1f7f6275928b
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-BoldItalic.ttf: committed 2587760 live 2940840
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-BoldItalic.ttf: committed 88fec4f9bd01a9f9a1d42bcfc52b11756b3fea8bc1b7f7f65c4b86829f18b0fa live cc839fc25bc69c2d91191501e55fe53802103d639722a0a814472aad05cb6dd3
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-Italic.ttf: committed 2571372 live 2924424
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-Italic.ttf: committed a5d11a58e56dadcae0b8983b0d04ba590dc67829fb5cfb6fb6de195fc2bc25ef live 5256278518e0903c3acf716255a2a91585b92a9201f87fec7b24612baada1d02
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-Regular.ttf: committed 2612620 live 2965672
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGLNerdFontPropo-Regular.ttf: committed 1f42efcee7d7e761844adeee583e16f3b3bec6f55176b7f1a683415d8e7c8984 live fb23fed003b07ad0761ff31927cc2eb5735dab228b4e1799aa6c3b27c01157f6
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-Bold.ttf: committed 2630000 live 2983056
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-Bold.ttf: committed d892340260a26139873d9fa16cffc890c9d795d5069dfff47a1dbdcf57f0f239 live 197462b0819a81dc3c16db2f48c358305634d92042b7b46648d42ba06ffb9a7f
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-BoldItalic.ttf: committed 2587960 live 2941016
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-BoldItalic.ttf: committed c3fbd76e2570dfb9d9cca1ed5b14be1eb94b97fee0b8612a6b2edc96035fbe57 live ce1de2a0d67215f25f27485a4a0d2289c1184bab811fd83b4f3a6b4c17b4a65d
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-Italic.ttf: committed 2571576 live 2924652
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-Italic.ttf: committed 1e2f4c372d3788faeb0b7128244858ee406a0ed46a6b42345bef056460bbf544 live ddf3d27e8c573ce418525edcbb3bf4275add38b4776a2269c3dd863f49e57d41
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-Regular.ttf: committed 2612820 live 2965896
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMDZNerdFont-Regular.ttf: committed 4d9a8bf9335621c764ac8ed575c85681dabe51c83da5084dcc47cdac5b908c00 live b8457260c0ba2f20446bb233b3219704e59b75636cca921a0c0d25bf69a78a9b
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-Bold.ttf: committed 2543116 live 2961644
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-Bold.ttf: committed 98980ab93291200f1bce6e24ff2286bef4e6ad562c4c316d6717750a021145cd live e434bb88f858ebaf46fd2a455d161a6e33fa279f51f57727aa6ac08e906e49bc
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-BoldItalic.ttf: committed 2501592 live 2920124
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-BoldItalic.ttf: committed cfc540b7e140344b746e75637d0ef49977aca4ac753bae6112de200bfc91d227 live e4484f12f7681a14137372439c8ab1a6935dabeb5407281222950d4e15207222
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-Italic.ttf: committed 2485212 live 2903760
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-Italic.ttf: committed 34ce1be4e01b7c6587cafe977f899665a7cd847c4115b20259f36a15e2d3e889 live e8267733b80457eb9426e8dfda89399b9efbe4ba20941f49f72488bcfd05d986
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-Regular.ttf: committed 2525936 live 2944488
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontMono-Regular.ttf: committed 384b666deedca2b0d99cf2e21fda75a2807c4e45d4cbccb880df6d09e30c80aa live 66e3a38c5caad569892bd5c241d0ea1fa3e09690521bd9453b77457e1208852a
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-Bold.ttf: committed 2629792 live 2982880
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-Bold.ttf: committed 5b5e3ab4d9d49455b4c59954e7677555e0042896b8f302c04dfe98ea5aafa94a live 9f4668ebdddde44cd2e166cff6b2ffcfec5313ae05eb0a362986057562f4661f
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-BoldItalic.ttf: committed 2587744 live 2940836
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-BoldItalic.ttf: committed e777e18704dd77c0eda2edb3e8fcbb80881037bce0f5012c23d67fb3a2dc5348 live ad5050ff30b6bedf5336dfc2cb21d8bb468514f1b5a65d583906ff3169d5138e
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-Italic.ttf: committed 2571364 live 2924476
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-Italic.ttf: committed d21d9db7b3616460445fc213a23691bdcaa2e455ca24fa435a6e84d6a0a88647 live 03894b6e2e7672e9d8786b0c34fa699163c136375f329f04e215f49cdaba0eca
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-Regular.ttf: committed 2612612 live 2965720
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMDZNerdFontPropo-Regular.ttf: committed 49928d507effdaf72653086823425360eabbdba64057fc7003903ef8ccf98daf live 750d8e9a0145e0543d411ac240f0abd98568c4ead84aea543df5cc6577b5df89
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMNerdFont-Bold.ttf: committed 2629964 live 2983020
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMNerdFont-Bold.ttf: committed 0c8cc66484c5a8f6f576053524e0cb549dafdb0abaf0fd42509c557998808789 live 4fca6f1bda421f4983c8865f900c810adfb548469efc4a43e1d177a762b56029
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMNerdFont-BoldItalic.ttf: committed 2587928 live 2940984
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMNerdFont-BoldItalic.ttf: committed de0a86e20eb44605e98150f49a94455f74a670324281c0c8630315febc233528 live c2f6797317ed5ade13894016600d92045041d63c30f0f4c6be9a1b9a0506fb65
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMNerdFont-Italic.ttf: committed 2571536 live 2924612
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMNerdFont-Italic.ttf: committed 00740fff8a76f642cbe1bd5d1ea14fe608f535eeadd7c74ccff08f038d04a540 live 7c60fc01f876e1082be117449f2fdb04c6986575666a7f5fb6272623493a9337
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMNerdFont-Regular.ttf: committed 2612784 live 2965860
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMNerdFont-Regular.ttf: committed 603f2d9b3ccd3297eb9abf9578333cc4a56bf4183ae7de39de71686595c9b871 live 40ae698bae08550d467ddb837ccbf0fab867b028030df3f72beb495e3df2685d
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-Bold.ttf: committed 2543080 live 2961608
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-Bold.ttf: committed 2b50c78e379c7ee67d4e50057a96e89a4ae9d818b973be1c120fea6e213b81c8 live 59cde1794434d0eb36d73911f8b6b6e623dafeaf659796134d4841283eb5bf09
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-BoldItalic.ttf: committed 2501560 live 2920092
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-BoldItalic.ttf: committed 4b8f85246ab6f2a46608e008c4055dc85bca8ac552e127bca35049b37f024c05 live 6682c02559b2334cf655b69dd9bd2b67c9079c92afc17ba61c875320aeb71282
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-Italic.ttf: committed 2485172 live 2903720
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-Italic.ttf: committed 11450113ef4c9c0fed5ad2720b09b143556a6b91004fa86ecd84d81db2f68002 live e392010ec1b8bcbbcc7c20e51953ddd93d4f4886394607b65142d776fb2c047c
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-Regular.ttf: committed 2525900 live 2944452
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-Regular.ttf: committed 3d9d48de7d48875042c248c2d41a3fdb899a98a7e1af1e5a854e6dcfdc806e26 live 35c4453cc6d0861e505b62fc7039b3fb8db9966ed75fd13dda2115e2ca94c7f7
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-Bold.ttf: committed 2629756 live 2982844
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-Bold.ttf: committed a4900054b8e17f54ffff5868067451975b88bb1ad7d8483ef97c3924c4e26333 live 027e84107f19b79a0f4f20b0635df54437d75e8b884029f5d3e97cf83c402b98
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-BoldItalic.ttf: committed 2587712 live 2940804
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-BoldItalic.ttf: committed b1f8b7823efa7d7a17194ebff3a24be2f3376b6b5f57d12f2cbae65aa65c3b33 live a243c610abca76910266fe0a27d9dc9ddb8bc6a75d9e999bed99c6fbf492e1e4
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-Italic.ttf: committed 2571324 live 2924436
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-Italic.ttf: committed 4684209993b66e5aaf6cfa1a9115635f3d0f7a49b4dba9d1ab5e230d00330155 live d2c263d28a25207d042dc473c699400b55df7d3871b7f66dce70340089547e34
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-Regular.ttf: committed 2612576 live 2965684
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGMNerdFontPropo-Regular.ttf: committed 787332ae93454c8310fd9466fbaeec2c340280b0b707a0dca8bf973dea046bf0 live f45fe06f6ca192a4b1a0bb5692cdcb54e309eb3db24479895adf67a08192d275
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-Bold.ttf: committed 2629912 live 2982768
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-Bold.ttf: committed f68a77f2f0d10f51738aeebc9d4d43256a1043b8150464d087be5e171846a8da live 3bc52ef16aeb214355929acb45bc2b2b4914ac6d3df56cfcb67fce329bead43d
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-BoldItalic.ttf: committed 2587872 live 2940728
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-BoldItalic.ttf: committed 8d11c8907aa2c0be529885a746820554f05f3f7f4ba8fe9281c78bf27e8d77c8 live 88f777b113038923943122c2223df4b7f58aff186c370d765fcd10d7c59b9630
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-Italic.ttf: committed 2571540 live 2924412
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-Italic.ttf: committed 540e94d36a2db5acd253c4ede92e6dbbb350885432c3f815b3e8f58ad04fb839 live 2da6a2c9173c2b25273e40a1db1d089ab11473edd49c626beea458e311c84d03
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-Regular.ttf: committed 2612784 live 2965656
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSDZNerdFont-Regular.ttf: committed e2053d401e29fff55cfd11e86a6b7d0fad27dcf34add91d6f64c72847f353e4b live eb25497d1bba82beb897ce6ed67267e3baae600c19fbaa802db2337eadf1caf2
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-Bold.ttf: committed 2542912 live 2961456
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-Bold.ttf: committed 5a06f3e2e8ab283258a9d9b87aa651f6a6c549bb35e10a8307b5f3a035f8f3b5 live 309c05447cdc21f760d95572e7a009cfb7954511b5331278bdba8e88d400f502
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-BoldItalic.ttf: committed 2501388 live 2919936
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-BoldItalic.ttf: committed 8dadf731deac9dbdda074fb61c30e2a872754efca6bdf1bbd63b7a9c38632b02 live d89abd4b5d1a5d8e81004b4b2f592832726d315302bc423459445ae87334e204
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-Italic.ttf: committed 2485060 live 2903620
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-Italic.ttf: committed 0eee9b06bf605f9d0e0dfdf39e364761789c9da2f111771b1e0cf8d42ac6cf87 live bcdb0d0d829dec2d224330b5c1439ca050d15662f4b273f498e378cd276efcbc
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-Regular.ttf: committed 2525784 live 2944348
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-Regular.ttf: committed 4f8404df381a102b87b64790e42dc56990558da07d685223d9f7bb0ea9df5521 live 35199cb1fa6590723922035e83d7f65c3f0947728d89e77e1da424d30b7b1704
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-Bold.ttf: committed 2629704 live 2982592
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-Bold.ttf: committed e696fb643b0a3de5eb0c50f43bdd09d23d20c7ba496f81d93ab87dac5ceda6ed live cef1f9d505fb41aa640ba0bc1481ee2f8f1766d0d09842ffb8378839c00733ef
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-BoldItalic.ttf: committed 2587656 live 2940548
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-BoldItalic.ttf: committed 75b08e6964ebe0d1c0ef85e88ff1266339f3c0484ef1a8f9f802d9fa0b06835d live 1af78b4e7cacd8b51ec99b784c9a56571adfff43f8842c9cb888a66209ce4765
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-Italic.ttf: committed 2571328 live 2924236
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-Italic.ttf: committed 74990914b0f3947871275d8e7411fde1f93124d3370d48e0407da8e921395041 live 4ffbfed416d7e3a0e22f01f6be6a0bd5db96dab9fc3bb21a9d0ffc277af466ef
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-Regular.ttf: committed 2612576 live 2965480
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSDZNerdFontPropo-Regular.ttf: committed e1d79258807ef91926fdfcd69a8c0b16c41dbbad257da4e13f64049c0dd7c9ef live d266d151e70f057ac6d6221613e9cfbcde16b35e6e309ca15caab523fdb5af66
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSNerdFont-Bold.ttf: committed 2629876 live 2982732
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSNerdFont-Bold.ttf: committed d32ad18d53072d1537cbfeb91054c28d9855b76ac0471d27093b6c06d683c350 live 63ff060fbe6db68ee719137640217f28da72fb1b78c1c41f254451f3fca1f236
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSNerdFont-BoldItalic.ttf: committed 2587840 live 2940696
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSNerdFont-BoldItalic.ttf: committed 0ddfdf61a6cc8bf4b9627d8495082ae82dfaf59f452ef1092c0076cde85f3664 live cb2a9fcbc8cbd587378035a46c0dac2c9490946b67b4ab91b3230559b5cc74e9
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSNerdFont-Italic.ttf: committed 2571500 live 2924372
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSNerdFont-Italic.ttf: committed 666b170f1d63325d3d92b7c9513fd4f4ae126c5bfe07b4bd7572f45e3e6363e4 live 998207ee63e0d2cd1490616f08a1bbfe217bd4ecf94060119048ab1e932d45bf
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSNerdFont-Regular.ttf: committed 2612748 live 2965620
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSNerdFont-Regular.ttf: committed 1769507f41c5694c68ca4ce9b738432bc2c1ea2dcdd01ab81aae8bca75a4fdc0 live f3148b1e05c1dcf86785020d1d144524b9458deaab17505b88ecfe1694543214
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-Bold.ttf: committed 2542876 live 2961420
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-Bold.ttf: committed cf2b21712b05728ec809d428cd5c16f91ed868b2d522fc054b09f56259832f28 live 640778cf27cf13d44f29d8d7cfddfdbd2979d6fce30732295d9ee5d610b000c4
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-BoldItalic.ttf: committed 2501356 live 2919904
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-BoldItalic.ttf: committed 5cc8ab4da8d0fde8abc7ac0498042494bc329a281910dffd96a8e4208a28669b live f6f421d599ab25cac00f88eb9a7ed5ff56bc8f618dfe0642a59ca6d033798648
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-Italic.ttf: committed 2485020 live 2903580
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-Italic.ttf: committed 1bc0bfbcf8cf1900df4956b6a5a0cbc6647ddc4dc863313e08881a4f217453d7 live 11d958b5b54017a9e896f8a159b37a24b8998b1937577160a56f2ec2fb2a3f8b
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-Regular.ttf: committed 2525748 live 2944312
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-Regular.ttf: committed 7fc866e64066c4db5d31f6a5c038bfdec346b598948674c2ee1e3741244884f8 live d14fdc035e41392917b9d665f91af5570b717191b63875532b5bb1b5d5aafcf8
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-Bold.ttf: committed 2629668 live 2982556
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-Bold.ttf: committed 9c36d13b1fc689a7da9e36a6be18731bfa87f0beb32e180467c351458269218f live 62ee02af3fb04063dc5542795eafe37be8ac3f01c5611a76fe7841fc53c5188c
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-BoldItalic.ttf: committed 2587624 live 2940516
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-BoldItalic.ttf: committed 4fb1807f93de1aa54f760f7897c6804f054eeca5aa015efb25d1d3b4325de6eb live 41c2df79c90ad1c5869511e8d15788723370a439ade1c57da37fe48948f4df9c
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-Italic.ttf: committed 2571288 live 2924196
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-Italic.ttf: committed a9facc7df0d02e25280b644d9b31ba8bfebe5af7ad2cb405e236a324a46d68a0 live 9881e6df7782795d6418578cb3028883ed3d10ad660e2762cae9d3ee45cd84e9
+DRIFT user-font size /Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-Regular.ttf: committed 2612540 live 2965444
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/MesloLGSNerdFontPropo-Regular.ttf: committed 64ea97f525531d7bff9f09d4816651a4813dabd020f47cee142e41fcd3fda3cb live fe17c629f0519dba90d9ff7c1462f6ff57fe0f49948e56e4036483887c5b5855
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Black.ttf: committed 2184584 live 2468244
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Black.ttf: committed fdcfb17d9acb9040367660c33d31215a45965f6f7121510201713eef2f769603 live a54993d6715112258a33ad75c9d9e3024e4dbf0f6bbb15b450f486d8cd25b719
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-BlackItalic.ttf: committed 2151292 live 2434956
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-BlackItalic.ttf: committed 8463a11628c6b8bcc8f787916cb11109ce7034e8a3e57a79929c98c0729a81ee live 321f2eb1c25907ddfd75e5b412e9c1e640d6833132064f1a48f55c89f336df4e
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Bold.ttf: committed 2183508 live 2467168
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Bold.ttf: committed 004568bc0d8ce96c518320b6a56a04267a713ab0a81789bd51cb101bbab3d447 live 1d4382f319dc82a7b13e7ed4484f10066f7199d3eac9dc42ef24d2e61d5e586d
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-BoldItalic.ttf: committed 2149808 live 2433472
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-BoldItalic.ttf: committed caf151df3426b2a6eeacb48bce0162a363c2c1a246b2a857a828d730fe12c91c live 9c4e4bfc3ab8348a9ef52363d10d14247993485fe5a43b072ce44096976e633c
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-ExtraLight.ttf: committed 2175912 live 2459572
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-ExtraLight.ttf: committed 94962f88fa7a951d573d0f0231986cd0ebf1aef64dcc9a1f8862f1b81e99d2d3 live fb4796a8987c4e5d74e7d9d509e64c786f2150ef9cf3ccdd6530ae866374c979
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-ExtraLightItalic.ttf: committed 2145480 live 2429144
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-ExtraLightItalic.ttf: committed eb9ea86b1848d4873024fe19d6fcebbee19d38f33e71198f5e8dcaf894f0714a live 523868a96e8a3752e68390dfe02ae3dc84ca16921315a4f83706888daab23efa
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Italic.ttf: committed 2147156 live 2430820
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Italic.ttf: committed 5c5a9413e965a106ecb67533e2263cd27cc53c05b4752044dbef3bdf0bf8f1e4 live 74cf1f8661c6e2ac6ce3d87234310fef35fe8ce3eed2511bf09cd54daf585cc5
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Light.ttf: committed 2175904 live 2459564
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Light.ttf: committed ba786f43a412a40fe0fd672bfd28fe441aa048f66c0b92a66fe2f6bdc699e290 live eac64b99640d839a5b0268d6f8d63ece5dbeefa3d2822347521e8844a095aa7d
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-LightItalic.ttf: committed 2145716 live 2429380
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-LightItalic.ttf: committed 6a26433525e22b7777b9e3d554cc1e8d6df359cdd08ed27b643b374530cdf26a live dbf811540f61c3021006484aca0293b5f06116aa899151b7fb6092cee80fb10a
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Medium.ttf: committed 2182464 live 2466124
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Medium.ttf: committed 5a9d895a0165212e328ced70c18a13f156fdb7c0c48d04a4bdf531a537ba35eb live c974e242f6a0b6dba532ba415fd84b1de209fdd686d7e6af85dba2a57edb8955
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-MediumItalic.ttf: committed 2147952 live 2431616
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-MediumItalic.ttf: committed 62254042aedd28a7e879422e52c3ad0885e0eadac088c1308b61cf425814003c live 034d2c608023e8c79154ff7bba41fc1a733636c08eedaeb2f88cb10f4d469259
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Regular.ttf: committed 2186992 live 2470652
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-Regular.ttf: committed 26feb989e8e6737754ba800ce163829d28e4344ea2370d856095865b71974d96 live 5928ef8e5b4d1d9e5c5e66fb01366ebade5f544ea73c60dd3b844b5b2fef8634
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-SemiBold.ttf: committed 2183320 live 2466980
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-SemiBold.ttf: committed d06f30b35aa58d1ad92a796b23001b6fde43629fc99486e579d2676f4cb0253e live bb2c5a790f0997825025ffc818208c4ed75fd7095d794e310be6af689441cbbe
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-SemiBoldItalic.ttf: committed 2150208 live 2433872
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFont-SemiBoldItalic.ttf: committed 5381950fd164fb20a3bb408c6c5acdbb9229c5b56249fa278b4cd78702c3aceb live e00c63312236d1fcf325582b6d8340a4c5ff31cac0b1b66f66e0fef5a3a0e5ce
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Black.ttf: committed 2160352 live 2493184
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Black.ttf: committed 5a69d8fc2a06704952eed2e9f359469e25dc2d83d80e12c3d336673eb00d3ddc live 8c7b7e6d1306a89b1c5e34728e536870cc9422c2a579bbce44aae522471002b8
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-BlackItalic.ttf: committed 2127060 live 2459896
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-BlackItalic.ttf: committed d6119999df91ff8ddc56ab636f38728406568b325e910983713c6467cc695fff live 35f4fe844469273c8ce8f6dd7079564612e160a0323f17576ad91c077baea6e1
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Bold.ttf: committed 2159304 live 2491888
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Bold.ttf: committed 33bdfcf807a675e1fe01a267cf96d04d91c5d9b39eceff8ef71221b24a3f0892 live fedd1dcdfc4228621075dc8a61190474aace7617aff61d1faca877d340a40ff6
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-BoldItalic.ttf: committed 2125608 live 2458196
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-BoldItalic.ttf: committed a28ba854eef40558b8c123c67380e6eb0c4251a36dd31f118170e94c21a64c7c live bc723ce781926ee93fbfb7585bd13e151f755ee2cdc08310e0e3200a753db8f3
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-ExtraLight.ttf: committed 2151708 live 2484564
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-ExtraLight.ttf: committed 8d6ff2279335b5b9aa783b113a70a81704f76887d9f4b307ed113a907600a469 live c8a66de3dc7bf68210b61fd12d60d39b40e965b906ab188e1db9296c03876b12
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-ExtraLightItalic.ttf: committed 2121276 live 2454136
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-ExtraLightItalic.ttf: committed fb45e1b142442df516435d0cbe848def7bc06f6e3c292fbdfc71e86b652234f5 live 1bd452fe7a6c191823ac8e3bbbd4dd9fa63822402ef3717c7f135f132f034dcd
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Italic.ttf: committed 2122948 live 2455436
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Italic.ttf: committed 4d6320a0005b4dcdd1cd7a13b959a2a6cb996b74b44791fdb1062c26c83141e8 live a7f108988ed9c38001ba6e2554c537744d75ed326b7a64be1eacc0cb695969f2
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Light.ttf: committed 2151704 live 2484420
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Light.ttf: committed 426175349e6f4f751953863d8494d658b529c8199381889ec08fcc3a4096a429 live 864d7d2885887355c530e003dca4eebdb790e7b82b355daed89eeca602759426
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-LightItalic.ttf: committed 2121516 live 2454236
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-LightItalic.ttf: committed 5b67ec17b4bfc11e8d557e9b07c6f85aa83426745ce801017cba31d8dbb30a96 live 37d24b3635323c6dc137b5ab4bc7b30a286dce9a21f6f55cbdb337d534477b81
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Medium.ttf: committed 2158276 live 2490944
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Medium.ttf: committed cc62f20ae7bfd530710d6b9b46b2d772ed3cf2f23233f6e164e043f3967aadac live 023e8bd28f4d31cc247244ab99c1ecb546746a7200d573a175698451b0b68a9e
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-MediumItalic.ttf: committed 2123764 live 2456436
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-MediumItalic.ttf: committed b5c56901c432f1d685a1e5574113e398ff23ba73a52977d896ccdff8189efa10 live 835a3a15685befa4dae3783e46227cca2ae16bac31ec06a3d8621939a5195309
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Regular.ttf: committed 2162784 live 2495268
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-Regular.ttf: committed a075caa19fb679370742733d7260e0db82a6ec0022ea4e3414af4dca52fa34c9 live cbfe6a91123b9d78a1b593cb2efa10a806a704490e3cea6b894078b86d67c0b1
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-SemiBold.ttf: committed 2159132 live 2492060
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-SemiBold.ttf: committed 4fa0930cb5ec811e3bdc074d94abd7300e2e41d1972cdda53b59b55f86d0be66 live d990ea87be5f1e216cb08de25786dd702322b975935d908312817c9f17b26feb
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-SemiBoldItalic.ttf: committed 2126020 live 2458952
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontMono-SemiBoldItalic.ttf: committed fe167c26d32d38d5ebd8c2018e86707911c7d58b0aea5a4a5cbcd9fd57453c2b live 701ad0da5dc6c75ea81bf2c50cd90209a9f533d6894bee3f65b1a5a0308431c2
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Black.ttf: committed 2207200 live 2492484
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Black.ttf: committed 4a072f47f0cb4cbb5f8cbfb94591debd69d92d72f88c08dabdb81be1ad797559 live 55bc925c26b7eb0737ff687c13b39ca416472b33e49ea11d2be23f3c5696f58c
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-BlackItalic.ttf: committed 2173412 live 2458696
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-BlackItalic.ttf: committed 129d3a72dbddd341f599a51afc411b6e40e4333bf6a3414444c6e607651355cf live 1df3b412c6e197b030070f6c8355fe80d05bed2a292ec396ec5e8a6363fa15da
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Bold.ttf: committed 2206124 live 2491408
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Bold.ttf: committed 276c2746cdd051910d74249db7b07a41acdb8b1625125007e66b9bd526d6f4d8 live e754957c4e6fe159ea0d8fe80477d7d2a04763693464e0d33756cccf6c2b1b2d
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-BoldItalic.ttf: committed 2171928 live 2457212
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-BoldItalic.ttf: committed 15a7da1360930354055e7eca0eb926b044f19fd1611b8ab5c148218a0bd46662 live b6d3952908ade9d62f11deed747831dcbbd0b9645169a00dceb16ea2a879f5b2
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-ExtraLight.ttf: committed 2198528 live 2483812
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-ExtraLight.ttf: committed 6156317e13483bd58c017b99415767b02508a2818f197b1a9f24d16184eccc74 live f189e0998d7ac23a440f99268550cc3cd4b9075c7b9ded795428fa4fe42be573
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-ExtraLightItalic.ttf: committed 2167600 live 2452884
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-ExtraLightItalic.ttf: committed 16f910fa21299f2934a1e4fe8099a29eb7f1eff436dd439296a5bc9097cbf004 live 27be47f7106f8b132205608fb06080b3e0ee99bf506ebd890dcf72941bd7bcdf
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Italic.ttf: committed 2169276 live 2454560
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Italic.ttf: committed 0fdb76e61310e6f2b5a63e49f360f5af17b1a8f1a806fe28a3449e6471942e8a live d37ab2e33a51142ae9e7c5fd6a2dcb9a61b4c8386e2f3802fcf49584ed9bc7f9
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Light.ttf: committed 2198520 live 2483804
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Light.ttf: committed a739ffa028f81da3d57a5e5f86c0e40712c25352020322e86d2b9c982c20bd37 live 4cb9d5f06a6cb6712ed22277f2ed31aaf31ec3ee4e867617e176e579e23fe84d
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-LightItalic.ttf: committed 2167836 live 2453120
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-LightItalic.ttf: committed a4bab0aa38fd72e0779f0fb6ac960ed35a735a3181f660431d65e002ac733a18 live fb3d942759a931dfe5241aa011c0b2356a43457694cb73c0e8f5042f4fa2e868
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Medium.ttf: committed 2205080 live 2490364
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Medium.ttf: committed 06ef3710d155d42b374d97fbc20ac35d3e1c21b077d6d932177b904c81710750 live 4e5d374f9652386e540a2102009a8c30ec541f48efc6ea6e2897db2955f9b638
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-MediumItalic.ttf: committed 2170072 live 2455356
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-MediumItalic.ttf: committed 63f0a0ebbda632f05347a71d07f2d628dd6aa66bd3b73011e0d8144c0212a64d live 29787046bb966a3a1b307f8e46c4cc478d6243127ac6a9a80c0ee6f19b89af58
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Regular.ttf: committed 2209608 live 2494892
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-Regular.ttf: committed 0886724b35f872d16ce635a0587093236d9ced601586560f17d14480cf3701b3 live 8dd3b1e6e8323fca9a0010be438831b5a416dcc2ccf07c3bd4dc246195ffab80
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-SemiBold.ttf: committed 2205936 live 2491220
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-SemiBold.ttf: committed 4af97baed7da5d8e7752d498dd8563dc9208a7c18a20218d7e90b62b9ad52891 live 9e768133cfe15eba33eafde826e7e2501973652f49b475f670f11067b4ce6d23
+DRIFT user-font size /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-SemiBoldItalic.ttf: committed 2172328 live 2457612
+DRIFT user-font sha256 /Users/marcelo/Library/Fonts/SauceCodeProNerdFontPropo-SemiBoldItalic.ttf: committed 6f17e56e56e2a64968e0befd9f4e6ad99c37d83ee376f1bac01edaf547b15406 live 33fc3880e95e92fa19c15d9cfa39424a16e530c8624f5c64e46a81dab8bcd0d5
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/00bfc46ccb002b730e29def5116e0a571fb617d8.asset/AssetData/Hannotate.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/04cf228b25a7ceefda732ebbb9d1a42c0e095528.asset/AssetData/WeibeiSC-Bold.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/0b5bb0a7f7e82279e049e3c943133f4b186ff8a2.asset/AssetData/Osaka.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/0ebfdb7e5a2a1db668fa6209779e0725d6f6baba.asset/AssetData/BIZ_UDMincho-regular.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/10e7a462a671950b802274fad767b566ff8457d1.asset/AssetData/STXIHEI.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/13b8ce423f920875b28b551f9406bf1014e0a656.asset/AssetData/Xingkai.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/1b6b2f148cdf17dd0d788706c83c61ca1998c3a6.asset/AssetData/STFANGSO.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/1fb44cf128344a11e654a43ccd7a45a68026bf5d.asset/AssetData/NanumScript.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/22656331beb61633e057fa20aa73b3bd117707f9.asset/AssetData/BMHanna11yrs-Regular.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/259e8f5a322e8dae602d51ac00aefb3d6b05c224.asset/AssetData/SimSong.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/2b7cea021df336d26a89f699c8469a51c721e9a2.asset/AssetData/Kyokasho.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/2cbbb46d93096244bde9fa13aa10939987dd0964.asset/AssetData/Gungseouche.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/36a81f2dad2ef266c50802d85839e0201fcf4e57.asset/AssetData/ToppanBunkyuMidashiMinchoStdN-ExtraBold.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/37618f984b05fb22375ca0987912653aba363389.asset/AssetData/WawaSC-Regular.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/37b7a41df590ab4ef2d6826c6ec7c69f0fd7379f.asset/AssetData/OsakaMono.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/3d0af21c67c597a49a25214ff4c70179baf6f3ca.asset/AssetData/BMHannaPro-Regular.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/42529d87b12845309dd4a57dea9e58446826e94c.asset/AssetData/BIZ_UDGothic.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/4a418d1fa4860652a3241e8ee457806c8557fc64.asset/AssetData/Yuanti.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/4c932c71d74fc9e4c1bd9cbf270374b0b3ee7519.asset/AssetData/NanumMyeongjo.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/53fe5be564086fefc7523ccd0a31200acf92e0e5.asset/AssetData/STHEITI.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/5d3a1229823fff781c0d9dac611c90f9fc31e138.asset/AssetData/LiHeiPro.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/5f4c23e4a0c7b70597730d79e252955e973ead7d.asset/AssetData/BiauKai.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/5feac9245cca79adaf638ded7a4994b1ddb33ca0.asset/AssetData/Hei.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/60484a5d6f3fa8d51dcbeff43b7e70c9d42bcd2f.asset/AssetData/TsukushiBMaruGothic.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/6331c5916c361af1b83fb8b8b76ef2eece20c8eb.asset/AssetData/Kai.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/6372627020b45393e500bb1661c460d4a93aff49.asset/AssetData/LiSongPro.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/6ca8b19114fa5b803af8c74eff3f7b75be41559a.asset/AssetData/BMDoHyeon-Regular.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/70875a1270987c17cfd6f40cd3d755ec04d03b33.asset/AssetData/Baoli.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/78f88149335340bffebcfade41e6a326a865625c.asset/AssetData/LingWaiSC-Medium.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/7a0b5c0f3c1d41c4c52a33343496c9c65ad52c50.asset/AssetData/NanumGothic.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/7a4aca403fc9a901dcfe5e71131b423d71231eec.asset/AssetData/ToppanBunkyuGothicPr6N.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/7a694995bfafc612fac18a23b283bdf239ef4f2c.asset/AssetData/BMKirangHaerang-Regular.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/81e879dcb4d596ab140f7cffcd5ccaaf8108519b.asset/AssetData/Klee.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/833e6cdde7e9b6be27aeb4bb26a2d25f93a6b1f7.asset/AssetData/PCmyoungjo.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/862669affb9c2df6a5af4627f6e8c4496e643d6e.asset/AssetData/Hiragino_Sans_TC.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/88d6cc32a907955efa1d014207889413890573be.asset/AssetData/Kaiti.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/97d327a33425a29aa6bf467dfc46a6e3d7b59a66.asset/AssetData/SpotMono.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/99517f5220d46dff05d0dbb2a22d0036afefb089.asset/AssetData/YuMincho.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/9ea5dc040323daeddd09ec48cfe7c73fc3144368.asset/AssetData/Pilgiche.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/9f4afe404b767c06554b8b78551e10e92f695147.asset/AssetData/WawaTC-Regular.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/a304e3396d019087ab67af77f5e398977529007d.asset/AssetData/Libian.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/a35803b18dea500ee1e426f403635efbe5a84bd4.asset/AssetData/ToppanBunkyuMinchoPr6N-Regular.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/a3c69464b629577766c23bcdb12ffbfe3759b923.asset/AssetData/Hanzipen.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/a7a90316a83e0693b3d971d89b235ee578c59f0c.asset/AssetData/BMYeongSung-Regular.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/a9507b2dd1e57ecf7dc3a2fe25e8abfef12973ad.asset/AssetData/TsukushiAMaruGothic.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/ac5cfaf67b84566ed61f464ef9820d3d59d18bf0.asset/AssetData/YuppyTC-Regular.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/b37171b0cb7d2044e39dd8001c23a0e540f91207.asset/AssetData/BMJua-Regular.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/b3a305e67bac3daadc55e9b976b534261c038509.asset/AssetData/AppleLiSung-Light.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/b7a6a6575a699e801915b73b9e1e75c74a3404ce.asset/AssetData/YuGothic-Bold.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/b7cb5af102eef622e55e701862272b80e89d2d5f.asset/AssetData/BMHannaAir-Regular.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/b860c3b445cd974141686f9fcfee362886d80bd9.asset/AssetData/YuppySC-Regular.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/bde53ad6e1bb82eb008445d7ed26d067e4c89497.asset/AssetData/LingWaiTC-Medium.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/c4f5f063cf47a2009786f645b423c09ea75666b8.asset/AssetData/WeibeiTC-Bold.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/c6821a5885b1c099dc7e340ca61cd3ddb35cb62e.asset/AssetData/HeadlineA.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/c6dd5dda81ed310c2248630a4e62f4fd71316d91.asset/AssetData/ToppanBunkyuMidashiGothicStdN-ExtraBold.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/c745f84f5eb15b1f594d3769dc86146fccee61ff.asset/AssetData/WeibeiSC-Bold.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/ecb0f9fe84d4cf732f739bbc2c6a8c29cfefd08e.asset/AssetData/AppleLiGothic-Medium.ttf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/ee57314cb0de889f6f741b43d931bf85d038ff0e.asset/AssetData/Ornanong.ttc
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/ee89e7987a76cc8cfdff36c96bd7bc77655b343e.asset/AssetData/YuGothic-Medium.otf
+DRIFT missing asset-font /System/Library/AssetsV2/com_apple_MobileAsset_Font8/f14049099a04e570b893c01d9a4cd71f87c9e8d8.asset/AssetData/Lantinghei.ttc
+496 pinned facts differ

@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName serif
+class Berth
+Berth : Pier x
+@enduml

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "mechanism": "menlo-bold-italic-fallback",
+  "maker": "maker-grok",
+  "account_commit": "a0dca233c38251c0233dfb85179d0eb9aa127f0f",
+  "probe_stdout_sha256": "31bd13b0e4b68737e067f807360c4c77ad8ef6e3c6a5fb79774a44df79125407",
+  "probe_source_sha256": "c8b15325b33cfb5f4ae5795e9f5f1e4830a2c7799fc10699462fbe2c9d5a8c9f",
+  "advances_tsv_sha256": "725db0d5d90a7e51c397d6d6772a6aa3a8f668eaecaa5b9314f48c3f2e4b14b6",
+  "measurement": "Joined the 536 JRS rows to the 536 WIDTH rows of grok-g3-menlo-jrs-probe2 by role and scalar. Compared the Core Text point advance with Java getStringBounds. See probe-jrs-score.txt.",
+  "observed": "532 of 536 widths are bitwise equal. The other four are float32(units/upem*14) against the f64 Core Text printed, absolute gap at most 3.43e-7, and they match at 4 decimal places under both HALF_UP and HALF_EVEN. All 268 bold widths and bold-italic U+2580 are the Menlo cell. The 267 bold-italic fallbacks name a face and an advance. Eighteen Apple Color Emoji scalars are exactly 19 points, which is 7600/7 units of upem 800.",
+  "cause": "When Menlo Bold Italic has no glyph, Java measures the face JRSFontCreateFallbackFontForCharacters returns. Those faces are not in the chain tables. The account's planned_change asked for an advance already in the chain data. That data does not contain these faces. The probe extracted the advance of each face for each missing scalar.",
+  "decision": "portable",
+  "change": "Measure a Menlo Bold Italic scalar that is in fallback-advances.tsv with units/units_den/upem times the font size. Key the table by the scalar and the PostScript face, as the extraction gives them. Leave Menlo Bold, Menlo plain, Menlo italic, Courier New, and every Menlo Bold Italic scalar outside the table on the cell. Do not copy a font file. Do not add a high-precision decimal literal: the decimal ratchet already allows 1053 in plantuml_metrics.rs and 0 in a new file. Store Apple Color Emoji as 7600/7 over upem 800, not as a rounded integer unit and not as a decimal. Cite the probe stdout hash next to the table.",
+  "residue": "The probe requested 14 pt only. Scaling by the font size is the Core Text font matrix, units/upem times size, and the held-out batch predicts a second size on that model. The four float32 gaps are stored as the integer units. The probe measured one scalar at a time, so a run of two fallback glyphs is predicted as the sum of those advances."
+}

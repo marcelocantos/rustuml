@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "mechanism": "menlo-font-name",
+  "reviewer": {
+    "task_id": "opus-g3-integ (T3 Code review sub-agent, branch review/opus-g3-integ)",
+    "model": "claude-opus-5-5 / Claude Code in T3 Code",
+    "independence": "Separate review task. No production, comparator, baseline, allow-list, or bullseye edits. No child agents, no other worktrees. Java relayed results only; no Java run locally."
+  },
+  "account_commit": "bf5fc5b94dd24682d94e3291f7a6dc57700c47a1",
+  "implementation_commit": "6484bb7e030828eb2ac3913aea27b5a48add2374",
+  "base_commit": "32684f81e4df2cf10bec9a74d935ea8ee944b5f0",
+  "packet_commit": "4761d217bbcd35add29e0393ba559c87e7b87d6d",
+  "previous_review": "4761d217bbcd35add29e0393ba559c87e7b87d6d review-2.json (rejected)",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git archive <rev> -- Cargo.toml Cargo.lock crates vendor; CARGO_TARGET_DIR=<private per tree> cargo build --release -p rustuml for 32684f81e, 4761d217b, 6484bb7e0. Binary SHA256: {\"32684f81e\": \"435480591e1299b38ff742b5e583c0fc4749ddfe9d474a8bed3b1f1f11a33135\", \"4761d217b\": \"413951b42977ea63fe1df5701981c18a7726a2d9ff4e767b85b5c83df4bfc541\", \"6484bb7e0\": \"1d528c24ce1e3325e62360ed9a9345d6bd02e81cc85dc572495af2eb2cf23cfe\"}",
+    "rustuml -pipe -tsvg < case.puml, cwd = the source directory, TZ=Australia/Sydney, for every case of CZ, CN, CG, CQ, CR, CX, CH, CM, CS, CU and grok-g2-checker-heldout (sources decoded from reference-input-bundle.json.gz), all 12,550 .puml under test-diagrams/golden (submodule 9efdc12fb) and all 6,405 .puml under test-diagrams/perturbations at 6484bb7e0",
+    "opus-cmp: stdin driver calling rustuml_oracle::compare::compare_svg_strict(java, rust) per case, whole SVG; plus an element-index loss check on every case whose stdout differs between a parent and the merge. Java validity from the raw relayed stdout and stderr (exit != 0, crash page markers, Java stack trace on stderr = invalid)",
+    "git merge-tree --write-tree 32684f81e 4761d217b (conflict only in text_render.rs) diffed against 6484bb7e0; changed-line multiset comparison of base->parent vs other-parent->merge for text_render.rs and creole.rs",
+    "decimal ratchet: the guard's count_high_precision_literals copied verbatim from harness_guards.rs, run over crates/rustuml-render/src at 505999cac, 32684f81e, 4761d217b, 6484bb7e0",
+    "cargo test --offline --release -p rustuml-oracle --test golden_no_oracle | golden_pairs | parity_perturbations | doc_claims | harness_guards --no-fail-fast; -p rustuml --test pipe_mode; --workspace --lib --no-fail-fast (merge); golden_pairs, parity_perturbations and harness_guards also at 32684f81e for comparison",
+    "cargo clippy --offline --release -p <crate> --all-targets -- -W clippy::all for all six crates at 32684f81e, 4761d217b and 6484bb7e0"
+  ],
+  "findings": [
+    "Verdict accepted. The single defect behind the review-2 rejection (unprovenanced 76.6016 in a text_render.rs test) is fixed by reusing one binding; the ratchet at the merge is no worse than parity-recovery 32684f81e. The Font.decode family resolution survives the merge intact: every G3 cohort is byte-identical to the G3 tip.",
+    "Pairs: the 16 menlo-font-name pairs that pass at the merge are carried from review-2.json with unchanged source and golden SHA-256 and re-measured on 6484bb7e0 (CLI and parity_perturbations agree). Residue stays out of the pairs list: chk_skin_helvetica_light (Helvetica-Light has no extracted advances), opus2_creole_decode_edges (T14.98 SansSerif spelling) and opus2_sk_empty (Java writes font-family=\"''\") still fail, identically at the G3 tip; they remain named by review.json and review-2.json, so the record guard still covers them.",
+    "Integration 6484bb7e0 is a single-parent squash onto parity-recovery 32684f81e carrying review/opus-g3-recheck 4761d217b; 4761d217b is not an ancestor. Reproducing the merge with git merge-tree gives a clean merge everywhere except text_render.rs; the committed tree differs from that result only in text_render.rs. class.rs, sequence.rs, state.rs, svg.rs, usecase.rs, plantuml_metrics.rs, menlo_bi_fallback.rs and lib.rs are byte-identical to the G3 tip; face_cmap_tables.rs and bullseye.yaml are byte-identical to 32684f81e; creole.rs carries every changed line of both sides (multiset check, 0 missing). No file is deleted relative to either parent.",
+    "Ratchet fix: the test explicit_font_monospace_decodes_to_dialog now binds `let dialog_base = base(26.0, 76.6016);` once and derives the Menlo base from it (`let mut menlo = dialog_base;`), so the pre-existing literal is the only one. With the guard's own counting rule text_render.rs has 51 literals at 505999cac, 68 at 32684f81e, 52 at 4761d217b and 68 at 6484bb7e0; every rustuml-render file count at the merge equals 32684f81e, and the decimal_literal_ratchet listing is identical to 32684f81e (class.rs 383->578, deployment.rs 43->44, plantuml_metrics.rs 1053->1055, state.rs 53->61, text_render.rs 51->68). The fix is minimal and test-only. The 51->68 text_render.rs line itself is pre-existing at parity-recovery (G2/G6), not caused by this merge.",
+    "Conflict resolution: trim_text_for_emit, text_width_for_style and tab_stop_width keep G3's style_face call; style_face now takes bold/italic from effective_bold/effective_italic, which return the atom's own bits when Style::owns_font_configuration is set and base||style otherwise. write_text_element keeps G6's effective_bold/effective_italic/effective_underline. Changed-line multiset check: every G3 line is present except the three base||style lines replaced by effective_*; every parity-recovery line is present except two effective_* pairs subsumed by style_face. Probe (CLI, Rust only, 10 inputs: Menlo/Helvetica/Dialog under classFontStyle bold, italic, bolditalic, creole <b><i> and participantFontStyle bold, each with <img:absent.png>): the (Cannot decode) atom is plain monospace at the merge exactly as at 32684f81e (the G3 tip wrongly emitted font-weight/font-style on it); ordinary atoms keep base bold/italic and G3's Menlo widths exactly as at the G3 tip; classFontStyle bolditalic stays plain as at the G3 tip; Helvetica ASCII advances follow G2 (32684f81e).",
+    "Corpus: all 12,550 goldens give identical CLI whole-SVG match sets at the three trees (11,179 each, 0 losses); the only stdout byte change is edge-cases/edge_seq_title_with_variables, a %date() timestamp, with the same comparator result. golden_no_oracle passes at the merge, 11181/11251, baseline file identical to both parents. golden_pairs 10497/754/1299 at 32684f81e and the merge with identical per-directory failure lines. Perturbations (6,405 at the merge): CLI whole-SVG 3,726 / 3,708 / 3,771 at 32684f81e / G3 tip / merge, 0 losses against either parent. parity_perturbations gate failing paths 2,662 at 32684f81e, 2,640 at the merge: 25 fixed, 3 new, and the 3 new are menlo-font-name residue pairs (chk_skin_helvetica_light, opus2_creole_decode_edges, opus2_sk_empty) that do not exist at 32684f81e and fail identically at the G3 tip.",
+    "Element-level check over every changed stdout found 4 flags, all byte-identical to the other parent: alias_courier_trailing and alias_monospaced_case equal the G3 tip (17 -> 3 differences); c9a_sp_seqnote_mx_P equals 32684f81e (G2 Verdana cmap width 73.6011 vs Java 74.8071; the G3 tip's pre-G2 76.21 coincidentally rounds the note to the Java x, so neither matches); g2chk_helvetica_bold equals 32684f81e (30 differences vs 84 at the G3 tip). None is a composition artefact.",
+    "G3 cohorts are byte-identical to the G3 tip in every case (CZ 68, CN 46, CG 6, CQ 7, CR 14, CX 14), and CZ reproduces the registered predictions debbce39 68/68 (exit, stdout, stderr). Scores (32684f81e / G3 tip / merge, of Java-valid): CZ 24/51/51 of 68, CN 8/38/38 of 46, CG 1/6/6 of 6, CQ 0/7/7 of 7, CR 0/13/13 of 14, CX 3/11/11 of 14. G6 cohorts are byte-identical to 32684f81e in every case: CH 13/1/13 of 17 valid (20 cases, 3 Java crash pages), CM 15/4/15 of 40 valid (48 cases, 6 exit-0 crash pages and 2 exit 200), CS 25/3/25 of 25, CU 7/2/7 of 13 valid (18 cases, 5 exit-0 crash pages). G2 grok-g2-checker-heldout: 0/0/0 of 28 whole-SVG, as the G2 checker recorded; 10 stdouts change against 32684f81e (G3 family resolution) with no element-level loss.",
+    "Gates at the merge: golden_no_oracle pass; golden_pairs and parity_perturbations fail exactly as at 32684f81e (above); pipe_mode 17/17; doc_claims 2/2; workspace lib layout 41, math 10, oracle 31, parser 665, render 874 + 1 ignored, 0 failed (render #[test] count 875 = 863 at 505999cac + 6 + 6). Clippy warning sets identical per crate at all three trees (render 21, parser 1, layout 1, math 0, oracle 21, rustuml 20). harness_guards by category: see harness finding.",
+    "harness_guards by category at the merge, with these records in place: comparator_constants_frozen, no_golden_data_embedded_in_shipping_crates, no_label_keyed_width_constants, error_golden_census_is_frozen and parity_review_paths_reject_traversal pass, as at 32684f81e. decimal_literal_ratchet fails with the identical five-line listing to 32684f81e. parity_review_records_are_complete fails with 2,684 violation lines at both 32684f81e and the merge, as identical sorted sets: this record adds 0 lines and none names menlo-font-name or menlo-bold-italic-fallback. Without review-3 the merge would add lines here, because menlo-font-name/review-2.json is rejected and names failing pairs."
+  ],
+  "verdict": "accepted",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_skin_menlo_bold_space.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_skin_menlo_bold_space.svg",
+      "axes": [
+        "Font.decode style token"
+      ],
+      "source_sha256": "091c7ede8d39fa171e0aad2d0ad40dc668568cd5235799373611c9efcb8270c2",
+      "golden_sha256": "7d03925f5f78028949bf6a1a7db24797f09eca6c96e08f1f2801e85d013e8f5c",
+      "result": "pass",
+      "before_match": true,
+      "origin": "earlier checker review.json (9c88c612b); carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_skin_arialmt.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_skin_arialmt.svg",
+      "axes": [
+        "PostScript full name"
+      ],
+      "source_sha256": "9749378d5cf2d475c0f2d16c5052114975ce1edf0b2377307714f09df9514c4a",
+      "golden_sha256": "28d2774fcd6084bf24b7dc0f1a7992f5c5c1dd50c7d60af68f94502c257d2791",
+      "result": "pass",
+      "before_match": true,
+      "origin": "earlier checker review.json (9c88c612b); carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_creole_menlo_class.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_creole_menlo_class.svg",
+      "axes": [
+        "creole family versus surrounding face"
+      ],
+      "source_sha256": "de7e83f1465234f76a3be8ab1f5c6f23435f27474d9d774dcf99f8dd68daf7f0",
+      "golden_sha256": "c2811d0d696fe4a33611ebdbe2930de52e862831045518c97bd34218b7dcb10c",
+      "result": "pass",
+      "before_match": false,
+      "origin": "earlier checker review.json (9c88c612b); carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_elem_seqfont_helvetica_bold.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_elem_seqfont_helvetica_bold.svg",
+      "axes": [
+        "unrecognized skinparam key"
+      ],
+      "source_sha256": "23fa150b637da168a9bfae2ce76a8c85e057963e0f01ba9635376d917306501d",
+      "golden_sha256": "95b4c5e4fd0c0b4558706382b320f033fb5d5bb18725101d7603e5fed5af14f4",
+      "result": "pass",
+      "before_match": false,
+      "origin": "earlier checker review.json (9c88c612b); carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/chk_skin_monospace_word.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/chk_skin_monospace_word.svg",
+      "axes": [
+        "SVG spelling versus logical font"
+      ],
+      "source_sha256": "eb8e07c1203240a967b812915c9676b9fd1e0412a9ffd61c247176436756aa30",
+      "golden_sha256": "86f3c5f5229620fc49a68512e947c580f842234e7c59dd268b93292bd6bd5e66",
+      "result": "pass",
+      "before_match": false,
+      "origin": "earlier checker review.json (9c88c612b); carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/opus2_log_css_monospace.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/opus2_log_css_monospace.svg",
+      "axes": [
+        "CSS spelling monospace is Font.decode Dialog"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_log_css_monospace",
+      "source_sha256": "45801762abf76a28cc3a2fbdf333cd33d5d39bcc5d19f4247a5ce1aac5e95bac",
+      "golden_sha256": "b8d2b05b53d8b82002436117e0c6d663b2080f2d6cf6a2df37c06ba09aab1442",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/opus2_log_css_upper_mono.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/opus2_log_css_upper_mono.svg",
+      "axes": [
+        "CSS spelling MONOSPACE, case"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_log_css_upper_mono",
+      "source_sha256": "90896295a1cecaf53c6d6914646c0529152707ecebb67480309b5dc58f971dd4",
+      "golden_sha256": "df8f777851f60310266e99e9314d3bbda095d9fc5116113e85f599cd75a6bec0",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/opus2_log_monospaced.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/opus2_log_monospaced.svg",
+      "axes": [
+        "JDK logical Monospaced"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_log_monospaced",
+      "source_sha256": "80939f7649f80c93996a4c8032e7ba43bdea623718a31de645267d73538e1d70",
+      "golden_sha256": "9ab2e37041259133a96a13dc1163c2428778539e45e1206824f13d78271d16c9",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/opus2_log_dialoginput.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/opus2_log_dialoginput.svg",
+      "axes": [
+        "JDK logical DialogInput"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": true,
+      "heldout": "CZ g3r2_log_dialoginput",
+      "source_sha256": "05265fe2bba6aac5c7136ad6764ac5442b16e78959337c582ab0a11169fd69f9",
+      "golden_sha256": "417ef1156bafdb2e5f5ece25f840472e50ac31a292661f80cd4b74588ab08e74",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": true,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/opus2_seq_ignore_sequencefont.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/opus2_seq_ignore_sequencefont.svg",
+      "axes": [
+        "unrecognised skinparam key sequenceFontName"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_seq_ignore_sequencefont",
+      "source_sha256": "fd4e5b1b16f1a36eac276ed22c4c14efa257bcb43c32abf4236b4ae59285681c",
+      "golden_sha256": "229e1b1b76785602d7823465af43a629564f89da0f4d351e564b2003d13206f6",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/opus2_seq_honour_participant.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/opus2_seq_honour_participant.svg",
+      "axes": [
+        "FontParam participantFontName honoured"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": true,
+      "heldout": "CZ g3r2_seq_honour_participant",
+      "source_sha256": "2f8b81756d6f2883a079527ac93f44696d4c5cbbb8ac409b4b86f8450d611e74",
+      "golden_sha256": "6413d8a43e5ea169e0f97bc3624789ae8a8e9aa7d6bff9a99090d6d6d9def738",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": true,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/opus2_sk_hyphen_style_size.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/opus2_sk_hyphen_style_size.svg",
+      "axes": [
+        "Font.decode name-style-size"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_sk_hyphen_style_size",
+      "source_sha256": "f7f780af59416e8a2add6566849aaea0cca5fbb22b3e9ccc130a249e859245f1",
+      "golden_sha256": "ff461a2cd390fadc94a18fe81c156723eba2ad17a053347fc90156a1a7fb33d8",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/opus2_sk_space_style_size.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/opus2_sk_space_style_size.svg",
+      "axes": [
+        "Font.decode name style size"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_sk_space_style_size",
+      "source_sha256": "ca40d7d13bcb523024323b2b8ce6330c7723c3d18c3b49b4cd87e97e5f6abf81",
+      "golden_sha256": "7d301a50b631fe5b0f123a4d7a1d6278fc7843752b3ff64848ede8a259bff013",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/opus2_sk_name_bolditalic.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/opus2_sk_name_bolditalic.svg",
+      "axes": [
+        "Font.decode name-bolditalic"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_sk_name_bolditalic",
+      "source_sha256": "1e13e2ffc9c172fb060813159db21c65513e80bf1417c64c410c851091ad2a58",
+      "golden_sha256": "e1b4653d545d9964def3432a1c7ccfe13ef1796ccecf58ea914adcd1e2225853",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/opus2_sk_trailing_dash.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/opus2_sk_trailing_dash.svg",
+      "axes": [
+        "Font.decode trailing dash"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_sk_trailing_dash",
+      "source_sha256": "0cfc379a267aca88ff82e968b3ce6685271d42a403d9c10714ca0d8bde0633fc",
+      "golden_sha256": "f9e2c55411663ee157639482723aebe9ea22dc10338fc0139105e4cf23781d2f",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-font-name/opus2_cls_ignore_diagramfont.puml",
+      "golden": "test-diagrams/perturbations/menlo-font-name/opus2_cls_ignore_diagramfont.svg",
+      "axes": [
+        "unrecognised skinparam key classDiagramFontName"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": true,
+      "heldout": "CZ g3r2_cls_ignore_diagramfont",
+      "source_sha256": "2359c739c701b5beb443b9b427afd4ea8bcfee19a054859f3c9b9dc712cac261",
+      "golden_sha256": "0613048062b53b69d7cc94c4c10bd8b61b96d066336c0d257b2e57ee60eb2ca6",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": true,
+      "g3_tip_match": true,
+      "merge_match": true
+    }
+  ]
+}

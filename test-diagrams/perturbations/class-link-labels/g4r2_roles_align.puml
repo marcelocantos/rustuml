@@ -1,0 +1,5 @@
+@startuml
+class Ledger
+class Hopper
+Ledger "owner\rside" --> "child\lside" Hopper : mid\nline
+@enduml

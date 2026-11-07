@@ -945,6 +945,7 @@ impl ClassParser {
                 label_arrow: LinkArrow::None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                stereotypes: Vec::new(),
                 from_decor: None,
                 to_decor: None,
                 decorated_end: RelationshipEnd::From,
@@ -1065,7 +1066,7 @@ impl ClassParser {
             // separator colon flanked by optional space), which a bare endpoint
             // (no spaces) never matches, so `A::B --> C::D : label` still splits.
             Regex::new(
-                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|<-->>|<-->|<->|\*--|--\*|o--|--o|-->>|<-{2,}|-{2,}>|<--|-->|->>|->|<-|-{1,}|\.{2,}>>|\.{2,}>|\.\.))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
+                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|<-->>|<-->|<->|\*--|--\*|o--|--o|-->>|<-{2,}|-{2,}>|<--|-->|->>|->|<-|-{1,}|\.{2,}>>|\.{2,}>|\.\.))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*<<(.+?)>>)?(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
@@ -1093,7 +1094,17 @@ impl ClassParser {
             } else {
                 caps.get(7).map(|m| m.as_str()).unwrap_or("").to_string()
             };
-            let (label, label_arrow) = parse_label_arrow(caps.get(8).map(|m| m.as_str()));
+            // `StereotypePattern.optional("STEREOTYPE")` sits after the second
+            // entity and before `: LABEL_LINK`. The capture is the inner text
+            // (`removeChevronBrackets`). A `<<...>>` after the colon stays part
+            // of the label.
+            let stereotypes = caps
+                .get(8)
+                .map(|m| m.as_str().trim().to_string())
+                .filter(|stereotype| !stereotype.is_empty())
+                .into_iter()
+                .collect();
+            let (label, label_arrow) = parse_label_arrow(caps.get(9).map(|m| m.as_str()));
 
             let (kind, dashed, mut decorated_end) = parse_relationship_kind(rel_str);
             if rel_str.contains(">>") || rel_str.contains("<<") {
@@ -1127,6 +1138,7 @@ impl ClassParser {
                 label_arrow,
                 from_multiplicity: from_mult,
                 to_multiplicity: to_mult,
+                stereotypes,
                 from_decor: None,
                 to_decor: None,
                 decorated_end,
@@ -1158,6 +1170,7 @@ impl ClassParser {
                 label_arrow: LinkArrow::None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                stereotypes: Vec::new(),
                 from_decor,
                 to_decor,
                 decorated_end: RelationshipEnd::None,
@@ -1212,6 +1225,7 @@ impl ClassParser {
                 label_arrow: LinkArrow::None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                stereotypes: Vec::new(),
                 from_decor: None,
                 to_decor: None,
                 decorated_end: RelationshipEnd::None,
@@ -1244,6 +1258,7 @@ impl ClassParser {
                 label_arrow: LinkArrow::None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                stereotypes: Vec::new(),
                 from_decor: None,
                 to_decor: None,
                 decorated_end: RelationshipEnd::None,
@@ -1969,7 +1984,43 @@ impl QueueDirection {
     }
 }
 
+/// `[[...]]` is a Creole link, including inside a relationship label. Arrow
+/// style brackets are a single `[...]` pair (`A -[#blue]-> B`). Mask links
+/// so that pair cannot swallow the URL.
+fn protect_creole_links(line: &str) -> (String, Vec<String>) {
+    let mut out = String::with_capacity(line.len());
+    let mut saved = Vec::new();
+    let mut rest = line;
+    while let Some(start) = rest.find("[[") {
+        out.push_str(&rest[..start]);
+        let after = &rest[start + 2..];
+        if let Some(end) = after.find("]]") {
+            let full = &rest[start..start + 2 + end + 2];
+            saved.push(full.to_string());
+            out.extend(std::iter::repeat_n('\u{E000}', full.len()));
+            rest = &after[end + 2..];
+        } else {
+            out.push_str(&rest[start..]);
+            break;
+        }
+    }
+    out.push_str(rest);
+    (out, saved)
+}
+
+fn restore_creole_links(mut line: String, saved: &[String]) -> String {
+    for token in saved {
+        let placeholder = "\u{E000}".repeat(token.len());
+        if let Some(pos) = line.find(&placeholder) {
+            line.replace_range(pos..pos + placeholder.len(), token);
+        }
+    }
+    line
+}
+
 fn strip_arrow_modifiers(line: &str) -> (String, RelationshipStyle, Option<QueueDirection>) {
+    let (masked, saved_links) = protect_creole_links(line);
+    let line = masked.as_str();
     static BRACKETED: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[[^\]]*\]").unwrap());
     // Direction keywords appearing between dash/dot runs on the arrow body.
     static DIRECTION: LazyLock<Regex> =
@@ -2027,7 +2078,11 @@ fn strip_arrow_modifiers(line: &str) -> (String, RelationshipStyle, Option<Queue
         }
     });
     let stripped = DIRECTION.replace_all(&s, "$1$3").into_owned();
-    (stripped, style, direction)
+    (
+        restore_creole_links(stripped, &saved_links),
+        style,
+        direction,
+    )
 }
 
 fn invert_relationship_end(end: RelationshipEnd) -> RelationshipEnd {
@@ -2914,6 +2969,40 @@ mod tests {
     fn relationship_label() {
         let d = parse("Parent -- Child : has");
         assert_eq!(d.relationships[0].label.as_deref(), Some("has"));
+    }
+
+    #[test]
+    fn relationship_label_keeps_a_creole_url() {
+        let d = parse("Kiln --> Glaze : pre\\n[[http://example.com/a\\nb]]\\npost");
+        assert_eq!(
+            d.relationships[0].label.as_deref(),
+            Some("pre\\n[[http://example.com/a\\nb]]\\npost")
+        );
+        let styled = parse("Kiln -[#blue]-> Glaze : plain");
+        assert_eq!(
+            styled.relationships[0].style.color.as_deref(),
+            Some("#blue")
+        );
+        assert_eq!(styled.relationships[0].label.as_deref(), Some("plain"));
+    }
+
+    #[test]
+    fn relationship_stereotype_before_the_label_keeps_the_link() {
+        // `CommandLinkClass` group STEREOTYPE is between the target and the
+        // colon. `A --> B : <<use>> text` is a label, not a link stereotype.
+        let d = parse("Harbor --> Wharf <<use>> : Pier quay");
+        assert_eq!(d.relationships.len(), 1);
+        assert_eq!(d.relationships[0].from, "Harbor");
+        assert_eq!(d.relationships[0].to, "Wharf");
+        assert_eq!(d.relationships[0].stereotypes, vec!["use".to_string()]);
+        assert_eq!(d.relationships[0].label.as_deref(), Some("Pier quay"));
+
+        let labeled = parse("Harbor --> Wharf : <<use>> text");
+        assert!(labeled.relationships[0].stereotypes.is_empty());
+        assert_eq!(
+            labeled.relationships[0].label.as_deref(),
+            Some("\u{00ab}use\u{00bb} text")
+        );
     }
 
     #[test]

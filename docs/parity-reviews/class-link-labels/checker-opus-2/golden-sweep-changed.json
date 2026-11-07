@@ -1,0 +1,37 @@
+{
+ "edge-cases/edge_seq_title_with_variables.puml": {
+  "base_exit": 0,
+  "same": false,
+  "tip_exit": 0
+ },
+ "er/er_ecommerce_schema.puml": {
+  "base_exit": 0,
+  "same": false,
+  "tip_exit": 0
+ },
+ "er/er_financial_schema.puml": {
+  "base_exit": 0,
+  "same": false,
+  "tip_exit": 0
+ },
+ "er/er_healthcare_schema.puml": {
+  "base_exit": 0,
+  "same": false,
+  "tip_exit": 0
+ },
+ "er/er_hr_schema.puml": {
+  "base_exit": 0,
+  "same": false,
+  "tip_exit": 0
+ },
+ "rendering/splines/splines_multilevel_inheritance.puml": {
+  "base_exit": 0,
+  "same": false,
+  "tip_exit": 0
+ },
+ "rendering/splines/splines_self_reference_ortho.puml": {
+  "base_exit": 0,
+  "same": false,
+  "tip_exit": 0
+ }
+}

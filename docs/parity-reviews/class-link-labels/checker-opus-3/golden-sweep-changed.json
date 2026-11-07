@@ -1,0 +1,123 @@
+{
+ "changed": {
+  "er/er_ecommerce_schema": {
+   "base": {
+    "exit": 0,
+    "sha": "1db1ffed95bcced9864030fd01b1fd10bc2f7e18fe13bba6461575f41efaaf57",
+    "strict": "DIFF 99"
+   },
+   "g4": {
+    "exit": 0,
+    "sha": "564aa71f7dd1a35f123f26262d27fbb4ac64e0d62d91021dff28a881e5fdc18d",
+    "strict": "DIFF 100"
+   },
+   "merge": {
+    "exit": 0,
+    "sha": "564aa71f7dd1a35f123f26262d27fbb4ac64e0d62d91021dff28a881e5fdc18d",
+    "strict": "DIFF 100"
+   }
+  },
+  "er/er_financial_schema": {
+   "base": {
+    "exit": 0,
+    "sha": "6f775a261c9ab7b2ec2921b6ea26536ab82dde953f35729d0a12c2ceda7be95b",
+    "strict": "DIFF 45"
+   },
+   "g4": {
+    "exit": 0,
+    "sha": "1739222f10790d3c877bd36ee22f95a728cbb03887431c40717f9ae22f836703",
+    "strict": "DIFF 45"
+   },
+   "merge": {
+    "exit": 0,
+    "sha": "1739222f10790d3c877bd36ee22f95a728cbb03887431c40717f9ae22f836703",
+    "strict": "DIFF 45"
+   }
+  },
+  "er/er_healthcare_schema": {
+   "base": {
+    "exit": 0,
+    "sha": "2a299feb30f558dd7dc0b7a1dd7377674a75dbbd7e3b2497a889fd5844a3afe4",
+    "strict": "DIFF 54"
+   },
+   "g4": {
+    "exit": 0,
+    "sha": "8bfe763ba35da0f4e9392b6b55d388466e0873c359329a21021dae875aa814db",
+    "strict": "DIFF 54"
+   },
+   "merge": {
+    "exit": 0,
+    "sha": "8bfe763ba35da0f4e9392b6b55d388466e0873c359329a21021dae875aa814db",
+    "strict": "DIFF 54"
+   }
+  },
+  "er/er_hr_schema": {
+   "base": {
+    "exit": 0,
+    "sha": "506e305a6949a8037208cb4a4307570274f84627f682f5f48437c771cea1b1d6",
+    "strict": "DIFF 158"
+   },
+   "g4": {
+    "exit": 0,
+    "sha": "421b8f02c32a765bc4877221f470f80037af85ea8b8180fa079bafacf05125df",
+    "strict": "DIFF 158"
+   },
+   "merge": {
+    "exit": 0,
+    "sha": "421b8f02c32a765bc4877221f470f80037af85ea8b8180fa079bafacf05125df",
+    "strict": "DIFF 158"
+   }
+  },
+  "rendering/splines/splines_multilevel_inheritance": {
+   "base": {
+    "exit": 0,
+    "sha": "d00ac35ff60be7762f5c004126468c94f90bfb0a8a11c87b9a075c59f772dc41",
+    "strict": "DIFF 1"
+   },
+   "g4": {
+    "exit": 0,
+    "sha": "9844621c9caf2709039a0fe93dfe7d0a1075b7160285900d7b2c0cc29b684338",
+    "strict": "MATCH"
+   },
+   "merge": {
+    "exit": 0,
+    "sha": "9844621c9caf2709039a0fe93dfe7d0a1075b7160285900d7b2c0cc29b684338",
+    "strict": "MATCH"
+   }
+  },
+  "rendering/splines/splines_self_reference_ortho": {
+   "base": {
+    "exit": 0,
+    "sha": "a4815e4b5693e99ab8df739ba05666fd7231b887591d6cf59b5e52b403e9241a",
+    "strict": "DIFF 10"
+   },
+   "g4": {
+    "exit": 0,
+    "sha": "273224c3eb068ad005ed747f1e60354ba4be6ebbe5b4d754aa9f1fe260f9ec45",
+    "strict": "DIFF 1"
+   },
+   "merge": {
+    "exit": 0,
+    "sha": "273224c3eb068ad005ed747f1e60354ba4be6ebbe5b4d754aa9f1fe260f9ec45",
+    "strict": "DIFF 1"
+   }
+  }
+ },
+ "totals": {
+  "base": {
+   "cases": 12550,
+   "panics": 0,
+   "strict_match": 11179
+  },
+  "g4": {
+   "cases": 12550,
+   "panics": 0,
+   "strict_match": 11180
+  },
+  "merge": {
+   "cases": 12550,
+   "panics": 0,
+   "strict_match": 11180
+  }
+ }
+}

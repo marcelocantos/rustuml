@@ -1,0 +1,24 @@
+== hook ==
+0	0	ok	both-exit-0	RETURNED	temps_left=[]	fs_changes=['/Users/marcelo/Library/Caches/rustuml-opus-g7-recheck3/hook/mm/reference-env/__pycache__', '/Users/marcelo/Library/Caches/rustuml-opus-g7-recheck3/hook/mm/reference-env/__pycache__/reference_env_gate.cpython-315.pyc', '/Users/marcelo/Library/Caches/rustuml-opus-g7-recheck3/hook/mm/reference-env']
+1	1	ok	check-exit-1 (harfbuzz hash moved)	SYSTEMEXIT 'reference census check exited 1; only exit 0 passes'	temps_left=[]	fs_changes=[]
+1	1	ok	check-exit-2 (scalar dash)	SYSTEMEXIT 'reference census check exited 2; only exit 0 passes'	temps_left=[]	fs_changes=[]
+1	1	ok	check-exit-2 (scalar blank both sides impossible live; committed blank)	SYSTEMEXIT 'reference census check exited 2; only exit 0 passes'	temps_left=[]	fs_changes=[]
+1	1	ok	record-exit-1 (JVM stub exits 1)	SYSTEMEXIT 'reference census record exited 1'	temps_left=[]	fs_changes=[]
+1	1	ok	check-exit-1 (committed has extra font row)	SYSTEMEXIT 'reference census check exited 1; only exit 0 passes'	temps_left=[]	fs_changes=[]
+1	1	ok	missing-installed-census	SYSTEMEXIT '/Users/marcelo/Library/Caches/rustuml-opus-g7-recheck3/hook/mm/reference-env is missing census.txt or reference_env_census.py'
+1	1	ok	missing-scratch	SYSTEMEXIT '/Users/marcelo/Library/Caches/rustuml-opus-g7-recheck3/hook/mm/scratch does not exist; the gate does not create it'	created=False
+1	1	ok	symlinked-scratch	SYSTEMEXIT 'reference census record exited 1'	left_in_target=[]
+1	1	ok	scratch-is-file	SYSTEMEXIT '/Users/marcelo/Library/Caches/rustuml-opus-g7-recheck3/hook/mm/scratch does not exist; the gate does not create it'
+== documented seq_capture.py paste ==
+pasted snippet:
+    import importlib.util
+    _gate_path = Path('/Users/marcelo/rustuml-reference/reference-env/reference_env_gate.py')
+    _spec = importlib.util.spec_from_file_location('reference_env_gate', _gate_path)
+    _gate = importlib.util.module_from_spec(_spec)
+    _spec.loader.exec_module(_gate)
+    _gate.require_reference_env()
+
+1	gate-exit-1	new_worker_ran=False	ok	reference census check exited 1; only exit 0 passes
+1	gate-exit-2	new_worker_ran=False	ok	reference census check exited 2; only exit 0 passes
+1	gate-record-1	new_worker_ran=False	ok	reference census record exited 1
+1	gate-pass	new_worker_ran=True	ok	FileNotFoundError: [Errno 2] No such file or directory: '/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/release'

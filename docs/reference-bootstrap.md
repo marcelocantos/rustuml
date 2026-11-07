@@ -154,6 +154,109 @@ is not a replacement for the preserved date goldens.
 hash, executable paths, environment, stdlib evidence and smoke result. This is
 machine-local scratch evidence, not a portable checkout or a checker verdict.
 
+## Monkey Man reference environment (owner decision, 6 November 2026)
+
+The owner chose to pin and gate, not to make the oracle hermetic. The
+Java oracle is Monkey Man as it stands: macOS 27.2 build 26B123, Homebrew
+OpenJDK 21.0.5 at `/opt/homebrew/Cellar/openjdk@21/21.0.5`, the system
+fonts the reference JVM's cascade reaches, downloaded MobileAsset fonts
+(PingFang, LiHei Pro) and the user fonts in `~/Library/Fonts` (Hack,
+MesloLGS NF, JetBrains Mono Nerd Font, and the rest of that directory).
+The cascade faces are the `#slot` paths in
+`tools/font-chain-reference/`, not a hand-typed list. Do not `brew upgrade`
+on Monkey Man. A Homebrew upgrade changes the oracle.
+
+Shaping libraries the reference JVM loads, confirmed by
+`DYLD_PRINT_LIBRARIES` and by `lsof`/`vmmap` on a live reference JVM
+(relay `shared-svg-round6-monkeyman-hb`, SHA256SUMS
+`c5d00e3cd71cd98cfb546c940ac747ef1a9281fc33cf0a10d1c010a63314adc8`):
+
+| Piece | Path | SHA256 |
+| --- | --- | --- |
+| HarfBuzz 15.0.0_1 | `/opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib` | `b04ab259a343ba51a50db8d1df637160f31d342a66c4192e18dba63ea42ed04a` |
+| FreeType 2.15.0 | `/opt/homebrew/Cellar/freetype/2.15.0/lib/libfreetype.6.dylib` | `1bf70387c4ef59accba8116c847cb87d2018ded2672db551686b95dce4c5d931` |
+| `libfontmanager.dylib` | the OpenJDK 21.0.5 copy | `80488062f9ab885f1860b0e3b8fc3d13030a0a05765c06d12301668d7404812c` |
+| `java` | `.../openjdk.jdk/Contents/Home/bin/java` | `ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9` |
+
+`/opt/homebrew/opt/harfbuzz` has pointed at `../Cellar/harfbuzz/15.0.0_1`
+since 2026-10-28. Kegs 10.1.0 and 13.2.1 are still installed and are not
+what the JVM loads. The dylib's current version is 61500.0.0. Link-time,
+`libfontmanager` asks for HarfBuzz compatibility 61001.0.0 and FreeType
+compatibility 27.0.0 / current 27.2.0. Relay batches captured before
+2026-10-28 were shaped by an older HarfBuzz and are not this oracle.
+
+The census is `tools/font-chain-reference/monkeyman-reference-env/census.txt`,
+sha256 `284d5ef4cf8a43abb92fab2436d7348b2ab00f64d05dbf5679f430c442575fe9`.
+It is the 2026-11-07 live record from
+`/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g7-census4/`,
+byte for byte. It replaces
+`3e5d4793194c9f385b9bd3500a06789614ab4d705d7656c774f32df57322b1b2`
+from `grok-g7-census3`, which had no cascade `font` rows. That record
+replaced the 2026-11-06 record
+`868a9072ecffd939c07e174b7c606679b5ac379a5ae7c1d48f2cf25336458ae6`
+from `grok-g7-census2`, whose Arial Unicode row was still lstat size
+plus `link`. An earlier record the same day
+(`5a60468e222a9ae22f7dc26ba906f0cf7817b8991123f6c3f79f0c4d88809cda`)
+listed catalog `.xml` and `Info.plist` files as asset fonts and left 59
+MobileAsset font-file hashes as `-`. An asset font is a `.ttf`, `.otf`,
+`.ttc` or `.dfont`. `record` and `check` share that rule, and this census
+hashes every asset font file, every user font, every cascade face
+named by a stored `#slot` line, and the FreeType dylib.
+`scripts/reference_env_census.py check` is the drift gate. Only exit 0
+passes. Exit 1 means a pinned fact moved. Exit 2 means a hash or a
+scalar is still blank or `-`, and that is a failed gate. A user-font
+symlink row pins the target file's size, the target file's SHA256, the
+link path and the resolved target path. `FONT_FILES` stays the modelled
+faces opened by absolute path. `CASCADE_FONT_FILES` is the other `#slot`
+paths, derived from the font-chain TSVs. Round-9 names 29 of them,
+including Apple Color Emoji. Round-6 names those and 12 more. A face
+with no `#slot` line stays outside the gate. This census pins those
+41 faces, including Apple Color Emoji at sha256
+`12bc8221a908c5bcf05f0fce940d3c3f6e9d09d8d806ffe31a969b4ac9be8f9e`.
+The Arial Unicode row pins target size 23278008,
+sha256
+`876af2cd4854644e7f3e7feb2f688997fdb3343c6df6693611209c9dfb47ccec`,
+the link path, and
+`/System/Library/Fonts/Supplemental/Arial Unicode.ttf`. Round-6
+`user-font-census.txt` still records that link's lstat size 52. It is
+not re-extracted: `ls` does not hash the target, and the census row is
+the fact the gate checks.
+
+The gate is armed by the parent's relay install, not by merging this
+checkout. This checkout does not install the files. After a re-review
+accepts the packet, the parent copies these three files onto Monkey Man:
+
+- `/Users/marcelo/rustuml-reference/reference-env/reference_env_census.py`
+- `/Users/marcelo/rustuml-reference/reference-env/reference_env_gate.py`
+- `/Users/marcelo/rustuml-reference/reference-env/census.txt`
+
+`/Users/marcelo/rustuml-reference/scratch` must already exist. In
+`seq_capture.py`, immediately before `new-worker`, the parent inserts
+the `require_reference_env()` call from `scripts/reference_env_gate.py`.
+Only exit 0 passes. This checkout does not edit the relay tools. The font-chain tests fail when
+this census and the stored per-face extractions disagree. The round-6, round-8, round-9 and round-11
+captures remain the stored extractions (font-chain SHA256SUMS
+`1c345cc384f0edb939dac3b87cf135db67ed7b6f8ffb76b586a8f9fd8480a6ed`,
+styles `ad8e6566043819726c0146b76261b2aea3710eb83372d59547b46c3132f3ed55`,
+ascii `f5def121617419f6d55ed7361fdba5b1d0e0b90433766f1e662a0c81586573d1`).
+
+## PDF exporter (owner decision, 6 November 2026)
+
+The owner chose to keep Rust's PDF exporter as a deliberate extension
+with its own oracle. Pinned Java's PDF route is commented out in
+`TitledDiagram.java` (the `FileFormat.PDF` branch around line 345), so
+`-tpdf` always throws `UnsupportedOperationException` from
+`TextBlockExporter12026.createUGraphic`. Parity tiers never count PDF
+cases as Java-backed. They render SVG only. `golden_formats` is a
+feature-gated smoke test and does not compare PDF bytes to Java.
+
+Rust's oracle is `cargo test -p rustuml --test pdf_contract`. It checks
+the PDF header, the xref table, a single page, and byte-identical output
+across two runs of a few diagrams. It does not invoke Java. PDF bytes
+come from a patched svg2pdf 0.13.0 (`third_party/svg2pdf`): resource
+dictionaries and font objects are written in a stable order, because
+the upstream `HashMap` iteration changes from process to process.
+
 ## Standing gates
 
 ### Campaign reference execution on Monkey Man
@@ -202,7 +305,8 @@ readiness record are in the remote operational directory's `README.md` and
 `readiness.json`.
 
 The existing remote runtime is Homebrew OpenJDK 21.0.5 and Graphviz 12.2.0 on
-macOS arm64, differing from the origin versions above. No installs or global
+macOS arm64, differing from the origin versions above. The pinned font and
+shaping oracle for that host is the Monkey Man environment section above. No installs or global
 changes were needed. Seven supplied source/reference pairs passed strict parsed
 XML equality, including both sequence font controls, a nested sequence group,
 class/container layout and the three raw-reader historical counterparts. This

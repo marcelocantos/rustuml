@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Menlo
+skinparam ClassAttributeFontStyle bold
+skinparam defaultFontSize 14
+class Cloud
+Cloud : {abstract} ☁
+@enduml

@@ -1,0 +1,1 @@
+local cascade paths over 25 reachable faces: 50; not in census: ['/System/Library/PrivateFrameworks/FontServices.framework/Resources/Reserved/PingFangUI.ttc']

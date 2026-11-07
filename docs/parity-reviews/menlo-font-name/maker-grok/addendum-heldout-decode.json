@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "mechanism": "menlo-font-name",
+  "maker": "maker-grok",
+  "prior_addendum": "addendum-font-decode-correction.json",
+  "results_sha256": "b333ba69cb4b54d4c214da93b6ee4a81b322e216dfb8d5075c80ce5a64930c94",
+  "relay": "grok-g3-cx",
+  "compare": "compare_svg_strict, whole SVG, tip 5ca278f72 11/14, merge base 0cd7743aa 7/14. Predictions were not edited.",
+  "decision": "residue",
+  "gains": [
+    "hn_seq_honours_note",
+    "hn_seq_ignores_sequencefontname",
+    "hn_skin_monospace_word",
+    "hn_skin_monospaced_word"
+  ],
+  "tip_fail_both_trees": [
+    {
+      "case": "hn_creole_faces",
+      "diff": "font-family expected sans-serif actual SansSerif. textLength 52.0967, x and y match.",
+      "proposal": "SVG font-family applies UFontImpl.getFamily's (?i)sansserif replacement. Not filed on this branch."
+    },
+    {
+      "case": "hn_skin_quoted_pad",
+      "diff": "font-family expected ' Menlo ' actual 'Menlo'. Widths and positions match.",
+      "target": "T14.94"
+    },
+    {
+      "case": "hn_skin_quoted_single",
+      "diff": "family 'Courier' matches. Java viewBox 0 0 86 84, title 34.6104, member 'Kelp wy' 52.3291. Rust viewBox 0 0 91 84, title 33.7148, member Kelp NBSP wy 59.001.",
+      "proposal": "A quoted default font name that is not a real face measures as the default face. Not filed on this branch."
+    }
+  ],
+  "why": "Each tip miss is already a miss on the merge base, so none is a regression of the font-decode correction. hn_creole_faces is UFontImpl.getFamily for SVG: replaceAll(\"(?i)sansserif\", \"sans-serif\") at UFontImpl.java 118-122. font_family_attribute rewrites only equalsIgnoreCase monospaced. hn_skin_quoted_pad is the inner-space trim already named by T14.94. hn_skin_quoted_single keeps the quoted family in the SVG, then is_monospace_font strips the quotes and measures Courier as the Menlo cell with a NBSP. Java's member width and baseline match the default-face row. No width was fitted and no production file changed, so the zero-loss attestation at 21685411a still covers the renderer."
+}

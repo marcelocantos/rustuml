@@ -1,0 +1,13 @@
+Courier	Courier	/System/Library/Fonts/Courier.ttc
+Times	Times-Roman	/System/Library/Fonts/Times.ttc
+Courier-Bold	Courier-Bold	/System/Library/Fonts/Courier.ttc
+Times-Roman	Times-Roman	/System/Library/Fonts/Times.ttc
+Times-Bold	Times-Bold	/System/Library/Fonts/Times.ttc
+Courier New	CourierNewPSMT	/System/Library/Fonts/Supplemental/Courier New.ttf
+Helvetica	Helvetica	/System/Library/Fonts/Helvetica.ttc
+Monaco	Monaco	/System/Library/Fonts/Monaco.ttf
+Lucida Grande	LucidaGrande	/System/Library/Fonts/LucidaGrande.ttc
+Menlo	Menlo-Regular	/System/Library/Fonts/Menlo.ttc
+Verdana	Verdana	/System/Library/Fonts/Supplemental/Verdana.ttf
+Arial	ArialMT	/System/Library/Fonts/Supplemental/Arial.ttf
+Times New Roman	TimesNewRomanPSMT	/System/Library/Fonts/Supplemental/Times New Roman.ttf

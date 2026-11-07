@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "mechanism": "menlo-bold-italic-fallback",
+  "maker": "maker-grok",
+  "supersedes": null,
+  "prior_addendum": "addendum-jrs-face.json",
+  "results_sha256": "292acc63242f916a470e0a704c2cf6da0916b83d64abfde33a538820524d982c",
+  "relay": "grok-g3-menlo-bi-heldout2",
+  "compare": "compare_svg_strict, tip 21685411a and merge base 0cd7743aa, both 13/14",
+  "only_mismatch": "g3_bi2_emoji_12 member textLength expected 16 actual 16.2857. Family, size, italic, weight 700, x and y match.",
+  "decision": "residue",
+  "why": "The JRS probe measured 14 pt only. AppleColorEmoji is an sbix bitmap, so the 12 pt advance is not units/upem times size. The prediction 16.2857 is that scale and is not adjusted. No constant is fitted to 16.",
+  "claim": "The fallback table is the 14 pt extraction. Outline faces may scale with the font matrix. Apple Color Emoji at a size other than 14 pt is outside the claim.",
+  "not_used": "COLOR_EMOJI_STRIKE_SCALE in non_ascii_widths.rs is the SansSerif path. It was not applied to this table and is not treated as a measurement of the Menlo Bold Italic fallback."
+}

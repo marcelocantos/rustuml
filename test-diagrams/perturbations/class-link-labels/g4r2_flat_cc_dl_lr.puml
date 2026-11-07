@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+class Ledger
+class Hopper
+Hopper }o--|| Ledger : hauls\ncrates
+@enduml
