@@ -1,0 +1,149 @@
+{
+ "pairs": {
+  "mismatch->mismatch": 1063,
+  "match->match": 2645,
+  "nonpositive-accepted->nonpositive-accepted": 66,
+  "valid-error->valid-error": 17,
+  "nonpositive-rejected->nonpositive-rejected": 368,
+  "nonpositive-accepted->nonpositive-rejected": 2,
+  "mismatch->match": 13
+ },
+ "changes": [
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_28_plain.puml",
+   "cohort": "checker509",
+   "name": "bd087_reg_28_plain",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_28_unusual.puml",
+   "cohort": "checker509",
+   "name": "bd087_reg_28_unusual",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_accent.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_accent",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_nbsp.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_nbsp",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_astral.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_astral",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_tab.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_tab",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_cr.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_cr",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-accepted",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_amp.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_amp",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_lt.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_lt",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_gt.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_gt",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_quot.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_quot",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_apos.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_apos",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_45.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_tooltip_45",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_48.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_tooltip_48",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_51.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_tooltip_51",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_54.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_tooltip_54",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_57.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_tooltip_57",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  }
+ ]
+}

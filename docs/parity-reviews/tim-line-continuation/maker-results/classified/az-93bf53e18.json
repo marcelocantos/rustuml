@@ -1,0 +1,46 @@
+{
+ "changes": [
+  {
+   "name": "mk4b_theme_trailing_comment_seq",
+   "cohort": "AZ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4b_theme_leading_comment_component",
+   "cohort": "AZ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4b_theme_triple_word_state",
+   "cohort": "AZ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4b_theme_comment_before_theme_class",
+   "cohort": "AZ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  }
+ ],
+ "losses": [],
+ "disagreements": []
+}

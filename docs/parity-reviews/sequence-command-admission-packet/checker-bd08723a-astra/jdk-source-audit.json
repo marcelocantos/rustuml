@@ -1,0 +1,32 @@
+[
+  {
+    "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/ToStream.java",
+    "file": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/jdk-source/ToStream.java",
+    "sha256": "5579427642883c4f0666e96eb66197c66bbe9ec109eb870ba9b4f02597262ca2",
+    "hash_equal": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/ToXMLStream.java",
+    "file": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/jdk-source/ToXMLStream.java",
+    "sha256": "06e8db7295be573a20c27ec21a5c0d3a8832c745ece706880238ed62307f2323",
+    "hash_equal": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/CharInfo.java",
+    "file": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/jdk-source/CharInfo.java",
+    "sha256": "8743d68a994e3c10beb75c08a8a861cb04f1e16fddd18d2fc997a3412354e868",
+    "hash_equal": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/Encodings.java",
+    "file": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/jdk-source/Encodings.java",
+    "sha256": "3d219f0fe726939f26b5ad4a4c7fd24d22b257946065a462244f163d48c0dfa1",
+    "hash_equal": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/XMLEntities.properties",
+    "file": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/jdk-source/XMLEntities.properties",
+    "sha256": "5c210d775b6f68feae7b3c83b2de1e33ce55c2af02b729111a56d2b59735e105",
+    "hash_equal": true
+  }
+]

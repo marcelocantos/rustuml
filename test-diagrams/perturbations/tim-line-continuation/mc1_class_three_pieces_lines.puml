@@ -1,0 +1,8 @@
+@startuml
+class Quill \
+<<pen>> \
+#lightblue
+class Ink
+class Blotter
+Quill --> Ink
+@enduml

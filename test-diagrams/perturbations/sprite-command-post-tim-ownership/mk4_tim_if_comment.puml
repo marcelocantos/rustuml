@@ -1,0 +1,6 @@
+@startuml
+!$on = 1
+!if $on == 1 /' c '/
+class Fir
+!endif
+@enduml

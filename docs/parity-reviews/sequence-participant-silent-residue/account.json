@@ -1,0 +1,23 @@
+{
+ "schema_version": 1,
+ "mechanism": "sequence-participant-silent-residue",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "status": "guard-schema projection of maker-results-round3/account.json (round-3 account of record, committed before the round-3 drafts); round-2 account maker-results/account.json; independent review required",
+ "java_locations": [
+  "net.sourceforge.plantuml.sequencediagram.command.CommandParticipant#executeArg",
+  "net.sourceforge.plantuml.url.UrlBuilder#getUrl (QUOTED, ONLY_TOOLTIP, ONLY_TOOLTIP_AND_LABEL, LINK_TOOLTIP_NOLABEL, LINK_WITH_OPTIONAL_TOOLTIP_WITH_OPTIONAL_LABEL; UrlMode.STRICT) / Url#<init>",
+  "net.sourceforge.plantuml.sequencediagram.SequenceDiagram#putParticipantInLast / #addWithOrder / #getOrCreateParticipant / #createNewParticipant"
+ ],
+ "rust_locations": [
+  "crates/rustuml-parser/src/parse/mod.rs (new url_builder_url: UrlBuilder#getUrl STRICT alternatives)",
+  "crates/rustuml-parser/src/parse/sequence.rs::try_participant_decl_in_command (participant URL and tooltip from url_builder_url)",
+  "crates/rustuml-parser/src/parse/sequence.rs::SeqParser (Java participantsList order and per-participant Java order; report_put_participant_in_last compares the list position before and after addWithOrder)"
+ ],
+ "invariant": "The participant anchor title is Url#getTooltip exactly as UrlBuilder#getUrl produces it; a re-declaration warns only when Java's participantsList position or box actually changes.",
+ "causal_divergence": "extract_link_tooltip took the first {...} anywhere in the link and trimmed it (and dropped an empty one); report_put_participant_in_last ordered by (order or index, index), which is Java's order only when no explicit order exists.",
+ "planned_change": "Port UrlBuilder#getUrl's five STRICT alternatives with Url's quote stripping and tooltip default for participant links (class keeps its existing tooltip reader, out of scope); keep a Java participantsList simulation (addWithOrder with Java order 0 by default) in the sequence parser and compare positions.",
+ "perturbation_axes": [
+  "tooltip shapes: label owning {x}, spaced, empty, nested braces, tooltip-only [[{x}]] and [[{x} label]], quoted URL with tooltip and label, legacy and teoz",
+  "re-declaration with explicit orders (stable, lower, higher, negative), implicit participants, boxes"
+ ]
+}

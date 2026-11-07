@@ -1,0 +1,86 @@
+{
+ "changes": [
+  {
+   "name": "ck3_svg_end_inner_comment_state",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": "warning: state sprite command CommandSpriteSvgMultiline is recognized; sprite materialization remains unsupported at line 1: sprite $box <svg width=\"4\" height=\"4\">\n"
+  },
+  {
+   "name": "ck3_pixel_end_inner_comment_class",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_pixel_end_inner_comment_seq",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 1: sprite $dot [2x2/16] {\n"
+  },
+  {
+   "name": "ck3_svg_end_inner_comment_nospace_component",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: component sprite command CommandSpriteSvgMultiline is recognized; sprite materialization remains unsupported at line 1: sprite $box <svg width=\"4\" height=\"4\">\n"
+  },
+  {
+   "name": "ck3_svg_end_inner_comment_teoz",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 2: sprite $box <svg width=\"4\" height=\"4\">\n"
+  },
+  {
+   "name": "ck3_svg_inline_inner_comment_object",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: object sprite command CommandSpriteSvg is recognized; sprite materialization remains unsupported at line 1: sprite $box <svg width=\"4\" height=\"4\"><rect width=\"4\" height=\"4\" fill=\"red\"/></svg>\n"
+  },
+  {
+   "name": "ck3_pixel_start_inner_comment_deployment",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_svg_end_inner_comment_usecase",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 1: sprite $box <svg width=\"4\" height=\"4\">\n"
+  }
+ ],
+ "losses": [],
+ "disagreements": []
+}

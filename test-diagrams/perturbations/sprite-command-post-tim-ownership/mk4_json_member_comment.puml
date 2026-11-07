@@ -1,0 +1,6 @@
+@startjson
+{
+"a": 1, /' c '/
+"b": [1, 2]
+}
+@endjson

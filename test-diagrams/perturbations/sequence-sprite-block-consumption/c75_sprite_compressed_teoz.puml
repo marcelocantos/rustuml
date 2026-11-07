@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+sprite $needle [3x2/16z] 0000
+Spruce --> Cedar: packed
+@enduml

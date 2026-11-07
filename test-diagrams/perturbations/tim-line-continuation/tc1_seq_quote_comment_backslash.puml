@@ -1,0 +1,5 @@
+@startuml
+' remark \
+Kea -> Tui : eaten
+Tui -> Kea : kept
+@enduml

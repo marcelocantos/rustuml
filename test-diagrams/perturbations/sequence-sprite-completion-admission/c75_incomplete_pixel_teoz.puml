@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+sprite $needle [3x2/16] {
+F0F
+0F0
+@enduml

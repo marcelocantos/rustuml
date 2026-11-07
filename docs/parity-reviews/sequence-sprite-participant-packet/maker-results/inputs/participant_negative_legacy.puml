@@ -1,0 +1,6 @@
+@startuml
+participant Ridge order -3
+participant Valley order 4
+Ridge -> Valley: survey
+Valley --> Ridge: logged
+@enduml

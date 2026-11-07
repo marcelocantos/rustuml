@@ -1,0 +1,5 @@
+@startuml
+!foreach $x in ["p", "q"]
+/' c '/ A -> B : $x
+!endfor
+@enduml

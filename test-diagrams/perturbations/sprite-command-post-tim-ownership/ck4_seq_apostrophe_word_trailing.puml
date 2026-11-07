@@ -1,0 +1,3 @@
+@startuml
+A -> B : don't /' c '/
+@enduml

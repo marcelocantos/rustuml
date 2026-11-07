@@ -1,0 +1,249 @@
+[
+ {
+  "name": "r2_seq_tab_end_after_backslash",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "sequence",
+   "tab-indented @enduml after backslash",
+   "Pipe column-0 end"
+  ],
+  "java_prediction": "message 'late \\t@enduml' at line 1"
+ },
+ {
+  "name": "r2_seq_backslash_end_after_backslash",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "sequence",
+   "\\enduml after backslash",
+   "Pipe column-0 end"
+  ],
+  "java_prediction": "message 'late \\enduml' at line 1"
+ },
+ {
+  "name": "r2_class_indented_end_after_backslash",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "class",
+   "indented @enduml after backslash",
+   "link label"
+  ],
+  "java_prediction": "link label 'grows    @enduml'"
+ },
+ {
+  "name": "r2_mindmap_indented_end_after_backslash",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "mindmap",
+   "indented @endmindmap after backslash"
+  ],
+  "java_prediction": "node 'Reed   @endmindmap'"
+ },
+ {
+  "name": "r2_seq_indented_end_then_more",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "sequence",
+   "content after an indented end",
+   "BlockUmlBuilder merged-line directive test"
+  ],
+  "java_prediction": "messages 'one   @enduml' (line 1) and 'two' (line 3)"
+ },
+ {
+  "name": "r2_seq_col0_end_swallowed_then_indented",
+  "intended_valid": false,
+  "crlf": false,
+  "axes": [
+   "sequence",
+   "column-0 end swallowed",
+   "Pipe stops after its end"
+  ],
+  "java_prediction": "No valid @start/@end found (exit 100)"
+ },
+ {
+  "name": "r2_seq_named_start_indented_end",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "sequence",
+   "named start: expectedEnd @end",
+   "indented end"
+  ],
+  "java_prediction": "message 'one   @enduml' at line 1"
+ },
+ {
+  "name": "r2_seq_indented_start_and_end",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "sequence",
+   "indented start: Pipe START_MARK_NOT_FOUND",
+   "indented end"
+  ],
+  "java_prediction": "message 'one   @enduml'; data-source-line 2 (Pipe prepends @startuml; Rust says 1: declared residue)"
+ },
+ {
+  "name": "r2_state_indented_end_after_comment",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "state",
+   "ReadFilterQuoteComment skip",
+   "indented end"
+  ],
+  "java_prediction": "transition label 'rest   @enduml'"
+ },
+ {
+  "name": "r2_seq_indented_end_crlf",
+  "intended_valid": true,
+  "crlf": true,
+  "axes": [
+   "sequence",
+   "indented end",
+   "CRLF"
+  ],
+  "java_prediction": "message 'late   @enduml' at line 1"
+ },
+ {
+  "name": "r2_seq_include_tail_then_blank",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "sequence",
+   "!include tail",
+   "blank TIM line"
+  ],
+  "java_prediction": "message 'drift ' at line 2, 'after' at line 3"
+ },
+ {
+  "name": "r2_seq_include_tail_then_comment",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "sequence",
+   "!include tail",
+   "' comment is no TIM line"
+  ],
+  "java_prediction": "message 'drift Egret -> Heron : after' at line 3"
+ },
+ {
+  "name": "r2_seq_include_tail_then_if",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "sequence",
+   "!include tail",
+   "!if block"
+  ],
+  "java_prediction": "message 'drift Egret -> Heron : inside' at line 4"
+ },
+ {
+  "name": "r2_seq_include_tail_then_include",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "sequence",
+   "!include tail",
+   "second include"
+  ],
+  "java_prediction": "message 'drift Egret -> Heron : plain' at r2_plain.iuml's location 0 (T14.53), 'main' at line 3"
+ },
+ {
+  "name": "r2_seq_include_two_tails_then_define",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "sequence",
+   "two included tails",
+   "!define"
+  ],
+  "java_prediction": "message 'one and Egret -> Heron : main' at line 3"
+ },
+ {
+  "name": "r2_class_include_link_tail_before_end",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "class",
+   "!include tail before @enduml",
+   "link label"
+  ],
+  "java_prediction": "link label 'tail @enduml' at line 4"
+ },
+ {
+  "name": "r2_seq_include_tail_no_end",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "sequence",
+   "!include tail",
+   "no end: Pipe appends @enduml"
+  ],
+  "java_prediction": "messages 'head' (1), 'drift @enduml' (3)"
+ },
+ {
+  "name": "r2_component_include_tail_then_variable",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "component",
+   "!include tail",
+   "!$ assignment"
+  ],
+  "java_prediction": "link label 'wire [Rowan] --> [Ash] : n3' at line 3 (Rust routes the joined line to sequence: T14.21)"
+ },
+ {
+  "name": "r2_ditaa_continued_row",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "ditaa",
+   "@startditaa: join off"
+  ],
+  "java_prediction": "4 art rows; PNG differs from r2_ditaa_continued_row_joined"
+ },
+ {
+  "name": "r2_ditaa_continued_row_joined",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "ditaa",
+   "control: continuation applied by hand"
+  ],
+  "java_prediction": "3 art rows"
+ },
+ {
+  "name": "r2_uml_ditaa_continued_row",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "ditaa",
+   "@startuml + ditaa: join on"
+  ],
+  "java_prediction": "PNG byte-identical to r2_uml_ditaa_continued_row_joined"
+ },
+ {
+  "name": "r2_uml_ditaa_continued_row_joined",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "ditaa",
+   "control: continuation applied by hand"
+  ],
+  "java_prediction": "3 art rows"
+ },
+ {
+  "name": "r2_ditaa_backslash_before_end",
+  "intended_valid": true,
+  "crlf": false,
+  "axes": [
+   "ditaa",
+   "continued last row before @endditaa"
+  ],
+  "java_prediction": "renders (the end is not swallowed)"
+ }
+]

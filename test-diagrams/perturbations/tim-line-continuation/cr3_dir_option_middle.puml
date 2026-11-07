@@ -1,0 +1,5 @@
+@startuml
+Kea -> Tui : x %chr(92)
+!option language "en"
+Tui -> Kea : y
+@enduml

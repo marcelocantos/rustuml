@@ -1,0 +1,105 @@
+{
+ "label": "ax",
+ "categories": {
+  "ast: exit 1->0 (svg changed)": 8,
+  "yaml: exit 1->0 (svg changed)": 8,
+  "ascii: exit 1->0 (svg changed)": 8,
+  "ast: add[\"@startuml\\nsprite $dot [NxN/N] {\\nFN \\nNF\\n}\\nAlder -> Birch : <$dot>\\n@enduml\\n\", | \"FN\", | height: N,] rem[\"@startuml\\nsprite $dot [NxN/N] {\\nFN /' row one '/\\nNF\\n}\\nAlder -> Birch : <$dot>\\n@enduml\\n\", | height: N,] (svg same)": 1,
+  "yaml: add[- FN | height: N | source: \"@startuml\\nsprite $dot [NxN/N] {\\nFN \\nNF\\n}\\nAlder -> Birch : <$dot>\\n@enduml\\n\"] rem[@enduml | @startuml | Alder -> Birch : <$dot> | FN /' row one '/ | NF | height: N | source: | | sprite $dot [NxN/N] { | }] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\" fill=\\\"red\\\"/> \\n</svg>\\nAlder ->] rem[\"@startuml\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\" fill=\\\"red\\\"/> /' fill '/\\n</svg>] (svg same)": 1,
+  "yaml: add[source: \"@startuml\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\" fill=\\\"red\\\"/> \\n</svg>\\n] rem[</svg> | <rect width=\"N\" height=\"N\" fill=\"red\"/> /' fill '/ | @enduml | @startuml | Alder -> Birch : <$box> | source: | | sprite $box <svg width=\"N\" height=\"N\">] (svg same)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\"> \\n<rect width=\\\"N\\\" height=\\\"N\\\" fill=\\\"red\\\"/] rem[\"@startuml\\n!pragma teoz true\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\"> /' start '/\\n<rect width=\\\"N\\\" height=\\\"N\\\" fi] (svg same)": 1,
+  "yaml: add[source: \"@startuml\\n!pragma teoz true\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\"> \\n<rect width=\\\"N\\\" height=\\\"N\\\" fill=] rem[!pragma teoz true | </svg> | <rect width=\"N\" height=\"N\" fill=\"red\"/> | @enduml | @startuml | Alder -> Birch : <$box> | source: | | sprite $box <svg width=\"N\" height=\"N\"> /' start '/] (svg same)": 1
+ },
+ "examples": {
+  "ast: add[\"@startuml\\nsprite $dot [NxN/N] {\\nFN \\nNF\\n}\\nAlder -> Birch : <$dot>\\n@enduml\\n\", | \"FN\", | height: N,] rem[\"@startuml\\nsprite $dot [NxN/N] {\\nFN /' row one '/\\nNF\\n}\\nAlder -> Birch : <$dot>\\n@enduml\\n\", | height: N,] (svg same)": [
+   "ck3_pixel_body_inner_comment_seq.puml"
+  ],
+  "yaml: add[- FN | height: N | source: \"@startuml\\nsprite $dot [NxN/N] {\\nFN \\nNF\\n}\\nAlder -> Birch : <$dot>\\n@enduml\\n\"] rem[@enduml | @startuml | Alder -> Birch : <$dot> | FN /' row one '/ | NF | height: N | source: | | sprite $dot [NxN/N] { | }] (svg same)": [
+   "ck3_pixel_body_inner_comment_seq.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\" fill=\\\"red\\\"/> \\n</svg>\\nAlder ->] rem[\"@startuml\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\" fill=\\\"red\\\"/> /' fill '/\\n</svg>] (svg same)": [
+   "ck3_svg_body_inner_comment_seq.puml"
+  ],
+  "yaml: add[source: \"@startuml\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\" fill=\\\"red\\\"/> \\n</svg>\\n] rem[</svg> | <rect width=\"N\" height=\"N\" fill=\"red\"/> /' fill '/ | @enduml | @startuml | Alder -> Birch : <$box> | source: | | sprite $box <svg width=\"N\" height=\"N\">] (svg same)": [
+   "ck3_svg_body_inner_comment_seq.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\"> \\n<rect width=\\\"N\\\" height=\\\"N\\\" fill=\\\"red\\\"/] rem[\"@startuml\\n!pragma teoz true\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\"> /' start '/\\n<rect width=\\\"N\\\" height=\\\"N\\\" fi] (svg same)": [
+   "ck3_svg_start_inner_comment_teoz.puml"
+  ],
+  "yaml: add[source: \"@startuml\\n!pragma teoz true\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\"> \\n<rect width=\\\"N\\\" height=\\\"N\\\" fill=] rem[!pragma teoz true | </svg> | <rect width=\"N\" height=\"N\" fill=\"red\"/> | @enduml | @startuml | Alder -> Birch : <$box> | source: | | sprite $box <svg width=\"N\" height=\"N\"> /' start '/] (svg same)": [
+   "ck3_svg_start_inner_comment_teoz.puml"
+  ],
+  "ast: exit 1->0 (svg changed)": [
+   "ck3_svg_end_inner_comment_state.puml",
+   "ck3_pixel_end_inner_comment_class.puml",
+   "ck3_pixel_end_inner_comment_seq.puml",
+   "ck3_svg_end_inner_comment_nospace_component.puml",
+   "ck3_svg_end_inner_comment_teoz.puml"
+  ],
+  "yaml: exit 1->0 (svg changed)": [
+   "ck3_svg_end_inner_comment_state.puml",
+   "ck3_pixel_end_inner_comment_class.puml",
+   "ck3_pixel_end_inner_comment_seq.puml",
+   "ck3_svg_end_inner_comment_nospace_component.puml",
+   "ck3_svg_end_inner_comment_teoz.puml"
+  ],
+  "ascii: exit 1->0 (svg changed)": [
+   "ck3_svg_end_inner_comment_state.puml",
+   "ck3_pixel_end_inner_comment_class.puml",
+   "ck3_pixel_end_inner_comment_seq.puml",
+   "ck3_svg_end_inner_comment_nospace_component.puml",
+   "ck3_svg_end_inner_comment_teoz.puml"
+  ]
+ },
+ "all": {
+  "ast: add[\"@startuml\\nsprite $dot [NxN/N] {\\nFN \\nNF\\n}\\nAlder -> Birch : <$dot>\\n@enduml\\n\", | \"FN\", | height: N,] rem[\"@startuml\\nsprite $dot [NxN/N] {\\nFN /' row one '/\\nNF\\n}\\nAlder -> Birch : <$dot>\\n@enduml\\n\", | height: N,] (svg same)": [
+   "ck3_pixel_body_inner_comment_seq.puml"
+  ],
+  "yaml: add[- FN | height: N | source: \"@startuml\\nsprite $dot [NxN/N] {\\nFN \\nNF\\n}\\nAlder -> Birch : <$dot>\\n@enduml\\n\"] rem[@enduml | @startuml | Alder -> Birch : <$dot> | FN /' row one '/ | NF | height: N | source: | | sprite $dot [NxN/N] { | }] (svg same)": [
+   "ck3_pixel_body_inner_comment_seq.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\" fill=\\\"red\\\"/> \\n</svg>\\nAlder ->] rem[\"@startuml\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\" fill=\\\"red\\\"/> /' fill '/\\n</svg>] (svg same)": [
+   "ck3_svg_body_inner_comment_seq.puml"
+  ],
+  "yaml: add[source: \"@startuml\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\" fill=\\\"red\\\"/> \\n</svg>\\n] rem[</svg> | <rect width=\"N\" height=\"N\" fill=\"red\"/> /' fill '/ | @enduml | @startuml | Alder -> Birch : <$box> | source: | | sprite $box <svg width=\"N\" height=\"N\">] (svg same)": [
+   "ck3_svg_body_inner_comment_seq.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\"> \\n<rect width=\\\"N\\\" height=\\\"N\\\" fill=\\\"red\\\"/] rem[\"@startuml\\n!pragma teoz true\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\"> /' start '/\\n<rect width=\\\"N\\\" height=\\\"N\\\" fi] (svg same)": [
+   "ck3_svg_start_inner_comment_teoz.puml"
+  ],
+  "yaml: add[source: \"@startuml\\n!pragma teoz true\\nsprite $box <svg width=\\\"N\\\" height=\\\"N\\\"> \\n<rect width=\\\"N\\\" height=\\\"N\\\" fill=] rem[!pragma teoz true | </svg> | <rect width=\"N\" height=\"N\" fill=\"red\"/> | @enduml | @startuml | Alder -> Birch : <$box> | source: | | sprite $box <svg width=\"N\" height=\"N\"> /' start '/] (svg same)": [
+   "ck3_svg_start_inner_comment_teoz.puml"
+  ],
+  "ast: exit 1->0 (svg changed)": [
+   "ck3_svg_end_inner_comment_state.puml",
+   "ck3_pixel_end_inner_comment_class.puml",
+   "ck3_pixel_end_inner_comment_seq.puml",
+   "ck3_svg_end_inner_comment_nospace_component.puml",
+   "ck3_svg_end_inner_comment_teoz.puml",
+   "ck3_svg_inline_inner_comment_object.puml",
+   "ck3_pixel_start_inner_comment_deployment.puml",
+   "ck3_svg_end_inner_comment_usecase.puml"
+  ],
+  "yaml: exit 1->0 (svg changed)": [
+   "ck3_svg_end_inner_comment_state.puml",
+   "ck3_pixel_end_inner_comment_class.puml",
+   "ck3_pixel_end_inner_comment_seq.puml",
+   "ck3_svg_end_inner_comment_nospace_component.puml",
+   "ck3_svg_end_inner_comment_teoz.puml",
+   "ck3_svg_inline_inner_comment_object.puml",
+   "ck3_pixel_start_inner_comment_deployment.puml",
+   "ck3_svg_end_inner_comment_usecase.puml"
+  ],
+  "ascii: exit 1->0 (svg changed)": [
+   "ck3_svg_end_inner_comment_state.puml",
+   "ck3_pixel_end_inner_comment_class.puml",
+   "ck3_pixel_end_inner_comment_seq.puml",
+   "ck3_svg_end_inner_comment_nospace_component.puml",
+   "ck3_svg_end_inner_comment_teoz.puml",
+   "ck3_svg_inline_inner_comment_object.puml",
+   "ck3_pixel_start_inner_comment_deployment.puml",
+   "ck3_svg_end_inner_comment_usecase.puml"
+  ]
+ }
+}

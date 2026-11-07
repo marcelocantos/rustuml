@@ -1,0 +1,5 @@
+@startuml
+sprite $tag <svg width="4" height="4">
+<text> 'hi'</text></svg>
+class Player
+@enduml

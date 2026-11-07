@@ -1,0 +1,4 @@
+@startebnf
+a = "x" , b ; /' c '/
+b = "y" ;
+@endebnf

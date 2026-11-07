@@ -1,0 +1,195 @@
+{
+ "schema_version": 1,
+ "mechanism": "sequence-participant-silent-residue",
+ "account_commit": "9b2e4758fdf25120127b57fc4723baabfb8d2123",
+ "implementation_commit": "607890d0dc89463c048339f4e6abe0a0982fafa5",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "reviewer": {
+  "task_id": "T3 thread t3-336f6851, branch review/sprite-round3-claude",
+  "model": "claude-opus-5-5"
+ },
+ "commands": [
+  "git archive 93bf53e18 / dea00b295 / 607890d0d into ~/Library/Caches/rustuml-sprite-round3-claude-checker/src/<rev>; CARGO_TARGET_DIR=<cache>/target-<rev> cargo build --release -j 6 -p rustuml",
+  "rustc --edition=2024 -O docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs (sha256 d1424469...) --extern rustuml_oracle=<cache>/target-93bf53e18/release/deps/librustuml_oracle-*.rlib (crates/rustuml-oracle unchanged 93bf53e18..607890d0d)",
+  "python3 -I support/prepare.py <cache>/fresh AS=<relay>/sprite-claude-maker-batch2 AQ=<relay>/sprite-claude-batch1 F790=<cache 75ed0e64> F28=<cache 75ed0e64>/supplement; fresh-at AT=<relay>/sprite-ownership-checker-batch1; fresh-av AV=<relay>/sprite-round3-mk3 (results sha256 6de00b2b...); fresh-ax AX=<relay>/sprite-round3-ck3 (results sha256 dcbb6d06...). Validity from raw Java SVG + stderr markers.",
+  "python3 -I support/replay.py LABEL MANIFEST rustuml-<rev> compare_cli OUT CWD for AV 63, AX 77, AT 45, fresh 915 (each from its private cwd), retained 4174 and golden 12550 (repo root); modes -tsvg/--ast/-ttxt/--yaml with -pipe; RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100; PLANTUML_STDLIB pinned; 6 workers",
+  "python3 -I support/{fresh_classify,classify}.py per cohort against both befores (93bf53e18 pre-packet, dea00b295 round 2)",
+  "python3 -I support/rejection_contract.py (unchanged, sha256 09cd998b...) on fresh 313, AT 3, AV 3, AX 8 Java-invalid inputs, before 93bf53e18 / after 607890d0d",
+  "CARGO_TARGET_DIR=<cache>/target-gates in the 607890d0d checkout: cargo test --release -j 6 --workspace --lib; -p rustuml --test pipe_mode; -p rustuml-oracle --test golden_no_oracle / golden_pairs / parity_perturbations / harness_guards --no-fail-fast -- --nocapture; failure names diffed against the 9834a7194 lists in ../checker-claude/gates/ and the dea00b295 lists in ../maker-results-round3/gates/",
+  "python3 -I support/stage_ck3.py <cache>/ck3 (request-ck3/, manifest sha256 e812c0db..., bundle sha256 fbea24b2...); python3 -I support/package_round3.py REPO; parity_perturbations rerun once after registering pairs (gates/parity_perturbations-post.log.gz): harness and CLI agree on all 110 new pairs"
+ ],
+ "findings": [
+  "VERDICT ACCEPT for the participant obligations (cde7b092c UrlBuilder#getUrl, b461817d4 addWithOrder; cd82c28dd clippy only). The sprite mechanism's rejection in this packet is caused only by the preprocessor comment exemption, which this mechanism does not touch.",
+  "Obligation 4 (UrlBuilder#getUrl, UrlMode.STRICT). parse/mod.rs::url_builder_url tries QUOTED, ONLY_TOOLTIP, ONLY_TOOLTIP_AND_LABEL, LINK_TOOLTIP_NOLABEL and LINK_WITH_OPTIONAL_TOOLTIP_WITH_OPTIONAL_LABEL in the pinned UrlBuilder#getUrl order. The patterns are byte-equal to the Java constants under Pattern2's %s/%g expansion; each is applied with captures() to the span from the first '[[' to the first ']]', which equals Matcher#matches except for a span holding a second '[[' (not probed, residue); groups are untrimmed. Url#<init> quote stripping follows StringUtils#eventuallyRemoveStartingAndEndingDoubleQuote(s, \"\\\"\") (length > 1; \" “ ” « »). Fresh held-out checks: AV 7 tooltip shapes match, including the round-2 lost case shape (label owns {y}), empty tooltip, greedy {a}{b}, spaced and quoted. AX gains: guillemet-quoted url (Url strip), entity QUOTED with tooltip. Uppercase keyword+link and a non-ASCII url/tooltip match.",
+  "Obligation 5 (SequenceDiagram#addWithOrder / #putParticipantInLast). java_list replays addWithOrder: insert before the first strictly greater order, default 0. It affects only the warning, not rendered output; model changes are confined to the 8 retained bd087_* URL sources. The three round-2 false warnings (ck_redeclare_order_stable_{legacy,teoz}, ck_redeclare_order_lower_legacy) are gone, as is AV's negative-order one. Every remaining warning in AT, AV, AX and fresh is on a whole-output mismatch whose Java order does change: tie at order 10, explicit order 0, leaving or entering a box, kind change. No warning fires on a matching case.",
+  "No loss on any cohort, against either 93bf53e18 or dea00b295: AV 15 participant cases, AX 14, AT 10, fresh 915, retained 4174 (6 bd087 gains), golden 12550. There are no panics, no timeouts and no new valid-input errors.",
+  "Declared residue, confirmed and unchanged: topurl is not applied (ck3_url_topurl_legacy mismatches in every build). ONLY_TOOLTIP / ONLY_TOOLTIP_AND_LABEL links keep the no-anchor model (mk3_tooltip_only/and_label and ck3_url_tooltip_label_teoz mismatch in every build). teoz participant anchors are not emitted. Rendered re-declaration order is not modelled (warned). The registered pairs are the 15 held-out cases that match; the 14 that mismatch in every build are in checker-claude-round3/evidence-only-cases.json.",
+  "Shared evidence is copied byte-identically from ../../sprite-command-post-tim-ownership/checker-claude-round3/ into checker-claude-round3/ here (46 files, SHA256 in evidence-files.json). Gates and frozen items are as recorded in that mechanism's review-2.json.",
+  "NEXT OBLIGATIONS (bounded, separate targets): topurl (UrlBuilder#withTopUrl), Url#getLabel, and the rendered putParticipantInLast reorder. Each needs its own held-out perturbations."
+ ],
+ "verdict": "accepted",
+ "record": "docs/parity-reviews/sequence-participant-silent-residue/checker-claude-round3/",
+ "perturbations": [
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_quoted_label_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_quoted_label_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "QUOTED with tooltip and label",
+    "untrimmed",
+    "AV held out",
+    "after: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_with_label_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_with_label_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "link, tooltip and label",
+    "AV held out",
+    "after: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_space_before_brace_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_space_before_brace_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "LINK_TOOLTIP_NOLABEL with space before {",
+    "AV held out",
+    "after: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_two_groups_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_two_groups_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "LINK_TOOLTIP_NOLABEL greedy across two groups",
+    "AV held out",
+    "after: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_label_brace_actor_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_label_brace_actor_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "label owns {y}",
+    "actor",
+    "AV held out",
+    "after: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_quoted_display_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_quoted_display_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "quoted display",
+    "spaced tooltip",
+    "AV held out",
+    "after: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_empty_database_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_empty_database_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "empty tooltip",
+    "database",
+    "AV held out",
+    "after: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_redeclare_negative_order_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_redeclare_negative_order_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "negative explicit order keeps first place",
+    "AV held out",
+    "after: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_redeclare_implicit_then_order_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_redeclare_implicit_then_order_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "implicit participant re-declared with an order",
+    "AV held out",
+    "after: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_redeclare_higher_order_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_redeclare_higher_order_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "explicit orders, re-declared highest keeps last",
+    "teoz",
+    "AV held out",
+    "after: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_guillemet_strip_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_guillemet_strip_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "Url quote strip with guillemets",
+    "legacy",
+    "AX held out",
+    "after: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_uppercase_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_uppercase_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "uppercase keyword and link",
+    "legacy",
+    "AX held out",
+    "after: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_unicode_tooltip_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_unicode_tooltip_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "non-ASCII url and tooltip",
+    "legacy",
+    "AX held out",
+    "after: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_entity_quoted_tooltip_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_entity_quoted_tooltip_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "QUOTED with tooltip",
+    "entity",
+    "legacy",
+    "AX held out",
+    "after: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_redeclare_lower_order_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_redeclare_lower_order_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "re-declared highest order keeps last",
+    "teoz",
+    "AX held out",
+    "after: match"
+   ]
+  }
+ ]
+}

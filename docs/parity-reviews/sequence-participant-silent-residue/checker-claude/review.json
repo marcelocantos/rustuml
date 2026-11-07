@@ -1,0 +1,443 @@
+{
+ "summary": "Rejected. The URL tooltip is not read the way Java's UrlBuilder reads it: one held-out Java-valid case loses its whole-output match, three tooltip forms differ from Java, and the re-declaration warning fires where Java does not reorder.",
+ "findings": [
+  "Gains: ck_create_tooltip_legacy matches (created head without its link, ArrowAndParticipant#drawInternalU, plus the {tooltip} title). The maker's tooltip and created-head gains in 790 and 28 reproduce exactly (790: 9 mismatches to match, among others).",
+  "LOSS (1 lost match: ck_tooltip_label_brace_legacy): for '[[https://example.org/ring ring{x}]]', Java's UrlBuilder#getUrl alternative S_LINK_WITH_OPTIONAL_TOOLTIP_WITH_OPTIONAL_LABEL reads 'ring{x}' as the label and leaves the tooltip null, so Url#getTooltip is the URL. Java's title is 'https://example.org/ring'; before the change Rust matched. extract_link_tooltip (parse/mod.rs) takes the first '{…}' anywhere in the link, so after the change the title is 'x'.",
+  "Divergent (mismatch both before and after, so not a loss): '{ rings }' gives Java title ' rings ' (the [^{}]* group is untrimmed), Rust 'rings'. '{}' gives Java '' (an empty tooltip, not null), Rust the URL. '{a{b}c}' gives Java 'a{b}c' (S_LINK_TOOLTIP_NOLABEL greedy \\{(.+)\\}), Rust 'a{b'. The tooltip needs the five UrlBuilder alternatives in order, not a substring scan.",
+  "False warning: ck_redeclare_order_stable_{legacy,teoz} and ck_redeclare_order_lower_legacy are whole-output matches in Java and Rust, yet report_put_participant_in_last warns 'moves ... to last'. SequenceDiagram#putParticipantInLast re-inserts with addWithOrder, before the first participant of strictly greater order, so an explicit order keeps its position. The Rust check compares (order.unwrap_or(index), index) keys, which is right only when every order is the default. The no-order control ck_redeclare_last_legacy is silent and matches, which is correct.",
+  "The other new warnings (multiple stereotypes, creole [[link]] in a quoted display, teoz anchors, group COLORS[1]) fire only on AS and 790/28 inputs that mismatch. A single stereotype or a spot stereotype does not warn (checked locally). The AS colour-free controls (note-across, hnote, rnote, teoz box) mismatch silently both before and after, which confirms the maker's claim that the residue is geometry, not colour.",
+  "The model change is explained: url_tooltip is additive (2,309 golden, 2,922 retained and 440 fresh AST records add 'url_tooltip: None'); SVG changes only where a {tooltip} exists."
+ ],
+ "next_obligations": [
+  "1 (blocking): port UrlBuilder#getUrl (QUOTED, ONLY_TOOLTIP, ONLY_TOOLTIP_AND_LABEL, LINK_TOOLTIP_NOLABEL, LINK_WITH_OPTIONAL_TOOLTIP_WITH_OPTIONAL_LABEL, in that order, STRICT mode) for participant URLs. The tooltip must be untrimmed and may be empty. Perturbations: ck_tooltip_* plus quoted-URL and tooltip-only forms.",
+  "2: report_put_participant_in_last must model addWithOrder (insert before the first strictly greater order) and warn only when the resulting position or box differs. Perturbations: ck_redeclare_order_* plus a reordering explicit-order case."
+ ],
+ "schema_version": 1,
+ "mechanism": "sequence-participant-silent-residue",
+ "verdict": "rejected",
+ "reviewer": {
+  "task_id": "T3 thread t3-991a0cd7, branch review/sprite-ownership-claude",
+  "model": "claude-opus-5-5"
+ },
+ "account_commit": "65b5a16338935699a8828665720373ec9bee9d35",
+ "implementation_commit": "87bdb0feb0cd1557070d12fcd3890417e884662d",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "commits": {
+  "before": "93bf53e18d892f60e66b5fdfb4237f681afd5860",
+  "sprite_account": "ff761cd0a60a7208a970bca7cc88fe08245bb1e3",
+  "sprite_impl": "95cf8525297d551cd7da954e9892cb25325d5191",
+  "part_account": "65b5a16338935699a8828665720373ec9bee9d35",
+  "part_impl1": "ecbd75ec87dbbabac18a88904c2bad4d4f2e4416",
+  "part_impl2": "87bdb0feb0cd1557070d12fcd3890417e884662d",
+  "maker_tip": "5cf1eac12183db62938fe199009b7410538b3822",
+  "base": "9834a719455308120c3289b59a260567f141b724",
+  "rejection": "dc1dfbb4ac8343fde59e041c651d288ffa318a52"
+ },
+ "commands": [
+  "git archive 93bf53e18 / 5cf1eac12 into private dirs; CARGO_TARGET_DIR=<private>/target-{before,after} cargo build --release -j 6 -p rustuml",
+  "rustc --edition=2024 -O docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs (sha256 d1424469...) --extern rustuml_oracle=<private>/target-before/release/deps/librustuml_oracle-*.rlib",
+  "python3 -I support/prepare.py fresh AS=<relay>/sprite-claude-maker-batch2 AQ=<relay>/sprite-claude-batch1 F790=<cache 75ed0e64> F28=<cache 75ed0e64>/supplement; prepare.py fresh-at AT=<relay>/sprite-ownership-checker-batch1",
+  "python3 -I support/replay.py LABEL MANIFEST rustuml-{before,after} compare_cli OUT CWD (svg/ast/ascii/yaml with -pipe; RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100; PLANTUML_STDLIB pinned; 6 workers) for fresh 915, AT 45, retained 4174, golden 12550",
+  "python3 -I support/{classify,fresh_classify,model_changes}.py on each before/after pair",
+  "python3 -I support/rejection_contract.py <fresh> fresh-manifest.json rustuml-before rustuml-after rejection-contract.json (unchanged, sha256 09cd998b...)",
+  "CARGO_TARGET_DIR=<private>/target-gates cargo test --release -j 6 --workspace --lib; cargo test --release -j 6 -p rustuml --test pipe_mode; cargo test --release -j 6 --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture (on 5cf1eac12 before checker files; same oracle tests on the 93bf53e18 export; golden_no_oracle + golden_pairs on the 9834a7194 export)"
+ ],
+ "fresh_tables": {
+  "AS": {
+   "after:match": 2,
+   "after:mismatch": 11,
+   "before:match": 1,
+   "before:mismatch": 12,
+   "gain": 1
+  },
+  "AT": {
+   "after:match": 5,
+   "after:mismatch": 5,
+   "before:match": 5,
+   "before:mismatch": 5,
+   "gain": 1,
+   "lost-match": 1
+  }
+ },
+ "perturbations": [
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_redeclare_into_box_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_redeclare_into_box_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "putParticipantInLast",
+    "box englober",
+    "legacy"
+   ],
+   "cohort": "AS",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_multi_stereo_three_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_multi_stereo_three_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "three stereotypes",
+    "legacy"
+   ],
+   "cohort": "AS",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_tooltip_in_box_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_tooltip_in_box_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "participant url tooltip",
+    "inside box",
+    "legacy"
+   ],
+   "cohort": "AS",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "change": "gain"
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_redeclare_into_box_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_redeclare_into_box_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "putParticipantInLast",
+    "box englober",
+    "teoz"
+   ],
+   "cohort": "AS",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_multi_stereo_three_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_multi_stereo_three_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "three stereotypes",
+    "teoz"
+   ],
+   "cohort": "AS",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_tooltip_in_box_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_tooltip_in_box_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "participant url tooltip",
+    "inside box",
+    "teoz"
+   ],
+   "cohort": "AS",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_note_across_plain_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_note_across_plain_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "note across",
+    "no colour control"
+   ],
+   "cohort": "AS",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_hnote_over_plain_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_hnote_over_plain_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "hnote over several",
+    "no colour control"
+   ],
+   "cohort": "AS",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_rnote_across_multi_plain_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_rnote_across_multi_plain_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "rnote across multiline",
+    "no colour control"
+   ],
+   "cohort": "AS",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_hnote_right_plain_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_hnote_right_plain_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "hnote right",
+    "no colour control",
+    "teoz"
+   ],
+   "cohort": "AS",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_box_plain_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_box_plain_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "box",
+    "no colour control",
+    "teoz"
+   ],
+   "cohort": "AS",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_group_space_colour_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_group_space_colour_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "group COLORS[1] only",
+    "teoz"
+   ],
+   "cohort": "AS",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_return_hash_label_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_return_hash_label_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "return label starting with #",
+    "creole list"
+   ],
+   "cohort": "AS",
+   "java_valid": true,
+   "before": "match",
+   "after": "match",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_label_brace_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_label_brace_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "url label containing braces",
+    "no tooltip",
+    "legacy"
+   ],
+   "cohort": "AT",
+   "java_valid": true,
+   "before": "match",
+   "after": "mismatch",
+   "change": "lost-match"
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_label_brace_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_label_brace_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "url label containing braces",
+    "no tooltip",
+    "teoz"
+   ],
+   "cohort": "AT",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_spaced_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_spaced_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "tooltip with surrounding spaces"
+   ],
+   "cohort": "AT",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_empty_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_empty_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "empty tooltip"
+   ],
+   "cohort": "AT",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_nested_brace_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_nested_brace_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "nested braces in tooltip"
+   ],
+   "cohort": "AT",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_create_tooltip_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_create_tooltip_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "created participant",
+    "tooltip"
+   ],
+   "cohort": "AT",
+   "java_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "change": "gain"
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_stable_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_stable_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "re-declaration",
+    "explicit order keeps position"
+   ],
+   "cohort": "AT",
+   "java_valid": true,
+   "before": "match",
+   "after": "match",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_stable_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_stable_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "re-declaration",
+    "explicit order keeps position"
+   ],
+   "cohort": "AT",
+   "java_valid": true,
+   "before": "match",
+   "after": "match",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_lower_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_lower_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "re-declaration",
+    "lower explicit order keeps position"
+   ],
+   "cohort": "AT",
+   "java_valid": true,
+   "before": "match",
+   "after": "match",
+   "change": null
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_last_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_last_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "re-declaration of last participant",
+    "control"
+   ],
+   "cohort": "AT",
+   "java_valid": true,
+   "before": "match",
+   "after": "match",
+   "change": null
+  }
+ ],
+ "evidence_files": {
+  "runs/fresh-before.results.json.gz": "2a5b18170dbce7e92199f9a360946a1dcc8e19235bf7ddd74028e8b7cb0a418c",
+  "runs/fresh-after.results.json.gz": "1ea7a46d9106c45ad0a63adf1abba86f8d45f3eccc329298d4b565cb420f5ef2",
+  "runs/at-before.results.json.gz": "4e3dd812ad9578a6d972b4322a9c3f7365e91db86c7497a9c2f4e95e832adb59",
+  "runs/at-after.results.json.gz": "2e19fa81cdeb4317ccc5edd096167a0ab77fe5d162d946231a7d674d1d97ae90",
+  "runs/retained-before.results.json.gz": "4bc1b2f6a1193cd09f3b946cf742ef1c9529bd1c6e344859fbe5f2a73f989c61",
+  "runs/retained-after.results.json.gz": "e03de5cb3916dc9b728dd8b692b6b40f147c4a65028af92007f6efe8e82113a1",
+  "runs/golden-before.results.json.gz": "44a166b7b17c9b495c679770020ff10b65f034d29f455522707144f2b639e80b",
+  "runs/golden-after.results.json.gz": "b88cc96dcf2e0021883f35ce5a71c052c7ee5406c086980201f41aa0cf397aea",
+  "runs/fresh-changes.json": "876613d2f8ac587b70611470a7fd9139135f41c8c3fff53812706a31e8116e91",
+  "runs/at-changes.json": "2ac07e2f6db76247392f29c2788b95a59b56db5423540b7352ba221713ce8c38",
+  "runs/retained-changes.json": "f82b8a92ebebed8c85193be268cc1286f30d8bad1e929de3c4a49476f82df94d",
+  "runs/golden-changes.json": "efc849e8de022d1ccb158140256b69e0843e57df97b09d7a3493940af42fbd06",
+  "runs/fresh-model-changes.json": "194e0cfcb3f4eafc323a8255f6eae88838782ff225164f1f39bf934b1da81bf8",
+  "runs/retained-model-changes.json": "d1aab2f7acc8a481588b0badd1bce2256fe02c5d2ee2528be64bddcdf2ece5df",
+  "runs/golden-model-changes.json": "47f9d038f97928b3987965df6b3f88767298b0c5a0e46cb6bc9e20b5e50c592b",
+  "runs/rejection-contract.json": "e536ace0ec93e04fa33cfb9fa5d775215d5e007fcddc86bcb7dc66b6f41f50fa",
+  "gates/no_oracle_failure_names-9834a7194.txt": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+  "gates/no_oracle_failure_names-before.txt": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+  "gates/no_oracle_failure_names-after.txt": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+  "gates/golden_failure_names-9834a7194.txt": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+  "gates/golden_failure_names-after.txt": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+  "gates/perturbation-failures-before.txt": "f06c4bd196c3d0d34c4073cb7f4e6f7ff043f5310dc683dcddde452e45922d1c",
+  "gates/perturbation-failures-after.txt": "eac3ebc5b03039e9237216a2ed8cfe462dc8c6cadd1e22d484d43477dcb9b2c2",
+  "gates/guards-before.txt": "375bd1689a5a5432289018a2ccd3f1a8ffe4e6b181369a0fa27e9df22f057948",
+  "gates/guards-after.txt": "f041cc886d63338f1f4a9cb21f6811c4e7512756d067bca17899c6c98e988752",
+  "gates/status.txt": "cca2fcc7352fafaba49ac6511906e490fe7da5fa26f2de7ac67723b10831f25c",
+  "batch1-local-observations.json": "3dd0a70d1a1cf36d057848e2572ae7c02bad5298adb550eef6766173eadc3aed",
+  "fresh-manifest.json": "5cfa8e0f4889572e02e20701580e20da9c78fadbc035915e010622462b69b684",
+  "fresh-at-manifest.json": "826b1b3af016f9b68177f5809f95d00af93f0eb92544e5f2a76ff018c18ac19c",
+  "retained-manifest.json": "69cbf753f230026a55768fe6eee699b53fc87ee88188b201f5717483025e97c2",
+  "golden-manifest.json": "9d3875a4585f9861a55f0753a4debc1f6034f843fd18d5391b33b7d5680617ca",
+  "gates/lib-after.log.gz": "52d3716d0a337628f2cb86965a5cee7c6c7a2addc4ee4acc93b6850986fbf257",
+  "gates/pipe-after.log.gz": "25b429297cbf77671e686726e133d5e063441297f877a935ab8975820fc636e8",
+  "gates/oracle-after.log.gz": "804ea3c22e13107da9ca1b1df59afb529a7101def7ab31c063d9a1562b16bfe9",
+  "gates/oracle-before.log.gz": "af806fa10e6a2f418f27a13714be8bf9a2a3f62590f905da98ed5b38f306c23c",
+  "gates/oracle-base.log.gz": "72f391a22405b51cb665d08fb3e9f03de189c6a5ae7f94515fad994738e9b1ef",
+  "support/classify.py": "7cf5460741c368964bd6646e90b79078aeb310ba69bf14b805f84dd2a3609ba4",
+  "support/fresh_classify.py": "e401b08c69e57a65c0bab1d7554620fa4d4d764bccf7fcddc68e3ab88d8819f1",
+  "support/model_changes.py": "c95e2655dcb809c57ca19946db5627965657a94bb40c368ccf5903e3660e3f08",
+  "support/package.py": "2423c15e84fa800003bb175a790862453621899986e5dfa32fbe384d75c38385",
+  "support/prepare.py": "a84a4e75390c6753719c316ee55b97d02976faae2515c19609cabcaa8cd421da",
+  "support/rejection_contract.py": "09cd998bd50710ca37015f1dda0ee617275954f39519d7b610236ea469ac8789",
+  "support/replay.py": "1bb2ed6ec224b750395efd7bd2b8b7e510b2727648e029bb9453a4cc055034dd",
+  "support/run_all.sh": "d0f71fb4d28b3122311db04ddf7d9f2993929ff5632b6f065ab25841d7bbe932",
+  "support/stage.py": "e6e2634a2f2c45b11b9d0dd3039af4b68fca7667895df9c0c1a1541ff38c88d0",
+  "request-batch1/reference-manifest.json": "bd13a2c644a2df93ce99e9686818640598d418a0b6b1bb0233010cc5229e86b0",
+  "request-batch1/reference-input-bundle.json.gz": "d3924c7e8b389e6a039e200c2f70ebb9eae8525a4068c34bedde9b5bc9cdf2c9",
+  "request-batch1/SHA256SUMS": "f51d0904e5e735965cad37fd1fab6bee2f5d628976e2dab2fa827a2cba19acfd",
+  "bindings.json": "fb5d616a3025efa383f998764798d328415cee743d26845cf49896bd78867e3f",
+  "mechanism-tables.json": "71a10f57079e92f4cb57823debb9c7f9b375289d87f944bcb782d0f652a360ef"
+ }
+}

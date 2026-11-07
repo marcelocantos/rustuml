@@ -1,0 +1,4 @@
+@startuml
+[*] --> Calm : rest \
+' aside
+  @enduml

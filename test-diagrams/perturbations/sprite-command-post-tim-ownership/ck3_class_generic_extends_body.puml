@@ -1,0 +1,6 @@
+@startuml
+abstract class Box<T> extends Base {
+Sprite sheets are loaded
+}
+class Base
+@enduml

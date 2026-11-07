@@ -1,0 +1,5 @@
+@startuml
+Kea -> Tui : one
+!exit
+Tui -> Kea : two
+@enduml

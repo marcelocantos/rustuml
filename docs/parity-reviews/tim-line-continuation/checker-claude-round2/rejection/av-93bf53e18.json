@@ -1,0 +1,93 @@
+{
+  "entries": 3,
+  "before_rejections": 0,
+  "after_rejections": 3,
+  "introduced_losses": [],
+  "after_false_accepts": [],
+  "results": [
+    {
+      "source": "mk3_svg_end_trailing_deployment.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c5ec60d77bccc744a6a3963e8a3dbd558638d72be145e76c297ab3ba3ec7e59b",
+          "stderr": "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-f2d12d0ef",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Syntax Error? sprite command never completed: sprite $mark <svg width=\"4\" height=\"4\">\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "mk3_pixel_end_trailing_class.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c6f39d4d39d4f0a21346b5d2e1d5960be476e6e068a77c732514dd77c6b85dc9",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-f2d12d0ef",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Cannot read: [2x2/16] {\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "mk3_pixel_end_trailing_seq_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "a459a9f24d091c98305a00ed8a262fdbbe78f0a5ccce94c4f34b1d850a8f361e",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-f2d12d0ef",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Cannot read: [2x2/16] {\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    }
+  ]
+}

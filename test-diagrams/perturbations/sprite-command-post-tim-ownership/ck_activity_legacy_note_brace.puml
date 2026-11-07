@@ -1,0 +1,7 @@
+@startuml
+(*) --> "load"
+note right
+Sprite frame {
+end note
+"load" --> (*)
+@enduml

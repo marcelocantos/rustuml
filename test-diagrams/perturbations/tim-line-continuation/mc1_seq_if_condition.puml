@@ -1,0 +1,8 @@
+@startuml
+!$on = 1
+!if $on == \
+1
+Cove -> Bight : on
+!endif
+Bight -> Cove : out
+@enduml

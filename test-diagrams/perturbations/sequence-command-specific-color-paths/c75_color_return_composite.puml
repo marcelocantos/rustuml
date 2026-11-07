@@ -1,0 +1,7 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+activate Spruce
+return #back:PaleGreen;line:Indigo pollen
+@enduml

@@ -1,0 +1,153 @@
+[
+ {
+  "name": "mk3_tooltip_only_legacy",
+  "cohort": "AV",
+  "outcome_after": "mismatch",
+  "axes": [
+   "ONLY_TOOLTIP"
+  ],
+  "java_valid": true,
+  "reason": "mismatch in every build (not caused by the packet)"
+ },
+ {
+  "name": "mk3_tooltip_and_label_legacy",
+  "cohort": "AV",
+  "outcome_after": "mismatch",
+  "axes": [
+   "ONLY_TOOLTIP_AND_LABEL"
+  ],
+  "java_valid": true,
+  "reason": "mismatch in every build (not caused by the packet)"
+ },
+ {
+  "name": "mk3_tooltip_nested_teoz",
+  "cohort": "AV",
+  "outcome_after": "mismatch",
+  "axes": [
+   "nested braces",
+   "teoz"
+  ],
+  "java_valid": true,
+  "reason": "mismatch in every build (not caused by the packet)"
+ },
+ {
+  "name": "mk3_redeclare_default_moves_legacy",
+  "cohort": "AV",
+  "outcome_after": "mismatch",
+  "axes": [
+   "default order: re-declared participant moves last"
+  ],
+  "java_valid": true,
+  "reason": "mismatch in every build (not caused by the packet)"
+ },
+ {
+  "name": "mk3_redeclare_into_box_legacy",
+  "cohort": "AV",
+  "outcome_after": "mismatch",
+  "axes": [
+   "re-declaration inside a box moves into it"
+  ],
+  "java_valid": true,
+  "reason": "mismatch in every build (not caused by the packet)"
+ },
+ {
+  "name": "ck3_url_spaces_inside_legacy",
+  "cohort": "AX",
+  "outcome_after": "mismatch",
+  "axes": [
+   "spaces inside [[ ]]",
+   "legacy"
+  ],
+  "java_valid": true,
+  "reason": "mismatch in every build (not caused by the packet)"
+ },
+ {
+  "name": "ck3_url_quoted_spaces_teoz",
+  "cohort": "AX",
+  "outcome_after": "mismatch",
+  "axes": [
+   "QUOTED url with a space",
+   "teoz"
+  ],
+  "java_valid": true,
+  "reason": "mismatch in every build (not caused by the packet)"
+ },
+ {
+  "name": "ck3_url_topurl_legacy",
+  "cohort": "AX",
+  "outcome_after": "mismatch",
+  "axes": [
+   "topurl relative link (declared residue)",
+   "legacy"
+  ],
+  "java_valid": true,
+  "reason": "mismatch in every build (not caused by the packet)"
+ },
+ {
+  "name": "ck3_url_label_only_actor_teoz",
+  "cohort": "AX",
+  "outcome_after": "mismatch",
+  "axes": [
+   "link with label only",
+   "actor",
+   "teoz"
+  ],
+  "java_valid": true,
+  "reason": "mismatch in every build (not caused by the packet)"
+ },
+ {
+  "name": "ck3_url_tooltip_label_teoz",
+  "cohort": "AX",
+  "outcome_after": "mismatch",
+  "axes": [
+   "ONLY_TOOLTIP_AND_LABEL",
+   "teoz"
+  ],
+  "java_valid": true,
+  "reason": "mismatch in every build (not caused by the packet)"
+ },
+ {
+  "name": "ck3_redeclare_tie_order_legacy",
+  "cohort": "AX",
+  "outcome_after": "mismatch",
+  "axes": [
+   "equal explicit orders, re-declared first moves last",
+   "legacy"
+  ],
+  "java_valid": true,
+  "reason": "mismatch in every build (not caused by the packet)"
+ },
+ {
+  "name": "ck3_redeclare_explicit_zero_legacy",
+  "cohort": "AX",
+  "outcome_after": "mismatch",
+  "axes": [
+   "explicit order 0 ties default",
+   "legacy"
+  ],
+  "java_valid": true,
+  "reason": "mismatch in every build (not caused by the packet)"
+ },
+ {
+  "name": "ck3_redeclare_out_of_box_legacy",
+  "cohort": "AX",
+  "outcome_after": "mismatch",
+  "axes": [
+   "re-declaration after the box leaves it",
+   "legacy"
+  ],
+  "java_valid": true,
+  "reason": "mismatch in every build (not caused by the packet)"
+ },
+ {
+  "name": "ck3_redeclare_actor_kind_change_legacy",
+  "cohort": "AX",
+  "outcome_after": "mismatch",
+  "axes": [
+   "re-declaration with another kind",
+   "legacy"
+  ],
+  "java_valid": true,
+  "reason": "mismatch in every build (not caused by the packet)"
+ }
+]

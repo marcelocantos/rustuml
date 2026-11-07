@@ -1,0 +1,6 @@
+@startuml
+component Engine [
+first line
+Sprite sheets are loaded
+]
+@enduml

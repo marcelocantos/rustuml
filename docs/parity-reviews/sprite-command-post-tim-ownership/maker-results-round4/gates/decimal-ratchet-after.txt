@@ -1,0 +1,5 @@
+  crates/rustuml-render/src/deployment.rs: 43 -> 44
+  crates/rustuml-render/src/plantuml_metrics.rs: 1053 -> 1055
+  crates/rustuml-render/src/state.rs: 53 -> 62
+  crates/rustuml-render/src/text_render.rs: 409 -> 419
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

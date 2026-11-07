@@ -1,0 +1,4 @@
+@startuml
+﻿!$x = "a"
+Kea -> Tui : $x
+@enduml

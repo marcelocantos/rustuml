@@ -1,0 +1,6 @@
+@startuml
+ENUM Colors {
+SPRITE sheets loaded
+RED
+}
+@enduml

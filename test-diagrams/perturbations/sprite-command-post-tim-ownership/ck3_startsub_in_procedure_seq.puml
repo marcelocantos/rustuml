@@ -1,0 +1,10 @@
+@startuml
+!procedure $twice()
+!startsub IN
+Alder -> Birch : in sub
+!endsub
+Birch -> Alder : after
+!endprocedure
+$twice()
+$twice()
+@enduml

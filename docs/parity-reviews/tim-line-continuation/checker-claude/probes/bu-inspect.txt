@@ -1,0 +1,280 @@
+== tc1_activity_legacy_label java_exit 0 valid True intended True
+   src: @startuml⏎(*) --> "First \⏎line"⏎--> (*)⏎@enduml⏎
+   java: lines=['1', '3', '1', '3'] texts=['First line']
+   93bf53e18 mismatch               exit=0 lines=[] texts=[] ''
+   9834a7194 mismatch               exit=0 lines=[] texts=[] ''
+   2a9373aca mismatch               exit=0 lines=[] texts=[] ''
+   594c2b3c5 mismatch               exit=0 lines=[] texts=['First line'] ''
+== tc1_class_block_comment_inner_backslash java_exit 0 valid True intended True
+   src: @startuml⏎/'⏎note \⏎'/⏎class Hidden⏎'/⏎class Shown⏎@enduml⏎
+   java: lines=['6'] texts=['Shown']
+   93bf53e18 mismatch               exit=0 lines=['4', '6'] texts=['Hidden', 'Shown'] ''
+   9834a7194 mismatch               exit=0 lines=['4', '6'] texts=['Hidden', 'Shown'] ''
+   2a9373aca mismatch               exit=0 lines=['4', '6'] texts=['Hidden', 'Shown'] ''
+   594c2b3c5 match                  exit=0 lines=['6'] texts=['Shown'] ''
+== tc1_class_crlf_comment_skip java_exit 0 valid True intended True
+   src: @startuml⏎class Ash⏎Ash --> Ash : one \⏎' gap⏎two⏎class Birch⏎@enduml⏎
+   java: lines=['1', '5', '2'] texts=['Ash', 'Birch', 'one two']
+   93bf53e18 mismatch               exit=0 lines=['1', '5', '2'] texts=['Ash', 'Birch', 'one \\'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '5', '2'] texts=['Ash', 'Birch', 'one \\'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '5', '2'] texts=['Ash', 'Birch', 'one \\'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '5', '2'] texts=['Ash', 'Birch', 'one two'] ''
+== tc1_class_four_pieces_lines java_exit 0 valid True intended True
+   src: @startuml⏎class Ash \⏎<<one>> \⏎#pink \⏎##red⏎class Birch⏎class Cedar⏎@enduml⏎
+   java: lines=['1', '5', '6'] texts=['&#171;one&#187;', 'Ash', 'Birch', 'Cedar']
+   93bf53e18 mismatch               exit=0 lines=['1', '5', '6'] texts=['Ash', 'Birch', 'Cedar'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '5', '6'] texts=['Ash', 'Birch', 'Cedar'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '5', '6'] texts=['Ash', 'Birch', 'Cedar'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '5', '6'] texts=['«one»', 'Ash', 'Birch', 'Cedar'] ''
+== tc1_class_include_three java_exit 0 valid True intended True
+   src: @startuml⏎!include tc1_three.iuml⏎class After⏎@enduml⏎
+   java: lines=['2', '3', '2'] texts=['&#171;i1&#187;', 'Inc', 'Inc2', 'After']
+   93bf53e18 mismatch               exit=0 lines=['1', '2', '4'] texts=['Inc', 'After', 'Inc2'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '2', '4'] texts=['Inc', 'After', 'Inc2'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '2', '4'] texts=['Inc', 'After', 'Inc2'] ''
+   594c2b3c5 mismatch               exit=0 lines=['2', '3', '4'] texts=['After', '«i1»', 'Inc', 'Inc2'] ''
+== tc1_class_note_body java_exit 0 valid True intended True
+   src: @startuml⏎class Oak⏎note right of Oak⏎first \⏎second⏎third⏎end note⏎@enduml⏎
+   java: lines=['1', '3'] texts=['Oak', 'first second', 'third']
+   93bf53e18 mismatch               exit=0 lines=['1', '3'] texts=['Oak', 'first \\', 'second', 'third'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '3'] texts=['Oak', 'first \\', 'second', 'third'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '3'] texts=['Oak', 'first \\', 'second', 'third'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '3'] texts=['Oak', 'first second', 'third'] ''
+== tc1_class_quote_comment_backslash java_exit 0 valid True intended True
+   src: @startuml⏎class Ash⏎' remark \⏎class Gone⏎class Elm⏎@enduml⏎
+   java: lines=['1', '4'] texts=['Ash', 'Elm']
+   93bf53e18 mismatch               exit=0 lines=['1', '3', '4'] texts=['Ash', 'Gone', 'Elm'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '3', '4'] texts=['Ash', 'Gone', 'Elm'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '3', '4'] texts=['Ash', 'Gone', 'Elm'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '4'] texts=['Ash', 'Elm'] ''
+== tc1_class_quoted_label_backslash java_exit 0 valid True intended True
+   src: @startuml⏎class Fir⏎class Yew⏎Fir --> Yew : "alpha \⏎beta"⏎@enduml⏎
+   java: lines=['1', '2', '3'] texts=['Fir', 'Yew', 'alpha beta']
+   93bf53e18 mismatch               exit=0 lines=['1', '2', '3'] texts=['Fir', 'Yew', 'alpha \\'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '2', '3'] texts=['Fir', 'Yew', 'alpha \\'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '2', '3'] texts=['Fir', 'Yew', 'alpha \\'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '2', '3'] texts=['Fir', 'Yew', 'alpha beta'] ''
+== tc1_class_two_merges_lines java_exit 0 valid True intended True
+   src: @startuml⏎class Ash \⏎<<s>>⏎class Birch \⏎<<t>>⏎class Cedar⏎@enduml⏎
+   java: lines=['1', '3', '5'] texts=['&#171;s&#187;', 'Ash', '&#171;t&#187;', 'Birch', 'Cedar']
+   93bf53e18 mismatch               exit=0 lines=['1', '3', '5'] texts=['Ash', 'Birch', 'Cedar'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '3', '5'] texts=['Ash', 'Birch', 'Cedar'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '3', '5'] texts=['Ash', 'Birch', 'Cedar'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '3', '5'] texts=['«s»', 'Ash', '«t»', 'Birch', 'Cedar'] ''
+== tc1_ctl_class_include_plain java_exit 0 valid True intended True
+   src: @startuml⏎!include tc1_plain_classes.iuml⏎Lantern --> Wick⏎@enduml⏎
+   java: lines=['0', '1', '2'] texts=['Lantern', 'Wick']
+   93bf53e18 mismatch               exit=0 lines=['1', '2', '2'] texts=['Lantern', 'Wick'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '2', '2'] texts=['Lantern', 'Wick'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '2', '2'] texts=['Lantern', 'Wick'] ''
+   594c2b3c5 mismatch               exit=0 lines=['1', '2', '2'] texts=['Lantern', 'Wick'] ''
+== tc1_ctl_seq_include_plain java_exit 0 valid True intended True
+   src: @startuml⏎Kea -> Tui : first⏎!include tc1_plain.iuml⏎Tui -> Kea : after⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1', '0', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'first', 'included', 'after']
+   93bf53e18 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'first', 'included', 'after'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'first', 'included', 'after'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'first', 'included', 'after'] ''
+   594c2b3c5 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'first', 'included', 'after'] ''
+== tc1_inv_seq_long_comment_unterminated_tail java_exit 100 valid False intended False
+   src: @startuml⏎Kea -> Tui : x \⏎/' long⏎end '/ tail⏎Tui -> Kea : z⏎@enduml⏎
+   java: lines=[] texts=['No valid @start/@end found, please check the version']
+   93bf53e18 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '4'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'x \\', 'z'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '4'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'x \\', 'z'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '4'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'x \\', 'z'] ''
+   594c2b3c5 valid-error            exit=1 lines=[] texts=[] 'parse error: line 1: No valid @start/@end found, please check the version'
+== tc1_inv_seq_quote_comment_then_end java_exit 100 valid False intended False
+   src: @startuml⏎Kea -> Tui : x \⏎' c⏎@enduml⏎
+   java: lines=[] texts=['No valid @start/@end found, please check the version']
+   93bf53e18 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'x \\'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'x \\'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'x \\'] ''
+   594c2b3c5 valid-error            exit=1 lines=[] texts=[] 'parse error: line 1: No valid @start/@end found, please check the version'
+== tc1_json_two_pieces_nested java_exit 0 valid True intended True
+   src: @startjson⏎{⏎"k": [1, \⏎2, \⏎3],⏎"z": "q"⏎}⏎@endjson⏎
+   java: lines=[] texts=['k', '&#160;&#160;&#160;', 'z', 'q', '1', '2', '3']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: JSON parse error: expected value at line 2 column 10'
+   9834a7194 valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: JSON parse error: expected value at line 2 column 10'
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: JSON parse error: expected value at line 2 column 10'
+   594c2b3c5 match                  exit=0 lines=[] texts=['k', '&#160;&#160;&#160;', 'z', 'q', '1', '2', '3'] ''
+== tc1_mindmap_chr_backslash_no_postjoin java_exit 0 valid True intended True
+   src: @startmindmap⏎* Root%chr(92)⏎** Leaf⏎@endmindmap⏎
+   java: lines=[] texts=['Root\\', 'Leaf']
+   93bf53e18 match                  exit=0 lines=[] texts=['Root\\', 'Leaf'] ''
+   9834a7194 match                  exit=0 lines=[] texts=['Root\\', 'Leaf'] ''
+   2a9373aca match                  exit=0 lines=[] texts=['Root\\', 'Leaf'] ''
+   594c2b3c5 match                  exit=0 lines=[] texts=['Root\\', 'Leaf'] ''
+== tc1_mindmap_include_no_postjoin java_exit 0 valid True intended True
+   src: @startmindmap⏎!include tc1_mm.iuml⏎** Leaf⏎@endmindmap⏎
+   java: lines=[] texts=['Root \\', 'Leaf']
+   93bf53e18 match                  exit=0 lines=[] texts=['Root \\', 'Leaf'] ''
+   9834a7194 match                  exit=0 lines=[] texts=['Root \\', 'Leaf'] ''
+   2a9373aca match                  exit=0 lines=[] texts=['Root \\', 'Leaf'] ''
+   594c2b3c5 match                  exit=0 lines=[] texts=['Root \\', 'Leaf'] ''
+== tc1_mindmap_three java_exit 0 valid True intended True
+   src: @startmindmap⏎* Root \⏎node \⏎name⏎** Leaf⏎@endmindmap⏎
+   java: lines=[] texts=['Root node name', 'Leaf']
+   93bf53e18 mismatch               exit=0 lines=[] texts=['Root \\', 'Leaf'] ''
+   9834a7194 mismatch               exit=0 lines=[] texts=['Root \\', 'Leaf'] ''
+   2a9373aca mismatch               exit=0 lines=[] texts=['Root \\', 'Leaf'] ''
+   594c2b3c5 match                  exit=0 lines=[] texts=['Root node name', 'Leaf'] ''
+== tc1_salt_body java_exit 0 valid True intended True
+   src: @startsalt⏎{⏎[Press \⏎Here]⏎"field"⏎}⏎@endsalt⏎
+   java: lines=[] texts=['Press Here', 'field']
+   93bf53e18 mismatch               exit=0 lines=[] texts=['[Press \\', 'Here]', 'field'] ''
+   9834a7194 mismatch               exit=0 lines=[] texts=['[Press \\', 'Here]', 'field'] ''
+   2a9373aca mismatch               exit=0 lines=[] texts=['[Press \\', 'Here]', 'field'] ''
+   594c2b3c5 match                  exit=0 lines=[] texts=['Press Here', 'field'] ''
+== tc1_seq_block_comment_inner_backslash java_exit 0 valid True intended True
+   src: @startuml⏎/'⏎text \⏎'/⏎Kea -> Tui : hidden⏎'/⏎Tui -> Kea : shown⏎@enduml⏎
+   java: lines=['6', '6', '6', '6', '6', '6', '6'] texts=['Tui', 'Tui', 'Kea', 'Kea', 'shown']
+   93bf53e18 mismatch               exit=0 lines=['4', '4', '4', '4', '4', '4', '4', '6'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'hidden', 'shown'] ''
+   9834a7194 mismatch               exit=0 lines=['4', '4', '4', '4', '4', '4', '4', '6'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'hidden', 'shown'] ''
+   2a9373aca mismatch               exit=0 lines=['4', '4', '4', '4', '4', '4', '4', '6'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'hidden', 'shown'] ''
+   594c2b3c5 match                  exit=0 lines=['6', '6', '6', '6', '6', '6', '6'] texts=['Tui', 'Tui', 'Kea', 'Kea', 'shown'] ''
+== tc1_seq_chr_backslash_postjoin java_exit 0 valid True intended True
+   src: @startuml⏎Kea -> Tui : one%chr(92)⏎Tui -> Kea : two⏎Kea -> Kea : three⏎@enduml⏎
+   java: lines=['2', '2', '2', '2', '2', '2', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'oneTui -&gt; Kea : two', 'three']
+   93bf53e18 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'one\\', 'two', 'three'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'one\\', 'two', 'three'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'one\\', 'two', 'three'] ''
+   594c2b3c5 match                  exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'oneTui -&gt; Kea : two', 'three'] ''
+== tc1_seq_four_pieces_lines java_exit 0 valid True intended True
+   src: @startuml⏎Kea -> Tui : p1 \⏎p2 \⏎p3 \⏎p4⏎Tui -> Kea : after⏎Kea -> Kea : last⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1', '5', '6'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'p1 p2 p3 p4', 'after', 'last']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "p2 \\\\"'
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '5', '6'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'p1 \\', 'after', 'last'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "p2 \\\\"'
+   594c2b3c5 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '5', '6'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'p1 p2 p3 p4', 'after', 'last'] ''
+== tc1_seq_include_directive_continued java_exit 0 valid True intended True
+   src: @startuml⏎!include \⏎tc1_plain.iuml⏎Tui -> Kea : main⏎@enduml⏎
+   java: lines=['0', '0', '0', '0', '0', '0', '0', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'included', 'main']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "tc1_plain.iuml"'
+   9834a7194 mismatch               exit=0 lines=['2', '2', '3', '3', '2', '2', '2', '2', '3', '3'] texts=['tc1_plain', 'tc1_plain', 'iuml', 'iuml', 'Tui', 'Tui', 'Kea', 'Kea', 'main'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "tc1_plain.iuml"'
+   594c2b3c5 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'included', 'main'] ''
+== tc1_seq_include_tail_before_end java_exit 0 valid True intended True
+   src: @startuml⏎Kea -> Tui : head⏎!include tc1_tail.iuml⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'head', 'tail @enduml']
+   93bf53e18 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'head', 'tail \\'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'head', 'tail \\'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'head', 'tail \\'] ''
+   594c2b3c5 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'head'] ''
+== tc1_seq_include_then_define java_exit 0 valid True intended True
+   src: @startuml⏎!include tc1_tail.iuml⏎!define LBL two⏎Tui -> Kea : LBL⏎@enduml⏎
+   java: lines=['3', '3', '3', '3', '3', '3', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'tail Tui -&gt; Kea : two']
+   93bf53e18 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'tail \\', 'two'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'tail \\', 'two'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'tail \\', 'two'] ''
+   594c2b3c5 mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'tail', 'two'] ''
+== tc1_seq_include_then_directive java_exit 0 valid True intended True
+   src: @startuml⏎!include tc1_tail.iuml⏎!$v = 2⏎Tui -> Kea : two $v⏎@enduml⏎
+   java: lines=['3', '3', '3', '3', '3', '3', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'tail Tui -&gt; Kea : two 2']
+   93bf53e18 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'tail \\', 'two 2'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'tail \\', 'two 2'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'tail \\', 'two 2'] ''
+   594c2b3c5 mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'tail', 'two 2'] ''
+== tc1_seq_include_then_main_line java_exit 0 valid True intended True
+   src: @startuml⏎!include tc1_tail.iuml⏎more⏎Tui -> Kea : after⏎@enduml⏎
+   java: lines=['2', '2', '2', '2', '2', '2', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'tail more', 'after']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "more"'
+   9834a7194 mismatch               exit=0 lines=['1', '1', '2', '2', '1', '1', '1', '1', '2', '2'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'm', 'm', 're', 're', 'tail \\', 'after'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "more"'
+   594c2b3c5 match                  exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'tail more', 'after'] ''
+== tc1_seq_indented_end_after_backslash java_exit 0 valid True intended True
+   src: @startuml⏎Kea -> Tui : last \⏎  @enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'last   @enduml']
+   93bf53e18 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'last \\'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'last \\'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'last \\'] ''
+   594c2b3c5 valid-error            exit=1 lines=[] texts=[] 'parse error: line 1: No valid @start/@end found, please check the version'
+== tc1_seq_legend_body java_exit 0 valid True intended True
+   src: @startuml⏎Kea -> Tui : hi⏎legend⏎line one \⏎two⏎three⏎endlegend⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'hi', 'line one two', 'three']
+   93bf53e18 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'hi', 'line one \\', 'two', 'three'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'hi', 'line one \\', 'two', 'three'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'hi', 'line one \\', 'two', 'three'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'hi', 'line one two', 'three'] ''
+== tc1_seq_next_apostrophe_leading java_exit 0 valid True intended True
+   src: @startuml⏎Kea -> Tui : it \⏎  's skipped⏎Tui -> Kea : z⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'it Tui -&gt; Kea : z']
+   93bf53e18 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'it \\', 'z'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'it \\', 'z'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'it \\', 'z'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'it Tui -&gt; Kea : z'] ''
+== tc1_seq_next_long_comment_tail java_exit 0 valid True intended True
+   src: @startuml⏎Kea -> Tui : x \⏎/' long⏎end '/⏎Tui -> Kea : after⏎Kea -> Kea : more⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1', '5'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'x Tui -&gt; Kea : after', 'more']
+   93bf53e18 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '4', '5'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'x \\', 'after', 'more'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '4', '5'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'x \\', 'after', 'more'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '4', '5'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'x \\', 'after', 'more'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '5'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'x Tui -&gt; Kea : after', 'more'] ''
+== tc1_seq_quote_comment_backslash java_exit 0 valid True intended True
+   src: @startuml⏎' remark \⏎Kea -> Tui : eaten⏎Tui -> Kea : kept⏎@enduml⏎
+   java: lines=['3', '3', '3', '3', '3', '3', '3'] texts=['Tui', 'Tui', 'Kea', 'Kea', 'kept']
+   93bf53e18 mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'eaten', 'kept'] ''
+   9834a7194 mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'eaten', 'kept'] ''
+   2a9373aca mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'eaten', 'kept'] ''
+   594c2b3c5 match                  exit=0 lines=['3', '3', '3', '3', '3', '3', '3'] texts=['Tui', 'Tui', 'Kea', 'Kea', 'kept'] ''
+== tc1_seq_quoted_backslash java_exit 0 valid True intended True
+   src: @startuml⏎participant "Wide \⏎Name" as W⏎W -> W : self⏎@enduml⏎
+   java: lines=['1', '1', '1', '3'] texts=['Wide Name', 'Wide Name', 'self']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 1: Syntax error: no registered sequence command accepts "participant \\"Wide \\\\"'
+   9834a7194 mismatch               exit=0 lines=['3', '3', '3', '3'] texts=['W', 'W', 'self'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 1: Syntax error: no registered sequence command accepts "participant \\"Wide \\\\"'
+   594c2b3c5 match                  exit=0 lines=['1', '1', '1', '3'] texts=['Wide Name', 'Wide Name', 'self'] ''
+== tc1_seq_separator_continued java_exit 0 valid True intended True
+   src: @startuml⏎Kea -> Tui : a⏎== Phase \⏎One ==⏎Tui -> Kea : b⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1', '4'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'a', 'Phase One', 'b']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "== Phase \\\\"'
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '4'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'a', 'b'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "== Phase \\\\"'
+   594c2b3c5 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '4'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'a', 'Phase One', 'b'] ''
+== tc1_seq_sprite_header_continued java_exit 0 valid True intended True
+   src: @startuml⏎sprite $dot \⏎[2x2/16] {⏎F0⏎0F⏎}⏎Kea -> Tui : <$dot> hi⏎@enduml⏎
+   java: lines=['6', '6', '6', '6', '6', '6', '6'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'hi']
+   93bf53e18 mismatch               exit=0 lines=['6', '6', '6'] texts=['Kea', 'Tui', '&lt;$dot&gt; hi'] 'ite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported'
+   9834a7194 mismatch               exit=0 lines=['6', '6', '6'] texts=['Kea', 'Tui', '&lt;$dot&gt; hi'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 1: Cannot read: \\'
+   594c2b3c5 mismatch               exit=0 lines=['6', '6', '6', '6', '6', '6', '6'] texts=['Kea', 'Kea', 'Tui', 'Tui', '&lt;$dot&gt; hi'] 'warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 1: sprite $dot [2x2/16] {'
+== tc1_seq_sprite_row_continued java_exit 200 valid False intended True
+   src: @startuml⏎sprite $dot [4x2/16] {⏎F0 \⏎0F⏎FFFF⏎}⏎Kea -> Tui : <$dot> hi⏎@enduml⏎
+   java: lines=[] texts=['PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]', '[From string (line 6) ]', '&#160;', '@startuml', 'sprite $dot [4x2/16] {', 'F0 0F', 'FFFF', '}', 'You should send a mail to plantuml@gmail.com or post to https://plantuml.com/qa with this log (V1.2026.3beta6) java.lang.IllegalArgumentException: level=-1 grayLevel=16 (Assumed diagram type: sequence)']
+   93bf53e18 nonpositive-accepted   exit=0 lines=['6', '6', '6', '6', '6', '6', '6'] texts=['Kea', 'Kea', 'Tui', 'Tui', '&lt;$dot&gt; hi'] ''
+   9834a7194 nonpositive-accepted   exit=0 lines=['6', '6', '6', '6', '6', '6', '6'] texts=['Kea', 'Kea', 'Tui', 'Tui', '&lt;$dot&gt; hi'] ''
+   2a9373aca nonpositive-accepted   exit=0 lines=['6', '6', '6', '6', '6', '6', '6'] texts=['Kea', 'Kea', 'Tui', 'Tui', '&lt;$dot&gt; hi'] 'warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 1: sprite $dot [4x2/16] {'
+   594c2b3c5 nonpositive-accepted   exit=0 lines=['6', '6', '6', '6', '6', '6', '6'] texts=['Kea', 'Kea', 'Tui', 'Tui', '&lt;$dot&gt; hi'] 'warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 1: sprite $dot [4x2/16] {'
+== tc1_seq_sprite_svg_continued java_exit 0 valid True intended True
+   src: @startuml⏎sprite $sq <svg viewBox="0 0 4 4"><rect width="4" height="4" fill="#ff0000"/>\⏎</svg>⏎Kea -> Tui : <$sq> hi⏎@enduml⏎
+   java: lines=['3', '3', '3', '3', '3', '3', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'hi']
+   93bf53e18 mismatch               exit=0 lines=['3', '3', '3', '3', '3', '3', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', '&lt;$sq&gt; hi'] 'recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported'
+   9834a7194 mismatch               exit=0 lines=['3', '3', '3', '3', '3', '3', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', '&lt;$sq&gt; hi'] ''
+   2a9373aca mismatch               exit=0 lines=['3', '3', '3', '3', '3', '3', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', '&lt;$sq&gt; hi'] 'd CommandSpriteSvgMultiline is recognized but unimplemented at line 1: sprite $sq <svg viewBox="0 0 4 4"><rect width="4" height="4" fill="#ff0000"/>\\'
+   594c2b3c5 mismatch               exit=0 lines=['3', '3', '3', '3', '3', '3', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', '&lt;$sq&gt; hi'] 'mmand CommandSpriteSvg is recognized but unimplemented at line 1: sprite $sq <svg viewBox="0 0 4 4"><rect width="4" height="4" fill="#ff0000"/></svg>'
+== tc1_seq_theme_local_postjoin java_exit 0 valid True intended True
+   src: @startuml⏎!theme tc1 from .⏎Kea -> Tui : hi⏎@enduml⏎
+   java: lines=['2', '2', '2', '2', '2', '2', '2'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'hi']
+   93bf53e18 mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'hi'] ''
+   9834a7194 mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'hi'] ''
+   2a9373aca mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'hi'] ''
+   594c2b3c5 mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'hi'] ''
+== tc1_seq_two_pieces_lines java_exit 0 valid True intended True
+   src: @startuml⏎Kea -> Tui : p1 \⏎p2⏎Tui -> Kea : after⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'p1 p2', 'after']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "p2"'
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'p1 \\', 'after'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "p2"'
+   594c2b3c5 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'p1 p2', 'after'] ''
+== tc1_seq_url_backslash java_exit 0 valid True intended True
+   src: @startuml⏎Kea -> Tui : see [[http://example.com/a go]] \⏎now⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'see', 'go', 'now']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "now"'
+   9834a7194 mismatch               exit=0 lines=['1', '1', '2', '2', '1', '1', '1', '1', '2', '2'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'n', 'n', 'w', 'w', 'see', 'go'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "now"'
+   594c2b3c5 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Kea', 'Kea', 'Tui', 'Tui', 'see', 'go', 'now'] ''
+== tc1_yaml_body java_exit 0 valid True intended True
+   src: @startyaml⏎fruit: apple \⏎pie⏎veg: leek⏎@endyaml⏎
+   java: lines=[] texts=['fruit', 'apple pie', 'veg', 'leek']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] "parse error: line 3: YAML parse error: could not find expected ':' at line 3 column 1, while scanning a simple key at line 2 column 1"
+   9834a7194 valid-error            exit=1 lines=[] texts=[] "parse error: line 3: YAML parse error: could not find expected ':' at line 3 column 1, while scanning a simple key at line 2 column 1"
+   2a9373aca valid-error            exit=1 lines=[] texts=[] "parse error: line 3: YAML parse error: could not find expected ':' at line 3 column 1, while scanning a simple key at line 2 column 1"
+   594c2b3c5 match                  exit=0 lines=[] texts=['fruit', 'apple pie', 'veg', 'leek'] ''

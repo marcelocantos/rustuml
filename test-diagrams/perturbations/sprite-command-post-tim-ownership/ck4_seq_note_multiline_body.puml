@@ -1,0 +1,7 @@
+@startuml
+A -> B : x
+note right
+/' c '/ body text
+more /' d '/
+end note
+@enduml

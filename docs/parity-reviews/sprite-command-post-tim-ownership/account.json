@@ -1,0 +1,33 @@
+{
+ "schema_version": 1,
+ "mechanism": "sprite-command-post-tim-ownership",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "status": "guard-schema projection of maker-results-round4/account.json (round-4 account of record, committed before the round-4 draft) and maker-results-round3/account.json (round 3); round-2 account maker-results/account.json (amended, see amendment_round3); independent review required",
+ "java_locations": [
+  "net.sourceforge.plantuml.command.PSystemCommandFactory#getCandidate / #isMultilineCommandOk / #addOneSingleLineManageEmbedded2",
+  "net.sourceforge.plantuml.command.CommandMultilines#isValid / CommandMultilines2#isValid (#syntaxWithFinalBracket, BlocLines#eventuallyMoveBracket) / CommandMultilinesBracket#isValid",
+  "net.sourceforge.plantuml.command.CommonCommands#addCommonCommands1 / #addTitleCommands / #addCommonCommands2",
+  "descdiagram.DescriptionDiagramFactory / statediagram.StateDiagramFactory / activitydiagram.ActivityDiagramFactory / classdiagram.ClassDiagramFactory #initCommandsList",
+  "descdiagram.command.CommandCreateElementMultilines / CommandCreateElementFull / CommandArchimateMultilines; objectdiagram.command.CommandCreateMap / CommandCreateJson#finalVerification / CommandCreateEntityObjectMultilines; classdiagram.command.CommandCreateClassMultilines / CommandCreateElementFull2",
+  "command.note.CommandFactoryNote / CommandFactoryNoteOnEntity / CommandFactoryNoteOnLink / CommandFactoryNoteActivity / CommandFactoryTipOnEntity; activitydiagram.command.CommandLinkLongActivity; style.CommandStyleMultilinesCSS",
+  "tim.TContext#buildCodeIterator; tim.iterator.CodeIteratorShortComment / CodeIteratorInnerComment; text.StringLocated#removeInnerComment",
+  "tim.iterator.CodeIteratorSub#peek; tim.TContext#executeIncludesub",
+  "command.CommandSpriteSvgMultiline / CommandFactorySprite (END grammars)",
+  "tim.TContext#buildCodeIterator it20-it40: CodeIteratorLongComment, CodeIteratorShortComment (text.TLineType COMMENT_LONG_START / COMMENT_SIMPLE), CodeIteratorInnerComment -> text.StringLocated#removeInnerComment / #removeSpecialInnerComment (round 4)"
+ ],
+ "rust_locations": [
+  "crates/rustuml-parser/src/parse/command_spans.rs (new)",
+  "crates/rustuml-parser/src/parse/{component,deployment,usecase,state,object,class,activity}.rs (sprite dispatch gated on the walk)",
+  "crates/rustuml-parser/src/preprocess/mod.rs::PreprocessContext::process_one_line (sprite comment exemption; !startsub in place)",
+  "crates/rustuml-parser/src/preprocess/mod.rs::remove_inner_comment and PreprocessContext::process_one_line (round 4: removeInnerComment at Java's it40 position, before the sprite exemption)"
+ ],
+ "invariant": "A line Java's getCandidate never offers as a command start (body or END of an earlier-selected multiline command) is never offered to the sprite group; sprite command lines keep Java's text (no Rust-only comment stripping); a !startsub body takes part in the diagram where it is written. Every line surviving Java's long/short comment stages carries exactly StringLocated#removeInnerComment's text into the rest of TIM and the commands (round 4).",
+ "causal_divergence": "Round 2 offered every line a Rust family parser did not claim to the sprite group, but the Rust parsers do not model all of Java's multiline commands; the preprocessor's trailing-apostrophe stripping spared only the SVG start line; !startsub bodies were never emitted in place. Round 3: Rust had no removeInnerComment, so with the sprite exemption the sprite commands saw /' ... '/ spans.",
+ "planned_change": "Port getCandidate's body ownership as a per-factory registry walk in initCommandsList order and gate sprite dispatch on it; exempt sprite start and open sprite command lines from the inline-comment stripping; replay !startsub bodies in place outside theme expansion. Round 4: port removeInnerComment as a preprocessor stage on every line at Java's it40 position.",
+ "perturbation_axes": [
+  "renamed and held-out AT body shapes: other body texts, other families, other multiline owners (caption, positioned header/footer, note on link/entity, TYPE0 bodies, map/json, class bodies), deeper nesting, embedded {{ }}",
+  "apostrophes in SVG body/END lines and pixel END lines; trailing text after </svg> and '}'",
+  "same-file !startsub sprites across families, with and without !includesub, inside !if",
+  "round 4: leading, trailing and /'''word'''/ inner comments on sprite start/body/END lines and on non-sprite lines across families, inside quotes and TIM bodies"
+ ]
+}

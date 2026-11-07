@@ -1,0 +1,50 @@
+{
+ "commits": {
+  "before": "93bf53e18d892f60e66b5fdfb4237f681afd5860",
+  "sprite_account": "ff761cd0a60a7208a970bca7cc88fe08245bb1e3",
+  "sprite_impl": "95cf8525297d551cd7da954e9892cb25325d5191",
+  "part_account": "65b5a16338935699a8828665720373ec9bee9d35",
+  "part_impl1": "ecbd75ec87dbbabac18a88904c2bad4d4f2e4416",
+  "part_impl2": "87bdb0feb0cd1557070d12fcd3890417e884662d",
+  "maker_tip": "5cf1eac12183db62938fe199009b7410538b3822",
+  "base": "9834a719455308120c3289b59a260567f141b724",
+  "rejection": "dc1dfbb4ac8343fde59e041c651d288ffa318a52"
+ },
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+ "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13); cargo 1.99.1",
+ "binaries": {
+  "rustuml-before": "fae4432a39eaffb79accdc8628192fb84b47d978013e18100d929c86952f3040",
+  "rustuml-after": "91208cc76fc3740b606869f3585c10dccac5ab4768c543f03c774158eb48ef2d",
+  "compare_cli": "34e9e8920c940a2d4289dc36b0771cedb02e3a197a2d5f413beb5022eebea6d0"
+ },
+ "compare_cli_rs": "d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701",
+ "java_references": {
+  "AS": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/sprite-claude-maker-batch2/reference-results.json",
+   "sha256": "83586c81d9322a4b1aaea40d06bd7000330b2a4365de73ff444c1d06a5b5a1cb"
+  },
+  "AQ": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/sprite-claude-batch1/reference-results.json",
+   "sha256": "a023e9b64410bfdeb366248fd885ee0ad41c33e8d8afbb3acb9d2c28509d062e"
+  },
+  "AT": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/sprite-ownership-checker-batch1/reference-results.json",
+   "sha256": "98671af0cd44fc70187857a672165bf2994b047d5e5f7bf30d50e3a92b194159",
+   "gz_sha256": "1a061a58f1d4f9584307a4180dd0c8cfa303a20cffc56237a4b7c2505e9923ca",
+   "manifest_sha256": "bd13a2c644a2df93ce99e9686818640598d418a0b6b1bb0233010cc5229e86b0",
+   "bundle_sha256": "d3924c7e8b389e6a039e200c2f70ebb9eae8525a4068c34bedde9b5bc9cdf2c9",
+   "transport_sha256": "4d462ab69529a94f896d4904b8dd62a80b55821cd2031f69df349c4db4eef407",
+   "parent_validation_sha256": "2cebcde30685e6dc626db5c58e43c6e8469e418721034cfe9b1ec23f02c37e97"
+  },
+  "F790/F28": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-checker-75ed0e64 (+ supplement)"
+  }
+ },
+ "environment": {
+  "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+  "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+  "jobs": 6
+ }
+}

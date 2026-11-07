@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Hazel
+participant Elm
+box "Copse"
+participant Hazel
+end box
+Hazel -> Elm: catkins
+@enduml

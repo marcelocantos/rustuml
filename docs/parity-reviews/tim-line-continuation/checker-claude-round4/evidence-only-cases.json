@@ -1,0 +1,1807 @@
+[
+ {
+  "name": "mr4_pragma_inactive_tail",
+  "batch": "CB",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "pragma",
+   "inactive branch",
+   "count:2",
+   "java:welcome",
+   "java-prediction:welcome"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "21cf7ff81f1a31c25075212864ace7613f1238846930ab569f0ee2762e131496",
+  "java_svg_sha256": "7df48d138abbdf5e48ba8eb5dfb4e2bc632a46b7ed885ab17518ac5d58a8f927",
+  "reason": "Java Welcome page (exit 0; distinct outcome, not a comparable pair)"
+ },
+ {
+  "name": "mr4_two_option_handwritten_tail",
+  "batch": "CB",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "rust-only line",
+   "option handwritten",
+   "count:2",
+   "java:welcome",
+   "java-prediction:welcome"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "a7c70c99dca536409d51780da41f745cf37545bbe7797c325da9356a6c1fc793",
+  "java_svg_sha256": "35d9ede2428e524eb04f7d78d0cf4d585ba723ebe5ebcc25045e26a4f325efb8",
+  "reason": "Java Welcome page (exit 0; distinct outcome, not a comparable pair)"
+ },
+ {
+  "name": "mr4_two_dump_tail",
+  "batch": "CB",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "rust-only line",
+   "dump_memory",
+   "count:2",
+   "java:welcome",
+   "java-prediction:welcome"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "857ad5d8ccf0320ae2e95fb6657c6e0e2e53f4b0b164db3746d2da33ba332c49",
+  "java_svg_sha256": "3c50b971d6adede890fbfc4ef2cb45edac67ac46298d252bde7e0c56bb171311",
+  "reason": "Java Welcome page (exit 0; distinct outcome, not a comparable pair)"
+ },
+ {
+  "name": "mr4_two_option_nojoin",
+  "batch": "CB",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "rust-only line",
+   "no continuation",
+   "count:2",
+   "java:welcome",
+   "java-prediction:welcome"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "03a883029327bcb1fb220a75348bea068b64d1ced646ae680408539c8b4fe214",
+  "java_svg_sha256": "0f6e69e29bcfcbd0c5020ca772502cb23ef65edc1946b21272fce0cdd77b65a2",
+  "reason": "Java Welcome page (exit 0; distinct outcome, not a comparable pair)"
+ },
+ {
+  "name": "mr4_two_comment_and_define_nojoin",
+  "batch": "CB",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "no continuation",
+   "count:2",
+   "java:welcome",
+   "java-prediction:welcome"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "689f1d95a9e84a3e75446abcba5cf95fe12206273f01773b6c091e634d717007",
+  "java_svg_sha256": "3b32cf47aadfe2abebfc969f09c26988144469bbda0a26abe0ba3658aba12e5d",
+  "reason": "Java Welcome page (exit 0; distinct outcome, not a comparable pair)"
+ },
+ {
+  "name": "mr4_one_at_end_in_procdef",
+  "batch": "CB",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "one-line",
+   "@enduml in !procedure definition",
+   "java-prediction:empty-description"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "59adcc2f10e7120eca117d9ba025442488dbc2e19077ffea05df2a31dd26a759",
+  "java_svg_sha256": "88585c12b4566004bcfbe2e67f180ef65f0318b10764daf94ba9848355f90686",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "mr4_one_bs_end_in_function",
+  "batch": "CB",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "one-line",
+   "\\enduml in !function definition",
+   "java-prediction:empty-description"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "42e9d61f84aa1fabf337041ef45ec73a8cc05176fef872b5578c6810eaff4dc2",
+  "java_svg_sha256": "930574f99e794d3115e887ecb82a5858fb16bb44f5d500102558ecfaae75cd5c",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "mr4_one_end_in_definelong",
+  "batch": "CB",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "one-line",
+   "\\enduml in !definelong",
+   "java-prediction:empty-description"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-rejected",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "e36c7643d6fcb148c6899c956a3a5d786ba6a8889b03b003645874979f429734",
+  "java_svg_sha256": "927ef7d8542b1024fc7155ed09f46ccea253dbddaa0d32d71e659385812abfcc",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "mr4_two_content_then_procdef_end",
+  "batch": "CB",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "two-line",
+   "end in definition after content",
+   "java:welcome",
+   "java-prediction:welcome"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "2172aa02c1a88d8c7388eb4aa23d3cc09c2bfb683d20569cb69db1e483593702",
+  "java_svg_sha256": "15261bec81d9dd212ef221b078b781202a143b15848eed7df5774fd917f596a8",
+  "reason": "Java Welcome page (exit 0; distinct outcome, not a comparable pair)"
+ },
+ {
+  "name": "mr4_one_end_continued_after_directive",
+  "batch": "CB",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "one-line",
+   "end line continued",
+   "directive before",
+   "java-prediction:empty-description"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "6284788339bd7a2848d1f78c9c6a26057c7b3ed81c188fe930b72a4eb618bfe6",
+  "java_svg_sha256": "d41b604dd7f9181905822d401c8a245090d09f1f99b12d24c846f81972c9eb45",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "mr4_ws_zwsp_before_bs_end",
+  "batch": "CB",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+200B",
+   "\\enduml",
+   "java-prediction:error"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-rejected",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "c88413261a39c3061690431404b1fd7cd0fd6f8919e53e6c0c1da66a64ceab19",
+  "java_svg_sha256": "d732f5af8af10b340827c3cbcf65a08dbe65a9ff967b79b1badfb27010a14026",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "mr4_ws_figure_space_before_bs_end",
+  "batch": "CB",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+2007",
+   "\\enduml",
+   "java-prediction:error"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-rejected",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "866525f329273f7c6fa36b1ab89eb75a68e42478effbd47cc6a90bbdadcab75b",
+  "java_svg_sha256": "05586df9f415d38cfa8a1924b5a7c994712e1645e6785215d781d709c7688aaf",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "mr4_ws_mongolian_vs_before_bs_end",
+  "batch": "CB",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+180E",
+   "\\enduml",
+   "java-prediction:error"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-rejected",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "01f353a96749adfa84ed6b216dcebe95cbd0dda82f504a568cdfd4c0abe88fd6",
+  "java_svg_sha256": "b9d36360a71227e56a87e26b1eaa1eb202c6cd7f26b1ffd24b7de34a1e411fa7",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "mr4_ws_nel_before_at_end",
+  "batch": "CB",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+0085",
+   "@enduml",
+   "java-prediction:error"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "c8c8f39e88acec425c4e8db8a1c250104af64dbf0d7e31e8a8e6d18969b962f5",
+  "java_svg_sha256": "12a6a3621e5a909438e08578e96b386ac195c2f1abc65baac12b7dfebdf9dc61",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "mr4_inc_bom_every_line",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "include",
+   "BOM on every line",
+   "wrapped",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "match",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "5560cb6b3fdf61f9e2e033b9496ca5907d6fa68aa22d0337b6658ed3adf564b4",
+  "java_svg_sha256": "65452879dc25f718ecadc4963901484606f6e4f009f1f8469fe321959c05cd43",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "mr4_inc_bom_directive_raw",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "include",
+   "BOM before a directive",
+   "raw",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "9d19d548a69fc1b09f4f01cb95d6ba0697a354b5ced73d2b8fb4ef5f37cb285a",
+  "java_svg_sha256": "c5e5a2777a739b9b6a69127d88dfb0bbccc707e53800212c438ec35f94264fd3",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "mr4_inc_endash_raw",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "include",
+   "U+2013",
+   "raw",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "6f73ab223d8bfd096a3b129a2ddcec71c9a69b2c29c8e90ac7ecfa74e3fb0d94",
+  "java_svg_sha256": "7364740f8830cd4a41fd9c546d395110d544de4689da44fef05a23aa00e89082",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "mr4_inc_endash_wrapped",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "include",
+   "U+2013",
+   "wrapped",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "bba4bf851967b5f91725f9764ecec259e58c7c6218033540bd8a9d6938aedbfb",
+  "java_svg_sha256": "736c1ed97b3b85da117aafe76950da05135438b0ccc9a599787848cf6e46103c",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "mr4_inc_header_half",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "include",
+   "header U+00BD (No)",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "2df5b91c25aea33493675b65488ce2953a023713465d55b9d0e33fca829d503d",
+  "java_svg_sha256": "03ccd371dfe138ad275e60d08fb5ff25956ca5dce0adf3f60b73f9f0f8e0a848",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "mr4_inc_header_roman",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "include",
+   "header U+2160 (Nl)",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "ca265ee6aa4c1cb52f77052b2002d2dc73143320ff0d3ee046fe7a1803663a0c",
+  "java_svg_sha256": "453792c5654de529aa46f3ddc828c25a77f2f30bcf6880f4b0713c0855b6a8ae",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "mr4_inc_header_supplementary",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "include",
+   "header U+1D400 (supplementary letter)",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "5bf1cfbcb21878834e70f0cd6968e7f97b9d10f33d35b3f44b8cb346b1315b76",
+  "java_svg_sha256": "792e42b68a592ef511a11f930e251eafc979771ee5f9adf7b3d0d3fa20b5edca",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "mr4_inc_bang1",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "include",
+   "!1 suffix",
+   "wrapped",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "61f5f6e16ec08b31ae2590b5b039ea14b8b515d8cff53b3b08ca2e29f4a4ee65",
+  "java_svg_sha256": "8f3eaf1333c01832fe8308b84dab896766a4a3dae561ba8821682d6432a2ad00",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "mr4_inc_bang_name_raw",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "include",
+   "!x suffix",
+   "raw",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "08bd91b7be70b0e16f0dcf45058ff02c53fcac3fe442a14a37a649a2717d83f7",
+  "java_svg_sha256": "1b0f6050c4ea2f15d2a98983b579bb1233d865a59254260b09d966f7ac5598be",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "mr4_includesub_bom",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "includesub",
+   "BOM before !startsub",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "match",
+   "cb550c0d6": "valid-error"
+  },
+  "source_sha256": "3217e75aaabd28ab78fd24855a013d02329b5329d899a8e90cfd175d27248f7d",
+  "java_svg_sha256": "07ef4ca9fd37d72419d76a2fe13271f0fe8423fef976ece42595bca700a32aea",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_cnt_pragma_bare",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "!pragma bare: PLAIN, count 3",
+   "CommandPragma needs a NAME"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-rejected",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "19ce20cb3c727e058517f1aabb9bf06ba444bc11313c89583b6f723fad565430",
+  "java_svg_sha256": "a7f060501e2cee82eb0b9a4e40fcb3012cb1485757171047e4734ea3a69f1563",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_cnt_pragma_bare_tail",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "!pragma bare + tail",
+   "count 3"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-rejected",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "6011dbe0226e1962d4ff768c6253fc084531f3e04379e3b8f096abaf8966fe96",
+  "java_svg_sha256": "89f8d7c04f0bb3f4035c97936402da9a56689df16442d367327286c6fb39b1fe",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_cnt_pragma_continued_end",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 100,
+  "validity_basis": "brief: Java exit 100/50 is invalid (No valid @start/@end found)",
+  "axes": [
+   "count",
+   "pragma ends with backslash",
+   "joined with end: count 2"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "valid-error",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "f8c03eaf5e93ccca84407848830a6ad73b4f19b5b80065d2457bfc240c145a42",
+  "java_svg_sha256": "427c1ce502ccee9df59e92af20afe24a00adbfed3d693efd671f7a10a907f710",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_cnt_pragma_from_include_tail",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "!pragma from raw include",
+   "count 3"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "aba538fead74d2476c6fbfde1ef5b464ae13b40c2fdd91d3be2d1d68ed969c94",
+  "java_svg_sha256": "90c95c1391f04516f5b0d0be0ebc3b2cb70955bca5fd32684ec6dc51110ff7b2",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_cnt_option_unknown",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "!option consumed: count 2"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "9e082ccb7bd9b7e22596d8e7599d4bcc9cc201483b3803520c71ea9bbb6f4cb0",
+  "java_svg_sha256": "bf53f1143e13a3e9715220dec6f02fbe9b1bc60c4084f582f63bf1d5d31c9aef",
+  "reason": "Java Welcome page (exit 0; distinct outcome, not a comparable pair)"
+ },
+ {
+  "name": "cr4_cnt_log_alone",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "!log consumed: count 2"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "99a7b13528e95af2cce6e7ace3d2544614ee81b9b1819d7771135725faadf560",
+  "java_svg_sha256": "3df4f0b8f05ca44917d54acfefd88458f3bd7a7c0a28c7bf3505257053eee05a",
+  "reason": "Java Welcome page (exit 0; distinct outcome, not a comparable pair)"
+ },
+ {
+  "name": "cr4_cnt_assert_alone",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "!assert consumed: count 2"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "1cebc1bab2a8e86a927bc77492f7042ebea78938ce506baed0f089d6a7fdfa29",
+  "java_svg_sha256": "2b7fbf5ac5db73574186d94708141f16f112945bcbe88febf077313e9596a0af",
+  "reason": "Java Welcome page (exit 0; distinct outcome, not a comparable pair)"
+ },
+ {
+  "name": "cr4_cnt_undef_alone",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "!undef consumed: count 2"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "7392476f96284a1cdaec41a386535efc30a554195578d17f7b318806d1749683",
+  "java_svg_sha256": "2ba9965e9db6dcbeb6182cd1de228e7d652af017bd3af31db12f50288713a416",
+  "reason": "Java Welcome page (exit 0; distinct outcome, not a comparable pair)"
+ },
+ {
+  "name": "cr4_cnt_include_empty",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "include of an empty file: count 2"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "829e96236fd62947a8a6c1509e2c18881468cb53e61dd0bf495ebc57c3f0f96b",
+  "java_svg_sha256": "49caae7d3c11038f552e6ff47b875b60a7109387003f8f24e285b2f9d517e6ca",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_cnt_include_blank_line",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "include of one blank line: count 3",
+   "UmlSource#isEmpty"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "244300f89bd6c05af4f10d86b1c87d8447648bbb1aa022030c238d012d2c135c",
+  "java_svg_sha256": "c83a79e1383e979c08b79867b137b25f1f3dacc49198f7ea5dc772cc6ce6ed7f",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_cnt_includesub_empty",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "empty sub: count 2"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "85aef1b9fd41cf7eecdec8f98d824f51843f8e73a62e762f3bef6c85a27ef5df",
+  "java_svg_sha256": "e3be944f30c84db563ee4440fb3c1e9b496d02c9ffb55657eb473080654b9917",
+  "reason": "Java Welcome page (exit 0; distinct outcome, not a comparable pair)"
+ },
+ {
+  "name": "cr4_cnt_theme_local_comment_only",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "local theme with no TIM lines: count 2"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "b2dfbcb8f10b86e3ea06de07daedad26c478e1dc7366773c81bd82de80a6f703",
+  "java_svg_sha256": "3ace8090996ed711121e00aed56ea82d0ca232e3205ab3d324513a2c341cb3fa",
+  "reason": "Java Welcome page (exit 0; distinct outcome, not a comparable pair)"
+ },
+ {
+  "name": "cr4_cnt_theme_local_one_skinparam",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "local theme with one line: count 3",
+   "unsure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "match",
+   "9ed52f435": "match",
+   "cb550c0d6": "match"
+  },
+  "source_sha256": "034d99b951e61ee22a0feea4bea89fd3f446b3b7f50d82d4ef566425a50ccade",
+  "java_svg_sha256": "d4fd671738a306057fe8289514e35b8057e77c9336f7e1eaa12dc3e0b945385b",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_cnt_exit_alone",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "BlockUmlBuilder !exit pauses; end line appended",
+   "count 2"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-rejected",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "ef4fa443286d07103d88fd7825afe0c1aaaddc49a40f820b48d5f28b711cc676",
+  "java_svg_sha256": "b09d3a648fb38598af173ec273377f79e8a2bf914a04c40142b249f141bca5e3",
+  "reason": "Java Welcome page (exit 0; distinct outcome, not a comparable pair)"
+ },
+ {
+  "name": "cr4_cnt_blank_three",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "one blank line: count 3",
+   "UmlSource#isEmpty"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "9812077fc7bcbff0d46cabe21ede1b5186a4e35d0dc966d587a6a08c338e0eea",
+  "java_svg_sha256": "9817a6d2b69ec4c6c93c7dd43c177a42588cb9822bda0f2f3050b22631009bc0",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_cnt_ws_only_line",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "whitespace-only line: count 3",
+   "UmlSource#isEmpty (trin)"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "651c18a4435e309e948c115a9dae458fb22fcb4f153bc828e1eb577c325234d2",
+  "java_svg_sha256": "28447692596834105e5f7a73870d431d74112bb5447b7cc63395f8ad3ddf070c",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_cnt_empty_var_line",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "TIM line evaluating to empty",
+   "UmlSource#isEmpty"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "1ac66277468b73d0466ae0dba4ee082c9621d45db015c3b3ca894df9834f8aa8",
+  "java_svg_sha256": "52d936a54438bd71e5c1b39efd6399b05fa9721b85c518d4898f24aa5e39d7b3",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_cnt_tim_comment_line",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "TIM line evaluating to a comment",
+   "UmlSource#isEmpty COMMENT_LINE"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-rejected",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "a6f9b09627208f6edc0c0fd089590a36057748bd186a6fa7d41806c1d4145025",
+  "java_svg_sha256": "0968b3c851ccbbe583ad2e24813f6adba7b8144190497536c898b0501545cda1",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_one_mindmap_procdef",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "one-line",
+   "mindmap",
+   "PSystemCommandFactory isEmpty"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "e731c8ccd844a192f0c4560aab77bdc33a154a1d8a0764a21ba686bce4c04edc",
+  "java_svg_sha256": "fedc39365750732001b44036c97447f7106f71d2f2b0cb740b6d9e61e2eb3131",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_one_gantt_procdef",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "one-line",
+   "gantt"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "5a3ea5678ba8ae8020db77d5b307354023d1c2da3620824ee6f98fe68ee9a7db",
+  "java_svg_sha256": "7f87cea51dec3ce84bbaae6fa780216b3015cf3f5ee8f7a6b77ef1f64a54e770",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_one_wbs_function",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "one-line",
+   "wbs",
+   "\\end form"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "a7a53a608cacbe5c1b9dccaf51eacdf6700f22acb4016f14ba6939d65497b8c7",
+  "java_svg_sha256": "754525e35e3bfa66fd52475cc20f3e1459a02fcb8e51b460b0a79ebbd2e6694a",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_one_salt_definelong",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "one-line",
+   "salt",
+   "unsure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-rejected",
+   "9834a7194": "nonpositive-rejected",
+   "1f6ffa9f4": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-rejected"
+  },
+  "source_sha256": "9fe7c43ff65794e824d3c131c1216a727c180dc533aebf44e65f3f9ceb6e2931",
+  "java_svg_sha256": "a0e71a710a37543e8d94fc0e1c9257e708df6b1954b2bf12bfe12ff4992dd139",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_one_json_procdef",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "one-line",
+   "json (not a command factory)",
+   "unsure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-rejected",
+   "9834a7194": "nonpositive-rejected",
+   "1f6ffa9f4": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-rejected"
+  },
+  "source_sha256": "b4c9ff56c73bd418213d775eccab3a2a40dbed48113ed74dc1499878a9597a8e",
+  "java_svg_sha256": "d1a905423181d275115ea6979ba939c574739662eafb7162bf355362852193e8",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_two_mindmap_content_then_procdef",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "two-line",
+   "mindmap: no Welcome factory"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "6cc6283b31faee902088c451aa8c5227a0568592761c8a74f8439a0a2bf57dd8",
+  "java_svg_sha256": "3069b78a985af49340960b28fa153b67a3a5dfb4365c0b2e94357b2c96b01cd5",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_two_class_content_then_function_end",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "two-line",
+   "class content",
+   "end swallowed by !function"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "dc4224c2f2aba6318e15d92f51eebc71d3cf0f072745817e25d973d37647015d",
+  "java_svg_sha256": "771a3b224bf0fd0999c898117d7f3eb1b42a9fc69afea98488f09fd98554a17e",
+  "reason": "Java Welcome page (exit 0; distinct outcome, not a comparable pair)"
+ },
+ {
+  "name": "cr4_two_blank_then_procdef_end",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "two-line",
+   "blank line then swallowed end: count 2"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "ba4581a65af31757d995c452560e336c586f1dff2fd0bfa1746bf9ee57ab32e6",
+  "java_svg_sha256": "654a40b987b3fd4b64dfb91a36e3f748b7885264a6dfb470528dad9f2b6585a3",
+  "reason": "Java Welcome page (exit 0; distinct outcome, not a comparable pair)"
+ },
+ {
+  "name": "cr4_ws_ideo_before_assign",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+3000 before a TIM assignment: PLAIN"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "2aebeb3ff85cb2363e178a57f53d35abe84b19282ceeb5388a8e7d6395e99e3f",
+  "java_svg_sha256": "36e5363650f59938cb1596ec5fc525b01de10242412dc0ed1ebc238e8108de33",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_ws_ideo_before_comment",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+3000 before ': PLAIN, not a comment"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "526b91d667b2a72905b1afdb856f2cff11797c3c2491a852db9727a003ffa4db",
+  "java_svg_sha256": "46e572ba4b278ac17b9f81f8947d48232aa857410964bc86ce47877b654e7c31",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_ws_ideo_before_procedure",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+3000 before !procedure: PLAIN"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "2c9dfeba1357e9ee1eefbe1dc190447472336f285c9315091d7719634dcb791f",
+  "java_svg_sha256": "8e07d13bbedb03ff8a7b5ea2537a2d0db888b6074704ebb81dd1c0a15a3df699",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_ws_ideo_before_if",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+3000 before !if: PLAIN; stray !endif"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "a4daa3d63ff69586631b1fb93cd273dbddd8e3508da36e5a813dbefd7f97d898",
+  "java_svg_sha256": "bd1f40fe2ae33de4a8fb9e117331a19652a270a043d4980d112fbf4f458d5e19",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_ws_nbsp_before_assign",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "NBSP before a TIM assignment: [%s] includes U+00A0"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "f66b44f941f069eaecc8ce73efeb14e30590c3169e8a3b620d40e3a716573af4",
+  "java_svg_sha256": "c9de7fd0248452313e3629e2b94aabcb73928b1810c77a66f860b64196634138",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_ws_us_before_assign",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+001F before an assignment: not \\s"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-rejected",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "853a37d5a8cedc2c607b396180a8a28a1795f9fc0e52ed24c11a5719ebb73442",
+  "java_svg_sha256": "ff7113612d5e093430a968b818924c40ac04bc3fd04017103060663986684c39",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_ws_ideo_startsub_in_includesub",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "Sub#fromFile: U+3000 before !startsub is no marker",
+   "cannot include"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "03cd78b1399b0d4655309305c9359da0b88c0cf21e57a686d5901ac9601bb863",
+  "java_svg_sha256": "3d086ae45d3839fbf1f9e04e78b5d11c67da3cacd55cd3b3f8ed9c968402fd29",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_main_endash_include_path",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "U+2013",
+   "main source !include path becomes cr4-a.iuml"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "mismatch",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "b504523a60ebaf0eb5a313fe44fb8e28e0718279360529f8cf2dcdb490263da6",
+  "java_svg_sha256": "0ecfca6ce7d7826581c89594161a7741495e11dc33099359576ab427b21bf09f",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_inc_endash_includesub_body",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "U+2013",
+   "!includesub body"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "35d56dc8d5fa8fac513581a11baf9ea10e7a46ef986ce11de965f0b40c8bef19",
+  "java_svg_sha256": "6e0641f7800ac5898abf1e56dcf908cb8101a6a5edcc802f79ce93044bbad4b1",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_inc_double_bom",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "BOM",
+   "two BOMs: one stays",
+   "unsure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-rejected",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "c6662a1b842baf2e73f4b40796b804a436ca5af51e95bb99e00668e1d24f18f6",
+  "java_svg_sha256": "7f57921bda59158613d1e9ca7e208818ab3ef8ebef08aa76eb4bddcc6403c8cc",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_inc_cr_only_lines",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "line split",
+   "BufferedReader splits on lone CR"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "valid-error",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "47298856fcf03e56e5c42067943d016a9df90fe4e360ec86b6234dd774f3cad4",
+  "java_svg_sha256": "e4284530331010bfcabc33264270fdf310c880e2c09dca768b5e743e21298e77",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_inc_yaml_header_raw",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "ReadLineWithYamlHeader",
+   "raw include"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "valid-error",
+   "cb550c0d6": "match"
+  },
+  "source_sha256": "872df2ca2dfb9ba66c869943c78cb9de7014068fa2dea944449758dac07a2457",
+  "java_svg_sha256": "70975e0f250a63704478e8c0c65b8527db845d0a371488840293aa7e02130442",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_inc_yaml_header_wrapped",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "ReadLineWithYamlHeader",
+   "wrapped include (extraction first)"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "match",
+   "1f6ffa9f4": "match",
+   "9ed52f435": "match",
+   "cb550c0d6": "match"
+  },
+  "source_sha256": "a3e38f59f26a2ac0fdba047983c7c627a69133ed529590559c999fbc707f9ef0",
+  "java_svg_sha256": "ed1513e8df33a60fbd816ae0312d37ef9bc22e52808826e334b3a0d6eaff3b1b",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_sfx_bang_empty",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "suffix",
+   "empty suffix"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "651750bef6687dcf24705a86b45dd44c99d40590068875c87d4071f438b2516f",
+  "java_svg_sha256": "e78a18bc6ba7cff576694a3794a897b2fd2e06340566bb76dc1fb2fa32b20a2b",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_sfx_bang0",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "suffix",
+   "!0"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "37c7cadefa86c697fbd7935ad97513ce319369d4f465b6c9d51520df5e4c92cb",
+  "java_svg_sha256": "60130b7dc028997c1544f648d1ef7fa31fdeb03b24c55b107401a69b3e2e0f9f",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_sfx_two_bangs",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "suffix",
+   "lastIndexOf leaves cr4_w_two.iuml!1: no such file",
+   "unsure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "6f8c140a25a228a44f0fecdbff867cddd8cf81213d32ce1a8ea0e4c690d12e1f",
+  "java_svg_sha256": "a6093c731f608883c3a538a69a6299520226d9cb4a78925f395ce996840faa77",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_sfx_include_many",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "suffix",
+   "!include_many"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "valid-error",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "d5d202dd3a392b4074db453ba6386fa38dd6fb3bd619cae01e24a5f3417b8360",
+  "java_svg_sha256": "dcd0017a14ab7dcecb040257fe58e1d4afd86123524bd285f1b5efdd41241609",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_sfx_include_once_twice",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "suffix",
+   "!include_once twice: filesUsedCurrent is never filled"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "30579d5b18ad8a7b249e6245050c63b81d346af1308ca5ae48510408d8f1a895",
+  "java_svg_sha256": "9094ea53d5e4c001afbf73254dccf5f67785e4614e47d9ecc45c00c9b7da941e",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_sfx_includesub_double_bang",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "suffix",
+   "includesub indexOf: block 'P!x' missing"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-rejected"
+  },
+  "source_sha256": "079785690998c846b2130cbffc386376f442c368aa3c1058ee49f616a76700e8",
+  "java_svg_sha256": "f82bf1c763154318f711741ef56b12b2c573265ec84dd76a406ed93b203872e5",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_sfx_quoted_plain",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "suffix",
+   "quoted path control",
+   "unsure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "ee4ba49ffa5353eb5dc37cfab48f66a6208589e1d666f1b58e8a53185677782f",
+  "java_svg_sha256": "c752be088d60cee99811a12dda349041e9bdaccaa2c031e84970b7b6ed383f2b",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_sfx_quoted_bang",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "suffix",
+   "quoted path with suffix",
+   "unsure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "c980c634f9ecbefff8f7d8f4c8e38a2494c86727d547c4b918d7ae986b0d0a2d",
+  "java_svg_sha256": "8c251effdc5f77deae72a49d9c08e297319d25e6a3b63d464248d2bdae371957",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_hdr_u16_cyrillic_tje",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "header",
+   "U+1C89 (Unicode 16 letter, unassigned in 15.0)"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "valid-error",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "94be2ea292f3a40cd1365d31b6abdff6cdc5bba700b9422254b5039c64257b70",
+  "java_svg_sha256": "158149eb1a42805d529b75a6fd8881a4f40b224fafc913b693537d2d74453585",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_hdr_u16_latin_a7cb",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "header",
+   "U+A7CB (Unicode 16 letter)"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "valid-error",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "51865e2adfb70f3f63c6786599df0cae56ec74098828bc91a1ac022a014e384f",
+  "java_svg_sha256": "ec15cbecd3f92b0ca95812506ce802f4d7c5e9928afc953d19b0b39cb23ed7ce",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_hdr_u17_latin_a7ce",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "header",
+   "U+A7CE (Unicode 17 letter)"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "valid-error",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "74fdd5d2be3998be9ea9d70ef51052d7925167546784e2fbbb10a73c2893bea6",
+  "java_svg_sha256": "fed56bf2ef3f8497db958d1da386d0a6d4ee35e609173f66a3170db47fb3edb0",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_hdr_u17_arabic_088f",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "header",
+   "U+088F (Unicode 17 letter)"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "valid-error",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "4b07dd28f0140160f9159a18339e8f6b3823147b0b53c38c4f40fb96048a95fe",
+  "java_svg_sha256": "3ff825d27ac85df128d192ebc722935584834985a4cc6506b885a27aa828c079",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_hdr_u15_thai_control",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "header",
+   "U+0E01 is a 15.0 letter: raw include"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-rejected",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "987c9e644083449ed9c034483d26329667cd487c404122e6703a76ce2dfbf860",
+  "java_svg_sha256": "03280539cd2a67b05061a2ddf037ea53ebe2eb79a465f392b06f7ca6c0333ccf",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_hdr_u15_digit_control",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "header",
+   "U+0663 is Nd: raw include"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-rejected",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "fc47952986d6ecbfe2fda8c4c7a84b2050679334c0c0dacadea8183bb5e8826b",
+  "java_svg_sha256": "c92aa314ecbf3734e60ef9fd838370f87f072e860fc84d4796ea07d6bf123c56",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ },
+ {
+  "name": "cr4_sprite_from_include",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "sprite",
+   "declared in a raw include"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "mismatch",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "d0eaeb5d8424c62be8b828255710c77d3baf7b4ed04cce0b0df40beb35b720ca",
+  "java_svg_sha256": "871c3220de6ef6cb906e9ff895e4955e20f7fcb57ec27b38604fe6e6230ee18e",
+  "reason": "needs an include resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "cr4_end_in_startsub_unterminated",
+  "batch": "CC",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 200,
+  "validity_basis": null,
+  "axes": [
+   "swallowed end",
+   "CodeIteratorSub without !endsub",
+   "unsure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "1f6ffa9f4": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "cb550c0d6": "nonpositive-accepted"
+  },
+  "source_sha256": "632fbe5fc4c87d7b328c381fc2c59ed93a98e3390062239f121cf2e2244a7691",
+  "java_svg_sha256": "ec73a91e46d2b013ce81c5c0c0efd76f32f0476f89901819c79ec76df9252a76",
+  "reason": "Java-invalid reference (raw SVG + stderr: error, crash or no-diagram page)"
+ }
+]

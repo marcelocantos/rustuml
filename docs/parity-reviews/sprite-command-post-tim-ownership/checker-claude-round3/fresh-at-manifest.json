@@ -1,0 +1,794 @@
+[
+ {
+  "source": "ck_component_bracket_body.puml",
+  "golden": "ck_component_bracket_body.svg",
+  "cohort": "AT",
+  "name": "ck_component_bracket_body",
+  "intended_valid": true,
+  "axes": [
+   "description bracket body",
+   "file-form text",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "4e850c60bb330925f254a49705c84a8aac1876495d5e2cd99398636494f05bf5",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_component_bracket_lower.puml",
+  "golden": "ck_component_bracket_lower.svg",
+  "cohort": "AT",
+  "name": "ck_component_bracket_lower",
+  "intended_valid": true,
+  "axes": [
+   "description bracket body",
+   "lowercase file-form",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "615ed9a6b8f93e4a49732df4095cd7cbc461be2c9d1a9d7439e5ab082fc50bcb",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_deployment_node_bracket_body.puml",
+  "golden": "ck_deployment_node_bracket_body.svg",
+  "cohort": "AT",
+  "name": "ck_deployment_node_bracket_body",
+  "intended_valid": true,
+  "axes": [
+   "description bracket body",
+   "file-form text",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "82aa910cd71854086a1f798a6a4f380ffecedf2e6e38e1e167e8cc45d4b148c9",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_deployment_bracket_upper.puml",
+  "golden": "ck_deployment_bracket_upper.svg",
+  "cohort": "AT",
+  "name": "ck_deployment_bracket_upper",
+  "intended_valid": true,
+  "axes": [
+   "description bracket body",
+   "uppercase file-form",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "689b7501a1a4ea43e892b49bd6be10103da0664b535d8136f7166c4ec9c9fb23",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_usecase_rectangle_bracket_body.puml",
+  "golden": "ck_usecase_rectangle_bracket_body.svg",
+  "cohort": "AT",
+  "name": "ck_usecase_rectangle_bracket_body",
+  "intended_valid": true,
+  "axes": [
+   "description bracket body",
+   "file-form text",
+   "usecase"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "abcaeecdbe45bb7b5d4b87e36d5ccf3a070e91713c2e92d66885855673cea389",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_component_header_body.puml",
+  "golden": "ck_component_header_body.svg",
+  "cohort": "AT",
+  "name": "ck_component_header_body",
+  "intended_valid": true,
+  "axes": [
+   "multiline header body",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "00adf0b877b8cb864211772b8b47f66b3c4cac3aa436bbfdad5fe39b1ab99503",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_component_footer_body.puml",
+  "golden": "ck_component_footer_body.svg",
+  "cohort": "AT",
+  "name": "ck_component_footer_body",
+  "intended_valid": true,
+  "axes": [
+   "multiline footer body",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "4aeb8ffb9dab9b34c60cb30450f4e1c21bea5d0d32892b75a146c144d2937891",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_deployment_header_body.puml",
+  "golden": "ck_deployment_header_body.svg",
+  "cohort": "AT",
+  "name": "ck_deployment_header_body",
+  "intended_valid": true,
+  "axes": [
+   "multiline header body",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "86d045b41a951b1bb4179f87803026ad04cfe497816572beeb25d38cae04b58b",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_deployment_footer_upper.puml",
+  "golden": "ck_deployment_footer_upper.svg",
+  "cohort": "AT",
+  "name": "ck_deployment_footer_upper",
+  "intended_valid": true,
+  "axes": [
+   "multiline footer body",
+   "uppercase",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "9909b44c92efdade8e8768044de7a2e5c9c309aee90df66eabcc96eecf2b9608",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_usecase_header_body.puml",
+  "golden": "ck_usecase_header_body.svg",
+  "cohort": "AT",
+  "name": "ck_usecase_header_body",
+  "intended_valid": true,
+  "axes": [
+   "multiline header body",
+   "usecase"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "39170e0e106044844dde402ba7488ccb056d34128d9aac8a133b91d8b66a6fe1",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_state_header_body.puml",
+  "golden": "ck_state_header_body.svg",
+  "cohort": "AT",
+  "name": "ck_state_header_body",
+  "intended_valid": true,
+  "axes": [
+   "multiline header body",
+   "state"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "07eb1a5f15a2438207820c2b769096cb2c77b1548dbab113e1270da7ee6be786",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_state_legend_body.puml",
+  "golden": "ck_state_legend_body.svg",
+  "cohort": "AT",
+  "name": "ck_state_legend_body",
+  "intended_valid": true,
+  "axes": [
+   "legend body",
+   "state"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "9ec1eeccf957a8a9cb8895f718c55d6ea5d33fbdf4f20e7dceea6d174b9fcdf8",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_state_title_body.puml",
+  "golden": "ck_state_title_body.svg",
+  "cohort": "AT",
+  "name": "ck_state_title_body",
+  "intended_valid": true,
+  "axes": [
+   "multiline title body",
+   "state"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "e7a8d00780a2c0992117a0597a464b401fb761b3b57f3b9240ce3df2cc822281",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_object_header_body.puml",
+  "golden": "ck_object_header_body.svg",
+  "cohort": "AT",
+  "name": "ck_object_header_body",
+  "intended_valid": true,
+  "axes": [
+   "multiline header body",
+   "object"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "d315c20964bc4bc5c63994f6801062ea3cb206c4c5852ed2a77526e935adc9a2",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_object_legend_body.puml",
+  "golden": "ck_object_legend_body.svg",
+  "cohort": "AT",
+  "name": "ck_object_legend_body",
+  "intended_valid": true,
+  "axes": [
+   "legend body",
+   "object"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "da0555a3b2439e37e9397a6211cbbb58a11f8e830065ec25c0f76182ae6ba437",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_activity_legacy_note_body.puml",
+  "golden": "ck_activity_legacy_note_body.svg",
+  "cohort": "AT",
+  "name": "ck_activity_legacy_note_body",
+  "intended_valid": true,
+  "axes": [
+   "legacy activity note body",
+   "file-form"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "e0cb16f56735b11e3e4bd7a8c73d8b109fcec108d7dc802ff0344bbcfee7baf6",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_activity_legacy_note_brace.puml",
+  "golden": "ck_activity_legacy_note_brace.svg",
+  "cohort": "AT",
+  "name": "ck_activity_legacy_note_brace",
+  "intended_valid": true,
+  "axes": [
+   "legacy activity note body",
+   "pixel header lookalike"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "b74e8e87208c70bf494e8b437b3ffa1649b6ca317903fc498eeaf50201578613",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_activity_legacy_legend_body.puml",
+  "golden": "ck_activity_legacy_legend_body.svg",
+  "cohort": "AT",
+  "name": "ck_activity_legacy_legend_body",
+  "intended_valid": true,
+  "axes": [
+   "legacy activity legend body"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "0e8ee1e130c8f73eb1e75d743c6ad50767c5c22afecdd49ee44423d06eafa8cb",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_class_header_body.puml",
+  "golden": "ck_class_header_body.svg",
+  "cohort": "AT",
+  "name": "ck_class_header_body",
+  "intended_valid": true,
+  "axes": [
+   "multiline header body",
+   "class"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "526504a3adae96610678ed243ce394c4f05d44a628c5e425356b9b4f37090ac6",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_class_legend_body.puml",
+  "golden": "ck_class_legend_body.svg",
+  "cohort": "AT",
+  "name": "ck_class_legend_body",
+  "intended_valid": true,
+  "axes": [
+   "legend body",
+   "class"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "5bfdfb091754b805ff99283d1e57d6edd9da7e025b25969f44c71487771a37a9",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_class_floating_note_body.puml",
+  "golden": "ck_class_floating_note_body.svg",
+  "cohort": "AT",
+  "name": "ck_class_floating_note_body",
+  "intended_valid": true,
+  "axes": [
+   "floating note body",
+   "class"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "7f55bc690a7fc42ad54f1a7298a7aed3b38a1e6e172b89d9699c750ab8a97db2",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_seq_header_body_legacy.puml",
+  "golden": "ck_seq_header_body_legacy.svg",
+  "cohort": "AT",
+  "name": "ck_seq_header_body_legacy",
+  "intended_valid": true,
+  "axes": [
+   "multiline header body",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "bfe98e6e48e18c0e54b04fa0e1284fd2d3073bcc6aacf95397c51c3686f48208",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_svg_body_apos_end_legacy.puml",
+  "golden": "ck_svg_body_apos_end_legacy.svg",
+  "cohort": "AT",
+  "name": "ck_svg_body_apos_end_legacy",
+  "intended_valid": true,
+  "axes": [
+   "multiline svg body",
+   "space-apostrophe on END line",
+   "legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "8be0d207ec024ae9546a8144622a8cfe52c726656ca53441859aaa5e4ee99e08",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_svg_body_trailing_after_end_legacy.puml",
+  "golden": "ck_svg_body_trailing_after_end_legacy.svg",
+  "cohort": "AT",
+  "name": "ck_svg_body_trailing_after_end_legacy",
+  "intended_valid": false,
+  "axes": [
+   "multiline svg body",
+   "text after </svg> on END line",
+   "legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n3\nSyntax Error? (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "b63a485b6a1556dd15993b36fd0ae48a90179a7a0a107141c473706dc356802c",
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck_svg_body_apos_end_teoz.puml",
+  "golden": "ck_svg_body_apos_end_teoz.svg",
+  "cohort": "AT",
+  "name": "ck_svg_body_apos_end_teoz",
+  "intended_valid": true,
+  "axes": [
+   "multiline svg body",
+   "space-apostrophe on END line",
+   "teoz"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "be3f5da4f9ee81aace8ed5edf89c9765d641f9213228a01379dd99a3c2cc9783",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_svg_body_trailing_after_end_teoz.puml",
+  "golden": "ck_svg_body_trailing_after_end_teoz.svg",
+  "cohort": "AT",
+  "name": "ck_svg_body_trailing_after_end_teoz",
+  "intended_valid": false,
+  "axes": [
+   "multiline svg body",
+   "text after </svg> on END line",
+   "teoz"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n4\nSyntax Error? (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "2709ade0728c999245ccb9ca20023d5510727eefa305c7cda48c7bae826b1372",
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck_svg_body_apos_end_class.puml",
+  "golden": "ck_svg_body_apos_end_class.svg",
+  "cohort": "AT",
+  "name": "ck_svg_body_apos_end_class",
+  "intended_valid": true,
+  "axes": [
+   "multiline svg body",
+   "space-apostrophe on END line",
+   "class"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "1dfb4531fa7428702f27da120222dee4d6f37c29ebf3c1b5c70944c54bda25f3",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_svg_body_apos_end_component.puml",
+  "golden": "ck_svg_body_apos_end_component.svg",
+  "cohort": "AT",
+  "name": "ck_svg_body_apos_end_component",
+  "intended_valid": true,
+  "axes": [
+   "multiline svg body",
+   "space-apostrophe on END line",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "15234a2770b9d7cb331ee2c046f4f6caca6ffdb81c4eaa07ef9b2f10a575199a",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_svg_body_apos_mid_legacy.puml",
+  "golden": "ck_svg_body_apos_mid_legacy.svg",
+  "cohort": "AT",
+  "name": "ck_svg_body_apos_mid_legacy",
+  "intended_valid": true,
+  "axes": [
+   "multiline svg body",
+   "space-apostrophe mid body",
+   "control"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "9f436b3bc21ab7d0b1afb35acb127a3c777c0fb072eec765850a960e109058c5",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_svg_body_trailing_after_end_class.puml",
+  "golden": "ck_svg_body_trailing_after_end_class.svg",
+  "cohort": "AT",
+  "name": "ck_svg_body_trailing_after_end_class",
+  "intended_valid": false,
+  "axes": [
+   "multiline svg body",
+   "text after </svg> on END line",
+   "class"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "2db07fb9e9ac5b950aba7f12a5d14767adf552263e872ce9819453271fe0aefa",
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck_startsub_sprite_deployment.puml",
+  "golden": "ck_startsub_sprite_deployment.svg",
+  "cohort": "AT",
+  "name": "ck_startsub_sprite_deployment",
+  "intended_valid": true,
+  "axes": [
+   "!startsub body",
+   "pixel sprite drawn",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "35ca6bc50f46dcf4c41d5025ccfb5ca409407d481b735fb1a9bf514497c58e01",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_nosub_sprite_deployment.puml",
+  "golden": "ck_nosub_sprite_deployment.svg",
+  "cohort": "AT",
+  "name": "ck_nosub_sprite_deployment",
+  "intended_valid": true,
+  "axes": [
+   "control without startsub",
+   "pixel sprite drawn",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "389b73f72cf769c876e553ba98b41be24a703e9c6cc659d76693c9ca85f5bfad",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_startsub_sprite_class.puml",
+  "golden": "ck_startsub_sprite_class.svg",
+  "cohort": "AT",
+  "name": "ck_startsub_sprite_class",
+  "intended_valid": true,
+  "axes": [
+   "!startsub body",
+   "pixel sprite",
+   "class"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "cb6994e9984c6bec54fe8b5fe25ab27285c8708a36e16d6ca1c6bb05038ee4ff",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_yaml_block_sprite_text.puml",
+  "golden": "ck_yaml_block_sprite_text.svg",
+  "cohort": "AT",
+  "name": "ck_yaml_block_sprite_text",
+  "intended_valid": true,
+  "axes": [
+   "yaml block scalar",
+   "single-line sprite shape"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "25c80793c1bd239afb7c51b7f85060b6f1bbc9f01f5ab81dcef160d80f660576",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_ditaa_sprite_text.puml",
+  "golden": "ck_ditaa_sprite_text.svg",
+  "cohort": "AT",
+  "name": "ck_ditaa_sprite_text",
+  "intended_valid": true,
+  "axes": [
+   "ditaa text",
+   "single-line sprite shape"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "de3eacc9c64b61f97748fab3fd8aa9082bce2723e48093993f18e3cc9875937f",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_tooltip_label_brace_legacy.puml",
+  "golden": "ck_tooltip_label_brace_legacy.svg",
+  "cohort": "AT",
+  "name": "ck_tooltip_label_brace_legacy",
+  "intended_valid": true,
+  "axes": [
+   "url label containing braces",
+   "no tooltip",
+   "legacy"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "8d761790a8721c43eb070afeb940a67ac3cbfe19a124d75090f1835654a03ce7",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_tooltip_label_brace_teoz.puml",
+  "golden": "ck_tooltip_label_brace_teoz.svg",
+  "cohort": "AT",
+  "name": "ck_tooltip_label_brace_teoz",
+  "intended_valid": true,
+  "axes": [
+   "url label containing braces",
+   "no tooltip",
+   "teoz"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "9de982fbef00f9cca9fb5e06a20181700ad9edfcb8b3e27d48f4face73dbc889",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_tooltip_spaced_legacy.puml",
+  "golden": "ck_tooltip_spaced_legacy.svg",
+  "cohort": "AT",
+  "name": "ck_tooltip_spaced_legacy",
+  "intended_valid": true,
+  "axes": [
+   "tooltip with surrounding spaces"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "3ea9338ff2dc1b42d546c96eede9faa0f86e7bfeef88e64ec28f9e42125d7cfd",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_tooltip_empty_legacy.puml",
+  "golden": "ck_tooltip_empty_legacy.svg",
+  "cohort": "AT",
+  "name": "ck_tooltip_empty_legacy",
+  "intended_valid": true,
+  "axes": [
+   "empty tooltip"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "8c8a2903afefd79de91f0b1e14fedcc51cc9bd76790a7c5d68238908b47469a9",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_tooltip_nested_brace_legacy.puml",
+  "golden": "ck_tooltip_nested_brace_legacy.svg",
+  "cohort": "AT",
+  "name": "ck_tooltip_nested_brace_legacy",
+  "intended_valid": true,
+  "axes": [
+   "nested braces in tooltip"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "c7f1e5af21d800db71d01a72d689bdeac55bbcf3c76abda736f48d9294d524fc",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_create_tooltip_legacy.puml",
+  "golden": "ck_create_tooltip_legacy.svg",
+  "cohort": "AT",
+  "name": "ck_create_tooltip_legacy",
+  "intended_valid": true,
+  "axes": [
+   "created participant",
+   "tooltip"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "6b5241575390b89f0186c7db8780f4d4caefbb971f2e3ca5f0216ed20ae6f01a",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_redeclare_order_stable_legacy.puml",
+  "golden": "ck_redeclare_order_stable_legacy.svg",
+  "cohort": "AT",
+  "name": "ck_redeclare_order_stable_legacy",
+  "intended_valid": true,
+  "axes": [
+   "re-declaration",
+   "explicit order keeps position"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "3f973d016043c3f369e7aec5496178c6908181f242d42848f06c8d724eb77ae6",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_redeclare_order_stable_teoz.puml",
+  "golden": "ck_redeclare_order_stable_teoz.svg",
+  "cohort": "AT",
+  "name": "ck_redeclare_order_stable_teoz",
+  "intended_valid": true,
+  "axes": [
+   "re-declaration",
+   "explicit order keeps position"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "c8067ee885204dc0c49f65394dc7cb1258697880b987f33059c5e139d89dc3bd",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_redeclare_order_lower_legacy.puml",
+  "golden": "ck_redeclare_order_lower_legacy.svg",
+  "cohort": "AT",
+  "name": "ck_redeclare_order_lower_legacy",
+  "intended_valid": true,
+  "axes": [
+   "re-declaration",
+   "lower explicit order keeps position"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "e6a791a5134adaa566469aac15290f619ee849971297c3957f9ff86abf02460c",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck_redeclare_last_legacy.puml",
+  "golden": "ck_redeclare_last_legacy.svg",
+  "cohort": "AT",
+  "name": "ck_redeclare_last_legacy",
+  "intended_valid": true,
+  "axes": [
+   "re-declaration of last participant",
+   "control"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "aa291cddf4bf9ce78b5b4bbf553b41c28ceb1ef2e0b2c5b10a5c0402366e983b",
+  "java_markers": [],
+  "observed_valid": true
+ }
+]

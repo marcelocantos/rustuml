@@ -1,0 +1,5 @@
+lib exit 0
+pipe exit 0
+oracle exit 101
+before oracle exit 101
+base oracle exit 101

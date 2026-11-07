@@ -1,0 +1,65 @@
+{
+  "acceptance": "NOT accepted; all mechanisms need fresh independent checking. No partial metrics substitute for full output.",
+  "full_remaining_failures": "remaining-failures.json",
+  "valid_mismatches": 866,
+  "valid_cli_errors": 17,
+  "parent_approved_new_errors": 15,
+  "previous_valid_errors": [
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+      "source_sha256": "7100bbc69273937eae2b9278b0168f8fb184001c8e253fd7001ce9e2f5cd4d2a",
+      "before_status": 3,
+      "after_status": 3,
+      "before_exit": 1,
+      "after_exit": 1,
+      "before_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "warning: sequence command CommandExoArrowLeft variant is recognized but unimplemented at line 4: ?-> Osprey: near\nparse error: line 5: After create command, you have to send a message to \"Osprey\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml",
+      "source_sha256": "d24b396616bdb28813d35743c3b4bba187390bc89edeb51b7534a80bb37d46c1",
+      "before_status": 3,
+      "after_status": 3,
+      "before_exit": 1,
+      "after_exit": 1,
+      "before_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "warning: sequence command CommandExoArrowLeft variant is recognized but unimplemented at line 5: ?-> Osprey: near\nparse error: line 6: After create command, you have to send a message to \"Osprey\"\n"
+    }
+  ],
+  "nonpositive": 241,
+  "dependencies": [
+    {
+      "target": "T14.21",
+      "cause": "Factory syntax-error fall-through requires family admission contracts;13 approved misroutes remain errors, four2001-unit controls retain wrong Sequence family. No new exception for size controls."
+    },
+    {
+      "target": "T14.22",
+      "cause": "Two exact retained TIM line-continuation sources produce invalid evaluated sequence text; parent-approved new errors, no preprocessor edits."
+    },
+    {
+      "target": "T14.20",
+      "cause": "20 retained Java exporter-failure references,8historical+12checker, stay nonpositive; Rust does not reproduce Java crash."
+    },
+    {
+      "target": "T14.13",
+      "cause": "Shared heading/stripe semantics; headings, notes/dividers remain failures."
+    },
+    {
+      "target": "T14.11",
+      "cause": "Logical font mapping/metrics remain unowned failures."
+    },
+    {
+      "cause": "Registered but unimplemented command classes/variants and partial color style materialization; full command inventory plus actual warnings in unimplemented-command-residue.json."
+    },
+    {
+      "cause": "Note geometry/envelopes, nested Teoz boxes, quoted activation, shaped-across, short external ? arrows, participant/stereotype and page controls remain in retained failures."
+    },
+    {
+      "cause": "TIM welcome/factory and other-family historical false successes remain;12 historical nonpositive successes are named in rejection-contract.json."
+    }
+  ],
+  "size_controls": "8 Java-valid;4SEQUENCE/4CLASS;2match6mismatch final, all sources and SVGs unchanged",
+  "new_capture_classification": "28batch:18valid10invalid. Size8:8valid, including4intended-invalid that renderCLASS. Intention disagreements preserved."
+}

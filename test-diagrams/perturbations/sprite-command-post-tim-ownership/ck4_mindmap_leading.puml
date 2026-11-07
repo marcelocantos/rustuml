@@ -1,0 +1,5 @@
+@startmindmap
+* root
+/' c '/ ** child
+** other
+@endmindmap

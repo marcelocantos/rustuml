@@ -1,0 +1,5 @@
+@startuml
+Kea -> Tui : one
+%chr(64)enduml
+Tui -> Kea : two
+@enduml

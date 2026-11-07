@@ -1,0 +1,4 @@
+2094566e9d32fab94ac29801d4af4a347d4c3febcef6083a5ce5de64b980b272  reference-manifest.json
+28b9d00108cc58ff8b3ec50720901f4fb8dd631b44ecc8ec05d9866c5d907a29  reference-input-bundle.json.gz
+952a42b617c1ec24441710b3cf5ddffe0bf2c4374add2320c5c0aa07f161e818  q8-rust-predictions.json
+b1ec8458f341585e2d67603878f5f801719ced7594d7fd9a757ae26ec0c08753  heldout-check-q8.json

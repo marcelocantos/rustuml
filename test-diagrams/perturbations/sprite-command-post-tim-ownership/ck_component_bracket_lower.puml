@@ -1,0 +1,7 @@
+@startuml
+component Engine [
+header row
+sprite pool holds frames
+]
+[Engine] --> [Store]
+@enduml

@@ -1,0 +1,612 @@
+[
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2000_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2000_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2001_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2001_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2002_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2002_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2003_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2003_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2004_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2004_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2005_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2005_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2006_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2006_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2007_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2007_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2008_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2008_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2009_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2009_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_200a_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_200a_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_3000_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_3000_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_1680_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_1680_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_205f_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_205f_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_feff_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_feff_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_color_boundary_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_color_boundary_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_activation_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_activation_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_autonumber_resume_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_autonumber_resume_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_create_destroy_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_create_destroy_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_hide_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_hide_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_color_boundary_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_color_boundary_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_color_boundary_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_color_boundary_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_accross_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_accross_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_coloured_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_coloured_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_rect_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_rect_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_hex_multiline_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_hex_multiline_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/vt_required_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/vt_required_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/resume_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/resume_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/accross_negative_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/accross_negative_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_ff_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_ff_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_space_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_space_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_space_nbsp_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_space_nbsp_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a2_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a2_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a3_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a3_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a4_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a4_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_note_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_note_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_rnote_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_rnote_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_hnote_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_hnote_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/unknown_command_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/unknown_command_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/invalid_suffix_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/invalid_suffix_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/invalid_gap_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/invalid_gap_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_simple_invalid_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_simple_invalid_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_composite_terminator_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_composite_terminator_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": false
+  }
+]

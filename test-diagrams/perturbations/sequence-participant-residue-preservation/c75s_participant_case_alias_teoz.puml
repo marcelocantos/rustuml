@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Hazel
+AcToR "Hazel crown" AS Hazel.Root<<leaf>> order -2 #LightBlue
+Hazel -> Elm: catkins
+@enduml

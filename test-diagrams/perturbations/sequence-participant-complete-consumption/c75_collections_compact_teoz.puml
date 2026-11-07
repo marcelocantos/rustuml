@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Spruce
+collections Cedar<<woody>>#PaleGreen
+Spruce -> Cedar: pollen
+@enduml

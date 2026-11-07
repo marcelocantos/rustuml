@@ -1,0 +1,9 @@
+@startuml
+state Idle
+header
+{{
+endheader
+}}
+Sprite keeper online
+endheader
+@enduml

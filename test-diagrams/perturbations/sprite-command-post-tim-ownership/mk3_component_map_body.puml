@@ -1,0 +1,7 @@
+@startuml
+map Config {
+Sprite pool => full
+mode => fast
+}
+[Engine]
+@enduml

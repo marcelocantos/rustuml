@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+group#back:PaleGreen;line:Indigo shade
+Cedar -> Spruce: roots
+end
+@enduml

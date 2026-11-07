@@ -1,0 +1,4 @@
+@startuml
+/' c '/ actor Clerk
+Clerk --> (Pay)
+@enduml

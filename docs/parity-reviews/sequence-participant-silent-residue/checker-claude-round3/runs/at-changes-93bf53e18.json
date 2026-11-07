@@ -1,0 +1,106 @@
+{
+ "changes": [
+  {
+   "name": "ck_class_header_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_class_legend_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_class_floating_note_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_svg_body_trailing_after_end_class",
+   "cohort": "AT",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 1: Syntax Error? sprite command never completed: sprite $tag <svg width=\"4\" height=\"4\">\n"
+  },
+  {
+   "name": "ck_yaml_block_sprite_text",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_ditaa_sprite_text",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "compare-101",
+   "after": "compare-101",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_tooltip_spaced_legacy",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_tooltip_empty_legacy",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_tooltip_nested_brace_legacy",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_create_tooltip_legacy",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  }
+ ],
+ "losses": [],
+ "disagreements": []
+}

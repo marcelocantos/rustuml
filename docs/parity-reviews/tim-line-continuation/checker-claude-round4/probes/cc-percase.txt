@@ -1,0 +1,148 @@
+cr4_cnt_pragma_bare                        J=200 valid=0 W=1 mk=['Syntax Error', 'Welcome to PlantUML', '[From string', '(Assumed diagram type:'] pred='syntax error (exit 200)'
+     9ed5=nonpositive-rejected 1f6f=nonpositive-rejected 93bf=nonpositive-rejected 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 1 Syntax Error? (Assumed diagram type: sequence)
+cr4_cnt_pragma_bare_tail                   J=200 valid=0 W=1 mk=['Syntax Error', 'Welcome to PlantUML', '[From string', '(Assumed diagram type:'] pred='syntax error on !pragma (exi'
+     9ed5=nonpositive-rejected 1f6f=nonpositive-rejected 93bf=nonpositive-rejected 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 1 Syntax Error? (Assumed diagram type: sequence)
+cr4_cnt_pragma_upper_msg                   J=  0 valid=1 W=0 mk=[] pred='syntax error (exit 200)'
+     9ed5=mismatch 1f6f=mismatch 93bf=mismatch 9834=mismatch cb55=mismatch | java texts ['Kea', 'Tui', 'Kea', 'Tui'] | err 
+cr4_cnt_pragma_continued_end               J=100 valid=1 W=0 mk=[] pred='welcome'
+     9ed5=valid-error 1f6f=valid-error 93bf=mismatch 9834=mismatch cb55=mismatch | java texts ['No valid @start/@end found, please check the version'] | err 
+cr4_cnt_pragma_from_include_tail           J=  0 valid=1 W=0 mk=[] pred="teoz message 'x @enduml'"
+     9ed5=match 1f6f=mismatch 93bf=mismatch 9834=mismatch cb55=mismatch | java texts ['Kea', 'Tui', 'Kea', 'Tui'] | err 
+cr4_cnt_pragma_from_variable_line          J=  0 valid=1 W=0 mk=[] pred="teoz message 'one'"
+     9ed5=match 1f6f=match 93bf=match 9834=match cb55=match | java texts ['Kea', 'Tui', 'Kea', 'Tui'] | err 
+cr4_cnt_option_unknown                     J=  0 valid=0 W=1 mk=['Welcome to PlantUML'] pred='welcome'
+     9ed5=WELCOME-MATCH 1f6f=WELCOME-MATCH 93bf=WELCOME-MATCH 9834=WELCOME-MATCH cb55=WELCOME-MATCH | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err 
+cr4_cnt_assume_alone                       J=  0 valid=1 W=0 mk=[] pred='an empty diagram (not Welcom'
+     9ed5=mismatch 1f6f=mismatch 93bf=mismatch 9834=mismatch cb55=mismatch | java texts [] | err 
+cr4_cnt_log_alone                          J=  0 valid=0 W=1 mk=['Welcome to PlantUML'] pred='welcome'
+     9ed5=WELCOME-MATCH 1f6f=WELCOME-MATCH 93bf=WELCOME-MATCH 9834=WELCOME-MATCH cb55=WELCOME-MATCH | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err 
+cr4_cnt_assert_alone                       J=  0 valid=0 W=1 mk=['Welcome to PlantUML'] pred='welcome'
+     9ed5=WELCOME-MATCH 1f6f=WELCOME-MATCH 93bf=WELCOME-MATCH 9834=WELCOME-MATCH cb55=WELCOME-MATCH | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err 
+cr4_cnt_undef_alone                        J=  0 valid=0 W=1 mk=['Welcome to PlantUML'] pred='welcome'
+     9ed5=WELCOME-MATCH 1f6f=WELCOME-MATCH 93bf=WELCOME-MATCH 9834=WELCOME-MATCH cb55=WELCOME-MATCH | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err 
+cr4_cnt_include_empty                      J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string'] pred='welcome'
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err e.plantuml.Pipe.managePipe(Pipe.java:91) 	at net.sourceforge.plantuml.Run.main(Run.java:183) ERROR 1 Fatal parsing error
+cr4_cnt_include_blank_line                 J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string', '(Assumed diagram type:'] pred='empty-description (exit 200)'
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 0 Empty description (Assumed diagram type: sequence)
+cr4_cnt_includesub_empty                   J=  0 valid=0 W=1 mk=['Welcome to PlantUML'] pred='welcome'
+     9ed5=WELCOME-MATCH 1f6f=WELCOME-MATCH 93bf=WELCOME-MATCH 9834=WELCOME-MATCH cb55=WELCOME-MATCH | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err 
+cr4_cnt_theme_local_comment_only           J=  0 valid=0 W=1 mk=['Welcome to PlantUML'] pred='welcome'
+     9ed5=WELCOME-MATCH 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err 
+cr4_cnt_theme_local_one_skinparam          J=  0 valid=1 W=0 mk=[] pred='an empty diagram (not Welcom'
+     9ed5=match 1f6f=match 93bf=mismatch 9834=mismatch cb55=match | java texts [] | err 
+cr4_cnt_theme_unshipped_alone              J=  0 valid=1 W=0 mk=[] pred='an empty diagram (not Welcom'
+     9ed5=mismatch 1f6f=mismatch 93bf=mismatch 9834=mismatch cb55=mismatch | java texts [] | err 
+cr4_cnt_exit_alone                         J=  0 valid=0 W=1 mk=['Welcome to PlantUML'] pred='welcome'
+     9ed5=nonpositive-rejected 1f6f=nonpositive-rejected 93bf=nonpositive-rejected 9834=WELCOME-MATCH cb55=WELCOME-MATCH | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err 
+cr4_exit_mid                               J=  0 valid=1 W=0 mk=[] pred="'one' only"
+     9ed5=valid-error 1f6f=valid-error 93bf=valid-error 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_cnt_blank_three                        J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string', '(Assumed diagram type:'] pred='empty-description (exit 200)'
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 1 Empty description (Assumed diagram type: sequence)
+cr4_cnt_ws_only_line                       J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string', '(Assumed diagram type:'] pred='empty-description (exit 200)'
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 1 Empty description (Assumed diagram type: sequence)
+cr4_cnt_empty_var_line                     J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string', '(Assumed diagram type:'] pred='empty-description (exit 200)'
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 2 Empty description (Assumed diagram type: sequence)
+cr4_cnt_tim_comment_line                   J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string', '(Assumed diagram type:'] pred='empty-description (exit 200)'
+     9ed5=nonpositive-rejected 1f6f=nonpositive-rejected 93bf=nonpositive-rejected 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 2 Empty description (Assumed diagram type: sequence)
+cr4_cnt_blank_then_message                 J=  0 valid=1 W=0 mk=[] pred="'one'"
+     9ed5=match 1f6f=match 93bf=mismatch 9834=mismatch cb55=match | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_one_mindmap_procdef                    J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string', '(Assumed diagram type:'] pred='empty-description (exit 200)'
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 0 Empty description (Assumed diagram type: mindmap)
+cr4_one_gantt_procdef                      J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string', '(Assumed diagram type:'] pred='empty-description (exit 200)'
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 0 Empty description (Assumed diagram type: gantt)
+cr4_one_wbs_function                       J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string', '(Assumed diagram type:'] pred='empty-description (exit 200)'
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 0 Empty description (Assumed diagram type: wbs)
+cr4_one_salt_definelong                    J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string', '(Assumed diagram type:'] pred='empty-description (exit 200)'
+     9ed5=nonpositive-rejected 1f6f=nonpositive-rejected 93bf=nonpositive-rejected 9834=nonpositive-rejected cb55=nonpositive-rejected | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 0 Empty description (Assumed diagram type: salt)
+cr4_one_json_procdef                       J=200 valid=0 W=1 mk=['NoSuchElementException', 'Welcome to PlantUML', '[From string'] pred='an error (exit 200)'
+     9ed5=nonpositive-rejected 1f6f=nonpositive-rejected 93bf=nonpositive-rejected 9834=nonpositive-rejected cb55=nonpositive-rejected | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err java:93) 	at net.sourceforge.plantuml.Run.main(Run.java:183) ERROR 0 Fatal crash error: java.util.NoSuchElementException
+cr4_two_mindmap_content_then_procdef       J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string'] pred="mindmap 'root'"
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err un.main(Run.java:183) ERROR 1 Fatal crash error: java.lang.IndexOutOfBoundsException: Index 2 out of bounds for length 2
+cr4_two_class_content_then_function_end    J=  0 valid=0 W=1 mk=['Welcome to PlantUML'] pred='welcome'
+     9ed5=WELCOME-MATCH 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err 
+cr4_two_blank_then_procdef_end             J=  0 valid=0 W=1 mk=['Welcome to PlantUML'] pred='welcome'
+     9ed5=WELCOME-MATCH 1f6f=WELCOME-MATCH 93bf=WELCOME-MATCH 9834=WELCOME-MATCH cb55=WELCOME-MATCH | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err 
+cr4_ws_ideo_before_assign                  J=200 valid=0 W=1 mk=['Syntax Error', 'Welcome to PlantUML', '[From string', '(Assumed diagram type:'] pred='syntax error (exit 200)'
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 1 Syntax Error? (Assumed diagram type: sequence)
+cr4_ws_ideo_before_comment                 J=200 valid=0 W=1 mk=['Syntax Error', 'Welcome to PlantUML', '[From string', '(Assumed diagram type:'] pred='syntax error (exit 200)'
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 1 Syntax Error? (Assumed diagram type: sequence)
+cr4_ws_ideo_before_procedure               J=200 valid=0 W=0 mk=['Syntax Error', '[From string', '(Assumed diagram type:'] pred='syntax error (exit 200)'
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]', '[From string (line 2) ]', '&#160;', '@startuml'] | err ERROR 1 Syntax Error? (Assumed diagram type: sequence)
+cr4_ws_ideo_before_if                      J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string'] pred='error (exit 200)'
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 3 No if related to this endif
+cr4_ws_nbsp_before_assign                  J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string'] pred="message 'a'"
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 1 a001
+cr4_ws_vt_before_define                    J=  0 valid=1 W=0 mk=[] pred='Kea -> Moa'
+     9ed5=match 1f6f=match 93bf=match 9834=match cb55=match | java texts ['Kea', 'Kea', 'Moa', 'Moa'] | err 
+cr4_ws_us_before_assign                    J=200 valid=0 W=0 mk=['Syntax Error', 'An error has occured', '(Assumed diagram type:'] pred='syntax error (exit 200)'
+     9ed5=nonpositive-rejected 1f6f=nonpositive-rejected 93bf=nonpositive-rejected 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ["An error has occured : java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0x1f) was found in the node's character data content.", "Pac-Man's a bad guy?", '&#160;', 'PlantUML (1.2026.3beta6) has crashed.'] | err .TransformerImpl.transform(TransformerImpl.java:781) 	... 10 more ERROR 1 Syntax Error? (Assumed diagram type: sequence)
+cr4_ws_ideo_startsub_in_includesub         J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string'] pred='error (exit 200)'
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 1 cannot include cr4_ws_sub.iuml!P
+cr4_ws_ideo_exit                           J=  0 valid=1 W=0 mk=[] pred="'one' only"
+     9ed5=valid-error 1f6f=valid-error 93bf=valid-error 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_ws_ideo_before_at_end                  J=  0 valid=1 W=0 mk=[] pred="'one' only"
+     9ed5=match 1f6f=match 93bf=match 9834=match cb55=match | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_main_bom_line2                         J=  0 valid=1 W=0 mk=[] pred="message 'bom'"
+     9ed5=valid-error 1f6f=valid-error 93bf=valid-error 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_main_bom_before_directive              J=  0 valid=1 W=0 mk=[] pred="message 'a'"
+     9ed5=valid-error 1f6f=valid-error 93bf=valid-error 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_main_endash_label                      J=  0 valid=1 W=0 mk=[] pred="message 'a - b'"
+     9ed5=mismatch 1f6f=mismatch 93bf=mismatch 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_main_endash_arrow                      J=  0 valid=1 W=0 mk=[] pred="Kea -> Tui 'dash'"
+     9ed5=valid-error 1f6f=valid-error 93bf=valid-error 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_main_endash_include_path               J=  0 valid=1 W=0 mk=[] pred="message 'dashpath'"
+     9ed5=mismatch 1f6f=mismatch 93bf=mismatch 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_inc_endash_includesub_body             J=  0 valid=1 W=0 mk=[] pred="Kea -> Tui 'dash'"
+     9ed5=match 1f6f=valid-error 93bf=valid-error 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_inc_double_bom                         J=200 valid=0 W=1 mk=['Syntax Error', 'Welcome to PlantUML', '[From string', '(Assumed diagram type:'] pred='syntax error (BOM before Kea'
+     9ed5=nonpositive-rejected 1f6f=nonpositive-rejected 93bf=nonpositive-rejected 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 0 Syntax Error? (Assumed diagram type: sequence)
+cr4_inc_cr_only_lines                      J=  0 valid=1 W=0 mk=[] pred="'a' and 'b'"
+     9ed5=valid-error 1f6f=valid-error 93bf=valid-error 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_main_cr_only_lines                     J=  0 valid=1 W=0 mk=[] pred="message 'a'"
+     9ed5=mismatch 1f6f=mismatch 93bf=mismatch 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_inc_yaml_header_raw                    J=  0 valid=1 W=0 mk=[] pred="message 'y' only"
+     9ed5=valid-error 1f6f=valid-error 93bf=valid-error 9834=mismatch cb55=match | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_inc_yaml_header_wrapped                J=  0 valid=1 W=0 mk=[] pred="message 'w'"
+     9ed5=match 1f6f=match 93bf=valid-error 9834=match cb55=match | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_sfx_bang_empty                         J=  0 valid=1 W=0 mk=[] pred="'first'"
+     9ed5=match 1f6f=mismatch 93bf=mismatch 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_sfx_bang0                              J=  0 valid=1 W=0 mk=[] pred="'first'"
+     9ed5=match 1f6f=mismatch 93bf=mismatch 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_sfx_two_bangs                          J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string'] pred='nothing included: welcome'
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 1 cannot include cr4_w_two.iuml!1
+cr4_sfx_include_many                       J=  0 valid=1 W=0 mk=[] pred="message 'plain'"
+     9ed5=valid-error 1f6f=valid-error 93bf=valid-error 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_sfx_include_once_twice                 J=  0 valid=1 W=0 mk=[] pred="'plain' twice"
+     9ed5=match 1f6f=mismatch 93bf=mismatch 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_sfx_includesub_double_bang             J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string'] pred='cannot include (exit 200)'
+     9ed5=nonpositive-rejected 1f6f=nonpositive-rejected 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-rejected | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 1 cannot include cr4_subs.iuml!P!x
+cr4_sfx_quoted_plain                       J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string'] pred="message 'plain'"
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 1 cannot include "cr4_r_plain.iuml"
+cr4_sfx_quoted_bang                        J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string'] pred="'first'"
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 1 cannot include "cr4_w_two.iuml
+cr4_hdr_u16_cyrillic_tje                   J=  0 valid=1 W=0 mk=[] pred="wrapped: message 'hdr'"
+     9ed5=valid-error 1f6f=valid-error 93bf=valid-error 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_hdr_u16_latin_a7cb                     J=  0 valid=1 W=0 mk=[] pred="wrapped: message 'hdr'"
+     9ed5=valid-error 1f6f=valid-error 93bf=valid-error 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_hdr_u17_latin_a7ce                     J=  0 valid=1 W=0 mk=[] pred="wrapped: message 'hdr'"
+     9ed5=valid-error 1f6f=valid-error 93bf=valid-error 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_hdr_u17_arabic_088f                    J=  0 valid=1 W=0 mk=[] pred="wrapped: message 'hdr'"
+     9ed5=valid-error 1f6f=valid-error 93bf=valid-error 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_hdr_u15_thai_control                   J=200 valid=0 W=0 mk=['Syntax Error', '[From string', '(Assumed diagram type:'] pred='syntax error (exit 200)'
+     9ed5=nonpositive-rejected 1f6f=nonpositive-rejected 93bf=nonpositive-rejected 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]', '[From cr4_h_thai.iuml (line 1) ]', '[From string (line 2) ]', '&#160;'] | err ERROR 0 Syntax Error? (Assumed diagram type: sequence)
+cr4_hdr_u15_digit_control                  J=200 valid=0 W=0 mk=['Syntax Error', '[From string', '(Assumed diagram type:'] pred='syntax error (exit 200)'
+     9ed5=nonpositive-rejected 1f6f=nonpositive-rejected 93bf=nonpositive-rejected 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]', '[From cr4_h_digit.iuml (line 1) ]', '[From string (line 2) ]', '&#160;'] | err ERROR 0 Syntax Error? (Assumed diagram type: sequence)
+cr4_sprite_from_procedure                  J=  0 valid=1 W=0 mk=[] pred='message with sprite'
+     9ed5=mismatch 1f6f=mismatch 93bf=mismatch 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_sprite_from_include                    J=  0 valid=1 W=0 mk=[] pred='message with sprite'
+     9ed5=mismatch 1f6f=mismatch 93bf=mismatch 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_sprite_continued_header                J=  0 valid=1 W=0 mk=[] pred='message with sprite'
+     9ed5=mismatch 1f6f=mismatch 93bf=mismatch 9834=mismatch cb55=mismatch | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_end_in_startsub_unterminated           J=200 valid=0 W=1 mk=['Welcome to PlantUML', '[From string'] pred='welcome'
+     9ed5=nonpositive-accepted 1f6f=nonpositive-accepted 93bf=nonpositive-accepted 9834=nonpositive-accepted cb55=nonpositive-accepted | java texts ['Welcome to PlantUML!', '&#160;', 'You can start with a simple UML Diagram like:', '&#160;'] | err ERROR 2 Compile Error null STARTSUB
+cr4_end_in_foreach_unterminated            J=  0 valid=1 W=0 mk=[] pred='error (exit 200)'
+     9ed5=match 1f6f=match 93bf=match 9834=match cb55=match | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_end_in_while_unterminated              J=  0 valid=1 W=0 mk=[] pred='error (exit 200)'
+     9ed5=match 1f6f=match 93bf=match 9834=match cb55=match | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 
+cr4_end_in_if_unterminated_active          J=  0 valid=1 W=0 mk=[] pred='error (exit 200)'
+     9ed5=match 1f6f=match 93bf=match 9834=match cb55=match | java texts ['Kea', 'Kea', 'Tui', 'Tui'] | err 

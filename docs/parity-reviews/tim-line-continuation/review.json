@@ -1,0 +1,813 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-line-continuation",
+ "account_commit": "ef52d5b323b4aad8b32ad98dcb6cbff757ffcbef",
+ "implementation_commit": "594c2b3c5e49fca3bd57cb9b44f6fafcd5f4e459",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "reviewer": {
+  "task_id": "T3 thread t3-a69f53d7, branch review/tim-continuation-claude-v2 (replaces the stalled checker)",
+  "model": "claude-opus-5-5"
+ },
+ "commands": [
+  "git switch -c review/tim-continuation-claude-v2 0a52663ac; submodule test-diagrams/golden hydrated with --reference at 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "checker-claude/support/build.sh: git archive 93bf53e18 / 9834a7194 / 2a9373aca / 594c2b3c5 into ~/Library/Caches/rustuml-tim-continuation-claude-checker-v2/src/<rev>, cargo build --release -p rustuml. The shared CARGO_TARGET_DIR build of 2a9373aca and 594c2b3c5 failed (E0609 in rustuml-render) and copied a stale binary, so all three non-first trees were rebuilt in isolated target dirs (target-2a, target-59, target-98); hashes in checker-claude/binaries.sha256. Stalled-checker binaries were not reused.",
+  "rustc --edition=2024 -O docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs (sha256 d1424469...) --extern rustuml_oracle=<target of 93bf53e18>/librustuml_oracle-*.rlib -> compare_cli sha256 bd01bdd1...; crates/rustuml-oracle unchanged 9834a7194..0a52663ac",
+  "checker-claude/support/verify_fresh.py: every row of the stalled checker's prepared fresh cohorts (AT 45, AV 63, AX 77, AY 48, AZ 8, BA 64, AS/AQ/790/28 915, BD 33) re-hashed against the immutable relay reference-results (source and Java SVG): 0 mismatches; validity recomputed from raw SVG+stderr (prepare.py markers + 'No valid @start/@end found' + exception text): only BD differs (3 cases), as the brief rules",
+  "unchanged prepare.py (a84a4e75) for BU (tim-continuation-tc1, reference-results sha256 2606b293...) and BD (tim-continuation-mc1); strict_validity.py rewrites observed_valid (BU 37/40 valid, BD 29/33 valid)",
+  "checker-claude/support/run_all.sh: unchanged replay.py (1bb2ed6e) through the actual CLI, 4 modes (-tsvg/--ast/-ttxt/--yaml, -pipe), each case from its recorded cwd, for BU, BD, BA, AY, AZ, AX, AV, AT, AS/AQ/790/28, retained 4,174 and golden 12,550, x 4 builds",
+  "checker-claude/support/summarize.py (unchanged classify.outcome, plus a validity-adjusted outcome for manifest-invalid fresh rows) -> checker-claude/summary.json",
+  "unchanged rejection_contract.py (09cd998b) for every fresh set against each before -> checker-claude/rejection/",
+  "checker-claude/support/gates.sh at the review branch (code 594c2b3c5 + registered pairs): workspace lib, pipe_mode, golden_no_oracle, golden_pairs, parity_perturbations, harness_guards once each; golden_no_oracle and golden_pairs also at a 9834a7194 export for the failure-name diff; parity_perturbations at a 2a9373aca export for the pre-existing-directory baseline; harness_guards rerun once after the review records were written"
+ ],
+ "findings": [
+  "VERDICT REJECT (round 1). One packet-caused real regression on a Java-valid held-out input: tc1_seq_indented_end_after_backslash (BU) goes from mismatch (all three befores) to a CLI error at 594c2b3c5 ('No valid @start/@end found').",
+  "Cause, traced: merge_ending_backslash_lines decides whether Pipe#readSingleDiagram appended an end with is_end_directive (leading Character#isWhitespace allowed, '@' or '\\\\' marker). Pipe#readSingleDiagram (Pipe.java:203) completes only on line.startsWith(expectedEnd) at column 0 and otherwise appends '@end<type>' (line 219). For 'Kea -> Tui : last \\\\' + '  @enduml' Java merges the indented end into the message ('last   @enduml', data-source-line 1) and the appended '@enduml' closes the block; Rust sees an end, appends none, the merge swallows it, and parse_with_base errors. The packet's own account states the column-0 rule, so the code contradicts its trace. The same rule mismatch covers a '\\\\enduml' end line. Fix inside T14.22: compute the appended end with Pipe's column-0 '@end<type>' prefix test.",
+  "Lost rejection vs 93bf53e18 and 2a9373aca: mc1_seq_foreach_body (BD). Java: exit 1, JsonParser exception from EaterForeach#analyze -> Json.parse on the unquoted list [Ash, Elm] (invalid). 93bf53e18/2a9373aca rejected only because the unjoined 'tall' line failed strict sequence admission; Rust's !foreach accepts [Ash, Elm] at every build (9834a7194 accepts too). Accidental-rejection residue, not owned by any target: proposed target 'TIM !foreach evaluates its list through Java's JsonParser; malformed lists fail as Java does'. The unchanged rejection_contract.py reports it as the only introduced loss in BD.",
+  "BU (40 cases, 37 Java-valid; the stalled checker's tc1): 594c2b3c5 matches 25/37 valid; befores 2/37 at each of 93bf53e18, 2a9373aca and 9834a7194 (the two mindmap no-join controls). Gains 23, newly rejected 2 (tc1_inv_* , Java 'No valid @start/@end found'), 1 new valid-input error (above), 0 lost matches, 0 lost rejections, 0 panics, 0 timeouts. tc1_seq_sprite_row_continued is Java-invalid (exit 200, IllegalArgumentException level=-1 grayLevel=16 on the merged row 'F0 0F') and accepted by every Rust build: pre-existing false accept.",
+  "BD (33 cases, 29 Java-valid; maker's mc1): 594c2b3c5 matches 23/29 (partial finding 1 confirmed); befores 5/29 at each of 93bf53e18, 2a9373aca and 9834a7194. Gains 18, newly rejected 2 (mc1_seq_before_enduml, mc1_seq_at_eof: Java 'No valid @start/@end found', exit 100, INVALID by the brief's rule, so declared residue 1 is a correct rejection, not a valid-input error), lost rejection 1 (mc1_seq_foreach_body), 0 lost matches, 0 panics/timeouts.",
+  "Mechanism checks (BU/BD vs Java): backslash inside quotes (tc1_seq_quoted_backslash, tc1_class_quoted_label_backslash) and after a URL (tc1_seq_url_backslash) match; a ' comment line ending in \\\\ swallows the next line exactly as Java (tc1_seq_quote_comment_backslash, tc1_class_quote_comment_backslash match); backslash inside a block comment and continuation into a long comment match (tc1_seq_block_comment_inner_backslash, tc1_class_block_comment_inner_backslash, tc1_seq_next_long_comment_tail, tc1_seq_next_apostrophe_leading); an unterminated long comment after a continuation is now rejected as Java does; legend, note, yaml, salt, json and mindmap bodies match; CRLF with a skipped comment matches; two-, three- and four-piece pre-TIM joins keep the first line's number and following lines keep Java's numbers (tc1_seq_two_pieces_lines, tc1_seq_four_pieces_lines, tc1_class_four_pieces_lines, tc1_class_two_merges_lines, mc1_class_three_pieces_lines match); TIM output ending in %chr(92) joins post-TIM for @startuml with the last piece's location (tc1_seq_chr_backslash_postjoin match) and not for @startmindmap (match); procedure, define, theme, if, assignment and comment-only continuations in mc1 match. Ditaa exemption: verified by code reading against ReadFilterMergeLines#isDitaa and the unit test only (no Java probe).",
+  "Post-TIM include-side join (declared residues 2 and 3), now Java-backed: tc1_seq_include_then_define and tc1_seq_include_then_directive: Java joins the included 'tail \\\\' with the next main line ('tail Tui -> Kea : two', location 3) because the directive emits no TIM line; Rust joins it with its blank placeholder ('tail' + separate 'two'); mismatch at all builds. tc1_seq_include_tail_before_end: Java renders 'tail @enduml'; 594c2b3c5 drops the message entirely (befores rendered 'tail \\\\'); mismatch before and after. Neither is an outcome change, but both are T14.22 scope left open and need follow-up in the next round.",
+  "Included-line numbering (stalled partial finding 3): predates the packet. BU controls without any continuation mismatch at all four builds on data-source-line: tc1_ctl_class_include_plain Java Lantern 0 / Wick 1, Rust 1 / 2; tc1_ctl_seq_include_plain Java message 0, Rust 2. Java numbers included lines by their location in the included file. The packet's post-TIM join takes the last piece's Rust origin and inherits the defect (mc1_class_include_postjoin Java 1 / 2, 594c2b3c5 2 / 3; mc1_seq_include_postjoin Java 1, Rust 2; tc1_class_include_three: joined Inc right, following main line 'After' Java 2 vs Rust 4 at every build). No target owns it: proposed.",
+  "Golden SVG byte changes vs 2a9373aca: exactly the 12 activity/act_color_{blue,cyan,green,lime,magenta,navy,orange,pink,purple,red,teal,yellow}_ending_output goldens, nonpositive-accepted before and after. --ast: before meta.source keeps '#red:Action with output\\\\' / 'stop' and the model is Start, Stop (colored action silently dropped); after meta.source is '#red:Action with outputstop', the ReadFilterMergeLines text Java's golden reports as a syntax error at line 4, and the model is Start only (merged line silently dropped). T14.17 silent-drop residue; no outcome change. Against 93bf53e18 two more byte changes (edge_render_sprite newly rejected, preproc_include_startsub) come from the sprite rounds, unchanged by this packet.",
+  "Exception-set sources: tim-evaluated-event-stream/retained_checker_line_continuation.puml and tim-theme-post-expansion-source-identity/checker_line_continuation.puml go valid-error -> match (CLI) and leave the parity_perturbations failure list. The frozen 15-source file docs/parity-reviews/sequence-command-admission-packet/maker-results/parent-approved-exceptions.json is blob 92890a439d4579de9bec45a49832feee5c90ee64 at 93bf53e18, 2a9373aca and 0a52663ac (absent at 9834a7194, where strict sequence admission does not exist yet).",
+  "Retained 4,174 vs 2a9373aca: 2 gains (the two exception sources), 2 SVG byte changes, nothing else. Vs 93bf53e18: 22 gains, 2 newly rejected, 0 losses. Vs 9834a7194: 78 gains, 252 newly rejected, 13 new valid-input errors = exactly the 13 T14.21 entries of the approved exception file (partial finding 4 confirmed), 0 lost matches, 0 lost rejections. Goldens 12,550: 0 outcome changes vs 2a9373aca; vs 93bf53e18 1 newly rejected; vs 9834a7194 126 newly rejected, 0 lost matches, 0 new valid-input errors. --yaml panics: 148 golden / 63 retained at 93bf53e18, 2a9373aca and 594c2b3c5 (160 / 72 at 9834a7194); no other panics; no timeouts in any cohort or build.",
+  "Gates at the review branch: workspace lib 1,507 passed 0 failed; pipe_mode 13 passed; golden_no_oracle 11,181/11,251, failure names (70) byte-identical to a 9834a7194 run in this review and to the maker's list (fails only on the unlocked baseline, as at round 4); golden_pairs 10,497 passed / 754 failed, failure names byte-identical to 9834a7194; parity_perturbations: against a 2a9373aca export, 0 new failures in pre-existing directories and 8 fixed (six ck4 continuation pairs and the two exception sources); the 53 newly registered tim-line-continuation pairs give 46 pass / 7 fail, identical to the CLI outcomes; harness_guards: comparator_constants_frozen, error_golden_census_is_frozen, no_golden_data_embedded_in_shipping_crates and parity_review_paths_reject_traversal pass; decimal_literal_ratchet fails on the same 5 rustuml-render files as the maker's base (render untouched by the packet); parity_review_records_are_complete before these records had 2,732 normalised violations = the maker's base 2,731 + this directory's 'account has no independent checker review'.",
+  "Process and frozen items: the account ef52d5b32 (19:33) precedes the code 594c2b3c5 (19:39) in ancestry and time; 8bd933bc3 (after the code) adds java_locations, planned_change and perturbation_axes, which the guard requires; the planned change matches ef52d5b32's rust_locations, so this is a schema completion, not a retrofit of substance (noted, not a rejection cause). The diff (530 lines, read in full) has no fixture-keyed logic, no golden data, no new decimal literals. crates/rustuml-oracle, crates/rustuml/tests, scripts and test-diagrams outside perturbations are unchanged between each of 9834a7194, 93bf53e18, 2a9373aca and 0a52663ac: comparator slack, syntax markers, park list (test-diagrams/ulp_parked.txt), error census, guard allow-lists and strict-XML list are unchanged. Side change: parse_with_base now strips source-line markers for json/yaml/salt/nwdiag/regex/ditaa/dot/board/ebnf/git/math/latex; no golden, retained or fresh outcome moved because of it.",
+  "Registration (T14.6.7 layout): 53 Java-valid BU/BD pairs copied byte-identically under test-diagrams/perturbations/tim-line-continuation/ (hashes in checker-claude/registered-pairs.json). 20 cases are evidence-only (checker-claude/evidence-only-cases.json): 7 Java-invalid and 13 that need an include or local theme file beside the source, which parity_perturbations cannot resolve (parse_auto_with_base(source, None); T14.6.2). Records reference only files inside their own mechanism directories."
+ ],
+ "verdict": "rejected",
+ "record": "docs/parity-reviews/tim-line-continuation/checker-claude/",
+ "perturbations": [
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_quoted_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_quoted_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "backslash inside quotes",
+    "pre-TIM",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_url_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_url_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "URL then backslash",
+    "pre-TIM",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_quoted_label_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_quoted_label_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "class",
+    "quoted link label",
+    "pre-TIM",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_quote_comment_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_quote_comment_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "' line ends with backslash",
+    "swallows next line",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_quote_comment_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_quote_comment_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "class",
+    "' line ends with backslash",
+    "swallows next line",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_next_apostrophe_leading.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_next_apostrophe_leading.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "next line starts with ' after spaces (skipped)",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_block_comment_inner_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_block_comment_inner_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "backslash inside long comment",
+    "'/ skipped as quote line",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_block_comment_inner_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_block_comment_inner_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "class",
+    "backslash inside long comment",
+    "'/ skipped as quote line",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_next_long_comment_tail.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_next_long_comment_tail.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "long comment skipped then next real line",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_legend_body.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_legend_body.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "legend body",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_note_body.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_note_body.svg",
+   "result": "pass",
+   "axes": [
+    "class",
+    "note body",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_yaml_body.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_yaml_body.svg",
+   "result": "pass",
+   "axes": [
+    "yaml",
+    "pre-TIM join",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: valid-error"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_salt_body.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_salt_body.svg",
+   "result": "pass",
+   "axes": [
+    "salt",
+    "pre-TIM join",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_json_two_pieces_nested.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_json_two_pieces_nested.svg",
+   "result": "pass",
+   "axes": [
+    "json",
+    "three pieces",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: valid-error"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_mindmap_three.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_mindmap_three.svg",
+   "result": "pass",
+   "axes": [
+    "mindmap",
+    "three pieces",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_activity_legacy_label.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_activity_legacy_label.svg",
+   "result": "fail",
+   "axes": [
+    "activity legacy",
+    "quoted label continued",
+    "BU held out",
+    "594c2b3c5: mismatch",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_chr_backslash_postjoin.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_chr_backslash_postjoin.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "TIM output ends with backslash",
+    "post-TIM join",
+    "last-line location",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_mindmap_chr_backslash_no_postjoin.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_mindmap_chr_backslash_no_postjoin.svg",
+   "result": "pass",
+   "axes": [
+    "mindmap",
+    "TIM output backslash, no post-TIM join",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: match",
+    "93bf53e18: match",
+    "9834a7194: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_two_pieces_lines.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_two_pieces_lines.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "two pieces",
+    "following data-source-line",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_four_pieces_lines.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_four_pieces_lines.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "four pieces",
+    "following data-source-line",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_four_pieces_lines.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_four_pieces_lines.svg",
+   "result": "pass",
+   "axes": [
+    "class",
+    "four pieces",
+    "following data-source-line",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_two_merges_lines.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_two_merges_lines.svg",
+   "result": "pass",
+   "axes": [
+    "class",
+    "two separate merges",
+    "following data-source-line",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_indented_end_after_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_indented_end_after_backslash.svg",
+   "result": "fail",
+   "axes": [
+    "sequence",
+    "indented @enduml after backslash",
+    "Pipe#readSingleDiagram startsWith",
+    "BU held out",
+    "594c2b3c5: valid-error",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_crlf_comment_skip.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_crlf_comment_skip.svg",
+   "result": "pass",
+   "axes": [
+    "class",
+    "CRLF",
+    "comment skipped",
+    "line-endings:CRLF",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_separator_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_separator_continued.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "separator continued",
+    "BU held out",
+    "594c2b3c5: match",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_sprite_header_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_sprite_header_continued.svg",
+   "result": "fail",
+   "axes": [
+    "sequence",
+    "sprite header continued",
+    "sprite ownership",
+    "BU held out",
+    "594c2b3c5: mismatch",
+    "2a9373aca: valid-error",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_sprite_svg_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_sprite_svg_continued.svg",
+   "result": "fail",
+   "axes": [
+    "sequence",
+    "inline svg sprite continued",
+    "sprite ownership",
+    "BU held out",
+    "594c2b3c5: mismatch",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_procedure_body.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_procedure_body.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "!procedure body",
+    "pre-TIM join",
+    "following source line",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_define_macro.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_define_macro.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "!define macro body",
+    "leading whitespace kept",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_theme_plain.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_theme_plain.svg",
+   "result": "fail",
+   "axes": [
+    "sequence",
+    "!theme",
+    "three pieces",
+    "BD held out",
+    "594c2b3c5: mismatch",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_class_theme_sketchy.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_class_theme_sketchy.svg",
+   "result": "fail",
+   "axes": [
+    "class",
+    "!theme",
+    "link label",
+    "BD held out",
+    "594c2b3c5: mismatch",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_state_theme_bluegray.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_state_theme_bluegray.svg",
+   "result": "pass",
+   "axes": [
+    "state",
+    "!theme",
+    "transition label",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_usecase_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_usecase_continued.svg",
+   "result": "fail",
+   "axes": [
+    "usecase",
+    "inside parentheses",
+    "BD held out",
+    "594c2b3c5: valid-error",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_class_three_pieces_lines.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_class_three_pieces_lines.svg",
+   "result": "pass",
+   "axes": [
+    "class",
+    "three pieces",
+    "following data-source-line",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_component_comments_between.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_component_comments_between.svg",
+   "result": "pass",
+   "axes": [
+    "component",
+    "ReadFilterQuoteComment skip",
+    "removeInnerComment on continuation",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_note_body.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_note_body.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "multiline note body",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_activity_multiline_action.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_activity_multiline_action.svg",
+   "result": "pass",
+   "axes": [
+    "activity3",
+    "multiline action body",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: match",
+    "93bf53e18: match",
+    "9834a7194: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_state_description.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_state_description.svg",
+   "result": "pass",
+   "axes": [
+    "state",
+    "description",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_escaped_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_escaped_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "escaped double backslash not continued",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: match",
+    "93bf53e18: match",
+    "9834a7194: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_backslash_space.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_backslash_space.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "backslash then space not continued",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: match",
+    "93bf53e18: match",
+    "9834a7194: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_crlf.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_crlf.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "CRLF",
+    "line-endings:CRLF",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_class_crlf_three.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_class_crlf_three.svg",
+   "result": "pass",
+   "axes": [
+    "class",
+    "CRLF",
+    "three pieces",
+    "line-endings:CRLF",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_tim_assignment.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_tim_assignment.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "TIM assignment continued",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_if_condition.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_if_condition.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "!if condition continued",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_comment_only_continuation.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_comment_only_continuation.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "comment lines skipped before continuation",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_continued_comment_line.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_continued_comment_line.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "continued line is a comment: continuation joins the comment",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_mindmap.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_mindmap.svg",
+   "result": "pass",
+   "axes": [
+    "mindmap",
+    "non-UML family pre-TIM join",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_json.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_json.svg",
+   "result": "pass",
+   "axes": [
+    "json",
+    "non-UML family pre-TIM join",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: valid-error"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_skinparam_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_skinparam_continued.svg",
+   "result": "pass",
+   "axes": [
+    "class",
+    "skinparam line continued",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: match",
+    "93bf53e18: match",
+    "9834a7194: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_style_block.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_style_block.svg",
+   "result": "pass",
+   "axes": [
+    "class",
+    "<style> body continued",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: match",
+    "93bf53e18: match",
+    "9834a7194: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_leading_space_continuation.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_leading_space_continuation.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "continuation leading spaces kept",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_object_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_object_continued.svg",
+   "result": "pass",
+   "axes": [
+    "object",
+    "continued declaration",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_block_comment_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_block_comment_continued.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "long comment skipped before continuation",
+    "BD held out",
+    "594c2b3c5: match",
+    "2a9373aca: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  }
+ ]
+}

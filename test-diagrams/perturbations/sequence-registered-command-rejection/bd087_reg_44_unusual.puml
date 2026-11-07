@@ -1,0 +1,8 @@
+@startuml
+Juniper -> Juniper: calibration
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+PARTICIPANT Cypress as "Cypress node" #Wheat
+Kestrel --> Juniper: receipt
+@enduml

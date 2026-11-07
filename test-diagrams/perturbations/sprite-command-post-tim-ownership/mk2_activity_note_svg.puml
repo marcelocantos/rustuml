@@ -1,0 +1,8 @@
+@startuml
+start
+:load;
+note right
+sprite $gem <svg width="2" height="2">
+end note
+stop
+@enduml

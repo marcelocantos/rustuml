@@ -1,0 +1,8 @@
+@startuml
+participant Cedar
+participant Spruce
+note over Cedar
+sprite sheets are loaded
+end note
+Cedar -> Spruce: go
+@enduml

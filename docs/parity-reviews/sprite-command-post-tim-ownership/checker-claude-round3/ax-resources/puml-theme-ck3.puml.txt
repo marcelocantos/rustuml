@@ -1,0 +1,4 @@
+skinparam ArrowColor #CC0000
+!startsub sequence
+skinparam ParticipantBackgroundColor #DDEEFF
+!endsub

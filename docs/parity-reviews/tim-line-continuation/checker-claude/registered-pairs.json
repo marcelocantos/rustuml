@@ -1,0 +1,1197 @@
+[
+ {
+  "name": "tc1_seq_quoted_backslash",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "backslash inside quotes",
+   "pre-TIM"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "e96bead1eaa0f05ef992f01e8211f4990fca02495ac68c1acd05a410bd249d10",
+  "java_svg_sha256": "b84776fdbb18942749ea8934865acfedc9c0f067d9be97a6d994bf4a7d0c0e67",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_quoted_backslash.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_quoted_backslash.svg"
+ },
+ {
+  "name": "tc1_seq_url_backslash",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "URL then backslash",
+   "pre-TIM"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "05dd98d2b06fc54d272d53d829121cc148b41a74ddc601406f8a90bc3ba4870e",
+  "java_svg_sha256": "d7591beb8879512dda60e868ceafba3557b0068a7b2909cc13ccf1c75c1d9533",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_url_backslash.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_url_backslash.svg"
+ },
+ {
+  "name": "tc1_class_quoted_label_backslash",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "class",
+   "quoted link label",
+   "pre-TIM"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "bcae0ca35f924b0c990890fd6e630b370602ede89a3fd8a458b086cecb5a86d5",
+  "java_svg_sha256": "7feca2dfb278137474adc6c8a1f939fc70016311bef26b0e707c0a68429e9c53",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_quoted_label_backslash.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_quoted_label_backslash.svg"
+ },
+ {
+  "name": "tc1_seq_quote_comment_backslash",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "' line ends with backslash",
+   "swallows next line"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "04ea14ddeb80fd87648f8c611523c8cd923296bd5fb5a58777579205d221562d",
+  "java_svg_sha256": "7b3da0a51bfc064d573d4b416ade55bbd1cdf12a876a2bb8d6196a4e799980e5",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_quote_comment_backslash.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_quote_comment_backslash.svg"
+ },
+ {
+  "name": "tc1_class_quote_comment_backslash",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "class",
+   "' line ends with backslash",
+   "swallows next line"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "b56bd0508e62161c1459293a970cab13ea8814359139d1e1efb959b4bc809504",
+  "java_svg_sha256": "06cacaa0adde25d1d9155b797e06aea7f31e2da2056d08ef2ac1debc7cbc65c9",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_quote_comment_backslash.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_quote_comment_backslash.svg"
+ },
+ {
+  "name": "tc1_seq_next_apostrophe_leading",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "next line starts with ' after spaces (skipped)"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "d9021a8d60943d622bbc26ae2f5b37fd3159a806fbf235a1bb9f487e044bb85f",
+  "java_svg_sha256": "589ffdc28f9cfa5fa186547e5a957b2db018eed33ed531c746e027c59839f926",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_next_apostrophe_leading.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_next_apostrophe_leading.svg"
+ },
+ {
+  "name": "tc1_seq_block_comment_inner_backslash",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "backslash inside long comment",
+   "'/ skipped as quote line"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "55049a45fe3813483c59c8be1b422b2901949131ff15a6fa7747991f701f62eb",
+  "java_svg_sha256": "55b8f38ef72b897e8dec311507a4d59bc294c6733d6b70a5c03d63f0c8216e9e",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_block_comment_inner_backslash.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_block_comment_inner_backslash.svg"
+ },
+ {
+  "name": "tc1_class_block_comment_inner_backslash",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "class",
+   "backslash inside long comment",
+   "'/ skipped as quote line"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "eed3cb503a10b1854f435bfe632e21b387e0a2a8f3885d47c1fd39bc02b6f9a6",
+  "java_svg_sha256": "b7210366ce3e7fd456cfc10913d3ef80eac10757c92a92f8d677e2cedadf4152",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_block_comment_inner_backslash.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_block_comment_inner_backslash.svg"
+ },
+ {
+  "name": "tc1_seq_next_long_comment_tail",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "long comment skipped then next real line"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "6da805d5764de374a22e324fa236eba63e210b374bd9ff44aff1c8d8d627c888",
+  "java_svg_sha256": "44521ea71005a42fe4d75f81c892e8a1a47a308c64eeadd7f42a148e7fef4154",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_next_long_comment_tail.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_next_long_comment_tail.svg"
+ },
+ {
+  "name": "tc1_seq_legend_body",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "legend body"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "df40d238e5d4cabb5f8f2a6e14f31f0b7ededbfb238addedba01dd4e91e63c89",
+  "java_svg_sha256": "b49eb8f09e955f6603e7548030c558dfcaa9a34c0e7723193738ac326710dfbc",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_legend_body.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_legend_body.svg"
+ },
+ {
+  "name": "tc1_class_note_body",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "class",
+   "note body"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "570a7454ae475c6d284de50a53d0a6f6fa5cf09d590a9e4faf011f054e14ebfd",
+  "java_svg_sha256": "9360ad4ba68b583acd9b2a20770e0e1bfcb7b1e7cd6964028e266246ac663ec0",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_note_body.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_note_body.svg"
+ },
+ {
+  "name": "tc1_yaml_body",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "yaml",
+   "pre-TIM join"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "valid-error",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "6f4ce29f6ba39b077d14f1df2099f41bff9b0f83aba6bb5ab52b9903c167557e",
+  "java_svg_sha256": "ca0539f425d69730454804407228003927edb69a99222b6fd4a7dab66309f4b7",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_yaml_body.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_yaml_body.svg"
+ },
+ {
+  "name": "tc1_salt_body",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "salt",
+   "pre-TIM join"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "141e082deed4a28b28856c71a7992d9af53ec1880d8d82313e39ddf0431d4b49",
+  "java_svg_sha256": "99af18af355825f14e73a65bb8137724cfd10508b61f6a260b2cc79e1b7aac05",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_salt_body.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_salt_body.svg"
+ },
+ {
+  "name": "tc1_json_two_pieces_nested",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "json",
+   "three pieces"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "valid-error",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "3f059f2c15ea4d82a12957d33d01020a5ed5ffbc67af2bf8cd0c75e7c714509c",
+  "java_svg_sha256": "035312908bbf15b629e32df5d445d23c0d9ee25a600d9392e19a64a7e477a11b",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_json_two_pieces_nested.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_json_two_pieces_nested.svg"
+ },
+ {
+  "name": "tc1_mindmap_three",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "mindmap",
+   "three pieces"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "9c29e3199a6e1f60488386eb11a11d8f23560c16a0b67f314c4aecd6a61423be",
+  "java_svg_sha256": "2cef0be2277b43e14f6495e51197f812d7c41685768f998f514850f371d2b84d",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_mindmap_three.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_mindmap_three.svg"
+ },
+ {
+  "name": "tc1_activity_legacy_label",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "activity legacy",
+   "quoted label continued"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "d84cafd165d4a0ac7e098b5aef57d4e45da31fa8ed0f39576acca647db0d9e2c",
+  "java_svg_sha256": "5d1b9dc75a63e8b0ee85a1ced2bb9f7f05422fcf88c3ce34984f203151ad2fba",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_activity_legacy_label.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_activity_legacy_label.svg"
+ },
+ {
+  "name": "tc1_seq_chr_backslash_postjoin",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "TIM output ends with backslash",
+   "post-TIM join",
+   "last-line location"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "d48b6af7c7a3db396ac5ea3ef336f2eb1a8f73c25a35e05261de429459136260",
+  "java_svg_sha256": "05f35e04fb6db5c0fb6d5e92c9e05d33eece99dde07c1b3fde413d58861f9a08",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_chr_backslash_postjoin.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_chr_backslash_postjoin.svg"
+ },
+ {
+  "name": "tc1_mindmap_chr_backslash_no_postjoin",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "mindmap",
+   "TIM output backslash, no post-TIM join"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "match",
+   "9834a7194": "match",
+   "2a9373aca": "match",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "2a3793fce6281210c26039e0b51492ea620e43753ac1487b026941863ed967d4",
+  "java_svg_sha256": "00b33b294e0a0c97c58fad0cf6a47c5ad586f3de6e3e8f1a3e92cc8d503a2a23",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_mindmap_chr_backslash_no_postjoin.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_mindmap_chr_backslash_no_postjoin.svg"
+ },
+ {
+  "name": "tc1_seq_two_pieces_lines",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "two pieces",
+   "following data-source-line"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "8b1f68ba3810e81d233292d1bc087a36f22ebee19d03c086306ecd19140f8bcd",
+  "java_svg_sha256": "13a6778005edb8d5ceba9c756508eeb9bd854defd4bc1f7c0e3300414e856e8e",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_two_pieces_lines.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_two_pieces_lines.svg"
+ },
+ {
+  "name": "tc1_seq_four_pieces_lines",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "four pieces",
+   "following data-source-line"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "d69bb919f45ac21e55df20472a7ef665a35a76f3253bad3ca22b2a1ea6804392",
+  "java_svg_sha256": "1768f8bdceb5ccc8d5fadbef2e1a63d3ed807baa183dc955965fc96c66de5f69",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_four_pieces_lines.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_four_pieces_lines.svg"
+ },
+ {
+  "name": "tc1_class_four_pieces_lines",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "class",
+   "four pieces",
+   "following data-source-line"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "8c2f73956f23f05d00cb6a8e66689b7396022be5cca8b7b1f8a70e4ef8b95385",
+  "java_svg_sha256": "34a12ed4b075b8f9b003d260fc01908b3cbdc064d08e70c3cb31e1a6d7227d4f",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_four_pieces_lines.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_four_pieces_lines.svg"
+ },
+ {
+  "name": "tc1_class_two_merges_lines",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "class",
+   "two separate merges",
+   "following data-source-line"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "c598ba9bf3d0eda7164ea8711c4cbc6a4c03dccd6dba62c1d688223f33ae3662",
+  "java_svg_sha256": "b3d5d42e160dc41cb4699a5988371ee29f4ac76de7ad8d0d446ef011e5bbd59f",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_two_merges_lines.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_two_merges_lines.svg"
+ },
+ {
+  "name": "tc1_seq_indented_end_after_backslash",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "indented @enduml after backslash",
+   "Pipe#readSingleDiagram startsWith"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "valid-error"
+  },
+  "source_sha256": "e9f91aa21f67536e612fd0abdf7874ea62c79f0e39d2b36ae02928ab350888ac",
+  "java_svg_sha256": "4f129b17346630ee434384b52e348ddef77f50aea1c8550efe16c4d809b0827a",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_indented_end_after_backslash.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_indented_end_after_backslash.svg"
+ },
+ {
+  "name": "tc1_class_crlf_comment_skip",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "class",
+   "CRLF",
+   "comment skipped",
+   "line-endings:CRLF"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "152726fc757e9a709621b3bd7b0893392b09702370c7d9e0e26937b5828d548d",
+  "java_svg_sha256": "36ee4d39b350900b092c8159c069337ad9c5f55c559e98e53d122bf3f7f4ec29",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_crlf_comment_skip.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_crlf_comment_skip.svg"
+ },
+ {
+  "name": "tc1_seq_separator_continued",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "separator continued"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "7e5e8999502b3098b6dbd846305dadad238559c4ae56e13eaf08c8c800e94f2d",
+  "java_svg_sha256": "61d2dbd677e3d692eefad6837cf52fef6cc7d1ea21fac6fd453634d92eed5b68",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_separator_continued.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_separator_continued.svg"
+ },
+ {
+  "name": "tc1_seq_sprite_header_continued",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "sprite header continued",
+   "sprite ownership"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "ee3a549159ac4d186174b8825ee9101e619cf984a5ccc8d5e141e1d750b51a3c",
+  "java_svg_sha256": "c52e6fbb9b3e3d30fccd57038abf96802332db551563bf518563741b3b604f6d",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_sprite_header_continued.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_sprite_header_continued.svg"
+ },
+ {
+  "name": "tc1_seq_sprite_svg_continued",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "inline svg sprite continued",
+   "sprite ownership"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "15aa6495cd45612e56691c9473abdcd2827843310ca7c63d5fca4afea31e8e37",
+  "java_svg_sha256": "148f3eee84418cd2ffbf6d6905f6ee63e30dc9ebfec6e8668ca05c88daf94764",
+  "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_sprite_svg_continued.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_sprite_svg_continued.svg"
+ },
+ {
+  "name": "mc1_seq_procedure_body",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "!procedure body",
+   "pre-TIM join",
+   "following source line"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "4818002e3d2e2ed8cbb1c45e6ac6e7fbdfe585fa28dab2c61a5742f8cf34f208",
+  "java_svg_sha256": "583cda8224c859181f881e5b50291c7e1854aede9f52946a168d34f0407a5f83",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_procedure_body.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_procedure_body.svg"
+ },
+ {
+  "name": "mc1_seq_define_macro",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "!define macro body",
+   "leading whitespace kept"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "436be701b38519a8727957d5c7f6048cde4dc507d00a244fce9f19a26053d5fd",
+  "java_svg_sha256": "130ec51d8cc04239d873547b42398e370315759b8b7e9587101d50b9dbc078a5",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_define_macro.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_define_macro.svg"
+ },
+ {
+  "name": "mc1_seq_theme_plain",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "!theme",
+   "three pieces"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "e634c4f85693cc99e7cbad31a3831762b31a9cc126740e13d0595520d0b8ca39",
+  "java_svg_sha256": "a81607b390d0746a57d7174d1531661238efe07ace74e519db68d128c49b8cfa",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_theme_plain.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_theme_plain.svg"
+ },
+ {
+  "name": "mc1_class_theme_sketchy",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "class",
+   "!theme",
+   "link label"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "30cb9fae15de25d0d3f00e2bb00bea5d91eeacfbcf2f3fb676103a4084b327e7",
+  "java_svg_sha256": "f3c9414e4add012d3e2d68e3a7172215898d9a7c7a821a740a74b20517d0d9e1",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_class_theme_sketchy.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_class_theme_sketchy.svg"
+ },
+ {
+  "name": "mc1_state_theme_bluegray",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "state",
+   "!theme",
+   "transition label"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "890811fb51bc808c86d8c8c01c8396e1104a5f7867bc5fadebf0da141e0482ae",
+  "java_svg_sha256": "c00b2bb7be963073b450b7e087ee2c1582c66e64b476e99f10e4325e2bef2af6",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_state_theme_bluegray.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_state_theme_bluegray.svg"
+ },
+ {
+  "name": "mc1_usecase_continued",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "usecase",
+   "inside parentheses"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "valid-error"
+  },
+  "source_sha256": "6891b3a97f18745b53ea85562caf33d9801204c873a07fc25a2767a14223349e",
+  "java_svg_sha256": "ed131aa3464876770a62efc4df7dd07be08eb0d0f0241f469e67d04505006c2d",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_usecase_continued.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_usecase_continued.svg"
+ },
+ {
+  "name": "mc1_class_three_pieces_lines",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "class",
+   "three pieces",
+   "following data-source-line"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "faf635b2b8ea7611fe835ee7352b42770fdf2d4192f72a7f3a6a586c8550d6a3",
+  "java_svg_sha256": "115f697839debf3a87762f2678ca2649ed103edf9229417a885643aa378914eb",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_class_three_pieces_lines.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_class_three_pieces_lines.svg"
+ },
+ {
+  "name": "mc1_component_comments_between",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "component",
+   "ReadFilterQuoteComment skip",
+   "removeInnerComment on continuation"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "5a147544a1a58a59b5b2b6905ec50ee102ddd56b85f3af99be473438f523bb11",
+  "java_svg_sha256": "f875b6f7afd91feba70b35ed638826471e418ac84881d0f4cc28539e8b51fe06",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_component_comments_between.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_component_comments_between.svg"
+ },
+ {
+  "name": "mc1_seq_note_body",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "multiline note body"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "5971a6e8392d8d49c52131f1e8ad0ce0992c0ffdcb710fb3ebd1cfa02758ad16",
+  "java_svg_sha256": "1bf3d0471ed4e8c1eee5e159146b8f56d9733cb249af3dcc730e22208ee54bbf",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_note_body.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_note_body.svg"
+ },
+ {
+  "name": "mc1_activity_multiline_action",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "activity3",
+   "multiline action body"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "match",
+   "9834a7194": "match",
+   "2a9373aca": "match",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "a6cbd6b68f92b9576fdad3b26470b10933a1fa0269c5d7dfdee08ee057e80af9",
+  "java_svg_sha256": "94dda917d7fb1156f71e00e28d3b5c8cddcc44200f2aa93b73084ebfbd803d92",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_activity_multiline_action.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_activity_multiline_action.svg"
+ },
+ {
+  "name": "mc1_state_description",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "state",
+   "description"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "cb4a8552b59a0e00371621aa53eaf0ec217ab07383705e01db668d49e35b835d",
+  "java_svg_sha256": "14203c5bc35c96fdd237f6700ee62187f232c933a255bce8b914a716c8bdac0b",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_state_description.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_state_description.svg"
+ },
+ {
+  "name": "mc1_seq_escaped_backslash",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "escaped double backslash not continued"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "match",
+   "9834a7194": "match",
+   "2a9373aca": "match",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "aabd984e7a1441f68c790e32ea4156199c6635af181356404088b87066fc1712",
+  "java_svg_sha256": "9c44c30af8a79b7d42a8d8f0aaebc552cf59839a96363f87c327cddd9642ee85",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_escaped_backslash.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_escaped_backslash.svg"
+ },
+ {
+  "name": "mc1_seq_backslash_space",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "backslash then space not continued"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "match",
+   "9834a7194": "match",
+   "2a9373aca": "match",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "92b1c615d9ded9eca52d7993e073d10f047bdcec8b2a9d930446b1dfe45cc92b",
+  "java_svg_sha256": "3f398fef0dddf6eb504559c62053161d1f712dddabdc884d50ef76b0384cab66",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_backslash_space.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_backslash_space.svg"
+ },
+ {
+  "name": "mc1_seq_crlf",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "CRLF",
+   "line-endings:CRLF"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "5592e4ed98bf70133fdcc83166fbc45456c86c2660ce723850a998c204521089",
+  "java_svg_sha256": "f5974c6c26527f43b0441ecb77d8467271a8febda6578db77d583546f687e681",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_crlf.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_crlf.svg"
+ },
+ {
+  "name": "mc1_class_crlf_three",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "class",
+   "CRLF",
+   "three pieces",
+   "line-endings:CRLF"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "51a71c90e03a956eece1fba51d8b314995c1d68b74cb2ce99115fa41e72c3712",
+  "java_svg_sha256": "913dc6576ad675b362d3082052c0ef51dc66c843011dca57226ac5dc8bb84580",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_class_crlf_three.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_class_crlf_three.svg"
+ },
+ {
+  "name": "mc1_seq_tim_assignment",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "TIM assignment continued"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "fc3f130ff5db7d09c8567e813389d1f2bfa6a0833654079a70f3eb717b4e860f",
+  "java_svg_sha256": "fe6cec4e6d87787e183ece3b3beca281152952db4348ae78e40e23f381da8980",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_tim_assignment.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_tim_assignment.svg"
+ },
+ {
+  "name": "mc1_seq_if_condition",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "!if condition continued"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "0bd9def77f38241c8d5fca1780d2073eeaf46893351a3ddcb251c57a96b953bc",
+  "java_svg_sha256": "2cb27d31272974672d6675bb8a4709aeac4c2375027229ad3e349414ade41dcc",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_if_condition.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_if_condition.svg"
+ },
+ {
+  "name": "mc1_seq_comment_only_continuation",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "comment lines skipped before continuation"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "8edfbd337bb85aa3aecefaee6f188b1178b818ac82f71a7ba10fb1b31a2a2684",
+  "java_svg_sha256": "9f4182bf5b2420636b39211ef9f0469939a9a3cccc3d8107f6167819968ccb91",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_comment_only_continuation.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_comment_only_continuation.svg"
+ },
+ {
+  "name": "mc1_seq_continued_comment_line",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "continued line is a comment: continuation joins the comment"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "a793e5f4eb2b40a45d94af2346ed00943b6b89baaa0e310f7e07dca582aca76e",
+  "java_svg_sha256": "ae6c3bf4ceaffb5a4d46cf22e8f3adb4fa993e674d22abf5b683f0a03d710313",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_continued_comment_line.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_continued_comment_line.svg"
+ },
+ {
+  "name": "mc1_mindmap",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "mindmap",
+   "non-UML family pre-TIM join"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "587dbb6314a42cbf236aba46b8d6ad9b4249f7feba86c838b6b4401ae4b23050",
+  "java_svg_sha256": "942f8fe40c1d441c631608d096c0c60e6db04429175f66965ce6b8d8d93e01f0",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_mindmap.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_mindmap.svg"
+ },
+ {
+  "name": "mc1_json",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "json",
+   "non-UML family pre-TIM join"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "valid-error",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "9d0ab91f3299f28edfbe2d1635067cc097b729ad845809e5416992eaf442d82b",
+  "java_svg_sha256": "28ef919c42e94b31b19eab6ddac3145401975a5259314ff9aad239b29c87d9eb",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_json.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_json.svg"
+ },
+ {
+  "name": "mc1_skinparam_continued",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "class",
+   "skinparam line continued"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "match",
+   "9834a7194": "match",
+   "2a9373aca": "match",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "b78c0d6792588c1e5ea5edd153d0b39434bcf3b11e7424a3087bc813d4285f80",
+  "java_svg_sha256": "00f7c894beca3e176ad762fc7199cd67aaec1e18c968adc5caadf2f3c3d2fd67",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_skinparam_continued.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_skinparam_continued.svg"
+ },
+ {
+  "name": "mc1_style_block",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "class",
+   "<style> body continued"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "match",
+   "9834a7194": "match",
+   "2a9373aca": "match",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "005ca4154792dedf0c7490b5f1f0361c395ed89cef061d4876eec06b365c3dea",
+  "java_svg_sha256": "d31f3e42744117887d28ec3786f17575b10bb1f19dbc73ae22f1a81c75928707",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_style_block.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_style_block.svg"
+ },
+ {
+  "name": "mc1_seq_leading_space_continuation",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "continuation leading spaces kept"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "207ae0d4d301e6f7d39ec27471a8440acb71880ebb64167cef62b947acda7766",
+  "java_svg_sha256": "02abc0ebe2ca49cf8a65813e43cb3d10f56cee445d8aa95f14e4905b0dcf299b",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_leading_space_continuation.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_leading_space_continuation.svg"
+ },
+ {
+  "name": "mc1_object_continued",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "object",
+   "continued declaration"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "30ca1ac51cb1de9c26f7172ce3b0db81e91c2bf0b62f1e078f19cd734869b7bf",
+  "java_svg_sha256": "9557a301e4acb0ddb0f9bba73f446deed46f4278a441c92070c1d9ef6b0e3ed9",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_object_continued.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_object_continued.svg"
+ },
+ {
+  "name": "mc1_seq_block_comment_continued",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "long comment skipped before continuation"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "62585fad80617de967f6942e969f3b2c06eb734e30fc0790ed7f078892989f40",
+  "java_svg_sha256": "ec6443fd6188339fe376ca6809fff3cbcb96cfd53b625399279ca581934ad3e0",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_block_comment_continued.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_block_comment_continued.svg"
+ }
+]

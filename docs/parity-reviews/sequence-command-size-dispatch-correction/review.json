@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-command-size-dispatch-correction",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A29fed3c4-f6f1-48fa-9925-601e7b0c6dcb",
+    "model": "gpt-6-astra; high reasoning effort",
+    "tool": "Codex harness in T3 Code",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-bd08723a",
+    "branch": "review/sequence-admission-bd08723a",
+    "independent": true,
+    "prior_involvement": false,
+    "children": 0
+  },
+  "account_commit": "297c7a1eacfff66445700496190630b891eb3ee7",
+  "implementation_commit": "c525fd32ae97b642b440a161140e9457f29bcfc8",
+  "implementation_commits": [
+    "c525fd32ae97b642b440a161140e9457f29bcfc8"
+  ],
+  "tested_rust_revision": "c6295ccdef39719b60f0e88dfd9555919523c961",
+  "production_revision": "c525fd32ae97b642b440a161140e9457f29bcfc8",
+  "baseline_revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "baseline_production_revision": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE/target-before cargo build --release --jobs 4 -p rustuml -p rustuml-oracle --bin rustuml --example diff_one at dc438fd0cd0f5edd44816db81f0d765bf48ce4e6; independently repeat at c6295ccdef39719b60f0e88dfd9555919523c961 with target-after.",
+    "rustc --edition=2024 docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs -L dependency=PRIVATE_TARGET/release/deps --extern rustuml_oracle=EXACT_RLIB -o PRIVATE_BIN/compare_cli (exact binding records retained).",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST PRIVATE_BIN PRIVATE_OUTPUT REPO_CWD; retained3569 and fresh509+62 before/after.",
+    "replay.py before|after golden|retained|fresh-main|fresh-supplement: actual rustuml -tsvg/-ttxt/--ast/--yaml -pipe; full byte captures and unchanged compare_cli.",
+    "Parent existing Monkey Man relay batches AH/AI only; [\"/Users/marcelo/rustuml-reference/bin/reference\",\"--cwd\",\"PRIVATE_CWD\",\"--timezone\",\"GMT+11:00\",\"--\",\"-pipe\",\"-tsvg\"]. No local Java/javac, SSH, runner or child was launched.",
+    "cargo test --release --lib -p rustuml-parser -p rustuml-render; cargo test --release -p rustuml --test pipe_mode; cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture (stable broad run once; exact logs preserved).",
+    "uv run --no-project python docs/parity-reviews/sequence-consumer-contract-packet/checker-9784-astra-b4b6/support/rejection_contract.py REPO NEGATIVES BEFORE_CLI AFTER_CLI OUTPUT; historical, prior-fresh, exporter and fresh-checker cohorts separately.",
+    "xml.etree.ElementTree.fromstring over every nonempty CLI SVG capture and every new reference, with empty/error outcomes retained separately."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_1999_ascii.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_1999_ascii.svg",
+      "axes": [
+        "UTF16 units 1999",
+        "reverse dashed arrow",
+        "ASCII"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "64eb00957b7857a98cf0296466f15afe680cd591b9556cce2de9f32591e0331d",
+      "golden_sha256": "6aac47dab3f0cd7eb6aae5c81ec365b433f291ecb93ca2e2a0c441b49654171c",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_1999_astral.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_1999_astral.svg",
+      "axes": [
+        "UTF16 units 1999",
+        "reverse dashed arrow",
+        "astral"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "8618122c6ce8f9db3c4395d68153d8cd982ec29c73884db61b3d55f7d54e88c8",
+      "golden_sha256": "e7ce2e9780223802259fceb2435040bee7aa819b9fa153f61d897ad50fb2e952",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_2000_ascii.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_2000_ascii.svg",
+      "axes": [
+        "UTF16 units 2000",
+        "reverse dashed arrow",
+        "ASCII"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "5c9d273d7ed4ba3e578127560498684e170bd32116fb1ddc5c4f85f225c90352",
+      "golden_sha256": "f54714cb6c45346c0f274fb76829cdaf3cb35b6daf85bd8aca9c12dacde01534",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_2000_astral.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_2000_astral.svg",
+      "axes": [
+        "UTF16 units 2000",
+        "reverse dashed arrow",
+        "astral"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "33bb5dda14b3ae681a7e4b47c588fe67184049735cc5734211b3d824cbd9b4e1",
+      "golden_sha256": "ed59b6a38d6ee8c33a10a3d4739b275ec465a07cb7629964cb19732880341329",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_2001_ascii.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_2001_ascii.svg",
+      "axes": [
+        "UTF16 units 2001",
+        "reverse dashed arrow",
+        "ASCII"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "c775e3b57e23dce51d6d055acb794f9bb5bb9008a0eed89e26e0c20b8c014b91",
+      "golden_sha256": "adea2c7023d1da284841eb290cce1c25867b5339c96f54209f02c81a53586efd",
+      "intended_valid": true,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 0,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_2001_astral.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_2001_astral.svg",
+      "axes": [
+        "UTF16 units 2001",
+        "reverse dashed arrow",
+        "astral"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "8291c04bd8932124943ef2c6dc7e8ab0ec0b60443ce0cf1cc1f3c9f634bbe898",
+      "golden_sha256": "fdcc8be08bc0a88a5d9875ad053f138dcda7f9cc3228602db598e87689ae90c6",
+      "intended_valid": true,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 0,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_2002_ascii.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_2002_ascii.svg",
+      "axes": [
+        "UTF16 units 2002",
+        "reverse dashed arrow",
+        "ASCII"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "60cc3a926ec51fe833b4a96e6fd52443e623e94964cf86da07043d0d9844f621",
+      "golden_sha256": "8f092e71a0ae9a3212931d95be82c6af85a32744bc093df5a5ba73a3018a8533",
+      "intended_valid": true,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 0,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_2002_astral.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_size_2002_astral.svg",
+      "axes": [
+        "UTF16 units 2002",
+        "reverse dashed arrow",
+        "astral"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "7078eff291065fec6bb4cb6a1885676f1c03a2ec544459862b1c2c449b881be0",
+      "golden_sha256": "c98de06aabe84b2553fe71fca61b2ee68cd5bdfe6afd386a4a6b2288e792b3dc",
+      "intended_valid": true,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 0,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_s_size_arrow_only_2000_False.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_s_size_arrow_only_2000_False.svg",
+      "axes": [
+        "2000 UTF16",
+        "arrow-only factory fallthrough",
+        "ASCII"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "20184b58026e78ec8dc731e10f89e555207c8fc826c00aedf2cdee44193e4f9f",
+      "golden_sha256": "a5628a85f176e0893926e8cc839db57ece347a9f007222645249748b67869853",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_s_size_arrow_only_2000_True.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_s_size_arrow_only_2000_True.svg",
+      "axes": [
+        "2000 UTF16",
+        "arrow-only factory fallthrough",
+        "astral"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "7575c78aa62c15db0181b4da89d8d01ada6df4918436bdad940195afab86a5f4",
+      "golden_sha256": "ff7dadead32fe27005993ba8ccda8f073b391d55ecf7a33d12244728ad582f80",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_s_size_arrow_only_2001_False.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_s_size_arrow_only_2001_False.svg",
+      "axes": [
+        "2001 UTF16",
+        "arrow-only factory fallthrough",
+        "ASCII"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "03b635acb927210d586dffa8171e30618c40b015fc02a93edba727d596ded03b",
+      "golden_sha256": "32d0f2458961a06f4aa7bc106fed7b950fa91e11e4fbf7bde2d322e9d82f880c",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "CLASS",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_s_size_arrow_only_2001_True.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_s_size_arrow_only_2001_True.svg",
+      "axes": [
+        "2001 UTF16",
+        "arrow-only factory fallthrough",
+        "astral"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "382ac695daa52269c4460acf6d651882b4530768bf5959ae796e880559bacd11",
+      "golden_sha256": "954a6ca31e251488a6ee4ee19c3dbaee5feb6084577742e8154569eff5925b76",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "CLASS",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    }
+  ],
+  "findings": [
+    "Original eight references independently parse as four2000-unit SEQUENCE outputs and four2001-unit CLASS outputs, all Java exit0. Final production/build/test sources are byte-identical to268fa9f8b: no size guard, guard test, branch, constant or other production residue remains. Original eight actual CLI outcomes are2 matches/6 mismatches/0 errors, unchanged.",
+    "Fresh arrow-only2000/2001 ASCII/non-BMP sources independently reproduce SEQUENCE then CLASS. However the first fresh matrix includes participant declarations and previous messages: over-limit arrow rejection cannot fall through to Class because Class rejects those sequence declarations. Those four sources return Java200. This conditions the maker correction on source shape; it is not a universal assertion that every over-limit arrow document renders CLASS.",
+    "REJECT parity: all four fresh over-limit declaration-bearing sources remain Rust false successes; both fresh over-limit arrow-only sources remain wrong-family whole-output mismatches. No lost rejection or new valid error is caused by the revert itself. The revert avoids an incorrect local guard while faithful factory admission/fall-through remains unresolved.",
+    "Causal source: CommandArrow#getRegexConcat protectSize(2000), RegexConcat#match UTF16 String.length, PSystemCommandFactory syntax failure, then PSystemBuilder constructor order and createPSystem:230\u2013255. Literal account citation PSystemBuilder#initFactories does not exist; the separate immutable citation-corrections.json correctly points to the constructor. The correction account precedes the revert, although the default revert message references only the reverted implementation, not that correction account."
+  ],
+  "verdict": "rejected",
+  "verdict_scope": "Whole-output and rejection-contract acceptance; bounded support is not a waiver. Source-correct or reverted portions are distinguished in findings.",
+  "fresh_counts": {
+    "before": {
+      "entries": 12,
+      "mismatch": 4,
+      "match": 4,
+      "nonpositive": 4
+    },
+    "after": {
+      "entries": 12,
+      "mismatch": 4,
+      "match": 4,
+      "nonpositive": 4
+    }
+  },
+  "evidence": "docs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra",
+  "bounded_next_obligations": [
+    "REJECT parity: all four fresh over-limit declaration-bearing sources remain Rust false successes; both fresh over-limit arrow-only sources remain wrong-family whole-output mismatches. No lost rejection or new valid error is caused by the revert itself. The revert avoids an incorrect local guard while faithful factory admission/fall-through remains unresolved."
+  ],
+  "limits": [
+    "No shared-SVG combined correctness claim.",
+    "Java argv is wrapper-derived, not process-traced.",
+    "No baseline/comparator/skip/allow-list/target changes.",
+    "Prior accepted exceptions remain exactly15 frozen entries (14 distinct source hashes); fresh sprite loss is an unapproved16th error, not silently added to that set."
+  ]
+}

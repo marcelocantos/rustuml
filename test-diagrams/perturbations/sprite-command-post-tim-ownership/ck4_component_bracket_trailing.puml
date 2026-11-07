@@ -1,0 +1,4 @@
+@startuml
+[Engine] /' c '/
+[Engine] --> [Pump]
+@enduml

@@ -1,0 +1,344 @@
+[
+ {
+  "name": "o7p_fmt_first_at_seq",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   1
+  ],
+  "df078f7d7": "mismatch",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "o7p_fmt_mid_at_seq",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "df078f7d7": "compare-101",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "compare-101"
+ },
+ {
+  "name": "o7p_fmt_mid_bs_seq",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "df078f7d7": "compare-101",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "compare-101"
+ },
+ {
+  "name": "o7p_fmt_before_end_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "o7p_fmt_after_end_at",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   1
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "match",
+  "9ed52f435": "match",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "o7p_fmt_two_lines_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "o7p_fmt_no_space",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   3
+  ],
+  "df078f7d7": "valid-error",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "o7p_fmt_indented",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   3
+  ],
+  "df078f7d7": "valid-error",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "o7p_blank_lead_ctrl_mix",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "o7p_blank_ctrl_inside",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "df078f7d7": "nonpositive-rejected",
+  "6d195c178": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "o7p_blank_ctrl_before_at",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   1
+  ],
+  "df078f7d7": "mismatch",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "o7p_blank_trailing_ws_lines",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "match",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "o7p_type_longs_first_salt",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "df078f7d7": "valid-error",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "o7p_type_wbs_longs_last",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "o7p_type_kelvin_first",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "df078f7d7": "valid-error",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "o7p_type_dotted_i_mindmap",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "o7p_type_sharp_s_wbs",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "df078f7d7": "valid-error",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "o7p_type_dotless_nwdiag",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "o7p_start_longs_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "o7p_start_longs_at_mindmap",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "o7p_bom_start_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "match",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "o7p_bom_content_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "o7p_bom_end_at",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   1
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "o7p_bom_two_content",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "df078f7d7": "nonpositive-rejected",
+  "6d195c178": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "o7p_bom_every_line_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "match",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "o7p_endash_label_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "mismatch",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "o7p_bom_blank_line_lead",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   3
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "o7p_fmt_and_bom",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ }
+]

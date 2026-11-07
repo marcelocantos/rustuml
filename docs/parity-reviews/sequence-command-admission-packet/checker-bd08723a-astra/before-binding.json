@@ -1,0 +1,20 @@
+{
+  "revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-bd08723a",
+  "command": [
+    "rustc",
+    "--edition=2024",
+    "docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs",
+    "-L",
+    "dependency=/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/target-before/release/deps",
+    "--extern",
+    "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/target-before/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+    "-o",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/compare_cli"
+  ],
+  "binaries": {
+    "compare_cli": "58f5719ae88da60223b74b7bd4c2cd5d6300f9614a230bbcc8d5e00e6c33b2d6",
+    "diff_one": "a0ffd12bc2e6475dcea4a5ef50ca4cdb0d78d3de667b614b5b0a6f197963b185",
+    "rustuml": "1fcb1bfc0eaf553fca7d57edb5524a0de4ba161c4952247196cccdd0e9503d73"
+  }
+}

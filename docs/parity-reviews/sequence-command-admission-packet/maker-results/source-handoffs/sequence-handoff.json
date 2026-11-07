@@ -1,0 +1,40 @@
+{
+  "owner": "concurrent sequence maker / T14.16",
+  "tested_sequence_revision": "b8905e296b8865e53f3c573abaebf4adb632d751",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_source": "SvgGraphics.getTransformer US-ASCII \u2192 XmlFactories TransformerFactory \u2192 OpenJDK21.0.5 ToStream.writeAttrString/accumDefaultEscape; source bytes and hashes in java-serialization-trace.json",
+  "rust_source": "crates/rustuml-render/src/sequence.rs:2756 escape_xml",
+  "equivalent_inputs": [
+    "ASCII & < > double quote entities",
+    "apostrophe literal",
+    "guillemets decimal references"
+  ],
+  "different_inputs": [
+    "LF/CR/TAB: local helper leaves raw; Java uses &#10;/&#13;/&#9;, retaining decoded whitespace instead of XML attribute normalization",
+    "non-ASCII other than guillemets: local helper raw; Java decimal scalar references including non-BMP"
+  ],
+  "callers": [
+    {
+      "line": 3806,
+      "attributes": "data-qualified-name and generated uid/id",
+      "source": "lifeline qualified_name via class::translate_qualified_name; part_uid allocated"
+    },
+    {
+      "line": 4110,
+      "attributes": "data-qualified-name and generated uid/id",
+      "source": "participant group translated qualified_name"
+    },
+    {
+      "line": 4121,
+      "attributes": "href/title/xlink:href/xlink:title",
+      "source": "active_participant_url"
+    },
+    {
+      "line": 4145,
+      "attributes": "data-entity-1/data-entity-2",
+      "source": "message endpoint ids"
+    }
+  ],
+  "proposal": "Route only user-derived attribute values through crate::svg::escape_attribute. Keep text-node escaping separate; preserve translated name normalization and allocated identifiers. Check any direct image href path (base4221) separately for user provenance. No sequence changes made in this packet.",
+  "c0": "Invalid C0 requires fallible export contract under T14.20; shared infallible helper preserves values, with exact three malformed-output ratchets."
+}

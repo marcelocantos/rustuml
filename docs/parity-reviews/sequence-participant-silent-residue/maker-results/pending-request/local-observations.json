@@ -1,0 +1,1222 @@
+{
+ "note": "local CLI observations only; no Java verdict",
+ "cases": [
+  {
+   "name": "mk2_if_false_pixel_seq_legacy",
+   "source_sha256": "3701fb7a3e3e0687f59f64c794c24ec6f862ed088c102d4628d272a4813bef2d",
+   "intended_valid": true,
+   "axes": [
+    "!if false",
+    "unclosed pixel",
+    "legacy"
+   ],
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "warning: sequence command CommandSpriteFile is recognized but unimplemented at line 5: sprite $gem [2x2/16] {",
+     "parse error: line 6: Syntax error: no registered sequence command accepts \"F0\""
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "38f1f7675c8862d6c8c0c8a141ec6acdcdebed27bd061900c4cf3c466b5ba519",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_else_branch_pixel_seq_legacy",
+   "source_sha256": "c1f6c3317b61f0499867c792b5f32d6b83ecc931f167480707a17a106076d255",
+   "intended_valid": true,
+   "axes": [
+    "!if false then !else",
+    "closed pixel",
+    "legacy"
+   ],
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "parse error: line 5: Syntax error: no registered sequence command accepts \"sprite $gem <svg width=\\\"2\\\" height=\\\"2\\\">\""
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "20e77fc1dea57fcee6e172ddc875761cb543f6e164ea8c7d3820a084607db547",
+    "stderr_tail": [
+     "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 8: sprite $gem [2x2/16] {"
+    ]
+   }
+  },
+  {
+   "name": "mk2_proc_invoked_closed_pixel_seq_legacy",
+   "source_sha256": "44ab5ded0d1054368ff17fe2333827eda292891c3b3e87a7dd5d2d5ba053fd0a",
+   "intended_valid": true,
+   "axes": [
+    "invoked procedure",
+    "closed pixel",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "e8a7069919599e714930130952c72d2c150a8a7fa5b32b672396972642b10f26",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "add930f0716bce1a3f72e3d441ab8de251fb39fdcaf2ba0da5752bc44949b44b",
+    "stderr_tail": [
+     "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 5: sprite $gem [2x2/16] {"
+    ]
+   }
+  },
+  {
+   "name": "mk2_proc_invoked_unclosed_svg_seq_legacy",
+   "source_sha256": "87015b94146cebb81d0e338df59f66b85a9d2093741815450efcdde37e3fd7d9",
+   "intended_valid": false,
+   "axes": [
+    "invoked procedure",
+    "unclosed svg",
+    "legacy"
+   ],
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "parse error: line 5: Syntax error: no registered sequence command accepts \"sprite $gem <svg width=\\\"2\\\" height=\\\"2\\\">\""
+    ]
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 5: Syntax error: no registered sequence command accepts \"sprite $gem <svg width=\\\"2\\\" height=\\\"2\\\">\""
+    ]
+   }
+  },
+  {
+   "name": "mk2_include_close_only_seq_legacy",
+   "source_sha256": "2caae5706a46453810496ca0644aab1dfffc2ac3f5d315d0872c886512fba0ed",
+   "intended_valid": true,
+   "axes": [
+    "!include supplies body and END",
+    "svg",
+    "legacy"
+   ],
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "parse error: line 4: Syntax error: no registered sequence command accepts \"sprite $gem <svg width=\\\"2\\\" height=\\\"2\\\">\""
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "590360f5f9e58a152880d69ebda71cca9dc8f75c43b7e722a99e8fe7bd8331da",
+    "stderr_tail": [
+     "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 4: sprite $gem <svg width=\"2\" height=\"2\">"
+    ]
+   }
+  },
+  {
+   "name": "mk2_seq_note_svg_lookalike_legacy",
+   "source_sha256": "5b00516db7cb405197cb1cf447cb2fcf7fb6a82a3be7659ddc600ad05f8ec793",
+   "intended_valid": true,
+   "axes": [
+    "note body",
+    "svg header lookalike",
+    "legacy"
+   ],
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "parse error: line 8: Syntax error: no registered sequence command accepts \"@enduml\""
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "3314aba4bc51a89147eb79c6f591dce4620b94f6aa7dd493e6c19be51bfa296a",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_seq_top_level_text_legacy",
+   "source_sha256": "c72ffe145b8347695cc8947dc48bc793a8ee0ac839ab755f0a4ab2363700ade2",
+   "intended_valid": false,
+   "axes": [
+    "top-level Sprite text",
+    "CommandSpriteFile",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "5cc51197ec3a65ff4577c40ce36a1080a3d85224d49bb6ca6fa3f0b5f99145d4",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported",
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported",
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 4: Cannot read: are loaded"
+    ]
+   }
+  },
+  {
+   "name": "mk2_redeclare_into_box_legacy",
+   "source_sha256": "c5a57eaaf4f02ecdb9e4fb6db607ba2e04157f8a16653b99d04e1e8bec88bd25",
+   "intended_valid": true,
+   "axes": [
+    "putParticipantInLast",
+    "box englober",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "22080b098aad33faafd95039495bd0815c87dc0ec9f2676be738cef92973bc94",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "22080b098aad33faafd95039495bd0815c87dc0ec9f2676be738cef92973bc94",
+    "stderr_tail": [
+     "warning: sequence participant re-declaration moves \"Hazel\" to last and into the current box in Java (SequenceDiagram#putParticipantInLast); this reorder is not modelled at line 4"
+    ]
+   }
+  },
+  {
+   "name": "mk2_multi_stereo_three_legacy",
+   "source_sha256": "f00617aed82281bded1824fa798aabb531c557a79694272ee6a3405c23d00962",
+   "intended_valid": true,
+   "axes": [
+    "three stereotypes",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "080c7aa95ee4c4d6acdf09a9660351fc7dc9ac8c42ed74c32b218a3f3a39f0fc",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "080c7aa95ee4c4d6acdf09a9660351fc7dc9ac8c42ed74c32b218a3f3a39f0fc",
+    "stderr_tail": [
+     "warning: sequence participant has multiple stereotypes (Stereotype#build label list); rendering them as separate labels remains unsupported at line 2",
+     "warning: sequence participant has multiple stereotypes (Stereotype#build label list); rendering them as separate labels remains unsupported at line 2"
+    ]
+   }
+  },
+  {
+   "name": "mk2_tooltip_in_box_legacy",
+   "source_sha256": "f15c9152771960a8fbc923fb511c36c7f646a7799d899bce8dfe42ef13aff823",
+   "intended_valid": true,
+   "axes": [
+    "participant url tooltip",
+    "inside box",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "fdd8a676c22cec287db82349445ce541d2ee25c4c3b1ed23568308d34ca152a2",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "2cce7626bb8e568bda9e541a8b0e78c40801b91d8738854d7fc8bef54f98a660",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_if_false_pixel_seq_teoz",
+   "source_sha256": "26036d0a7178197d5cae9bf339d83da8bf65178155e9e7c0826557481f09112a",
+   "intended_valid": true,
+   "axes": [
+    "!if false",
+    "unclosed pixel",
+    "teoz"
+   ],
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "warning: sequence command CommandSpriteFile is recognized but unimplemented at line 6: sprite $gem [2x2/16] {",
+     "parse error: line 7: Syntax error: no registered sequence command accepts \"F0\""
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "4390fc1f4cf7ea60f3ebd307cbbb04630ceae1260457c8ec392e55dc4493eb9d",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_else_branch_pixel_seq_teoz",
+   "source_sha256": "7db9fe1d692050994c28079251f056490e9423c41466a25c88f0d400cafe4e4b",
+   "intended_valid": true,
+   "axes": [
+    "!if false then !else",
+    "closed pixel",
+    "teoz"
+   ],
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "parse error: line 6: Syntax error: no registered sequence command accepts \"sprite $gem <svg width=\\\"2\\\" height=\\\"2\\\">\""
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "4390fc1f4cf7ea60f3ebd307cbbb04630ceae1260457c8ec392e55dc4493eb9d",
+    "stderr_tail": [
+     "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 9: sprite $gem [2x2/16] {"
+    ]
+   }
+  },
+  {
+   "name": "mk2_proc_invoked_closed_pixel_seq_teoz",
+   "source_sha256": "e0a67ab52c2b93d285b42cec9f0d84ca5a9f9de9d6786c4b0325789e05c2a5d2",
+   "intended_valid": true,
+   "axes": [
+    "invoked procedure",
+    "closed pixel",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "4390fc1f4cf7ea60f3ebd307cbbb04630ceae1260457c8ec392e55dc4493eb9d",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "4390fc1f4cf7ea60f3ebd307cbbb04630ceae1260457c8ec392e55dc4493eb9d",
+    "stderr_tail": [
+     "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 6: sprite $gem [2x2/16] {"
+    ]
+   }
+  },
+  {
+   "name": "mk2_proc_invoked_unclosed_svg_seq_teoz",
+   "source_sha256": "2820b6b9753259675ad0ebc84bf7afe1e96117c81ada315bb0c6c868f2e2f20b",
+   "intended_valid": false,
+   "axes": [
+    "invoked procedure",
+    "unclosed svg",
+    "teoz"
+   ],
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "parse error: line 6: Syntax error: no registered sequence command accepts \"sprite $gem <svg width=\\\"2\\\" height=\\\"2\\\">\""
+    ]
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 6: Syntax error: no registered sequence command accepts \"sprite $gem <svg width=\\\"2\\\" height=\\\"2\\\">\""
+    ]
+   }
+  },
+  {
+   "name": "mk2_include_close_only_seq_teoz",
+   "source_sha256": "461607560ea8e03df3f9526bf633509e8121c4432901f40cc1a6e95b970fb01a",
+   "intended_valid": true,
+   "axes": [
+    "!include supplies body and END",
+    "svg",
+    "teoz"
+   ],
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "parse error: line 5: Syntax error: no registered sequence command accepts \"sprite $gem <svg width=\\\"2\\\" height=\\\"2\\\">\""
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "4390fc1f4cf7ea60f3ebd307cbbb04630ceae1260457c8ec392e55dc4493eb9d",
+    "stderr_tail": [
+     "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 5: sprite $gem <svg width=\"2\" height=\"2\">"
+    ]
+   }
+  },
+  {
+   "name": "mk2_seq_note_svg_lookalike_teoz",
+   "source_sha256": "c0dc586116e15dd4caabc12284131ac57a3d23b6173448fee1d953e0c250228e",
+   "intended_valid": true,
+   "axes": [
+    "note body",
+    "svg header lookalike",
+    "teoz"
+   ],
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "parse error: line 9: Syntax error: no registered sequence command accepts \"@enduml\""
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "af3649ca6032a4ca22d58343ef1c1ee23cc9b15d5bf4e62c5fe8677da0b0f292",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_seq_top_level_text_teoz",
+   "source_sha256": "9aebd5506b464806867ec57fe3f8162c8e99601065e6cfeccd61ad2fd237255b",
+   "intended_valid": false,
+   "axes": [
+    "top-level Sprite text",
+    "CommandSpriteFile",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "0723cc58bb9e3f65c6290e635c56743afa3968ac4b8ce5d7a5cab63ea2ece7b3",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported",
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported",
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 5: Cannot read: are loaded"
+    ]
+   }
+  },
+  {
+   "name": "mk2_redeclare_into_box_teoz",
+   "source_sha256": "d9a3eaa107b51aa27e2a19029371e219a5fd43b254a92dbfd3d38906673cf020",
+   "intended_valid": true,
+   "axes": [
+    "putParticipantInLast",
+    "box englober",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "3ed9d2242f89709248f69c00ddad0570b0df72a6e056b32fdaf20a9e4eb14d9f",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "3ed9d2242f89709248f69c00ddad0570b0df72a6e056b32fdaf20a9e4eb14d9f",
+    "stderr_tail": [
+     "warning: sequence participant re-declaration moves \"Hazel\" to last and into the current box in Java (SequenceDiagram#putParticipantInLast); this reorder is not modelled at line 5"
+    ]
+   }
+  },
+  {
+   "name": "mk2_multi_stereo_three_teoz",
+   "source_sha256": "bc6b8f6ad159715015523c89fa206c9160999f04f36f3c2c6652e86af13a8f5c",
+   "intended_valid": true,
+   "axes": [
+    "three stereotypes",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "aa48b9daabc0334bbc2156ce54ac8e7675e30c3c8be5d3ae5bb3ac249dfe6c8b",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "aa48b9daabc0334bbc2156ce54ac8e7675e30c3c8be5d3ae5bb3ac249dfe6c8b",
+    "stderr_tail": [
+     "warning: sequence participant has multiple stereotypes (Stereotype#build label list); rendering them as separate labels remains unsupported at line 3",
+     "warning: sequence participant has multiple stereotypes (Stereotype#build label list); rendering them as separate labels remains unsupported at line 3"
+    ]
+   }
+  },
+  {
+   "name": "mk2_tooltip_in_box_teoz",
+   "source_sha256": "cd9feb03f828d89e25f2cc317f9db0b47c8b36d6a1617eb8c08b76703d4d94d0",
+   "intended_valid": true,
+   "axes": [
+    "participant url tooltip",
+    "inside box",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "d5620d691336d0420af8d544a49abefafb2da0c613d04c61dc680024563301e0",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "d5620d691336d0420af8d544a49abefafb2da0c613d04c61dc680024563301e0",
+    "stderr_tail": [
+     "warning: teoz participant link anchors ([[url]]) are not emitted; the links are dropped from the SVG"
+    ]
+   }
+  },
+  {
+   "name": "mk2_note_across_plain_legacy",
+   "source_sha256": "d4383954f5a5b00a4aa4b54051a1df6e0dd97eb530f28c9f2e71a80efaa347c5",
+   "intended_valid": true,
+   "axes": [
+    "note across",
+    "no colour control"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "91feaf0fcaf634a3a5564f648b0001cfdfc114fc7d278c6e7664e5865e28b3cb",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "91feaf0fcaf634a3a5564f648b0001cfdfc114fc7d278c6e7664e5865e28b3cb",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_hnote_over_plain_legacy",
+   "source_sha256": "cdf9076a5b90b985f47469c7c43b394f3467d04408306a0fb5b730d5fb8ba2fa",
+   "intended_valid": true,
+   "axes": [
+    "hnote over several",
+    "no colour control"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "07d1081a87f9f63b009cf3c97c0c9645e460c1fcb5137b2b9351acbe15fd7667",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "07d1081a87f9f63b009cf3c97c0c9645e460c1fcb5137b2b9351acbe15fd7667",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_rnote_across_multi_plain_legacy",
+   "source_sha256": "1c61dc5ba6ff05890e2d7ceeed413821f5c136224e840726fa5177491603459b",
+   "intended_valid": true,
+   "axes": [
+    "rnote across multiline",
+    "no colour control"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "0cbe656358e7b204a96b895f3df9b2b167a424f4dae87c852fb213b9d0a0be3a",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "0cbe656358e7b204a96b895f3df9b2b167a424f4dae87c852fb213b9d0a0be3a",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_hnote_right_plain_teoz",
+   "source_sha256": "d95e19720da4fde28fabaf8dd05f211a58e41b0726fb61ebc9b2d3d5ae744b98",
+   "intended_valid": true,
+   "axes": [
+    "hnote right",
+    "no colour control",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "658eaf79e288954fad87d85d01fe5600cd832bec5533d5d37ccf743c4cb822c9",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "658eaf79e288954fad87d85d01fe5600cd832bec5533d5d37ccf743c4cb822c9",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_box_plain_teoz",
+   "source_sha256": "2d20da31951b07970aa8bf9538510b15ae4c3fff2201bd6de881afffa02e1731",
+   "intended_valid": true,
+   "axes": [
+    "box",
+    "no colour control",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "2f6fcc01c27da7bb9d644f1f17b1924c9ae0b48b2f5eb3d3bbc38819c0e40c1c",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "2f6fcc01c27da7bb9d644f1f17b1924c9ae0b48b2f5eb3d3bbc38819c0e40c1c",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_group_space_colour_teoz",
+   "source_sha256": "6b7b994bf9fb5bbd04ad5fee432db256de1f04204c34bdfb3598070e66cde29f",
+   "intended_valid": true,
+   "axes": [
+    "group COLORS[1] only",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "4cb57d04f1a86285b127b4dd7664cccc6b113a814f5a4213f8af8651384e1f83",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "4cb57d04f1a86285b127b4dd7664cccc6b113a814f5a4213f8af8651384e1f83",
+    "stderr_tail": [
+     "warning: sequence group second colour (CommandGrouping backColorGeneral) is not painted as the group background at line 5"
+    ]
+   }
+  },
+  {
+   "name": "mk2_return_hash_label_legacy",
+   "source_sha256": "a0e109b23b5fdb0eac580ee38e5acf41579d44ad7abc2f7058aec4b9be3d0756",
+   "intended_valid": true,
+   "axes": [
+    "return label starting with #",
+    "creole list"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "a9d695e82083a5b0f2ab09d34cb5294ccf7f60448ecb10194bcce75e940654ce",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "a9d695e82083a5b0f2ab09d34cb5294ccf7f60448ecb10194bcce75e940654ce",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_if_false_svg_class",
+   "source_sha256": "b1527067044b1794b379c25a527b7612b8e92b8c6932d925d9c3a0061b2c3c32",
+   "intended_valid": true,
+   "axes": [
+    "!if false",
+    "unclosed svg",
+    "class"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "fd622630a27872738a48edb34e0603fd756140779ae913851341e061a7c62e6f",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported"
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "fd622630a27872738a48edb34e0603fd756140779ae913851341e061a7c62e6f",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_if_true_closed_pixel_component",
+   "source_sha256": "d5d5f703df9768ededa81bf19ee5b9e6ff566ddbd94d8a42cde5817516cd1083",
+   "intended_valid": true,
+   "axes": [
+    "!if true",
+    "closed pixel",
+    "component"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "cae8aec32b19bf90bfd036adf69739de28e39e41d25f28d77c1c58cac9c7f527",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "cae8aec32b19bf90bfd036adf69739de28e39e41d25f28d77c1c58cac9c7f527",
+    "stderr_tail": [
+     "warning: component sprite command CommandFactorySprite$1 executed; component rendering of sprite references remains unsupported at line 2"
+    ]
+   }
+  },
+  {
+   "name": "mk2_if_true_unclosed_pixel_state",
+   "source_sha256": "0afffb92df3d2e0f016b806047e044b025405100873d2da0f54bd8301127509d",
+   "intended_valid": false,
+   "axes": [
+    "!if true",
+    "unclosed pixel",
+    "state"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "67d0a7a3553ba901a171b89d20d54fd599be5fa9f673512ab907f0622955eec0",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 3: Cannot read: [2x2/16] {"
+    ]
+   }
+  },
+  {
+   "name": "mk2_proc_uninvoked_svg_usecase",
+   "source_sha256": "be247b515dc2db2444a295bdd2edb3f8e33ac5947e4ba7f1755a8821e6e9178a",
+   "intended_valid": true,
+   "axes": [
+    "uninvoked procedure",
+    "unclosed svg",
+    "usecase"
+   ],
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "parse error: line 3: Syntax error: no registered sequence command accepts \"sprite $gem <svg width=\\\"2\\\" height=\\\"2\\\">\""
+    ]
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 6: Syntax error: no registered sequence command accepts \"Hero --> (Play)\""
+    ]
+   }
+  },
+  {
+   "name": "mk2_include_header_only_class",
+   "source_sha256": "37eb538459767144caef328144a3ac69fdec6b644ed38f2c0e233c51834decd6",
+   "intended_valid": true,
+   "axes": [
+    "!include supplies header and rows",
+    "pixel",
+    "class"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "a55dcd63205776ce4b2afddadadaf75972924b1c08ee5e1a0981dafecc2d090c",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "a55dcd63205776ce4b2afddadadaf75972924b1c08ee5e1a0981dafecc2d090c",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_include_unclosed_component",
+   "source_sha256": "29d8856628f9c9bdde04f20ad835dc3df5ff3c018716bbf922559e70fc7be8ce",
+   "intended_valid": false,
+   "axes": [
+    "!include opens pixel never closed",
+    "component"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "d2b9003b4f22c79bb091c7d48740e93bb53307de06ba88d13b51b68b77f277e2",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 2: Cannot read: [2x2/16] {"
+    ]
+   }
+  },
+  {
+   "name": "mk2_state_note_brace",
+   "source_sha256": "d42f047e4abdf935d368220496a5f850e4291416040f44525410d2ccfa84fb00",
+   "intended_valid": true,
+   "axes": [
+    "state note body",
+    "pixel header lookalike"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "6f01a5746926bdbbcf0e2bd0025da93cfbe70620b5a779ed17290fae20ee52e0",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "6f01a5746926bdbbcf0e2bd0025da93cfbe70620b5a779ed17290fae20ee52e0",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_activity_note_svg",
+   "source_sha256": "39cce5248073e625faf28201af323424707f0b39799f133ba234d789b23aedd8",
+   "intended_valid": true,
+   "axes": [
+    "activity note body",
+    "svg header lookalike"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "7b73bc2419925c5fcc5a7f811dbbcc89d3bfe885b1a8a63c249546d91cc7eb4c",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported"
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "7b73bc2419925c5fcc5a7f811dbbcc89d3bfe885b1a8a63c249546d91cc7eb4c",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_usecase_note_upper",
+   "source_sha256": "052f6ac040a5125ef1cda96d78df32086b320fb69707e48e9fddb203a1c12e5e",
+   "intended_valid": true,
+   "axes": [
+    "usecase note body",
+    "Sprite capitalised"
+   ],
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported",
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported",
+     "parse error: line 5: Syntax error: no registered sequence command accepts \"Hero --> (Play)\""
+    ]
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 5: Syntax error: no registered sequence command accepts \"Hero --> (Play)\""
+    ]
+   }
+  },
+  {
+   "name": "mk2_deployment_note_brace",
+   "source_sha256": "93b7b71fa2c527c2eecf8ef93559980f816de2f02ffe30b1c395b3e725021524",
+   "intended_valid": true,
+   "axes": [
+    "deployment note body",
+    "pixel header lookalike"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "d59f302965d0429d3bf82a633fd772c92f38e2eaa739a66bcc8a03c765bad554",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "d59f302965d0429d3bf82a633fd772c92f38e2eaa739a66bcc8a03c765bad554",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_component_legend_upper",
+   "source_sha256": "16fbfeab3cbc22ce12ad5f21b66a49485be18cb594f7a3d3e424c7b05abf7ab2",
+   "intended_valid": true,
+   "axes": [
+    "legend body",
+    "component"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "f802ecbf190d491f71d17848c7e151a9cbe054ba514f7421170f24f03528c806",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported",
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "5339ed09bf723f273e40a0858a517b56b4ad3436e8b5c22398b7fece5c603a54",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_class_member_svg",
+   "source_sha256": "0f572451758f16e4d3963eaf902382fb0b1df1667f9f1d6ed22e0e0efccd18f0",
+   "intended_valid": true,
+   "axes": [
+    "class body",
+    "svg header lookalike"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "4de0c7295ff9b550693cf55c514ea5450a205a67be1999f94fe3d4b84f25194c",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported"
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "4de0c7295ff9b550693cf55c514ea5450a205a67be1999f94fe3d4b84f25194c",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_class_top_level_text",
+   "source_sha256": "407ec00c50dd17fb84b6f747773a9f449253cf23b08bb4f41d4e4eae17a4027a",
+   "intended_valid": false,
+   "axes": [
+    "top-level Sprite text",
+    "class",
+    "CommandSpriteFile"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "57df50018a1a8e4e9098c4546df4dab97d57a1891ae3fde5d93d481b5f052d79",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported",
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 2: Cannot read: are loaded"
+    ]
+   }
+  },
+  {
+   "name": "mk2_component_top_level_text",
+   "source_sha256": "814a65250399792b4cd0ab0a48fff3b14545641876717f2aa12de07c05938f8b",
+   "intended_valid": false,
+   "axes": [
+    "top-level Sprite text",
+    "component",
+    "CommandSpriteFile"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "f802ecbf190d491f71d17848c7e151a9cbe054ba514f7421170f24f03528c806",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported",
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 2: Cannot read: are loaded"
+    ]
+   }
+  },
+  {
+   "name": "mk2_unclosed_pixel_object",
+   "source_sha256": "5f3e43473a76dddd1c900806003e859b0b27c339132eafe8d4c705fb71fcad34",
+   "intended_valid": false,
+   "axes": [
+    "unclosed pixel",
+    "object"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "40576b28221e5599dcd9e6f6b854c4052d4777c9a809b2d4b1741e286ca903cf",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 2: Cannot read: [2x2/16] {"
+    ]
+   }
+  },
+  {
+   "name": "mk2_unclosed_svg_object",
+   "source_sha256": "3060d263cbb0a72f1fd947fac480c3dd8cc0ef70764cc27c7db85ab6311a4db4",
+   "intended_valid": false,
+   "axes": [
+    "unclosed svg",
+    "object"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "40576b28221e5599dcd9e6f6b854c4052d4777c9a809b2d4b1741e286ca903cf",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported"
+    ]
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 2: Syntax Error? sprite command never completed: sprite $gem <svg width=\"2\" height=\"2\">"
+    ]
+   }
+  },
+  {
+   "name": "mk2_unclosed_pixel_deployment",
+   "source_sha256": "92a710e3deb689d2de71c20c43c142de2c33e5a88dc91108f27e3c8c2d6e84f2",
+   "intended_valid": false,
+   "axes": [
+    "unclosed pixel",
+    "deployment"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "49966f181882cd681620cbbd16412ccc09314f079dabe2d5f81f9035f649c78a",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 2: Cannot read: [2x2/16] {"
+    ]
+   }
+  },
+  {
+   "name": "mk2_unclosed_svg_deployment",
+   "source_sha256": "9ced2334496acc58b1df3d2fb5d02ab40d10c4caee1edbdf2b8c3cad5fe596bd",
+   "intended_valid": false,
+   "axes": [
+    "unclosed svg",
+    "deployment"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "a35a3832d17eef58c5e7a4dfbd33e1f860a595079c12d663eaf3f17e4d792984",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported"
+    ]
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 2: Syntax Error? sprite command never completed: sprite $gem <svg width=\"2\" height=\"2\">"
+    ]
+   }
+  },
+  {
+   "name": "mk2_unclosed_pixel_activity_legacy",
+   "source_sha256": "cc1cd60483ab6d57abd30a70fd1cea13a1425d28efb50efee6183444814cb73f",
+   "intended_valid": false,
+   "axes": [
+    "unclosed pixel",
+    "activity_legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "e063f05fee03d6c2277acdeeea25ff2587ef8450a5ccca7e4a22dec56a2bbc4d",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 2: Cannot read: [2x2/16] {"
+    ]
+   }
+  },
+  {
+   "name": "mk2_unclosed_svg_activity_legacy",
+   "source_sha256": "26317ccdb78cc6dc616a9d5749967b023d54cd95135a8b44f957aeeecd0c9a90",
+   "intended_valid": false,
+   "axes": [
+    "unclosed svg",
+    "activity_legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "e063f05fee03d6c2277acdeeea25ff2587ef8450a5ccca7e4a22dec56a2bbc4d",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported"
+    ]
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 2: Syntax Error? sprite command never completed: sprite $gem <svg width=\"2\" height=\"2\">"
+    ]
+   }
+  },
+  {
+   "name": "mk2_unclosed_pixel_timing",
+   "source_sha256": "c3bdea491df6bade342fa7d034f4eeec0572e5df411b2ea7f64c656eeacb6606",
+   "intended_valid": false,
+   "axes": [
+    "unclosed pixel",
+    "timing"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "d3c52b5614f9f6c1b07b02ff3a69794c40f512216d6ed6668d234be00a5075fb",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "d3c52b5614f9f6c1b07b02ff3a69794c40f512216d6ed6668d234be00a5075fb",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_unclosed_svg_timing",
+   "source_sha256": "3a27719f35105f92b9e122441caf5215da7418921f2cdf6ae82fe75b721a227d",
+   "intended_valid": false,
+   "axes": [
+    "unclosed svg",
+    "timing"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "d3c52b5614f9f6c1b07b02ff3a69794c40f512216d6ed6668d234be00a5075fb",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported"
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "d3c52b5614f9f6c1b07b02ff3a69794c40f512216d6ed6668d234be00a5075fb",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_unclosed_svg_mindmap",
+   "source_sha256": "cf729fbe8f8951ca3826116341a50ac02548b7e4cccb7d7208ca1d4796717986",
+   "intended_valid": false,
+   "axes": [
+    "unclosed svg",
+    "mindmap"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "4429e564a558dad9ef3032bf9e116f3b8b0df6054de78089650c6d1dfa195c14",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported",
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported"
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "4429e564a558dad9ef3032bf9e116f3b8b0df6054de78089650c6d1dfa195c14",
+    "stderr_tail": []
+   }
+  },
+  {
+   "name": "mk2_empty_pixel_class",
+   "source_sha256": "f51272ac2def175f603c3dedce37713de7ca3a065ddaeab9c7f8a9320dd0be22",
+   "intended_valid": false,
+   "axes": [
+    "empty pixel body",
+    "No sprite defined.",
+    "class"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "57df50018a1a8e4e9098c4546df4dab97d57a1891ae3fde5d93d481b5f052d79",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 2: No sprite defined."
+    ]
+   }
+  },
+  {
+   "name": "mk2_graylevel_component",
+   "source_sha256": "b3773a46ca4daa3ecb0cc0c6ee9894365a168637e8fc168ece523eb6f377a519",
+   "intended_valid": false,
+   "axes": [
+    "graylevel 7",
+    "component"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "f802ecbf190d491f71d17848c7e151a9cbe054ba514f7421170f24f03528c806",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 2: Only 4, 8 or 16 graylevel are allowed."
+    ]
+   }
+  },
+  {
+   "name": "mk2_sprite_file_missing_deployment",
+   "source_sha256": "db7568348dd6484cfdbf3d89fce44c02bb762f81398613ac1e584a95ba739ab6",
+   "intended_valid": false,
+   "axes": [
+    "CommandSpriteFile",
+    "missing file",
+    "deployment"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "a35a3832d17eef58c5e7a4dfbd33e1f860a595079c12d663eaf3f17e4d792984",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported",
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 2: Cannot read: missing_gem.png"
+    ]
+   }
+  },
+  {
+   "name": "mk2_compressed_bad_class",
+   "source_sha256": "b5a29ef40c34a260ad5d9741212f654f07abfa160c1c547b6d3a379940e0c9ca",
+   "intended_valid": false,
+   "axes": [
+    "z-compressed",
+    "Cannot decode sprite.",
+    "class"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "57df50018a1a8e4e9098c4546df4dab97d57a1891ae3fde5d93d481b5f052d79",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported",
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "57df50018a1a8e4e9098c4546df4dab97d57a1891ae3fde5d93d481b5f052d79",
+    "stderr_tail": [
+     "warning: class sprite command CommandFactorySprite$2 is recognized; sprite materialization remains unsupported at line 2: sprite $gem [3x2/16z] 0000"
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "purpose": "Read-only pinned SequenceDiagramFactory ordered registration and exact runtime regex source inventory; no rendering or fixtures",
+  "cases": [
+    {
+      "name": "sequence_command_inventory",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/SequenceCommandsProbe.java",
+      "source_sha256": "fc2dca31605b2a85c94a01f1a5bc5de84bb3a89c8dfb2987462f4c901e444f96",
+      "stdin_base64": "",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "PRIVATE_CWD/SequenceCommandsProbe.java",
+        "--classpath",
+        "PRIVATE_CWD",
+        "--"
+      ],
+      "axes": [
+        "registered command class",
+        "registration order and regex composition"
+      ],
+      "intended_valid": true
+    }
+  ]
+}

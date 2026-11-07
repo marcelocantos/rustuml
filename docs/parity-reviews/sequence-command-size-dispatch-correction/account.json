@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-command-size-dispatch-correction",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.command.CommandArrow#getRegexConcat:132",
+    "regex.RegexConcat#match:127-133",
+    "command.SingleLineCommand2#isValid:82-106",
+    "command.PSystemCommandFactory#executeFewLines:139-150",
+    "PSystemBuilder#initFactories:131-132",
+    "PSystemBuilder#createPSystem:230-255",
+    "classdiagram.ClassDiagramFactory#initCommandsList:143",
+    "classdiagram.command.CommandLinkClass#getRegexConcat and executeArg"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::RegisteredSequenceCommand::color_match"
+  ],
+  "invariant": "CommandArrow protectSize is a sequence-command rejection, not a global syntax rejection. Java subsequently accepts these 2001-UTF-16-unit relations in ClassDiagramFactory, preserving the complete label.",
+  "causal_divergence": "Account 8efd66082 and implementation ba3d0196b inferred global rejection from a single factory guard. All eight returned XML outputs are valid: four 2000-unit SEQUENCE diagrams and four 2001-unit CLASS diagrams. Rust dispatch has no faithful syntax-error fall-through and other factories ignore unknown commands; adding only the sequence guard introduces four valid-input CLI errors.",
+  "planned_change": "Remove exactly the ba3d0196b guard and its rejection unit, restoring production source byte-for-byte to 268fa9f8b. Preserve all commits, accounts, eight source/reference pairs, actual bad-guard outputs and intention disagreements. Record the unresolved size/family switch under T14.21; do not edit dispatch or add these cases to the approved 15 exceptions.",
+  "perturbation_axes": [
+    "2000 versus 2001 UTF-16 units",
+    "ASCII versus non-BMP text",
+    "legacy versus Teoz"
+  ],
+  "prior_account_commit": "8efd66082c108fb0b46439665363fe9a8ce827d4",
+  "failed_implementation_commit": "ba3d0196bcb11829a3e114871976faaa695c7025",
+  "chronology": "New correction after remote size8 evidence; original account and implementation remain immutable. Reverting the incorrect restriction does not claim the unresolved factory behavior is repaired.",
+  "reference_gzip_sha256": "2a38010f72b553b3f45779b0a4b6949e8fd588e66a20aa883832500636da0483"
+}

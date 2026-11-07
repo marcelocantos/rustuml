@@ -1,0 +1,152 @@
+[
+ {
+  "name": "c75_color_box_short_hex",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_return_composite",
+  "paint_equal": false,
+  "java_only": {
+   "#000000": 1
+  },
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_return_dash",
+  "paint_equal": false,
+  "java_only": {
+   "#000000": 1
+  },
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_return_slash",
+  "paint_equal": false,
+  "java_only": {
+   "#000000": 1
+  },
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_return_bar",
+  "paint_equal": false,
+  "java_only": {
+   "#000000": 1
+  },
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_return_backslash",
+  "paint_equal": false,
+  "java_only": {
+   "#000000": 1
+  },
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_return_duplicate",
+  "paint_equal": false,
+  "java_only": {
+   "#000000": 1
+  },
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_note_across_simple",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_note_across_multi_short_hex",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_hnote_over_Cedar_Spruce_simple",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_hnote_over_Cedar_Spruce_multi_short_hex",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_hnote_across_simple",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_hnote_across_short_hex",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_hnote_across_multi_simple",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_hnote_across_multi_short_hex",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_hnote_right_short_hex",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_rnote_over_Cedar_Spruce_simple",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_rnote_over_Cedar_Spruce_multi_short_hex",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_rnote_across_simple",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_rnote_across_short_hex",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_rnote_across_multi_simple",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_rnote_across_multi_short_hex",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ },
+ {
+  "name": "c75_color_rnote_right_short_hex",
+  "paint_equal": true,
+  "java_only": {},
+  "rust_only": {}
+ }
+]

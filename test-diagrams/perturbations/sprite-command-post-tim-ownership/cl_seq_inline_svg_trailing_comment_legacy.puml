@@ -1,0 +1,5 @@
+@startuml
+participant Cedar
+sprite $tag <svg width="4" height="4"><rect width="1" height="1"/></svg> ' trailing
+Cedar -> Cedar: go
+@enduml

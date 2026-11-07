@@ -1,0 +1,8 @@
+@startuml
+database Store [
+rows
+SPRITE ROWS FLUSHED
+]
+node App
+App --> Store
+@enduml

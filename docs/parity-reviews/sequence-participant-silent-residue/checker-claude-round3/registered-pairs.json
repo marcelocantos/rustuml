@@ -1,0 +1,163 @@
+[
+ {
+  "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_quoted_label_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_quoted_label_legacy.svg",
+  "result": "pass",
+  "axes": [
+   "QUOTED with tooltip and label",
+   "untrimmed",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_with_label_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_with_label_legacy.svg",
+  "result": "pass",
+  "axes": [
+   "link, tooltip and label",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_space_before_brace_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_space_before_brace_legacy.svg",
+  "result": "pass",
+  "axes": [
+   "LINK_TOOLTIP_NOLABEL with space before {",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_two_groups_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_two_groups_legacy.svg",
+  "result": "pass",
+  "axes": [
+   "LINK_TOOLTIP_NOLABEL greedy across two groups",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_label_brace_actor_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_label_brace_actor_legacy.svg",
+  "result": "pass",
+  "axes": [
+   "label owns {y}",
+   "actor",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_quoted_display_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_quoted_display_legacy.svg",
+  "result": "pass",
+  "axes": [
+   "quoted display",
+   "spaced tooltip",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_empty_database_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_tooltip_empty_database_legacy.svg",
+  "result": "pass",
+  "axes": [
+   "empty tooltip",
+   "database",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_redeclare_negative_order_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_redeclare_negative_order_legacy.svg",
+  "result": "pass",
+  "axes": [
+   "negative explicit order keeps first place",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_redeclare_implicit_then_order_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_redeclare_implicit_then_order_legacy.svg",
+  "result": "pass",
+  "axes": [
+   "implicit participant re-declared with an order",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_redeclare_higher_order_teoz.puml",
+  "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk3_redeclare_higher_order_teoz.svg",
+  "result": "pass",
+  "axes": [
+   "explicit orders, re-declared highest keeps last",
+   "teoz",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_guillemet_strip_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_guillemet_strip_legacy.svg",
+  "result": "pass",
+  "axes": [
+   "Url quote strip with guillemets",
+   "legacy",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_uppercase_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_uppercase_legacy.svg",
+  "result": "pass",
+  "axes": [
+   "uppercase keyword and link",
+   "legacy",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_unicode_tooltip_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_unicode_tooltip_legacy.svg",
+  "result": "pass",
+  "axes": [
+   "non-ASCII url and tooltip",
+   "legacy",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_entity_quoted_tooltip_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_url_entity_quoted_tooltip_legacy.svg",
+  "result": "pass",
+  "axes": [
+   "QUOTED with tooltip",
+   "entity",
+   "legacy",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_redeclare_lower_order_teoz.puml",
+  "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck3_redeclare_lower_order_teoz.svg",
+  "result": "pass",
+  "axes": [
+   "re-declared highest order keeps last",
+   "teoz",
+   "AX held out",
+   "after: match"
+  ]
+ }
+]

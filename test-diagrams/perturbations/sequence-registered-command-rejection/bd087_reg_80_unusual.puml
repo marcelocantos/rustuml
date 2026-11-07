@@ -1,0 +1,10 @@
+@startuml
+Juniper -> Juniper: calibration
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+{first} Juniper -> Kestrel: first
+{second} Kestrel -> Juniper: second
+{first} <-> {second}: span
+Kestrel --> Juniper: receipt
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+start
+:Load;
+note right
+Sprite sheets are loaded
+end note
+stop
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+activate Cedar
+deactivate Cedar #PaleGreen/Indigo
+@enduml

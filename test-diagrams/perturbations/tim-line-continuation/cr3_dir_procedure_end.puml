@@ -1,0 +1,7 @@
+@startuml
+Tui -> Kea : y
+Kea -> Tui : x %chr(92)
+!procedure $p()
+Tui -> Kea : p
+!endprocedure
+@enduml

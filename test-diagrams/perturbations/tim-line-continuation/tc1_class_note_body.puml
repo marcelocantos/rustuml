@@ -1,0 +1,8 @@
+@startuml
+class Oak
+note right of Oak
+first \
+second
+third
+end note
+@enduml

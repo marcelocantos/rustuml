@@ -1,0 +1,4 @@
+@startuml
+!PRAGMA teoz true
+Kea -> Tui : one
+@enduml

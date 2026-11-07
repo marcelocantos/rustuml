@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Spruce
+queue @Cedar
+Spruce -> @Cedar: pollen
+@enduml

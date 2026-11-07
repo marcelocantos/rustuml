@@ -1,0 +1,6 @@
+@startuml
+(Login)
+note top of (Login)
+Sprite sheets are loaded
+end note
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+!theme mono
+Kea -> Tui : x %chr(92)
+@enduml

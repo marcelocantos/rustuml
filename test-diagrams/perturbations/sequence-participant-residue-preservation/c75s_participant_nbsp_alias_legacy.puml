@@ -1,0 +1,5 @@
+@startuml
+participant Hazel
+actor "Hazel crown" as Hazel.Root<<leaf>> order -2 #LightBlue
+Hazel -> Elm: catkins
+@enduml

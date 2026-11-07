@@ -1,0 +1,1255 @@
+[
+ {
+  "name": "mc1_seq_procedure_body",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"back\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-2a9373aca": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"back\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "5b29f37e19003bf0ea97198f1a615e31d8dbe8143e52a9257f76e93a87c9064e",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Dock",
+     "Dock",
+     "Pier",
+     "Pier",
+     "Quay",
+     "Quay",
+     "ping back",
+     "ping back",
+     "done"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_define_macro",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"softly\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-2a9373aca": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"softly\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "bf9c54f6c95c38d91cddd6eec1d3201ec8556f4c9d86e47babcf8abf5b785967",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Fern",
+     "Fern",
+     "Moss",
+     "Moss",
+     "said   softly",
+     "ok"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_class_definelong",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "032e9ce59693bbd8c5a26fde0b977317da23d4f456a83654f799f6ccd5eebebd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Cedar",
+     "Birch"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "032e9ce59693bbd8c5a26fde0b977317da23d4f456a83654f799f6ccd5eebebd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Cedar",
+     "Birch"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "dadd01751e713b954791a45b4513e876a7ed3be67fc3a2e9fced7ffc1da4335d",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "\u00abcrate\u00bb",
+     "Cedar",
+     "Birch"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_theme_plain",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"the \\\\\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-2a9373aca": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"the \\\\\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "be89b40ec69c5b6676471dda6ab07ff9c11519c0579b1484e9534d9ef5c4d7b1",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Gull",
+     "Gull",
+     "Tern",
+     "Tern",
+     "over the bay",
+     "yes"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_class_theme_sketchy",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "1e7f28167e87b35efb2ba4edeb46e70fbfffa9b8a2f825fed8a5b0a08868082c",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Anvil",
+     "Forge",
+     "heat \\"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "1e7f28167e87b35efb2ba4edeb46e70fbfffa9b8a2f825fed8a5b0a08868082c",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Anvil",
+     "Forge",
+     "heat \\"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "84f598711ebe8cb23e5c7e75900d4e09ea5e2bea27990be2ba06b252aec8cd8c",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "\u00abiron\u00bb",
+     "Anvil",
+     "Forge",
+     "heat ed"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_state_theme_bluegray",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "5ac05bdb5106e5b238e8aa2f02e4326bede4ced611e6956bbbbd714bffc21bde",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Thaw",
+     "Melt",
+     "warm \\"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "5ac05bdb5106e5b238e8aa2f02e4326bede4ced611e6956bbbbd714bffc21bde",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Thaw",
+     "Melt",
+     "warm \\"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "ce04594168229ac1fb712fa7270a91cc7c28d05536df275e6230648b0b8b3da3",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Thaw",
+     "Melt",
+     "warm ing"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_usecase_continued",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"Rowan --> (Climb \\\\\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-2a9373aca": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"Rowan --> (Climb \\\\\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"Rowan --> (Climb ridge)\"\n",
+    "panic": false,
+    "texts": []
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_include_postjoin",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"wind\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-2a9373aca": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"wind\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "c7ec7295074ca2e31b78cc732c65fb6d9e29149b9e1c317a1ef9cdbf73e165a1",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kestrel",
+     "Kestrel",
+     "Osprey",
+     "Osprey",
+     "north wind",
+     "calm"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_class_include_postjoin",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "693786c67f0cd9f6eacdbc18be0c5c71077795c6bc1b0daa9c61ec59a477f625",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Lantern",
+     "Wick"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "693786c67f0cd9f6eacdbc18be0c5c71077795c6bc1b0daa9c61ec59a477f625",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Lantern",
+     "Wick"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "d09125b20591f65600ed7ebe44c643f929eef2502d1aac23c71f16799be0011e",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "\u00ablamp\u00bb",
+     "Lantern",
+     "Wick"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_include_procedure",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"mate\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-2a9373aca": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"mate\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "162bb70272d99f36e6597b5fe0b820c5d736a5fb4078918ba22606c112ea6230",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Harbor",
+     "Harbor",
+     "Skiff",
+     "Skiff",
+     "ahoy mate",
+     "aye"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_class_three_pieces_lines",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "cdc912d4c3410c63012083da68d39b8d8c87f98faa1840772cdb4961df8e4412",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Quill",
+     "Ink",
+     "Blotter"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "cdc912d4c3410c63012083da68d39b8d8c87f98faa1840772cdb4961df8e4412",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Quill",
+     "Ink",
+     "Blotter"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "68aebf76d81ac110f1d1ee8a36853a80a107e590cf108d772762f396c15ddbd4",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "\u00abpen\u00bb",
+     "Quill",
+     "Ink",
+     "Blotter"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_component_comments_between",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "0bc8b96574dba2c9e3f74318f8355ae0c8bb298ab824d5d1f3da71795419a0b0",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Valve",
+     "Gauge",
+     "Dial",
+     "press \\"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "0bc8b96574dba2c9e3f74318f8355ae0c8bb298ab824d5d1f3da71795419a0b0",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Valve",
+     "Gauge",
+     "Dial",
+     "press \\"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "e38fb078f007f8b5405d19b711d38a304b6cb0752e205193b9de961c083d365c",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Valve",
+     "Gauge",
+     "Dial",
+     "press  ure"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_note_body",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "eba09713dde05e4954c8be1bd7bd4a65079485dd3d6bce185525fd919dbe9e81",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Marten",
+     "Marten",
+     "Vole",
+     "Vole",
+     "hop",
+     "first \\",
+     "second",
+     "third",
+     "back"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "eba09713dde05e4954c8be1bd7bd4a65079485dd3d6bce185525fd919dbe9e81",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Marten",
+     "Marten",
+     "Vole",
+     "Vole",
+     "hop",
+     "first \\",
+     "second",
+     "third",
+     "back"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "adb920691affe1f74a92509811d0ca548658514eb6ed6a646da0640a113846fa",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Marten",
+     "Marten",
+     "Vole",
+     "Vole",
+     "hop",
+     "first second",
+     "third",
+     "back"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_activity_multiline_action",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "8a132a0987827ee3d71aa40d7076635ac0a0293eac73025b0e413263b820c8fc",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Brew tea",
+     "and cake"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "8a132a0987827ee3d71aa40d7076635ac0a0293eac73025b0e413263b820c8fc",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Brew tea",
+     "and cake"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "8a132a0987827ee3d71aa40d7076635ac0a0293eac73025b0e413263b820c8fc",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Brew tea",
+     "and cake"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_state_description",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "620c60b3daf08e396e281331b2cfd67224aa7a19aec5c4e34cea05f61dafed1a",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Dormant",
+     "sleeps \\",
+     "Awake"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "620c60b3daf08e396e281331b2cfd67224aa7a19aec5c4e34cea05f61dafed1a",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Dormant",
+     "sleeps \\",
+     "Awake"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "4b1cf1241309c5d36f324f0087d2cd1df51779ff7ad48604aca62d60db4a55f7",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Dormant",
+     "sleeps soundly",
+     "Awake"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_escaped_backslash",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "7b788e61c367f86bbe3bb7e6ad1df3c83a92fff51c59978738d9169c435e8185",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Raven",
+     "Raven",
+     "Crow",
+     "Crow",
+     "path C:\\",
+     "got it"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "7b788e61c367f86bbe3bb7e6ad1df3c83a92fff51c59978738d9169c435e8185",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Raven",
+     "Raven",
+     "Crow",
+     "Crow",
+     "path C:\\",
+     "got it"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "7b788e61c367f86bbe3bb7e6ad1df3c83a92fff51c59978738d9169c435e8185",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Raven",
+     "Raven",
+     "Crow",
+     "Crow",
+     "path C:\\",
+     "got it"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_backslash_space",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "4526e501d543da95048235ba33251922cb3ae96a4d55323e69ea09c7a4beee85",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Raven",
+     "Raven",
+     "Crow",
+     "Crow",
+     "spaced \\",
+     "next"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "4526e501d543da95048235ba33251922cb3ae96a4d55323e69ea09c7a4beee85",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Raven",
+     "Raven",
+     "Crow",
+     "Crow",
+     "spaced \\",
+     "next"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "4526e501d543da95048235ba33251922cb3ae96a4d55323e69ea09c7a4beee85",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Raven",
+     "Raven",
+     "Crow",
+     "Crow",
+     "spaced \\",
+     "next"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_crlf",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"slowly\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-2a9373aca": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"slowly\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "2bc1e8a8994132572e1077123c59068a460fbe9ae5d631e73860be8b7adbbd83",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "wading slowly",
+     "fine"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_class_crlf_three",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "ecef03f1c3e17a59d77c505b02ed9e3bb19eb4199cd230b84e9fbb63680f1b1b",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Pebble",
+     "Sand"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "ecef03f1c3e17a59d77c505b02ed9e3bb19eb4199cd230b84e9fbb63680f1b1b",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Pebble",
+     "Sand"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "975fb01eb209076d559f2741cc9ef319af25b114ada52847fe0be497eae30b39",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "\u00abstone\u00bb",
+     "Pebble",
+     "Sand"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_before_enduml",
+  "intended_valid": false,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "adbea1af45e14f77f0c7089e0de2436d79a47ec3838fc0a7b7b723f99648a479",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Lynx",
+     "Lynx",
+     "Ibex",
+     "Ibex",
+     "last \\"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "adbea1af45e14f77f0c7089e0de2436d79a47ec3838fc0a7b7b723f99648a479",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Lynx",
+     "Lynx",
+     "Ibex",
+     "Ibex",
+     "last \\"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "texts": []
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_at_eof",
+  "intended_valid": false,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "adbea1af45e14f77f0c7089e0de2436d79a47ec3838fc0a7b7b723f99648a479",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Lynx",
+     "Lynx",
+     "Ibex",
+     "Ibex",
+     "last \\"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "adbea1af45e14f77f0c7089e0de2436d79a47ec3838fc0a7b7b723f99648a479",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Lynx",
+     "Lynx",
+     "Ibex",
+     "Ibex",
+     "last \\"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "texts": []
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_foreach_body",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"tall\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-2a9373aca": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"tall\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "fa80fe3ae17aa6a93f5e4d08be7742253aa02c42e45293a6b8c7d4c31ee9f111",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Root",
+     "Root",
+     "Ash",
+     "Ash",
+     "Elm",
+     "Elm",
+     "grow tall",
+     "grow tall",
+     "end"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_tim_assignment",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\"pool\\\"\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-2a9373aca": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\"pool\\\"\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "b84e77c3cdc01e8a66ed1094babf3d2bd35b0e58a0213340e8c852740345601c",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Shore",
+     "Shore",
+     "Reef",
+     "Reef",
+     "tide pool"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_if_condition",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "a04446b062549ebc953764ab752c468e80d9a61ea67e011006694992929044f0",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Bight",
+     "Bight",
+     "Cove",
+     "Cove",
+     "out"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "a04446b062549ebc953764ab752c468e80d9a61ea67e011006694992929044f0",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Bight",
+     "Bight",
+     "Cove",
+     "Cove",
+     "out"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "695836a1cd140355db3819433fe7cd5cd270f6970aad0e02f9c6e3f55be4e147",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Cove",
+     "Cove",
+     "Bight",
+     "Bight",
+     "on",
+     "out"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_comment_only_continuation",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"fast\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-2a9373aca": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"fast\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "c849c939789710ea275dad42c54d6b572d6d3e6e33112e6a897730481f8ffe95",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Otter",
+     "Otter",
+     "Mink",
+     "Mink",
+     "swim fast",
+     "ok"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_continued_comment_line",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "c7e4314e66887a29acb00d2e8f8eb9ecfdd5b16e0b36d43fe2bcec0fd10857f3",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Otter",
+     "Otter",
+     "Mink",
+     "Mink",
+     "hidden",
+     "shown"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "c7e4314e66887a29acb00d2e8f8eb9ecfdd5b16e0b36d43fe2bcec0fd10857f3",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Otter",
+     "Otter",
+     "Mink",
+     "Mink",
+     "hidden",
+     "shown"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "c4430bd98bff1371ac4acf96a64262ea2db62cec678d8c5a8d77f0c02d08f6e3",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Mink",
+     "Mink",
+     "Otter",
+     "Otter",
+     "shown"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_mindmap",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "52f382db28aeaa03179cecade479bf00ce0a4bd096349204c932a6f7db656855",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Orchard \\",
+     "Pear",
+     "Plum \\"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "52f382db28aeaa03179cecade479bf00ce0a4bd096349204c932a6f7db656855",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Orchard \\",
+     "Pear",
+     "Plum \\"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "7cc2f96ba4085104252f69b571ef1d0056f4afd7943210bfbaab369c135c36e5",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Orchard rows",
+     "Pear",
+     "Plum tree"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_json",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: JSON parse error: expected value at line 1 column 11\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-2a9373aca": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: JSON parse error: expected value at line 1 column 11\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "f5d9ce6c08434f0b7b7961a98e1d7a57b646d15344cb3559c318189740cff583",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "crate",
+     "apples",
+     "count",
+     "4"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_skinparam_continued",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "62fae7656e6ec767e93baf318b50b7aa5017ff0bbb8b523bd2071708b99ccbbd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Fennel",
+     "Dill"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "62fae7656e6ec767e93baf318b50b7aa5017ff0bbb8b523bd2071708b99ccbbd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Fennel",
+     "Dill"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "62fae7656e6ec767e93baf318b50b7aa5017ff0bbb8b523bd2071708b99ccbbd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Fennel",
+     "Dill"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_style_block",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "6a6a8251a229ceb588b30dffae9dcaca27ba9734cf92d3e841350aa79b95c85e",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Barley"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "6a6a8251a229ceb588b30dffae9dcaca27ba9734cf92d3e841350aa79b95c85e",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Barley"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "6a6a8251a229ceb588b30dffae9dcaca27ba9734cf92d3e841350aa79b95c85e",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Barley"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_leading_space_continuation",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"b\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-2a9373aca": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"b\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "a3be571e1ab3a2e16e1ecea307e359e52b5bc6d83e97b77dd41a09adef5ffdd6",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Finch",
+     "Finch",
+     "Wren",
+     "Wren",
+     "a   b",
+     "c"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_object_continued",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "1025cb151fc3763c10247a7c2809113c57efc37cc4c7bdacde216524129bed70",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Stove",
+     "Kettle"
+    ]
+   },
+   "rustuml-2a9373aca": {
+    "exit": 0,
+    "stdout_sha256": "1025cb151fc3763c10247a7c2809113c57efc37cc4c7bdacde216524129bed70",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Stove",
+     "Kettle"
+    ]
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "c5080d582d87733afb07572e5b88f6f8398ba1a5777e06718bc200f028990177",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "\u00abpot\u00bb",
+     "Kettle",
+     "Stove"
+    ]
+   }
+  }
+ },
+ {
+  "name": "mc1_seq_block_comment_continued",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"hello\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-2a9373aca": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"hello\"\n",
+    "panic": false,
+    "texts": []
+   },
+   "rustuml-594c2b3c5": {
+    "exit": 0,
+    "stdout_sha256": "9d1f036bcc61012d5145a6635630844d48a563cb936cbc15b2abd13e42c15c32",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Puffin",
+     "Puffin",
+     "Auk",
+     "Auk",
+     "wave   hello",
+     "hi"
+    ]
+   }
+  }
+ }
+]

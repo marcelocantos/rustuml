@@ -1,0 +1,5 @@
+@startuml
+participant Hazel
+participant "Hazel [[https://example.org/hazel{sap} leaf]]" as Hazel.Root
+Hazel -> Elm: catkins
+@enduml

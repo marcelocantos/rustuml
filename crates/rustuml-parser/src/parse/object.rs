@@ -14,13 +14,27 @@ use crate::diagram::object::*;
 /// Parse preprocessed lines into an object diagram.
 pub fn parse_object(lines: &[String]) -> Result<ObjectDiagram, ParseError> {
     let mut parser = ObjectParser::new();
+    // PSystemCommandFactory#getCandidate never offers a line of a body that
+    // an earlier-selected multiline command owns.
+    let spans = super::command_spans::walk(lines, super::command_spans::Factory::Class);
 
-    for (i, line) in lines.iter().enumerate() {
-        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
-        if trimmed.is_empty() {
-            continue;
+    let mut i = 0;
+    while i < lines.len() {
+        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, &lines[i]);
+        if !trimmed.is_empty() {
+            parser.unrecognized = false;
+            parser.parse_line(source_line, trimmed)?;
+            // Object diagrams use ClassDiagramFactory: the sprite commands
+            // (addCommonCommands2) follow every object, link and note command.
+            if parser.unrecognized
+                && !spans.owned_by_other(i)
+                && let Some(end) =
+                    super::sprite::dispatch(lines, i, &mut parser.meta, "object", false)?
+            {
+                i = end;
+            }
         }
-        parser.parse_line(source_line, trimmed)?;
+        i += 1;
     }
 
     Ok(parser.finish())
@@ -42,6 +56,8 @@ struct ObjectParser {
     /// When non-None, every `Key Value` line inside the block becomes a
     /// `<prefix><Key>` skinparam entry.
     current_skin_prefix: Option<String>,
+    /// The last line reached the end of the object dispatch chain.
+    unrecognized: bool,
 }
 
 impl ObjectParser {
@@ -56,6 +72,7 @@ impl ObjectParser {
             current_package: None,
             current_line: 0,
             current_skin_prefix: None,
+            unrecognized: false,
         }
     }
 
@@ -154,7 +171,8 @@ impl ObjectParser {
             return Ok(());
         }
 
-        // Silently ignore unknown lines.
+        // Silently ignore unknown lines (offered to the sprite commands).
+        self.unrecognized = true;
         Ok(())
     }
 

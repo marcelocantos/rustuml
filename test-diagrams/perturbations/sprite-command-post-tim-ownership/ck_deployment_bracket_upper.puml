@@ -1,0 +1,8 @@
+@startuml
+node Server [
+status
+SPRITE QUEUE FLUSHED NOW
+]
+node Client
+Client --> Server
+@enduml

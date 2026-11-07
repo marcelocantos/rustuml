@@ -1,0 +1,4 @@
+@startuml
+node Server
+sprite $gem missing_gem.png
+@enduml

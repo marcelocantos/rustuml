@@ -1,0 +1,15 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+!if %false()
+sprite $gem <svg width="2" height="2">
+<rect width="2" height="2"/>
+!else
+sprite $gem [2x2/16] {
+F0
+0F
+}
+!endif
+Spruce -> Cedar: back
+@enduml

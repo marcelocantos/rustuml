@@ -1,0 +1,6 @@
+@startuml
+participant Alder
+Alder -> Birch : hi
+create participant Cedar [[https://example.org/c{cedar tip}]]
+Alder -> Cedar : make
+@enduml

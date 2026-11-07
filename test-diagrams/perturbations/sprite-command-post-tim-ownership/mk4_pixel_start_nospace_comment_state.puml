@@ -1,0 +1,7 @@
+@startuml
+sprite $dot [2x2/16] {/'s'/
+F0
+0F
+}
+state Parked
+@enduml

@@ -1,0 +1,1858 @@
+[
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/class-native-container-factory-precedence/case_tabs.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"NoDe\\t\\\"Polar Harbor\\\" {\"\n",
+    "after_comparison": 3
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"class\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/class-package-full-symbol-model/hexagon_empty_tb.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n",
+    "after_comparison": 3
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+    "after_comparison": 3
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+    "after_comparison": 3
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n",
+    "after_comparison": 3
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n",
+    "after_comparison": 3
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+    "after_comparison": 3
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+    "after_comparison": 3
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n",
+    "after_comparison": 3
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+    "after_comparison": 3
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"NoDe \\\"Runtime Mesh\\\" as Mesh {\"\n",
+    "after_comparison": 3
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+    "after_comparison": 3
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_plain_state_paint_control.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"state StartGate <<start>>\"\n",
+    "after_comparison": 3
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_line_continuation.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 3: Syntax error: no registered sequence command accepts \"second\"\n",
+    "after_comparison": 3
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_line_continuation.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 3: Syntax error: no registered sequence command accepts \"second\"\n",
+    "after_comparison": 3
+  },
+  {
+    "cohort": "retained3569",
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 12: Syntax error: no registered sequence command accepts \"] -> L -- : inlet\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 13: Syntax error: no registered sequence command accepts \"] -> L -- : inlet\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_unknown.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"this command is not real\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"Larch <</- Quartz: reversed open\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"Larch <</- Quartz: reversed open\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_blank_display_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"queue \\\"\\\" as Q\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_blank_display_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 3: Syntax error: no registered sequence command accepts \"queue \\\"\\\" as Q\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/message_gap_em_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"Birch\\u{2003}->\\u{2003}Elm: next\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/message_gap_narrow_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"Birch\\u{202f}->\\u{202f}Elm: next\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_color_boundary_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"actor Finch #pink\\u{a0}order 4\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_color_boundary_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"actor Finch #pink\\u{a0}order 4\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_activation_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"deactivate\\u{b}Kestrel\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_activation_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"deactivate\\u{b}Kestrel\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_autonumber_resume_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"autonumber\\u{b}resume\\u{b}3\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_autonumber_resume_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 8: Syntax error: no registered sequence command accepts \"autonumber\\u{b}resume\\u{b}3\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_create_destroy_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"destroy\\u{b}F\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_create_destroy_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"destroy\\u{b}F\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_hide_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"hide\\u{b}stereotype\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_hide_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"hide\\u{b}stereotype\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_color_boundary_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"actor Finch #pink\\u{b}order 4\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_color_boundary_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"actor Finch #pink\\u{b}order 4\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_color_boundary_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"actor Finch #pink\\u{c}order 4\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_color_boundary_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"actor Finch #pink\\u{c}order 4\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/vt_required_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"activate\\u{b}S\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/vt_required_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"activate\\u{b}S\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/resume_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"autonumber\\u{b}resume\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/resume_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"autonumber\\u{b}resume\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"participant\\u{b}Depot\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"participant\\u{b}Depot\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"activate\\u{b}Vale\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"activate\\u{b}Vale\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"destroy\\u{b}Vale\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"destroy\\u{b}Vale\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"create\\u{b}Depot\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"create\\u{b}Depot\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"autoactivate\\u{b}on\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"autoactivate\\u{b}on\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"autonumber\\u{b}resume\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 8: Syntax error: no registered sequence command accepts \"autonumber\\u{b}resume\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"autonumber\\u{b}stop\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"autonumber\\u{b}stop\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 4: autonumber 1.2\nparse error: line 5: Syntax error: no registered sequence command accepts \"autonumber\\u{b}inc\\u{b}A\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 5: autonumber 1.2\nparse error: line 6: Syntax error: no registered sequence command accepts \"autonumber\\u{b}inc\\u{b}A\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"note\\u{b}over\\u{b}Vale:ledger\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"note\\u{b}over\\u{b}Vale:ledger\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"note\\u{b}over\\u{b}Quartz,Vale:ledger\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"note\\u{b}over\\u{b}Quartz,Vale:ledger\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"ref\\u{b}over\\u{b}Quartz,Vale:ledger\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"ref\\u{b}over\\u{b}Quartz,Vale:ledger\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"hide\\u{b}stereotype\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"hide\\u{b}stereotype\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"\\u{b}|||\\u{b}\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"\\u{b}|||\\u{b}\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_ff_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"\\u{c}|||\\u{c}\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_ff_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"\\u{c}|||\\u{c}\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_space_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"\\u{b} |||\\u{b}\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_space_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"\\u{b} |||\\u{b}\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"skinparam\\u{b}sequenceMessageAlign\\u{b}right\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"skinparam\\u{b}sequenceMessageAlign\\u{b}right\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_space_nbsp_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"\\u{a0}|||\\u{a0}\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_space_nbsp_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"\\u{a0}|||\\u{a0}\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"autonewpage\\u{b}90\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"autonewpage\\u{b}90\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"hide\\u{b}unlinked\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"hide\\u{b}unlinked\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"url\\u{b}of\\u{b}Vale\\u{b}is\\u{b}[[https://example.invalid/berth]]\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"url\\u{b}of\\u{b}Vale\\u{b}is\\u{b}[[https://example.invalid/berth]]\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"participant\\u{b}Depot[\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"participant\\u{b}Depot[\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a2_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"actor\\u{b}Depot\\u{b}as\\u{b}\\\"Freighter\\\"\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a2_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"actor\\u{b}Depot\\u{b}as\\u{b}\\\"Freighter\\\"\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a3_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"actor\\u{b}Freighter\\u{b}as\\u{b}Depot\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a3_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"actor\\u{b}Freighter\\u{b}as\\u{b}Depot\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a4_vt_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"actor\\u{b}\\\"Freighter\\\"\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a4_vt_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"actor\\u{b}\\\"Freighter\\\"\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_note_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: No such color\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_note_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: No such color\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_rnote_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: No such color\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_rnote_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: No such color\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_hnote_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: No such color\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_hnote_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: No such color\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/unknown_command_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"fling N sideways\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/unknown_command_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 3: Syntax error: no registered sequence command accepts \"fling N sideways\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/invalid_suffix_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"hide footbox garbage\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/invalid_suffix_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 3: Syntax error: no registered sequence command accepts \"hide footbox garbage\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/invalid_gap_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 3: Syntax error: no registered sequence command accepts \"N\\u{2003}->\\u{2003}S: seed\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/invalid_gap_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"N\\u{2003}->\\u{2003}S: seed\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_simple_invalid_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 2: No such color\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_simple_invalid_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 3: No such color\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_composite_terminator_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 2: No such color\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_composite_terminator_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 3: No such color\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/edge-cases/edge_nwdiag_groups.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"nwdiag {\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/edge-cases/edge_seq_fragment_alt.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"condition B\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/edge-cases/edge_seq_fragment_neg.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"neg negative\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/edge-cases/edge_seq_note_shapes.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"/ note\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_set_variable_value_basic.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"!\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_set_variable_value_overwrite.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"!\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_func_generate_note.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 10: Syntax error: no registered sequence command accepts \"!\\u{1e}RSL:2\\u{1f}  note over Bob : step one\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_nested.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 3: Syntax error: no registered sequence command accepts \"ClientA -> $server : connect\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_all_features_02.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"<<actor>>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_autonumber_fmt_plain.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"autonumber \\\"\\\"\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_autonumber_fmt_plain_2parts.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"autonumber \\\"\\\"\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_autonumber_fmt_plain_3parts.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"autonumber \\\"\\\"\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_autonumber_fmt_plain_4parts.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"autonumber \\\"\\\"\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_autonumber_fmt_plain_5parts.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"autonumber \\\"\\\"\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_box_1boxes_par.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 10: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_box_2boxes_par.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 15: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_box_3boxes_par.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 20: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mg_hex9900FF.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##9900FF]> Bob : colored ->\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mg_hexFF8800.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##FF8800]> Bob : colored ->\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mgg_hex9900FF.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##9900FF]>> Bob : colored ->>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mgg_hexFF8800.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##FF8800]>> Bob : colored ->>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mmg_hex9900FF.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##9900FF]-> Bob : colored -->\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mmg_hexFF8800.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##FF8800]-> Bob : colored -->\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mmgg_hex9900FF.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##9900FF]->> Bob : colored -->>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mmgg_hexFF8800.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##FF8800]->> Bob : colored -->>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_combo_actor_full.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"actor \\\"Alice Smith\\\" as A <<user>> #lightblue order 10\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_combo_boundary_full.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"boundary \\\"Alice Smith\\\" as A <<user>> #lightblue order 10\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_combo_control_full.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"control \\\"Alice Smith\\\" as A <<user>> #lightblue order 10\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_combo_database_full.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"database \\\"Alice Smith\\\" as A <<user>> #lightblue order 10\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_combo_entity_full.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"entity \\\"Alice Smith\\\" as A <<user>> #lightblue order 10\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_combo_skinparam_complex.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 13: Syntax error: no registered sequence command accepts \"aut\u043e\u043dumber\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_decl_form_actor_color_stereo.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor Alice #green <<user>>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_decl_form_full.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Alice Smith\\\" as A #blue <<ext>> order 10\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_deep_nest_depth4.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_deep_nest_depth5.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_deep_nest_depth6.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_deep_nest_depth7.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_found_lost_unknown_dest.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 3: Syntax error: no registered sequence command accepts \"[->] : unknown destination\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_actor_blue_external_20.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor \\\"Name\\\" as N #blue <<external>> order 20\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_actor_green_service_5.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor \\\"Name\\\" as N #green <<service>> order 5\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_actor_orange_new_25.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor \\\"Name\\\" as N #orange <<new>> order 25\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_actor_red_internal_10.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor \\\"Name\\\" as N #red <<internal>> order 10\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_actor_yellow_legacy_15.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor \\\"Name\\\" as N #yellow <<legacy>> order 15\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_boundary_blue_external_20.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"boundary \\\"Name\\\" as N #blue <<external>> order 20\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_boundary_green_service_5.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"boundary \\\"Name\\\" as N #green <<service>> order 5\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_boundary_orange_new_25.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"boundary \\\"Name\\\" as N #orange <<new>> order 25\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_boundary_red_internal_10.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"boundary \\\"Name\\\" as N #red <<internal>> order 10\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_boundary_yellow_legacy_15.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"boundary \\\"Name\\\" as N #yellow <<legacy>> order 15\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_control_blue_external_20.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"control \\\"Name\\\" as N #blue <<external>> order 20\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_control_green_service_5.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"control \\\"Name\\\" as N #green <<service>> order 5\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_control_orange_new_25.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"control \\\"Name\\\" as N #orange <<new>> order 25\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_control_red_internal_10.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"control \\\"Name\\\" as N #red <<internal>> order 10\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_control_yellow_legacy_15.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"control \\\"Name\\\" as N #yellow <<legacy>> order 15\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_participant_blue_external_20.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Name\\\" as N #blue <<external>> order 20\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_participant_green_service_5.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Name\\\" as N #green <<service>> order 5\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_participant_orange_new_25.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Name\\\" as N #orange <<new>> order 25\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_participant_red_internal_10.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Name\\\" as N #red <<internal>> order 10\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_full_decl_participant_yellow_legacy_15.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Name\\\" as N #yellow <<legacy>> order 15\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_group_all_types_nested.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_group_nested_5deep.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 8: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_group_par_activate_note.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_group_par_arrow_dotted.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_group_par_arrow_solid.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_group_par_arrow_thin_dotted.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_group_par_arrow_thin_solid.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_group_par_autonumber_bold.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_group_par_autonumber_default.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_group_par_autonumber_parens.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_group_par_basic.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_group_par_standalone.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_group_par_three.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_hide_footbox_group_par_v2.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_kitchen_sink_02.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 22: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_kitchen_sink_04.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"participant \\\"<<Component>>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_kitchen_sink_06.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 57: Syntax error: no registered sequence command accepts \"and notification\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_kitchen_sink_09.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 28: Syntax error: no registered sequence command accepts \"and background sync\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_kitchen_sink_10.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 32: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_mega_combo_02.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 23: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_msg_color_hexFF8800.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##FF8800]> Bob : colored #FF8800\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_msg_dotted_noarrow.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -->) Bob : dotted_noarrow message\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_msg_solid_noarrow.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice ->) Bob : solid_noarrow message\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_nested_par_critical.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_participant_color_format_named_aliceblue.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice AliceBlue\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_participant_color_format_named_lightblue.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice lightblue\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_participant_color_format_named_red.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice red\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_participant_order_ascending.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"A\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_participant_order_descending.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"A\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_participant_order_large_gaps.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"A\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_participant_order_mixed.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"A\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_participant_order_same_order.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"A\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_pcolor_cblue_stereo_external_group.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice #blue <<external>>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_pcolor_cblue_stereo_internal_group.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice #blue <<internal>>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_pcolor_clightgreen_stereo_external_group.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice #lightgreen <<external>>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_pcolor_clightgreen_stereo_internal_group.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice #lightgreen <<internal>>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_pcolor_cred_stereo_external_group.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice #red <<external>>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_pcolor_cred_stereo_internal_group.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice #red <<internal>>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_actor_full_decl.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 20\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_actor_group_par.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_boundary_full_decl.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"boundary \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 30\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_boundary_group_par.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_collections_full_decl.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"collections \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 70\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_collections_group_par.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_combo_colors_green_yellow.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant A <<svc>> #green order 10\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_combo_colors_orange_purple.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant A <<svc>> #orange order 10\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_combo_colors_red_blue.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant A <<svc>> #red order 10\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_control_full_decl.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"control \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 40\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_control_group_par.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_database_full_decl.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"database \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 60\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_database_group_par.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_entity_full_decl.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"entity \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 50\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_entity_group_par.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_participant_full_decl.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 10\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_participant_group_par.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_queue_full_decl.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"queue \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 80\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ptype_queue_group_par.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ref_2_participants.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"ref over P0 P1 : Reference diagram 2\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sequence/seq_ref_3_participants.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"ref over P0 P1 P2 : Reference diagram 3\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/skinparam/skin_sequence_numbering_true.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"skinparam autonumber\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/type-detection/ambiguous_nwdiag_in_startuml.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"nwdiag {\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/usecase/usecase_extra_all_LightBlue_optional.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor User #Orange <<human>>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/usecase/usecase_extra_all_LightBlue_primary.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor User #Orange <<human>>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/usecase/usecase_extra_all_LightGreen_optional.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor User #Orange <<human>>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/usecase/usecase_extra_all_LightGreen_primary.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor User #Orange <<human>>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/usecase/usecase_extra_all_Pink_optional.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor User #Orange <<human>>\"\n",
+    "after_comparison": 2
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/usecase/usecase_extra_all_Pink_primary.puml",
+    "before_family": "Sequence",
+    "after_family": "ERROR",
+    "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor User #Orange <<human>>\"\n",
+    "after_comparison": 2
+  }
+]

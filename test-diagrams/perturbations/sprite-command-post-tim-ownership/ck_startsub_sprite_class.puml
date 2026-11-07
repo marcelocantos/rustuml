@@ -1,0 +1,13 @@
+@startuml
+!startsub GEMS
+sprite $gem [4x4/16] {
+F00F
+0FF0
+0FF0
+F00F
+}
+!endsub
+class Player {
+  <$gem> icon
+}
+@enduml

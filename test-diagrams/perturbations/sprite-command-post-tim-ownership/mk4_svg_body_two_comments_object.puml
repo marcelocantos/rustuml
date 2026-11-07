@@ -1,0 +1,7 @@
+@startuml
+sprite $box <svg width="4" height="4">
+<rect width="2" height="2" fill="red"/>/'a'/
+<rect x="2" width="2" height="2" fill="blue"/> /' b '/
+</svg>
+object Vault
+@enduml

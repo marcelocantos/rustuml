@@ -1,0 +1,6 @@
+@startuml
+node Server
+center footer
+SPRITE $x [2x2/16] {
+end footer
+@enduml

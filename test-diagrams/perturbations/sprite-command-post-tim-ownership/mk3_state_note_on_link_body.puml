@@ -1,0 +1,8 @@
+@startuml
+state Idle
+state Busy
+Idle --> Busy
+note on link
+Sprite link text
+end note
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+title
+Sprite sheets are loaded
+end title
+state Idle
+@enduml

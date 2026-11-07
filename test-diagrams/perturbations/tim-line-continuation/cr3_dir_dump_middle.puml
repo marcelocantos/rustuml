@@ -1,0 +1,5 @@
+@startuml
+Kea -> Tui : x %chr(92)
+!dump_memory
+Tui -> Kea : y
+@enduml

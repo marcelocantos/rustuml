@@ -1,0 +1,428 @@
+[
+ {
+  "name": "mr4_pragma_svek_start",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "pragma",
+   "position:start",
+   "count:3"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_pragma_two_then_tail",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "pragma",
+   "two pragmas",
+   "count:4"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_pragma_middle_vertical",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "pragma",
+   "position:middle",
+   "join into pragma text"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_pragma_inactive_tail",
+  "intended_valid": true,
+  "java_prediction": "welcome",
+  "axes": [
+   "pragma",
+   "inactive branch",
+   "count:2",
+   "java:welcome"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_pragma_from_procedure",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "pragma",
+   "procedure output",
+   "count:3"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_pragma_variable_value",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "pragma",
+   "variable",
+   "count:3"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_two_option_handwritten_tail",
+  "intended_valid": true,
+  "java_prediction": "welcome",
+  "axes": [
+   "rust-only line",
+   "option handwritten",
+   "count:2",
+   "java:welcome"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_two_dump_tail",
+  "intended_valid": true,
+  "java_prediction": "welcome",
+  "axes": [
+   "rust-only line",
+   "dump_memory",
+   "count:2",
+   "java:welcome"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_two_option_nojoin",
+  "intended_valid": true,
+  "java_prediction": "welcome",
+  "axes": [
+   "rust-only line",
+   "no continuation",
+   "count:2",
+   "java:welcome"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_two_comment_and_define_nojoin",
+  "intended_valid": true,
+  "java_prediction": "welcome",
+  "axes": [
+   "no continuation",
+   "count:2",
+   "java:welcome"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_theme_unshipped_tail",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "theme",
+   "java-bundled theme Rust does not ship",
+   "count>2"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_theme_shipped_tail",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "theme",
+   "shipped theme",
+   "count>2"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_one_at_end_in_procdef",
+  "intended_valid": false,
+  "java_prediction": "empty-description",
+  "axes": [
+   "one-line",
+   "@enduml in !procedure definition"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_one_bs_end_in_function",
+  "intended_valid": false,
+  "java_prediction": "empty-description",
+  "axes": [
+   "one-line",
+   "\\enduml in !function definition"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_one_end_in_definelong",
+  "intended_valid": false,
+  "java_prediction": "empty-description",
+  "axes": [
+   "one-line",
+   "\\enduml in !definelong"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_two_content_then_procdef_end",
+  "intended_valid": true,
+  "java_prediction": "welcome",
+  "axes": [
+   "two-line",
+   "end in definition after content",
+   "java:welcome"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_one_end_continued_after_directive",
+  "intended_valid": false,
+  "java_prediction": "empty-description",
+  "axes": [
+   "one-line",
+   "end line continued",
+   "directive before"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_terminated_def_then_bs_end",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "control",
+   "terminated definition",
+   "\\enduml"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_ws_fs_before_bs_end",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "whitespace",
+   "U+001C",
+   "\\enduml"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_ws_gs_before_bs_end",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "whitespace",
+   "U+001D",
+   "\\enduml"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_ws_rs_before_bs_end",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "whitespace",
+   "U+001E",
+   "\\enduml"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_ws_ideographic_before_bs_end",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "whitespace",
+   "U+3000",
+   "\\enduml"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_ws_line_separator_before_bs_end",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "whitespace",
+   "U+2028",
+   "\\enduml"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_ws_em_quad_before_bs_end",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "whitespace",
+   "U+2001",
+   "\\enduml"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_ws_zwsp_before_bs_end",
+  "intended_valid": false,
+  "java_prediction": "error",
+  "axes": [
+   "whitespace",
+   "U+200B",
+   "\\enduml"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_ws_figure_space_before_bs_end",
+  "intended_valid": false,
+  "java_prediction": "error",
+  "axes": [
+   "whitespace",
+   "U+2007",
+   "\\enduml"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_ws_mongolian_vs_before_bs_end",
+  "intended_valid": false,
+  "java_prediction": "error",
+  "axes": [
+   "whitespace",
+   "U+180E",
+   "\\enduml"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_ws_gs_before_at_end",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "whitespace",
+   "U+001D",
+   "@enduml (not Pipe's end)"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_ws_nel_before_at_end",
+  "intended_valid": false,
+  "java_prediction": "error",
+  "axes": [
+   "whitespace",
+   "U+0085",
+   "@enduml"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_inc_bom_every_line",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "include",
+   "BOM on every line",
+   "wrapped"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_inc_bom_directive_raw",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "include",
+   "BOM before a directive",
+   "raw"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_inc_endash_raw",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "include",
+   "U+2013",
+   "raw"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_inc_endash_wrapped",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "include",
+   "U+2013",
+   "wrapped"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_inc_header_half",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "include",
+   "header U+00BD (No)"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_inc_header_roman",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "include",
+   "header U+2160 (Nl)"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_inc_header_supplementary",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "include",
+   "header U+1D400 (supplementary letter)"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_inc_bang1",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "include",
+   "!1 suffix",
+   "wrapped"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_inc_bang_name_raw",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "include",
+   "!x suffix",
+   "raw"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "mr4_includesub_bom",
+  "intended_valid": true,
+  "java_prediction": "valid",
+  "axes": [
+   "includesub",
+   "BOM before !startsub"
+  ],
+  "crlf": false
+ }
+]

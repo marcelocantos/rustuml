@@ -1,0 +1,7 @@
+@startuml
+[Comp]
+note as N1 <<memo>> #yellow
+sprite $z foo
+end note
+Comp .. N1
+@enduml

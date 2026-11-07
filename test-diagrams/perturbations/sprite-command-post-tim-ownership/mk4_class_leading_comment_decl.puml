@@ -1,0 +1,4 @@
+@startuml
+/' c '/ class Spruce
+Spruce --> Larch
+@enduml

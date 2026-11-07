@@ -1,0 +1,7 @@
+@startuml
+participant Pine
+participant Fir
+sprite $mark <svg viewBox="0 0 4 4"><title> 'mark'</title><rect width="2" height="2"/></svg>
+Fir -> Pine: back
+Pine -> Fir: forth
+@enduml

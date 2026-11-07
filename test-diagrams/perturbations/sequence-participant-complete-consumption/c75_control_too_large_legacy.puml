@@ -1,0 +1,5 @@
+@startuml
+participant Spruce
+control Cedar order 10000000
+Spruce -> Cedar: pollen
+@enduml

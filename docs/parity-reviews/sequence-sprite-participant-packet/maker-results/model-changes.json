@@ -1,0 +1,361 @@
+[
+  {
+    "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_multiple_legacy.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_multiple_teoz.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_22_unusual.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_23_unusual.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_24_unusual.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_25_unusual.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_26_unusual.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_plain.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_unusual.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_28_unusual.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_43_unusual.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_44_unusual.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_45_unusual.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_46_unusual.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_392.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_398.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_401.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_404.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_407.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_dot.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_at.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_compact_stereo.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_compact_colour.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/svg_upper_legacy.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/svg_upper_teoz.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/svg_nbsp_legacy.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/svg_nbsp_teoz.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_upper_end_legacy.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_upper_end_teoz.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_nbsp_brace_legacy.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_nbsp_brace_teoz.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_compact_end_legacy.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_compact_end_teoz.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_dotted_legacy.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_dotted_teoz.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_at_compact_legacy.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_at_compact_teoz.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_composite_legacy.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_composite_teoz.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_repeat_color_legacy.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_repeat_color_teoz.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_multiline_color_legacy.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_multiline_color_teoz.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/svg_class.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/svg_state.puml",
+    "modes": [
+      "ast",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/completion-inputs/pixel_unclosed_legacy.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/completion-inputs/pixel_unclosed_teoz.puml",
+    "modes": [
+      "ast",
+      "ascii",
+      "yaml"
+    ]
+  }
+]

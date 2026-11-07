@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-line-continuation",
+  "target": "T14.22",
+  "round": 7,
+  "maker": "claude-opus-5-5",
+  "kind": "post-test addendum, committed before the change it plans. 50adb43e2 was committed while the workspace lib run had one failure (my command chain did not stop on it): parse::tests::parse_block_preserves_absolute_source_lines (expected source line 5, got 2).",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "cause": "50adb43e2 removes every line Pipe does not append. parse_block pads a block that follows a preamble with blank lines so its lines keep their file numbers (source_with_original_line_offset); those padding lines are leading trim-empty lines, so they were removed, and a marked input's unmarked lines, which take their parser-stream position, moved up by three.",
+  "java": "Pipe.java:191-192/207-208 drops trim-empty lines only while NO_CONTENT, i.e. before any content line; 188-189 drops '@@@format ' lines anywhere.",
+  "planned_change": "A leading not-appended line (trim-empty, before content) stays in place as an empty line: before any content it is outside the block (marked input) or before the first content line (no mark), so an empty line is no TIM or parser input there and positions are kept. A '@@@format ' line is removed outright; when one is removed, every later content line carries its explicit number (mark_source_lines), because stream positions no longer equal input lines. No golden contains a '@@@format ' line.",
+  "acceptance": "Workspace lib 0 failures; o6n_format_line_bs_seq and q7_num_us_blank_bs_seq match; the round-7 measurement as in addendum 6."
+}

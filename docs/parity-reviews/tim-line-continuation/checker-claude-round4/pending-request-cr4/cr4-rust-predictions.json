@@ -1,0 +1,5750 @@
+{
+ "batch_manifest_sha256": "55029e322501c927c024ea1d8275c6abf17074a173c4d175b9f1a82056ed5dec",
+ "binaries": {
+  "9ed52f435": "2ceb1a20b0d0ab119b6af36e8f00a2ecc67f246f07d9f2f5bf65e6584fd4b942",
+  "1f6ffa9f4": "d03f9a0ac534d6fb67d4498555f416ebe40ec612c560441be947f5e4a8f715a3",
+  "93bf53e18": "0e5ccb064a73ba08deab3a49f8eb156524e35e434d4d00a08ae17753b62a82f6",
+  "9834a7194": "c0db3bd611dae0f8f4352fc21bd20f42ee41980e1d6fdc92bb7ebaafd59b0559"
+ },
+ "rows": [
+  {
+   "name": "cr4_cnt_pragma_bare",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"!pragma\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"!pragma\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"!pragma\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_pragma_bare_tail",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"!pragma\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"!pragma\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"!pragma\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "8c0eb51f9776165e25f95079cea158df59a99bb6e595c4faf56d569f82a6094a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "x \\"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_pragma_upper_msg",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": "warning: sequence command CommandPragma variant is recognized but unimplemented at line 1: !PRAGMA teoz true\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": "warning: sequence command CommandPragma variant is recognized but unimplemented at line 1: !PRAGMA teoz true\n"
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": "warning: sequence command CommandPragma variant is recognized but unimplemented at line 1: !PRAGMA teoz true\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_pragma_continued_end",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_pragma_from_include_tail",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "f89ce6d14cb2a41385408906e56c92f2ca7171c25903414189fe89221a8e34d5",
+     "stdout_bytes": 2306,
+     "texts": [
+      "Kea",
+      "Tui",
+      "Kea",
+      "Tui",
+      "x @enduml"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "5031df8caf0dfc12aaed929bae17830ba272a2f26b630552ae1f896c5cdde70a",
+     "stdout_bytes": 2288,
+     "texts": [
+      "Kea",
+      "Tui",
+      "Kea",
+      "Tui",
+      "x \\"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "5031df8caf0dfc12aaed929bae17830ba272a2f26b630552ae1f896c5cdde70a",
+     "stdout_bytes": 2288,
+     "texts": [
+      "Kea",
+      "Tui",
+      "Kea",
+      "Tui",
+      "x \\"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr4_cnt_pragma_from_variable_line",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "7f90791085a4a2e84c95799002040e2a7f0f70a0fb0ea935d11edd28eebf70fa",
+     "stdout_bytes": 2288,
+     "texts": [
+      "Kea",
+      "Tui",
+      "Kea",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "7f90791085a4a2e84c95799002040e2a7f0f70a0fb0ea935d11edd28eebf70fa",
+     "stdout_bytes": 2288,
+     "texts": [
+      "Kea",
+      "Tui",
+      "Kea",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "7f90791085a4a2e84c95799002040e2a7f0f70a0fb0ea935d11edd28eebf70fa",
+     "stdout_bytes": 2288,
+     "texts": [
+      "Kea",
+      "Tui",
+      "Kea",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "7f90791085a4a2e84c95799002040e2a7f0f70a0fb0ea935d11edd28eebf70fa",
+     "stdout_bytes": 2288,
+     "texts": [
+      "Kea",
+      "Tui",
+      "Kea",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_option_unknown",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_assume_alone",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": "warning: sequence command CommandAssumeTransparent is recognized but unimplemented at line 1: !assume transparent light\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": "warning: sequence command CommandAssumeTransparent is recognized but unimplemented at line 1: !assume transparent light\n"
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": "warning: sequence command CommandAssumeTransparent is recognized but unimplemented at line 1: !assume transparent light\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_log_alone",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_assert_alone",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_undef_alone",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_include_empty",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_include_blank_line",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_includesub_empty",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_theme_local_comment_only",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "0c5bb9d6ebbc7e20516f4d6372f648d725fcf9504eacd3e57a20ac7099681724",
+     "stdout_bytes": 343,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "0c5bb9d6ebbc7e20516f4d6372f648d725fcf9504eacd3e57a20ac7099681724",
+     "stdout_bytes": 343,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "0c5bb9d6ebbc7e20516f4d6372f648d725fcf9504eacd3e57a20ac7099681724",
+     "stdout_bytes": 343,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr4_cnt_theme_local_one_skinparam",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "b870d89c7e82296caf4702eaa6357b71feb6fd4206ef66fe6e598d2d57cf48cc",
+     "stdout_bytes": 436,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "b870d89c7e82296caf4702eaa6357b71feb6fd4206ef66fe6e598d2d57cf48cc",
+     "stdout_bytes": 436,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "0c5bb9d6ebbc7e20516f4d6372f648d725fcf9504eacd3e57a20ac7099681724",
+     "stdout_bytes": 343,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "0c5bb9d6ebbc7e20516f4d6372f648d725fcf9504eacd3e57a20ac7099681724",
+     "stdout_bytes": 343,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_theme_unshipped_alone",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "0c5bb9d6ebbc7e20516f4d6372f648d725fcf9504eacd3e57a20ac7099681724",
+     "stdout_bytes": 343,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "0c5bb9d6ebbc7e20516f4d6372f648d725fcf9504eacd3e57a20ac7099681724",
+     "stdout_bytes": 343,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "0c5bb9d6ebbc7e20516f4d6372f648d725fcf9504eacd3e57a20ac7099681724",
+     "stdout_bytes": 343,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "0c5bb9d6ebbc7e20516f4d6372f648d725fcf9504eacd3e57a20ac7099681724",
+     "stdout_bytes": 343,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_exit_alone",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"!exit\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"!exit\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"!exit\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_exit_mid",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"!exit\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"!exit\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"!exit\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "3d087458bcfdda6916070e23b7b0001c6fa3fb288828e12028072c05bc07655b",
+     "stdout_bytes": 3629,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_blank_three",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_ws_only_line",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_empty_var_line",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_tim_comment_line",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"' hidden\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"' hidden\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"' hidden\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_cnt_blank_then_message",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_one_mindmap_procdef",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "6c35e72f0d36e69d5a3d9c63e40c8ac2aabc0791c15d22b6db55da23a02f85f2",
+     "stdout_bytes": 335,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "6c35e72f0d36e69d5a3d9c63e40c8ac2aabc0791c15d22b6db55da23a02f85f2",
+     "stdout_bytes": 335,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "6c35e72f0d36e69d5a3d9c63e40c8ac2aabc0791c15d22b6db55da23a02f85f2",
+     "stdout_bytes": 335,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "6c35e72f0d36e69d5a3d9c63e40c8ac2aabc0791c15d22b6db55da23a02f85f2",
+     "stdout_bytes": 335,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_one_gantt_procdef",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "ac846c9239bd06038e575d73c074734ba9f58da27e68827f12dfd04e48fc60e9",
+     "stdout_bytes": 330,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "ac846c9239bd06038e575d73c074734ba9f58da27e68827f12dfd04e48fc60e9",
+     "stdout_bytes": 330,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "ac846c9239bd06038e575d73c074734ba9f58da27e68827f12dfd04e48fc60e9",
+     "stdout_bytes": 330,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "ac846c9239bd06038e575d73c074734ba9f58da27e68827f12dfd04e48fc60e9",
+     "stdout_bytes": 330,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_one_wbs_function",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "209872fbf9f93b919aa59f7bf2d0496792a70d03562114ff1ab8ededbc096e85",
+     "stdout_bytes": 331,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "209872fbf9f93b919aa59f7bf2d0496792a70d03562114ff1ab8ededbc096e85",
+     "stdout_bytes": 331,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "209872fbf9f93b919aa59f7bf2d0496792a70d03562114ff1ab8ededbc096e85",
+     "stdout_bytes": 331,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "209872fbf9f93b919aa59f7bf2d0496792a70d03562114ff1ab8ededbc096e85",
+     "stdout_bytes": 331,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_one_salt_definelong",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: expected '{' to open Salt block, got: \"\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: expected '{' to open Salt block, got: \"\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: expected '{' to open Salt block, got: \"\"\n"
+    },
+    "9834a7194": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: expected '{' to open Salt block, got: \"\"\n"
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_one_json_procdef",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: JSON parse error: EOF while parsing a value at line 1 column 0\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: JSON parse error: EOF while parsing a value at line 1 column 0\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: JSON parse error: EOF while parsing a value at line 2 column 0\n"
+    },
+    "9834a7194": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: JSON parse error: EOF while parsing a value at line 2 column 0\n"
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_two_mindmap_content_then_procdef",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "de6c76baa5a50429d0185eff8c7dea135b4ee4d56f020add68202418a2934618",
+     "stdout_bytes": 600,
+     "texts": [
+      "root"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "de6c76baa5a50429d0185eff8c7dea135b4ee4d56f020add68202418a2934618",
+     "stdout_bytes": 600,
+     "texts": [
+      "root"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "de6c76baa5a50429d0185eff8c7dea135b4ee4d56f020add68202418a2934618",
+     "stdout_bytes": 600,
+     "texts": [
+      "root"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "de6c76baa5a50429d0185eff8c7dea135b4ee4d56f020add68202418a2934618",
+     "stdout_bytes": 600,
+     "texts": [
+      "root"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_two_class_content_then_function_end",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "a27000fd44a3a82f3689e704b155d8f4fa2db7688a4664eac711ef1936342c70",
+     "stdout_bytes": 1546,
+     "texts": [
+      "Kea"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "a27000fd44a3a82f3689e704b155d8f4fa2db7688a4664eac711ef1936342c70",
+     "stdout_bytes": 1546,
+     "texts": [
+      "Kea"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "a27000fd44a3a82f3689e704b155d8f4fa2db7688a4664eac711ef1936342c70",
+     "stdout_bytes": 1546,
+     "texts": [
+      "Kea"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr4_two_blank_then_procdef_end",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_ws_ideo_before_assign",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e59937fdfc4d4e055cc85ada5a38515672f153f920b50080a3c1168094657b03",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "a"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e59937fdfc4d4e055cc85ada5a38515672f153f920b50080a3c1168094657b03",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "a"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e59937fdfc4d4e055cc85ada5a38515672f153f920b50080a3c1168094657b03",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "a"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e59937fdfc4d4e055cc85ada5a38515672f153f920b50080a3c1168094657b03",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "a"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_ws_ideo_before_comment",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_ws_ideo_before_procedure",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "be089d2b889340383c0b9e1ea5a322d52cf8955baacbeeded10d6beed204cfa9",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "p"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "be089d2b889340383c0b9e1ea5a322d52cf8955baacbeeded10d6beed204cfa9",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "p"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "be089d2b889340383c0b9e1ea5a322d52cf8955baacbeeded10d6beed204cfa9",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "p"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "be089d2b889340383c0b9e1ea5a322d52cf8955baacbeeded10d6beed204cfa9",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "p"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_ws_ideo_before_if",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_ws_nbsp_before_assign",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e59937fdfc4d4e055cc85ada5a38515672f153f920b50080a3c1168094657b03",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "a"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e59937fdfc4d4e055cc85ada5a38515672f153f920b50080a3c1168094657b03",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "a"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e59937fdfc4d4e055cc85ada5a38515672f153f920b50080a3c1168094657b03",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "a"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e59937fdfc4d4e055cc85ada5a38515672f153f920b50080a3c1168094657b03",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "a"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_ws_vt_before_define",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "c1bdb7b3783edeae8c3f9d428b079ad622ac34c8ce515e0a192dddb629c4e6d8",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Moa",
+      "Moa",
+      "a"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "c1bdb7b3783edeae8c3f9d428b079ad622ac34c8ce515e0a192dddb629c4e6d8",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Moa",
+      "Moa",
+      "a"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "c1bdb7b3783edeae8c3f9d428b079ad622ac34c8ce515e0a192dddb629c4e6d8",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Moa",
+      "Moa",
+      "a"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "c1bdb7b3783edeae8c3f9d428b079ad622ac34c8ce515e0a192dddb629c4e6d8",
+     "stdout_bytes": 3147,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Moa",
+      "Moa",
+      "a"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_ws_us_before_assign",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{1f}!$x = \\\"a\\\"\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{1f}!$x = \\\"a\\\"\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{1f}!$x = \\\"a\\\"\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "890c00b378e3c7b891f968a7f3a5e0b251f195cf438a38145bef3ddbf88cb877",
+     "stdout_bytes": 3149,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "$x"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_ws_ideo_startsub_in_includesub",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "a17b029f1f609861c3e15f37ba19b93c7e44fa600f6df372d0529c147af887e3",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "wsp"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "a17b029f1f609861c3e15f37ba19b93c7e44fa600f6df372d0529c147af887e3",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "wsp"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "a17b029f1f609861c3e15f37ba19b93c7e44fa600f6df372d0529c147af887e3",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "wsp"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "a17b029f1f609861c3e15f37ba19b93c7e44fa600f6df372d0529c147af887e3",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "wsp"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_ws_ideo_exit",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{3000}!exit\\u{3000}\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{3000}!exit\\u{3000}\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{3000}!exit\\u{3000}\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "3d087458bcfdda6916070e23b7b0001c6fa3fb288828e12028072c05bc07655b",
+     "stdout_bytes": 3629,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_ws_ideo_before_at_end",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_main_bom_line2",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{feff}Kea -> Tui : bom\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{feff}Kea -> Tui : bom\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{feff}Kea -> Tui : bom\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_main_bom_before_directive",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{feff}!$x = \\\"a\\\"\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{feff}!$x = \\\"a\\\"\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{feff}!$x = \\\"a\\\"\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "890c00b378e3c7b891f968a7f3a5e0b251f195cf438a38145bef3ddbf88cb877",
+     "stdout_bytes": 3149,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "$x"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_main_endash_label",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "a0f060901f07aae7ab0122349d19a45dab37c25ac7f0a6707b448ebf617ded99",
+     "stdout_bytes": 3154,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "a – b"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "a0f060901f07aae7ab0122349d19a45dab37c25ac7f0a6707b448ebf617ded99",
+     "stdout_bytes": 3154,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "a – b"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "a0f060901f07aae7ab0122349d19a45dab37c25ac7f0a6707b448ebf617ded99",
+     "stdout_bytes": 3154,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "a – b"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "a0f060901f07aae7ab0122349d19a45dab37c25ac7f0a6707b448ebf617ded99",
+     "stdout_bytes": 3154,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "a – b"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_main_endash_arrow",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"Kea –> Tui : dash\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"Kea –> Tui : dash\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"Kea –> Tui : dash\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_main_endash_include_path",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_inc_endash_includesub_body",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "f02d82d0b2f42d7e5fbe94ad7c538b3150a5a599ceac64a26e10291002ef3a7e",
+     "stdout_bytes": 3151,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "dash"
+     ],
+     "source_lines": [
+      6
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 6: Syntax error: no registered sequence command accepts \"Kea –> Tui : dash\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"Kea –> Tui : dash\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr4_inc_double_bom",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"\\u{feff}Kea -> Tui : dbom\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"\\u{feff}\\u{feff}Kea -> Tui : dbom\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{feff}\\u{feff}Kea -> Tui : dbom\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_inc_cr_only_lines",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"Kea -> Tui : a\\rTui -> Kea : b\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"Kea -> Tui : a\\rTui -> Kea : b\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"Kea -> Tui : a\\rTui -> Kea : b\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "6c3aa63de2588ad90776c532de9e3178c1d1d27298646b4a70db8235874af692",
+     "stdout_bytes": 3173,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "a\rTui -&gt; Kea : b"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_main_cr_only_lines",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_inc_yaml_header_raw",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"---\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"---\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"---\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "43a529170a56f4c4905ea5a3c562ffec1f7ece293841d5d0691fbf211819e7a5",
+     "stdout_bytes": 3146,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "y"
+     ],
+     "source_lines": [
+      4
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_inc_yaml_header_wrapped",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "c8bfec214b64821377d02efb9d1e9012192a7b82c7bcfe1c3a9df68531db3097",
+     "stdout_bytes": 3148,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "w"
+     ],
+     "source_lines": [
+      4
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "c8bfec214b64821377d02efb9d1e9012192a7b82c7bcfe1c3a9df68531db3097",
+     "stdout_bytes": 3148,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "w"
+     ],
+     "source_lines": [
+      4
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"---\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "c8bfec214b64821377d02efb9d1e9012192a7b82c7bcfe1c3a9df68531db3097",
+     "stdout_bytes": 3148,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "w"
+     ],
+     "source_lines": [
+      4
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_sfx_bang_empty",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "b4fad45556837b1827f94314e73fef3c220b8d0cebc5a7fb4d850bb6c18e43eb",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "first"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr4_sfx_bang0",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "b4fad45556837b1827f94314e73fef3c220b8d0cebc5a7fb4d850bb6c18e43eb",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "first"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr4_sfx_two_bangs",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_sfx_include_many",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"!include_many cr4_r_plain.iuml!1\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"!include_many cr4_r_plain.iuml!1\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"!include_many cr4_r_plain.iuml!1\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_sfx_include_once_twice",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "7af3ad40110ea37359481db7d7dd145d613fe7497b7d359d1241554ad1249b1b",
+     "stdout_bytes": 3633,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "plain",
+      "plain"
+     ],
+     "source_lines": [
+      0
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr4_sfx_includesub_double_bang",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: cannot include cr4_subs.iuml!P!x\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: cannot include cr4_subs.iuml!P!x\n"
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_sfx_quoted_plain",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "f8f95ab6ccd2c07b9f78452f0366a4477f408ce89623f7b6157d9f5b0a72f72e",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "plain"
+     ],
+     "source_lines": [
+      0
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "f8f95ab6ccd2c07b9f78452f0366a4477f408ce89623f7b6157d9f5b0a72f72e",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "plain"
+     ],
+     "source_lines": [
+      0
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "af73a335c5a89df21630ea5b314c9e366b46f8c08fa366e52a26804b321a7782",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "plain"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "af73a335c5a89df21630ea5b314c9e366b46f8c08fa366e52a26804b321a7782",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "plain"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_sfx_quoted_bang",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "b4fad45556837b1827f94314e73fef3c220b8d0cebc5a7fb4d850bb6c18e43eb",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "first"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr4_hdr_u16_cyrillic_tje",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"Ᲊ @startuml\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"Ᲊ @startuml\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"Ᲊ @startuml\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_hdr_u16_latin_a7cb",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"Ɤ @startuml\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"Ɤ @startuml\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"Ɤ @startuml\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_hdr_u17_latin_a7ce",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"꟎ @startuml\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"꟎ @startuml\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"꟎ @startuml\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_hdr_u17_arabic_088f",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"࢏ @startuml\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"࢏ @startuml\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"࢏ @startuml\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_hdr_u15_thai_control",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"ก @startuml\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"ก @startuml\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"ก @startuml\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_hdr_u15_digit_control",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"٣ @startuml\"\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 0: Syntax error: no registered sequence command accepts \"٣ @startuml\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"٣ @startuml\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_sprite_from_procedure",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "6d8cecab52d5b3d197636e00e9b3d3f3b24c58c9ba629f809719604ba1ac7298",
+     "stdout_bytes": 3159,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "&#160;"
+     ],
+     "source_lines": [
+      10
+     ],
+     "stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 2: sprite $kiwi [4x4/16] {\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "6d8cecab52d5b3d197636e00e9b3d3f3b24c58c9ba629f809719604ba1ac7298",
+     "stdout_bytes": 3159,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "&#160;"
+     ],
+     "source_lines": [
+      10
+     ],
+     "stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 2: sprite $kiwi [4x4/16] {\n"
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "f961662e7640bc471a3808698ffcd302a0758ca306cb6311484ac7669c8dc05a",
+     "stdout_bytes": 3164,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "&lt;$kiwi&gt;"
+     ],
+     "source_lines": [
+      11
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "f961662e7640bc471a3808698ffcd302a0758ca306cb6311484ac7669c8dc05a",
+     "stdout_bytes": 3164,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "&lt;$kiwi&gt;"
+     ],
+     "source_lines": [
+      11
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_sprite_from_include",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "f6ca587b44de689c01302665e120235f96c1dd46d3fdcec09aae4c497ba8c3c1",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "&#160;"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 0: sprite $kiwi [4x4/16] {\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "f6ca587b44de689c01302665e120235f96c1dd46d3fdcec09aae4c497ba8c3c1",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "&#160;"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 0: sprite $kiwi [4x4/16] {\n"
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "7b0a21cd2bc547db596dc6f1f594bf69515d7731e958a333cd6e5db13affd44f",
+     "stdout_bytes": 3157,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "&lt;$kiwi&gt;"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "7b0a21cd2bc547db596dc6f1f594bf69515d7731e958a333cd6e5db13affd44f",
+     "stdout_bytes": 3157,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "&lt;$kiwi&gt;"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_sprite_continued_header",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "fc6276679f00a483dfe898fbb6e414eec10d422eb723c61b3be002a187b61109",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "&#160;"
+     ],
+     "source_lines": [
+      8
+     ],
+     "stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 1: sprite $kiwi [4x4/16] {\n"
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "fc6276679f00a483dfe898fbb6e414eec10d422eb723c61b3be002a187b61109",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "&#160;"
+     ],
+     "source_lines": [
+      8
+     ],
+     "stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 1: sprite $kiwi [4x4/16] {\n"
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "dc4ec67f8bfc5a3362cbce72cc5a9a9fa8f5856ef39f48021b7c64534a5a21f4",
+     "stdout_bytes": 4046,
+     "texts": [
+      "00",
+      "0",
+      "0F",
+      "F0",
+      "Kea",
+      "Tui",
+      "&lt;$kiwi&gt;"
+     ],
+     "source_lines": [
+      3,
+      4,
+      5,
+      6,
+      8
+     ],
+     "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "dc4ec67f8bfc5a3362cbce72cc5a9a9fa8f5856ef39f48021b7c64534a5a21f4",
+     "stdout_bytes": 4046,
+     "texts": [
+      "00",
+      "0",
+      "0F",
+      "F0",
+      "Kea",
+      "Tui",
+      "&lt;$kiwi&gt;"
+     ],
+     "source_lines": [
+      3,
+      4,
+      5,
+      6,
+      8
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_end_in_startsub_unterminated",
+   "intended_valid": true,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_end_in_foreach_unterminated",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_end_in_while_unterminated",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr4_end_in_if_unterminated_active",
+   "intended_valid": false,
+   "builds": {
+    "9ed52f435": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "1f6ffa9f4": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  }
+ ]
+}

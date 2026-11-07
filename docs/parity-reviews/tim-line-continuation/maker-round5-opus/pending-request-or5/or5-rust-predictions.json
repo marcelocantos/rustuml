@@ -1,0 +1,572 @@
+{
+ "note": "Rust outputs recorded before any Java result for batch or5; tip c4b5a8436. Java validity predictions are the manifest's intended_valid.",
+ "builds": [
+  "c4b5a8436",
+  "9dc1af5f9",
+  "9ed52f435",
+  "32684f81e",
+  "d28dd64a9",
+  "cb550c0d6"
+ ],
+ "cases": [
+  {
+   "name": "or5_theme_uml_seq_two_props",
+   "java_prediction_valid": true,
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "c211b52c25f218e9feafef87ae8c5c3929e19f333c701205ea663df5d4b030b3",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "c211b52c25f218e9feafef87ae8c5c3929e19f333c701205ea663df5d4b030b3",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"#00AA00\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "b257c38bf265de3e276c5688fb8ddc1cef953d7d2144407c685995bac3f8531b",
+     "stderr": "",
+     "welcome": false
+    },
+    "d28dd64a9": {
+     "exit": 0,
+     "svg_sha256": "2375755361876bce6896fb47e23e3f3c5eb188a43ff32cc760d6babe1218ce82",
+     "stderr": "",
+     "welcome": false
+    },
+    "cb550c0d6": {
+     "exit": 0,
+     "svg_sha256": "b257c38bf265de3e276c5688fb8ddc1cef953d7d2144407c685995bac3f8531b",
+     "stderr": "",
+     "welcome": false
+    }
+   },
+   "tip_prediction": "render (match predicted if Java renders the joined/stripped text)"
+  },
+  {
+   "name": "or5_theme_uml_class_chain3",
+   "java_prediction_valid": true,
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "e7c56ca2e9bc5e6205b6424f31ecb1be123d6b61d3bf5bf251139063eb3e4615",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "e7c56ca2e9bc5e6205b6424f31ecb1be123d6b61d3bf5bf251139063eb3e4615",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "5ab059c6099b7e5ce6ece1a0d5f8f973e0e562dc5d6628a0bd8ec7dd2c5a68ce",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "5ab059c6099b7e5ce6ece1a0d5f8f973e0e562dc5d6628a0bd8ec7dd2c5a68ce",
+     "stderr": "",
+     "welcome": false
+    },
+    "d28dd64a9": {
+     "exit": 0,
+     "svg_sha256": "5ab059c6099b7e5ce6ece1a0d5f8f973e0e562dc5d6628a0bd8ec7dd2c5a68ce",
+     "stderr": "",
+     "welcome": false
+    },
+    "cb550c0d6": {
+     "exit": 0,
+     "svg_sha256": "5ab059c6099b7e5ce6ece1a0d5f8f973e0e562dc5d6628a0bd8ec7dd2c5a68ce",
+     "stderr": "",
+     "welcome": false
+    }
+   },
+   "tip_prediction": "render (match predicted if Java renders the joined/stripped text)"
+  },
+  {
+   "name": "or5_theme_uml_activity",
+   "java_prediction_valid": true,
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "02a29359ef37f2d30975228f9a256d56ae0b0d66c1753fc67c34484408a5eab5",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "02a29359ef37f2d30975228f9a256d56ae0b0d66c1753fc67c34484408a5eab5",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "be6a868c9112e03399916ed78e2745038e545f3d81efafe0e16a5df4fdb89d88",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "be6a868c9112e03399916ed78e2745038e545f3d81efafe0e16a5df4fdb89d88",
+     "stderr": "",
+     "welcome": false
+    },
+    "d28dd64a9": {
+     "exit": 0,
+     "svg_sha256": "2eab51f5927c3aaa6c487ef07d52487f94894171023116cce40a2297529eb88e",
+     "stderr": "",
+     "welcome": false
+    },
+    "cb550c0d6": {
+     "exit": 0,
+     "svg_sha256": "be6a868c9112e03399916ed78e2745038e545f3d81efafe0e16a5df4fdb89d88",
+     "stderr": "",
+     "welcome": false
+    }
+   },
+   "tip_prediction": "render (match predicted if Java renders the joined/stripped text)"
+  },
+  {
+   "name": "or5_theme_uml_state",
+   "java_prediction_valid": true,
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "078635f88a50da01c785b09e2d235c0c4c0fa8885e4f6eb390cb748c0630068a",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "078635f88a50da01c785b09e2d235c0c4c0fa8885e4f6eb390cb748c0630068a",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "7382c9300da5543ea4a2f6e2d4d576a2041fbc32adfed2789791de7738cf1601",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "7382c9300da5543ea4a2f6e2d4d576a2041fbc32adfed2789791de7738cf1601",
+     "stderr": "",
+     "welcome": false
+    },
+    "d28dd64a9": {
+     "exit": 0,
+     "svg_sha256": "a23a53423986eef388395da44682aeb7f1bf0c839d63dfb6b3a5e15467426382",
+     "stderr": "",
+     "welcome": false
+    },
+    "cb550c0d6": {
+     "exit": 0,
+     "svg_sha256": "7382c9300da5543ea4a2f6e2d4d576a2041fbc32adfed2789791de7738cf1601",
+     "stderr": "",
+     "welcome": false
+    }
+   },
+   "tip_prediction": "render (match predicted if Java renders the joined/stripped text)"
+  },
+  {
+   "name": "or5_theme_mindmap_continued",
+   "java_prediction_valid": false,
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "c43bfd586bfac667f64fe8fd757d9e4ed9dbb4e804bbb6097e8f473414f09138",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "87217ed16cfb32a7c4b3a0b01e2b5b0adb9dcf597fce26103dbc09819ae3a612",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "c43bfd586bfac667f64fe8fd757d9e4ed9dbb4e804bbb6097e8f473414f09138",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "c43bfd586bfac667f64fe8fd757d9e4ed9dbb4e804bbb6097e8f473414f09138",
+     "stderr": "",
+     "welcome": false
+    },
+    "d28dd64a9": {
+     "exit": 0,
+     "svg_sha256": "87217ed16cfb32a7c4b3a0b01e2b5b0adb9dcf597fce26103dbc09819ae3a612",
+     "stderr": "",
+     "welcome": false
+    },
+    "cb550c0d6": {
+     "exit": 0,
+     "svg_sha256": "c43bfd586bfac667f64fe8fd757d9e4ed9dbb4e804bbb6097e8f473414f09138",
+     "stderr": "",
+     "welcome": false
+    }
+   },
+   "tip_prediction": "render (match predicted if Java renders the joined/stripped text)"
+  },
+  {
+   "name": "or5_theme_wbs_continued",
+   "java_prediction_valid": false,
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "4f7665cd4770dcd69764575816b58834710fef6123f619876dbb86ace3ea8edf",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "4f7665cd4770dcd69764575816b58834710fef6123f619876dbb86ace3ea8edf",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "4f7665cd4770dcd69764575816b58834710fef6123f619876dbb86ace3ea8edf",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "4f7665cd4770dcd69764575816b58834710fef6123f619876dbb86ace3ea8edf",
+     "stderr": "",
+     "welcome": false
+    },
+    "d28dd64a9": {
+     "exit": 0,
+     "svg_sha256": "4f7665cd4770dcd69764575816b58834710fef6123f619876dbb86ace3ea8edf",
+     "stderr": "",
+     "welcome": false
+    },
+    "cb550c0d6": {
+     "exit": 0,
+     "svg_sha256": "4f7665cd4770dcd69764575816b58834710fef6123f619876dbb86ace3ea8edf",
+     "stderr": "",
+     "welcome": false
+    }
+   },
+   "tip_prediction": "render (match predicted if Java renders the joined/stripped text)"
+  },
+  {
+   "name": "or5_theme_mindmap_flat_control",
+   "java_prediction_valid": true,
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "87217ed16cfb32a7c4b3a0b01e2b5b0adb9dcf597fce26103dbc09819ae3a612",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "87217ed16cfb32a7c4b3a0b01e2b5b0adb9dcf597fce26103dbc09819ae3a612",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "87217ed16cfb32a7c4b3a0b01e2b5b0adb9dcf597fce26103dbc09819ae3a612",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "87217ed16cfb32a7c4b3a0b01e2b5b0adb9dcf597fce26103dbc09819ae3a612",
+     "stderr": "",
+     "welcome": false
+    },
+    "d28dd64a9": {
+     "exit": 0,
+     "svg_sha256": "87217ed16cfb32a7c4b3a0b01e2b5b0adb9dcf597fce26103dbc09819ae3a612",
+     "stderr": "",
+     "welcome": false
+    },
+    "cb550c0d6": {
+     "exit": 0,
+     "svg_sha256": "87217ed16cfb32a7c4b3a0b01e2b5b0adb9dcf597fce26103dbc09819ae3a612",
+     "stderr": "",
+     "welcome": false
+    }
+   },
+   "tip_prediction": "render (match predicted if Java renders the joined/stripped text)"
+  },
+  {
+   "name": "or5_theme_uml_last_line_open",
+   "java_prediction_valid": true,
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "49e667d9b9ec2b52d77aa4f9055365a5a3a37fb5b4fc01e20a2f089efd5f05ed",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"2\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"2\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "2d4341aa6bfbb4dafb95755d430d9edbb8e11254a21f90de2e11b1824bff58b4",
+     "stderr": "",
+     "welcome": false
+    },
+    "d28dd64a9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"2\"\n",
+     "welcome": false
+    },
+    "cb550c0d6": {
+     "exit": 0,
+     "svg_sha256": "2d4341aa6bfbb4dafb95755d430d9edbb8e11254a21f90de2e11b1824bff58b4",
+     "stderr": "",
+     "welcome": false
+    }
+   },
+   "tip_prediction": "render (match predicted if Java renders the joined/stripped text)"
+  },
+  {
+   "name": "or5_theme_uml_nested_outer_continued",
+   "java_prediction_valid": true,
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "87e980d4ce0433f433b83b344e7e2afba25dc6169512afa752626106aff30dc1",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 6: Syntax error: no registered sequence command accepts \"#00AA00\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 6: Syntax error: no registered sequence command accepts \"#00AA00\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "655c39fb320e27f6c9fdce45c5a243448116a9fded456a80f64a69c2bd92259e",
+     "stderr": "",
+     "welcome": false
+    },
+    "d28dd64a9": {
+     "exit": 0,
+     "svg_sha256": "2375755361876bce6896fb47e23e3f3c5eb188a43ff32cc760d6babe1218ce82",
+     "stderr": "",
+     "welcome": false
+    },
+    "cb550c0d6": {
+     "exit": 0,
+     "svg_sha256": "655c39fb320e27f6c9fdce45c5a243448116a9fded456a80f64a69c2bd92259e",
+     "stderr": "",
+     "welcome": false
+    }
+   },
+   "tip_prediction": "render (match predicted if Java renders the joined/stripped text)"
+  },
+  {
+   "name": "or5_ebnf_leading_inner_comment",
+   "java_prediction_valid": true,
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "551df226fc946a62a0df1ca093dab9ec1e0c879d54cf3e285483a04f4df32cca",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "551df226fc946a62a0df1ca093dab9ec1e0c879d54cf3e285483a04f4df32cca",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "bffbebe984945ba43032cf66fc6cb3572117d69cd25a6c1be1f50f99845fd36b",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "bffbebe984945ba43032cf66fc6cb3572117d69cd25a6c1be1f50f99845fd36b",
+     "stderr": "",
+     "welcome": false
+    },
+    "d28dd64a9": {
+     "exit": 0,
+     "svg_sha256": "551df226fc946a62a0df1ca093dab9ec1e0c879d54cf3e285483a04f4df32cca",
+     "stderr": "",
+     "welcome": false
+    },
+    "cb550c0d6": {
+     "exit": 0,
+     "svg_sha256": "bffbebe984945ba43032cf66fc6cb3572117d69cd25a6c1be1f50f99845fd36b",
+     "stderr": "",
+     "welcome": false
+    }
+   },
+   "tip_prediction": "render (match predicted if Java renders the joined/stripped text)"
+  },
+  {
+   "name": "or5_ebnf_special_inner_comment",
+   "java_prediction_valid": true,
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "551df226fc946a62a0df1ca093dab9ec1e0c879d54cf3e285483a04f4df32cca",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "551df226fc946a62a0df1ca093dab9ec1e0c879d54cf3e285483a04f4df32cca",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unexpected character in EBNF: '/'\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unexpected character in EBNF: '/'\n",
+     "welcome": false
+    },
+    "d28dd64a9": {
+     "exit": 0,
+     "svg_sha256": "551df226fc946a62a0df1ca093dab9ec1e0c879d54cf3e285483a04f4df32cca",
+     "stderr": "",
+     "welcome": false
+    },
+    "cb550c0d6": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unexpected character in EBNF: '/'\n",
+     "welcome": false
+    }
+   },
+   "tip_prediction": "render (match predicted if Java renders the joined/stripped text)"
+  },
+  {
+   "name": "or5_definelong_two_line_comments",
+   "java_prediction_valid": true,
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "ce829adb748cf758ec4cd31a67e53e00a17c92c3c61e4d18df5f008335950c99",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "ce829adb748cf758ec4cd31a67e53e00a17c92c3c61e4d18df5f008335950c99",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"/' one '/ Alice -> Bob : first\"\n",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "93da99b739a6b0de530d66ca8cb5bad8f1d33b498ef58da0d897e13cf1310442",
+     "stderr": "",
+     "welcome": false
+    },
+    "d28dd64a9": {
+     "exit": 0,
+     "svg_sha256": "ce829adb748cf758ec4cd31a67e53e00a17c92c3c61e4d18df5f008335950c99",
+     "stderr": "",
+     "welcome": false
+    },
+    "cb550c0d6": {
+     "exit": 0,
+     "svg_sha256": "93da99b739a6b0de530d66ca8cb5bad8f1d33b498ef58da0d897e13cf1310442",
+     "stderr": "",
+     "welcome": false
+    }
+   },
+   "tip_prediction": "render (match predicted if Java renders the joined/stripped text)"
+  },
+  {
+   "name": "or5_definelong_class_trailing",
+   "java_prediction_valid": true,
+   "rust": {
+    "c4b5a8436": {
+     "exit": 0,
+     "svg_sha256": "270f041c1fc26de7114825c421a84ebc76e596bccee5481bc5924ce8be21b116",
+     "stderr": "",
+     "welcome": false
+    },
+    "9dc1af5f9": {
+     "exit": 0,
+     "svg_sha256": "270f041c1fc26de7114825c421a84ebc76e596bccee5481bc5924ce8be21b116",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "270f041c1fc26de7114825c421a84ebc76e596bccee5481bc5924ce8be21b116",
+     "stderr": "",
+     "welcome": false
+    },
+    "32684f81e": {
+     "exit": 0,
+     "svg_sha256": "270f041c1fc26de7114825c421a84ebc76e596bccee5481bc5924ce8be21b116",
+     "stderr": "",
+     "welcome": false
+    },
+    "d28dd64a9": {
+     "exit": 0,
+     "svg_sha256": "270f041c1fc26de7114825c421a84ebc76e596bccee5481bc5924ce8be21b116",
+     "stderr": "",
+     "welcome": false
+    },
+    "cb550c0d6": {
+     "exit": 0,
+     "svg_sha256": "270f041c1fc26de7114825c421a84ebc76e596bccee5481bc5924ce8be21b116",
+     "stderr": "",
+     "welcome": false
+    }
+   },
+   "tip_prediction": "render (match predicted if Java renders the joined/stripped text)"
+  }
+ ]
+}

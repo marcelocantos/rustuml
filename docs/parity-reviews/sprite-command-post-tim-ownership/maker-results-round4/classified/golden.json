@@ -1,0 +1,10 @@
+{
+ "pairs": {
+  "nonpositive-rejected->nonpositive-rejected": 202,
+  "match->match": 11181,
+  "nonpositive-accepted->nonpositive-accepted": 997,
+  "mismatch->mismatch": 70,
+  "compare-101->compare-101": 100
+ },
+ "changes": []
+}

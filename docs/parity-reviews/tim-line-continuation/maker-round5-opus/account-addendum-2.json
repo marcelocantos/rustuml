@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-line-continuation",
+  "target": "T14.22",
+  "round": 5,
+  "maker": "claude-opus-5-5",
+  "kind": "post-measurement addendum, committed before the change it plans. Measurement had started on 29c930a5f (replays in progress) and the held-out or5 probes below had been run through the Rust builds; no Java result exists for them.",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "observation": {
+    "probes": "Batch or5 (held-out, not in any corpus), run through Rust only: or5_theme_uml_last_line_open (local theme whose last line is 'skinparam ArrowThickness \\', main source continues with '2') and or5_theme_uml_nested_outer_continued (outer local theme '!theme or5flat from .' then 'skinparam ArrowColor \\' + '#00AA00').",
+    "rust": "At 29c930a5f and 9dc1af5f9 both are valid-input errors: 'no registered sequence command accepts \"2\"' and '... accepts \"#00AA00\"'. 9ed52f435 errors on both too; 32684f81e and cb550c0d6 render both (exit 0). d28dd64a9 renders the nested case and errors on the open tail.",
+    "cause": "The draft joins each theme body on its own (collapse_post_tim_ending_backslashes(expanded, None, true)) and skips a body that contains a nested theme. Java has one result list: TContext#executeTheme (tim/TContext.java:725-745) runs the theme body through executeLines into the same list as the main source, and a nested !theme puts its body there in place. UmlSource#loadInternal (core/UmlSource.java:118-134) joins that one list in order, so (a) a theme's last continued line joins the next list line after the !theme line, wherever it comes from, and (b) an outer body's continued line joins across a nested body's lines in list order (the nested body's first line, if the nested body is not empty)."
+  },
+  "java_prediction": {
+    "or5_theme_uml_last_line_open": "valid: 'skinparam ArrowThickness ' + '2' becomes 'skinparam ArrowThickness 2' at the main line's location.",
+    "or5_theme_uml_nested_outer_continued": "valid: the nested or5flat body comes first in the list ('skinparam BackgroundColor #EEEEFF'), then 'skinparam ArrowColor ' + '#00AA00' joins inside the outer body."
+  },
+  "planned_change": "Replace the per-body join with one post-TIM join over Java's result-list order. project_events walks the events in order (main lines, a theme's body in place of its !theme line, a nested body in place of its !theme line) and carries a single pending join across those streams. A continued TIM line (Text or Executed whose text endsWithBackslash) is folded into pending and emits nothing; the next TIM line, in whatever stream, receives the joined text at its own position and source line, exactly as collapse_post_tim_ending_backslashes does within one stream (same marker and shift rules per stream; Rust-only lines are passed over). After the walk, a pending tail joins block_end as before, unless block_end itself ends with a backslash; otherwise it is dropped (Java never adds it). With check_ending_backslash false, every stream is tim_texts as before. The joined text of a theme line that closes in the main stream is a main-stream line; the parser reads it there, as Java's parser reads it at that list position. keep_open_tail and the nested-theme exemption go away. Java: UmlSource.java:118-134, TContext.java:725-745, PSystemBuilder.java:210-212.",
+  "residue_retired": [
+    "Addendum 1 residue 'a theme body's last continued line keeps its backslash': retired by this change.",
+    "Addendum 1 residue 'a body containing a nested theme is not joined': retired by this change."
+  ],
+  "residue_kept": [
+    "JavaOnlyLines (a Java-bundled theme this distribution does not ship) has no text in Rust, so a join cannot see its lines; it stays a pass-over, as before.",
+    "Theme bodies are still relocated to theme_tail for the parser envelope; only the join order follows Java's list."
+  ],
+  "measurement": "Same as addendum 1. The tip is rebuilt from a fresh git archive and replayed over every cohort; the other builds' runs stand. The or5 batch is staged as a relay request with Rust predictions from the rebuilt tip, recorded before any Java result."
+}

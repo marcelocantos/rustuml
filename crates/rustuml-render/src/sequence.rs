@@ -3094,7 +3094,28 @@ fn format_autonumber(n: u32, format: &Option<String>) -> String {
     }
 }
 
+// SvgGraphics#getTransformer selects us-ascii. OpenJDK 21.0.5
+// ToStream#writeAttrString/accumDefaultEscape preserves attribute whitespace
+// with references and emits non-ASCII Unicode scalars as decimal references.
+// Source trace: sequence-local-attribute-serialization (account 3b38384b3).
 fn escape_xml(s: &str) -> String {
+    let mut escaped = String::with_capacity(s.len());
+    for ch in s.chars() {
+        match ch {
+            '&' => escaped.push_str("&amp;"),
+            '<' => escaped.push_str("&lt;"),
+            '>' => escaped.push_str("&gt;"),
+            '"' => escaped.push_str("&quot;"),
+            '\n' | '\r' | '\t' => write!(escaped, "&#{};", u32::from(ch)).unwrap(),
+            ch if !ch.is_ascii() => write!(escaped, "&#{};", u32::from(ch)).unwrap(),
+            ch => escaped.push(ch),
+        }
+    }
+    escaped
+}
+
+// Keep the existing text-node consumer separate from attribute serialization.
+fn escape_xml_text(s: &str) -> String {
     s.replace('&', "&amp;")
         .replace('<', "&lt;")
         .replace('>', "&gt;")
@@ -3122,14 +3143,14 @@ fn emit_handwritten_warning(svg: &mut String, warning: &OracleHandwrittenWarning
             escape_xml(text_length),
             fmt_coord(warning.text.x),
             fmt_coord(warning.text.y),
-            escape_xml(&warning.text.text),
+            escape_xml_text(&warning.text.text),
         ),
         None => write!(
             svg,
             r##"<text fill="#000000" font-family="monospace" font-size="10" x="{}" y="{}">{}</text>"##,
             fmt_coord(warning.text.x),
             fmt_coord(warning.text.y),
-            escape_xml(&warning.text.text),
+            escape_xml_text(&warning.text.text),
         ),
     }
     .unwrap();
@@ -3217,6 +3238,8 @@ struct ParticipantLayout {
     lifeline_line_x: f64,
     /// Optional `[[url]]` link attached to the participant declaration.
     url: Option<String>,
+    /// Url#getTooltip of that link when a `{tooltip}` was declared.
+    url_tooltip: Option<String>,
     /// Optional per-participant background colour from the declaration.
     color: Option<String>,
     /// 1-based line number within the `@startuml` block.
@@ -4572,6 +4595,8 @@ struct PlantUmlSvg {
     /// `participant_group_open` and consumed by `participant_group_close`. When
     /// present the shape contents are wrapped in a PlantUML `[[url]]` anchor.
     active_participant_url: Option<String>,
+    /// Url#getTooltip of the active participant link, when declared.
+    active_participant_title: Option<String>,
     /// Corner radius (rx/ry) for participant head/tail boxes. Defaults to
     /// `HEAD_BOX_RX` (2.5 = RoundCorner 5 / 2) and is overridden to
     /// `RoundCorner / 2` by `skinparam RoundCorner N`.
@@ -4616,6 +4641,7 @@ impl PlantUmlSvg {
             lifeline_border: "#181818".into(),
             lifeline_border_thickness: "0.5".into(),
             active_participant_url: None,
+            active_participant_title: None,
             head_box_rx: HEAD_BOX_RX,
             note_corner_radius: 0.0,
             note_border_thickness: "0.5".into(),
@@ -4725,7 +4751,7 @@ impl PlantUmlSvg {
         // spanning [seg_top, seg_bottom]. The rect keeps the original `rect_x`.
         let emit_segment = |this: &mut Self, seg_top: f64, seg_bottom: f64| {
             this.buf.push_str("<g>");
-            write!(this.buf, "<title>{}</title>", escape_xml(title)).unwrap();
+            write!(this.buf, "<title>{}</title>", escape_xml_text(title)).unwrap();
             if this.handwritten {
                 let points = handwritten_rect_points(
                     rect_x,
@@ -4967,9 +4993,11 @@ impl PlantUmlSvg {
         // shape contents (text + glyph) in a link anchor inside the group.
         if let Some(url) = self.active_participant_url.clone() {
             let h = escape_xml(&url);
+            // Url#getTooltip: the declared {tooltip}, else the URL.
+            let t = escape_xml(self.active_participant_title.as_deref().unwrap_or(&url));
             write!(
                 self.buf,
-                r#"<a href="{h}" target="_top" title="{h}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{h}" xlink:type="simple">"#,
+                r#"<a href="{h}" target="_top" title="{t}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{t}" xlink:type="simple">"#,
             )
             .unwrap();
         }
@@ -6676,6 +6704,7 @@ fn render_participant_shape(
     // Make the participant's link (if any) available to the group open/close
     // helpers so the shape contents get wrapped in a link anchor.
     svg.active_participant_url = p.url.clone();
+    svg.active_participant_title = p.url_tooltip.clone();
     let outer_font_size = svg.participant_font_size;
     svg.participant_font_size = p.font_size;
     match p.kind {
@@ -6826,6 +6855,7 @@ fn render_participant_shape(
         }
     }
     svg.active_participant_url = None;
+    svg.active_participant_title = None;
     svg.participant_font_size = outer_font_size;
 }
 
@@ -7941,6 +7971,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 center_x: 0.0,
                 lifeline_line_x: 0.0,
                 url: p.url.clone(),
+                url_tooltip: p.url_tooltip.clone(),
                 color: p.color.clone(),
                 source_line: p.source_line as u32,
             }
@@ -12681,7 +12712,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let close_up = i == 0;
             let close_down = i == n - 1;
             svg.buf.push_str("<g>");
-            write!(svg.buf, "<title>{}</title>", escape_xml(title)).unwrap();
+            write!(svg.buf, "<title>{}</title>", escape_xml_text(title)).unwrap();
             // DrawableSet#clipAndTranslate2 clips the complete component pass.
             // DriverRectangleSvg#draw trims rectangles but preserves their groups.
             let bottom = if has_newpage {
@@ -12970,6 +13001,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         if let Some((pi, fill_color, draw_control_glyph)) = created_inline.get(&ev_idx) {
             // The created participant's box occupies the next message-id slot.
             let mut shifted = participants[*pi].clone();
+            // ArrowAndParticipant#drawInternalU calls drawParticipantHead
+            // directly; only DrawableSet#drawHeadTailU opens the participant
+            // URL (UGraphic#startUrl), so the created head is not a link.
+            shifted.url = None;
+            shifted.url_tooltip = None;
             let p = if diagram.teoz {
                 let Event::Message(message) = &diagram.events[ev_idx] else {
                     unreachable!()
@@ -12995,7 +13031,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 shifted.center_x += shift;
                 &shifted
             } else {
-                &participants[*pi]
+                &shifted
             };
             let part_uid = format!("part{}", p.decl_idx + 1);
             let sl = p.source_line;
@@ -16265,6 +16301,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn sequence_attributes_preserve_xml_whitespace_and_unicode_scalars() {
+        assert_eq!(
+            super::escape_xml("&<>\"'\n\r\té枝😀"),
+            "&amp;&lt;&gt;&quot;'&#10;&#13;&#9;&#233;&#26525;&#128512;"
+        );
+        assert_eq!(super::escape_xml("&#10;"), "&amp;#10;");
+        assert_eq!(super::escape_xml_text("a\nb\té"), "a\nb\té");
+    }
+
     use super::*;
 
     fn text_baseline(svg: &str, label: &str) -> f64 {
@@ -17050,6 +17096,7 @@ mod tests {
                     stereotype: None,
                     stereotype_position_bottom: false,
                     url: None,
+                    url_tooltip: None,
                     color: None,
                     source_line: 1,
                 },
@@ -17061,6 +17108,7 @@ mod tests {
                     stereotype: None,
                     stereotype_position_bottom: false,
                     url: None,
+                    url_tooltip: None,
                     color: None,
                     source_line: 1,
                 },

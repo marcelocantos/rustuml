@@ -1,0 +1,5 @@
+@startuml
+participant Spruce
+queue Cedar order 2.5
+Spruce -> Cedar: pollen
+@enduml

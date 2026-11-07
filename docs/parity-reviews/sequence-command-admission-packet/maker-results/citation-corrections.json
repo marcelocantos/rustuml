@@ -1,0 +1,17 @@
+{
+  "corrections": [
+    {
+      "original": "CommandAutonumberResume#getRegexConcat",
+      "actual": "CommandAutonumberResume#getConcat",
+      "source": "sequencediagram/command/CommandAutonumberResume.java",
+      "account": "sequence-resume-citation-correction"
+    },
+    {
+      "original": "PSystemBuilder#initFactories in the new size-dispatch account",
+      "actual": "PSystemBuilder private constructor, lines128\u2013132",
+      "source": "PSystemBuilder.java",
+      "note": "New evidence corrects method naming without rewriting the committed account; factory order and createPSystem230\u2013255 remain the causal path."
+    }
+  ],
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+}

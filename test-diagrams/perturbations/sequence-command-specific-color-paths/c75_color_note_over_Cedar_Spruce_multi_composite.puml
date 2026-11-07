@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+note over Cedar,Spruce #back:PaleGreen;line:Indigo
+rings
+endnote
+@enduml

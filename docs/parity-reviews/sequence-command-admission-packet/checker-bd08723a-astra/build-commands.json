@@ -1,0 +1,54 @@
+[
+  {
+    "label": "before",
+    "revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-bd08723a",
+    "command": [
+      "cargo",
+      "build",
+      "--release",
+      "--jobs",
+      "4",
+      "-p",
+      "rustuml",
+      "-p",
+      "rustuml-oracle",
+      "--bin",
+      "rustuml",
+      "--example",
+      "diff_one"
+    ],
+    "env": {
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/target-before"
+    },
+    "exit": 0,
+    "log": "logs/build-before.log.gz"
+  },
+  {
+    "label": "after",
+    "revision": "c6295ccdef39719b60f0e88dfd9555919523c961",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-bd08723a",
+    "command": [
+      "cargo",
+      "build",
+      "--release",
+      "--jobs",
+      "4",
+      "-p",
+      "rustuml",
+      "-p",
+      "rustuml-oracle",
+      "--bin",
+      "rustuml",
+      "--example",
+      "diff_one"
+    ],
+    "env": {
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/target-after"
+    },
+    "exit": 0,
+    "log": "logs/build-after.log.gz"
+  }
+]

@@ -1,0 +1,3 @@
+@startuml
+A -> B : "x/'''k-1'''/y"
+@enduml

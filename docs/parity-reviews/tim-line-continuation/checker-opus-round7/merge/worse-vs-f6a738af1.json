@@ -1,0 +1,430 @@
+{
+ "total": 44,
+ "outside_allowed": [
+  {
+   "cohort": "dn",
+   "case": "q8_cr_inside_marked",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "dm",
+   "case": "o7p_fmt_no_space",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "dm",
+   "case": "o7p_fmt_indented",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  }
+ ],
+ "rows": [
+  {
+   "cohort": "dn",
+   "case": "q8_cr_inside_marked",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "dm",
+   "case": "o7p_fmt_no_space",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "dm",
+   "case": "o7p_fmt_indented",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "dj",
+   "case": "r5b_num_unmarked_bs_end_only",
+   "kind": "lost_match",
+   "in_review5_approved": false,
+   "named_inherited": true,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "dj",
+   "case": "r5b_start_bs_chen",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": true
+  },
+  {
+   "cohort": "dj",
+   "case": "r5b_start_bs_files",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "named_inherited": true,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "dj",
+   "case": "r5b_start_bs_creole",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "named_inherited": true,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "dj",
+   "case": "r5b_nest_uml_content_bs_json",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "named_inherited": true,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "df",
+   "case": "cr5o_scope_uml_usecase_theme",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_cnt_exit_alone",
+   "kind": "lost_welcome_match",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_exit_mid",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_ws_ideo_exit",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_inc_cr_only_lines",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_sfx_include_many",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_inc_yaml_header_raw",
+   "kind": "lost_match",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "ca",
+   "case": "cr3_end_tim_chr64_enduml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "ca",
+   "case": "cr3_end_tim_chr92_enduml",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "ca",
+   "case": "cr3_wrap_first_is_mindmap",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "by",
+   "case": "cr2_seq_two_blocks_first_swallowed",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "named_inherited": false,
+   "by_inherited": true,
+   "chen": false
+  },
+  {
+   "cohort": "by",
+   "case": "cr2_seq_pre_start_backslash_text",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "bw",
+   "case": "r2_component_include_tail_then_variable",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "bd",
+   "case": "mc1_usecase_continued",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "ba",
+   "case": "ck4_usecase_leading_actor_line",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "az",
+   "case": "mk4b_theme_trailing_comment_usecase",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "ax",
+   "case": "ck3_usecase_note_top_of_paren",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "ax",
+   "case": "ck3_class_enum_upper_body",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "av",
+   "case": "mk3_usecase_right_header_body",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "av",
+   "case": "mk3_deployment_archimate_body",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "at",
+   "case": "ck_usecase_header_body",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "fresh",
+   "case": "mk2_proc_uninvoked_svg_usecase",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "fresh",
+   "case": "mk2_usecase_note_upper",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "retained",
+   "case": "case_tabs",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "retained",
+   "case": "hexagon_empty_tb",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "retained",
+   "case": "checker_lr_relationship_created_endpoints",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "retained",
+   "case": "followup2_exclusive_artifact_container_nested_database_lr",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "retained",
+   "case": "followup2_exclusive_storage_container_nested_queue_tb",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "retained",
+   "case": "followup2_root_mixedcase_component_quoted_as_tb",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "retained",
+   "case": "followup2_root_mixedcase_storage_bare_lr",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "retained",
+   "case": "followup2_root_upper_component_bare_lr",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "retained",
+   "case": "followup2_root_upper_queue_quoted_as_tb",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "retained",
+   "case": "followup2_shared_cloud_nested_upper_database_lr",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "retained",
+   "case": "followup_root_mixedcase_node_quoted_as_tb",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "retained",
+   "case": "followup_root_upper_database_bare_lr",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "retained",
+   "case": "checker_plain_state_paint_control",
+   "kind": "new_valid_error",
+   "in_review5_approved": true,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  }
+ ]
+}

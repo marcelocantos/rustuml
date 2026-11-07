@@ -1,0 +1,876 @@
+{
+  "entries": 30,
+  "before_rejections": 0,
+  "after_rejections": 4,
+  "introduced_losses": [],
+  "after_false_accepts": [
+    "cr3_dir_define_start.puml",
+    "cr3_dir_procedure_start.puml",
+    "cr3_dir_if_start.puml",
+    "cr3_dir_include_start.puml",
+    "cr3_dir_option_start.puml",
+    "cr3_dir_log_start.puml",
+    "cr3_dir_dump_start.puml",
+    "cr3_dir_startsub_start.puml",
+    "cr3_dir_startsub_middle.puml",
+    "cr3_dir_startsub_end.puml",
+    "cr3_two_one_line_after_join.puml",
+    "cr3_two_zero_content_end_continued.puml",
+    "cr3_two_end_continued_after_two.puml",
+    "cr3_two_comments_only.puml",
+    "cr3_two_directives_only.puml",
+    "cr3_two_double_tail.puml",
+    "cr3_two_activity_tail.puml",
+    "cr3_two_nojoin_option_handwritten.puml",
+    "cr3_two_include_tail_then_dump.puml",
+    "cr3_end_bs_in_block_comment.puml",
+    "cr3_end_at_in_block_comment.puml",
+    "cr3_end_bs_in_if0.puml",
+    "cr3_end_at_in_if0.puml",
+    "cr3_end_bs_in_procdef.puml",
+    "cr3_end_nel_before_bs_end.puml",
+    "cr3_wrap_tail_runs_into_second_block.puml"
+  ],
+  "results": [
+    {
+      "source": "cr3_dir_define_start.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8c0eb51f9776165e25f95079cea158df59a99bb6e595c4faf56d569f82a6094a",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_dir_procedure_start.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "a5a6773c1dcba42ecdd41e4c55c235779a4a0c85bcaf31aaf1f1110091504c02",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_dir_if_start.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "865ddfe7d0e1c987d326ecfab734dfccfed00de0202bfdad422a6f56684c08cc",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_dir_include_start.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8c0eb51f9776165e25f95079cea158df59a99bb6e595c4faf56d569f82a6094a",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_dir_option_start.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8c0eb51f9776165e25f95079cea158df59a99bb6e595c4faf56d569f82a6094a",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_dir_log_start.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8c0eb51f9776165e25f95079cea158df59a99bb6e595c4faf56d569f82a6094a",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_dir_dump_start.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "7864c6325cc12dc7a23bc5a5174a1db89911cd4e2e16adf79980eec9c215598f",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "46f8752e47626434ed14dfdee5741298f4987c7dc07ac9ad130b95b4f9b45906",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_dir_startsub_start.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "865ddfe7d0e1c987d326ecfab734dfccfed00de0202bfdad422a6f56684c08cc",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_dir_startsub_middle.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "64cb2d7ce97b6d9f0f231d54c0f5e41b278367ddaf35fadbbbe173e1496ea559",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8629db689f1b6fbe971397ca5705135d623f141560600051d0dfed840fea8abf",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_dir_startsub_end.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "ab7aee2f21556b67289ba0583c96890b4299855ad97f0be753bfe8e8aa05ee45",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "9edc80e7b41a2cea147c87b7a3ade2068a6ed2c19d9f7dfa4f82d5f82edcd5f8",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_two_one_line_after_join.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "cb3eadb45f3eb42efbe034c49c9d564db10f2994aa1e12be98d03933fadfd969",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_two_zero_content_end_continued.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_two_end_continued_after_two.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "526b4c6121d2623bd08c04bd0ddcb128b525b656dfb2ced29fdf6cd858010ae1",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_two_comments_only.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "cb3eadb45f3eb42efbe034c49c9d564db10f2994aa1e12be98d03933fadfd969",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_two_directives_only.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "865ddfe7d0e1c987d326ecfab734dfccfed00de0202bfdad422a6f56684c08cc",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_two_double_tail.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "5f380dcf91ca12afd68e12fd128470ba6685aa043c97d314fea27970c1002576",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_two_activity_tail.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_two_nojoin_option_handwritten.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "0c5bb9d6ebbc7e20516f4d6372f648d725fcf9504eacd3e57a20ac7099681724",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "0c5bb9d6ebbc7e20516f4d6372f648d725fcf9504eacd3e57a20ac7099681724",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_two_include_tail_then_dump.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b840dc3a7d0efa40a26cbb44c59d80978180453cbec5352b30472a5652209f3b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "4c4a02137c7f97e2d5f7efc55593ef44efa2df189483231ac843c828a04e3d8a",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_end_bs_End_case.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\Enduml\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_end_double_backslash.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\\\\\enduml\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_end_bs_in_block_comment.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e9c9208b051f5aec902808eafdf5f700f2c3dfc5e7a6a7aa2bdb8d6d478154dc",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e9c9208b051f5aec902808eafdf5f700f2c3dfc5e7a6a7aa2bdb8d6d478154dc",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_end_at_in_block_comment.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_end_bs_in_if0.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e9c9208b051f5aec902808eafdf5f700f2c3dfc5e7a6a7aa2bdb8d6d478154dc",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_end_at_in_if0.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_end_bs_in_procdef.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "be089d2b889340383c0b9e1ea5a322d52cf8955baacbeeded10d6beed204cfa9",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_end_bs_in_note.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "7442cfea841708b5abf76c7e229f2ca5e44c088a8fbe5e6f046367ec4b458459",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"note over Kea\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_end_nel_before_bs_end.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "3d087458bcfdda6916070e23b7b0001c6fa3fb288828e12028072c05bc07655b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_end_nbsp_before_bs_end.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{a0}\\\\enduml\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "cr3_wrap_tail_runs_into_second_block.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e824cbb6125d11339c6883be05e401d64b46080358ccd8745afcc6c0961475db",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round3-claude-checker/bin/rustuml-d28dd64a9",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c40cc376304956f2092c3fc8cc7c3216e2623bc87f9a20066d3ba716ba467e6f",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    }
+  ]
+}

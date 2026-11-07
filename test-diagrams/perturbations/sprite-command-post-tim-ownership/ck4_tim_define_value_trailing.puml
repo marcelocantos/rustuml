@@ -1,0 +1,4 @@
+@startuml
+!define GREET hello /' c '/
+A -> B : GREET world
+@enduml

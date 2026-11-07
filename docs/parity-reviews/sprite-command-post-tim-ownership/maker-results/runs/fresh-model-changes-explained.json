@@ -1,0 +1,451 @@
+{
+ "categories": {
+  "diagram/meta/source": 54,
+  "diagram/events/[]/source_line + diagram/meta/source": 2,
+  "diagram/meta/source + diagram/meta/sprites": 2,
+  "diagram/meta/source + diagram/meta/sprites/needle/height + diagram/meta/sprites/needle/rows": 2,
+  "diagram/participants/[]/url_tooltip": 12
+ },
+ "rows": [
+  {
+   "source": "c75_sprite_nested_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_nested_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_attribute_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_attribute_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_back_to_back_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_back_to_back_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_uppercase_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_uppercase_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_mixed_nbsp_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_mixed_nbsp_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_pixel_end_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_pixel_end_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_pixel_compact_end_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_pixel_compact_end_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_compressed_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_compressed_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_one_line_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_one_line_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_procedure_teoz.puml",
+   "differing_paths": [
+    "diagram/events/[]/source_line",
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_function_teoz.puml",
+   "differing_paths": [
+    "diagram/events/[]/source_line",
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_if_true_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source",
+    "diagram/meta/sprites"
+   ]
+  },
+  {
+   "source": "c75_sprite_if_true_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source",
+    "diagram/meta/sprites"
+   ]
+  },
+  {
+   "source": "c75_sprite_if_false_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_if_false_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_body_if_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source",
+    "diagram/meta/sprites/needle/height",
+    "diagram/meta/sprites/needle/rows"
+   ]
+  },
+  {
+   "source": "c75_sprite_body_if_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source",
+    "diagram/meta/sprites/needle/height",
+    "diagram/meta/sprites/needle/rows"
+   ]
+  },
+  {
+   "source": "c75_sprite_last_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_sprite_last_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_include_closed_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_include_closed_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_include_child_to_parent_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_include_child_to_parent_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_include_nested_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_include_nested_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_use_svg_class.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_unused_svg_class.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_use_pixel_class.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_unused_pixel_class.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_use_svg_state.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_unused_svg_state.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_use_pixel_state.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_unused_pixel_state.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_use_svg_activity.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_unused_svg_activity.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_use_pixel_activity.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_unused_pixel_activity.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_use_svg_usecase.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_unused_svg_usecase.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_use_pixel_usecase.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_unused_pixel_usecase.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_use_svg_component.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_unused_svg_component.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_use_pixel_component.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_unused_pixel_component.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_use_svg_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_use_svg_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_use_pixel_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_use_pixel_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75_participant_link_teoz.puml",
+   "differing_paths": [
+    "diagram/participants/[]/url_tooltip"
+   ]
+  },
+  {
+   "source": "c75_participant_combined_teoz.puml",
+   "differing_paths": [
+    "diagram/participants/[]/url_tooltip"
+   ]
+  },
+  {
+   "source": "c75_actor_link_teoz.puml",
+   "differing_paths": [
+    "diagram/participants/[]/url_tooltip"
+   ]
+  },
+  {
+   "source": "c75_actor_combined_teoz.puml",
+   "differing_paths": [
+    "diagram/participants/[]/url_tooltip"
+   ]
+  },
+  {
+   "source": "c75_boundary_link_teoz.puml",
+   "differing_paths": [
+    "diagram/participants/[]/url_tooltip"
+   ]
+  },
+  {
+   "source": "c75_control_link_teoz.puml",
+   "differing_paths": [
+    "diagram/participants/[]/url_tooltip"
+   ]
+  },
+  {
+   "source": "c75_entity_link_teoz.puml",
+   "differing_paths": [
+    "diagram/participants/[]/url_tooltip"
+   ]
+  },
+  {
+   "source": "c75_database_link_teoz.puml",
+   "differing_paths": [
+    "diagram/participants/[]/url_tooltip"
+   ]
+  },
+  {
+   "source": "c75_collections_link_teoz.puml",
+   "differing_paths": [
+    "diagram/participants/[]/url_tooltip"
+   ]
+  },
+  {
+   "source": "c75_queue_link_teoz.puml",
+   "differing_paths": [
+    "diagram/participants/[]/url_tooltip"
+   ]
+  },
+  {
+   "source": "c75_create_combined_teoz.puml",
+   "differing_paths": [
+    "diagram/participants/[]/url_tooltip"
+   ]
+  },
+  {
+   "source": "c75s_svg_variable_name_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75s_svg_variable_name_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "c75s_participant_link_inside_label_teoz.puml",
+   "differing_paths": [
+    "diagram/participants/[]/url_tooltip"
+   ]
+  }
+ ]
+}

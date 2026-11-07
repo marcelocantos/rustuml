@@ -1,0 +1,5 @@
+@startuml
+Tui -> Kea : y
+Kea -> Tui : x %chr(92)
+!theme plain
+@enduml

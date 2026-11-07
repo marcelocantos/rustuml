@@ -1,0 +1,8 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+sprite $needle <svg width="3" height="4">
+!include c75_end.inc
+Spruce --> Cedar: ring
+@enduml

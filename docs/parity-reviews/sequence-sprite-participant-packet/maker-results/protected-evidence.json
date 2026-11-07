@@ -1,0 +1,13 @@
+{
+  "prior_paths": 14413,
+  "unchanged": true,
+  "imported_rejection": "a2f0aa4083b8e1195f19e9434b6d6a4be7e407f9",
+  "import_commit": "2b8dc61e28943773a71c13ffbbeb52a2d4500f8a",
+  "imported_paths": 1267,
+  "imported_bytes_equal": true,
+  "production_files": [
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "comparator_source_sha256": "d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701"
+}

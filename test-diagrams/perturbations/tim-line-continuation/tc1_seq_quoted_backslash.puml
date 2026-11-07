@@ -1,0 +1,5 @@
+@startuml
+participant "Wide \
+Name" as W
+W -> W : self
+@enduml

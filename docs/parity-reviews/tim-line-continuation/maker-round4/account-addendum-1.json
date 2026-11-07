@@ -1,0 +1,13 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-line-continuation",
+ "target": "T14.22",
+ "round": 4,
+ "addendum": 1,
+ "account": "9ee6c154c",
+ "status": "written during the draft, before any measurement of a round-4 build",
+ "observation": "Working-build check of CA cr3_dir_theme_start ('!theme plain', then a %chr(92) tail, then @enduml): the identity-based count is 2, so Rust gives the Welcome page; Java renders the message. 'plain' is one of themes::JAVA_BUNDLED_UNSHIPPED_THEMES: Java loads it from its jar, while Rust leaves only the ParserOnly 'skinparam __theme plain' marker, so the identity projection has none of the theme's lines.",
+ "java_trace": "TContext#executeTheme (tim/TContext.java:725-745) reads the theme ThemeUtils.loadBundledOrLocalTheme found and runs executeLines over its body, so the theme's PLAIN lines (skinparam, style) enter the result list where '!theme' stood. Java's bundled 'plain' and the other unshipped themes are non-empty, so the span adds at least one line after the join.",
+ "change": "The line count gets its own walk of the events (block_line_count): Plain, Boundary and Executed text, Theme bodies recursively, and one placeholder line for an unshipped Java-bundled theme, then the loadInternal join count. For the 1 and 2 thresholds 'at least one line' decides exactly as Java's real body would (any non-empty span yields at least one joined line). The unshipped theme gets its own event kind (JavaOnlyLines) so it is told apart from Rust-only ParserOnly lines; its parser projection is unchanged (the RustOnly marker), and the identity projection used for uml_source is unchanged (no theme text is invented).",
+ "residue": "The joined text Java builds from the theme's real lines (a tail before '!theme plain' joins with the theme's first line) cannot be reproduced without the theme source; T14.62's theme residue is unchanged."
+}

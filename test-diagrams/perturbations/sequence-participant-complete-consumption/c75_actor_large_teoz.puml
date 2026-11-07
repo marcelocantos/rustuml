@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Spruce
+actor Cedar order 9999999
+Spruce -> Cedar: pollen
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+node Server
+footer
+SPRITE QUEUE FLUSHED NOW
+endfooter
+@enduml

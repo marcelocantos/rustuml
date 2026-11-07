@@ -1,0 +1,5 @@
+@startuml
+!$v = "smetana"
+!pragma layout $v
+Kea -> Tui : x %chr(92)
+@enduml

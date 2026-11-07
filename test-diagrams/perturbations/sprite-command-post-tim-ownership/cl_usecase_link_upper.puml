@@ -1,0 +1,4 @@
+@startuml
+actor Hero
+Sprite -- (Play)
+@enduml

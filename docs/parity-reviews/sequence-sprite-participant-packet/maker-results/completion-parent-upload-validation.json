@@ -1,0 +1,14 @@
+{
+  "remote_input": "/Users/marcelo/rustuml-reference/scratch/transfer.2epL7tNh/input-bundle.json.gz",
+  "input_sha256": "e7dc8f9f17592030b65e8c8d66d9bb036adf0826411c391f6a7c105d3b229fb9",
+  "original_input_sha256": "52be239fd10e7c9fd318b9edc557a825f6ef47eb3f1581a8e2565dbed099b1e4",
+  "cases": 4,
+  "manifest_sha256": "75be27ad4c869df998a9a6cb08444c7668cff0102a671c035bf80e5e58d23ff0",
+  "mapping": "original bundle content unchanged plus exact manifest bytes base64; files[].path = case name + .puml",
+  "intended_invalid": [
+    "svg_unclosed_legacy",
+    "svg_unclosed_teoz",
+    "pixel_unclosed_legacy",
+    "pixel_unclosed_teoz"
+  ]
+}

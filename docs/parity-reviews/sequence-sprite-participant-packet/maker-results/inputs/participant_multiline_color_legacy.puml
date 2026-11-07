@@ -1,0 +1,7 @@
+@startuml
+participant Ridge #NotAColourAtAll [
+Ridge
+]
+Ridge -> Valley: survey
+Valley --> Ridge: logged
+@enduml

@@ -1,0 +1,64 @@
+{
+ "schema_version": 1,
+ "mechanism": "sequence-participant-silent-residue",
+ "round": 3,
+ "role": "maker (not a review); independent checker required",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "commits": {
+  "account": "9b2e4758f",
+  "url_builder": "cde7b092c",
+  "add_with_order": "b461817d4",
+  "tip": "cd82c28dd"
+ },
+ "participant_cases": {
+  "AT_10": {
+   "vs_93bf53e18": {
+    "match->match": 5,
+    "mismatch->match": 4,
+    "mismatch->mismatch": 1
+   },
+   "vs_dea00b29": {
+    "match->match": 5,
+    "mismatch->match": 4,
+    "mismatch->mismatch": 1,
+    "gains": [
+     "ck_tooltip_label_brace_legacy (round-2 lost match restored)",
+     "ck_tooltip_spaced_legacy",
+     "ck_tooltip_empty_legacy",
+     "ck_tooltip_nested_brace_legacy"
+    ]
+   },
+   "remaining_mismatch": "ck_tooltip_label_brace_teoz (teoz participant anchors not emitted; warned)",
+   "redeclaration_warnings": {
+    "dea00b29": 3,
+    "after": 0
+   }
+  },
+  "AS_13": {
+   "vs_93bf53e18": {
+    "match->match": 1,
+    "mismatch->match": 1,
+    "mismatch->mismatch": 11
+   },
+   "vs_dea00b29": "identical outcomes"
+  },
+  "790_and_28": {
+   "vs_93bf53e18": "9 mismatch->match in 790 (c75_*_link_legacy), no loss",
+   "vs_dea00b29": "identical outcomes"
+  },
+  "redeclaration_warnings_after": "AS 2, 28 8 (unchanged from round 2); every one on an input Rust mismatches (into-box, zero-order and default-order re-declarations that Java reorders)"
+ },
+ "losses": "0 lost matches, 0 lost rejections, 0 new valid-input errors, 0 panics on every cohort (shared-summary.json)",
+ "retained_svg_changes_vs_round2": [
+  "sequence-local-attribute-serialization/bd087_attribute_url_{nbsp,tab}: mismatch->match",
+  "bd087_s_attribute_quoted_url_{47,50,53,56}: mismatch->match",
+  "bd087_attribute_url_cr (Java-invalid, still accepted) and bd087_s_attribute_quoted_url_44 (mismatch both): SVG changed"
+ ],
+ "residue": [
+  "topurl (Url#withTopUrl) not applied",
+  "ONLY_TOOLTIP links ([[{tip}]]) keep the existing no-anchor model (Java builds Url(\"\", tip))",
+  "Url#getLabel not modelled",
+  "class diagrams keep extract_link_tooltip (out of scope)"
+ ],
+ "pending_relay_request": "mk3 (shared with the sprite mechanism): pending-request/, manifest sha256 fdc4ec7562061a983befb650faf48e2f798c14ade95d0bde021539a911dbdd56"
+}

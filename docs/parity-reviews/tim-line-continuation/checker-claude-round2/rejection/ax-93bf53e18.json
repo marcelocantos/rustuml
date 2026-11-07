@@ -1,0 +1,243 @@
+{
+  "entries": 8,
+  "before_rejections": 2,
+  "after_rejections": 1,
+  "introduced_losses": [
+    "ck3_svg_inline_quoted_apostrophe_seq.puml"
+  ],
+  "after_false_accepts": [
+    "ck3_usecase_business_actor_type1.puml",
+    "ck3_deployment_unterminated_legend_at_enduml.puml",
+    "ck3_component_unterminated_type0_before_sprite.puml",
+    "ck3_nwdiag_legend_body.puml",
+    "ck3_svg_inline_quoted_apostrophe_seq.puml",
+    "ck3_nested_startsub_seq.puml",
+    "ck3_startsub_unterminated_seq.puml"
+  ],
+  "results": [
+    {
+      "source": "ck3_usecase_business_actor_type1.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "280e792744a476d3b2101965bf2a3dd146990d5228fb99b3f6db9d488c7a4e77",
+          "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-f2d12d0ef",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "280e792744a476d3b2101965bf2a3dd146990d5228fb99b3f6db9d488c7a4e77",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "ck3_deployment_unterminated_legend_at_enduml.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "a35a3832d17eef58c5e7a4dfbd33e1f860a595079c12d663eaf3f17e4d792984",
+          "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-f2d12d0ef",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "a35a3832d17eef58c5e7a4dfbd33e1f860a595079c12d663eaf3f17e4d792984",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "ck3_component_unterminated_type0_before_sprite.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "45d08a3ad73850c16562f0124389444a2d3c4795e86a072422b2a41a042200c2",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-f2d12d0ef",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "45d08a3ad73850c16562f0124389444a2d3c4795e86a072422b2a41a042200c2",
+          "stderr": "warning: component sprite command CommandFactorySprite$1 executed; component rendering of sprite references remains unsupported at line 2\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "ck3_nwdiag_legend_body.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "ad3d3a34b33c760f2dc8bad60025fa6ae03a0b4e4ecf12c64bad10b103c82d10",
+          "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-f2d12d0ef",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "505f97a2235dfa6e67864ab2a7eafee4e2e24edda79b66082f5d01b0ba070c86",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "ck3_svg_inline_quoted_apostrophe_seq.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nparse error: line 1: Syntax error: no registered sequence command accepts \"sprite $txt <svg width=\\\"20\\\" height=\\\"10\\\"><text x=\\\"0\\\" y=\\\"8\\\">it\"\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-f2d12d0ef",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "a91cdc9c7d7dd90b39127e2dc684f62c2a7a8dc686c1838acd5b622dd2f5fb71",
+          "stderr": "warning: sequence command CommandSpriteSvg is recognized but unimplemented at line 1: sprite $txt <svg width=\"20\" height=\"10\"><text x=\"0\" y=\"8\">it ' s</text></svg>\n"
+        }
+      },
+      "introduced_rejection_loss": true
+    },
+    {
+      "source": "ck3_nested_startsub_seq.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-f2d12d0ef",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "ea5c843dc386659f6ac35fe7285dba03ab228379913705f56ca794363b97cb77",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "ck3_startsub_unterminated_seq.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "6e2f01302074d69ebf2c85c3a7f0202205fb87895be2605d5f66ac4d418289c4",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-f2d12d0ef",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "97923c7d4bf87f26db672f452038b7a12b1aa7ed6036a5b7617b7a2c991af30b",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "ck3_startsub_definelong_seq.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"!startsub D\"\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-f2d12d0ef",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"!startsub D\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    }
+  ]
+}

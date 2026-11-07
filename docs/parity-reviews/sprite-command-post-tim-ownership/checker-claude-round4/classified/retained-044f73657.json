@@ -1,0 +1,28 @@
+{
+ "pairs": {
+  "mismatch->mismatch": 1056,
+  "match->match": 2664,
+  "nonpositive-accepted->nonpositive-accepted": 66,
+  "valid-error->valid-error": 17,
+  "nonpositive-rejected->nonpositive-rejected": 370,
+  "mismatch->match": 1
+ },
+ "changes": [
+  {
+   "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+   "cohort": "parent-added145",
+   "name": null,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+   "cohort": "parent-added145",
+   "name": null,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  }
+ ]
+}

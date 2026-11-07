@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-footbox-command-consumption",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.command.CommandFootbox#HIDE_SHOW_FOOTBOX",
+    "sequencediagram.command.CommandFootbox#executeArg",
+    "regex.RegexLeaf#spaceZeroOrMore",
+    "regex.Pattern2#transform"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::SeqParser::try_hide"
+  ],
+  "invariant": "Footbox visibility consumes the registered optional hide/show prefix and zero-or-more Pattern2 whitespace; there is no mandatory FoxSignature whitespace bit.",
+  "causal_divergence": "Rust uses literal hide footbox/show footbox checks, missing Java-valid VT and zero separator forms, leaving the default visibility.",
+  "planned_change": "Parse the complete CommandFootbox expression in the sequence visibility handler and apply the captured action; keep the legacy footbox command independently inventoried.",
+  "perturbation_axes": [
+    "hide/show and separator placement",
+    "legacy/Teoz and participant topology"
+  ],
+  "baseline_evidence": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "baseline_production": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "rejection": "0fb379a26ab64ead0744278935a0b6c64082ef35",
+  "status": "preimplementation hypothesis; no acceptance claim"
+}

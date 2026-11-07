@@ -1,0 +1,2 @@
+test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_ebnf_trailing.puml
+test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_definelong_body.puml

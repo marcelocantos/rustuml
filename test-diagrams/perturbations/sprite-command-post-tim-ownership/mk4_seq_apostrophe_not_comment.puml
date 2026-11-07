@@ -1,0 +1,4 @@
+@startuml
+Alder -> Birch : don't stop
+Birch -> Alder : it's "a ' b"
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+entity Cedar [["https://example.org/e"{quoted tip}]]
+participant Moss
+Cedar -> Moss : go
+@enduml

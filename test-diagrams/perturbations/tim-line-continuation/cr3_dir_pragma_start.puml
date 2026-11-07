@@ -1,0 +1,4 @@
+@startuml
+!pragma layout smetana
+Kea -> Tui : x %chr(92)
+@enduml

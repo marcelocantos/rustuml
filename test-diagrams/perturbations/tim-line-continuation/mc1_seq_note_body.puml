@@ -1,0 +1,9 @@
+@startuml
+Marten -> Vole : hop
+note right of Vole
+first \
+second
+third
+end note
+Vole -> Marten : back
+@enduml

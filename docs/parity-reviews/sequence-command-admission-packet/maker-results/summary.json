@@ -1,0 +1,925 @@
+{
+  "kind": "Maker measurement, NOT independent acceptance",
+  "baseline": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "production": "c525fd32ae97b642b440a161140e9457f29bcfc8",
+  "tested_revision": "268fa9f8b700ba08579efc603e4d0e92b4313e5f",
+  "before": {
+    "entries": 3569,
+    "cli_status": {
+      "1": 895,
+      "0": 2431,
+      "2": 241,
+      "3": 2
+    },
+    "cli_exit": {
+      "0": 3450,
+      "1": 119
+    },
+    "product_library": {
+      "1": 895,
+      "0": 2431,
+      "2": 239,
+      "101": 4
+    },
+    "assisted_library": {
+      "1": 937,
+      "0": 2389,
+      "2": 239,
+      "101": 4
+    },
+    "cli_equals_library": 3328,
+    "panics": 0,
+    "timeouts": 0
+  },
+  "after": {
+    "entries": 3569,
+    "cli_status": {
+      "1": 866,
+      "0": 2445,
+      "2": 241,
+      "3": 17
+    },
+    "cli_exit": {
+      "0": 3343,
+      "1": 226
+    },
+    "product_library": {
+      "1": 866,
+      "0": 2445,
+      "2": 239,
+      "101": 19
+    },
+    "assisted_library": {
+      "1": 908,
+      "0": 2403,
+      "2": 239,
+      "101": 19
+    },
+    "cli_equals_library": 3313,
+    "panics": 0,
+    "timeouts": 0
+  },
+  "cohorts": {
+    "frozen3111": {
+      "before": {
+        "entries": 3111,
+        "cli_status": {
+          "1": 749,
+          "0": 2195,
+          "2": 165,
+          "3": 2
+        },
+        "cli_exit": {
+          "0": 2992,
+          "1": 119
+        },
+        "product_library": {
+          "1": 749,
+          "0": 2195,
+          "2": 163,
+          "101": 4
+        },
+        "assisted_library": {
+          "1": 791,
+          "0": 2153,
+          "2": 163,
+          "101": 4
+        },
+        "cli_equals_library": 2946,
+        "panics": 0,
+        "timeouts": 0
+      },
+      "after": {
+        "entries": 3111,
+        "cli_status": {
+          "1": 734,
+          "0": 2195,
+          "2": 165,
+          "3": 17
+        },
+        "cli_exit": {
+          "0": 2949,
+          "1": 162
+        },
+        "product_library": {
+          "1": 734,
+          "0": 2195,
+          "2": 163,
+          "101": 19
+        },
+        "assisted_library": {
+          "1": 776,
+          "0": 2153,
+          "2": 163,
+          "101": 19
+        },
+        "cli_equals_library": 2931,
+        "panics": 0,
+        "timeouts": 0
+      }
+    },
+    "checker422": {
+      "before": {
+        "entries": 422,
+        "cli_status": {
+          "0": 232,
+          "1": 124,
+          "2": 66
+        },
+        "cli_exit": {
+          "0": 422
+        },
+        "product_library": {
+          "0": 232,
+          "1": 124,
+          "2": 66
+        },
+        "assisted_library": {
+          "0": 232,
+          "1": 124,
+          "2": 66
+        },
+        "cli_equals_library": 356,
+        "panics": 0,
+        "timeouts": 0
+      },
+      "after": {
+        "entries": 422,
+        "cli_status": {
+          "0": 242,
+          "1": 114,
+          "2": 66
+        },
+        "cli_exit": {
+          "0": 368,
+          "1": 54
+        },
+        "product_library": {
+          "0": 242,
+          "1": 114,
+          "2": 66
+        },
+        "assisted_library": {
+          "0": 242,
+          "1": 114,
+          "2": 66
+        },
+        "cli_equals_library": 356,
+        "panics": 0,
+        "timeouts": 0
+      }
+    },
+    "maker28": {
+      "before": {
+        "entries": 28,
+        "cli_status": {
+          "2": 10,
+          "1": 16,
+          "0": 2
+        },
+        "cli_exit": {
+          "0": 28
+        },
+        "product_library": {
+          "2": 10,
+          "1": 16,
+          "0": 2
+        },
+        "assisted_library": {
+          "2": 10,
+          "1": 16,
+          "0": 2
+        },
+        "cli_equals_library": 18,
+        "panics": 0,
+        "timeouts": 0
+      },
+      "after": {
+        "entries": 28,
+        "cli_status": {
+          "2": 10,
+          "1": 12,
+          "0": 6
+        },
+        "cli_exit": {
+          "1": 10,
+          "0": 18
+        },
+        "product_library": {
+          "2": 10,
+          "1": 12,
+          "0": 6
+        },
+        "assisted_library": {
+          "2": 10,
+          "1": 12,
+          "0": 6
+        },
+        "cli_equals_library": 18,
+        "panics": 0,
+        "timeouts": 0
+      }
+    },
+    "size8": {
+      "before": {
+        "entries": 8,
+        "cli_status": {
+          "1": 6,
+          "0": 2
+        },
+        "cli_exit": {
+          "0": 8
+        },
+        "product_library": {
+          "1": 6,
+          "0": 2
+        },
+        "assisted_library": {
+          "1": 6,
+          "0": 2
+        },
+        "cli_equals_library": 8,
+        "panics": 0,
+        "timeouts": 0
+      },
+      "after": {
+        "entries": 8,
+        "cli_status": {
+          "1": 6,
+          "0": 2
+        },
+        "cli_exit": {
+          "0": 8
+        },
+        "product_library": {
+          "1": 6,
+          "0": 2
+        },
+        "assisted_library": {
+          "1": 6,
+          "0": 2
+        },
+        "cli_equals_library": 8,
+        "panics": 0,
+        "timeouts": 0
+      }
+    }
+  },
+  "gains": [
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_legacy.puml",
+      "source_sha256": "f9b4156d497bc359f7d6a71887a42223229f13663d0081439b75daf3a99008e2",
+      "before_status": 1,
+      "after_status": 0,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_svg_sha256": "b7ff860cbaae816feacf8492551298a8decc96a657e8ebdd46776022f0dd55e1",
+      "after_svg_sha256": "05e4580285db1b83b1701d4ab2e73e4c64660c2dcc322743ec777570a659b969",
+      "after_diagnostic": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_teoz.puml",
+      "source_sha256": "20fcd83bbc4838a3a80dae775d7e6e60d504a8413607ad4c3eef2078db24f47a",
+      "before_status": 1,
+      "after_status": 0,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_svg_sha256": "0b02477091d52b87b7f7360538390660852de8d6e5b09b47a458439f20da8083",
+      "after_svg_sha256": "e81570b1277025f8ac940d65110cb5d397a02ad9cc3e6f96e45e13aa9c3dd3a6",
+      "after_diagnostic": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_ff_legacy.puml",
+      "source_sha256": "4f5734f5b1576606654ff9401dc6b47528f973c83fa11817c6953c67a19600db",
+      "before_status": 1,
+      "after_status": 0,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_svg_sha256": "b7ff860cbaae816feacf8492551298a8decc96a657e8ebdd46776022f0dd55e1",
+      "after_svg_sha256": "05e4580285db1b83b1701d4ab2e73e4c64660c2dcc322743ec777570a659b969",
+      "after_diagnostic": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_ff_teoz.puml",
+      "source_sha256": "b72c1b6243f21b512ca5602a6482d2151ac8000a8ec48d5201a5744455d4d98b",
+      "before_status": 1,
+      "after_status": 0,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_svg_sha256": "0b02477091d52b87b7f7360538390660852de8d6e5b09b47a458439f20da8083",
+      "after_svg_sha256": "e81570b1277025f8ac940d65110cb5d397a02ad9cc3e6f96e45e13aa9c3dd3a6",
+      "after_diagnostic": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_space_legacy.puml",
+      "source_sha256": "879760bf1fd07d1fb176185ba33aa36cd3a895cb037e9f6446001d88b27aa3d3",
+      "before_status": 1,
+      "after_status": 0,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_svg_sha256": "b7ff860cbaae816feacf8492551298a8decc96a657e8ebdd46776022f0dd55e1",
+      "after_svg_sha256": "05e4580285db1b83b1701d4ab2e73e4c64660c2dcc322743ec777570a659b969",
+      "after_diagnostic": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_space_teoz.puml",
+      "source_sha256": "3dda6c089c9a3dcdc9cfbf8689d2f03c7cf4d8f7f3afc6ceae0d2b2ae8f76aa0",
+      "before_status": 1,
+      "after_status": 0,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_svg_sha256": "0b02477091d52b87b7f7360538390660852de8d6e5b09b47a458439f20da8083",
+      "after_svg_sha256": "e81570b1277025f8ac940d65110cb5d397a02ad9cc3e6f96e45e13aa9c3dd3a6",
+      "after_diagnostic": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_vt_legacy.puml",
+      "source_sha256": "39360c557e0f77781c38ea13557e8cc10b57fba668cbe760204d77c1d7d7465a",
+      "before_status": 1,
+      "after_status": 0,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_svg_sha256": "23907baa3a90ff6e68543c1403be4671b439ab941c2a0c0a813d8ed4e0276391",
+      "after_svg_sha256": "8912e01ebb77d3d2075609867dba6e2bc290a926a5ae102b2ec022b462d8b705",
+      "after_diagnostic": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_vt_teoz.puml",
+      "source_sha256": "144b8068203669dccf960fae9b83f73a71d217e52d576cad51c9d5ca23104e89",
+      "before_status": 1,
+      "after_status": 0,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_svg_sha256": "2a028314ca8143ee88ee2b7be775d9afe57639d2f25c88074dee3850f4b12846",
+      "after_svg_sha256": "5e94d539e8de7de20300071ca15fa5e704f6ca195cf39e9eda17a06895d06056",
+      "after_diagnostic": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_ff_legacy.puml",
+      "source_sha256": "efc20fb1aa60a977f8d9d3c225556fa5b86c72432e0513aa17d2e50b0dfdc7c9",
+      "before_status": 1,
+      "after_status": 0,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_svg_sha256": "23907baa3a90ff6e68543c1403be4671b439ab941c2a0c0a813d8ed4e0276391",
+      "after_svg_sha256": "8912e01ebb77d3d2075609867dba6e2bc290a926a5ae102b2ec022b462d8b705",
+      "after_diagnostic": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_ff_teoz.puml",
+      "source_sha256": "6ce09c3487d158dcaa77c0def331156b971d36fa5845d0ef8a5fcde15ef9b467",
+      "before_status": 1,
+      "after_status": 0,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_svg_sha256": "2a028314ca8143ee88ee2b7be775d9afe57639d2f25c88074dee3850f4b12846",
+      "after_svg_sha256": "5e94d539e8de7de20300071ca15fa5e704f6ca195cf39e9eda17a06895d06056",
+      "after_diagnostic": ""
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/footbox_vt_legacy.puml",
+      "source_sha256": "4cd4543bf7b91c6a4ad23566a69f32f984e213d670ecfdc35bb4f79f03a9ec17",
+      "before_status": 1,
+      "after_status": 0,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_svg_sha256": "8e44f9a00edacf193e486daf60a963e6c50be4968b418af25d6faa46b96005e1",
+      "after_svg_sha256": "b278bec4db117015c3c89361f8a97d3825dce3725b944296e60a7a94d2ac962f",
+      "after_diagnostic": ""
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/footbox_vt_teoz.puml",
+      "source_sha256": "5813f42b3e9d331bc413d8a8dc5d235170eab1b981a6054190af09654f8bfca3",
+      "before_status": 1,
+      "after_status": 0,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_svg_sha256": "07d726551bcb7829dd6ca9bf129b649afc59234b585790ebcdcd916705f79526",
+      "after_svg_sha256": "61cff5013d47e4602d7b0840c67bdf5b0c28f21f751a8f5c017932f96d694683",
+      "after_diagnostic": ""
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/footbox_compact_legacy.puml",
+      "source_sha256": "27321b8352f129ab53147472363b8c113b2ea62fd83d67d835aef4457cece85c",
+      "before_status": 1,
+      "after_status": 0,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_svg_sha256": "557e4381cd76c9bfd81ee1be3fef52e08058fef0053ccfda15c2fe0995616304",
+      "after_svg_sha256": "8e44f9a00edacf193e486daf60a963e6c50be4968b418af25d6faa46b96005e1",
+      "after_diagnostic": ""
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/footbox_compact_teoz.puml",
+      "source_sha256": "29c4da9a6f120b751f32e5db4fd46202cf2c2bcf45bd62fd7ad84a6180cd0e76",
+      "before_status": 1,
+      "after_status": 0,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_svg_sha256": "569336899d1bf4f59090d1bd3214c812cc566a573c11c674e482021a0acbb35b",
+      "after_svg_sha256": "07d726551bcb7829dd6ca9bf129b649afc59234b585790ebcdcd916705f79526",
+      "after_diagnostic": ""
+    }
+  ],
+  "lost_matches": [],
+  "new_valid_errors": [
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/case_tabs.puml",
+      "source_sha256": "1befbb61b49a99f7592466a1d69f5d8b784c3f680ba2bf38e6a96e236ad66ea8",
+      "before_status": 1,
+      "after_status": 3,
+      "before_exit": 0,
+      "after_exit": 1,
+      "before_svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"NoDe\\t\\\"Polar Harbor\\\" {\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/hexagon_empty_tb.puml",
+      "source_sha256": "02c522dfe074c914991ffe236b1e169c2c70152b005a74f7f7d1d7588bbd3641",
+      "before_status": 1,
+      "after_status": 3,
+      "before_exit": 0,
+      "after_exit": 1,
+      "before_svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.puml",
+      "source_sha256": "bea6c0fc90f90c420514300a9f8a761e1052ff67d79aa002a7f5d5ed1e72134f",
+      "before_status": 1,
+      "after_status": 3,
+      "before_exit": 0,
+      "after_exit": 1,
+      "before_svg_sha256": "d68092f625268e992dd5e22858914a86e74f491083c39170b7a4974be6efabe7",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+      "source_sha256": "d4e171580077b8d814abdbddea3a525915faeb20dc56a0735534eed7ce281f61",
+      "before_status": 1,
+      "after_status": 3,
+      "before_exit": 0,
+      "after_exit": 1,
+      "before_svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+      "source_sha256": "8449f98653643212786ff1fee583efc415ee9338b1ad7aae9d841da44ea49c78",
+      "before_status": 1,
+      "after_status": 3,
+      "before_exit": 0,
+      "after_exit": 1,
+      "before_svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+      "source_sha256": "cc05d08eb6cdec982ae573fdfe81eb2f6bae3ae9b26536be787136d61e0dacae",
+      "before_status": 1,
+      "after_status": 3,
+      "before_exit": 0,
+      "after_exit": 1,
+      "before_svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml",
+      "source_sha256": "d6d42c559dbe4e35637746c00994455c36ad7c2f68e545bc12d361c5c7436733",
+      "before_status": 1,
+      "after_status": 3,
+      "before_exit": 0,
+      "after_exit": 1,
+      "before_svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+      "source_sha256": "eec9ba45fa3f8964486488631f1228ef7dcc3ff6eeef0c319fde4c57ed6c8615",
+      "before_status": 1,
+      "after_status": 3,
+      "before_exit": 0,
+      "after_exit": 1,
+      "before_svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml",
+      "source_sha256": "ddfb1ecacd856a2ef06afe346f02f36793633e6db91b18bc21e4363d30846268",
+      "before_status": 1,
+      "after_status": 3,
+      "before_exit": 0,
+      "after_exit": 1,
+      "before_svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml",
+      "source_sha256": "4fabd1f9953a2ce3b46796759b4e362f5595f07d91c9f8b83b29448c1fe086d3",
+      "before_status": 1,
+      "after_status": 3,
+      "before_exit": 0,
+      "after_exit": 1,
+      "before_svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+      "source_sha256": "849853b2a109c4c6faadf0097cdb67f6dd2080f6c40627776c3ba58e65623970",
+      "before_status": 1,
+      "after_status": 3,
+      "before_exit": 0,
+      "after_exit": 1,
+      "before_svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"NoDe \\\"Runtime Mesh\\\" as Mesh {\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+      "source_sha256": "d08d89bee079d61530b8c655923c47d43461e651a77151d45179daea837206cc",
+      "before_status": 1,
+      "after_status": 3,
+      "before_exit": 0,
+      "after_exit": 1,
+      "before_svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_plain_state_paint_control.puml",
+      "source_sha256": "ed347a84eda7f93341b417a0f013204e3342de91756e3bb1c01c430c522d8db6",
+      "before_status": 1,
+      "after_status": 3,
+      "before_exit": 0,
+      "after_exit": 1,
+      "before_svg_sha256": "5396056fa00adcf309005ca2f56c33e6b4fecc72721cca4c7625964ec7bf995d",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"state StartGate <<start>>\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_line_continuation.puml",
+      "source_sha256": "f2e8387b5c1096a6c0ab645aa03d802c90c9380ebf94c5f4f3992d795fdac473",
+      "before_status": 1,
+      "after_status": 3,
+      "before_exit": 0,
+      "after_exit": 1,
+      "before_svg_sha256": "c9dabb057f4e1f4939fa9360c5b1bdbdaa4cb6cda1ef7e99f587848dd58a7d25",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "parse error: line 3: Syntax error: no registered sequence command accepts \"second\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_line_continuation.puml",
+      "source_sha256": "f2e8387b5c1096a6c0ab645aa03d802c90c9380ebf94c5f4f3992d795fdac473",
+      "before_status": 1,
+      "after_status": 3,
+      "before_exit": 0,
+      "after_exit": 1,
+      "before_svg_sha256": "c9dabb057f4e1f4939fa9360c5b1bdbdaa4cb6cda1ef7e99f587848dd58a7d25",
+      "after_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_diagnostic": "parse error: line 3: Syntax error: no registered sequence command accepts \"second\"\n"
+    }
+  ],
+  "parent_approved_exceptions": [
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/case_tabs.puml",
+      "source_sha256": "1befbb61b49a99f7592466a1d69f5d8b784c3f680ba2bf38e6a96e236ad66ea8",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"NoDe\\t\\\"Polar Harbor\\\" {\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/hexagon_empty_tb.puml",
+      "source_sha256": "02c522dfe074c914991ffe236b1e169c2c70152b005a74f7f7d1d7588bbd3641",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.puml",
+      "source_sha256": "bea6c0fc90f90c420514300a9f8a761e1052ff67d79aa002a7f5d5ed1e72134f",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+      "source_sha256": "d4e171580077b8d814abdbddea3a525915faeb20dc56a0735534eed7ce281f61",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+      "source_sha256": "8449f98653643212786ff1fee583efc415ee9338b1ad7aae9d841da44ea49c78",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+      "source_sha256": "cc05d08eb6cdec982ae573fdfe81eb2f6bae3ae9b26536be787136d61e0dacae",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml",
+      "source_sha256": "d6d42c559dbe4e35637746c00994455c36ad7c2f68e545bc12d361c5c7436733",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+      "source_sha256": "eec9ba45fa3f8964486488631f1228ef7dcc3ff6eeef0c319fde4c57ed6c8615",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml",
+      "source_sha256": "ddfb1ecacd856a2ef06afe346f02f36793633e6db91b18bc21e4363d30846268",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml",
+      "source_sha256": "4fabd1f9953a2ce3b46796759b4e362f5595f07d91c9f8b83b29448c1fe086d3",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+      "source_sha256": "849853b2a109c4c6faadf0097cdb67f6dd2080f6c40627776c3ba58e65623970",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"NoDe \\\"Runtime Mesh\\\" as Mesh {\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+      "source_sha256": "d08d89bee079d61530b8c655923c47d43461e651a77151d45179daea837206cc",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_plain_state_paint_control.puml",
+      "source_sha256": "ed347a84eda7f93341b417a0f013204e3342de91756e3bb1c01c430c522d8db6",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 6: Syntax error: no registered sequence command accepts \"state StartGate <<start>>\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_line_continuation.puml",
+      "source_sha256": "f2e8387b5c1096a6c0ab645aa03d802c90c9380ebf94c5f4f3992d795fdac473",
+      "owner": "T14.22",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream T14.22, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 3: Syntax error: no registered sequence command accepts \"second\"\n",
+      "dispatch_cause": "TIM fails to join source continuation, leaving second as a command",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_line_continuation.puml",
+      "source_sha256": "f2e8387b5c1096a6c0ab645aa03d802c90c9380ebf94c5f4f3992d795fdac473",
+      "owner": "T14.22",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream T14.22, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 3: Syntax error: no registered sequence command accepts \"second\"\n",
+      "dispatch_cause": "TIM fails to join source continuation, leaving second as a command",
+      "before_whole_match": false
+    }
+  ],
+  "lost_rejections": 0,
+  "rejection_contract": {
+    "historical_nonpositive": {
+      "entries": 99,
+      "before_rejected": 77,
+      "after_rejected": 87,
+      "false_successes": [
+        "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+        "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+        "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+        "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+        "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+        "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+        "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+        "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+        "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+        "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+        "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/factory_mixed.puml",
+        "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_mixed_after.puml"
+      ]
+    },
+    "java_export_error": {
+      "entries": 20,
+      "before_rejected": 0,
+      "after_rejected": 0,
+      "false_successes": [
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_divider_legacy.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_divider_teoz.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_delay_legacy.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_delay_teoz.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_divider_legacy.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_divider_teoz.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_delay_legacy.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_delay_teoz.puml",
+        "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_legacy.puml",
+        "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_teoz.puml",
+        "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_ff_legacy.puml",
+        "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_ff_teoz.puml",
+        "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_space_legacy.puml",
+        "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_space_teoz.puml",
+        "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_legacy.puml",
+        "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_teoz.puml",
+        "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_ff_legacy.puml",
+        "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_ff_teoz.puml",
+        "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_space_legacy.puml",
+        "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_space_teoz.puml"
+      ]
+    },
+    "java_invalid": {
+      "entries": 122,
+      "before_rejected": 40,
+      "after_rejected": 122,
+      "false_successes": []
+    }
+  },
+  "golden": {
+    "entries": 12550,
+    "sequence_sources": 1521,
+    "before_comparison": {
+      "2": 1199,
+      "0": 11181,
+      "1": 70,
+      "101": 100
+    },
+    "after_comparison": {
+      "2": 1199,
+      "0": 11181,
+      "1": 70,
+      "101": 100
+    },
+    "lost_matches": [],
+    "new_valid_errors": [],
+    "new_nonpositive_rejections": 125,
+    "svg_byte_changes": 125,
+    "model_summary": {
+      "golden12550:model": {
+        "entries": 12550,
+        "stdout_changes": 132,
+        "diagnostic_changes": 129,
+        "new_errors": 125,
+        "new_successes": 0
+      },
+      "golden12550:ascii": {
+        "entries": 12550,
+        "stdout_changes": 111,
+        "diagnostic_changes": 129,
+        "new_errors": 125,
+        "new_successes": 0
+      },
+      "golden12550:yaml": {
+        "entries": 12550,
+        "stdout_changes": 119,
+        "diagnostic_changes": 277,
+        "new_errors": 113,
+        "new_successes": 0
+      }
+    },
+    "comparator_nonUTF8_panics": 100,
+    "product_panics": 0,
+    "timeouts": 0,
+    "note": "100 comparator read panics are non-UTF8 reference files, not Rust CLI panics. 1199 comparator nonpositives plus100 non-UTF8 are1299 main exclusions, unchanged."
+  },
+  "main_library": {
+    "product": 11181,
+    "assisted": 10497,
+    "eligible": 11251,
+    "sequence": "1411/1411",
+    "label": "Library API diagnostics, not11251 CLI invocations",
+    "failure_name_snapshot": "final-failure-names"
+  },
+  "units": {
+    "parser": 589,
+    "renderer": 801,
+    "cli": 13,
+    "ascii_included": 12
+  },
+  "guards": "4/6",
+  "standing": {
+    "entries": 2682,
+    "failures": 1037
+  },
+  "stable_broad_runs": 1,
+  "model_summary": {
+    "retained3569:model": {
+      "entries": 3569,
+      "stdout_changes": 129,
+      "diagnostic_changes": 273,
+      "new_errors": 107,
+      "new_successes": 0
+    },
+    "retained3569:ascii": {
+      "entries": 3569,
+      "stdout_changes": 103,
+      "diagnostic_changes": 273,
+      "new_errors": 107,
+      "new_successes": 0
+    },
+    "retained3569:yaml": {
+      "entries": 3569,
+      "stdout_changes": 121,
+      "diagnostic_changes": 328,
+      "new_errors": 99,
+      "new_successes": 0
+    },
+    "golden12550:model": {
+      "entries": 12550,
+      "stdout_changes": 132,
+      "diagnostic_changes": 129,
+      "new_errors": 125,
+      "new_successes": 0
+    },
+    "golden12550:ascii": {
+      "entries": 12550,
+      "stdout_changes": 111,
+      "diagnostic_changes": 129,
+      "new_errors": 125,
+      "new_successes": 0
+    },
+    "golden12550:yaml": {
+      "entries": 12550,
+      "stdout_changes": 119,
+      "diagnostic_changes": 277,
+      "new_errors": 113,
+      "new_successes": 0
+    }
+  }
+}

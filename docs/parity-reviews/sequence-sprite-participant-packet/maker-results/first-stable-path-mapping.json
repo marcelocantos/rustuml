@@ -1,0 +1,16 @@
+{
+  "final-maker30": "first-stable-maker30",
+  "final-golden-cli": "first-stable-golden-cli",
+  "final-binding.json": "first-stable-binding.json",
+  "final-checks-progress.log": "first-stable-checks-progress.log",
+  "final-golden.log": "first-stable-golden.log",
+  "final-retained4140": "first-stable-retained4140",
+  "final-completion4": "first-stable-completion4",
+  "final-maker.log": "first-stable-maker.log",
+  "final-bin": "first-stable-bin",
+  "final-failure-names": "first-stable-failure-names",
+  "final-logs": "first-stable-logs",
+  "final-completion.log": "first-stable-completion.log",
+  "final-checks.json": "first-stable-checks.json",
+  "final-retained.log": "first-stable-retained.log"
+}

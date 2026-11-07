@@ -1,0 +1,5 @@
+@startuml
+object "Order One" as o1 #pink {
+Sprite sheets = loaded
+}
+@enduml

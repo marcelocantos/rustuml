@@ -1,0 +1,8 @@
+@startuml
+sprite $box <svg width="4" height="4"> /' s '/
+<rect width="4" height="4" fill="red"/>
+</svg>
+start
+:prepare;
+stop
+@enduml

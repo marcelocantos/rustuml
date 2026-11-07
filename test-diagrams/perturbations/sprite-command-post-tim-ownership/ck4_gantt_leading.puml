@@ -1,0 +1,4 @@
+@startgantt
+/' c '/ [Task] requires 3 days
+[Other] requires 2 days
+@endgantt

@@ -1,0 +1,18 @@
+[
+  {
+    "name": "no_oracle_failure_names.txt",
+    "final_sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+    "first_stable_sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+    "prior_packet_sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+    "equal_to_first": true,
+    "equal_to_prior": true
+  },
+  {
+    "name": "golden_failure_names.txt",
+    "final_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+    "first_stable_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+    "prior_packet_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+    "equal_to_first": true,
+    "equal_to_prior": true
+  }
+]

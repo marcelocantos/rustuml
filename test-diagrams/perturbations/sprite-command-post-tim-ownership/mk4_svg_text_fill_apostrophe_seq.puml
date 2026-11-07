@@ -1,0 +1,4 @@
+@startuml
+sprite $txt <svg width="20" height="10"><text x="0" y="8" fill="black">it ' s</text></svg>
+Alder -> Birch : <$txt> it's "q ' q"
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+Otter -> Mink : swim \
+' quiet
+  ' again
+fast
+Mink -> Otter : ok
+@enduml

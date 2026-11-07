@@ -1,0 +1,9 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+group#aBc Walnut
+Juniper -> Kestrel: paint
+end
+Kestrel --> Juniper: receipt
+@enduml

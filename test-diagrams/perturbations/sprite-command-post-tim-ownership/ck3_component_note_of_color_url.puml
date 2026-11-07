@@ -1,0 +1,6 @@
+@startuml
+[Comp]
+note right of Comp #lightblue [[https://example.org/n]]
+Sprite sheets are loaded
+end note
+@enduml

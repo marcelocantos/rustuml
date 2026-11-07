@@ -1,0 +1,41 @@
+o6n_format_line_bs_seq                   dk exit=0 cmp=0 
+q7_num_us_blank_bs_seq                   dl exit=0 cmp=0 
+q7_type_bs_dotless_mindmap               dl exit=0 cmp=0 
+q7_hdr_bom_content                       dl exit=0 cmp=0 
+r5b_start_bs_chen                        dj exit=1 cmp=3 parse error: line 1: unsupported diagram type: @startchen 
+r5b_num_bs_state                         dj exit=0 cmp=0 
+r5b_num_bs_object                        dj exit=0 cmp=0 
+r5b_num_bs_deployment                    dj exit=0 cmp=0 
+r5b_num_bs_seq_three                     dj exit=0 cmp=0 
+r5b_num_upper_at_seq                     dj exit=0 cmp=0 
+r5b_num_us_bs_seq                        dj exit=0 cmp=0 
+r5b_num_bs_blank_inside                  dj exit=0 cmp=0 
+r5b_start_bs_name                        dj exit=0 cmp=0 
+r5b_end_bs_bare                          dj exit=0 cmp=0 
+r5b_multi_bs_then_bs_mindmap             dj exit=0 cmp=0 
+r5b_crlf_bs_seq                          dj exit=0 cmp=0 
+o5s_bs_uml_class                         dh exit=0 cmp=0 
+o5s_mix_bs_start_at_end                  dh exit=0 cmp=0 
+o5s_ws_tab_bs                            dh exit=0 cmp=0 
+o5s_ws_bs_end_indented                   dh exit=0 cmp=0 
+o5s_case_bs_upper_start                  dh exit=0 cmp=0 
+o5s_case_at_upper_start_lower_end        dh exit=0 cmp=0 
+r5b_num_ws_at_seq                        dj exit=0 cmp=0 
+r5b_num_emsp_seq                         dj exit=0 cmp=0 
+r5b_num_tab_at_state                     dj exit=0 cmp=0 
+r5b_num_comment_bs_seq                   dj exit=0 cmp=0 
+o5s_two_blocks_bs                        dh exit=0 cmp=0 
+o5s_bs_seq_continuation                  dh exit=0 cmp=0 
+r5b_num_two_blank_bs_seq                 dj exit=0 cmp=0 
+r5b_num_pipe_nostart_blank_ws            dj exit=0 cmp=0 
+o5s_ws_leading_blank_line                dh exit=0 cmp=0 
+r5b_num_comment_at_seq                   dj exit=0 cmp=1 
+o5s_ws_leading_blank_at                  dh exit=0 cmp=1 
+r5b_start_bs_space_uml                   dj exit=1 cmp=3 parse error: line 1: unsupported diagram type: @start uml 
+r5b_start_bs_chen                        dj exit=1 cmp=3 parse error: line 1: unsupported diagram type: @startchen 
+r5b_start_bs_project                     dj exit=0 cmp=0 
+r5b_start_nbsp                           dj exit=0 cmp=0 
+r5b_start_bs_umlish                      dj exit=0 cmp=0 
+r5b_start_bs_files                       dj exit=1 cmp=3 parse error: line 1: unsupported diagram type: @startfiles 
+r5b_start_bs_creole                      dj exit=1 cmp=3 parse error: line 1: unsupported diagram type: @startcreole 
+r5b_num_unmarked_bs_end_only             dj exit=1 cmp=3 parse error: line 3: Syntax error: no registered sequence command accepts "\\enduml" 

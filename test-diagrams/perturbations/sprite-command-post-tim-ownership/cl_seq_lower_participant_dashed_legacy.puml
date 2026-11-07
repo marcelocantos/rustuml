@@ -1,0 +1,4 @@
+@startuml
+participant Cedar
+sprite --> Cedar : reply
+@enduml

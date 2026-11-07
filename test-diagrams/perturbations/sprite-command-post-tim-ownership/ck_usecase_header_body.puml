@@ -1,0 +1,7 @@
+@startuml
+header
+Sprite sheets are loaded
+endheader
+actor Hero
+Hero -- (Play)
+@enduml

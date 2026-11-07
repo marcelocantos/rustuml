@@ -1,0 +1,88 @@
+cr3_dir_define_start                             iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_dir_define_middle                            iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=x Tui -&gt; Kea : y
+cr3_dir_define_end                               iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=y|x @enduml
+cr3_dir_procedure_start                          iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_dir_procedure_middle                         iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=x Tui -&gt; Kea : y
+cr3_dir_procedure_end                            iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=y|x @enduml
+cr3_dir_if_start                                 iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_dir_if_middle                                iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=x Tui -&gt; Kea : y
+cr3_dir_if_end                                   iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=y|x @enduml
+cr3_dir_include_start                            iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_dir_include_middle                           iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=x Tui -&gt; Kea : y
+cr3_dir_include_end                              iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=y|x @enduml
+cr3_dir_theme_start                              iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=x @enduml
+cr3_dir_theme_middle                             iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=x skinparam __theme plain|y
+cr3_dir_theme_end                                iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=y|x skinparam __theme plain
+cr3_dir_option_start                             iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_dir_option_middle                            iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=x Tui -&gt; Kea : y
+cr3_dir_option_end                               iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=y|x @enduml
+cr3_dir_pragma_start                             iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_dir_pragma_middle                            iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=x Tui -&gt; Kea : y
+cr3_dir_pragma_end                               iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=y|x @enduml
+cr3_dir_assume_start                             iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=x @enduml
+cr3_dir_assume_middle                            iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=x !assume transparent light|y
+cr3_dir_assume_end                               iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=y|x !assume transparent light
+cr3_dir_log_start                                iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_dir_log_middle                               iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=x Tui -&gt; Kea : y
+cr3_dir_log_end                                  iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=y|x @enduml
+cr3_dir_dump_start                               iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=
+cr3_dir_dump_middle                              iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=x ' [dump]|y
+cr3_dir_dump_end                                 iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=y|x ' [dump]
+cr3_dir_startsub_start                           iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_dir_startsub_middle                          iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=x Tui -&gt; Kea : y
+cr3_dir_startsub_end                             iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=y|x @enduml
+cr3_dir_teoz_pragma_start                        iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_two_one_line_after_join                      iv=0 d28d:0 a572:0 93bf:0 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_two_zero_content_end_continued               iv=0 d28d:0 a572:0 93bf:0 9834:0 identical tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_two_end_continued_after_two                  iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_two_comments_only                            iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_two_directives_only                          iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_two_blank_after_tail                         iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=x
+cr3_two_three_lines_before                       iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=y|x @enduml
+cr3_two_three_lines_after                        iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=x Tui -&gt; Kea : y
+cr3_two_double_tail                              iv=1 d28d:0 a572:0 93bf:1 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_two_activity_tail                            iv=1 d28d:0 a572:1 93bf:1 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_two_mindmap_control                          iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=
+cr3_two_nojoin_option_handwritten                iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=
+cr3_two_nojoin_pragma                            iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_two_include_tail_then_dump                   iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=inc ' [dump]
+cr3_end_bs_end_alone                             iv=1 d28d:0 a572:1 93bf:1 9834:0 differs tip=one
+cr3_end_bs_endless_indented                      iv=1 d28d:0 a572:1 93bf:1 9834:0 differs tip=one
+cr3_end_bs_endmindmap_in_uml                     iv=1 d28d:0 a572:1 93bf:1 9834:0 differs tip=one
+cr3_end_bs_enduml_trailing                       iv=1 d28d:0 a572:1 93bf:1 9834:0 differs tip=one
+cr3_end_bs_End_case                              iv=0 d28d:1 a572:1 93bf:1 9834:0 identical tip=
+cr3_end_double_backslash                         iv=0 d28d:1 a572:1 93bf:1 9834:0 identical tip=
+cr3_end_bs_in_block_comment                      iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=one|two
+cr3_end_at_in_block_comment                      iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=one
+cr3_end_bs_in_if0                                iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=one
+cr3_end_at_in_if0                                iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=one
+cr3_end_bs_in_procdef                            iv=0 d28d:0 a572:1 93bf:1 9834:0 differs tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_end_bs_in_note                               iv=0 d28d:1 a572:0 93bf:0 9834:0 differs tip=
+cr3_end_us_before_bs_end                         iv=1 d28d:1 a572:1 93bf:1 9834:0 identical tip=
+cr3_end_nel_before_bs_end                        iv=0 d28d:0 a572:1 93bf:1 9834:0 differs tip=one
+cr3_end_nbsp_before_bs_end                       iv=0 d28d:1 a572:1 93bf:1 9834:0 identical tip=
+cr3_end_tim_chr64_enduml                         iv=1 d28d:1 a572:1 93bf:1 9834:0 identical tip=
+cr3_end_tim_chr92_enduml                         iv=1 d28d:1 a572:1 93bf:1 9834:0 identical tip=
+cr3_end_mindmap_bs_end                           iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=
+cr3_end_pipe_second_diagram                      iv=1 d28d:0 a572:1 93bf:1 9834:0 differs tip=one
+cr3_end_bs_end_no_at_end                         iv=1 d28d:0 a572:1 93bf:1 9834:0 differs tip=one
+cr3_wrap_three_blocks                            iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=first
+cr3_wrap_three_blocks_bang2                      iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_wrap_ids_bang_beta                           iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=Bob-&gt;Alice:&#160;Hello|&#160;|Or|&#160;
+cr3_wrap_first_is_mindmap                        iv=0 d28d:1 a572:1 93bf:1 9834:0 identical tip=
+cr3_wrap_hash_header                             iv=1 d28d:0 a572:1 93bf:1 9834:0 differs tip=hashed
+cr3_wrap_angle_header                            iv=1 d28d:0 a572:1 93bf:1 9834:0 differs tip=angled
+cr3_wrap_superscript_header                      iv=1 d28d:1 a572:1 93bf:1 9834:0 identical tip=
+cr3_wrap_bom_start                               iv=1 d28d:0 a572:1 93bf:1 9834:0 differs tip=bom|two
+cr3_wrap_bom_hash_header                         iv=1 d28d:1 a572:1 93bf:1 9834:0 identical tip=
+cr3_wrap_bom_inner_line                          iv=1 d28d:1 a572:1 93bf:1 9834:0 identical tip=
+cr3_raw_bom_include                              iv=1 d28d:1 a572:1 93bf:1 9834:0 identical tip=
+cr3_wrap_crlf_continuation_comments              iv=1 d28d:0 a572:0 93bf:1 9834:0 differs tip=c1 c2
+cr3_wrap_tail_runs_into_second_block             iv=0 d28d:0 a572:0 93bf:0 9834:0 differs tip=x @enduml|y
+cr3_wrap_nested_wrapped                          iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=inner|outer
+cr3_wrap_vars_and_procedure                      iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=hi
+cr3_wrap_backslash_end                           iv=1 d28d:0 a572:1 93bf:1 9834:0 differs tip=a
+cr3_wrap_end_trailing_text                       iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=a
+cr3_wrap_backslash_start                         iv=1 d28d:0 a572:1 93bf:1 9834:0 differs tip=bs
+cr3_wrap_mindmap_family                          iv=1 d28d:0 a572:0 93bf:0 9834:0 differs tip=
+cr3_raw_include_mid_end                          iv=1 d28d:0 a572:0 93bf:0 9834:0 identical tip=a|b|two

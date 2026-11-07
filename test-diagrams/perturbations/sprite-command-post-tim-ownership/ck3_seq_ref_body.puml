@@ -1,0 +1,7 @@
+@startuml
+participant Alder
+participant Birch
+ref over Alder, Birch
+Sprite sheets are loaded
+end ref
+@enduml

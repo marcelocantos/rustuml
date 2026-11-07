@@ -1,0 +1,47 @@
+{
+ "fresh-at-manifest.json": {
+  "n": 45,
+  "bad": [],
+  "validity_differs_under_strict_markers": []
+ },
+ "fresh-av-manifest.json": {
+  "n": 63,
+  "bad": [],
+  "validity_differs_under_strict_markers": []
+ },
+ "fresh-ax-manifest.json": {
+  "n": 77,
+  "bad": [],
+  "validity_differs_under_strict_markers": []
+ },
+ "fresh-ay-manifest.json": {
+  "n": 48,
+  "bad": [],
+  "validity_differs_under_strict_markers": []
+ },
+ "fresh-az-manifest.json": {
+  "n": 8,
+  "bad": [],
+  "validity_differs_under_strict_markers": []
+ },
+ "fresh-ba-manifest.json": {
+  "n": 64,
+  "bad": [],
+  "validity_differs_under_strict_markers": []
+ },
+ "fresh-bd-manifest.json": {
+  "n": 33,
+  "bad": [],
+  "validity_differs_under_strict_markers": []
+ },
+ "fresh-bu-manifest.json": {
+  "n": 40,
+  "bad": [],
+  "validity_differs_under_strict_markers": []
+ },
+ "fresh-manifest.json": {
+  "n": 915,
+  "bad": [],
+  "validity_differs_under_strict_markers": []
+ }
+}

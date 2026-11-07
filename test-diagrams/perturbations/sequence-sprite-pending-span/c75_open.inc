@@ -1,0 +1,2 @@
+sprite $needle <svg width="3" height="4">
+<rect width="3" height="4"/>

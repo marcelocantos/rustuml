@@ -1,0 +1,8 @@
+@startuml
+participant Cedar
+participant Spruce
+note over Cedar
+Sprite frame {
+end note
+Cedar -> Spruce: go
+@enduml

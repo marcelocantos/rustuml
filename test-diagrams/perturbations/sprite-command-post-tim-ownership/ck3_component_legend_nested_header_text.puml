@@ -1,0 +1,8 @@
+@startuml
+[Engine]
+legend
+header
+Sprite sheets are loaded
+endheader
+endlegend
+@enduml

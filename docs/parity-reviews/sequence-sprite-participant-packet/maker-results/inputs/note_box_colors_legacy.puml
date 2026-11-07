@@ -1,0 +1,8 @@
+@startuml
+box "Valley" #back:Wheat;line:Olive
+participant Ridge
+end box
+note over Ridge #Wheat-Olive: cargo
+Ridge -> Valley: survey
+Valley --> Ridge: logged
+@enduml

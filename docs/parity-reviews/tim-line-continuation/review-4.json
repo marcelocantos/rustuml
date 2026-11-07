@@ -1,0 +1,588 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-line-continuation",
+ "account_commit": "9ee6c154c8f5bc1e1bb8ad3c55d2ae9da17a8a4b",
+ "implementation_commit": "9ed52f4357c7d5af2fac06b340170c73eaad7800",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "reviewer": {
+  "task_id": "T3 thread t3-1ec8f45b, branch review/tim-continuation-round4-claude",
+  "model": "claude-opus-5-5"
+ },
+ "commands": [
+  "git switch -c review/tim-continuation-round4-claude fa3f95010; golden submodule hydrated with --reference at 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "checker-claude-round4/support/build.sh and build_pr.sh: git archive 9ed52f435 / 1f6ffa9f4 / 93bf53e18 / 9834a7194 / cb550c0d6, one private CARGO_TARGET_DIR each, deleted after the binary was saved; compare_cli from unchanged source against 93bf53e18's rustuml_oracle (binaries.sha256)",
+  "pre-registration a01ab9853: gen_probes_cr4.py, stage_cr4.py, predict_rust_cr4.py (batch CR4, relayed as CC, reference-results 2f6b7b68...)",
+  "prepare.py (unchanged) for CB and CC; verify_fresh_r4.py (round-3 script plus the CB/CC reference dirs): 0 bad rows; brief rule applied: Java exit 100/50 invalid (cr4_cnt_pragma_continued_end)",
+  "run_all.sh: unchanged replay.py, 4 modes, each case from its recorded cwd, every cohort at 4 builds; cb550c0d6 replayed on CB, CC, CA..AT, the 915, retained and golden",
+  "summarize_r4.py (round-3 summarizer plus the T14.63 welcome-match overlay); merge3.py and merge3_outcomes.py (three-way merge fidelity: ancestor 9834a7194 = code of merge-base adf56ce53, sprite side d28dd64a9 from the round-3 checker runs, parity-recovery side cb550c0d6)",
+  "rejection_contract.py (unchanged) per cohort against 1f6ffa9f4, 93bf53e18, 9834a7194 and cb550c0d6",
+  "gates.sh: workspace lib, pipe_mode, golden_no_oracle, golden_pairs, parity_perturbations, harness_guards at the tip; the four oracle tests at 1f6ffa9f4; pipe_mode at cb550c0d6; parity_perturbations once more after registration"
+ ],
+ "findings": [
+  "VERDICT REJECT (round 4). The round-4 code (3ae71ad99, 9ed52f435) loses nothing against the merged base 1f6ffa9f4 in any cohort, and its four obligations are accepted within their stated scope. The merge 1f6ffa9f4 does not keep everything from both sides: 2 registered perturbation pairs that matched at the round-3 tip are lost, and 1 Java-valid source that both parents render becomes a valid-input error.",
+  "Merge loss 1: ck4_ebnf_trailing (BA, registered under sprite-command-post-tim-ownership) matches at d28dd64a9 and at the round-3 merged base a5720e095, and mismatches at 1f6ffa9f4 and 9ed52f435 ('/' c '/ b' is drawn). Java's CodeIteratorInnerComment (TContext#buildCodeIterator it40) applies StringLocated#removeInnerComment to every line. Round 3 did too; the merge kept parity-recovery's EBNF exemption (preprocess/mod.rs, line_no_comment = line when in_ebnf_block).",
+  "Merge loss 2: ck4_tim_definelong_body (BA, registered) matches at d28dd64a9/a5720e095 and mismatches at 1f6ffa9f4/9ed52f435 ('dl /' c '/'). The definelong body is buffered from the raw line (current_buffered_line(line)) instead of the removeInnerComment text.",
+  "Merge loss 3: tc1_seq_theme_local_postjoin (BU, Java-valid; a local theme whose body has 'skinparam ArrowColor \\' + '#DD0000') is a mismatch at d28dd64a9, cb550c0d6 and 9834a7194, and a valid-input error at 1f6ffa9f4 and 9ed52f435 (\"#DD0000\" reaches the parser). project_events sends theme body lines to theme_tail, which the post-TIM UmlSource#loadInternal join never sees.",
+  "Every other three-way difference (merge3.json, merge3-outcomes.json) takes one parent's outcome: the sprite line's strict sequence admission errors (the approved and known sets) and parity-recovery's three golden mismatches (act_skinparam2_shadowing_true, act_skinparam_shadowing, edge_whitespace_multiple_blank_lines), which cb550c0d6 also mismatches. The sprite extraction drop is clean: no sprite-declaring case is worse than both parents, and the 790/28 cohort has 0 SVG byte changes against 1f6ffa9f4.",
+  "Obligation 1 (TIM line count over Java's list; !pragma PLAIN, Rust-only lines excluded, unshipped theme counts): ACCEPTED. CB: the 5 pragma cases and mr4_theme_shipped_tail gain; the 6 Java Welcome pages are reproduced. CC: cr4_cnt_pragma_from_include_tail gains; !option/!log/!assert/!undef/empty-sub/local comment-only theme Welcome pages match (cr4_cnt_theme_local_comment_only is a welcome-match gain). cr4_cnt_pragma_continued_end is Java exit 100 (the raw ReadFilterMergeLines merge swallows the end line); Rust rejects it ('No valid @start/@end'), a matched rejection.",
+  "Obligation 2 (one-line sources): ACCEPTED for its @startuml scope; CB's 4 Empty-description cases and mr4_ws_nel_before_at_end are newly rejected as Java rejects them. The rule is narrower than Java's UmlSource#isEmpty: count-3 bodies of blank, whitespace-only or TIM-empty lines and an include of one blank line are Java exit-200 Empty description, while every build shows Welcome with exit 0 (cr4_cnt_blank_three, cr4_cnt_ws_only_line, cr4_cnt_empty_var_line, cr4_cnt_include_blank_line). Non-@startuml one-line sources (mindmap, gantt, wbs) are Java Empty description; every build renders them. Not losses; proposed target.",
+  "Obligation 3 (Java whitespace at the @end/\\end tests): ACCEPTED. CB: FS/GS/RS/U+3000/U+2028/U+2001 before \\enduml and GS before @enduml match; ZWSP/U+2007/U+180E and NEL are rejected as Java rejects them. Other whitespace sites still differ: TIM directive and comment detection uses Rust trim() where TLineType uses [%s]* = [\\s\\u00A0]* (U+3000 before !$x =, ', !procedure, !if: Java syntax error, every Rust build accepts); Sub#fromFile's marker test (cr4_ws_ideo_startsub_in_includesub: Java 'cannot include'); NBSP before an assignment is a Java error (a001), every build accepts; StartUtils#isExit / !exit is unported.",
+  "Obligation 4 (ReadLineReader for includes, isLetterOrDigit header test, !N cut): ACCEPTED within its scope. CB: BOM directive, en dash raw and wrapped, headers U+00BD, U+2160, U+1D400, !1, !x and includesub BOM gain. CC: !, !0, _once twice and the !includesub en dash gain. The isLetterOrDigit table is Unicode 17 (unicode-properties 0.1.4); JDK 21 is Unicode 15.0. Sixteen BMP code points differ (U+088F, U+0C5C, U+0CDC, U+1C89, U+1C8A, U+A7CB-U+A7CF, U+A7D2, U+A7D4, U+A7DA-U+A7DC, U+A7F1). All four CC probes (U+1C89, U+A7CB, U+A7CE, U+088F) are Java-valid wrapped includes and Rust valid-input errors. Cargo.toml says '0.1', so cargo update moves to 0.1.5 (Unicode 18) silently.",
+  "Known losses: T14.33 x2 (ck4_procedure_sprite_end_comment_two, mk4_tim_sprite_in_procedure) RESOLVED, match at the tip through parity-recovery's event stream (ck4_ctl_procedure_four_classes also matches). T14.32 ck3_svg_inline_quoted_apostrophe_seq and T14.52 mc1_seq_foreach_body remain lost rejections against 93bf53e18 (accepted at 9834a7194 and cb550c0d6). T14.21 r2_component_include_tail_then_variable and cr3_wrap_first_is_mindmap, and T14.26 cr2_seq_pre_start_backslash_text remain valid-input errors. Fresh known 11: 10 remain; ck4_seq_divider_trailing now matches. Retained approved 13: identical. CA 8: 3 remain (cr3_end_tim_chr64_enduml, cr3_end_tim_chr92_enduml: T14.66; cr3_wrap_first_is_mindmap: T14.21); 5 fixed.",
+  "New against 9834a7194, all valid-input errors at 93bf53e18, 1f6ffa9f4 and the tip alike (strict sequence admission exposing unported preprocessing): cr4_exit_mid, cr4_ws_ideo_exit (!exit), cr4_main_bom_line2, cr4_main_bom_before_directive, cr4_main_endash_arrow (main source not read by ReadLineReader), cr4_inc_cr_only_lines (lone-CR split), cr4_inc_yaml_header_raw (ReadLineWithYamlHeader; cb550c0d6 matched it only because its lenient parser ignored '---' and 'title: x'), cr4_sfx_include_many, and the four Unicode-16/17 headers; plus cr4_cnt_exit_alone, a Java Welcome page that 9834a7194 and cb550c0d6 reproduce and every sprite-line build rejects. Golden preproc_foreach_nested ('!endforeach', Java ENDFOREACH is !endfor\\b) was rejected only at 93bf53e18, by accident.",
+  "Welcome outcomes at the tip (T14.63): CB 6/6, CC 8/9 (not cr4_cnt_exit_alone), CA 16/19 (T14.66 trio), BZ 5/5, BY 5/5, golden 17/17.",
+  "Gates: workspace lib 1,660 passed, 0 failed (5 crates). pipe_mode 16/17 at the tip; help_agent_discloses_no_oracle_product_metric fails because main.rs carries 11,175 from f70f107b8; cb550c0d6 passes 17/17, so the line needs cb550c0d6 merged, not new code. golden_no_oracle 11,182/11,251 at the tip against 11,181 at 1f6ffa9f4 (passes): only edge-cases 759 -> 760, the edge_pragma_useVerticalIf gain, unlocked. golden_pairs 10,498/753/1,299 against 10,497/754/1,299. parity_perturbations 3,890 failures at the tip against 3,895 at the base: 0 new, 5 fixed (cr3 pragma x4, cr3_end_us_before_bs_end); after registration 3,903 (the 13 registered pairs that fail at the tip). The 2 merge losses were already registered and fail at both the base and the tip. harness_guards: 4 pass; decimal_literal_ratchet and parity_review_records_are_complete fail identically at the tip and the base (records sha 72fc42ed after path normalisation; no T14.6.7 layout violation from this mechanism).",
+  "Process: the account 9ee6c154c precedes the draft 3ae71ad99, and addendum 2 96954ed40 precedes the final code 9ed52f435; account commits touch docs only. No fixture-keyed logic: probe strings appear only in #[cfg(test)]. Frozen items: crates/rustuml-oracle, crates/rustuml (tests and src), scripts, .gitmodules and non-perturbation test-diagrams are identical to parity-recovery f70f107b8 (comparator slack, syntax markers, park list, error census, guard allow-lists, strict-XML list, the 15-source approved set, and the no-oracle and decimal baselines unchanged)."
+ ],
+ "verdict": "rejected",
+ "record": "docs/parity-reviews/tim-line-continuation/checker-claude-round4/",
+ "perturbations": [
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_svek_start.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_svek_start.svg",
+   "result": "pass",
+   "axes": [
+    "pragma",
+    "position:start",
+    "count:3",
+    "java-prediction:valid",
+    "CB held out",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: mismatch",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_two_then_tail.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_two_then_tail.svg",
+   "result": "pass",
+   "axes": [
+    "pragma",
+    "two pragmas",
+    "count:4",
+    "java-prediction:valid",
+    "CB held out",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: mismatch",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_middle_vertical.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_middle_vertical.svg",
+   "result": "pass",
+   "axes": [
+    "pragma",
+    "position:middle",
+    "join into pragma text",
+    "java-prediction:valid",
+    "CB held out",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: mismatch",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_from_procedure.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_from_procedure.svg",
+   "result": "pass",
+   "axes": [
+    "pragma",
+    "procedure output",
+    "count:3",
+    "java-prediction:valid",
+    "CB held out",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: mismatch",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_variable_value.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_variable_value.svg",
+   "result": "pass",
+   "axes": [
+    "pragma",
+    "variable",
+    "count:3",
+    "java-prediction:valid",
+    "CB held out",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: mismatch",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_theme_unshipped_tail.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_theme_unshipped_tail.svg",
+   "result": "fail",
+   "axes": [
+    "theme",
+    "java-bundled theme Rust does not ship",
+    "count>2",
+    "java-prediction:valid",
+    "CB held out",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: mismatch",
+    "9ed52f435: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_theme_shipped_tail.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_theme_shipped_tail.svg",
+   "result": "pass",
+   "axes": [
+    "theme",
+    "shipped theme",
+    "count>2",
+    "java-prediction:valid",
+    "CB held out",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: mismatch",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_terminated_def_then_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_terminated_def_then_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "control",
+    "terminated definition",
+    "\\enduml",
+    "java-prediction:valid",
+    "CB held out",
+    "93bf53e18: valid-error",
+    "9834a7194: match",
+    "cb550c0d6: match",
+    "1f6ffa9f4: match",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_fs_before_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_fs_before_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+001C",
+    "\\enduml",
+    "java-prediction:valid",
+    "CB held out",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: valid-error",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_gs_before_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_gs_before_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+001D",
+    "\\enduml",
+    "java-prediction:valid",
+    "CB held out",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: valid-error",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_rs_before_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_rs_before_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+001E",
+    "\\enduml",
+    "java-prediction:valid",
+    "CB held out",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: valid-error",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_ideographic_before_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_ideographic_before_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+3000",
+    "\\enduml",
+    "java-prediction:valid",
+    "CB held out",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: match",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_line_separator_before_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_line_separator_before_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+2028",
+    "\\enduml",
+    "java-prediction:valid",
+    "CB held out",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: match",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_em_quad_before_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_em_quad_before_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+2001",
+    "\\enduml",
+    "java-prediction:valid",
+    "CB held out",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: match",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_gs_before_at_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_gs_before_at_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+001D",
+    "@enduml (not Pipe's end)",
+    "java-prediction:valid",
+    "CB held out",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: valid-error",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_pragma_upper_msg.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_pragma_upper_msg.svg",
+   "result": "fail",
+   "axes": [
+    "count",
+    "!PRAGMA: PLAIN; CommandPragma is case-sensitive",
+    "unsure",
+    "CC held out",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: mismatch",
+    "9ed52f435: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_pragma_from_variable_line.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_pragma_from_variable_line.svg",
+   "result": "pass",
+   "axes": [
+    "count",
+    "TIM-generated !pragma line",
+    "unsure",
+    "CC held out",
+    "93bf53e18: match",
+    "9834a7194: match",
+    "cb550c0d6: match",
+    "1f6ffa9f4: match",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_assume_alone.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_assume_alone.svg",
+   "result": "fail",
+   "axes": [
+    "count",
+    "!assume PLAIN: count 3",
+    "unsure",
+    "CC held out",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: mismatch",
+    "9ed52f435: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_theme_unshipped_alone.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_theme_unshipped_alone.svg",
+   "result": "fail",
+   "axes": [
+    "count",
+    "unshipped bundled theme alone",
+    "unsure",
+    "CC held out",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: mismatch",
+    "9ed52f435: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_exit_mid.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_exit_mid.svg",
+   "result": "fail",
+   "axes": [
+    "BlockUmlBuilder !exit",
+    "lines after !exit dropped",
+    "CC held out",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: valid-error",
+    "9ed52f435: valid-error"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_blank_then_message.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_blank_then_message.svg",
+   "result": "pass",
+   "axes": [
+    "count",
+    "control: blank then content",
+    "CC held out",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch",
+    "cb550c0d6: match",
+    "1f6ffa9f4: match",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_vt_before_define.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_vt_before_define.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "VT before !define: ASCII \\s",
+    "CC held out",
+    "93bf53e18: match",
+    "9834a7194: match",
+    "cb550c0d6: match",
+    "1f6ffa9f4: match",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_ideo_exit.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_ideo_exit.svg",
+   "result": "fail",
+   "axes": [
+    "whitespace",
+    "StartUtils#isExit trims Character#isWhitespace",
+    "CC held out",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: valid-error",
+    "9ed52f435: valid-error"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_ideo_before_at_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_ideo_before_at_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+3000 before @enduml ends the block",
+    "CC held out",
+    "93bf53e18: match",
+    "9834a7194: match",
+    "cb550c0d6: match",
+    "1f6ffa9f4: match",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_main_bom_line2.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_main_bom_line2.svg",
+   "result": "fail",
+   "axes": [
+    "BOM",
+    "main source body line",
+    "CC held out",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: valid-error",
+    "9ed52f435: valid-error"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_main_bom_before_directive.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_main_bom_before_directive.svg",
+   "result": "fail",
+   "axes": [
+    "BOM",
+    "main source, before a directive",
+    "CC held out",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: valid-error",
+    "9ed52f435: valid-error"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_main_endash_label.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_main_endash_label.svg",
+   "result": "fail",
+   "axes": [
+    "U+2013",
+    "main source label",
+    "CC held out",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: mismatch",
+    "9ed52f435: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_main_endash_arrow.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_main_endash_arrow.svg",
+   "result": "fail",
+   "axes": [
+    "U+2013",
+    "main source arrow",
+    "CC held out",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: valid-error",
+    "9ed52f435: valid-error"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_main_cr_only_lines.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_main_cr_only_lines.svg",
+   "result": "fail",
+   "axes": [
+    "line split",
+    "Pipe BufferedReader splits on lone CR",
+    "CC held out",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: mismatch",
+    "9ed52f435: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_sprite_from_procedure.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_sprite_from_procedure.svg",
+   "result": "fail",
+   "axes": [
+    "sprite",
+    "declared by a procedure",
+    "CC held out",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: mismatch",
+    "9ed52f435: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_sprite_continued_header.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_sprite_continued_header.svg",
+   "result": "fail",
+   "axes": [
+    "sprite",
+    "continued header line",
+    "CC held out",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch",
+    "cb550c0d6: mismatch",
+    "1f6ffa9f4: mismatch",
+    "9ed52f435: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_foreach_unterminated.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_foreach_unterminated.svg",
+   "result": "pass",
+   "axes": [
+    "swallowed end",
+    "!foreach without !endfor",
+    "unsure",
+    "CC held out",
+    "93bf53e18: match",
+    "9834a7194: match",
+    "cb550c0d6: match",
+    "1f6ffa9f4: match",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_while_unterminated.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_while_unterminated.svg",
+   "result": "pass",
+   "axes": [
+    "swallowed end",
+    "!while without !endwhile",
+    "unsure",
+    "CC held out",
+    "93bf53e18: match",
+    "9834a7194: match",
+    "cb550c0d6: match",
+    "1f6ffa9f4: match",
+    "9ed52f435: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_if_unterminated_active.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_if_unterminated_active.svg",
+   "result": "pass",
+   "axes": [
+    "swallowed end",
+    "active !if without !endif",
+    "unsure",
+    "CC held out",
+    "93bf53e18: match",
+    "9834a7194: match",
+    "cb550c0d6: match",
+    "1f6ffa9f4: match",
+    "9ed52f435: match"
+   ]
+  }
+ ]
+}

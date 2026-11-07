@@ -1,0 +1,445 @@
+{
+  "entries": 15,
+  "before_rejections": 0,
+  "after_rejections": 0,
+  "introduced_losses": [],
+  "after_false_accepts": [
+    "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_participant_automatic.puml",
+    "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_arrow_automatic.puml",
+    "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_exo_left_automatic.puml",
+    "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_exo_right_automatic.puml",
+    "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_note_automatic.puml",
+    "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_rnote_automatic.puml",
+    "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_note_multi_automatic.puml",
+    "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_group_automatic.puml",
+    "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_box_automatic.puml",
+    "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_ref_automatic.puml",
+    "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_ref_multi_automatic.puml",
+    "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_activation_automatic.puml",
+    "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_activation_second_automatic.puml",
+    "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_activation_short_automatic.puml",
+    "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_return_automatic.puml"
+  ],
+  "results": [
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_participant_automatic.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "d5207508e730c044946c47ded382763ee96430bc891aacbe5e1d1efe13b171c5",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "d5207508e730c044946c47ded382763ee96430bc891aacbe5e1d1efe13b171c5",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_arrow_automatic.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "a913f8c0d0ecf982e423e2ff784a31fa1eb098e8d2a49f00050445049a69d453",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "a913f8c0d0ecf982e423e2ff784a31fa1eb098e8d2a49f00050445049a69d453",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_exo_left_automatic.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "16fdd1df3aa7eed75a6f8a11da6bc55a8882bbace461fcea1e5f1460c5ad8d7e",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "16fdd1df3aa7eed75a6f8a11da6bc55a8882bbace461fcea1e5f1460c5ad8d7e",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_exo_right_automatic.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "ad8a2bcdecb3e52999e112c3400a1ed12227740d36fb1bfb277723c97860bc39",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "ad8a2bcdecb3e52999e112c3400a1ed12227740d36fb1bfb277723c97860bc39",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_note_automatic.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "85897823f1a1840e39c1b65ca9758b8717a03127f84bcf275f3653385c57f37d",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "85897823f1a1840e39c1b65ca9758b8717a03127f84bcf275f3653385c57f37d",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_rnote_automatic.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "7180fad7575ea2f32d5a0273a3f92c797a108a5e79ee1a597ace6108eb1d94a0",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "7180fad7575ea2f32d5a0273a3f92c797a108a5e79ee1a597ace6108eb1d94a0",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_note_multi_automatic.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "0855e13e88167ffcfe6a19e741c2f8fa3f0d63ea6cb442746c0c30e999917575",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "0855e13e88167ffcfe6a19e741c2f8fa3f0d63ea6cb442746c0c30e999917575",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_group_automatic.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "972d0cbc8b0c9aa42e424d09bf9c3603e958df26c7e9e0174b9f10ac39be8b71",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "972d0cbc8b0c9aa42e424d09bf9c3603e958df26c7e9e0174b9f10ac39be8b71",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_box_automatic.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b0daeff5d569631519501ecff39583eae9e41c756557de3564a9158dc21cce50",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b0daeff5d569631519501ecff39583eae9e41c756557de3564a9158dc21cce50",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_ref_automatic.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "dc53052b3326c114594a757d094f41fa990cf5d9baf60fbbde0b58ba56c659d9",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "dc53052b3326c114594a757d094f41fa990cf5d9baf60fbbde0b58ba56c659d9",
+          "stderr": "warning: sequence command CommandReferenceOverSeveral variant is recognized but unimplemented at line 4: ref#automatic over Juniper: paint\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_ref_multi_automatic.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "839e31260a73274501642eaec3bbfa6bbc043d573da15bb3ea1231d44a6a24bc",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "839e31260a73274501642eaec3bbfa6bbc043d573da15bb3ea1231d44a6a24bc",
+          "stderr": "warning: sequence command CommandReferenceMultilinesOverSeveral variant is recognized but unimplemented at line 4: ref#automatic over Juniper\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_activation_automatic.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "9140d362dccb6f72c24e93b055aaf8414cbc0e39614589be3ea8acc63133008f",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "9140d362dccb6f72c24e93b055aaf8414cbc0e39614589be3ea8acc63133008f",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_activation_second_automatic.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "2f2c108a2b9f0b1e44cb467bd14c746358c1db79ef987f9fcb23deb055f5d272",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "2f2c108a2b9f0b1e44cb467bd14c746358c1db79ef987f9fcb23deb055f5d272",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_activation_short_automatic.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c9a22c733283b1c30092a981b4c61c5c607cb46f886637c8fb40de868388ffd3",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c9a22c733283b1c30092a981b4c61c5c607cb46f886637c8fb40de868388ffd3",
+          "stderr": "warning: sequence command CommandActivate2 is recognized but unimplemented at line 4: Juniper ++ #automatic\nwarning: sequence command CommandActivate2 is recognized but unimplemented at line 5: Juniper --\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_colour_return_automatic.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "03b09bf32338584c98be0323235ba15e783e44d14acacb14dc41deb943193ce4",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "03b09bf32338584c98be0323235ba15e783e44d14acacb14dc41deb943193ce4",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    }
+  ]
+}

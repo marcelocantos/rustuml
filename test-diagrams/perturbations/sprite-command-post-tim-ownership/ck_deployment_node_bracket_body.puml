@@ -1,0 +1,6 @@
+@startuml
+node Server [
+first line
+Sprite sheets are loaded
+]
+@enduml

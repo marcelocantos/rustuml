@@ -1,0 +1,16 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+!if 1
+sprite $needle <svg width="3" height="4">
+<rect width="3" height="4"/>
+</svg>
+!else
+sprite $needle [3x2/16] {
+F0F
+0F0
+}
+!endif
+Spruce --> Cedar: packed
+@enduml

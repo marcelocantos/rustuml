@@ -1,0 +1,542 @@
+{
+  "before": {
+    "CommandActivate": {
+      "case_count": 7,
+      "warning_count": 11
+    },
+    "CommandActivate2": {
+      "case_count": 11,
+      "warning_count": 22
+    },
+    "CommandArrow": {
+      "case_count": 15,
+      "warning_count": 21
+    },
+    "CommandAssumeTransparent": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandAutoNewpage": {
+      "case_count": 4,
+      "warning_count": 4
+    },
+    "CommandAutoactivate": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "CommandAutonumber": {
+      "case_count": 17,
+      "warning_count": 17
+    },
+    "CommandAutonumberIncrement": {
+      "case_count": 6,
+      "warning_count": 6
+    },
+    "CommandAutonumberStop": {
+      "case_count": 5,
+      "warning_count": 5
+    },
+    "CommandBoxEnd": {
+      "case_count": 6,
+      "warning_count": 6
+    },
+    "CommandBoxStart": {
+      "case_count": 14,
+      "warning_count": 14
+    },
+    "CommandCaption": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandDeactivateShort": {
+      "case_count": 6,
+      "warning_count": 6
+    },
+    "CommandExoArrowLeft": {
+      "case_count": 10,
+      "warning_count": 10
+    },
+    "CommandExoArrowRight": {
+      "case_count": 9,
+      "warning_count": 9
+    },
+    "CommandFactorySprite$1": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "CommandFactorySprite$2": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "CommandFooter": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandGrouping": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "CommandHeader": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandHideEmptyDescription": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandHideShowByVisibility": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandHideUnlinked": {
+      "case_count": 4,
+      "warning_count": 4
+    },
+    "CommandIgnoreNewpage": {
+      "case_count": 6,
+      "warning_count": 6
+    },
+    "CommandLegend": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandLinkAnchor": {
+      "case_count": 6,
+      "warning_count": 6
+    },
+    "CommandMainframe": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandMinwidth": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandMultilinesCaption": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandMultilinesFooter": {
+      "case_count": 4,
+      "warning_count": 4
+    },
+    "CommandMultilinesHeader": {
+      "case_count": 4,
+      "warning_count": 4
+    },
+    "CommandMultilinesLegend": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "CommandMultilinesTitle": {
+      "case_count": 4,
+      "warning_count": 4
+    },
+    "CommandNamespaceSeparator": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandNewpage": {
+      "case_count": 9,
+      "warning_count": 9
+    },
+    "CommandPage": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandParticipantA": {
+      "case_count": 15,
+      "warning_count": 15
+    },
+    "CommandParticipantA2": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "CommandParticipantA3": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "CommandParticipantA4": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "CommandParticipantMultilines": {
+      "case_count": 6,
+      "warning_count": 6
+    },
+    "CommandReferenceMultilinesOverSeveral": {
+      "case_count": 12,
+      "warning_count": 12
+    },
+    "CommandReferenceOverSeveral": {
+      "case_count": 6,
+      "warning_count": 6
+    },
+    "CommandRotate": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandScale": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandScaleMaxHeight": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandScaleMaxWidth": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandScaleMaxWidthAndHeight": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandScaleWidthAndHeight": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandScaleWidthOrHeight": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandSkin": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandSkinParam": {
+      "case_count": 5,
+      "warning_count": 5
+    },
+    "CommandSkinParamJaws": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandSkinParamMultilines": {
+      "case_count": 3,
+      "warning_count": 5
+    },
+    "CommandSpriteFile": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "CommandSpriteStdlib": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "CommandSpriteStdlibSvg": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "CommandSpriteSvg": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "CommandSpriteSvgMultiline": {
+      "case_count": 5,
+      "warning_count": 5
+    },
+    "CommandStyleImport": {
+      "case_count": 4,
+      "warning_count": 4
+    },
+    "CommandTitle": {
+      "case_count": 3,
+      "warning_count": 3
+    },
+    "CommandUrl": {
+      "case_count": 4,
+      "warning_count": 4
+    },
+    "FactorySequenceNoteAcrossCommand$1": {
+      "case_count": 5,
+      "warning_count": 5
+    },
+    "FactorySequenceNoteAcrossCommand$2": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "FactorySequenceNoteCommand$1": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "FactorySequenceNoteCommand$2": {
+      "case_count": 17,
+      "warning_count": 17
+    },
+    "FactorySequenceNoteOnArrowCommand$1": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "FactorySequenceNoteOnArrowCommand$2": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "FactorySequenceNoteOverSeveralCommand$1": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "FactorySequenceNoteOverSeveralCommand$2": {
+      "case_count": 1,
+      "warning_count": 1
+    }
+  },
+  "after": {
+    "CommandActivate": {
+      "case_count": 7,
+      "warning_count": 11
+    },
+    "CommandActivate2": {
+      "case_count": 11,
+      "warning_count": 22
+    },
+    "CommandArrow": {
+      "case_count": 15,
+      "warning_count": 21
+    },
+    "CommandAssumeTransparent": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandAutoNewpage": {
+      "case_count": 4,
+      "warning_count": 4
+    },
+    "CommandAutoactivate": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "CommandAutonumber": {
+      "case_count": 17,
+      "warning_count": 17
+    },
+    "CommandAutonumberIncrement": {
+      "case_count": 6,
+      "warning_count": 6
+    },
+    "CommandAutonumberStop": {
+      "case_count": 5,
+      "warning_count": 5
+    },
+    "CommandBoxEnd": {
+      "case_count": 6,
+      "warning_count": 6
+    },
+    "CommandBoxStart": {
+      "case_count": 15,
+      "warning_count": 15
+    },
+    "CommandCaption": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandDeactivateShort": {
+      "case_count": 6,
+      "warning_count": 6
+    },
+    "CommandExoArrowLeft": {
+      "case_count": 10,
+      "warning_count": 10
+    },
+    "CommandExoArrowRight": {
+      "case_count": 9,
+      "warning_count": 9
+    },
+    "CommandFooter": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandGrouping": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "CommandHeader": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandHideEmptyDescription": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandHideShowByVisibility": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandHideUnlinked": {
+      "case_count": 4,
+      "warning_count": 4
+    },
+    "CommandIgnoreNewpage": {
+      "case_count": 6,
+      "warning_count": 6
+    },
+    "CommandLegend": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandLinkAnchor": {
+      "case_count": 6,
+      "warning_count": 6
+    },
+    "CommandMainframe": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandMinwidth": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandMultilinesCaption": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandMultilinesFooter": {
+      "case_count": 4,
+      "warning_count": 4
+    },
+    "CommandMultilinesHeader": {
+      "case_count": 4,
+      "warning_count": 4
+    },
+    "CommandMultilinesLegend": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "CommandMultilinesTitle": {
+      "case_count": 4,
+      "warning_count": 4
+    },
+    "CommandNamespaceSeparator": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandNewpage": {
+      "case_count": 9,
+      "warning_count": 9
+    },
+    "CommandPage": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandParticipant: signed-order residue": {
+      "case_count": 3,
+      "warning_count": 3
+    },
+    "CommandParticipantA": {
+      "case_count": 9,
+      "warning_count": 9
+    },
+    "CommandParticipantMultilines": {
+      "case_count": 8,
+      "warning_count": 8
+    },
+    "CommandReferenceMultilinesOverSeveral": {
+      "case_count": 12,
+      "warning_count": 12
+    },
+    "CommandReferenceOverSeveral": {
+      "case_count": 6,
+      "warning_count": 6
+    },
+    "CommandRotate": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandScale": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandScaleMaxHeight": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandScaleMaxWidth": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandScaleMaxWidthAndHeight": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandScaleWidthAndHeight": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandScaleWidthOrHeight": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandSkin": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandSkinParam": {
+      "case_count": 5,
+      "warning_count": 5
+    },
+    "CommandSkinParamJaws": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandSkinParamMultilines": {
+      "case_count": 3,
+      "warning_count": 5
+    },
+    "CommandSpriteFile": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "CommandSpriteSvg/CommandSpriteSvgMultiline: materialization residue": {
+      "case_count": 14,
+      "warning_count": 14
+    },
+    "CommandStyleImport": {
+      "case_count": 4,
+      "warning_count": 4
+    },
+    "CommandTitle": {
+      "case_count": 3,
+      "warning_count": 3
+    },
+    "CommandUrl": {
+      "case_count": 4,
+      "warning_count": 4
+    },
+    "FactorySequenceNoteAcrossCommand$1": {
+      "case_count": 5,
+      "warning_count": 5
+    },
+    "FactorySequenceNoteAcrossCommand$2": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "FactorySequenceNoteCommand$1": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "FactorySequenceNoteCommand$2": {
+      "case_count": 20,
+      "warning_count": 20
+    },
+    "FactorySequenceNoteOnArrowCommand$1": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "FactorySequenceNoteOnArrowCommand$2": {
+      "case_count": 2,
+      "warning_count": 2
+    },
+    "FactorySequenceNoteOverSeveralCommand$1": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "FactorySequenceNoteOverSeveralCommand$2": {
+      "case_count": 1,
+      "warning_count": 1
+    },
+    "single-line sprite command: execution residue": {
+      "case_count": 14,
+      "warning_count": 14
+    }
+  }
+}

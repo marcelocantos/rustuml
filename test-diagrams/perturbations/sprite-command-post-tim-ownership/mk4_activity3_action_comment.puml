@@ -1,0 +1,6 @@
+@startuml
+start
+:step one; /' c '/
+:step two;
+stop
+@enduml

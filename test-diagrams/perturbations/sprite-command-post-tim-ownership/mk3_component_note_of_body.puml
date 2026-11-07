@@ -1,0 +1,6 @@
+@startuml
+[Engine]
+note left of Engine
+Sprite sheets cached
+end note
+@enduml

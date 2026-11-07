@@ -1,0 +1,3320 @@
+[
+ {
+  "name": "tc1_seq_quoted_backslash",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "backslash inside quotes",
+   "pre-TIM"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "b8464eb9376e",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "W",
+     "W",
+     "self"
+    ],
+    "source_lines": [
+     "3",
+     "3",
+     "3",
+     "3"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Wide \\\\\"\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "2a9373aca": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Wide \\\\\"\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "61f0303ef783",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Wide Name",
+     "Wide Name",
+     "self"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "3"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_url_backslash",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "URL then backslash",
+   "pre-TIM"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "9d7513aaf7af",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "n",
+     "n",
+     "w",
+     "w",
+     "see",
+     "go",
+     "\\"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "2",
+     "2",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2",
+     "2",
+     "2",
+     "2"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"now\"\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "2a9373aca": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"now\"\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "ca473722fe97",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "see",
+     "go",
+     "now"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_class_quoted_label_backslash",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "quoted link label",
+   "pre-TIM"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "f1378743fbee",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Fir",
+     "Yew",
+     "alpha \\"
+    ],
+    "source_lines": [
+     "1",
+     "2",
+     "3"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "f1378743fbee",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Fir",
+     "Yew",
+     "alpha \\"
+    ],
+    "source_lines": [
+     "1",
+     "2",
+     "3"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "f1378743fbee",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Fir",
+     "Yew",
+     "alpha \\"
+    ],
+    "source_lines": [
+     "1",
+     "2",
+     "3"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "41caadcf2d13",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Fir",
+     "Yew",
+     "alpha beta"
+    ],
+    "source_lines": [
+     "1",
+     "2",
+     "3"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_quote_comment_backslash",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "' line ends with backslash",
+   "swallows next line"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "9430f7b37a86",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "eaten",
+     "kept"
+    ],
+    "source_lines": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "3"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "9430f7b37a86",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "eaten",
+     "kept"
+    ],
+    "source_lines": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "3"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "9430f7b37a86",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "eaten",
+     "kept"
+    ],
+    "source_lines": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "3"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "4ee8d0b4a826",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Tui",
+     "Tui",
+     "Kea",
+     "Kea",
+     "kept"
+    ],
+    "source_lines": [
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_class_quote_comment_backslash",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "' line ends with backslash",
+   "swallows next line"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "7508f3cee967",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Ash",
+     "Gone",
+     "Elm"
+    ],
+    "source_lines": [
+     "1",
+     "3",
+     "4"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "7508f3cee967",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Ash",
+     "Gone",
+     "Elm"
+    ],
+    "source_lines": [
+     "1",
+     "3",
+     "4"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "7508f3cee967",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Ash",
+     "Gone",
+     "Elm"
+    ],
+    "source_lines": [
+     "1",
+     "3",
+     "4"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "07a2450c6fde",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Ash",
+     "Elm"
+    ],
+    "source_lines": [
+     "1",
+     "4"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_next_apostrophe_leading",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "next line starts with ' after spaces (skipped)"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "fc17a3cced39",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "it \\",
+     "z"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "fc17a3cced39",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "it \\",
+     "z"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "fc17a3cced39",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "it \\",
+     "z"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "208d3b4474ce",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "it Tui -&gt; Kea : z"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_block_comment_inner_backslash",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "backslash inside long comment",
+   "'/ skipped as quote line"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "00208c50195d",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "hidden",
+     "shown"
+    ],
+    "source_lines": [
+     "4",
+     "4",
+     "4",
+     "4",
+     "4",
+     "4",
+     "4",
+     "6"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "00208c50195d",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "hidden",
+     "shown"
+    ],
+    "source_lines": [
+     "4",
+     "4",
+     "4",
+     "4",
+     "4",
+     "4",
+     "4",
+     "6"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "00208c50195d",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "hidden",
+     "shown"
+    ],
+    "source_lines": [
+     "4",
+     "4",
+     "4",
+     "4",
+     "4",
+     "4",
+     "4",
+     "6"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "28fd6e77e606",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Tui",
+     "Tui",
+     "Kea",
+     "Kea",
+     "shown"
+    ],
+    "source_lines": [
+     "6",
+     "6",
+     "6",
+     "6",
+     "6",
+     "6",
+     "6"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_class_block_comment_inner_backslash",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "backslash inside long comment",
+   "'/ skipped as quote line"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "0115d2e690b0",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Hidden",
+     "Shown"
+    ],
+    "source_lines": [
+     "4",
+     "6"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "0115d2e690b0",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Hidden",
+     "Shown"
+    ],
+    "source_lines": [
+     "4",
+     "6"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "0115d2e690b0",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Hidden",
+     "Shown"
+    ],
+    "source_lines": [
+     "4",
+     "6"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "10e8d82fec0c",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Shown"
+    ],
+    "source_lines": [
+     "6"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_next_long_comment_tail",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "long comment skipped then next real line"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "233f59e268ce",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "x \\",
+     "after",
+     "more"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "4",
+     "5"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "233f59e268ce",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "x \\",
+     "after",
+     "more"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "4",
+     "5"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "233f59e268ce",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "x \\",
+     "after",
+     "more"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "4",
+     "5"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "1f79e68ca9cd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "x Tui -&gt; Kea : after",
+     "more"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "5"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_inv_seq_long_comment_unterminated_tail",
+  "intended_valid": false,
+  "axes": [
+   "sequence",
+   "long comment never ends (tail after '/)",
+   "swallows end"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "0dd25cede5ce",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "x \\",
+     "z"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "4"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "0dd25cede5ce",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "x \\",
+     "z"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "4"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "0dd25cede5ce",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "x \\",
+     "z"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "4"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   }
+  }
+ },
+ {
+  "name": "tc1_inv_seq_quote_comment_then_end",
+  "intended_valid": false,
+  "axes": [
+   "sequence",
+   "comment line then end swallowed"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "cb3eadb45f3e",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "x \\"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "cb3eadb45f3e",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "x \\"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "cb3eadb45f3e",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "x \\"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_legend_body",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "legend body"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "26bfed2d0295",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "hi",
+     "line one \\",
+     "two",
+     "three"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "26bfed2d0295",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "hi",
+     "line one \\",
+     "two",
+     "three"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "26bfed2d0295",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "hi",
+     "line one \\",
+     "two",
+     "three"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "aa838aa8487f",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "hi",
+     "line one two",
+     "three"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_class_note_body",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "note body"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "33e924c4a7ad",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Oak",
+     "first \\",
+     "second",
+     "third"
+    ],
+    "source_lines": [
+     "1",
+     "3"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "33e924c4a7ad",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Oak",
+     "first \\",
+     "second",
+     "third"
+    ],
+    "source_lines": [
+     "1",
+     "3"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "33e924c4a7ad",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Oak",
+     "first \\",
+     "second",
+     "third"
+    ],
+    "source_lines": [
+     "1",
+     "3"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "fbc9cdb0e333",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Oak",
+     "first second",
+     "third"
+    ],
+    "source_lines": [
+     "1",
+     "3"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_yaml_body",
+  "intended_valid": true,
+  "axes": [
+   "yaml",
+   "pre-TIM join"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 3: YAML parse error: could not find expected ':' at line 3 column 1, while scanning a simple key at line 2 column 1\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "93bf53e18": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 3: YAML parse error: could not find expected ':' at line 3 column 1, while scanning a simple key at line 2 column 1\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "2a9373aca": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 3: YAML parse error: could not find expected ':' at line 3 column 1, while scanning a simple key at line 2 column 1\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "c8a5af8c8c08",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "fruit",
+     "apple pie",
+     "veg",
+     "leek"
+    ],
+    "source_lines": []
+   }
+  }
+ },
+ {
+  "name": "tc1_salt_body",
+  "intended_valid": true,
+  "axes": [
+   "salt",
+   "pre-TIM join"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "47a9b8ad9b3c",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "[Press \\",
+     "Here]",
+     "field"
+    ],
+    "source_lines": []
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "47a9b8ad9b3c",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "[Press \\",
+     "Here]",
+     "field"
+    ],
+    "source_lines": []
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "47a9b8ad9b3c",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "[Press \\",
+     "Here]",
+     "field"
+    ],
+    "source_lines": []
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "982e6bb6e758",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Press Here",
+     "field"
+    ],
+    "source_lines": []
+   }
+  }
+ },
+ {
+  "name": "tc1_json_two_pieces_nested",
+  "intended_valid": true,
+  "axes": [
+   "json",
+   "three pieces"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 2: JSON parse error: expected value at line 2 column 10\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "93bf53e18": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 2: JSON parse error: expected value at line 2 column 10\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "2a9373aca": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 2: JSON parse error: expected value at line 2 column 10\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "ba4ce1e88695",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "k",
+     "&#160;&#160;&#160;",
+     "z",
+     "q",
+     "1",
+     "2",
+     "3"
+    ],
+    "source_lines": []
+   }
+  }
+ },
+ {
+  "name": "tc1_mindmap_three",
+  "intended_valid": true,
+  "axes": [
+   "mindmap",
+   "three pieces"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "f4b883dd576b",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Root \\",
+     "Leaf"
+    ],
+    "source_lines": []
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "f4b883dd576b",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Root \\",
+     "Leaf"
+    ],
+    "source_lines": []
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "f4b883dd576b",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Root \\",
+     "Leaf"
+    ],
+    "source_lines": []
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "44fa5b616b8d",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Root node name",
+     "Leaf"
+    ],
+    "source_lines": []
+   }
+  }
+ },
+ {
+  "name": "tc1_activity_legacy_label",
+  "intended_valid": true,
+  "axes": [
+   "activity legacy",
+   "quoted label continued"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "a2abc7a104d5",
+    "stderr": "",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "a2abc7a104d5",
+    "stderr": "",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "a2abc7a104d5",
+    "stderr": "",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "8a2fc7f965ce",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "First line"
+    ],
+    "source_lines": []
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_include_tail_before_end",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "!include last line backslash then @enduml",
+   "post-TIM pending tail"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "ccc239ac6a4b",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "head",
+     "tail \\"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "ccc239ac6a4b",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "head",
+     "tail \\"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "ccc239ac6a4b",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "head",
+     "tail \\"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "def7476b0c48",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "head"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_include_then_directive",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "!include backslash then TIM directive (Rust placeholder)",
+   "post-TIM"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "3867a7e559c6",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "tail \\",
+     "two 2"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "3867a7e559c6",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "tail \\",
+     "two 2"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "3867a7e559c6",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "tail \\",
+     "two 2"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "c42e2c87020c",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "tail",
+     "two 2"
+    ],
+    "source_lines": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "3"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_include_then_define",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "!include backslash then !define (Rust placeholder)",
+   "post-TIM"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "70693d6750ef",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "tail \\",
+     "two"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "70693d6750ef",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "tail \\",
+     "two"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "70693d6750ef",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "tail \\",
+     "two"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "07b8032d5927",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "tail",
+     "two"
+    ],
+    "source_lines": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "3"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_include_then_main_line",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "!include backslash joined with main line",
+   "post-TIM numbering"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "9aefccc51149",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "m",
+     "m",
+     "re",
+     "re",
+     "tail \\",
+     "after"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "2",
+     "2",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2",
+     "2",
+     "2",
+     "2"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"more\"\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "2a9373aca": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"more\"\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "2deda691265f",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "tail more",
+     "after"
+    ],
+    "source_lines": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "3"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_class_include_three",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "!include three pieces",
+   "post-TIM last-line location"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "ff101741d433",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Inc",
+     "After",
+     "Inc2"
+    ],
+    "source_lines": [
+     "1",
+     "2",
+     "4"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "ff101741d433",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Inc",
+     "After",
+     "Inc2"
+    ],
+    "source_lines": [
+     "1",
+     "2",
+     "4"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "ff101741d433",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Inc",
+     "After",
+     "Inc2"
+    ],
+    "source_lines": [
+     "1",
+     "2",
+     "4"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "01fd3eede73c",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "After",
+     "\u00abi1\u00bb",
+     "Inc",
+     "Inc2"
+    ],
+    "source_lines": [
+     "2",
+     "3",
+     "4"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_mindmap_include_no_postjoin",
+  "intended_valid": true,
+  "axes": [
+   "mindmap",
+   "!include backslash not joined (no SEQUENCE)"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "f4b883dd576b",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Root \\",
+     "Leaf"
+    ],
+    "source_lines": []
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "f4b883dd576b",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Root \\",
+     "Leaf"
+    ],
+    "source_lines": []
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "f4b883dd576b",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Root \\",
+     "Leaf"
+    ],
+    "source_lines": []
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "f4b883dd576b",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Root \\",
+     "Leaf"
+    ],
+    "source_lines": []
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_include_directive_continued",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "!include directive split by continuation"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "f24d0c75ff61",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "tc1_plain",
+     "tc1_plain",
+     "iuml",
+     "iuml",
+     "Tui",
+     "Tui",
+     "Kea",
+     "Kea",
+     "main"
+    ],
+    "source_lines": [
+     "2",
+     "2",
+     "3",
+     "3",
+     "2",
+     "2",
+     "2",
+     "2",
+     "3",
+     "3",
+     "3",
+     "3"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"tc1_plain.iuml\"\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "2a9373aca": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"tc1_plain.iuml\"\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "42a65d7548a3",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "included",
+     "main"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_theme_local_postjoin",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "local !theme file with backslash",
+   "post-TIM"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "bd666983fc71",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "hi"
+    ],
+    "source_lines": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "bd666983fc71",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "hi"
+    ],
+    "source_lines": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "bd666983fc71",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "hi"
+    ],
+    "source_lines": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "bd666983fc71",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "hi"
+    ],
+    "source_lines": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_chr_backslash_postjoin",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "TIM output ends with backslash",
+   "post-TIM join",
+   "last-line location"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "37fdc07a8a4e",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "one\\",
+     "two",
+     "three"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2",
+     "3"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "37fdc07a8a4e",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "one\\",
+     "two",
+     "three"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2",
+     "3"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "37fdc07a8a4e",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "one\\",
+     "two",
+     "three"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2",
+     "3"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "16f06c49e266",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "oneTui -&gt; Kea : two",
+     "three"
+    ],
+    "source_lines": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "3"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_mindmap_chr_backslash_no_postjoin",
+  "intended_valid": true,
+  "axes": [
+   "mindmap",
+   "TIM output backslash, no post-TIM join"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "a906a541fbbd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Root\\",
+     "Leaf"
+    ],
+    "source_lines": []
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "a906a541fbbd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Root\\",
+     "Leaf"
+    ],
+    "source_lines": []
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "a906a541fbbd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Root\\",
+     "Leaf"
+    ],
+    "source_lines": []
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "a906a541fbbd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Root\\",
+     "Leaf"
+    ],
+    "source_lines": []
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_two_pieces_lines",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "two pieces",
+   "following data-source-line"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "c07da40465b4",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "p1 \\",
+     "after"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"p2\"\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "2a9373aca": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"p2\"\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "bf8427146983",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "p1 p2",
+     "after"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_four_pieces_lines",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "four pieces",
+   "following data-source-line"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "52becc43486d",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "p1 \\",
+     "after",
+     "last"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "5",
+     "6"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"p2 \\\\\"\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "2a9373aca": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"p2 \\\\\"\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "6abfa64da4be",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "p1 p2 p3 p4",
+     "after",
+     "last"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "5",
+     "6"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_class_four_pieces_lines",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "four pieces",
+   "following data-source-line"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "42f5a1639047",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Ash",
+     "Birch",
+     "Cedar"
+    ],
+    "source_lines": [
+     "1",
+     "5",
+     "6"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "42f5a1639047",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Ash",
+     "Birch",
+     "Cedar"
+    ],
+    "source_lines": [
+     "1",
+     "5",
+     "6"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "42f5a1639047",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Ash",
+     "Birch",
+     "Cedar"
+    ],
+    "source_lines": [
+     "1",
+     "5",
+     "6"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "df1299f44075",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "\u00abone\u00bb",
+     "Ash",
+     "Birch",
+     "Cedar"
+    ],
+    "source_lines": [
+     "1",
+     "5",
+     "6"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_class_two_merges_lines",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "two separate merges",
+   "following data-source-line"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "6dc98319ecdd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Ash",
+     "Birch",
+     "Cedar"
+    ],
+    "source_lines": [
+     "1",
+     "3",
+     "5"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "6dc98319ecdd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Ash",
+     "Birch",
+     "Cedar"
+    ],
+    "source_lines": [
+     "1",
+     "3",
+     "5"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "6dc98319ecdd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Ash",
+     "Birch",
+     "Cedar"
+    ],
+    "source_lines": [
+     "1",
+     "3",
+     "5"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "ddf612b5e519",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "\u00abs\u00bb",
+     "Ash",
+     "\u00abt\u00bb",
+     "Birch",
+     "Cedar"
+    ],
+    "source_lines": [
+     "1",
+     "3",
+     "5"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_indented_end_after_backslash",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "indented @enduml after backslash",
+   "Pipe#readSingleDiagram startsWith"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "2aab1cc08acd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "last \\"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "2aab1cc08acd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "last \\"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "2aab1cc08acd",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "last \\"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   }
+  }
+ },
+ {
+  "name": "tc1_class_crlf_comment_skip",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "CRLF",
+   "comment skipped"
+  ],
+  "crlf": true,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "3c33524e3838",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Ash",
+     "Birch",
+     "one \\"
+    ],
+    "source_lines": [
+     "1",
+     "5",
+     "2"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "3c33524e3838",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Ash",
+     "Birch",
+     "one \\"
+    ],
+    "source_lines": [
+     "1",
+     "5",
+     "2"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "3c33524e3838",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Ash",
+     "Birch",
+     "one \\"
+    ],
+    "source_lines": [
+     "1",
+     "5",
+     "2"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "db81b12a8c37",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Ash",
+     "Birch",
+     "one two"
+    ],
+    "source_lines": [
+     "1",
+     "5",
+     "2"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_separator_continued",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "separator continued"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "8ebde1df5f20",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "a",
+     "b"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "4"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"== Phase \\\\\"\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "2a9373aca": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"== Phase \\\\\"\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "ee30ec10fd54",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "a",
+     "Phase One",
+     "b"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "4"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_sprite_header_continued",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "sprite header continued",
+   "sprite ownership"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "ed53b17d451c",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Tui",
+     "&lt;$dot&gt; hi"
+    ],
+    "source_lines": [
+     "6",
+     "6",
+     "6"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "ed53b17d451c",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Tui",
+     "&lt;$dot&gt; hi"
+    ],
+    "source_lines": [
+     "6",
+     "6",
+     "6"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 1,
+    "sha": "e3b0c44298fc",
+    "stderr": "parse error: line 1: Cannot read: \\\n",
+    "panic": false,
+    "texts": [],
+    "source_lines": []
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "35db501e830c",
+    "stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 1: sprite $dot [2x2/16] {\n",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "&lt;$dot&gt; hi"
+    ],
+    "source_lines": [
+     "6",
+     "6",
+     "6",
+     "6",
+     "6",
+     "6",
+     "6"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_sprite_row_continued",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "sprite row continued",
+   "sprite ownership"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "35db501e830c",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "&lt;$dot&gt; hi"
+    ],
+    "source_lines": [
+     "6",
+     "6",
+     "6",
+     "6",
+     "6",
+     "6",
+     "6"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "35db501e830c",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "&lt;$dot&gt; hi"
+    ],
+    "source_lines": [
+     "6",
+     "6",
+     "6",
+     "6",
+     "6",
+     "6",
+     "6"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "35db501e830c",
+    "stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 1: sprite $dot [4x2/16] {\n",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "&lt;$dot&gt; hi"
+    ],
+    "source_lines": [
+     "6",
+     "6",
+     "6",
+     "6",
+     "6",
+     "6",
+     "6"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "35db501e830c",
+    "stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 1: sprite $dot [4x2/16] {\n",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "&lt;$dot&gt; hi"
+    ],
+    "source_lines": [
+     "6",
+     "6",
+     "6",
+     "6",
+     "6",
+     "6",
+     "6"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_seq_sprite_svg_continued",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "inline svg sprite continued",
+   "sprite ownership"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "3c6321fcb4fc",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "&lt;$sq&gt; hi"
+    ],
+    "source_lines": [
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "3c6321fcb4fc",
+    "stderr": "zation remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\n",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "&lt;$sq&gt; hi"
+    ],
+    "source_lines": [
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "3c6321fcb4fc",
+    "stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 1: sprite $sq <svg viewBox=\"0 0 4 4\"><rect width=\"4\" height=\"4\" fill=\"#ff0000\"/>\\\n",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "&lt;$sq&gt; hi"
+    ],
+    "source_lines": [
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "3c6321fcb4fc",
+    "stderr": "warning: sequence command CommandSpriteSvg is recognized but unimplemented at line 1: sprite $sq <svg viewBox=\"0 0 4 4\"><rect width=\"4\" height=\"4\" fill=\"#ff0000\"/></svg>\n",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "&lt;$sq&gt; hi"
+    ],
+    "source_lines": [
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_ctl_class_include_plain",
+  "intended_valid": true,
+  "axes": [
+   "control",
+   "class",
+   "!include without continuation",
+   "included data-source-line"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "2b36b66d29b5",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Lantern",
+     "Wick"
+    ],
+    "source_lines": [
+     "1",
+     "2",
+     "2"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "2b36b66d29b5",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Lantern",
+     "Wick"
+    ],
+    "source_lines": [
+     "1",
+     "2",
+     "2"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "2b36b66d29b5",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Lantern",
+     "Wick"
+    ],
+    "source_lines": [
+     "1",
+     "2",
+     "2"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "2b36b66d29b5",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Lantern",
+     "Wick"
+    ],
+    "source_lines": [
+     "1",
+     "2",
+     "2"
+    ]
+   }
+  }
+ },
+ {
+  "name": "tc1_ctl_seq_include_plain",
+  "intended_valid": true,
+  "axes": [
+   "control",
+   "sequence",
+   "!include without continuation",
+   "included data-source-line"
+  ],
+  "crlf": false,
+  "builds": {
+   "9834a7194": {
+    "exit": 0,
+    "sha": "d07b3a7f99e5",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "first",
+     "included",
+     "after"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2",
+     "3"
+    ]
+   },
+   "93bf53e18": {
+    "exit": 0,
+    "sha": "d07b3a7f99e5",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "first",
+     "included",
+     "after"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2",
+     "3"
+    ]
+   },
+   "2a9373aca": {
+    "exit": 0,
+    "sha": "d07b3a7f99e5",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "first",
+     "included",
+     "after"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2",
+     "3"
+    ]
+   },
+   "594c2b3c5": {
+    "exit": 0,
+    "sha": "d07b3a7f99e5",
+    "stderr": "",
+    "panic": false,
+    "texts": [
+     "Kea",
+     "Kea",
+     "Tui",
+     "Tui",
+     "first",
+     "included",
+     "after"
+    ],
+    "source_lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2",
+     "3"
+    ]
+   }
+  }
+ }
+]

@@ -1,0 +1,14 @@
+{
+  "original_rejection": "0fb379a26ab64ead0744278935a0b6c64082ef35",
+  "import_commit": "193480c26fc5885d7b8e60f0452c9c755ca6d68e",
+  "old_protected_paths": 12005,
+  "imported_paths": 896,
+  "byte_unchanged": true,
+  "modified_existing_files": [
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "model_ascii_factory_shared_files_unchanged": true,
+  "comparator_sha256": "d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701",
+  "measure_sha256": "966d34c58c2025580eb887907cac11ef753a4b02920a0a5bc56d600f22f092c9"
+}

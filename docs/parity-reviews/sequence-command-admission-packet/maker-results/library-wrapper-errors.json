@@ -1,0 +1,157 @@
+{
+  "rows": [
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/case_tabs.puml",
+      "before_exit": 1,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "\nthread 'main' (27773639) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 1, message: \"Syntax error: no registered sequence command accepts \\\"NoDe\\\\t\\\\\\\"Polar Harbor\\\\\\\" {\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/hexagon_empty_tb.puml",
+      "before_exit": 1,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "\nthread 'main' (27775054) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 1, message: \"Syntax error: no registered sequence command accepts \\\"top to bottom direction\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.puml",
+      "before_exit": 1,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "\nthread 'main' (27780193) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 1, message: \"Syntax error: no registered sequence command accepts \\\"left to right direction\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+      "before_exit": 1,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "\nthread 'main' (27791493) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 1, message: \"Syntax error: no registered sequence command accepts \\\"left to right direction\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+      "before_exit": 1,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "\nthread 'main' (27791537) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 1, message: \"Syntax error: no registered sequence command accepts \\\"top to bottom direction\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+      "before_exit": 1,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "\nthread 'main' (27791550) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 1, message: \"Syntax error: no registered sequence command accepts \\\"top to bottom direction\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml",
+      "before_exit": 1,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "\nthread 'main' (27791565) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 1, message: \"Syntax error: no registered sequence command accepts \\\"left to right direction\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+      "before_exit": 1,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "\nthread 'main' (27791627) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 1, message: \"Syntax error: no registered sequence command accepts \\\"left to right direction\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml",
+      "before_exit": 1,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "\nthread 'main' (27791661) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 1, message: \"Syntax error: no registered sequence command accepts \\\"top to bottom direction\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml",
+      "before_exit": 1,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "\nthread 'main' (27791685) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 1, message: \"Syntax error: no registered sequence command accepts \\\"left to right direction\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+      "before_exit": 1,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "\nthread 'main' (27791781) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 1, message: \"Syntax error: no registered sequence command accepts \\\"NoDe \\\\\\\"Runtime Mesh\\\\\\\" as Mesh {\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+      "before_exit": 1,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "\nthread 'main' (27791802) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 1, message: \"Syntax error: no registered sequence command accepts \\\"left to right direction\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_plain_state_paint_control.puml",
+      "before_exit": 1,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "\nthread 'main' (27803093) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 6, message: \"Syntax error: no registered sequence command accepts \\\"state StartGate <<start>>\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_line_continuation.puml",
+      "before_exit": 1,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "\nthread 'main' (27806422) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 3, message: \"Syntax error: no registered sequence command accepts \\\"second\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+      "before_exit": 101,
+      "after_exit": 101,
+      "cli_exit": 0,
+      "stderr": "\nthread 'main' (27806778) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_line_continuation.puml",
+      "before_exit": 1,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "\nthread 'main' (27807662) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 3, message: \"Syntax error: no registered sequence command accepts \\\"second\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+      "before_exit": 101,
+      "after_exit": 101,
+      "cli_exit": 0,
+      "stderr": "\nthread 'main' (27848350) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+      "before_exit": 101,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "warning: sequence command CommandExoArrowLeft variant is recognized but unimplemented at line 4: ?-> Osprey: near\n\nthread 'main' (27863464) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 5, message: \"After create command, you have to send a message to \\\"Osprey\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml",
+      "before_exit": 101,
+      "after_exit": 101,
+      "cli_exit": 1,
+      "stderr": "warning: sequence command CommandExoArrowLeft variant is recognized but unimplemented at line 5: ?-> Osprey: near\n\nthread 'main' (27863517) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 6, message: \"After create command, you have to send a message to \\\"Osprey\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    }
+  ],
+  "note": "diff_one is an existing diagnostic example. Its parse-result unwrap panics on a parser error; CLI handles that error and returns exit1. Preserve separately from product render panics."
+}

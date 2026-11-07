@@ -1,0 +1,627 @@
+[
+ {
+  "name": "ck4_seq_apostrophe_word_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "trailing",
+   "apostrophe"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_url_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "trailing",
+   "url"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_creole_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "trailing",
+   "creole"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_quoted_then_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "trailing",
+   "quotes"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_span_in_quotes_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "trailing",
+   "quotes-unbalanced"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_triple_in_quotes",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "special",
+   "quotes"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_triple_name",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "special",
+   "identifier"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_double_trailing_top",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "trailing-twice",
+   "top-level-single-pass"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_double_leading_top",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "leading-twice",
+   "top-level-single-pass"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_note_multiline_body",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "note",
+   "leading",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_note_inline_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "note",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_continuation_next_leading",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "continuation",
+   "leading"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_continuation_comment_only_then_msg",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "continuation",
+   "comment-then-backslash"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_crlf_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "crlf",
+   "trailing",
+   "leading"
+  ],
+  "crlf": true
+ },
+ {
+  "name": "ck4_seq_quote_slash_no_comment",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "no-comment",
+   "quote-slash"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_trailing_slash_quote_only",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "no-open",
+   "trailing-close-only"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_leading_space_trailing_spaces",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "leading",
+   "whitespace"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_divider_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "middle-not-removed"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_divider_end_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_title_leading",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "leading",
+   "title"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_seq_skinparam_block",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "skinparam-block"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_class_body_member_leading",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "body",
+   "leading",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_class_comment_then_backslash",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "continuation",
+   "comment-then-backslash"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_class_note_multiline",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "note"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_class_relation_label",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "relation",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_class_special_in_name",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "special"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_usecase_leading_actor_line",
+  "intended_valid": true,
+  "axes": [
+   "usecase",
+   "leading"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_component_bracket_trailing",
+  "intended_valid": true,
+  "axes": [
+   "component",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_state_body_leading",
+  "intended_valid": true,
+  "axes": [
+   "state",
+   "body",
+   "leading"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_activity3_if_trailing",
+  "intended_valid": true,
+  "axes": [
+   "activity3",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_activity_legacy_trailing",
+  "intended_valid": true,
+  "axes": [
+   "activity-legacy",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_object_field_trailing",
+  "intended_valid": true,
+  "axes": [
+   "object",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_yaml_trailing",
+  "intended_valid": true,
+  "axes": [
+   "yaml",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_json_leading_member",
+  "intended_valid": true,
+  "axes": [
+   "json",
+   "leading"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_mindmap_leading",
+  "intended_valid": true,
+  "axes": [
+   "mindmap",
+   "leading"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_wbs_trailing",
+  "intended_valid": true,
+  "axes": [
+   "wbs",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_timing_trailing",
+  "intended_valid": true,
+  "axes": [
+   "timing",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_nwdiag_trailing",
+  "intended_valid": true,
+  "axes": [
+   "nwdiag",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_ebnf_trailing",
+  "intended_valid": true,
+  "axes": [
+   "ebnf",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_gantt_leading",
+  "intended_valid": true,
+  "axes": [
+   "gantt",
+   "leading"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_salt_trailing",
+  "intended_valid": true,
+  "axes": [
+   "salt",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_tim_procedure_double_trailing",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "procedure",
+   "double-pass"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_tim_procedure_double_leading",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "procedure",
+   "double-pass"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_tim_function_return_trailing",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "function",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_tim_define_value_trailing",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "define",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_tim_definelong_body",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "definelong",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_tim_while_body",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "while",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_tim_foreach_body",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "foreach",
+   "leading"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_tim_include_trailing",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "include",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_tim_include_body_comments",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "include-body",
+   "leading",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_tim_var_string_comment",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "string-middle"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_tim_if_else_comment",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "if",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_tim_startsub_inplace_double",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "startsub-in-place",
+   "single-pass"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_tim_includesub_double",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "includesub",
+   "double-pass"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_activity3_comment_then_backslash",
+  "intended_valid": true,
+  "axes": [
+   "activity3",
+   "continuation",
+   "comment-then-backslash"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_component_comment_then_backslash",
+  "intended_valid": true,
+  "axes": [
+   "component",
+   "continuation",
+   "comment-then-backslash"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_state_comment_then_backslash",
+  "intended_valid": true,
+  "axes": [
+   "state",
+   "continuation",
+   "comment-then-backslash"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_class_continuation_next_leading",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "continuation",
+   "leading"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_ctl_procedure_four_classes",
+  "intended_valid": true,
+  "axes": [
+   "control",
+   "procedure",
+   "source-line"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_ctl_procedure_sprite_nocomment",
+  "intended_valid": true,
+  "axes": [
+   "control",
+   "procedure",
+   "sprite",
+   "source-line"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_procedure_sprite_end_comment_two",
+  "intended_valid": true,
+  "axes": [
+   "procedure",
+   "sprite",
+   "source-line",
+   "trailing"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_inv_nbsp_leading_comment_seq",
+  "intended_valid": false,
+  "axes": [
+   "sequence",
+   "nbsp",
+   "java-trim"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_inv_include_missing_after_comment",
+  "intended_valid": false,
+  "axes": [
+   "tim",
+   "include",
+   "leading"
+  ],
+  "crlf": false
+ },
+ {
+  "name": "ck4_inv_class_after_leading_two",
+  "intended_valid": false,
+  "axes": [
+   "class",
+   "leading-twice"
+  ],
+  "crlf": false
+ }
+]

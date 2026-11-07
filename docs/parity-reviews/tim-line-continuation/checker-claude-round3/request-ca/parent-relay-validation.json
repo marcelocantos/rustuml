@@ -1,0 +1,52 @@
+{
+  "validated": true,
+  "cases": 88,
+  "timeouts": 0,
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.r49wHdtX",
+  "hashes": {
+    "reference-results.json.gz": "14982dfc023618cb0e2ad07d0e25e52c1b885ec6642de514677e22aca407c37b",
+    "reference-transport.json": "88a200175cd472d2a6b77e7a864665747c51ba5c456162d4f98c86823e1b6f31"
+  },
+  "remote_names": {
+    "reference-results.json.gz": "reference-results.json.gz",
+    "reference-transport.json": "reference-transport.json"
+  },
+  "exit_statuses": {
+    "0": 77,
+    "200": 11
+  },
+  "intended_invalid": [
+    "cr3_end_bs_End_case",
+    "cr3_end_bs_in_note",
+    "cr3_end_bs_in_procdef",
+    "cr3_end_double_backslash",
+    "cr3_end_nbsp_before_bs_end",
+    "cr3_end_nel_before_bs_end",
+    "cr3_two_one_line_after_join",
+    "cr3_two_zero_content_end_continued",
+    "cr3_wrap_first_is_mindmap",
+    "cr3_wrap_tail_runs_into_second_block"
+  ],
+  "intended_invalid_exit0": [
+    "cr3_wrap_first_is_mindmap"
+  ],
+  "intended_valid_nonzero": [
+    "cr3_dir_startsub_middle",
+    "cr3_dir_startsub_start"
+  ],
+  "nonempty_stderr": [
+    "cr3_dir_startsub_middle",
+    "cr3_dir_startsub_start",
+    "cr3_end_bs_End_case",
+    "cr3_end_bs_in_note",
+    "cr3_end_bs_in_procdef",
+    "cr3_end_double_backslash",
+    "cr3_end_nbsp_before_bs_end",
+    "cr3_end_nel_before_bs_end",
+    "cr3_two_one_line_after_join",
+    "cr3_two_zero_content_end_continued",
+    "cr3_wrap_tail_runs_into_second_block"
+  ],
+  "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+  "classification": "Validity not inferred from exit status."
+}

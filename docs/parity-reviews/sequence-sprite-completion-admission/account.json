@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-sprite-completion-admission",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "command.CommandMultilines2#isValid",
+    "command.PSystemCommandFactory#getCandidate",
+    "command.CommandSpriteSvgMultiline#END",
+    "command.CommandFactorySprite#END"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs::SpriteBlockKind",
+    "crates/rustuml-parser/src/preprocess/mod.rs::PreprocessContext::process_one_line (authorized sprite body and declaration blocks only)"
+  ],
+  "invariant": "Blanking a recognized multiline sprite is committed only after its command-specific terminator arrives. An incomplete command must remain available to syntax admission rather than turn into an empty successful program.",
+  "causal_divergence": "The candidate consumes SVG bodies eagerly. If no END arrives, the header/body disappear and strict sequence parsing cannot reject the incomplete command. This is inferred from source/control flow, not a claim from an absent Java capture.",
+  "planned_change": "Store the output start index in each existing block-kind enum variant. Retain original header/body lines while pending; upon the exact end, clear that contiguous output span to the same blank placeholders. Retain existing pixel accumulation. No finalization/TIM/reader or extra context-field changes.",
+  "perturbation_axes": [
+    "SVG versus pixel missing terminator",
+    "legacy/Teoz and valid followed-by-command controls"
+  ],
+  "ownership": "Only the already authorized enum/initializer/declaration/body blocks; no additional preprocess locations.",
+  "status": "preimplementation hypothesis; fresh negative captures requested separately"
+}

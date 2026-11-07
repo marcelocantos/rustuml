@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-command-size-admission",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.command.CommandArrow#getRegexConcat",
+    "regex.RegexConcat#protectSize",
+    "regex.RegexConcat#match"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::RegisteredSequenceCommand::color_match"
+  ],
+  "invariant": "CommandArrow admission includes its protectSize(2000) guard measured in Java UTF-16 code units after command trimming; other registered commands retain their own unlimited size.",
+  "causal_divergence": "The initial 81-command probe captures patterns and Fox signatures but not RegexConcat.limitSize. A final source audit found the single registered CommandArrow protectSize call; matching its regular expression alone incorrectly admits longer messages.",
+  "planned_change": "Apply the exact named CommandArrow limit before its regex, counting UTF-16 units. Preserve other commands and let ordered candidate search continue. No fixture strings or rendered-coordinate limits.",
+  "perturbation_axes": [
+    "exact 2000-unit boundary versus next unit",
+    "ASCII versus non-BMP payload encoding",
+    "legacy and Teoz"
+  ],
+  "discovery": "Source audit after the first stable broad run, which is preserved as intermediate evidence; no acceptance claim."
+}

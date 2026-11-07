@@ -7,13 +7,12 @@
 // Checker7 corrective contracts: precommitted accounts 02fa49de2396c1445a4ddf1a783c973f883a82f4.
 // Checker4 corrective contracts: precommitted causal accounts 6d46a483aad389d4535e1ba24822fdd116baf517.
 
+use std::borrow::Cow;
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use regex::Regex;
-
-use crate::diagram::SpriteData;
 
 mod date_format;
 mod debug;
@@ -30,17 +29,29 @@ pub struct PreprocessError {
 }
 
 /// Evaluated source and parser projection, or a fatal error with partial output.
+///
+/// Sprite declarations are diagram commands (`CommonCommands`), executed by
+/// the family command dispatch after TIM, so they are not collected here.
 pub struct PreprocessOutput {
     /// Fatal TIM error. Callers must check this before consuming partial output.
     /// parse_with_base must map it to ParseError (owned by the parse worker).
     pub error: Option<PreprocessError>,
     pub lines: Vec<String>,
-    pub sprites: HashMap<String, SpriteData>,
     /// PlantUML's post-TIM `UmlSource.getPlainString("\n")`.
     ///
     /// SVG resources hash this expanded source, rather than the raw input,
     /// when deriving deterministic filter and gradient identifiers.
     pub uml_source: String,
+    /// A backslash continuation swallowed the block's end directive, so
+    /// Java's `BlockUmlBuilder` builds no diagram from this input.
+    pub swallowed_end_directive: bool,
+    /// The post-TIM join (`UmlSource#loadInternal`) left a `@startuml`
+    /// source of exactly two lines, which `PSystemWelcomeFactory` turns into
+    /// the empty (Welcome) diagram before any family factory runs.
+    pub two_line_source: bool,
+    /// The `@startuml` source is its start line alone (TIM consumed the end
+    /// line): every factory reports `Empty description`.
+    pub one_line_source: bool,
 }
 
 const SOURCE_LINE_PREFIX: &str = "\x1ERSL:";
@@ -57,7 +68,7 @@ pub(crate) fn split_source_line_marker(line: &str) -> Option<(usize, &str)> {
     Some((source_line, line))
 }
 
-fn strip_source_line_markers(lines: Vec<String>) -> Vec<String> {
+pub(crate) fn strip_source_line_markers(lines: Vec<String>) -> Vec<String> {
     lines
         .into_iter()
         .map(|line| {
@@ -108,12 +119,50 @@ fn preprocess_full_inner(
     // consume that same evaluated stream. Never rerun TIM to compute identity.
     let mut ctx = PreprocessContext::new(base_dir, mark_function_body_source_lines);
     ctx.preserve_teoz_pragma = preserve_teoz_pragma;
-    let events = ctx.process(input);
+    // Every caller passes text read from outside: escape it once for the
+    // unit carrier, as `process` does for included text.
+    let input = crate::java_utf16::escape(input);
+    let input_lines: Vec<&str> = input.lines().collect();
+    // BlockUmlBuilder reads the block through ReadFilterMergeLines before TIM
+    // (and so before every TIM comment stage) runs.
+    let merged = merge_ending_backslash_lines(&input_lines);
+    // Every line is numbered from Pipe's text, so every content line carries
+    // its number instead of its parser-stream position.
+    ctx.mark_source_lines = merged.pipe_positions.is_some() || merged.format_removed;
+    ctx.pipe_positions = merged.pipe_positions;
+    let events = ctx.process_merged_lines(&merged.lines);
     let mut identity = Vec::new();
-    let mut lines = Vec::new();
+    let mut main_stream = JoinStream::default();
     let mut theme_tail = Vec::new();
-    project_events(&events, &mut identity, &mut lines, &mut theme_tail);
-    let uml_source = uml_source_string(&identity, preserve_teoz_pragma);
+    let mut join = PostTimJoin::new(ctx.start_checks_ending_backslash);
+    project_events(
+        &events,
+        &mut join,
+        &mut identity,
+        &mut main_stream,
+        &mut theme_tail,
+    );
+    join.finish(&mut main_stream, ctx.block_end.as_ref());
+    let mut lines = main_stream.out;
+    // UmlSource#loadInternal joins with `checkEndingBackslash` exactly when
+    // the start line's DiagramType#findStartTypes contains SEQUENCE.
+    let uml_source = uml_source_string(&identity, ctx.start_checks_ending_backslash);
+    // `UmlSource#getTotalLineCount` of a `@startuml` source: the identity
+    // projection is Java's TIM result list, counted from the block's start
+    // line (BlockUmlBuilder collects from there; a Rust preamble is no part
+    // of it) through the loadInternal join. PSystemWelcomeFactory fires on
+    // 2; a source of the start line alone is empty for every factory.
+    let line_count = ctx
+        .start_checks_ending_backslash
+        .then(|| {
+            let start = events
+                .iter()
+                .position(|event| matches!(event, EvaluatedEvent::Boundary(_)))?;
+            let mut block_lines = Vec::new();
+            java_list_lines(&events[start..], &mut block_lines);
+            Some(uml_source_line_count(&block_lines))
+        })
+        .flatten();
     if !theme_tail.is_empty() {
         theme_tail.push(format!(
             "skinparam __svgIdSeed {}",
@@ -121,13 +170,12 @@ fn preprocess_full_inner(
         ));
         lines.extend(theme_tail);
     }
-    // Sprite extraction belongs to parser lowering, after TIM evaluation.
-    // Java leaves every evaluated sprite line in TContext.resultList/UmlSource.
-    let sprites = extract_sprites(&mut lines);
     PreprocessOutput {
         lines,
-        sprites,
         uml_source,
+        swallowed_end_directive: merged.swallowed_end,
+        two_line_source: line_count == Some(2),
+        one_line_source: line_count == Some(1),
         error: ctx.error,
     }
 }
@@ -140,6 +188,17 @@ enum EvaluatedEvent {
     Plain(String),
     Boundary(String),
     ParserOnly(String),
+    /// A PLAIN line of Java's TIM result list that Rust's TIM executes itself
+    /// (`!pragma`, which Java's CommandPragma runs after UmlSource is built).
+    /// The identity projection carries its text; the parser projection
+    /// carries a stand-in unless the post-TIM join folds it into a line.
+    Executed(String),
+    /// Lines Java's TIM adds that Rust cannot reproduce: a Java-bundled theme
+    /// this distribution does not ship (TContext#executeTheme runs its body
+    /// into the result list). The parser projection carries the Rust-only
+    /// marker; the identity has no text for it; the line count knows only
+    /// that the span is non-empty.
+    JavaOnlyLines(String),
     Theme {
         name: String,
         source_line: usize,
@@ -147,10 +206,16 @@ enum EvaluatedEvent {
     },
 }
 
+/// Project the events into the identity list and the parser streams, in
+/// Java's result-list order: a theme's body comes in place of its `!theme`
+/// line (TContext#executeTheme runs it into the same list), and a nested
+/// theme's body in place of its own. `join` is the one post-TIM join over
+/// that list, so a pending continuation crosses from one stream to the next.
 fn project_events(
     events: &[EvaluatedEvent],
+    join: &mut PostTimJoin,
     identity: &mut Vec<String>,
-    lines: &mut Vec<String>,
+    lines: &mut JoinStream,
     theme_tail: &mut Vec<String>,
 ) {
     for event in events {
@@ -161,74 +226,44 @@ fn project_events(
                         .map_or(line.as_str(), |(_, text)| text)
                         .to_string(),
                 );
-                lines.push(line.clone());
+                join.push(lines, TimLine::Text(line.clone()));
             }
             EvaluatedEvent::Boundary(line) => identity.push(line.clone()),
-            EvaluatedEvent::ParserOnly(line) => lines.push(line.clone()),
+            EvaluatedEvent::ParserOnly(line) => join.push(lines, TimLine::RustOnly(line.clone())),
+            EvaluatedEvent::Executed(line) => {
+                identity.push(line.clone());
+                join.push(lines, TimLine::Executed(line.clone()));
+            }
+            EvaluatedEvent::JavaOnlyLines(marker) => {
+                join.push(lines, TimLine::RustOnly(marker.clone()))
+            }
             EvaluatedEvent::Theme {
                 name,
                 source_line,
                 body,
             } => {
-                let mut expanded = Vec::new();
+                // The body joins in list order with the lines around it: its
+                // last continued line folds into the next list line after the
+                // `!theme` line, in whichever stream that line is.
+                let mut expanded = JoinStream::default();
                 let mut nested_tail = Vec::new();
-                project_events(body, identity, &mut expanded, &mut nested_tail);
-                lines.push(source_line_marker(
-                    *source_line,
-                    &format!("skinparam __theme {name}"),
-                ));
+                project_events(body, join, identity, &mut expanded, &mut nested_tail);
+                join.push(
+                    lines,
+                    TimLine::RustOnly(source_line_marker(
+                        *source_line,
+                        &format!("skinparam __theme {name}"),
+                    )),
+                );
                 // Retain the parser's theme envelope contract. Only this
                 // projection flattens grouped properties or relocates them.
                 theme_tail.push(format!("skinparam __theme_body_start {name}"));
-                theme_tail.extend(themes::flatten_theme_output(&expanded));
+                theme_tail.extend(themes::flatten_theme_output(&expanded.out));
                 theme_tail.extend(nested_tail);
                 theme_tail.push(format!("skinparam __theme_body_end {name}"));
             }
         }
     }
-}
-
-fn extract_sprites(lines: &mut [String]) -> HashMap<String, SpriteData> {
-    let mut sprites: HashMap<String, SpriteData> = HashMap::new();
-    let mut current: Option<String> = None;
-    for line in lines {
-        let text = split_source_line_marker(line)
-            .map_or(line.as_str(), |(_, text)| text)
-            .trim();
-        if let Some(name) = &current {
-            if text == "}" {
-                current = None;
-            } else if !text.is_empty()
-                && text.chars().all(|c| c.is_ascii_hexdigit())
-                && let Some(sprite) = sprites.get_mut(name)
-            {
-                sprite.rows.push(text.to_string());
-                sprite.height = sprite.rows.len() as u32;
-            }
-            line.clear();
-        } else if text.starts_with("sprite ") || text.starts_with("sprite\t") {
-            if text.ends_with('{') {
-                let rest = text["sprite ".len()..].trim_start();
-                let rest = rest.strip_prefix('$').unwrap_or(rest);
-                let name: String = rest
-                    .chars()
-                    .take_while(|c| c.is_alphanumeric() || *c == '_')
-                    .collect();
-                let (width, height) = parse_sprite_dimensions(rest);
-                sprites.insert(
-                    name.clone(),
-                    SpriteData {
-                        width,
-                        height,
-                        rows: Vec::new(),
-                    },
-                );
-                current = Some(name);
-            }
-            line.clear();
-        }
-    }
-    sprites
 }
 
 /// First code point of each Unicode 15.0 (JDK 21 `java.lang.Character`) BMP
@@ -337,7 +372,40 @@ fn uml_source_string(lines: &[String], collapse_ending_backslashes: bool) -> Str
     source
 }
 
-/// Preprocess with a base directory, returning full output including sprites.
+/// The lines of Java's TIM result list as far as the line count needs them:
+/// the identity projection's text, plus one placeholder for a span of lines
+/// only Java has (at least one line, which decides the 1 and 2 thresholds
+/// as Java's real span would).
+fn java_list_lines(events: &[EvaluatedEvent], lines: &mut Vec<String>) {
+    for event in events {
+        match event {
+            EvaluatedEvent::Plain(line) => lines.push(
+                split_source_line_marker(line)
+                    .map_or(line.as_str(), |(_, text)| text)
+                    .to_string(),
+            ),
+            EvaluatedEvent::Boundary(line) | EvaluatedEvent::Executed(line) => {
+                lines.push(line.clone())
+            }
+            EvaluatedEvent::ParserOnly(_) => {}
+            EvaluatedEvent::JavaOnlyLines(_) => lines.push(String::new()),
+            EvaluatedEvent::Theme { body, .. } => java_list_lines(body, lines),
+        }
+    }
+}
+
+/// `UmlSource#getTotalLineCount` after `loadInternal` with
+/// `checkEndingBackslash` (core/UmlSource.java:118-134, 198-200): every line
+/// that does not end with a backslash completes one joined line; a pending
+/// tail with no following line is never added.
+fn uml_source_line_count(lines: &[String]) -> usize {
+    lines
+        .iter()
+        .filter(|line| !ends_with_backslash(line))
+        .count()
+}
+
+/// Preprocess with a base directory, returning the full output.
 pub fn preprocess_full_with_base(input: &str, base_dir: &Path) -> PreprocessOutput {
     preprocess_full(input, Some(base_dir.to_path_buf()))
 }
@@ -649,6 +717,9 @@ struct PreprocessContext {
     /// Rust's parse_block API supports definitions in a shared preamble and
     /// keeps their one-based file origins (source_with_original_line_offset).
     preamble_body: bool,
+    /// When Pipe found no start mark: each input line's position in Pipe's
+    /// text, which is its `data-source-line` (`pipe_text_positions`).
+    pipe_positions: Option<Vec<usize>>,
     base_dir: Option<PathBuf>,
     include_depth: usize,
     foreach_stack: Vec<ForEachState>,
@@ -685,6 +756,14 @@ struct PreprocessContext {
     execution_kind: FunctionKind,
     /// CodeIteratorSub's empty replay ends only its current executeLines iterator.
     iterator_stopped: bool,
+    /// The block starts with `@startuml`: `DiagramType#findStartTypes`
+    /// contains SEQUENCE, so `PSystemBuilder#createPSystem` builds the
+    /// `UmlSource` with `checkEndingBackslash` (post-TIM join).
+    start_checks_ending_backslash: bool,
+    /// The top-level block's end line as TIM passes it on: its diagram
+    /// source line and text. Java's TIM result list ends with it; the parser
+    /// stream does not carry it, but the post-TIM join can still reach it.
+    block_end: Option<(usize, String)>,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -903,6 +982,7 @@ impl PreprocessContext {
             in_ebnf_block: false,
             seen_start_tag: false,
             preamble_body: false,
+            pipe_positions: None,
             base_dir,
             include_depth: 0,
             foreach_stack: Vec::new(),
@@ -926,6 +1006,8 @@ impl PreprocessContext {
             text_consumed: false,
             execution_kind: FunctionKind::Procedure,
             iterator_stopped: false,
+            start_checks_ending_backslash: false,
+            block_end: None,
         }
     }
 
@@ -953,6 +1035,16 @@ impl PreprocessContext {
     }
 
     fn current_diagram_source_line(&self) -> usize {
+        if self.include_depth == 0
+            && let Some(positions) = &self.pipe_positions
+        {
+            return self
+                .current_source_line
+                .checked_sub(1)
+                .and_then(|index| positions.get(index))
+                .copied()
+                .unwrap_or(self.current_source_line);
+        }
         if self.include_depth == 0
             && self.in_diagram_block
             && self.seen_start_tag
@@ -1062,22 +1154,55 @@ impl PreprocessContext {
         self.process_lines(&lines)
     }
 
+    /// Process the top-level block input after ReadFilterMergeLines. Each
+    /// line keeps the number of its first piece; once a merge absorbs later
+    /// lines, the output index no longer equals the source line, so following
+    /// lines carry explicit origins (as after an include).
+    fn process_merged_lines(&mut self, lines: &[MergedInputLine<'_>]) -> Vec<EvaluatedEvent> {
+        let mut output = Vec::new();
+        let outer_stop = std::mem::replace(&mut self.iterator_stopped, false);
+
+        let saved_source_line = self.current_source_line;
+        for line in lines {
+            if self.iterator_stopped || self.error.is_some() {
+                break;
+            }
+            self.current_source_line = line.source_line;
+            self.process_one_line(&line.text, &mut output);
+            if line.consumed > 0 {
+                self.mark_source_lines = true;
+            }
+        }
+        self.current_source_line = saved_source_line;
+
+        self.iterator_stopped = outer_stop;
+        output
+    }
+
     fn process_lines(&mut self, lines: &[&str]) -> Vec<EvaluatedEvent> {
+        self.process_numbered_lines(lines.iter().enumerate().map(|(idx, &line)| (idx + 1, line)))
+    }
+
+    /// Process lines that carry their own 1-based source line.
+    fn process_numbered_lines<'a>(
+        &mut self,
+        lines: impl IntoIterator<Item = (usize, &'a str)>,
+    ) -> Vec<EvaluatedEvent> {
         let mut output = Vec::new();
         let outer_stop = std::mem::replace(&mut self.iterator_stopped, false);
 
         let saved_source_line = self.current_source_line;
         let saved_override = self.source_line_override;
         let saved_mark = self.mark_source_lines;
-        for (idx, &line) in lines.iter().enumerate() {
+        for (source_line, line) in lines {
             if self.iterator_stopped || self.error.is_some() {
                 break;
             }
-            self.current_source_line = idx + 1;
+            self.current_source_line = source_line;
             if self.include_depth > 0 {
                 // ReadLineReader gives each included file its own zero-based
                 // LineLocation; a caller's buffered override must not leak in.
-                self.source_line_override = Some(idx);
+                self.source_line_override = Some(source_line - 1);
                 self.mark_source_lines = true;
             }
             self.process_one_line(line, &mut output);
@@ -1168,30 +1293,58 @@ impl PreprocessContext {
             return;
         }
 
-        // Java StringLocated.removeInnerComment leaves trailing apostrophes
-        // alone and removes only its supported block-comment forms.
-        let line_no_comment = if self.in_ebnf_block {
-            line.to_string()
-        } else {
-            remove_inner_comment(line)
-        };
+        // CodeIteratorInnerComment (TContext#buildCodeIterator it40) applies
+        // StringLocated#removeInnerComment to every line that survives the
+        // long and short comment iterators. There is no diagram-type
+        // exemption: an EBNF line is stripped like any other. Trailing
+        // apostrophes are not comments; only the /' … '/ forms are.
+        let line_no_comment = remove_inner_comment(line).into_owned();
         let trimmed = line_no_comment.trim();
 
         // Handle @start/@end tags.
         // PlantUML renders only the first block. Files without any
         // @start tag pass through entirely.
         if self.include_depth == 0 {
-            if trimmed.starts_with("@start") {
+            // BlockUmlBuilder opens a block at every line for which
+            // StartUtils#isStartDirective holds (DiagramType#findStartTypes:
+            // whitespace, '@' or '\\', `start` and a type, case-insensitive),
+            // tested on the line before TIM, as the end test below is.
+            if let Some(kind) = start_directive_type(line) {
                 if !self.seen_start_tag {
                     self.seen_start_tag = true;
                     self.in_diagram_block = true;
-                    self.in_ebnf_block = trimmed.starts_with("@startebnf");
+                    self.in_ebnf_block = start_type_is(kind, "ebnf");
+                    self.start_checks_ending_backslash = start_type_is(kind, "uml");
                     output.push(EvaluatedEvent::Boundary(line_no_comment));
                 }
                 return;
             }
-            if trimmed.starts_with("@end") {
-                if self.in_diagram_block {
+            // BlockUmlBuilder closes the block at the first line for which
+            // StartUtils#isEndDirective holds ('@' or '\\' then `end`), so a
+            // `\enduml` line is the block's end line and Pipe's appended
+            // `@enduml` lies outside the block. The test reads the line as
+            // BlockUmlBuilder does (before removeInnerComment) and skips
+            // only Character#isWhitespace, for '@' and '\\' alike.
+            // Procedure bodies (a local scope) are not block lines; outside
+            // the block and for their lines the trimmed `@end` test stays.
+            let ends_block = if self.in_diagram_block && self.local_vars.is_empty() {
+                is_end_directive(line)
+            } else {
+                trimmed.starts_with("@end")
+            };
+            if ends_block {
+                // An unterminated !procedure, !function or !definelong
+                // definition takes the end line as body text
+                // (CodeIteratorProcedure#peek, CodeIteratorReturnFunction#peek):
+                // the block still ends here, but the end is no line of TIM's
+                // result list.
+                let in_definition =
+                    self.collecting_function.is_some() || self.collecting_definelong.is_some();
+                if self.in_diagram_block && !in_definition {
+                    if self.block_end.is_none() {
+                        self.block_end =
+                            Some((self.current_diagram_source_line(), line_no_comment.clone()));
+                    }
                     output.push(EvaluatedEvent::Boundary(line_no_comment));
                 }
                 self.in_diagram_block = false;
@@ -1258,7 +1411,9 @@ impl PreprocessContext {
             if trimmed == "!enddefinelong" {
                 self.collecting_definelong = None;
             } else if let Some(name) = self.collecting_definelong.clone() {
-                let buffered = self.current_buffered_line(line);
+                // CodeIteratorProcedure#peek adds the it40 line, which
+                // removeInnerComment has already rewritten.
+                let buffered = self.current_buffered_line(&line_no_comment);
                 if let Some(dl) = self.definelong_macros.get_mut(&name) {
                     dl.body.push(buffered);
                 }
@@ -1294,7 +1449,18 @@ impl PreprocessContext {
 
         // Directives that are consumed silently.
         if self.try_silent_directive(trimmed) {
-            self.push_directive_placeholder(output);
+            // TLineType has no pragma type (text/TLineType.java:259), so an
+            // active `!pragma` is a PLAIN line that TContext#addPlain adds to
+            // the result list with functions and variables applied; Java's
+            // CommandPragma runs it after UmlSource is built.
+            let in_tim_list =
+                self.in_diagram_block || self.include_depth > 0 || !self.local_vars.is_empty();
+            if is_pragma_directive(trimmed) && self.is_active() && in_tim_list {
+                let text = self.substitute_vars(&line_no_comment);
+                output.push(EvaluatedEvent::Executed(text));
+            } else {
+                self.push_directive_placeholder(output);
+            }
             return;
         }
 
@@ -2112,6 +2278,10 @@ impl PreprocessContext {
         }
 
         let path_str = quoted_path.or(bare_path)?;
+        // TContext#executeInclude (tim/TContext.java:799-802) cuts the text
+        // after the last '!' from every include; a local file ignores it
+        // (DiagramDetector#extractFromFile yields the first diagram).
+        let path_str = path_str.rsplit_once('!').map_or(path_str, |(path, _)| path);
         let file_path = if let Some(base) = &self.base_dir {
             base.join(path_str)
         } else {
@@ -2126,7 +2296,22 @@ impl PreprocessContext {
                     .replace(file_path.parent().unwrap_or(Path::new(".")).to_path_buf());
                 let saved_kind =
                     std::mem::replace(&mut self.execution_kind, FunctionKind::Procedure);
-                let lines = self.process(&content);
+                // TContext#executeInclude reads a local file through
+                // DiagramDetector#extractFromFile when it holds a diagram, and
+                // raw (no merge) otherwise.
+                let content = crate::java_utf16::escape(&content);
+                let file_lines = read_line_reader_lines(&content);
+                let lines = match wrapped_diagram_lines(&file_lines) {
+                    Some(body) => self.process_numbered_lines(
+                        body.iter().map(|(line, text)| (*line, text.as_str())),
+                    ),
+                    None => self.process_numbered_lines(
+                        file_lines
+                            .iter()
+                            .enumerate()
+                            .map(|(index, text)| (index + 1, text.as_ref())),
+                    ),
+                };
                 self.execution_kind = saved_kind;
                 self.base_dir = saved_base;
                 self.include_depth -= 1;
@@ -2197,7 +2382,9 @@ impl PreprocessContext {
                 let mut selected = Vec::new();
                 let mut found = false;
                 let mut skip = false;
-                for (index, text) in content.lines().enumerate() {
+                // ReadLineReader (tim/TContext.java:660) reads the file.
+                for (index, text) in read_line_reader_lines(&content).iter().enumerate() {
+                    let text: &str = text;
                     // Sub.fromFile sees raw markers before TIM's comment iterators.
                     // UncommentReadLine handles embedding prefixes, not TIM comments.
                     let trimmed = text.trim();
@@ -2308,7 +2495,7 @@ impl PreprocessContext {
             let source_line = self
                 .source_line_override
                 .unwrap_or_else(|| self.current_diagram_source_line());
-            output.push(EvaluatedEvent::ParserOnly(source_line_marker(
+            output.push(EvaluatedEvent::JavaOnlyLines(source_line_marker(
                 source_line,
                 &format!("skinparam __theme {name}"),
             )));
@@ -3917,45 +4104,1103 @@ where
     }
 }
 
-/// Parse optional `[WxH/Z]` dimension spec from a sprite header line.
-///
-/// The `rest` parameter is the text after `sprite $` (name included).
-/// Returns `(width, height)` where 0 means "infer from pixel data".
-fn parse_sprite_dimensions(rest: &str) -> (u32, u32) {
-    // Look for `[WxH/Z]` or `[WxH]` pattern anywhere in the rest string.
-    if let Some(start) = rest.find('[')
-        && let Some(end) = rest[start..].find(']')
-    {
-        let spec = &rest[start + 1..start + end];
-        // Format: WxH/Z  or WxH
-        let wh = spec.split('/').next().unwrap_or(spec);
-        let mut parts = wh.splitn(2, 'x');
-        let w: u32 = parts
-            .next()
-            .and_then(|s| s.trim().parse().ok())
-            .unwrap_or(0);
-        let h: u32 = parts
-            .next()
-            .and_then(|s| s.trim().parse().ok())
-            .unwrap_or(0);
-        return (w, h);
-    }
-    (0, 0)
+/// Java `String#trim`: strips leading and trailing chars `<= U+0020`.
+fn java_trim(s: &str) -> &str {
+    s.trim_matches(|c: char| c <= ' ')
 }
 
-// StringLocated.removeInnerComment: only leading/trailing block comments and
-// the special /'''[-\w]*'''/ form are removed; a trailing apostrophe is plain.
-fn remove_inner_comment(line: &str) -> String {
-    let trimmed = line.trim();
-    let content = if trimmed.starts_with("/'") {
-        line.find("'/").map_or(line, |end| &line[end + 2..])
-    } else if trimmed.ends_with("'/") {
-        line.rfind("/'").map_or(line, |start| &line[..start])
+/// Port of `text.StringLocated#removeInnerComment`. A leading `/' … '/`
+/// (the line starts with `/'`) keeps the text after the first `'/`; a
+/// trailing one (the line ends with `'/`) keeps the text before the last
+/// `/'`; otherwise only `/'''word'''/` spans are removed. Java looks at no
+/// quotes: a span inside double quotes is removed like any other.
+fn remove_inner_comment(line: &str) -> Cow<'_, str> {
+    // `s.replace('\t', ' ').trim()`: a tab is <= U+0020, so java_trim
+    // already removes it at either end and nothing else reads `trim`'s tabs.
+    let trim = java_trim(line);
+    if trim.starts_with("/'")
+        && let Some(idx) = line.find("'/")
+    {
+        return Cow::Owned(remove_special_inner_comment(&line[idx + 2..]).into_owned());
+    }
+    if trim.ends_with("'/")
+        && let Some(idx) = line.rfind("/'")
+    {
+        return Cow::Owned(remove_special_inner_comment(&line[..idx]).into_owned());
+    }
+    if trim.contains(SPECIAL_COMMENT_OPEN) && trim.contains(SPECIAL_COMMENT_CLOSE) {
+        return remove_special_inner_comment(line);
+    }
+    Cow::Borrowed(line)
+}
+
+/// `StringUtils#endsWithBackslash`: a final `\` continues the line, an
+/// escaped final `\\` does not.
+fn ends_with_backslash(s: &str) -> bool {
+    s.ends_with('\\') && !s.ends_with("\\\\")
+}
+
+/// JDK 21 `Character#isWhitespace(int)`: a SPACE_SEPARATOR, LINE_SEPARATOR
+/// or PARAGRAPH_SEPARATOR code point that is not a no-break space (U+00A0,
+/// U+2007, U+202F), or one of U+0009-U+000D and U+001C-U+001F. Under
+/// Unicode 15.0 (Zs, Zl, Zp) that is exactly this set. Unlike Rust's
+/// `char::is_whitespace` it excludes U+0085 (NEL, category Cc) and includes
+/// the four information separators.
+fn java_is_whitespace(c: char) -> bool {
+    matches!(
+        c,
+        '\u{0009}'..='\u{000D}'
+            | '\u{001C}'..='\u{0020}'
+            | '\u{1680}'
+            | '\u{2000}'..='\u{2006}'
+            | '\u{2008}'..='\u{200A}'
+            | '\u{2028}'
+            | '\u{2029}'
+            | '\u{205F}'
+            | '\u{3000}'
+    )
+}
+
+/// The text after a start or end directive's `@`/`\` marker: Java's
+/// `StartUtils#startsWithDirectiveKeyword` and `DiagramType#findStartTypes`
+/// skip leading `Character#isWhitespace` and then require `@` or `\`.
+fn directive_tail(line: &str) -> Option<&str> {
+    let rest = line.trim_start_matches(java_is_whitespace);
+    rest.strip_prefix('@').or_else(|| rest.strip_prefix('\\'))
+}
+
+/// `StartUtils#isEndDirective`: case-sensitive `end` after the marker.
+pub(crate) fn is_end_directive(line: &str) -> bool {
+    directive_tail(line).is_some_and(|tail| tail.starts_with("end"))
+}
+
+/// A trimmed `!pragma` line, as `try_silent_directive` recognises it.
+fn is_pragma_directive(line: &str) -> bool {
+    line.starts_with("!pragma ") || line.starts_with("!pragma\t")
+}
+
+/// The diagram type text after `start` (`DiagramType#findStartTypes` matches
+/// `start` and the type name with `regionMatches(true, ...)`).
+pub(crate) fn start_directive_type(line: &str) -> Option<&str> {
+    let tail = directive_tail(line)?;
+    java_region_matches_ignore_case(tail, "start").filter(|kind| !kind.is_empty())
+}
+
+/// The non-ASCII BMP units that `String#regionMatches(true, ...)` matches
+/// against an ASCII letter: per unit it compares `Character.toUpperCase`
+/// and then `Character.toLowerCase` of those (Java's simple mappings,
+/// UnicodeData fields 12 and 13). Generated from UnicodeData.txt 15.0.0
+/// (sha256 806e9aed65037197f1ec85e12be6e8cd870fc5608b4de0fffd990f689f376a73) by
+/// `docs/parity-reviews/tim-line-continuation/maker-round5-opus/support/gen_ascii_fold.py`.
+const JAVA_ASCII_CASE_FOLDS: [(char, char); 4] = [
+    ('\u{0130}', 'i'),
+    ('\u{0131}', 'i'),
+    ('\u{017F}', 's'),
+    ('\u{212A}', 'k'),
+];
+
+/// `text.regionMatches(true, 0, key, 0, key.length())` for an ASCII `key`:
+/// the rest of `text` after the matched units, or `None`. A supplementary
+/// character is two units and never matches an ASCII letter.
+fn java_region_matches_ignore_case<'a>(text: &'a str, key: &str) -> Option<&'a str> {
+    let mut chars = text.char_indices();
+    for k in key.chars() {
+        let (_, c) = chars.next()?;
+        let folds = c.eq_ignore_ascii_case(&k)
+            || JAVA_ASCII_CASE_FOLDS.contains(&(c, k.to_ascii_lowercase()));
+        if !folds {
+            return None;
+        }
+    }
+    Some(chars.next().map_or("", |(index, _)| &text[index..]))
+}
+
+/// `DiagramType#getTypes` (core/DiagramType.java:94-216) on the text after
+/// `start`: a switch on `Character.toLowerCase` of its first character, then
+/// case-insensitive prefix tests (`check`, regionMatches(true, ...)) in
+/// Java's order. The result is the Rust dispatch key of the Java type; a
+/// Java type with no Rust parser keeps its Java name, and UNKNOWN (which
+/// PSystemBuilder turns into PSystemUnsupported) keeps the raw text, so
+/// neither is a dispatch key.
+pub(crate) fn java_start_type(kind: &str) -> Cow<'_, str> {
+    const TABLE: &[(char, &[(&str, &str)])] = &[
+        ('b', &[("bpm", "bpm"), ("board", "board")]),
+        (
+            'c',
+            &[
+                ("chart", "chart"),
+                ("creole", "creole"),
+                ("chronology", "chronology"),
+                ("chen", "chen"),
+            ],
+        ),
+        ('d', &[("dot", "dot"), ("ditaa", "ditaa"), ("def", "def")]),
+        ('e', &[("ebnf", "ebnf")]),
+        ('f', &[("flow", "flow"), ("files", "files")]),
+        ('g', &[("gantt", "gantt"), ("git", "git")]),
+        ('h', &[("hcl", "hcl")]),
+        ('j', &[("jcckit", "jcckit"), ("json", "json")]),
+        ('l', &[("latex", "latex")]),
+        ('m', &[("math", "math"), ("mindmap", "mindmap")]),
+        ('n', &[("nwdiag", "nwdiag")]),
+        ('p', &[("project", "gantt"), ("packetdiag", "packetdiag")]),
+        ('r', &[("regex", "regex")]),
+        ('s', &[("salt", "salt"), ("sprites", "sprites")]),
+        ('u', &[("uml", "uml")]),
+        ('w', &[("wire", "wire"), ("wbs", "wbs")]),
+        ('y', &[("yaml", "yaml")]),
+    ];
+    let Some(first) = kind.chars().next() else {
+        return Cow::Borrowed(kind);
+    };
+    let lower = first.to_lowercase().next().unwrap_or(first);
+    TABLE
+        .iter()
+        .find(|(c, _)| *c == lower)
+        .and_then(|(_, keys)| {
+            keys.iter()
+                .find(|(java, _)| start_type_is(kind, java))
+                .map(|(_, rust)| Cow::Borrowed(*rust))
+        })
+        .unwrap_or(Cow::Borrowed(kind))
+}
+
+fn start_type_is(kind: &str, name: &str) -> bool {
+    java_region_matches_ignore_case(kind, name).is_some()
+}
+
+/// One line of the block input after `preproc2.ReadFilterMergeLines`.
+struct MergedInputLine<'a> {
+    /// 1-based input position of the first piece:
+    /// `StringLocated#mergeEndBackslash` keeps the continued line's location.
+    source_line: usize,
+    text: Cow<'a, str>,
+    /// How many later input lines (continuations and the comment lines
+    /// `ReadFilterQuoteComment` skipped) this line absorbed.
+    consumed: usize,
+}
+
+struct MergedInput<'a> {
+    lines: Vec<MergedInputLine<'a>>,
+    /// The merge swallowed the block's end directive (the input's own, or
+    /// the one `Pipe#readSingleDiagram` appends when the input has none), so
+    /// `BlockUmlBuilder` creates no block for it.
+    swallowed_end: bool,
+    /// `pipe_text_positions` of the raw lines when Pipe found no start mark.
+    pipe_positions: Option<Vec<usize>>,
+    /// A `@@@format ` line was removed, so stream positions no longer equal
+    /// input lines.
+    format_removed: bool,
+}
+
+/// What `Pipe#readSingleDiagram` hands to `SourceStringReader` for one
+/// diagram: a prefix of the input and, when that prefix has no end line of
+/// Pipe's own kind, the end line Pipe appends.
+struct PipeDiagram {
+    /// Number of input lines kept: reading stops after Pipe's end line.
+    kept: usize,
+    appended_end: Option<String>,
+    /// A line `startsWith("@start")`: Pipe numbers the diagram from it.
+    start_mark_found: bool,
+}
+
+/// Port of `Pipe#readSingleDiagram`'s start and end recognition
+/// (Pipe.java:180-224). Unlike `StartUtils`, Pipe looks only at column 0: a
+/// line that `startsWith("@start")` opens the diagram, and the diagram is
+/// complete at the first later line that `startsWith(expectedEnd)`, where
+/// `expectedEnd` is `@end` plus the start's type when the whole start line
+/// matches `@start([A-Za-z]*)`, and `@end` otherwise. An indented end, or one
+/// written with `\`, is not Pipe's end, so Pipe appends its own after it.
+///
+/// Not ported (they shift or drop lines rather than end the diagram): the
+/// `@startuml` Pipe prepends when no column-0 start exists, and its discard
+/// of the lines before the start.
+fn pipe_single_diagram(input: &[&str]) -> PipeDiagram {
+    #[derive(PartialEq)]
+    enum State {
+        NoContent,
+        StartMarkNotFound,
+        StartMarkFound,
+    }
+    // Pipe.java:217: `"@startuml\n" + sb + "@enduml\n"`.
+    const UNMARKED_END: &str = "@enduml";
+    let mut state = State::NoContent;
+    let mut expected_end = String::new();
+    for (index, line) in input.iter().enumerate() {
+        // `manageFormat` consumes these lines; they never reach `sb`.
+        if line.starts_with(PIPE_FORMAT_PREFIX) {
+            continue;
+        }
+        if state == State::NoContent && !java_trim(line).is_empty() {
+            state = State::StartMarkNotFound;
+        }
+        if state == State::StartMarkNotFound && line.starts_with("@start") {
+            state = State::StartMarkFound;
+            // `Pattern.compile("@start([A-Za-z]*)").matcher(line).matches()`
+            let kind = line
+                .strip_prefix("@start")
+                .filter(|kind| kind.chars().all(|c| c.is_ascii_alphabetic()))
+                .unwrap_or("");
+            expected_end = format!("@end{kind}");
+        } else if state == State::StartMarkFound && line.starts_with(expected_end.as_str()) {
+            return PipeDiagram {
+                kept: index + 1,
+                appended_end: None,
+                start_mark_found: true,
+            };
+        }
+    }
+    PipeDiagram {
+        kept: input.len(),
+        start_mark_found: state == State::StartMarkFound,
+        appended_end: match state {
+            // Pipe returns null: there is no diagram to end.
+            State::NoContent => None,
+            State::StartMarkNotFound => Some(UNMARKED_END.to_string()),
+            State::StartMarkFound => Some(expected_end),
+        },
+    }
+}
+
+/// Port of `preproc2.ReadFilterMergeLines`, which `BlockUmlBuilder` applies
+/// (through `preproc2.Preprocessor`) to the raw input before any block
+/// splitting or TIM stage.
+///
+/// While a line `endsWithBackslash` and the active block is not ditaa, the
+/// next line is read through `ReadFilterQuoteComment` (comment lines skipped,
+/// `removeInnerComment` applied) and appended after dropping the backslash.
+/// The line that is continued is never comment-filtered here; TIM's own
+/// comment stages see the merged text later. Start and end directives are
+/// recognised only on lines read as a new result, never on merged-in text.
+fn read_filter_merge_lines<'a>(raw: &[Cow<'a, str>]) -> Vec<MergedInputLine<'a>> {
+    let mut lines = Vec::with_capacity(raw.len());
+    let mut manage_ending_backslash = true;
+    let mut next_index = 0;
+    while next_index < raw.len() {
+        let first_index = next_index;
+        let result = &raw[first_index];
+        next_index += 1;
+        if let Some(kind) = start_directive_type(java_trim(result))
+            && start_type_is(kind, "ditaa")
+        {
+            manage_ending_backslash = false;
+        }
+        if is_end_directive(result) {
+            manage_ending_backslash = true;
+        }
+
+        let mut text = result.clone();
+        while manage_ending_backslash && ends_with_backslash(&text) {
+            // ReadFilterQuoteComment#readLine; `longComment` is local to
+            // each call.
+            let mut long_comment = false;
+            let mut next = None;
+            while next_index < raw.len() {
+                let line: &str = &raw[next_index];
+                next_index += 1;
+                // `replace('\t', ' ').trim()`: a tab is <= U+0020.
+                let trim = java_trim(line);
+                if long_comment {
+                    if trim.ends_with("'/") {
+                        long_comment = false;
+                    }
+                    continue;
+                }
+                if trim.starts_with('\'') {
+                    continue;
+                }
+                if trim.starts_with("/'") && trim.ends_with("'/") {
+                    continue;
+                }
+                if trim.starts_with("/'") && !trim.contains("'/") {
+                    long_comment = true;
+                    continue;
+                }
+                next = Some(remove_inner_comment(line).into_owned());
+                break;
+            }
+            let Some(next) = next else {
+                break;
+            };
+            let mut merged = text.into_owned();
+            merged.pop();
+            merged.push_str(&next);
+            text = Cow::Owned(merged);
+        }
+
+        lines.push(MergedInputLine {
+            source_line: first_index + 1,
+            text,
+            consumed: next_index - first_index - 1,
+        });
+    }
+    lines
+}
+
+/// The block input as `BlockUmlBuilder` reads it in `-pipe` mode:
+/// `Pipe#readSingleDiagram`'s text (cut after Pipe's end line, or with Pipe's
+/// end appended) through `ReadFilterMergeLines`. An appended end stays in the
+/// list, as it does in Java's TIM input.
+fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
+    let pipe = pipe_single_diagram(input);
+    let mut raw: Vec<Cow<'a, str>> = input[..pipe.kept]
+        .iter()
+        .map(|line| Cow::Borrowed(*line))
+        .collect();
+    if let Some(end) = pipe.appended_end {
+        raw.push(Cow::Owned(end));
+    }
+    let appended = pipe_appended(&raw);
+    let pipe_positions = (!pipe.start_mark_found).then(|| pipe_text_positions(&appended));
+    // Only the lines Pipe appends are in the text BlockUmlBuilder reads, as
+    // UncommentReadLine(ReadLineReader) through the Preprocessor's
+    // ReadFilterMergeLines (BlockUmlBuilder.java:91-95). A '@@@format ' line
+    // is removed; a leading trim-empty line, which precedes all content,
+    // stays as an empty line so stream positions keep counting input lines.
+    // Each kept line keeps its input index.
+    let format_removed = raw.iter().any(|line| line.starts_with(PIPE_FORMAT_PREFIX));
+    let kept: Vec<usize> = (0..raw.len())
+        .filter(|&index| !raw[index].starts_with(PIPE_FORMAT_PREFIX))
+        .collect();
+    let mut reader = UncommentReadLine::default();
+    let text: Vec<Cow<'a, str>> = raw
+        .into_iter()
+        .zip(&appended)
+        .filter(|(line, _)| !line.starts_with(PIPE_FORMAT_PREFIX))
+        .map(|(line, &appended)| {
+            if appended {
+                reader.read(read_line_reader_line(line))
+            } else {
+                Cow::Borrowed("")
+            }
+        })
+        .collect();
+    let mut lines = read_filter_merge_lines(&text);
+    for line in &mut lines {
+        line.source_line = kept[line.source_line - 1] + 1;
+    }
+    let swallowed_end = !lines.iter().any(|line| is_end_directive(&line.text));
+    MergedInput {
+        lines,
+        swallowed_end,
+        pipe_positions,
+        format_removed,
+    }
+}
+
+/// `Pipe#readSingleDiagram` hands a line with this prefix to `manageFormat`
+/// and never appends it (Pipe.java:188-189).
+const PIPE_FORMAT_PREFIX: &str = "@@@format ";
+
+/// The position (0-based, as `LineLocation` counts it) of each input line in
+/// the text `Pipe#readSingleDiagram` returns when no line
+/// `startsWith("@start")`: `"@startuml\n" + sb` (Pipe.java:217), so the
+/// first appended line is position 1. `@@@format ` lines go to
+/// `manageFormat` and are not appended (188-189); while no content has been
+/// seen, a line whose `String#trim` is empty is not appended (191-192,
+/// 207-208). A line that is not appended gets the position the next
+/// appended line takes.
+fn pipe_text_positions(appended: &[bool]) -> Vec<usize> {
+    let mut next = 1;
+    appended
+        .iter()
+        .map(|&appended| {
+            let position = next;
+            next += usize::from(appended);
+            position
+        })
+        .collect()
+}
+
+/// Whether `Pipe#readSingleDiagram` appends each input line to its text:
+/// never a `@@@format ` line (manageFormat, Pipe.java:188-189), and not a
+/// line whose `String#trim` is empty while no content has been seen
+/// (191-192, 207-208).
+fn pipe_appended(raw: &[Cow<'_, str>]) -> Vec<bool> {
+    let mut content_seen = false;
+    raw.iter()
+        .map(|line| {
+            if line.starts_with(PIPE_FORMAT_PREFIX) {
+                return false;
+            }
+            content_seen |= !java_trim(line).is_empty();
+            content_seen
+        })
+        .collect()
+}
+
+/// `UncommentReadLine#readLine` (preproc/UncommentReadLine.java:57-81),
+/// never paused: a line for which `StartUtils#beforeStartUml` finds a header
+/// sets the header to remove; a line that is a prefix of the header becomes
+/// empty, and a line that starts with it loses it.
+#[derive(Default)]
+struct UncommentReadLine {
+    header_to_remove: Option<String>,
+}
+
+impl UncommentReadLine {
+    fn read<'a>(&mut self, text: Cow<'a, str>) -> Cow<'a, str> {
+        if let Some(header) = before_start_uml(&text) {
+            self.header_to_remove = Some(header.to_string());
+        }
+        match &self.header_to_remove {
+            Some(header) if header.starts_with(text.as_ref()) => Cow::Borrowed(""),
+            Some(header) if !header.is_empty() && text.starts_with(header.as_str()) => {
+                Cow::Owned(text[header.len()..].to_string())
+            }
+            _ => text,
+        }
+    }
+}
+
+/// `pub(crate)` view of the main-block reader for `parse::split_blocks` and
+/// `parse::detect_type`: each input line as BlockUmlBuilder's
+/// `UncommentReadLine` returns it.
+pub(crate) fn uncommented_lines<'a>(input: &[&'a str]) -> Vec<Cow<'a, str>> {
+    let mut reader = UncommentReadLine::default();
+    input
+        .iter()
+        .map(|line| reader.read(read_line_reader_line(Cow::Borrowed(*line))))
+        .collect()
+}
+
+/// `DiagramDetector#extractFromFile` (DiagramDetector.java:71-113) for a
+/// local include: the file is read through `ReadFilterMergeLines` and
+/// `UncommentReadLine`. When one of those lines is a start directive
+/// (`containsStartDiagram`), `DiagramExtractor` yields the lines after the
+/// first start and before the first end directive, each with its first
+/// piece's file line. `None` when the file holds no start directive: Java
+/// then reads it raw.
+fn wrapped_diagram_lines(raw: &[Cow<'_, str>]) -> Option<Vec<(usize, String)>> {
+    let mut reader = UncommentReadLine::default();
+    let lines: Vec<(usize, String)> = read_filter_merge_lines(raw)
+        .into_iter()
+        .map(|line| (line.source_line, reader.read(line.text).into_owned()))
+        .collect();
+    let start = lines
+        .iter()
+        .position(|(_, text)| start_directive_type(text).is_some())?;
+    Some(
+        lines[start + 1..]
+            .iter()
+            .take_while(|(_, text)| !is_end_directive(text))
+            .cloned()
+            .collect(),
+    )
+}
+
+/// `ReadLineReader#readLine` (preproc/ReadLineReader.java:89-103), the
+/// reader of every included file: each line loses one leading U+FEFF and has
+/// U+2013 replaced by '-'.
+fn read_line_reader_lines(content: &str) -> Vec<Cow<'_, str>> {
+    content
+        .lines()
+        .map(|line| read_line_reader_line(Cow::Borrowed(line)))
+        .collect()
+}
+
+/// One line through `ReadLineReader#readLine`: one leading U+FEFF dropped,
+/// every U+2013 replaced by '-'.
+fn read_line_reader_line(line: Cow<'_, str>) -> Cow<'_, str> {
+    let line = match line {
+        Cow::Borrowed(text) => Cow::Borrowed(text.strip_prefix('\u{FEFF}').unwrap_or(text)),
+        Cow::Owned(text) => match text.strip_prefix('\u{FEFF}') {
+            Some(rest) => Cow::Owned(rest.to_string()),
+            None => Cow::Owned(text),
+        },
+    };
+    if line.contains('\u{2013}') {
+        Cow::Owned(line.replace('\u{2013}', "-"))
     } else {
         line
+    }
+}
+
+/// Inclusive BMP runs of Unicode 15.0 general category L* (Lu, Ll, Lt, Lm, Lo).
+/// Nd is `BMP_DECIMAL_DIGIT_ZEROS`, not this table.
+///
+/// Generated from UnicodeData.txt 15.0.0
+/// <https://www.unicode.org/Public/15.0.0/ucd/UnicodeData.txt> by
+/// `docs/parity-reviews/tim-line-continuation/maker-round5-opus/support/gen_bmp_letters.py`,
+/// which also checks this table against the file.
+/// sha256 806e9aed65037197f1ec85e12be6e8cd870fc5608b4de0fffd990f689f376a73.
+/// 48,965 BMP letters, 380 runs. Unicode 17 adds sixteen BMP letters
+/// (sha256 2e1efc1dcb59c575eedf5ccae60f95229f706ee6d031835247d843c11d96470c)
+/// and removes none; those sixteen are absent here.
+const BMP_LETTER_RANGES: [(u16, u16); 380] = [
+    (0x0041, 0x005A),
+    (0x0061, 0x007A),
+    (0x00AA, 0x00AA),
+    (0x00B5, 0x00B5),
+    (0x00BA, 0x00BA),
+    (0x00C0, 0x00D6),
+    (0x00D8, 0x00F6),
+    (0x00F8, 0x02C1),
+    (0x02C6, 0x02D1),
+    (0x02E0, 0x02E4),
+    (0x02EC, 0x02EC),
+    (0x02EE, 0x02EE),
+    (0x0370, 0x0374),
+    (0x0376, 0x0377),
+    (0x037A, 0x037D),
+    (0x037F, 0x037F),
+    (0x0386, 0x0386),
+    (0x0388, 0x038A),
+    (0x038C, 0x038C),
+    (0x038E, 0x03A1),
+    (0x03A3, 0x03F5),
+    (0x03F7, 0x0481),
+    (0x048A, 0x052F),
+    (0x0531, 0x0556),
+    (0x0559, 0x0559),
+    (0x0560, 0x0588),
+    (0x05D0, 0x05EA),
+    (0x05EF, 0x05F2),
+    (0x0620, 0x064A),
+    (0x066E, 0x066F),
+    (0x0671, 0x06D3),
+    (0x06D5, 0x06D5),
+    (0x06E5, 0x06E6),
+    (0x06EE, 0x06EF),
+    (0x06FA, 0x06FC),
+    (0x06FF, 0x06FF),
+    (0x0710, 0x0710),
+    (0x0712, 0x072F),
+    (0x074D, 0x07A5),
+    (0x07B1, 0x07B1),
+    (0x07CA, 0x07EA),
+    (0x07F4, 0x07F5),
+    (0x07FA, 0x07FA),
+    (0x0800, 0x0815),
+    (0x081A, 0x081A),
+    (0x0824, 0x0824),
+    (0x0828, 0x0828),
+    (0x0840, 0x0858),
+    (0x0860, 0x086A),
+    (0x0870, 0x0887),
+    (0x0889, 0x088E),
+    (0x08A0, 0x08C9),
+    (0x0904, 0x0939),
+    (0x093D, 0x093D),
+    (0x0950, 0x0950),
+    (0x0958, 0x0961),
+    (0x0971, 0x0980),
+    (0x0985, 0x098C),
+    (0x098F, 0x0990),
+    (0x0993, 0x09A8),
+    (0x09AA, 0x09B0),
+    (0x09B2, 0x09B2),
+    (0x09B6, 0x09B9),
+    (0x09BD, 0x09BD),
+    (0x09CE, 0x09CE),
+    (0x09DC, 0x09DD),
+    (0x09DF, 0x09E1),
+    (0x09F0, 0x09F1),
+    (0x09FC, 0x09FC),
+    (0x0A05, 0x0A0A),
+    (0x0A0F, 0x0A10),
+    (0x0A13, 0x0A28),
+    (0x0A2A, 0x0A30),
+    (0x0A32, 0x0A33),
+    (0x0A35, 0x0A36),
+    (0x0A38, 0x0A39),
+    (0x0A59, 0x0A5C),
+    (0x0A5E, 0x0A5E),
+    (0x0A72, 0x0A74),
+    (0x0A85, 0x0A8D),
+    (0x0A8F, 0x0A91),
+    (0x0A93, 0x0AA8),
+    (0x0AAA, 0x0AB0),
+    (0x0AB2, 0x0AB3),
+    (0x0AB5, 0x0AB9),
+    (0x0ABD, 0x0ABD),
+    (0x0AD0, 0x0AD0),
+    (0x0AE0, 0x0AE1),
+    (0x0AF9, 0x0AF9),
+    (0x0B05, 0x0B0C),
+    (0x0B0F, 0x0B10),
+    (0x0B13, 0x0B28),
+    (0x0B2A, 0x0B30),
+    (0x0B32, 0x0B33),
+    (0x0B35, 0x0B39),
+    (0x0B3D, 0x0B3D),
+    (0x0B5C, 0x0B5D),
+    (0x0B5F, 0x0B61),
+    (0x0B71, 0x0B71),
+    (0x0B83, 0x0B83),
+    (0x0B85, 0x0B8A),
+    (0x0B8E, 0x0B90),
+    (0x0B92, 0x0B95),
+    (0x0B99, 0x0B9A),
+    (0x0B9C, 0x0B9C),
+    (0x0B9E, 0x0B9F),
+    (0x0BA3, 0x0BA4),
+    (0x0BA8, 0x0BAA),
+    (0x0BAE, 0x0BB9),
+    (0x0BD0, 0x0BD0),
+    (0x0C05, 0x0C0C),
+    (0x0C0E, 0x0C10),
+    (0x0C12, 0x0C28),
+    (0x0C2A, 0x0C39),
+    (0x0C3D, 0x0C3D),
+    (0x0C58, 0x0C5A),
+    (0x0C5D, 0x0C5D),
+    (0x0C60, 0x0C61),
+    (0x0C80, 0x0C80),
+    (0x0C85, 0x0C8C),
+    (0x0C8E, 0x0C90),
+    (0x0C92, 0x0CA8),
+    (0x0CAA, 0x0CB3),
+    (0x0CB5, 0x0CB9),
+    (0x0CBD, 0x0CBD),
+    (0x0CDD, 0x0CDE),
+    (0x0CE0, 0x0CE1),
+    (0x0CF1, 0x0CF2),
+    (0x0D04, 0x0D0C),
+    (0x0D0E, 0x0D10),
+    (0x0D12, 0x0D3A),
+    (0x0D3D, 0x0D3D),
+    (0x0D4E, 0x0D4E),
+    (0x0D54, 0x0D56),
+    (0x0D5F, 0x0D61),
+    (0x0D7A, 0x0D7F),
+    (0x0D85, 0x0D96),
+    (0x0D9A, 0x0DB1),
+    (0x0DB3, 0x0DBB),
+    (0x0DBD, 0x0DBD),
+    (0x0DC0, 0x0DC6),
+    (0x0E01, 0x0E30),
+    (0x0E32, 0x0E33),
+    (0x0E40, 0x0E46),
+    (0x0E81, 0x0E82),
+    (0x0E84, 0x0E84),
+    (0x0E86, 0x0E8A),
+    (0x0E8C, 0x0EA3),
+    (0x0EA5, 0x0EA5),
+    (0x0EA7, 0x0EB0),
+    (0x0EB2, 0x0EB3),
+    (0x0EBD, 0x0EBD),
+    (0x0EC0, 0x0EC4),
+    (0x0EC6, 0x0EC6),
+    (0x0EDC, 0x0EDF),
+    (0x0F00, 0x0F00),
+    (0x0F40, 0x0F47),
+    (0x0F49, 0x0F6C),
+    (0x0F88, 0x0F8C),
+    (0x1000, 0x102A),
+    (0x103F, 0x103F),
+    (0x1050, 0x1055),
+    (0x105A, 0x105D),
+    (0x1061, 0x1061),
+    (0x1065, 0x1066),
+    (0x106E, 0x1070),
+    (0x1075, 0x1081),
+    (0x108E, 0x108E),
+    (0x10A0, 0x10C5),
+    (0x10C7, 0x10C7),
+    (0x10CD, 0x10CD),
+    (0x10D0, 0x10FA),
+    (0x10FC, 0x1248),
+    (0x124A, 0x124D),
+    (0x1250, 0x1256),
+    (0x1258, 0x1258),
+    (0x125A, 0x125D),
+    (0x1260, 0x1288),
+    (0x128A, 0x128D),
+    (0x1290, 0x12B0),
+    (0x12B2, 0x12B5),
+    (0x12B8, 0x12BE),
+    (0x12C0, 0x12C0),
+    (0x12C2, 0x12C5),
+    (0x12C8, 0x12D6),
+    (0x12D8, 0x1310),
+    (0x1312, 0x1315),
+    (0x1318, 0x135A),
+    (0x1380, 0x138F),
+    (0x13A0, 0x13F5),
+    (0x13F8, 0x13FD),
+    (0x1401, 0x166C),
+    (0x166F, 0x167F),
+    (0x1681, 0x169A),
+    (0x16A0, 0x16EA),
+    (0x16F1, 0x16F8),
+    (0x1700, 0x1711),
+    (0x171F, 0x1731),
+    (0x1740, 0x1751),
+    (0x1760, 0x176C),
+    (0x176E, 0x1770),
+    (0x1780, 0x17B3),
+    (0x17D7, 0x17D7),
+    (0x17DC, 0x17DC),
+    (0x1820, 0x1878),
+    (0x1880, 0x1884),
+    (0x1887, 0x18A8),
+    (0x18AA, 0x18AA),
+    (0x18B0, 0x18F5),
+    (0x1900, 0x191E),
+    (0x1950, 0x196D),
+    (0x1970, 0x1974),
+    (0x1980, 0x19AB),
+    (0x19B0, 0x19C9),
+    (0x1A00, 0x1A16),
+    (0x1A20, 0x1A54),
+    (0x1AA7, 0x1AA7),
+    (0x1B05, 0x1B33),
+    (0x1B45, 0x1B4C),
+    (0x1B83, 0x1BA0),
+    (0x1BAE, 0x1BAF),
+    (0x1BBA, 0x1BE5),
+    (0x1C00, 0x1C23),
+    (0x1C4D, 0x1C4F),
+    (0x1C5A, 0x1C7D),
+    (0x1C80, 0x1C88),
+    (0x1C90, 0x1CBA),
+    (0x1CBD, 0x1CBF),
+    (0x1CE9, 0x1CEC),
+    (0x1CEE, 0x1CF3),
+    (0x1CF5, 0x1CF6),
+    (0x1CFA, 0x1CFA),
+    (0x1D00, 0x1DBF),
+    (0x1E00, 0x1F15),
+    (0x1F18, 0x1F1D),
+    (0x1F20, 0x1F45),
+    (0x1F48, 0x1F4D),
+    (0x1F50, 0x1F57),
+    (0x1F59, 0x1F59),
+    (0x1F5B, 0x1F5B),
+    (0x1F5D, 0x1F5D),
+    (0x1F5F, 0x1F7D),
+    (0x1F80, 0x1FB4),
+    (0x1FB6, 0x1FBC),
+    (0x1FBE, 0x1FBE),
+    (0x1FC2, 0x1FC4),
+    (0x1FC6, 0x1FCC),
+    (0x1FD0, 0x1FD3),
+    (0x1FD6, 0x1FDB),
+    (0x1FE0, 0x1FEC),
+    (0x1FF2, 0x1FF4),
+    (0x1FF6, 0x1FFC),
+    (0x2071, 0x2071),
+    (0x207F, 0x207F),
+    (0x2090, 0x209C),
+    (0x2102, 0x2102),
+    (0x2107, 0x2107),
+    (0x210A, 0x2113),
+    (0x2115, 0x2115),
+    (0x2119, 0x211D),
+    (0x2124, 0x2124),
+    (0x2126, 0x2126),
+    (0x2128, 0x2128),
+    (0x212A, 0x212D),
+    (0x212F, 0x2139),
+    (0x213C, 0x213F),
+    (0x2145, 0x2149),
+    (0x214E, 0x214E),
+    (0x2183, 0x2184),
+    (0x2C00, 0x2CE4),
+    (0x2CEB, 0x2CEE),
+    (0x2CF2, 0x2CF3),
+    (0x2D00, 0x2D25),
+    (0x2D27, 0x2D27),
+    (0x2D2D, 0x2D2D),
+    (0x2D30, 0x2D67),
+    (0x2D6F, 0x2D6F),
+    (0x2D80, 0x2D96),
+    (0x2DA0, 0x2DA6),
+    (0x2DA8, 0x2DAE),
+    (0x2DB0, 0x2DB6),
+    (0x2DB8, 0x2DBE),
+    (0x2DC0, 0x2DC6),
+    (0x2DC8, 0x2DCE),
+    (0x2DD0, 0x2DD6),
+    (0x2DD8, 0x2DDE),
+    (0x2E2F, 0x2E2F),
+    (0x3005, 0x3006),
+    (0x3031, 0x3035),
+    (0x303B, 0x303C),
+    (0x3041, 0x3096),
+    (0x309D, 0x309F),
+    (0x30A1, 0x30FA),
+    (0x30FC, 0x30FF),
+    (0x3105, 0x312F),
+    (0x3131, 0x318E),
+    (0x31A0, 0x31BF),
+    (0x31F0, 0x31FF),
+    (0x3400, 0x4DBF),
+    (0x4E00, 0xA48C),
+    (0xA4D0, 0xA4FD),
+    (0xA500, 0xA60C),
+    (0xA610, 0xA61F),
+    (0xA62A, 0xA62B),
+    (0xA640, 0xA66E),
+    (0xA67F, 0xA69D),
+    (0xA6A0, 0xA6E5),
+    (0xA717, 0xA71F),
+    (0xA722, 0xA788),
+    (0xA78B, 0xA7CA),
+    (0xA7D0, 0xA7D1),
+    (0xA7D3, 0xA7D3),
+    (0xA7D5, 0xA7D9),
+    (0xA7F2, 0xA801),
+    (0xA803, 0xA805),
+    (0xA807, 0xA80A),
+    (0xA80C, 0xA822),
+    (0xA840, 0xA873),
+    (0xA882, 0xA8B3),
+    (0xA8F2, 0xA8F7),
+    (0xA8FB, 0xA8FB),
+    (0xA8FD, 0xA8FE),
+    (0xA90A, 0xA925),
+    (0xA930, 0xA946),
+    (0xA960, 0xA97C),
+    (0xA984, 0xA9B2),
+    (0xA9CF, 0xA9CF),
+    (0xA9E0, 0xA9E4),
+    (0xA9E6, 0xA9EF),
+    (0xA9FA, 0xA9FE),
+    (0xAA00, 0xAA28),
+    (0xAA40, 0xAA42),
+    (0xAA44, 0xAA4B),
+    (0xAA60, 0xAA76),
+    (0xAA7A, 0xAA7A),
+    (0xAA7E, 0xAAAF),
+    (0xAAB1, 0xAAB1),
+    (0xAAB5, 0xAAB6),
+    (0xAAB9, 0xAABD),
+    (0xAAC0, 0xAAC0),
+    (0xAAC2, 0xAAC2),
+    (0xAADB, 0xAADD),
+    (0xAAE0, 0xAAEA),
+    (0xAAF2, 0xAAF4),
+    (0xAB01, 0xAB06),
+    (0xAB09, 0xAB0E),
+    (0xAB11, 0xAB16),
+    (0xAB20, 0xAB26),
+    (0xAB28, 0xAB2E),
+    (0xAB30, 0xAB5A),
+    (0xAB5C, 0xAB69),
+    (0xAB70, 0xABE2),
+    (0xAC00, 0xD7A3),
+    (0xD7B0, 0xD7C6),
+    (0xD7CB, 0xD7FB),
+    (0xF900, 0xFA6D),
+    (0xFA70, 0xFAD9),
+    (0xFB00, 0xFB06),
+    (0xFB13, 0xFB17),
+    (0xFB1D, 0xFB1D),
+    (0xFB1F, 0xFB28),
+    (0xFB2A, 0xFB36),
+    (0xFB38, 0xFB3C),
+    (0xFB3E, 0xFB3E),
+    (0xFB40, 0xFB41),
+    (0xFB43, 0xFB44),
+    (0xFB46, 0xFBB1),
+    (0xFBD3, 0xFD3D),
+    (0xFD50, 0xFD8F),
+    (0xFD92, 0xFDC7),
+    (0xFDF0, 0xFDFB),
+    (0xFE70, 0xFE74),
+    (0xFE76, 0xFEFC),
+    (0xFF21, 0xFF3A),
+    (0xFF41, 0xFF5A),
+    (0xFF66, 0xFFBE),
+    (0xFFC2, 0xFFC7),
+    (0xFFCA, 0xFFCF),
+    (0xFFD2, 0xFFD7),
+    (0xFFDA, 0xFFDC),
+];
+
+/// `Character#isLetterOrDigit(char)`: general category Lu, Ll, Lt, Lm, Lo
+/// or Nd of one UTF-16 unit, under Unicode 15.0. A supplementary code point
+/// reaches Java as two surrogate units, and a surrogate is neither a letter
+/// nor a digit.
+fn java_is_letter_or_digit(c: char) -> bool {
+    let Ok(unit) = u16::try_from(u32::from(c)) else {
+        return false;
     };
-    static SPECIAL: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"/'''[-\w]*'''/").unwrap());
-    SPECIAL.replace_all(content, "").into_owned()
+    java_decimal_digit(unit).is_some() || bmp_letter(unit)
+}
+
+fn bmp_letter(unit: u16) -> bool {
+    BMP_LETTER_RANGES
+        .binary_search_by(|&(start, end)| {
+            if unit < start {
+                std::cmp::Ordering::Greater
+            } else if unit > end {
+                std::cmp::Ordering::Less
+            } else {
+                std::cmp::Ordering::Equal
+            }
+        })
+        .is_ok()
+}
+
+/// `StartUtils#beforeStartUml`: the text before a `[@\\]start` keyword that
+/// is preceded only by non-word characters (text inside `<...>` is skipped).
+fn before_start_uml(s: &str) -> Option<&str> {
+    let mut inside = false;
+    for (index, c) in s.char_indices() {
+        // `startsWithDirectiveKeyword(s, i, "start")`
+        if directive_tail(&s[index..]).is_some_and(|tail| tail.starts_with("start")) {
+            return Some(&s[..index]);
+        }
+        if inside {
+            if c == '>' {
+                inside = false;
+            }
+            continue;
+        }
+        if c == '<' {
+            inside = true;
+        } else if c == '~' || c == '_' || java_is_letter_or_digit(c) {
+            // `isWordOrTilde`: Character#isLetterOrDigit, '_' or '~'.
+            return None;
+        }
+    }
+    None
+}
+
+/// For each input line, whether `ReadFilterMergeLines` merges it into an
+/// earlier continued line (as a continuation, or as a comment line
+/// `ReadFilterQuoteComment` skips on the way). `BlockUmlBuilder` tests start
+/// and end directives only on the merged lines, so such a line never starts
+/// or ends a block.
+pub(crate) fn lines_merged_into_previous(input: &[&str]) -> Vec<bool> {
+    let raw: Vec<Cow<'_, str>> = input.iter().map(|line| Cow::Borrowed(*line)).collect();
+    let mut merged_away = vec![false; input.len()];
+    for line in read_filter_merge_lines(&raw) {
+        // `source_line` is the 1-based first piece, so the absorbed lines
+        // are the 0-based indices that follow it.
+        for flag in &mut merged_away[line.source_line..line.source_line + line.consumed] {
+            *flag = true;
+        }
+    }
+    merged_away
+}
+
+/// One entry of the parser projection of the TIM events, before the
+/// post-TIM join.
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum TimLine {
+    /// A line of Java's TIM result list (`EvaluatedEvent::Plain`), as the
+    /// parser stream carries it (possibly behind a source-line marker).
+    Text(String),
+    /// A line of Java's TIM result list that Rust's TIM executed itself
+    /// (`EvaluatedEvent::Executed`): the join reads its text, and the parser
+    /// sees an empty stand-in unless the join folds it into a line.
+    Executed(String),
+    /// A Rust-only parser line (`EvaluatedEvent::ParserOnly` and the theme
+    /// marker): the empty stand-in for a top-level line that TIM consumes (a
+    /// directive, a comment, an inactive branch), or Rust-only metadata. It
+    /// is no line of Java's TIM result list, so the post-TIM join passes over
+    /// it. It is a variant, not a text value, so no user line can be taken
+    /// for it.
+    RustOnly(String),
+}
+
+/// One parser stream of the post-TIM join: the top-level stream, or one theme
+/// body. `len` counts its entries (a line's default source line is its
+/// one-based position); `shifted` is set once an entry of this stream is
+/// folded into a later line, after which its content lines carry explicit
+/// source-line markers, because positions no longer equal source lines.
+#[derive(Default)]
+struct JoinStream {
+    out: Vec<String>,
+    len: usize,
+    shifted: bool,
+}
+
+/// `UmlSource#loadInternal` (UmlSource.java:118-134) on the parser streams,
+/// with `checkEndingBackslash` (PSystemBuilder.java:210-212: true for
+/// `@startuml`, whose `DiagramType#findStartTypes` contains SEQUENCE). Java
+/// joins one list, the TIM result list; Rust lays that list out over several
+/// streams, so the one `pending` join is carried from stream to stream in
+/// list order. After TIM, a line that `endsWithBackslash` is folded into the
+/// following ones, and the joined line takes the last piece's location and
+/// stream. Rust-only lines are not TIM lines and are passed over; an executed
+/// directive is a TIM line whose text joins like any other, and otherwise the
+/// parser sees its empty stand-in. Without the flag every entry is its text.
+/// The line count is taken from the identity projection
+/// (`uml_source_line_count`), not from these streams.
+struct PostTimJoin {
+    check_ending_backslash: bool,
+    pending: Option<String>,
+}
+
+impl PostTimJoin {
+    fn new(check_ending_backslash: bool) -> Self {
+        Self {
+            check_ending_backslash,
+            pending: None,
+        }
+    }
+
+    fn push(&mut self, stream: &mut JoinStream, line: TimLine) {
+        stream.len += 1;
+        let (line, executed) = match line {
+            TimLine::Text(line) => (line, false),
+            TimLine::Executed(line) => (line, true),
+            TimLine::RustOnly(text) => {
+                stream.out.push(text);
+                return;
+            }
+        };
+        if !self.check_ending_backslash {
+            stream.out.push(if executed { String::new() } else { line });
+            return;
+        }
+        let (source_line, text) = split_source_line_marker(&line).unwrap_or((stream.len, &line));
+        if ends_with_backslash(text) {
+            self.pending
+                .get_or_insert_with(String::new)
+                .push_str(&text[..text.len() - 1]);
+            stream.shifted = true;
+            return;
+        }
+        if let Some(mut joined) = self.pending.take() {
+            joined.push_str(text);
+            stream.out.push(source_line_marker(source_line, &joined));
+        } else if executed {
+            stream.out.push(String::new());
+        } else if stream.shifted && !text.is_empty() && split_source_line_marker(&line).is_none() {
+            stream.out.push(source_line_marker(source_line, text));
+        } else {
+            stream.out.push(line);
+        }
+    }
+
+    /// The parser stream omits the block's end line, which Java's list ends
+    /// with, so a tail still pending at the end joins with `block_end`
+    /// (diagram source line and TIM text), as `pending.append(s)` does with
+    /// the end line in Java. An end line that itself ends with a backslash
+    /// stays pending and, being last, is never added; so is a tail with no
+    /// end line.
+    fn finish(self, stream: &mut JoinStream, block_end: Option<&(usize, String)>) {
+        if let Some((end_line, end_text)) = block_end
+            && !ends_with_backslash(end_text)
+            && let Some(mut joined) = self.pending
+        {
+            joined.push_str(end_text);
+            stream.out.push(source_line_marker(*end_line, &joined));
+        }
+    }
+}
+
+const SPECIAL_COMMENT_OPEN: &str = "/'''";
+const SPECIAL_COMMENT_CLOSE: &str = "'''/";
+
+/// `StringLocated#removeSpecialInnerComment`:
+/// `s.replaceAll("/'''[-\\w]*'''/", "")` when both delimiters occur. Java's
+/// `\w` (no UNICODE_CHARACTER_CLASS) is `[A-Za-z0-9_]`.
+fn remove_special_inner_comment(s: &str) -> Cow<'_, str> {
+    static SPECIAL: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"/'''[-A-Za-z0-9_]*'''/").expect("valid special comment regex")
+    });
+    if s.contains(SPECIAL_COMMENT_OPEN) && s.contains(SPECIAL_COMMENT_CLOSE) {
+        SPECIAL.replace_all(s, "")
+    } else {
+        Cow::Borrowed(s)
+    }
 }
 
 /// TIM JSON (`!$j = {...}`, member access, `%str2json`) decodes JSON escapes
@@ -4108,7 +5353,13 @@ mod tests {
         assert!(ctx.error.is_none());
         ctx.process_one_line("class Tail", &mut events);
         let mut identity = Vec::new();
-        project_events(&events, &mut identity, &mut Vec::new(), &mut Vec::new());
+        project_events(
+            &events,
+            &mut PostTimJoin::new(false),
+            &mut identity,
+            &mut JoinStream::default(),
+            &mut Vec::new(),
+        );
         assert_eq!(identity, ["class Head", "class Tail"]);
         let out = preprocess_full(
             "@startuml\n!startsub blank\n\n!endsub\nclass Continued\n@enduml",
@@ -4896,15 +6147,15 @@ class "$count / $v" as Actual
     }
 
     #[test]
-    fn evaluated_sprite_is_shared_by_identity_and_extraction() {
+    fn evaluated_sprite_reaches_identity_and_commands_unchanged() {
         let source = "@startuml\n!$pixels = \"FA\"\nsprite $badge [2x1/16] {\n$pixels\n}\nclass Ledger\n@enduml";
         let output = preprocess_full(source, None);
         assert_eq!(
             output.uml_source,
             "@startuml\nsprite $badge [2x1/16] {\nFA\n}\nclass Ledger\n@enduml\n"
         );
-        assert_eq!(output.sprites["badge"].rows, ["FA"]);
-        assert!(!output.lines.iter().any(|line| line == "FA"));
+        // Sprite commands run after TIM, in the family dispatch.
+        assert!(output.lines.iter().any(|line| line == "FA"));
     }
 
     #[test]
@@ -5715,55 +6966,6 @@ $record(SaffronArchive)\n\
     }
 
     #[test]
-    fn sprite_block_is_collected() {
-        let input =
-            "@startuml\nsprite $disk [8x8/16] {\nFF00FF00\n00FF00FF\n}\nnote : hello\n@enduml";
-        let out = preprocess_full(input, None);
-        // The sprite block should NOT appear as content in the preprocessed
-        // lines, but each block line is replaced by an empty placeholder so
-        // downstream source-line numbers stay aligned with the original source.
-        assert!(
-            !out.lines.iter().any(|l| l.contains("FF00FF00")),
-            "sprite pixel rows should not appear in output lines"
-        );
-        // 4 sprite-block lines (opener, 2 pixel rows, closer) → 4 placeholders.
-        assert_eq!(out.lines, vec!["", "", "", "", "note : hello"]);
-        // The sprite should be collected.
-        assert!(
-            out.sprites.contains_key("disk"),
-            "sprite 'disk' should be parsed"
-        );
-        let s = &out.sprites["disk"];
-        assert_eq!(s.rows, vec!["FF00FF00", "00FF00FF"]);
-        assert_eq!(s.width, 8);
-        assert_eq!(s.height, 2);
-    }
-
-    #[test]
-    fn sprite_ref_preserved_in_output() {
-        // <$name> references in diagram lines should be preserved.
-        let input =
-            "@startuml\nsprite $icon [4x4/16] {\nFFFF\nFFFF\n}\nnote : <$icon> hello\n@enduml";
-        let out = preprocess_full(input, None);
-        // 4 sprite-block lines become empty placeholders (source-line alignment).
-        assert_eq!(out.lines, vec!["", "", "", "", "note : <$icon> hello"]);
-        assert!(out.sprites.contains_key("icon"));
-    }
-
-    #[test]
-    fn sprite_without_dimensions() {
-        // Sprite blocks without [WxH/Z] annotation should still be parsed.
-        let input = "@startuml\nsprite $dot {\nFF\n00\n}\nnote : test\n@enduml";
-        let out = preprocess_full(input, None);
-        assert!(
-            out.sprites.contains_key("dot"),
-            "sprite 'dot' should be parsed"
-        );
-        let s = &out.sprites["dot"];
-        assert_eq!(s.rows, vec!["FF", "00"]);
-    }
-
-    #[test]
     fn include_angle_bracket_resolves_stdlib() {
         // Set up a fake stdlib directory with a .puml file.
         let dir = std::env::temp_dir().join("rustuml_test_stdlib_include");
@@ -5946,6 +7148,1034 @@ $record(SaffronArchive)\n\
         assert_eq!(lines, vec!["participant StdLib"]);
 
         stdlib::set_stdlib_override(None);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn sprite_commands_pass_through_tim_unchanged() {
+        let input = "@startuml\nsprite $disk [8x8/16] {\nFF00FF00\n00FF00FF\n}\nnote : <$disk> hello\n@enduml";
+        assert_eq!(
+            pp(input),
+            vec![
+                "sprite $disk [8x8/16] {",
+                "FF00FF00",
+                "00FF00FF",
+                "}",
+                "note : <$disk> hello"
+            ]
+        );
+    }
+
+    #[test]
+    fn inactive_and_uninvoked_sprite_headers_never_reach_commands() {
+        for body in [
+            "!if %false()\nsprite $mark [2x2/16] {\n!endif\nA -> B",
+            "!procedure $p()\nsprite $mark <svg width=\"2\" height=\"2\">\n!endprocedure\nA -> B",
+        ] {
+            let lines = pp(&format!("@startuml\n{body}\n@enduml"));
+            assert_eq!(lines, vec!["A -> B"], "{body}");
+        }
+        // An invoked procedure and an active branch contribute their lines.
+        let lines = pp(
+            "@startuml\n!procedure $p()\nsprite $mark [2x2/16] {\nFF\n}\n!endprocedure\n$p()\n!if %true()\nA -> B\n!endif\n@enduml",
+        );
+        assert_eq!(lines, vec!["sprite $mark [2x2/16] {", "FF", "}", "A -> B"]);
+    }
+
+    #[test]
+    fn included_lines_complete_a_sprite_after_expansion() {
+        let nonce = std::process::id();
+        let dir = std::env::temp_dir().join(format!("rustuml-tim-sprite-include-{nonce}"));
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(dir.join("rows.inc"), "FF\n00\n}\n").unwrap();
+        let lines: Vec<String> = preprocess_with_base(
+            "@startuml\nsprite $mark [2x2/16] {\n!include rows.inc\nA -> B\n@enduml",
+            &dir,
+        )
+        .into_iter()
+        .filter(|line| !line.is_empty())
+        .collect();
+        let _ = std::fs::remove_dir_all(&dir);
+        assert_eq!(
+            lines,
+            vec!["sprite $mark [2x2/16] {", "FF", "00", "}", "A -> B"]
+        );
+    }
+
+    #[test]
+    fn apostrophes_in_svg_sprite_lines_are_command_text() {
+        let line = "sprite $tag <svg width=\"4\" height=\"4\"><text> 'hi'</text></svg>";
+        assert_eq!(pp(&format!("@startuml\n{line}\n@enduml")), vec![line]);
+        let trailing = "SPRITE $tag <svg><rect/></svg> ' trailing";
+        assert_eq!(
+            pp(&format!("@startuml\n{trailing}\n@enduml")),
+            vec![trailing]
+        );
+        // Java has no trailing-apostrophe comment form: other lines keep it too.
+        assert_eq!(
+            pp("@startuml\nA -> B ' note\n@enduml"),
+            vec!["A -> B ' note"]
+        );
+    }
+
+    #[test]
+    fn startsub_bodies_are_replayed_in_place() {
+        // CodeIteratorSub#peek: the stored body is also read where it is
+        // written, through the rest of TIM (here an inactive !if).
+        let input = "@startuml\n!startsub GEMS\nA -> B\n!if %false()\nX -> Y\n!endif\n!endsub\nC -> D\n@enduml";
+        assert_eq!(pp(input), vec!["A -> B", "C -> D"]);
+        // The line after the block keeps its own diagram source line.
+        let lines = preprocess_full_for_parse(input, None).lines;
+        let after = lines
+            .iter()
+            .find_map(|l| split_source_line_marker(l).filter(|(_, t)| *t == "C -> D"));
+        assert_eq!(after.map(|(line, _)| line), Some(7));
+    }
+
+    #[test]
+    fn remove_inner_comment_follows_string_located() {
+        // Leading: text after the first '/ (Java indexOf).
+        assert_eq!(remove_inner_comment("/' a '/ A -> B"), " A -> B");
+        assert_eq!(remove_inner_comment("  /'x'/ y '/ z"), " y '/ z");
+        assert_eq!(remove_inner_comment("/'/ X"), " X");
+        // Trailing: text before the last /' (Java lastIndexOf).
+        assert_eq!(remove_inner_comment("} /' end '/"), "} ");
+        assert_eq!(remove_inner_comment("</svg>/'end'/ \t"), "</svg>");
+        assert_eq!(remove_inner_comment("a /' b /' c '/"), "a /' b ");
+        // Trailing '/ with no /' anywhere: unchanged.
+        assert_eq!(remove_inner_comment("x '/"), "x '/");
+        // Only /'''[-\w]*'''/ spans go in the middle of a line.
+        assert_eq!(remove_inner_comment("F/'''row-1'''/0"), "F0");
+        assert_eq!(remove_inner_comment("F/''' row '''/0"), "F/''' row '''/0");
+        assert_eq!(remove_inner_comment("a /'''é'''/ b"), "a /'''é'''/ b");
+        assert_eq!(remove_inner_comment("a /'''x'''/ b /'''y'''/"), "a  b ");
+        // No quote handling, and plain apostrophes are untouched.
+        assert_eq!(
+            remove_inner_comment("A -> B : \"q /' x '/"),
+            "A -> B : \"q "
+        );
+        assert_eq!(
+            remove_inner_comment("A -> B : it's \"q ' q\""),
+            "A -> B : it's \"q ' q\""
+        );
+        // A middle /' ... '/ that neither starts nor ends the line stays.
+        assert_eq!(remove_inner_comment("a /' b '/ c"), "a /' b '/ c");
+        // Java trim strips chars <= U+0020 only.
+        assert_eq!(remove_inner_comment("\u{a0}/' a '/ b"), "\u{a0}/' a '/ b");
+    }
+
+    #[test]
+    fn inner_comments_reach_tim_and_commands_stripped() {
+        // A /'-prefixed line that continues after '/ is PLAIN (not a
+        // whole-line comment) and keeps its tail.
+        assert_eq!(pp("@startuml\n/' c '/ A -> B\n@enduml"), vec![" A -> B"]);
+        // Whole-line forms are still comments.
+        assert_eq!(pp("@startuml\n/' c '/\nA -> B\n@enduml"), vec!["A -> B"]);
+        assert_eq!(pp("@startuml\n/' c\nd '/\nA -> B\n@enduml"), vec!["A -> B"]);
+        // Trailing span on an ordinary line.
+        assert_eq!(
+            pp("@startuml\nclass Holder /' x '/\n@enduml"),
+            vec!["class Holder "]
+        );
+        // Sprite start, body and END lines lose the span; a trailing
+        // apostrophe is plain text (StringLocated#removeInnerComment).
+        let pixel = "sprite $dot [2x2/16] { /' s '/\nF0 /' r '/\n0F\n} /' e '/\nA -> B ' c";
+        assert_eq!(
+            pp(&format!("@startuml\n{pixel}\n@enduml")),
+            vec!["sprite $dot [2x2/16] { ", "F0 ", "0F", "} ", "A -> B ' c"]
+        );
+        let svg =
+            "sprite $b <svg width=\"4\" height=\"4\">\n<rect/>/'''w'''/\n</svg>/'end'/\nA -> B";
+        assert_eq!(
+            pp(&format!("@startuml\n{svg}\n@enduml")),
+            vec![
+                "sprite $b <svg width=\"4\" height=\"4\">",
+                "<rect/>",
+                "</svg>",
+                "A -> B"
+            ]
+        );
+        // TIM directives see the stripped text.
+        assert_eq!(
+            pp("@startuml\n!$x = \"v\" /' c '/\nA -> $x\n@enduml"),
+            vec!["A -> v"]
+        );
+    }
+
+    #[test]
+    fn theme_seed_source_carries_inner_comment_removal() {
+        let seed = |body: &str| {
+            preprocess(&format!("@startuml\n!theme cerulean\n{body}\n@enduml\n"))
+                .into_iter()
+                .find(|line| line.starts_with("skinparam __svgIdSeed"))
+                .expect("theme seed")
+        };
+        assert_eq!(seed("class B /' c '/"), seed("class B "));
+        assert_ne!(seed("class B /' c '/"), seed("class B /' c"));
+        // Whole-line comments are no line of the TIM result list.
+        assert_eq!(seed("' c\nclass B"), seed("class B"));
+    }
+
+    #[test]
+    fn open_sprite_commands_keep_apostrophes_through_end() {
+        // SVG body and END lines keep their apostrophes, as every line does:
+        // Java has no trailing-apostrophe comment form.
+        let svg = "sprite $tag <svg width=\"4\" height=\"4\">\n<g> 'a' </g>\n<text> 'hi'</text></svg>\nA -> B ' c";
+        assert_eq!(
+            pp(&format!("@startuml\n{svg}\n@enduml")),
+            vec![
+                "sprite $tag <svg width=\"4\" height=\"4\">",
+                "<g> 'a' </g>",
+                "<text> 'hi'</text></svg>",
+                "A -> B ' c"
+            ]
+        );
+        // Trailing text after </svg> stays, so END cannot match it.
+        let trailing = "sprite $tag <svg>\n<rect/>\n</svg> ' done\n</svg>\nA -> B ' c";
+        assert_eq!(
+            pp(&format!("@startuml\n{trailing}\n@enduml")),
+            vec![
+                "sprite $tag <svg>",
+                "<rect/>",
+                "</svg> ' done",
+                "</svg>",
+                "A -> B ' c"
+            ]
+        );
+        // Pixel sprites: '} ' x' is not END; the start line keeps its text.
+        let pixel = "sprite $p [2x2/16] {\nFF\n} ' x\n}\nA -> B ' c";
+        assert_eq!(
+            pp(&format!("@startuml\n{pixel}\n@enduml")),
+            vec!["sprite $p [2x2/16] {", "FF", "} ' x", "}", "A -> B ' c"]
+        );
+        // A sprite header in an inactive branch opens nothing.
+        let inactive = "!if %false()\nsprite $q <svg>\n!endif\nA -> B ' c";
+        assert_eq!(
+            pp(&format!("@startuml\n{inactive}\n@enduml")),
+            vec!["A -> B ' c"]
+        );
+    }
+
+    fn merged(input: &str) -> (Vec<(usize, String, usize)>, bool) {
+        let raw: Vec<&str> = input.lines().collect();
+        let merged = merge_ending_backslash_lines(&raw);
+        (
+            merged
+                .lines
+                .into_iter()
+                .map(|line| (line.source_line, line.text.into_owned(), line.consumed))
+                .collect(),
+            merged.swallowed_end,
+        )
+    }
+
+    #[test]
+    fn read_filter_merge_lines_joins_at_the_first_line() {
+        // ReadFilterMergeLines: drop the final backslash, append the next
+        // line, keep the first line's location; several continuations chain.
+        let (lines, swallowed) = merged("@startuml\nA -> B : a \\\nb\\\n  c\nB -> A\n@enduml");
+        assert!(!swallowed);
+        assert_eq!(
+            lines,
+            vec![
+                (1, "@startuml".to_string(), 0),
+                (2, "A -> B : a b  c".to_string(), 2),
+                (5, "B -> A".to_string(), 0),
+                (6, "@enduml".to_string(), 0),
+            ]
+        );
+    }
+
+    #[test]
+    fn continued_lines_pass_read_filter_quote_comment() {
+        // The continuation is read through ReadFilterQuoteComment: comment
+        // lines are skipped and removeInnerComment applies; the continued
+        // line itself is not filtered.
+        let (lines, _) = merged(
+            "@startuml\n/' c '/ \\\nA -> B : hi\nA -> B : one \\\n/' c '/ two\nA -> B : x \\\n' skipped\n/' long\nstill '/\n  /' w '/ y\n@enduml",
+        );
+        let texts: Vec<_> = lines.iter().map(|(n, t, _)| (*n, t.as_str())).collect();
+        assert_eq!(
+            texts,
+            vec![
+                (1, "@startuml"),
+                (2, "/' c '/ A -> B : hi"),
+                (4, "A -> B : one  two"),
+                (6, "A -> B : x  y"),
+                (11, "@enduml"),
+            ]
+        );
+    }
+
+    #[test]
+    fn escaped_backslash_and_ditaa_blocks_are_not_continued() {
+        let (lines, _) = merged("@startuml\nA -> B : a\\\\\nB -> A\n@enduml");
+        assert_eq!(lines[1].1, "A -> B : a\\\\");
+        let (lines, _) = merged("@startditaa\n/--\\\n|  |\n@endditaa");
+        let texts: Vec<_> = lines.iter().map(|(_, t, _)| t.as_str()).collect();
+        assert_eq!(texts, vec!["@startditaa", "/--\\", "|  |", "@endditaa"]);
+        // The switch is keyed to the start directive's type, case-insensitive
+        // (DiagramType#findStartTypes), and an end directive turns the join
+        // back on for whatever the reader sees next.
+        let input = [
+            "@StartDitaa",
+            "/--\\",
+            "|  |",
+            "@endditaa",
+            "x \\",
+            "y",
+            "@startuml",
+            "ditaa",
+            "+-\\",
+            "+",
+            "@enduml",
+        ];
+        assert_eq!(
+            lines_merged_into_previous(&input),
+            vec![
+                false, false, false, false, false, true, false, false, false, true, false
+            ]
+        );
+    }
+
+    #[test]
+    fn a_continued_last_line_swallows_the_end_directive() {
+        // BlockUmlBuilder then finds no end; Pipe#readSingleDiagram appends
+        // `@end…` to input without one, and that is swallowed too.
+        assert!(merged("@startuml\nA -> B : x \\\n@enduml").1);
+        assert!(merged("@startuml\nA -> B : x \\").1);
+        // Without a continuation the appended end stays in the list, as it
+        // does in the text Pipe hands on.
+        let (lines, swallowed) = merged("@startuml\nA -> B : x");
+        assert!(!swallowed);
+        assert_eq!(
+            lines,
+            vec![
+                (1, "@startuml".to_string(), 0),
+                (2, "A -> B : x".to_string(), 0),
+                (3, "@enduml".to_string(), 0),
+            ]
+        );
+    }
+
+    #[test]
+    fn pipe_ends_the_diagram_only_at_a_column_zero_end() {
+        // Pipe.java:203 `line.startsWith(expectedEnd)`: an indented end, a
+        // tab-indented one and a `\end…` line are not Pipe's end, so Pipe
+        // appends `@enduml` (line 219) and the continuation merges the
+        // indented line like any other text.
+        for end in ["  @enduml", "\t@enduml", "\\enduml"] {
+            let input = format!("@startuml\nKea -> Tui : last \\\n{end}");
+            let (lines, swallowed) = merged(&input);
+            assert!(!swallowed, "{end:?}");
+            assert_eq!(lines[1].1, format!("Kea -> Tui : last {end}"));
+            assert_eq!(lines[2], (4, "@enduml".to_string(), 0));
+        }
+        // The type comes from the start line: `@startmindmap` expects
+        // `@endmindmap`; a start line with more than letters expects `@end`.
+        let (lines, swallowed) = merged("@startmindmap\n* Root \\\n  @endmindmap");
+        assert!(!swallowed);
+        assert_eq!(lines[2].1, "@endmindmap");
+        let (lines, swallowed) = merged("@startuml(id=x)\nA -> B : a \\\n  @enduml");
+        assert!(!swallowed);
+        assert_eq!(lines[2].1, "@end");
+        // Reading stops after Pipe's end, so a later indented end is not part
+        // of the diagram and cannot rescue a swallowed one.
+        let (lines, swallowed) = merged("@startuml\nA -> B : x \\\n@enduml\n  @enduml");
+        assert!(swallowed);
+        assert_eq!(lines.len(), 2);
+        // Content after an indented end belongs to the diagram up to the
+        // column-0 end.
+        let (lines, swallowed) =
+            merged("@startuml\nA -> B : x \\\n  @enduml\nB -> A : y\n@enduml\nC -> D");
+        assert!(!swallowed);
+        let texts: Vec<_> = lines.iter().map(|(_, t, _)| t.as_str()).collect();
+        assert_eq!(
+            texts,
+            vec!["@startuml", "A -> B : x   @enduml", "B -> A : y", "@enduml"]
+        );
+    }
+
+    #[test]
+    fn continuation_joins_before_tim_in_macro_and_procedure_bodies() {
+        let input = "@startuml\n!procedure $p($a)\nA -> B : $a \\\nend\n!endprocedure\n!define D(x) B -> A : x \\\nback\n$p(go)\nD(z)\nA -> C : after\n@enduml";
+        let lines = pp(input);
+        assert_eq!(
+            lines
+                .iter()
+                .map(|l| split_source_line_marker(l).map_or(l.as_str(), |(_, t)| t))
+                .collect::<Vec<_>>(),
+            vec!["A -> B : go end", "B -> A : z back", "A -> C : after"]
+        );
+        let parse_lines = preprocess_full_for_parse(input, None).lines;
+        let after = parse_lines
+            .iter()
+            .find_map(|l| split_source_line_marker(l).filter(|(_, t)| *t == "A -> C : after"))
+            .expect("following line keeps its source line");
+        assert_eq!(after.0, 9);
+    }
+
+    #[test]
+    fn post_tim_join_follows_uml_source_for_startuml_only() {
+        let dir = std::env::temp_dir().join("rustuml_test_post_tim_continuation");
+        let _ = std::fs::create_dir_all(&dir);
+        std::fs::write(dir.join("inc.iuml"), "A -> B : one \\\ntwo\n").unwrap();
+        let out = preprocess_full_for_parse(
+            "@startuml\n!include inc.iuml\nB -> A : back\n@enduml",
+            Some(dir.clone()),
+        );
+        let texts: Vec<_> = out
+            .lines
+            .iter()
+            .map(|l| split_source_line_marker(l).map_or(l.as_str(), |(_, t)| t))
+            .filter(|t| !t.is_empty())
+            .collect();
+        assert_eq!(texts, vec!["A -> B : one two", "B -> A : back"]);
+        assert!(out.uml_source.contains("A -> B : one two\n"));
+
+        let out = preprocess_full_for_parse(
+            "@startmindmap\n!include inc.iuml\n@endmindmap",
+            Some(dir.clone()),
+        );
+        assert!(out.lines.iter().any(|l| l.ends_with("one \\")));
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn post_tim_join_passes_placeholders_and_reaches_the_end_line() {
+        // UmlSource#loadInternal joins over Java's TIM result list: directive
+        // and comment lines are not in it, blank lines and the end line are.
+        let dir = std::env::temp_dir().join("rustuml_test_post_tim_tail");
+        let _ = std::fs::create_dir_all(&dir);
+        std::fs::write(dir.join("tail.iuml"), "Kea -> Tui : tail \\\n").unwrap();
+        let joined = |input: &str| -> Vec<(Option<usize>, String)> {
+            preprocess_full_for_parse(input, Some(dir.clone()))
+                .lines
+                .iter()
+                .filter(|l| !l.is_empty())
+                .map(|l| match split_source_line_marker(l) {
+                    Some((n, t)) => (Some(n), t.to_string()),
+                    None => (None, l.clone()),
+                })
+                .collect()
+        };
+        let cases = [
+            (
+                "!define LBL two\nTui -> Kea : LBL",
+                "Kea -> Tui : tail Tui -> Kea : two",
+                3,
+            ),
+            (
+                "!$v = 2\nTui -> Kea : two $v",
+                "Kea -> Tui : tail Tui -> Kea : two 2",
+                3,
+            ),
+            (
+                "' note\n!if 1\nTui -> Kea : in\n!endif",
+                "Kea -> Tui : tail Tui -> Kea : in",
+                4,
+            ),
+            ("", "Kea -> Tui : tail @enduml", 2),
+        ];
+        for (rest, expected, line) in cases {
+            let rest = if rest.is_empty() {
+                String::new()
+            } else {
+                format!("{rest}\n")
+            };
+            let input = format!("@startuml\n!include tail.iuml\n{rest}@enduml");
+            assert_eq!(
+                joined(&input),
+                vec![(Some(line), expected.to_string())],
+                "{rest:?}"
+            );
+        }
+        // A real blank line is a TIM line: the tail joins with it.
+        let lines = joined("@startuml\n!include tail.iuml\n\nTui -> Kea : after\n@enduml");
+        assert_eq!(lines[0], (Some(2), "Kea -> Tui : tail ".to_string()));
+        // Without an end the appended Pipe end is the last TIM line.
+        let lines = joined("@startuml\nKea -> Tui : head\n!include tail.iuml");
+        assert_eq!(
+            lines.last(),
+            Some(&(Some(3), "Kea -> Tui : tail @enduml".to_string()))
+        );
+        // The identity source joins the same list.
+        let out = preprocess_full_for_parse(
+            "@startuml\n!include tail.iuml\n!define LBL two\nTui -> Kea : LBL\n@enduml",
+            Some(dir.clone()),
+        );
+        assert_eq!(
+            out.uml_source,
+            "@startuml\nKea -> Tui : tail Tui -> Kea : two\n@enduml\n"
+        );
+        assert!(
+            preprocess_full_for_parse("@startuml\n!include tail.iuml\n@enduml", Some(dir.clone()))
+                .uml_source
+                .ends_with("Kea -> Tui : tail @enduml\n")
+        );
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn consumed_lines_are_out_of_band() {
+        // A user line whose text equals no special value is never taken for
+        // a stand-in: `%chr(30)RSP` and a raw U+001E line stay text lines,
+        // also in a note body, while a directive line becomes an empty line.
+        for line in ["%chr(30)RSP", "\u{1e}RSP"] {
+            let out = preprocess_full_for_parse(
+                &format!(
+                    "@startuml\nKea -> Tui : one\n{line}\nnote over Kea\n{line}\nend note\n!$x = 1\n@enduml"
+                ),
+                None,
+            );
+            let texts = strip_source_line_markers(out.lines);
+            assert_eq!(
+                texts,
+                vec![
+                    "Kea -> Tui : one",
+                    "\u{1e}RSP",
+                    "note over Kea",
+                    "\u{1e}RSP",
+                    "end note",
+                    ""
+                ],
+                "{line:?}"
+            );
+        }
+        // The join passes over a stand-in but not over such a line.
+        let out =
+            preprocess_full_for_parse("@startuml\nKea -> Tui : a \\\n\u{1e}RSP\n@enduml", None);
+        assert_eq!(
+            strip_source_line_markers(out.lines),
+            vec!["Kea -> Tui : a \u{1e}RSP".to_string()]
+        );
+    }
+
+    #[test]
+    fn two_line_source_after_the_join() {
+        let dir = std::env::temp_dir().join("rustuml_test_two_line_source");
+        let _ = std::fs::create_dir_all(&dir);
+        std::fs::write(dir.join("tail.iuml"), "Kea -> Tui : tail \\\n").unwrap();
+        let two = |input: &str| preprocess_full_for_parse(input, Some(dir.clone())).two_line_source;
+        // A pending tail absorbs the end line (`tail @enduml`): two lines.
+        assert!(two("@startuml\n!include tail.iuml\n@enduml"));
+        assert!(two("@startuml\n!include tail.iuml\n!$v = 1\n  @enduml"));
+        assert!(two("@startuml\nKea -> Tui : t %chr(92)\n@enduml"));
+        // `\enduml` is StartUtils#isEndDirective, so it is the end line.
+        assert!(two("@startuml\n!include tail.iuml\n\\enduml"));
+        // The end line ends with a backslash: it stays pending and is dropped.
+        assert!(two("@startuml\nKea -> Tui : one\n@enduml \\"));
+        // Three lines, or no join at all: not reported.
+        assert!(!two(
+            "@startuml\n!include tail.iuml\nTui -> Kea : two\n@enduml"
+        ));
+        assert!(!two(
+            "@startuml\nKea -> Tui : one\nTui -> Kea : two\n@enduml \\"
+        ));
+        assert!(!two("@startuml\nKea -> Tui : one\n@enduml"));
+        assert!(!two("@startmindmap\n* r %chr(92)\n@endmindmap"));
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn wrapped_include_is_extracted_from_merged_lines() {
+        // DiagramDetector#extractFromFile: merged and uncommented lines,
+        // after the first start and before the first end.
+        assert_eq!(
+            wrapped_diagram_lines(&read_line_reader_lines(
+                "!$x = 1\n@startuml\nKea -> Tui : w \\\n@enduml\nTui -> Kea : after\n"
+            )),
+            // The merge swallows the file's end, so DiagramExtractor reads on to
+            // the end of the file.
+            Some(vec![
+                (3, "Kea -> Tui : w @enduml".to_string()),
+                (5, "Tui -> Kea : after".to_string())
+            ])
+        );
+        assert_eq!(
+            wrapped_diagram_lines(&read_line_reader_lines(
+                "@startuml\nKea -> Tui : a\n  @enduml\nB -> C\n"
+            )),
+            Some(vec![(2, "Kea -> Tui : a".to_string())])
+        );
+        // UncommentReadLine: a `' @startuml` header is removed from the lines
+        // that start with it.
+        assert_eq!(
+            wrapped_diagram_lines(&read_line_reader_lines(
+                "' @startuml\n'Kea -> Tui : c\n' @enduml\n"
+            )),
+            Some(vec![(2, "Kea -> Tui : c".to_string())])
+        );
+        // No start directive: read raw.
+        assert_eq!(
+            wrapped_diagram_lines(&read_line_reader_lines("Kea -> Tui : t \\\n")),
+            None
+        );
+
+        let dir = std::env::temp_dir().join("rustuml_test_wrapped_include");
+        let _ = std::fs::create_dir_all(&dir);
+        std::fs::write(
+            dir.join("w.iuml"),
+            "@startuml\nKea -> Tui : w \\\n@enduml\n",
+        )
+        .unwrap();
+        let out = preprocess_full_for_parse(
+            "@startuml\n!include w.iuml\nTui -> Kea : two\n@enduml",
+            Some(dir.clone()),
+        );
+        let texts: Vec<String> = strip_source_line_markers(out.lines)
+            .into_iter()
+            .filter(|l| !l.is_empty())
+            .collect();
+        assert_eq!(texts, vec!["Kea -> Tui : w @enduml", "Tui -> Kea : two"]);
+        assert!(!out.two_line_source);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn pragma_is_a_line_of_the_tim_result_list() {
+        // TLineType has no pragma type: the line is counted and joined, and
+        // only its parser projection is a stand-in.
+        let out = preprocess_full_for_parse(
+            "@startuml\n!pragma layout smetana\nKea -> Tui : x %chr(92)\n@enduml",
+            None,
+        );
+        assert!(!out.two_line_source);
+        assert_eq!(
+            strip_source_line_markers(out.lines),
+            vec!["", "Kea -> Tui : x @enduml"]
+        );
+        assert_eq!(
+            out.uml_source,
+            "@startuml\n!pragma layout smetana\nKea -> Tui : x @enduml\n"
+        );
+        // The sequence projection keeps the teoz pragma as text; same count.
+        let out = preprocess_full_for_sequence_parse(
+            "@startuml\n!pragma teoz true\nKea -> Tui : x %chr(92)\n@enduml",
+            None,
+        );
+        assert!(!out.two_line_source);
+        // A pending tail joins with the pragma text, as UmlSource does.
+        let out = preprocess_full_for_parse(
+            "@startuml\nKea -> Tui : x %chr(92)\n!pragma layout smetana\nTui -> Kea : y\n@enduml",
+            None,
+        );
+        assert_eq!(
+            strip_source_line_markers(out.lines),
+            vec!["Kea -> Tui : x !pragma layout smetana", "Tui -> Kea : y"]
+        );
+        // Variables apply (TContext#addPlain); an inactive pragma is no line.
+        let out = preprocess_full_for_parse(
+            "@startuml\n!$k = layout\n!pragma $k smetana\n!if %false()\n!pragma x\n!endif\n@enduml",
+            None,
+        );
+        assert_eq!(
+            out.uml_source,
+            "@startuml\n!pragma layout smetana\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn line_count_reads_the_identity_projection() {
+        let count = |input: &str| {
+            let out = preprocess_full_for_parse(input, None);
+            (out.one_line_source, out.two_line_source)
+        };
+        // Rust-only parser lines are no lines of Java's list.
+        assert_eq!(
+            count("@startuml\n!option handwritten true\n@enduml"),
+            (false, true)
+        );
+        assert_eq!(count("@startuml\n!dump_memory\n@enduml"), (false, true));
+        assert_eq!(count("@startuml\n' c\n!$x = 1\n@enduml"), (false, true));
+        // A theme's body lines are.
+        assert_eq!(
+            count("@startuml\n!theme cerulean\nKea -> Tui : x %chr(92)\n@enduml"),
+            (false, false)
+        );
+        assert_eq!(
+            count("@startuml\n!pragma layout smetana\n@enduml"),
+            (false, false)
+        );
+        // A Java-bundled theme Rust does not ship still adds Java lines.
+        assert_eq!(count("@startuml\n!theme plain\n@enduml"), (false, false));
+        assert_eq!(
+            count("@startuml\n!theme plain\nKea -> Tui : x %chr(92)\n@enduml"),
+            (false, false)
+        );
+        // A preamble before the start line is no part of the block.
+        assert_eq!(count("!$x = 1\nfoo\n@startuml\n@enduml"), (false, true));
+        // Only `@startuml` sources are counted.
+        assert_eq!(count("@startmindmap\n@endmindmap"), (false, false));
+        // The end line stays pending and is dropped.
+        assert_eq!(count("@startuml\n@enduml \\"), (true, false));
+        assert_eq!(
+            count("@startuml\nKea -> Tui : x %chr(92)\n@enduml \\"),
+            (true, false)
+        );
+    }
+
+    #[test]
+    fn an_unterminated_definition_takes_the_end_line() {
+        for input in [
+            "@startuml\n!procedure $p()\nKea -> Tui : p\n\\enduml\n!endprocedure\n$p()\n@enduml",
+            "@startuml\n!function $f()\n!return 1\n@enduml\n!endfunction\n@enduml",
+            "@startuml\n!definelong D()\nKea -> Tui : d\n@enduml\n!enddefinelong\n@enduml",
+        ] {
+            let out = preprocess_full_for_parse(input, None);
+            assert!(out.one_line_source, "{input:?}");
+            assert_eq!(out.uml_source, "@startuml\n", "{input:?}");
+        }
+        // A terminated definition leaves the end line in place.
+        let out = preprocess_full_for_parse(
+            "@startuml\n!procedure $p()\nKea -> Tui : p\n!endprocedure\n$p()\n\\enduml",
+            None,
+        );
+        assert!(!out.one_line_source && !out.two_line_source);
+    }
+
+    #[test]
+    fn java_whitespace_is_character_is_whitespace() {
+        for c in [
+            '\t', '\n', '\u{b}', '\u{c}', '\r', '\u{1c}', '\u{1d}', '\u{1e}', '\u{1f}', ' ',
+            '\u{1680}', '\u{2000}', '\u{2006}', '\u{2008}', '\u{200a}', '\u{2028}', '\u{2029}',
+            '\u{205f}', '\u{3000}',
+        ] {
+            assert!(java_is_whitespace(c), "{c:?}");
+        }
+        for c in [
+            '\u{85}', '\u{a0}', '\u{2007}', '\u{202f}', '\u{180e}', '\u{200b}', '\u{feff}',
+            '\u{1b}', 'a',
+        ] {
+            assert!(!java_is_whitespace(c), "{c:?}");
+        }
+        assert!(is_end_directive("\u{1f}\\enduml"));
+        assert!(!is_end_directive("\u{85}\\enduml"));
+        // The `@` form reads the block line too: no U+0085 or no-break space
+        // before it, and no inner comment.
+        for line in ["\u{85}@enduml", "\u{a0}@enduml", "/' c '/ @enduml"] {
+            let out = preprocess_full_for_parse(
+                &format!("@startuml\nKea -> Tui : one\n{line}\nTui -> Kea : two\n@enduml"),
+                None,
+            );
+            assert!(
+                strip_source_line_markers(out.lines)
+                    .iter()
+                    .any(|l| l == "Tui -> Kea : two"),
+                "{line:?}"
+            );
+        }
+    }
+
+    #[test]
+    fn included_lines_follow_read_line_reader_and_is_letter_or_digit() {
+        assert_eq!(
+            read_line_reader_lines("\u{feff}\u{feff}a\nb \u{2013} c\n\u{feff}"),
+            vec!["\u{feff}a", "b - c", ""]
+        );
+        for c in [
+            'a', 'Z', '\u{aa}', '\u{1c5}', '\u{2b0}', '\u{663}', '7', '\u{ff10}',
+        ] {
+            assert!(java_is_letter_or_digit(c), "{c:?}");
+        }
+        for c in [
+            '\u{b2}',
+            '\u{bd}',
+            '\u{345}',
+            '\u{16ee}',
+            '\u{2160}',
+            '\u{1d400}',
+            '#',
+            ' ',
+        ] {
+            assert!(!java_is_letter_or_digit(c), "{c:?}");
+        }
+        // startsWithDirectiveKeyword skips whitespace from each index.
+        assert_eq!(before_start_uml("\u{b2} @startuml"), Some("\u{b2}"));
+        assert_eq!(before_start_uml("\u{1d400}@startuml"), Some("\u{1d400}"));
+        assert_eq!(before_start_uml("x @startuml"), None);
+
+        // Unicode 17's sixteen new BMP letters are not letters in Unicode 15.0.
+        // The four header probes are U+1C89, U+A7CB, U+A7CE and U+088F.
+        const UNICODE_17_ONLY_LETTERS: [char; 16] = [
+            '\u{088F}', '\u{0C5C}', '\u{0CDC}', '\u{1C89}', '\u{1C8A}', '\u{A7CB}', '\u{A7CC}',
+            '\u{A7CD}', '\u{A7CE}', '\u{A7CF}', '\u{A7D2}', '\u{A7D4}', '\u{A7DA}', '\u{A7DB}',
+            '\u{A7DC}', '\u{A7F1}',
+        ];
+        let covered: u32 = BMP_LETTER_RANGES
+            .iter()
+            .map(|&(start, end)| u32::from(end - start) + 1)
+            .sum();
+        assert_eq!(covered, 48_965);
+        for c in UNICODE_17_ONLY_LETTERS {
+            assert!(!java_is_letter_or_digit(c), "{c:?}");
+            let header = format!("{c}@startuml");
+            assert_eq!(before_start_uml(&header), Some(&header[..c.len_utf8()]));
+        }
+
+        let dir = std::env::temp_dir().join(format!("rustuml-r4-include-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(
+            dir.join("w.iuml"),
+            "\u{feff}# @startuml\n\u{feff}# Kea -> Tui : a \u{2013} b\n# @enduml\n@startuml\nTui -> Kea : second\n@enduml\n",
+        )
+        .unwrap();
+        std::fs::write(dir.join("r.iuml"), "\u{feff}Kea -> Tui : raw\n").unwrap();
+        let texts = |input: &str| -> Vec<String> {
+            strip_source_line_markers(preprocess_full_for_parse(input, Some(dir.clone())).lines)
+                .into_iter()
+                .filter(|l| !l.is_empty())
+                .collect()
+        };
+        // The BOM goes before the header check, and '!2' is ignored: the
+        // first diagram is included.
+        for path in ["w.iuml", "w.iuml!2", "w.iuml!beta"] {
+            assert_eq!(
+                texts(&format!("@startuml\n!include {path}\n@enduml")),
+                // UncommentReadLine removes the header "#" (whitespace before
+                // `@start` belongs to the keyword test, not the header).
+                vec![" Kea -> Tui : a - b"],
+                "{path}"
+            );
+        }
+        assert_eq!(
+            texts("@startuml\n!include r.iuml!1\n@enduml"),
+            vec!["Kea -> Tui : raw"]
+        );
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn inner_comment_is_stripped_in_ebnf_and_definelong_bodies() {
+        let ebnf = pp("@startebnf\na = \"x\" , b ; /' c '/\nb = \"y\" ;\n@endebnf");
+        assert!(
+            ebnf.iter()
+                .any(|line| line.contains("a = \"x\" , b ;") && !line.contains("/'")),
+            "{ebnf:?}"
+        );
+        let defined =
+            pp("@startuml\n!definelong DL()\nA -> B : dl /' c '/\n!enddefinelong\nDL()\n@enduml");
+        assert!(
+            defined
+                .iter()
+                .any(|line| line.contains("A -> B : dl") && !line.contains("/'")),
+            "{defined:?}"
+        );
+    }
+
+    #[test]
+    fn pipe_positions_number_lines_when_pipe_finds_no_mark() {
+        let raw: Vec<Cow<'_, str>> = [
+            "",
+            "  ",
+            "\\startuml",
+            "@@@format png",
+            "Kea -> Tui",
+            "\\enduml",
+        ]
+        .into_iter()
+        .map(Cow::Borrowed)
+        .collect();
+        assert_eq!(pipe_appended(&raw), [false, false, true, false, true, true]);
+        assert_eq!(
+            pipe_text_positions(&pipe_appended(&raw)),
+            [1, 1, 1, 2, 2, 3]
+        );
+        let merged = merge_ending_backslash_lines(&["@startuml", "Kea -> Tui", "@enduml"]);
+        assert!(merged.pipe_positions.is_none());
+        let merged = merge_ending_backslash_lines(&["\\startuml", "Kea -> Tui", "\\enduml"]);
+        assert_eq!(merged.pipe_positions.as_deref(), Some(&[1, 2, 3, 4][..]));
+        let lines = preprocess_full_for_parse("\\startuml\nKea -> Tui : x\n\\enduml", None).lines;
+        assert!(
+            lines
+                .iter()
+                .any(|line| split_source_line_marker(line) == Some((2, "Kea -> Tui : x"))),
+            "{lines:?}"
+        );
+    }
+
+    #[test]
+    fn lines_pipe_does_not_append_reach_neither_tim_nor_parser() {
+        for input in [
+            "@@@format svg\n\\startuml\nKea -> Tui : f\n\\enduml",
+            "\u{1f}\n\\startuml\nKea -> Tui : f\n\\enduml",
+            "\\startuml\nKea -> Tui : f\n@@@format png\n\\enduml",
+        ] {
+            let out = preprocess_full_for_parse(input, None);
+            let lines = strip_source_line_markers(out.lines.clone());
+            assert!(
+                lines
+                    .iter()
+                    .all(|line| !line.contains("@@@format") && !line.contains('\u{1f}')),
+                "{lines:?}"
+            );
+            assert!(
+                out.lines
+                    .iter()
+                    .any(|line| split_source_line_marker(line) == Some((2, "Kea -> Tui : f"))),
+                "{input:?}: {:?}",
+                out.lines
+            );
+        }
+    }
+
+    #[test]
+    fn region_matches_ignore_case_folds_java_units_only() {
+        for (text, key, rest) in [
+            ("m\u{131}ndmap", "mindmap", Some("")),
+            ("\u{17F}alt x", "salt", Some(" x")),
+            ("\u{212A}", "k", Some("")),
+            ("\u{130}", "i", Some("")),
+            ("\u{DF}alt", "salt", None),
+            ("UML", "uml", Some("")),
+        ] {
+            assert_eq!(java_region_matches_ignore_case(text, key), rest, "{text:?}");
+        }
+        assert_eq!(
+            java_start_type(start_directive_type("\\startm\u{131}ndmap").unwrap()),
+            "mindmap"
+        );
+        assert_eq!(start_directive_type("@\u{17F}tartuml"), Some("uml"));
+    }
+
+    #[test]
+    fn main_block_lines_go_through_read_line_reader() {
+        let out = preprocess_full_for_parse(
+            "@startuml\n\u{feff}Kea -> Tui : bom\nTui \u{2013}> Kea : d\n@enduml",
+            None,
+        );
+        let lines = strip_source_line_markers(out.lines);
+        assert!(
+            lines.iter().any(|line| line == "Kea -> Tui : bom"),
+            "{lines:?}"
+        );
+        assert!(
+            lines.iter().any(|line| line == "Tui -> Kea : d"),
+            "{lines:?}"
+        );
+    }
+
+    #[test]
+    fn start_type_follows_diagram_type_get_types() {
+        for (kind, key) in [
+            ("uml", "uml"),
+            ("UML", "uml"),
+            ("umlish", "uml"),
+            ("uml(id=a)", "uml"),
+            ("project", "gantt"),
+            ("Gantt", "gantt"),
+            ("mindmap x", "mindmap"),
+            ("chen", "chen"),
+            ("ditaa", "ditaa"),
+            (" uml", " uml"),
+            ("zebra", "zebra"),
+        ] {
+            assert_eq!(java_start_type(kind), key, "{kind}");
+        }
+    }
+
+    #[test]
+    fn uncomment_read_line_strips_a_non_whitespace_header() {
+        let lines =
+            uncommented_lines(&["\u{a0}@startuml", "\u{a0}Kea -> Tui", "\u{a0}", "@enduml"]);
+        assert_eq!(lines, ["@startuml", "Kea -> Tui", "", "@enduml"]);
+        assert_eq!(
+            uncommented_lines(&["  @startuml", "  A"]),
+            ["  @startuml", "  A"]
+        );
+    }
+
+    #[test]
+    fn local_theme_body_continuation_joins_before_the_parser() {
+        let dir = std::env::temp_dir().join(format!("rustuml-r5-theme-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(
+            dir.join("puml-theme-grokr5.puml"),
+            "skinparam ArrowColor \\\n#DD0000\n",
+        )
+        .unwrap();
+        let lines = strip_source_line_markers(
+            preprocess_full_for_parse(
+                "@startuml\n!theme grokr5 from .\nKea -> Tui : hi\n@enduml",
+                Some(dir.clone()),
+            )
+            .lines,
+        );
+        assert!(
+            lines
+                .iter()
+                .any(|line| line.contains("skinparam ArrowColor #DD0000")),
+            "{lines:?}"
+        );
+        assert!(
+            lines.iter().all(|line| line.trim() != "#DD0000"),
+            "{lines:?}"
+        );
+        // One list: a theme's last continued line joins the next main line,
+        // and an outer body joins across a nested body in list order.
+        std::fs::write(
+            dir.join("puml-theme-grokr5open.puml"),
+            "skinparam ArrowColor #00AA00\nskinparam ArrowThickness \\\n",
+        )
+        .unwrap();
+        std::fs::write(
+            dir.join("puml-theme-grokr5outer.puml"),
+            "!theme grokr5 from .\nskinparam SequenceLifeLineBorderColor \\\n#AA0000\n",
+        )
+        .unwrap();
+        let open = strip_source_line_markers(
+            preprocess_full_for_parse(
+                "@startuml\n!theme grokr5open from .\n2\nKea -> Tui : hi\n@enduml",
+                Some(dir.clone()),
+            )
+            .lines,
+        );
+        assert!(
+            open.iter()
+                .any(|line| line.trim() == "skinparam ArrowThickness 2"),
+            "{open:?}"
+        );
+        assert!(open.iter().all(|line| line.trim() != "2"), "{open:?}");
+        let nested = strip_source_line_markers(
+            preprocess_full_for_parse(
+                "@startuml\n!theme grokr5outer from .\nKea -> Tui : hi\n@enduml",
+                Some(dir.clone()),
+            )
+            .lines,
+        );
+        for joined in [
+            "skinparam ArrowColor #DD0000",
+            "skinparam SequenceLifeLineBorderColor #AA0000",
+        ] {
+            assert!(
+                nested.iter().any(|line| line.contains(joined)),
+                "{joined}: {nested:?}"
+            );
+        }
+        assert!(
+            nested
+                .iter()
+                .all(|line| line.trim() != "#AA0000" && line.trim() != "#DD0000"),
+            "{nested:?}"
+        );
+        // Without SEQUENCE in findStartTypes, loadInternal does not join.
+        let mindmap = strip_source_line_markers(
+            preprocess_full_for_parse(
+                "@startmindmap\n!theme grokr5 from .\n* root\n@endmindmap",
+                Some(dir.clone()),
+            )
+            .lines,
+        );
+        assert!(
+            mindmap
+                .iter()
+                .all(|line| !line.contains("skinparam ArrowColor #DD0000")),
+            "{mindmap:?}"
+        );
+        assert!(
+            mindmap.iter().any(|line| line.trim() == "#DD0000"),
+            "{mindmap:?}"
+        );
         let _ = std::fs::remove_dir_all(&dir);
     }
 }

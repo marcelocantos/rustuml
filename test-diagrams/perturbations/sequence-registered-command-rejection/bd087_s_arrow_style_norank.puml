@@ -1,0 +1,6 @@
+@startuml
+participant Alder
+participant Osprey
+Alder -> Osprey: audit
+Alder -[norank]-> Osprey: style
+@enduml

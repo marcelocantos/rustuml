@@ -1,0 +1,5 @@
+@startuml
+!pragma a b
+!pragma c d
+Kea -> Tui : x %chr(92)
+@enduml

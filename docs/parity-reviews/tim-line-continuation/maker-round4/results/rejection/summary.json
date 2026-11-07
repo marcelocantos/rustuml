@@ -1,0 +1,185 @@
+{
+ "ca": {
+  "entries": 30,
+  "before_rejections": 4,
+  "after_rejections": 10,
+  "introduced_losses": [],
+  "welcome_matches": [
+   "cr3_dir_define_start",
+   "cr3_dir_procedure_start",
+   "cr3_dir_if_start",
+   "cr3_dir_include_start",
+   "cr3_dir_option_start",
+   "cr3_dir_log_start",
+   "cr3_dir_dump_start",
+   "cr3_dir_startsub_end",
+   "cr3_two_end_continued_after_two",
+   "cr3_two_comments_only",
+   "cr3_two_directives_only",
+   "cr3_two_double_tail",
+   "cr3_two_activity_tail",
+   "cr3_two_nojoin_option_handwritten",
+   "cr3_two_include_tail_then_dump",
+   "cr3_end_at_in_block_comment"
+  ],
+  "other_false_accepts": [
+   "cr3_end_bs_in_block_comment",
+   "cr3_end_bs_in_if0",
+   "cr3_end_at_in_if0",
+   "cr3_wrap_tail_runs_into_second_block"
+  ],
+  "other_false_accepts_new_vs_base": []
+ },
+ "bz": {
+  "entries": 9,
+  "before_rejections": 4,
+  "after_rejections": 4,
+  "introduced_losses": [],
+  "welcome_matches": [
+   "mr3_seq_end_continued_one_line",
+   "mr3_seq_bad_tail_then_end",
+   "mr3_class_only_link_tail_then_end",
+   "mr3_seq_chr92_tail_then_tab_end",
+   "mr3_seq_tail_then_backslash_end_then_text"
+  ],
+  "other_false_accepts": [],
+  "other_false_accepts_new_vs_base": []
+ },
+ "by": {
+  "entries": 17,
+  "before_rejections": 11,
+  "after_rejections": 11,
+  "introduced_losses": [],
+  "welcome_matches": [
+   "cr2_seq_end_line_continued_then_text",
+   "cr2_seq_depth2_tail_then_end",
+   "cr2_seq_tail_then_backslash_end",
+   "cr2_seq_tail_then_indented_end",
+   "cr2_seq_chr92_tail_then_end"
+  ],
+  "other_false_accepts": [
+   "cr2_seq_note_chr30_rsp"
+  ],
+  "other_false_accepts_new_vs_base": []
+ },
+ "bw": {
+  "entries": 3,
+  "before_rejections": 3,
+  "after_rejections": 3,
+  "introduced_losses": [],
+  "welcome_matches": [],
+  "other_false_accepts": [],
+  "other_false_accepts_new_vs_base": []
+ },
+ "bu": {
+  "entries": 3,
+  "before_rejections": 2,
+  "after_rejections": 2,
+  "introduced_losses": [],
+  "welcome_matches": [],
+  "other_false_accepts": [
+   "tc1_seq_sprite_row_continued"
+  ],
+  "other_false_accepts_new_vs_base": []
+ },
+ "bd": {
+  "entries": 4,
+  "before_rejections": 2,
+  "after_rejections": 2,
+  "introduced_losses": [],
+  "welcome_matches": [],
+  "other_false_accepts": [
+   "mc1_class_definelong",
+   "mc1_seq_foreach_body"
+  ],
+  "other_false_accepts_new_vs_base": []
+ },
+ "ba": {
+  "entries": 7,
+  "before_rejections": 4,
+  "after_rejections": 4,
+  "introduced_losses": [],
+  "welcome_matches": [],
+  "other_false_accepts": [
+   "ck4_nwdiag_trailing",
+   "ck4_salt_trailing",
+   "ck4_inv_include_missing_after_comment"
+  ],
+  "other_false_accepts_new_vs_base": []
+ },
+ "ay": {
+  "entries": 4,
+  "before_rejections": 1,
+  "after_rejections": 1,
+  "introduced_losses": [],
+  "welcome_matches": [],
+  "other_false_accepts": [
+   "mk4_pixel_row_triple_spaced_component",
+   "mk4_svg_text_nofill_plain_seq",
+   "mk4_svg_text_nofill_usecase"
+  ],
+  "other_false_accepts_new_vs_base": []
+ },
+ "az": {
+  "entries": 0,
+  "before_rejections": 0,
+  "after_rejections": 0,
+  "introduced_losses": [],
+  "welcome_matches": [],
+  "other_false_accepts": [],
+  "other_false_accepts_new_vs_base": []
+ },
+ "ax": {
+  "entries": 8,
+  "before_rejections": 2,
+  "after_rejections": 2,
+  "introduced_losses": [],
+  "welcome_matches": [],
+  "other_false_accepts": [
+   "ck3_usecase_business_actor_type1",
+   "ck3_deployment_unterminated_legend_at_enduml",
+   "ck3_component_unterminated_type0_before_sprite",
+   "ck3_nwdiag_legend_body",
+   "ck3_svg_inline_quoted_apostrophe_seq",
+   "ck3_startsub_unterminated_seq"
+  ],
+  "other_false_accepts_new_vs_base": []
+ },
+ "av": {
+  "entries": 3,
+  "before_rejections": 3,
+  "after_rejections": 3,
+  "introduced_losses": [],
+  "welcome_matches": [],
+  "other_false_accepts": [],
+  "other_false_accepts_new_vs_base": []
+ },
+ "at": {
+  "entries": 3,
+  "before_rejections": 3,
+  "after_rejections": 3,
+  "introduced_losses": [],
+  "welcome_matches": [],
+  "other_false_accepts": [],
+  "other_false_accepts_new_vs_base": []
+ },
+ "fresh": {
+  "entries": 313,
+  "before_rejections": 304,
+  "after_rejections": 304,
+  "introduced_losses": [],
+  "welcome_matches": [],
+  "other_false_accepts": [
+   "mk2_unclosed_pixel_timing",
+   "mk2_unclosed_svg_timing",
+   "mk2_unclosed_svg_mindmap",
+   "mk2_compressed_bad_class",
+   "cl_class_bare_sprite",
+   "c75_sprite_compressed_legacy",
+   "c75_sprite_compressed_teoz",
+   "c75_sprite_function_legacy",
+   "c75_sprite_function_teoz"
+  ],
+  "other_false_accepts_new_vs_base": []
+ }
+}

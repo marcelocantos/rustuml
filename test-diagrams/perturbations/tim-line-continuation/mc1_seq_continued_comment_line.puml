@@ -1,0 +1,5 @@
+@startuml
+' note \
+Otter -> Mink : hidden
+Mink -> Otter : shown
+@enduml

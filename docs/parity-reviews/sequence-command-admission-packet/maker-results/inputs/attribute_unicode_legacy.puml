@@ -1,0 +1,4 @@
+@startuml
+participant "North" as Árbol [[https://example.test/枝?q=é&x=雪]]
+Árbol -> South: seed
+@enduml

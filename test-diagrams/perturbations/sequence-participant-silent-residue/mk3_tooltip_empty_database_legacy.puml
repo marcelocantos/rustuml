@@ -1,0 +1,5 @@
+@startuml
+database Store [[https://example.org/s{}]]
+participant Moss
+Moss -> Store : go
+@enduml

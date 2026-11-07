@@ -1,0 +1,397 @@
+{
+ "schema_version": 1,
+ "mechanism": "sprite-command-post-tim-ownership",
+ "round": 4,
+ "before": "044f73657 (merge of parity-recovery a0ed69740 into round-3 review 6fd931656; crates/ identical to 607890d0d)",
+ "after": "d322dec66 (round-4 code tip)",
+ "binaries_sha256": {
+  "rustuml-044f73657": "df2cb72d4dad29f34f0c77b9645b79a0a7591f717b1f5257af32a60b054e9d33",
+  "rustuml-d322dec66": "6536f1bae66d79651425bd7364c251b47ff3870a68628982739777a8d3900c65",
+  "compare_cli": "f2cba16d30e6535c8f3d2ab07e766f6bdd5dd5eeb8ce9efcdea8f14a874e3868"
+ },
+ "cohorts": {
+  "ax": {
+   "n": 77,
+   "panics_044f73657": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "timeouts_044f73657": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "panics_d322dec66": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "timeouts_d322dec66": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "new_panics": [],
+   "svg_byte_changes": 8,
+   "losses": [],
+   "changes": [
+    {
+     "name": "ck3_svg_end_inner_comment_state",
+     "cohort": "AX",
+     "java_valid": true,
+     "intended_valid": true,
+     "before": "valid-error",
+     "after": "mismatch",
+     "svg_changed": true
+    },
+    {
+     "name": "ck3_pixel_end_inner_comment_class",
+     "cohort": "AX",
+     "java_valid": true,
+     "intended_valid": true,
+     "before": "valid-error",
+     "after": "match",
+     "svg_changed": true
+    },
+    {
+     "name": "ck3_pixel_end_inner_comment_seq",
+     "cohort": "AX",
+     "java_valid": true,
+     "intended_valid": true,
+     "before": "valid-error",
+     "after": "mismatch",
+     "svg_changed": true
+    },
+    {
+     "name": "ck3_svg_end_inner_comment_nospace_component",
+     "cohort": "AX",
+     "java_valid": true,
+     "intended_valid": true,
+     "before": "valid-error",
+     "after": "match",
+     "svg_changed": true
+    },
+    {
+     "name": "ck3_svg_end_inner_comment_teoz",
+     "cohort": "AX",
+     "java_valid": true,
+     "intended_valid": true,
+     "before": "valid-error",
+     "after": "mismatch",
+     "svg_changed": true
+    },
+    {
+     "name": "ck3_svg_inline_inner_comment_object",
+     "cohort": "AX",
+     "java_valid": true,
+     "intended_valid": true,
+     "before": "valid-error",
+     "after": "match",
+     "svg_changed": true
+    },
+    {
+     "name": "ck3_pixel_start_inner_comment_deployment",
+     "cohort": "AX",
+     "java_valid": true,
+     "intended_valid": true,
+     "before": "valid-error",
+     "after": "match",
+     "svg_changed": true
+    },
+    {
+     "name": "ck3_svg_end_inner_comment_usecase",
+     "cohort": "AX",
+     "java_valid": true,
+     "intended_valid": true,
+     "before": "valid-error",
+     "after": "match",
+     "svg_changed": true
+    }
+   ]
+  },
+  "av": {
+   "n": 63,
+   "panics_044f73657": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "timeouts_044f73657": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "panics_d322dec66": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "timeouts_d322dec66": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "new_panics": [],
+   "svg_byte_changes": 0,
+   "losses": [],
+   "changes": []
+  },
+  "at": {
+   "n": 45,
+   "panics_044f73657": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "timeouts_044f73657": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "panics_d322dec66": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "timeouts_d322dec66": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "new_panics": [],
+   "svg_byte_changes": 0,
+   "losses": [],
+   "changes": []
+  },
+  "fresh": {
+   "n": 915,
+   "panics_044f73657": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "timeouts_044f73657": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "panics_d322dec66": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "timeouts_d322dec66": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "new_panics": [],
+   "svg_byte_changes": 0,
+   "losses": [],
+   "changes": []
+  },
+  "retained": {
+   "n": 4174,
+   "panics_044f73657": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 63
+   },
+   "timeouts_044f73657": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "panics_d322dec66": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 63
+   },
+   "timeouts_d322dec66": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "new_panics": [],
+   "svg_byte_changes": 2,
+   "pairs": {
+    "mismatch->mismatch": 1056,
+    "match->match": 2664,
+    "nonpositive-accepted->nonpositive-accepted": 66,
+    "valid-error->valid-error": 17,
+    "nonpositive-rejected->nonpositive-rejected": 370,
+    "mismatch->match": 1
+   },
+   "changes": [
+    {
+     "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+     "cohort": "parent-added145",
+     "name": null,
+     "before": "mismatch",
+     "after": "mismatch",
+     "svg_changed": true
+    },
+    {
+     "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+     "cohort": "parent-added145",
+     "name": null,
+     "before": "mismatch",
+     "after": "match",
+     "svg_changed": true
+    }
+   ]
+  },
+  "golden": {
+   "n": 12550,
+   "panics_044f73657": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 148
+   },
+   "timeouts_044f73657": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "panics_d322dec66": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 148
+   },
+   "timeouts_d322dec66": {
+    "svg": 0,
+    "ast": 0,
+    "ascii": 0,
+    "yaml": 0
+   },
+   "new_panics": [],
+   "svg_byte_changes": 0,
+   "pairs": {
+    "nonpositive-rejected->nonpositive-rejected": 202,
+    "match->match": 11181,
+    "nonpositive-accepted->nonpositive-accepted": 997,
+    "mismatch->mismatch": 70,
+    "compare-101->compare-101": 100
+   },
+   "changes": []
+  }
+ },
+ "rejection_contract": {
+  "fresh": {
+   "entries": 313,
+   "before_rejections": 304,
+   "after_rejections": 304,
+   "introduced_losses": [],
+   "after_false_accepts": [
+    "mk2_unclosed_pixel_timing.puml",
+    "mk2_unclosed_svg_timing.puml",
+    "mk2_unclosed_svg_mindmap.puml",
+    "mk2_compressed_bad_class.puml",
+    "cl_class_bare_sprite.puml",
+    "c75_sprite_compressed_legacy.puml",
+    "c75_sprite_compressed_teoz.puml",
+    "c75_sprite_function_legacy.puml",
+    "c75_sprite_function_teoz.puml"
+   ]
+  },
+  "fresh-at": {
+   "entries": 3,
+   "before_rejections": 3,
+   "after_rejections": 3,
+   "introduced_losses": [],
+   "after_false_accepts": []
+  },
+  "fresh-av": {
+   "entries": 3,
+   "before_rejections": 3,
+   "after_rejections": 3,
+   "introduced_losses": [],
+   "after_false_accepts": []
+  },
+  "fresh-ax": {
+   "entries": 8,
+   "before_rejections": 1,
+   "after_rejections": 1,
+   "introduced_losses": [],
+   "after_false_accepts": [
+    "ck3_usecase_business_actor_type1.puml",
+    "ck3_deployment_unterminated_legend_at_enduml.puml",
+    "ck3_component_unterminated_type0_before_sprite.puml",
+    "ck3_nwdiag_legend_body.puml",
+    "ck3_svg_inline_quoted_apostrophe_seq.puml",
+    "ck3_nested_startsub_seq.puml",
+    "ck3_startsub_unterminated_seq.puml"
+   ]
+  }
+ },
+ "gates": {
+  "golden_no_oracle": "70 failure names, byte-identical to checker-claude/gates/no_oracle_failure_names-9834a7194.txt; the suite's 'progress not locked in' message (class 1962->1963, preprocessing 284->285, rendering 91->95) is identical to round 3 (checker-claude-round3/gates/golden_no_oracle-after.log.gz)",
+  "golden_pairs": "754 failure names, byte-identical to checker-claude/gates/golden_failure_names-9834a7194.txt",
+  "parity_perturbations": {
+   "before_044f73657": 2507,
+   "after_d322dec66": 2499,
+   "new_failures": 0,
+   "fixed": [
+    "class-command-execution-ownership/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment",
+    "class-command-grammar-closure/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment",
+    "sprite-command-post-tim-ownership/ck3_pixel_end_inner_comment_class",
+    "sprite-command-post-tim-ownership/ck3_pixel_start_inner_comment_deployment",
+    "sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_nospace_component",
+    "sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_usecase",
+    "sprite-command-post-tim-ownership/ck3_svg_inline_inner_comment_object",
+    "tim-theme-post-expansion-source-identity/checker_inner_comment"
+   ],
+   "note": "before list equals checker-claude-round3/gates/perturbation-failure-names-post.txt (2507). The before run used its own CARGO_TARGET_DIR; a first attempt sharing the after target dir silently reported the after list and was discarded."
+  },
+  "harness_guards": {
+   "failing": [
+    "decimal_literal_ratchet",
+    "parity_review_records_are_complete"
+   ],
+   "decimal_ratchet": "identical to checker-claude-round3/gates/decimal-ratchet-after.txt (5 render files, none touched)",
+   "review_record_violations": "2,471 lines after normalisation, identical to checker-claude-round3/gates/guard-violations-post.txt; none in this mechanism"
+  },
+  "pipe_mode": "13/13",
+  "workspace_lib": "1,501/1,501 (41+10+31+618+801; round 3 had 1,498, +3 new preprocess tests)"
+ },
+ "pending_relay": {
+  "mk4": {
+   "path": "~/Library/Caches/rustuml-sprite-round4-claude-maker/mk4/",
+   "cases": 48,
+   "intended_valid": 45,
+   "reference-manifest.json": "3b75bc0bcbba234a39371e29112bbef33879ceaf5538a6354458601791661766",
+   "reference-input-bundle.json.gz": "0287d308512c9dc02b0e0fd0eb2274bbab704b9bd1120abab8f73f24261cc0ea"
+  },
+  "mk4b": {
+   "path": "~/Library/Caches/rustuml-sprite-round4-claude-maker/mk4b/",
+   "cases": 8,
+   "intended_valid": 8,
+   "reference-manifest.json": "d13369506982d52b849d8874c582f886ba9d55efc9ab7456b49aa4590dd175ce",
+   "reference-input-bundle.json.gz": "52d4851f7cd3f669d9d22bad2b5121d45f32a1940bd934c2796806666999ceb1"
+  }
+ }
+}

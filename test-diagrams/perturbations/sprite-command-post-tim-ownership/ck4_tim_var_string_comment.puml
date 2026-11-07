@@ -1,0 +1,4 @@
+@startuml
+!$v = "a /' b '/ c"
+A -> B : $v
+@enduml

@@ -1,0 +1,55 @@
+{
+ "before_tree": {
+  "commit": "93bf53e18d892f60e66b5fdfb4237f681afd5860",
+  "note": "merge of rejected maker line dc1dfbb4a (production d15d6eaf9, ba2e6c2b7) with parity-recovery-2026-11-03 9834a7194"
+ },
+ "integration_base": "9834a719455308120c3289b59a260567f141b724",
+ "pre_packet_baseline": "c525fd32ae97b642b440a161140e9457f29bcfc8 (checker captures used only for the vs-baseline loss check)",
+ "production_commits": {
+  "sprite": "95cf8525297d551cd7da954e9892cb25325d5191",
+  "participant": "ecbd75ec87dbbabac18a88904c2bad4d4f2e4416",
+  "created_head_anchor": "87bdb0feb0cd1557070d12fcd3890417e884662d"
+ },
+ "accounts": {
+  "sprite": "ff761cd0a60a7208a970bca7cc88fe08245bb1e3",
+  "participant": "65b5a16338935699a8828665720373ec9bee9d35"
+ },
+ "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "binaries": {
+  "before": "08b2d6d57d5d92afa331b9b7306054a310c326a9c6216cbed871e76b77c3213c",
+  "after": "bdc82272f2d27323c2581348cde649f77eb7de4118ce5e949806a893fabc223b",
+  "candidate1": "87186bfcad8981d0889521e0791d81fe83f8b27f071e28dd300809c6c5a8efd3",
+  "candidate2": "2ac605669fe3b8fee4ae58fec35c99f578cb5b8bbe2feb57358b1c02808384db",
+  "compare_cli": "d2f2a1cfbcd96d5127aafbfdba58adec3286b6c4ba8c6e358e1e82c4328f0086",
+  "candidate3": "68cd9dc42ef29b6f132a32812db8a46e110dc19515614b141d3e8ed0fa5936bd"
+ },
+ "build": "CARGO_TARGET_DIR=<private> cargo build --release -j 6 -p rustuml --bin rustuml (before: git archive 93bf53e18; after: worktree at the production commits); compare_cli: rustc --edition=2024 -O docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs against the before target's rustuml_oracle rlib",
+ "java_references": {
+  "790+28 (staged by the earlier checker)": {
+   "dir": "~/Library/Caches/rustuml-sequence-sprite-checker-75ed0e64",
+   "reference-results.json": "24d9feb0129fd09efad3e430b57a173763a3610709a58ae834ddc0eb43d5ccd8",
+   "supplement/reference-results.json": "c679912e61afd714a6393041b83eacacbb57af3e4345762b1e77b8f248231ad5"
+  },
+  "batch1 (43, relay)": {
+   "dir": "~/Library/Caches/rustuml-relay-parent/sprite-claude-batch1",
+   "reference-results.json": "a023e9b64410bfdeb366248fd885ee0ad41c33e8d8afbb3acb9d2c28509d062e",
+   "reference-results.json.gz": "94e51b8838e01989da165eb98cd61535fd193dbe6a07460d28ce706c3f4e0bef",
+   "reference-transport.json": "850684eb59015d9c575e16239c2285ddb630c7efd5b25439165d772b70f79c0e",
+   "reference-manifest.json": "77b31ad29fa40421795f4fe82fff0ba11156a493dde5fe20441cf1397d29c127"
+  }
+ },
+ "manifests": {
+  "retained-manifest.json (checker-claude)": "69cbf753f230026a55768fe6eee699b53fc87ee88188b201f5717483025e97c2",
+  "golden-manifest.json (checker-claude)": "9d3875a4585f9861a55f0753a4debc1f6034f843fd18d5391b33b7d5680617ca",
+  "fresh-manifest-classified.json (here)": "73b87adfa3717bd4046868083ffda37561fa1672520f9ddc7f960707b613ddc4"
+ },
+ "approved_new_valid_input_error_set": {
+  "path": "~/Library/Caches/rustuml-sequence-rejection-dc438/candidate1/new-valid-errors.json",
+  "sha256": "c3076b2c8c50f461680ef2af2042db7ce9fd4852f12bd17bc151db61c3020969",
+  "entries": 15
+ },
+ "replay": "support/replay.py (checker-claude copy; only change max_workers 4 -> 8), modes -tsvg/--ast/-ttxt/--yaml with -pipe, RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100, PLANTUML_STDLIB pinned; fresh cwd = private reference dir, retained/golden cwd = repo root",
+ "after_tree_note": "after = worktree at 87bdb0feb (production) for replays; gates ran on the same production files"
+}

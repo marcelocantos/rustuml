@@ -7,6 +7,7 @@ pub mod activity;
 pub mod archimate;
 pub mod board;
 pub mod class;
+mod command_spans;
 pub mod component;
 pub mod deployment;
 pub mod ditaa;
@@ -22,12 +23,15 @@ pub mod object;
 pub mod regex_diagram;
 pub mod salt;
 pub mod sequence;
+mod sprite;
 pub mod state;
 pub mod timing;
 pub mod usecase;
 pub mod wbs;
 
 mod style;
+
+use std::collections::HashMap;
 
 use crate::diagram::Diagram;
 use crate::preprocess;
@@ -199,6 +203,73 @@ pub fn extract_link_tooltip(line: &str) -> Option<String> {
     }
 }
 
+/// `url.Url` as `UrlBuilder#getUrl` builds it in `UrlMode.STRICT`.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub(crate) struct BuiltUrl {
+    /// `Url#getUrl` (`StringUtils#eventuallyRemoveStartingAndEndingDoubleQuote`
+    /// applied; `topurl` is not modelled).
+    pub url: String,
+    /// The explicit tooltip, untrimmed and possibly empty; `None` when the
+    /// link has none, so `Url#getTooltip` is the URL.
+    pub tooltip: Option<String>,
+}
+
+/// `UrlBuilder#getUrl` in `UrlMode.STRICT` (`Matcher#matches`) on a whole
+/// `[[...]]` link: QUOTED, ONLY_TOOLTIP, ONLY_TOOLTIP_AND_LABEL,
+/// LINK_TOOLTIP_NOLABEL, LINK_WITH_OPTIONAL_TOOLTIP_WITH_OPTIONAL_LABEL, in
+/// that order. Each entry is the pattern and its (url, tooltip) groups.
+pub(crate) fn url_builder_url(link: &str) -> Option<BuiltUrl> {
+    static ALTERNATIVES: std::sync::LazyLock<Vec<(regex::Regex, Option<usize>, usize)>> =
+        std::sync::LazyLock::new(|| {
+            [
+            (
+                r"\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]",
+                Some(1),
+                2,
+            ),
+            (r"\[\[[%s]*\{(.*)\}[%s]*\]\]", None, 1),
+            (
+                r"\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]",
+                None,
+                1,
+            ),
+            (
+                r"\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]",
+                Some(1),
+                2,
+            ),
+            (
+                r"\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]",
+                Some(1),
+                2,
+            ),
+        ]
+        .into_iter()
+        .map(|(pattern, url, tooltip)| (sequence::registered_regex(pattern), url, tooltip))
+        .collect()
+        });
+    // Pattern2's ASCII case folding keeps byte offsets.
+    let folded = link.to_ascii_lowercase();
+    ALTERNATIVES.iter().find_map(|(pattern, url, tooltip)| {
+        let caps = pattern.captures(&folded)?;
+        let group = |index: usize| caps.get(index).map(|m| link[m.range()].to_string());
+        let url = url.and_then(group).unwrap_or_default();
+        // Url#<init>: eventuallyRemoveStartingAndEndingDoubleQuote(url, "\"").
+        let is_quote = |c: char| matches!(c, '"' | '\u{201c}' | '\u{201d}' | '\u{ab}' | '\u{bb}');
+        let mut chars = url.chars();
+        let url = match (chars.next(), chars.next_back()) {
+            (Some(first), Some(last)) if is_quote(first) && is_quote(last) => {
+                url[first.len_utf8()..url.len() - last.len_utf8()].to_string()
+            }
+            _ => url,
+        };
+        Some(BuiltUrl {
+            url,
+            tooltip: group(*tooltip),
+        })
+    })
+}
+
 /// Strip surrounding double-quotes from a title string, then trim whitespace.
 pub fn strip_title_quotes(s: &str) -> &str {
     let s = s.trim();
@@ -274,35 +345,34 @@ fn resembles_allow_mixing_command(line: &str) -> bool {
     })
 }
 
-/// Detect the diagram type from the @start tag.
+/// Detect the diagram type from the start directive.
+///
+/// A start directive is `StartUtils#isStartDirective`: whitespace, `@` or
+/// `\\`, then `start` and a type (DiagramType#findStartTypes). The type is
+/// case-insensitive (`getTypes` switches on `Character.toLowerCase` and
+/// `check` is `regionMatches(true, ...)`), so it is returned lower-cased.
 ///
 /// If the input has an outer `@startuml` wrapper with an inner `@startXxx`
 /// (e.g. `@startjson` nested inside `@startuml`), the inner type wins because
 /// PlantUML allows embedding any `@start*` block inside `@startuml`.
-fn detect_type(input: &str) -> &str {
-    let mut first_type: Option<&str> = None;
-    for line in input.lines() {
-        let trimmed = line.trim();
-        if let Some(rest) = trimmed.strip_prefix("@start") {
-            let typ = rest.split_whitespace().next().unwrap_or(rest);
-            match first_type {
-                None => {
-                    first_type = Some(typ);
-                }
-                Some("uml") => {
-                    // An inner @start inside @startuml overrides the outer uml type.
-                    if typ != "uml" {
-                        return typ;
-                    }
-                }
-                _ => {
-                    // Already have a specific (non-uml) type; stop scanning.
-                    break;
-                }
+fn detect_type(input: &str) -> String {
+    let mut first_type: Option<String> = None;
+    let input_lines: Vec<&str> = input.lines().collect();
+    // BlockUmlBuilder tests the lines UncommentReadLine returns.
+    for line in preprocess::uncommented_lines(&input_lines) {
+        if let Some(rest) = preprocess::start_directive_type(&line) {
+            let typ = preprocess::java_start_type(rest).into_owned();
+            match first_type.as_deref() {
+                None => first_type = Some(typ),
+                // An inner @start inside @startuml overrides the outer uml type.
+                Some("uml") if typ != "uml" => return typ,
+                Some("uml") => {}
+                // Already have a specific (non-uml) type; stop scanning.
+                Some(_) => break,
             }
         }
     }
-    first_type.unwrap_or("uml")
+    first_type.unwrap_or_else(|| "uml".to_string())
 }
 
 /// For @startuml, detect the specific UML subtype by scanning ALL lines
@@ -933,12 +1003,21 @@ pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
     // drops back to 0 on an @end.
     let mut current_start: Option<OpenDiagramBlock<'_>> = None;
     let mut index = 0usize;
+    let input_lines: Vec<&str> = input.lines().collect();
+    // BlockUmlBuilder looks for start and end directives on
+    // ReadFilterMergeLines' output, so a line merged into a continued line
+    // is block content, never a start or an end.
+    let merged_away = preprocess::lines_merged_into_previous(&input_lines);
+    // BlockUmlBuilder tests start and end on UncommentReadLine's lines.
+    let uncommented = preprocess::uncommented_lines(&input_lines);
 
-    for (line_idx, line) in input.lines().enumerate() {
+    for (line_idx, &line) in input_lines.iter().enumerate() {
         let source_line = line_idx + 1;
-        let trimmed = line.trim();
+        let directive = !merged_away[line_idx];
 
-        if let Some(rest) = trimmed.strip_prefix("@start") {
+        // StartUtils#isStartDirective and #isEndDirective, which accept `@`
+        // or `\\` (BlockUmlBuilder.java:101 and 126).
+        if directive && let Some(rest) = preprocess::start_directive_type(&uncommented[line_idx]) {
             if current_start.is_none() {
                 // Starting a new top-level block.
                 let mut parts = rest.split_whitespace();
@@ -957,7 +1036,7 @@ pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
                 block.lines.push(line);
                 block.depth += 1;
             }
-        } else if trimmed.starts_with("@end") {
+        } else if directive && preprocess::is_end_directive(&uncommented[line_idx]) {
             if let Some(block) = &mut current_start {
                 block.lines.push(line);
                 block.depth -= 1;
@@ -1156,17 +1235,40 @@ pub fn parse_with_base(
     input: &str,
     base_dir: Option<&std::path::Path>,
 ) -> Result<Diagram, ParseError> {
-    let typ = detect_type(input);
+    let detected_type = detect_type(input);
+    let typ = detected_type.as_str();
     let mut preprocess_out = match base_dir {
         Some(dir) => preprocess::preprocess_full_for_parse(input, Some(dir.to_path_buf())),
         None => preprocess::preprocess_full_for_parse(input, None),
     };
     // Java TContext.executeOneLineSafe propagates fatal TIM errors; its partial
     // result list must not become a successful diagram (account 0530072a).
+    // BlockUml#getDiagram builds PSystemErrorPreprocessor before
+    // PSystemBuilder#createPSystem runs any factory.
     if let Some(error) = preprocess_out.error.take() {
         return Err(ParseError {
             line: error.line,
             message: error.message,
+        });
+    }
+    // PSystemBuilder#createPSystem tries PSystemWelcomeFactory first for a
+    // `@startuml` source (its diagram type is SEQUENCE), and it returns the
+    // Welcome diagram when the post-TIM `UmlSource` has exactly two lines,
+    // before any family factory or command runs. A swallowed end means there
+    // is no block at all, which is reported below.
+    if preprocess_out.two_line_source && !preprocess_out.swallowed_end_directive {
+        let mut diagram = Diagram::Sequence(sequence::parse_sequence(&[])?);
+        diagram.meta_mut().source = Some(preprocess_out.uml_source);
+        return Ok(diagram);
+    }
+    // A `@startuml` source of its start line alone (TIM took the end line):
+    // PSystemWelcomeFactory needs two lines, and every family factory finds
+    // UmlSource#isEmpty and builds the `Empty description` error at the
+    // start line (PSystemCommandFactory.java:85-89).
+    if preprocess_out.one_line_source && !preprocess_out.swallowed_end_directive {
+        return Err(ParseError {
+            line: 0,
+            message: "Empty description".to_string(),
         });
     }
     let mut style_program = style::extract_style_program(&mut preprocess_out.lines);
@@ -1181,7 +1283,12 @@ pub fn parse_with_base(
             }
         }
     }
-    let uml_subtype = (typ == "uml").then(|| detect_uml_subtype(&preprocess_out.lines));
+    // Subtype detection stands in for PSystemBuilder trying each factory.
+    // Sprite commands are registered by every candidate UML factory, so they
+    // carry no discriminating signal; detection sees them consumed (this was
+    // the effect of the former in-TIM blanking).
+    let uml_subtype = (typ == "uml")
+        .then(|| detect_uml_subtype(&sprite::consume_complete_commands(&preprocess_out.lines).0));
     if matches!(uml_subtype, Some(UmlSubtype::Sequence)) {
         preprocess_out = match base_dir {
             Some(dir) => {
@@ -1198,8 +1305,16 @@ pub fn parse_with_base(
         }
         style_program = style::extract_style_program(&mut preprocess_out.lines);
     }
+    // BlockUmlBuilder recognises start and end directives on the merged
+    // lines: when a continued line swallows the end, Java builds no block and
+    // SourceStringReader#noValidStartFound reports that instead of a diagram.
+    if preprocess_out.swallowed_end_directive {
+        return Err(ParseError {
+            line: 1,
+            message: "No valid @start/@end found, please check the version".to_string(),
+        });
+    }
     let lines = preprocess_out.lines;
-    let sprites = preprocess_out.sprites;
     let uml_source = preprocess_out.uml_source;
 
     // For non-sequence UML diagrams a `newpage` directive splits the diagram
@@ -1210,6 +1325,44 @@ pub fn parse_with_base(
         lines
     } else {
         truncate_at_newpage(lines)
+    };
+
+    // Families whose factories register CommonCommands but whose parsers do
+    // not yet offer lines to the sprite group at their dispatch position:
+    // consume complete sprite commands after TIM, context-free (residual).
+    let fallback_sprites = matches!(
+        uml_subtype,
+        Some(UmlSubtype::Timing | UmlSubtype::Archimate)
+    ) || matches!(
+        typ,
+        "mindmap" | "gantt" | "wbs" | "salt" | "nwdiag" | "regex" | "board" | "ebnf"
+    );
+    let (lines, sprites) = if fallback_sprites {
+        sprite::consume_complete_commands(&lines)
+    } else {
+        (lines, HashMap::new())
+    };
+    // These parsers read plain text and never source-line markers, which TIM
+    // adds once a continuation, include or loop moves later lines away from
+    // their output position.
+    let lines = if matches!(
+        typ,
+        "json"
+            | "yaml"
+            | "salt"
+            | "nwdiag"
+            | "regex"
+            | "ditaa"
+            | "dot"
+            | "board"
+            | "ebnf"
+            | "git"
+            | "math"
+            | "latex"
+    ) {
+        preprocess::strip_source_line_markers(lines)
+    } else {
+        lines
     };
 
     let mut diagram = match typ {
@@ -1324,10 +1477,9 @@ pub fn parse_with_base(
     collapse_reassigned_skinparams(&mut diagram);
     diagram.meta_mut().style_program = style_program;
 
-    // Inject sprite definitions from the preprocessor into the diagram's meta.
+    // Sprites executed by the post-TIM fallback consumption.
     if !sprites.is_empty() {
-        let meta = diagram.meta_mut();
-        meta.sprites = sprites;
+        diagram.meta_mut().sprites.extend(sprites);
     }
 
     // Stash PlantUML's post-TIM `UmlSource.getPlainString("\n")` for
@@ -1418,6 +1570,31 @@ mod tests {
                 "@enduml\n",
             )),
         );
+    }
+
+    #[test]
+    fn two_line_join_gives_the_welcome_diagram_first() {
+        // PSystemWelcomeFactory runs before any family factory, so even a
+        // joined line no command accepts gives the empty diagram.
+        for input in [
+            "@startuml\nKea -> Tui : tail %chr(92)\n@enduml",
+            "@startuml\nnot a command %chr(92)\n@enduml",
+            "@startuml\nKea -> Tui : one\n@enduml \\\nTui -> Kea : two",
+        ] {
+            let diagram = parse(input).expect(input);
+            let Diagram::Sequence(seq) = diagram else {
+                panic!("{input}: not the empty @startuml diagram");
+            };
+            assert!(
+                seq.participants.is_empty() && seq.events.is_empty(),
+                "{input}"
+            );
+        }
+        // Three lines: the joined message renders.
+        let diagram =
+            parse("@startuml\nKea -> Tui : a %chr(92)\nb\nTui -> Kea : c\n@enduml").unwrap();
+        let ast = format!("{diagram:?}");
+        assert!(ast.contains("a b"), "{ast}");
     }
 
     #[test]
@@ -2273,6 +2450,38 @@ Policy --> Retry
         assert_eq!(blocks[0].index, 0);
         assert_eq!(blocks[1].typ, "uml");
         assert_eq!(blocks[1].index, 1);
+    }
+
+    #[test]
+    fn split_blocks_tests_directives_on_merged_lines() {
+        // BlockUmlBuilder sees ReadFilterMergeLines' output: an end line
+        // merged into a continued line does not end the block.
+        let input = "@startuml\nKea -> Tui : x \\\n  @enduml\nTui -> Kea : y\n@enduml";
+        let blocks = split_blocks(input);
+        assert_eq!(blocks.len(), 1);
+        assert_eq!(blocks[0].source, input);
+        let diagram = parse_block(input, 0).expect("Java renders both messages");
+        let ast = format!("{diagram:?}");
+        assert!(
+            ast.contains("x   @enduml") && ast.contains("\"y\""),
+            "{ast}"
+        );
+    }
+
+    #[test]
+    fn backslash_start_directives_open_main_blocks() {
+        // StartUtils#isStartDirective / #isEndDirective accept '\\'.
+        let seq = "\\startuml\nRuru -> Weka : hi\n\\enduml";
+        assert_eq!(split_blocks(seq).len(), 1);
+        assert_eq!(detect_type(seq), "uml");
+        assert!(matches!(parse_block(seq, 0), Ok(Diagram::Sequence(_))));
+        let mindmap = "\\startmindmap\n* Rimu\n** Miro\n\\endmindmap";
+        assert_eq!(detect_type(mindmap), "mindmap");
+        assert!(matches!(parse_block(mindmap, 0), Ok(Diagram::MindMap(_))));
+        // The start is case-insensitive, the end is not: '@ENDUML' is a
+        // content line, as Java reads it.
+        assert_eq!(detect_type("@STARTUML\nA -> B\n@ENDUML"), "uml");
+        assert!(parse("@STARTUML\nRuru -> Weka : hi\n@ENDUML").is_err());
     }
 
     #[test]

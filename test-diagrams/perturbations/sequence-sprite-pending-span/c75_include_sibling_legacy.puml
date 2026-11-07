@@ -1,0 +1,8 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+!include c75_open.inc
+!include c75_end.inc
+Spruce --> Cedar: ring
+@enduml

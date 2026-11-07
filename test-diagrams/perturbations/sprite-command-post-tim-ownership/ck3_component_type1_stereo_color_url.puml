@@ -1,0 +1,6 @@
+@startuml
+component C <<svc>> #pink [[https://example.org/c]] [
+first line
+Sprite sheets are loaded
+]
+@enduml

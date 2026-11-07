@@ -1,0 +1,7 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+<style file=walnut_missing.css>
+Kestrel --> Juniper: receipt
+@enduml

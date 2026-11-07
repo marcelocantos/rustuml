@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-line-continuation",
+  "target": "T14.22",
+  "round": 2,
+  "packet_context": "Round 2 of the TIM line-continuation packet, which carries the whole sprite/participant line (sprite round 6). Branch maker/tim-continuation-round2-claude from the v2 review fdc8df1fd (maker tip 0a52663ac, code 594c2b3c5), merged with parity-recovery-2026-11-03 4623c5494 (merge b0fb43c3e; code unchanged since 9834a7194). This account is committed before any code change.",
+  "status": "preimplementation account of record for round 2; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "obligations": {
+    "1_column0_end_rule": "tc1_seq_indented_end_after_backslash (BU) must render as Java does. Round 1 decided whether Pipe appended an end with StartUtils#isEndDirective (leading whitespace, '@' or '\\\\'), which is BlockUmlBuilder's test, not Pipe's.",
+    "2_include_tail_join": "tc1_seq_include_tail_before_end must keep its message, and round-1 residues 2 (Rust placeholder lines) and 3 (pending tail) must match Java or be shown to depend only on T14.53.",
+    "3_ditaa_probe": "The ditaa exemption gets a Java-backed probe."
+  },
+  "java_trace": {
+    "pipe_read_single_diagram": "Pipe#readSingleDiagram (Pipe.java:179-225), which feeds -pipe input to SourceStringReader. State NO_CONTENT -> START_MARK_NOT_FOUND on the first line whose String#trim is non-empty. Lines starting with '@@@format ' are consumed by manageFormat and never added. In START_MARK_NOT_FOUND, a line that startsWith(\"@start\") at column 0 discards earlier input (sb.setLength(0)) and sets START_MARK_FOUND; expectedEnd = \"@end\" + group(1) when the whole line matches @start([A-Za-z]*), else \"@end\" (Pipe.java:194-199). In START_MARK_FOUND, a line that startsWith(expectedEnd) at column 0 sets COMPLETE (Pipe.java:203) and reading stops after appending that line, so later lines are not part of this diagram. At EOF: START_MARK_FOUND returns sb + expectedEnd (Pipe.java:219), START_MARK_NOT_FOUND returns \"@startuml\\n\" + sb + \"@enduml\\n\" (line 217), COMPLETE returns sb. An indented '  @enduml' or a '\\\\enduml' line is therefore never Pipe's end: Pipe appends its own end after it.",
+    "block_uml_builder": "BlockUmlBuilder#<init> (BlockUmlBuilder.java:88-135) tests StartUtils#isStartDirective and #isEndDirective on each line ReadFilterMergeLines returns, so on merged lines only. A raw line merged into a continued line is never a start or end directive; the block ends at the first merged result that is an end directive, and the appended Pipe end is an ordinary input line for this test.",
+    "read_filter_merge_lines": "Unchanged from round 1 (preproc2.ReadFilterMergeLines#readLine; ReadFilterQuoteComment#readLine with longComment local to each call; StringLocated#mergeEndBackslash keeps the first location; the ditaa switch is DiagramType#findStartTypes(trim).contains(DITAA) on a result line and resets on an end directive).",
+    "tim_result_list": "BlockUml passes the whole block, its start and end lines included, to TIM (TimLoader -> TContext#executeLines). The result list holds the start line, every PLAIN line (blank lines included) with its location, included-file lines with their own locations, and the end line last. Comment lines (CodeIteratorShortComment/LongComment) and directive lines (!define, !$x =, !if/!endif, !include itself, procedure definitions) produce no entry.",
+    "uml_source_load_internal": "UmlSource#loadInternal (core/UmlSource.java:118-134) with checkEndingBackslash (PSystemBuilder.java:210-212: findStartTypes(first line).contains(SEQUENCE), i.e. @startuml): over the TIM result list, a line that endsWithBackslash appends its text minus the backslash to pending; the next line that does not appends its whole text and the joined StringLocated takes that line's location. So an included 'tail \\\\' joins with whatever the next TIM result line is: the next main line when only directives intervene (location of that line), a blank line, or the end line ('tail @enduml', location of the end line).",
+    "end_after_join": "PSystemCommandFactory#createSystem (command/PSystemCommandFactory.java:97-109) stops at an end directive or when the iterator runs out. When the end line was joined into a message the source has no end directive and the message line is executed as a command ('tail @enduml' is the message label).",
+    "ditaa_exemption": "ReadFilterMergeLines#isDitaa: DiagramType#findStartTypes(StringUtils#trinNoTrace(line)).contains(DITAA) on a start directive turns the join off until the next end directive. findStartTypes is case-insensitive and keyed on the start directive only, so '@startditaa' is exempt and '@startuml' + 'ditaa' is not."
+  },
+  "java_locations": [
+    "net.sourceforge.plantuml.Pipe#readSingleDiagram (Pipe.java:179-225)",
+    "net.sourceforge.plantuml.BlockUmlBuilder#<init> (BlockUmlBuilder.java:88-135)",
+    "net.sourceforge.plantuml.preproc2.ReadFilterMergeLines#readLine, #isDitaa",
+    "net.sourceforge.plantuml.preproc2.ReadFilterQuoteComment#readLine",
+    "net.sourceforge.plantuml.utils.StartUtils#isStartDirective, #isEndDirective, #startsWithDirectiveKeyword",
+    "net.sourceforge.plantuml.PSystemBuilder#createPSystem (PSystemBuilder.java:208-212)",
+    "net.sourceforge.plantuml.core.UmlSource#createWithRaw, #loadInternal (UmlSource.java:108-134)",
+    "net.sourceforge.plantuml.command.PSystemCommandFactory#createSystem (PSystemCommandFactory.java:75-110)"
+  ],
+  "causal_divergence": [
+    "merge_ending_backslash_lines appends '@enduml' only when no input line is_end_directive (BlockUmlBuilder's whitespace-tolerant test), so '  @enduml' after a continued line suppresses the append, the merge swallows it and the block has no end.",
+    "split_blocks (parse/mod.rs) ends a block on any raw line whose trim starts with '@end', including a line ReadFilterMergeLines merges into the previous one, so content after an indented end that Java keeps is cut off.",
+    "collapse_post_tim_ending_backslashes treats Rust's blank directive placeholders (push_directive_placeholder, the post-procedure padding) as TIM result lines, so 'tail \\\\' joins with an empty placeholder instead of the next main line.",
+    "The Rust parser stream has no end line, so a pending tail at the end of the list is dropped where Java joins it with the end line. The appended Pipe end is also popped from the merged lines, so no end line exists for it either."
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs: new pipe_single_diagram_lines, a port of Pipe#readSingleDiagram's start and end recognition: column-0 '@start', expectedEnd from the whole-line @start([A-Za-z]*) match or '@end', column-0 startsWith(expectedEnd) completes and cuts later lines, otherwise expectedEnd (or '@enduml' when no column-0 start was seen) is appended. merge_ending_backslash_lines runs ReadFilterMergeLines over that list; the appended end stays in the merged lines (TIM sees it, as in Java) instead of being popped.",
+    "crates/rustuml-parser/src/preprocess/mod.rs + parse/mod.rs: split_blocks tests start and end directives only on raw lines that ReadFilterMergeLines reads as results; lines it merges into a continued line are block content (BlockUmlBuilder tests merged lines).",
+    "crates/rustuml-parser/src/preprocess/mod.rs: push_directive_placeholder and the post-procedure padding emit an internal placeholder value that collapse_post_tim_ending_backslashes skips (it is not a Java TIM line) and that becomes the usual empty line afterwards. Real blank lines are still lines.",
+    "crates/rustuml-parser/src/preprocess/mod.rs: PreprocessContext records the block's end line (its TIM text and diagram source line) when it ends the top-level block; collapse_post_tim_ending_backslashes joins a pending tail with it (text = pending + end text, location = end line) instead of dropping it."
+  ],
+  "planned_change": "Port Pipe#readSingleDiagram's column-0 start/end recognition into the merge input (cut after the end, append expectedEnd otherwise, keep the appended end); make split_blocks honour ReadFilterMergeLines' merged lines; make the post-TIM join skip Rust-only placeholders and join a pending tail with the block's end line.",
+  "out_of_scope": "T14.52 (!foreach JSON; mc1_seq_foreach_body stays a lost rejection for owner sign-off), T14.53 (include line numbering), T14.54 (local themes), T14.32 (sprite crash cases), T14.21/T14.31 (the 11 fresh new valid-input errors against 9834a7194 that predate this packet). Not ported here and declared: Pipe's START_MARK_NOT_FOUND '@startuml' prepend (it shifts Java's line locations by one), Pipe's discard of lines before the column-0 start, and '@@@format' lines.",
+  "perturbation_axes": [
+    "indented end after a continued line: spaces, tab, '\\\\enduml', sequence/class/mindmap",
+    "content after an indented end, then a column-0 end",
+    "column-0 end swallowed by a continuation, then an indented end (Java: no block)",
+    "named start (@startuml name: expectedEnd '@end')",
+    "indented start (Pipe START_MARK_NOT_FOUND)",
+    "included tail before a blank line, a ' comment, an !if block, a second include, the end, and EOF without an end",
+    "two consecutive included tails before a directive",
+    "class link label tail before the end",
+    "ditaa: continued art row in @startditaa vs textually joined art; @startuml + ditaa (not exempt); continued last art row before @endditaa"
+  ],
+  "precommitted_measurement": {
+    "builds": "private release builds, one CARGO_TARGET_DIR each under ~/Library/Caches/rustuml-tim-continuation-round2-claude-maker (maker-round2/support/build.sh): merged base b0fb43c3e (code == 594c2b3c5), tip, 93bf53e18, 9834a7194",
+    "comparator": "unchanged compare_cli (docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs) linked against 93bf53e18's rustuml_oracle; 4 modes (-tsvg, --ast, -ttxt, --yaml, all -pipe); each case from its recorded cwd",
+    "scripts": "unchanged prepare.py a84a4e75, replay.py 1bb2ed6e, classify.py 7cf54607, fresh_classify.py e401b08c, rejection_contract.py 09cd998b; strict_validity.py from checker-claude (exit-100 no-block and crash pages are invalid)",
+    "cohorts": "BU 40, BD 33, BA 64, AY 48, AZ 8, AX 77, AV 63, AT 45, AS/AQ/790/28 = 915, retained 4,174, golden 12,550 (SVG bytes), round-2 probes (new relay batch r2)",
+    "bar": "zero lost matches, lost rejections, new valid-input errors and panics vs the merged base in every cohort; gains; no-oracle failure-name diff vs 9834a7194; golden_pairs; parity_perturbations; harness_guards by category; pipe_mode; workspace lib; rejection_contract.py",
+    "predictions": {
+      "tc1_seq_indented_end_after_backslash": "match (message 'last   @enduml' at line 1)",
+      "tc1_seq_include_tail_before_end": "match (message 'tail @enduml' at the end line's location 3)",
+      "tc1_seq_include_then_define": "match ('tail Tui -> Kea : two' at 3)",
+      "tc1_seq_include_then_directive": "match ('tail Tui -> Kea : two 2' at 3)",
+      "other BU/BD cases": "unchanged from the merged base",
+      "BA, AY, AZ, AX, AV, AT, AS/AQ/790/28, retained": "no outcome change vs the merged base",
+      "golden 12,550": "no outcome change vs the merged base; any SVG byte change is limited to sources without an end directive (the kept appended end enters the SVG id seed) and is reported"
+    }
+  },
+  "cross_family_scope": "The Pipe end rule and split_blocks change are family-independent. The post-TIM join applies to @startuml blocks only, as before. The ditaa exemption is unchanged.",
+  "frozen": "comparator slack, syntax markers, park list, error census, guard allow-lists, strict-XML malformed list and the 15-source approved valid-error set stay unchanged."
+}

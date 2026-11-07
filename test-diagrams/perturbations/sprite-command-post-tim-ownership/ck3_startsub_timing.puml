@@ -1,0 +1,9 @@
+@startuml
+robust "Web" as W
+!startsub T
+@0
+W is Idle
+!endsub
+@5
+W is Busy
+@enduml

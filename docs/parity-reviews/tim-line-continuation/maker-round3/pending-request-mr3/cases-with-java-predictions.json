@@ -1,0 +1,235 @@
+[
+ {
+  "name": "mr3_seq_chr30_rsp_after_directive",
+  "intended_valid": false,
+  "axes": [
+   "stand-in",
+   "%chr(30)RSP after a directive"
+  ],
+  "java_prediction": "no command accepts the line: syntax error (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_procedure_emits_rs_line",
+  "intended_valid": false,
+  "axes": [
+   "stand-in",
+   "procedure output"
+  ],
+  "java_prediction": "syntax error on the emitted line",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_include_rs_line",
+  "intended_valid": false,
+  "axes": [
+   "stand-in",
+   "raw U+001E RSP in an included file"
+  ],
+  "java_prediction": "syntax error on the included line",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_rs_line_in_if",
+  "intended_valid": false,
+  "axes": [
+   "stand-in",
+   "inside an active !if"
+  ],
+  "java_prediction": "syntax error",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_end_continued_one_line",
+  "intended_valid": false,
+  "axes": [
+   "two-line",
+   "end line ends with backslash, one line before"
+  ],
+  "java_prediction": "the pending end is dropped: 2 lines -> Welcome",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_end_continued_two_lines",
+  "intended_valid": true,
+  "axes": [
+   "two-line control",
+   "end line ends with backslash, two lines before"
+  ],
+  "java_prediction": "3 lines: messages 'one' and 'two'",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_bad_tail_then_end",
+  "intended_valid": false,
+  "axes": [
+   "two-line",
+   "joined line no command accepts"
+  ],
+  "java_prediction": "PSystemWelcomeFactory runs first: Welcome, not a syntax error",
+  "crlf": false
+ },
+ {
+  "name": "mr3_class_link_tail_then_end",
+  "intended_valid": true,
+  "axes": [
+   "two-line control",
+   "class",
+   "joined link before end with two classes"
+  ],
+  "java_prediction": "4 lines: class diagram with link 'feeds @enduml'",
+  "crlf": false
+ },
+ {
+  "name": "mr3_class_only_link_tail_then_end",
+  "intended_valid": false,
+  "axes": [
+   "two-line",
+   "class link tail absorbs the end"
+  ],
+  "java_prediction": "2 lines -> Welcome (Welcome factory precedes class)",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_chr92_tail_then_tab_end",
+  "intended_valid": false,
+  "axes": [
+   "two-line",
+   "tab-indented end is BlockUmlBuilder's end"
+  ],
+  "java_prediction": "'t \\t@enduml' joined: 2 lines -> Welcome",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_tail_then_end_three_lines",
+  "intended_valid": true,
+  "axes": [
+   "two-line control",
+   "three lines"
+  ],
+  "java_prediction": "messages 'one' and 'tail @enduml'",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_tail_then_backslash_end_then_text",
+  "intended_valid": false,
+  "axes": [
+   "two-line",
+   "\\enduml ends the block",
+   "text after it"
+  ],
+  "java_prediction": "'tail \\enduml': 2 lines -> Welcome",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_tail_then_option_then_msg",
+  "intended_valid": true,
+  "axes": [
+   "stand-in",
+   "!option is a TIM directive"
+  ],
+  "java_prediction": "'tail Tui -> Kea : two' (the !option line is no TIM line)",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_backslash_end_plain",
+  "intended_valid": true,
+  "axes": [
+   "end-directive",
+   "\\enduml without a continuation"
+  ],
+  "java_prediction": "block ends at \\enduml: message 'one'",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_backslash_end_then_more",
+  "intended_valid": true,
+  "axes": [
+   "end-directive",
+   "content after \\enduml"
+  ],
+  "java_prediction": "message 'one' only",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_wrapped_preamble_dropped",
+  "intended_valid": true,
+  "axes": [
+   "wrapped-include",
+   "lines before the start are not read"
+  ],
+  "java_prediction": "WHO is not defined: participant 'WHO', message 'w'",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_wrapped_trailer_dropped",
+  "intended_valid": true,
+  "axes": [
+   "wrapped-include",
+   "lines after the end are not read"
+  ],
+  "java_prediction": "message 'inside' only",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_wrapped_continued_line",
+  "intended_valid": true,
+  "axes": [
+   "wrapped-include",
+   "continuation merged inside the file"
+  ],
+  "java_prediction": "messages 'first second' and 'main'",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_wrapped_indented",
+  "intended_valid": true,
+  "axes": [
+   "wrapped-include",
+   "indented start and end"
+  ],
+  "java_prediction": "message 'indented'",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_wrapped_comment_header",
+  "intended_valid": true,
+  "axes": [
+   "wrapped-include",
+   "UncommentReadLine header removal"
+  ],
+  "java_prediction": "message 'commented'",
+  "crlf": false
+ },
+ {
+  "name": "mr3_seq_wrapped_two_blocks",
+  "intended_valid": true,
+  "axes": [
+   "wrapped-include",
+   "first block only"
+  ],
+  "java_prediction": "message 'block one' only",
+  "crlf": false
+ },
+ {
+  "name": "mr3_class_wrapped_continued",
+  "intended_valid": true,
+  "axes": [
+   "wrapped-include",
+   "class",
+   "continuation inside the file"
+  ],
+  "java_prediction": "class Rimu with stereotype native",
+  "crlf": false
+ },
+ {
+  "name": "mr3_class_raw_tail_control",
+  "intended_valid": true,
+  "axes": [
+   "control",
+   "unwrapped include tail joins after TIM"
+  ],
+  "java_prediction": "'class Rimu <<native>>' and class Kauri",
+  "crlf": false
+ }
+]

@@ -1,0 +1,8 @@
+@startuml
+Kea -> Tui : hi
+legend
+line one \
+two
+three
+endlegend
+@enduml

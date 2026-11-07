@@ -1,0 +1,7 @@
+@startuml
+participant Alder
+participant Osprey
+Alder -> Osprey: audit
+participant Cedar#Wheat
+Cedar -> Alder: paint
+@enduml

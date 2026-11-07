@@ -1,0 +1,376 @@
+{
+ "mk4_tim_sprite_in_procedure (AY, Java data-source-line 8)": {
+  "source": "@startuml\n!procedure $mk()\nsprite $dot [2x2/16] {\nF0\n0F\n} /' e '/\n!endprocedure\n$mk()\nclass Oak\n@enduml\n",
+  "results": {
+   "93bf53e18": {
+    "exit": 0,
+    "svg_sha256": "d4793bd61070a28784a0e6b211f5615ddc3e2d88ef42ac51be91a4d91f3bcfc4",
+    "svg_sha256_gradient_ids_normalised": "d4793bd61070a28784a0e6b211f5615ddc3e2d88ef42ac51be91a4d91f3bcfc4",
+    "source_lines": [
+     [
+      "Oak",
+      "8"
+     ]
+    ],
+    "stderr": ""
+   },
+   "044f73657": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "svg_sha256_gradient_ids_normalised": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source_lines": [],
+    "stderr": "parse error: line 2: Cannot read: [2x2/16] {\n"
+   },
+   "c9e11493c": {
+    "exit": 0,
+    "svg_sha256": "4f098e78d3bb6b19f154fa2efbf59689066d43942cca53622bec9d8c5ac3a3c1",
+    "svg_sha256_gradient_ids_normalised": "4f098e78d3bb6b19f154fa2efbf59689066d43942cca53622bec9d8c5ac3a3c1",
+    "source_lines": [
+     [
+      "Oak",
+      "11"
+     ]
+    ],
+    "stderr": ""
+   }
+  }
+ },
+ "same, comment removed": {
+  "source": "@startuml\n!procedure $mk()\nsprite $dot [2x2/16] {\nF0\n0F\n}\n!endprocedure\n$mk()\nclass Oak\n@enduml\n",
+  "results": {
+   "93bf53e18": {
+    "exit": 0,
+    "svg_sha256": "ede2fe64b8e84dd5e5604bdbd32008af551e9e5f2473e0f29ae27b508501abfd",
+    "svg_sha256_gradient_ids_normalised": "ede2fe64b8e84dd5e5604bdbd32008af551e9e5f2473e0f29ae27b508501abfd",
+    "source_lines": [
+     [
+      "Oak",
+      "9"
+     ]
+    ],
+    "stderr": ""
+   },
+   "044f73657": {
+    "exit": 0,
+    "svg_sha256": "4f098e78d3bb6b19f154fa2efbf59689066d43942cca53622bec9d8c5ac3a3c1",
+    "svg_sha256_gradient_ids_normalised": "4f098e78d3bb6b19f154fa2efbf59689066d43942cca53622bec9d8c5ac3a3c1",
+    "source_lines": [
+     [
+      "Oak",
+      "11"
+     ]
+    ],
+    "stderr": ""
+   },
+   "c9e11493c": {
+    "exit": 0,
+    "svg_sha256": "4f098e78d3bb6b19f154fa2efbf59689066d43942cca53622bec9d8c5ac3a3c1",
+    "svg_sha256_gradient_ids_normalised": "4f098e78d3bb6b19f154fa2efbf59689066d43942cca53622bec9d8c5ac3a3c1",
+    "source_lines": [
+     [
+      "Oak",
+      "11"
+     ]
+    ],
+    "stderr": ""
+   }
+  }
+ },
+ "procedure emitting four classes, then class Oak (raw line 9)": {
+  "source": "@startuml\n!procedure $mk()\nclass P1\nclass P2\nclass P3\nclass P4\n!endprocedure\n$mk()\nclass Oak\n@enduml\n",
+  "results": {
+   "93bf53e18": {
+    "exit": 0,
+    "svg_sha256": "cd5f25ad94679afb1d1ab0416b0ba9c422658e163b9b1eeced1b2cb4dafc8abf",
+    "svg_sha256_gradient_ids_normalised": "cd5f25ad94679afb1d1ab0416b0ba9c422658e163b9b1eeced1b2cb4dafc8abf",
+    "source_lines": [
+     [
+      "P1",
+      "2"
+     ],
+     [
+      "P2",
+      "3"
+     ],
+     [
+      "P3",
+      "4"
+     ],
+     [
+      "P4",
+      "5"
+     ],
+     [
+      "Oak",
+      "11"
+     ]
+    ],
+    "stderr": ""
+   },
+   "044f73657": {
+    "exit": 0,
+    "svg_sha256": "cd5f25ad94679afb1d1ab0416b0ba9c422658e163b9b1eeced1b2cb4dafc8abf",
+    "svg_sha256_gradient_ids_normalised": "cd5f25ad94679afb1d1ab0416b0ba9c422658e163b9b1eeced1b2cb4dafc8abf",
+    "source_lines": [
+     [
+      "P1",
+      "2"
+     ],
+     [
+      "P2",
+      "3"
+     ],
+     [
+      "P3",
+      "4"
+     ],
+     [
+      "P4",
+      "5"
+     ],
+     [
+      "Oak",
+      "11"
+     ]
+    ],
+    "stderr": ""
+   },
+   "c9e11493c": {
+    "exit": 0,
+    "svg_sha256": "cd5f25ad94679afb1d1ab0416b0ba9c422658e163b9b1eeced1b2cb4dafc8abf",
+    "svg_sha256_gradient_ids_normalised": "cd5f25ad94679afb1d1ab0416b0ba9c422658e163b9b1eeced1b2cb4dafc8abf",
+    "source_lines": [
+     [
+      "P1",
+      "2"
+     ],
+     [
+      "P2",
+      "3"
+     ],
+     [
+      "P3",
+      "4"
+     ],
+     [
+      "P4",
+      "5"
+     ],
+     [
+      "Oak",
+      "11"
+     ]
+    ],
+    "stderr": ""
+   }
+  }
+ },
+ "seq continuation control: A -> B : one \\ / two": {
+  "source": "@startuml\nA -> B : one \\\ntwo\n@enduml\n",
+  "results": {
+   "93bf53e18": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "svg_sha256_gradient_ids_normalised": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source_lines": [],
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"two\"\n"
+   },
+   "044f73657": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "svg_sha256_gradient_ids_normalised": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source_lines": [],
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"two\"\n"
+   },
+   "c9e11493c": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "svg_sha256_gradient_ids_normalised": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source_lines": [],
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"two\"\n"
+   }
+  }
+ },
+ "seq comment then backslash: /' c '/ \\ / A -> B : hi": {
+  "source": "@startuml\n/' c '/ \\\nA -> B : hi\n@enduml\n",
+  "results": {
+   "93bf53e18": {
+    "exit": 0,
+    "svg_sha256": "e77f9b50fa366431ffc9c94b03ee4cc10346766072f1d699bdffbebcc33b740b",
+    "svg_sha256_gradient_ids_normalised": "e77f9b50fa366431ffc9c94b03ee4cc10346766072f1d699bdffbebcc33b740b",
+    "source_lines": [
+     [
+      "A",
+      "2"
+     ],
+     [
+      "B",
+      "2"
+     ],
+     [
+      "A",
+      "2"
+     ],
+     [
+      "A",
+      "2"
+     ],
+     [
+      "B",
+      "2"
+     ],
+     [
+      "B",
+      "2"
+     ]
+    ],
+    "stderr": ""
+   },
+   "044f73657": {
+    "exit": 0,
+    "svg_sha256": "e77f9b50fa366431ffc9c94b03ee4cc10346766072f1d699bdffbebcc33b740b",
+    "svg_sha256_gradient_ids_normalised": "e77f9b50fa366431ffc9c94b03ee4cc10346766072f1d699bdffbebcc33b740b",
+    "source_lines": [
+     [
+      "A",
+      "2"
+     ],
+     [
+      "B",
+      "2"
+     ],
+     [
+      "A",
+      "2"
+     ],
+     [
+      "A",
+      "2"
+     ],
+     [
+      "B",
+      "2"
+     ],
+     [
+      "B",
+      "2"
+     ]
+    ],
+    "stderr": ""
+   },
+   "c9e11493c": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "svg_sha256_gradient_ids_normalised": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source_lines": [],
+    "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\\"\n"
+   }
+  }
+ },
+ "checker_comments_and_origins": {
+  "source": "@startuml\n\n/' before '/ !theme cerulean\n!if 0\n!theme united\n!endif\n' consume this\nclass Larch /' trailing '/\n\nclass Pine\nLarch --> Pine\n@enduml\n",
+  "results": {
+   "93bf53e18": {
+    "exit": 0,
+    "svg_sha256": "133caf2a815ecc76e40a96f3e872c3c115ebc4c90074b832bca83a87a12d6d8b",
+    "svg_sha256_gradient_ids_normalised": "133caf2a815ecc76e40a96f3e872c3c115ebc4c90074b832bca83a87a12d6d8b",
+    "source_lines": [
+     [
+      "Larch",
+      "5"
+     ],
+     [
+      "Pine",
+      "7"
+     ]
+    ],
+    "stderr": ""
+   },
+   "044f73657": {
+    "exit": 0,
+    "svg_sha256": "133caf2a815ecc76e40a96f3e872c3c115ebc4c90074b832bca83a87a12d6d8b",
+    "svg_sha256_gradient_ids_normalised": "133caf2a815ecc76e40a96f3e872c3c115ebc4c90074b832bca83a87a12d6d8b",
+    "source_lines": [
+     [
+      "Larch",
+      "5"
+     ],
+     [
+      "Pine",
+      "7"
+     ]
+    ],
+    "stderr": ""
+   },
+   "c9e11493c": {
+    "exit": 0,
+    "svg_sha256": "38984adb3cf4c70e84a1bfac3d9977c6a58ae041d1b948b98539ab373ace947e",
+    "svg_sha256_gradient_ids_normalised": "3dcdb442b0702d13ebc3f7b4736d531d70047aa2c393cffb9450a74588be123b",
+    "source_lines": [
+     [
+      "Larch",
+      "5"
+     ],
+     [
+      "Pine",
+      "7"
+     ]
+    ],
+    "stderr": ""
+   }
+  }
+ },
+ "checker_comments_and_origins, comments removed": {
+  "source": "@startuml\n\n!theme cerulean\n!if 0\n!theme united\n!endif\n' consume this\nclass Larch\n\nclass Pine\nLarch --> Pine\n@enduml\n",
+  "results": {
+   "93bf53e18": {
+    "exit": 0,
+    "svg_sha256": "792dbb27d6e4619ccd6ea16f12a9eb74cb71330bfb2627e0fd03254cfc0af322",
+    "svg_sha256_gradient_ids_normalised": "3dcdb442b0702d13ebc3f7b4736d531d70047aa2c393cffb9450a74588be123b",
+    "source_lines": [
+     [
+      "Larch",
+      "5"
+     ],
+     [
+      "Pine",
+      "7"
+     ]
+    ],
+    "stderr": ""
+   },
+   "044f73657": {
+    "exit": 0,
+    "svg_sha256": "792dbb27d6e4619ccd6ea16f12a9eb74cb71330bfb2627e0fd03254cfc0af322",
+    "svg_sha256_gradient_ids_normalised": "3dcdb442b0702d13ebc3f7b4736d531d70047aa2c393cffb9450a74588be123b",
+    "source_lines": [
+     [
+      "Larch",
+      "5"
+     ],
+     [
+      "Pine",
+      "7"
+     ]
+    ],
+    "stderr": ""
+   },
+   "c9e11493c": {
+    "exit": 0,
+    "svg_sha256": "792dbb27d6e4619ccd6ea16f12a9eb74cb71330bfb2627e0fd03254cfc0af322",
+    "svg_sha256_gradient_ids_normalised": "3dcdb442b0702d13ebc3f7b4736d531d70047aa2c393cffb9450a74588be123b",
+    "source_lines": [
+     [
+      "Larch",
+      "5"
+     ],
+     [
+      "Pine",
+      "7"
+     ]
+    ],
+    "stderr": ""
+   }
+  }
+ }
+}

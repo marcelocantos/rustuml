@@ -1,0 +1,8 @@
+@startuml
+!procedure $never()
+!startsub IN
+Alder -> Birch : in sub
+!endsub
+!endprocedure
+Alder -> Birch : main
+@enduml

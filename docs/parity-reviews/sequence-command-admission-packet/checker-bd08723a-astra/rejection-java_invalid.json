@@ -1,0 +1,3425 @@
+{
+  "entries": 122,
+  "before_rejections": 40,
+  "after_rejections": 122,
+  "introduced_losses": [],
+  "after_false_accepts": [],
+  "results": [
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2000_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2000_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2001_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2001_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2002_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2002_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2003_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2003_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2004_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2004_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2005_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2005_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2006_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2006_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2007_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2007_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2008_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2008_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2009_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2009_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_200a_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_200a_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_3000_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_3000_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_1680_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_1680_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_205f_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_205f_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_feff_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_feff_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over Juniper\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_color_boundary_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "97dfa061f1623c986abc5e12be1682f9d80af9cdd7380ab8d52b3d4ef1e8b4eb",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"actor Finch #pink\\u{a0}order 4\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_color_boundary_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "58350d3d2eca7acb7278d91ad4d486ef314bd8e7d552a4704bffbb4c396c0dbb",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"actor Finch #pink\\u{a0}order 4\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_activation_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "d4333475e25537081a9db9d112e1d3fba79ac3c4ac13469b0e3a38a1ab5bb72c",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 6: Syntax error: no registered sequence command accepts \"deactivate\\u{b}Kestrel\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_activation_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "aa95c7e3ef1087d3c9aae40d7fe089f22657b4661de405b0043d788f4dd4cfc4",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 7: Syntax error: no registered sequence command accepts \"deactivate\\u{b}Kestrel\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_autonumber_resume_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "f5f8620907ce924eff8b85681683193dc93610db347bce489baa830aac6d8094",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 7: Syntax error: no registered sequence command accepts \"autonumber\\u{b}resume\\u{b}3\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_autonumber_resume_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "a14607042981a0d50f4a8621f7e67aaa2b85c447a146f42ca87befcb89c4c800",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 8: Syntax error: no registered sequence command accepts \"autonumber\\u{b}resume\\u{b}3\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_create_destroy_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "5e063204dab7a9771553f1844c91cf300f6c9dae68ddd7bcec5454f87ce56601",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 6: Syntax error: no registered sequence command accepts \"destroy\\u{b}F\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_create_destroy_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e4f68c34d8ca7b6ad6c72d7f395c9eb6a6e2e1ba81a2a95110c95450313d4eda",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 7: Syntax error: no registered sequence command accepts \"destroy\\u{b}F\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_hide_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "a5aabdc5e1621533120f2ca98e3dc4fd5ba33cc91da92710317d978b6b38ac9f",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"hide\\u{b}stereotype\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_hide_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "9b984fc3962a296f7d8165d61c422f74e717f10471ee04b6035ad05a1917ee81",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"hide\\u{b}stereotype\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_color_boundary_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "97dfa061f1623c986abc5e12be1682f9d80af9cdd7380ab8d52b3d4ef1e8b4eb",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"actor Finch #pink\\u{b}order 4\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_color_boundary_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "58350d3d2eca7acb7278d91ad4d486ef314bd8e7d552a4704bffbb4c396c0dbb",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"actor Finch #pink\\u{b}order 4\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_color_boundary_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "97dfa061f1623c986abc5e12be1682f9d80af9cdd7380ab8d52b3d4ef1e8b4eb",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"actor Finch #pink\\u{c}order 4\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_color_boundary_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "58350d3d2eca7acb7278d91ad4d486ef314bd8e7d552a4704bffbb4c396c0dbb",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"actor Finch #pink\\u{c}order 4\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_accross_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Use 'across' instead of 'accross'\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Use 'across' instead of 'accross'\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_accross_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Use 'across' instead of 'accross'\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Use 'across' instead of 'accross'\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_coloured_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: A note over command requires a participant\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"note over #pink: prohibited\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_coloured_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: A note over command requires a participant\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"note over #pink: prohibited\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_rect_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: A note over command requires a participant\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"rnote over: prohibited\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_rect_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: A note over command requires a participant\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"rnote over: prohibited\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_hex_multiline_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: A note over command requires a participant\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"hnote over\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_hex_multiline_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: A note over command requires a participant\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"hnote over\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/vt_required_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "78b6bd7229dadafd9dfdd04d6c3737e8449b3951a2111f7b61b972453c0c256b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"activate\\u{b}S\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/vt_required_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "07d726551bcb7829dd6ca9bf129b649afc59234b585790ebcdcd916705f79526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"activate\\u{b}S\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/resume_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "96ee1b5f00bcfcded723a87dc46e746d456adeaf79e27a991d3b497b0904606c",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 6: Syntax error: no registered sequence command accepts \"autonumber\\u{b}resume\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/resume_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "35e64c9874bb28d0c64c2aaf1dbef56ca0fa7d5fe61472c6d5b9f16beb6f3b8c",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 7: Syntax error: no registered sequence command accepts \"autonumber\\u{b}resume\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/accross_negative_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: Use 'across' instead of 'accross'\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: Use 'across' instead of 'accross'\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/accross_negative_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Use 'across' instead of 'accross'\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Use 'across' instead of 'accross'\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "d6ecb5aaadc1e6325a147c7a879c27d8168839960ab5795af988054bb73a6e95",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"participant\\u{b}Depot\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "bdb4d4936489b090c2fe29ba8faee7c079018ebb69b76e9299c80fe64efc4769",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"participant\\u{b}Depot\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c15f97e6278957e91e97543cefea61093ee8d83e880179a99ac89d6c987f9d7b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"activate\\u{b}Vale\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "d6ed8f6e6b4805c1a3010364bcd28d100794b7947045637b8007131ef5181cf2",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"activate\\u{b}Vale\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b7ff860cbaae816feacf8492551298a8decc96a657e8ebdd46776022f0dd55e1",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"destroy\\u{b}Vale\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "0b02477091d52b87b7f7360538390660852de8d6e5b09b47a458439f20da8083",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"destroy\\u{b}Vale\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "2d5dc89e11a4857296d64767719dcde1443f89e364fb0669112eaf1235f7a3a4",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"create\\u{b}Depot\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "f62e8d92831aef6b5437efee6b1c5b12ad079a80da96697f5f033897899ea5d4",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"create\\u{b}Depot\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "443b6c9ca6a9ea2b33b1a158a174b8c3a47cadd37bde687ff30b0f5fa7e79158",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"autoactivate\\u{b}on\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "38e6e5eef85ce188fb209571ebba16d8a22a95854b8424518cf33ce20c35d4af",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"autoactivate\\u{b}on\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "40b5c7125839e7206c72d9af530c3604e2a3b6801facfaf3be786d2d8e179c5d",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 7: Syntax error: no registered sequence command accepts \"autonumber\\u{b}resume\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "d0ed0a2f77785a56b70adb8d6bd8c3669e5ca14fab4d3c89c22adc8b76f7cdd9",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 8: Syntax error: no registered sequence command accepts \"autonumber\\u{b}resume\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "69746d3a4612bb2efdf6ab4319cd0f8ec66ad56c57d52f58ab1643c28658970e",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 6: Syntax error: no registered sequence command accepts \"autonumber\\u{b}stop\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "078fb8035e92657d6555931d15e5828ce3caac38951435efa4ccf0713ce83eec",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 7: Syntax error: no registered sequence command accepts \"autonumber\\u{b}stop\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "7d06de177441fed0fe4c3188f369fe88b6ef57344324ed55fcd290ea23c6a607",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 4: autonumber 1.2\nparse error: line 5: Syntax error: no registered sequence command accepts \"autonumber\\u{b}inc\\u{b}A\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8a15fcc75da3c40fb07cd56de92340eebcbae2dedb563bf530c012caa37bf488",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 5: autonumber 1.2\nparse error: line 6: Syntax error: no registered sequence command accepts \"autonumber\\u{b}inc\\u{b}A\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b7ff860cbaae816feacf8492551298a8decc96a657e8ebdd46776022f0dd55e1",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"note\\u{b}over\\u{b}Vale:ledger\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "0b02477091d52b87b7f7360538390660852de8d6e5b09b47a458439f20da8083",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"note\\u{b}over\\u{b}Vale:ledger\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b7ff860cbaae816feacf8492551298a8decc96a657e8ebdd46776022f0dd55e1",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"note\\u{b}over\\u{b}Quartz,Vale:ledger\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "0b02477091d52b87b7f7360538390660852de8d6e5b09b47a458439f20da8083",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"note\\u{b}over\\u{b}Quartz,Vale:ledger\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b7ff860cbaae816feacf8492551298a8decc96a657e8ebdd46776022f0dd55e1",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"ref\\u{b}over\\u{b}Quartz,Vale:ledger\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "0b02477091d52b87b7f7360538390660852de8d6e5b09b47a458439f20da8083",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"ref\\u{b}over\\u{b}Quartz,Vale:ledger\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b7ff860cbaae816feacf8492551298a8decc96a657e8ebdd46776022f0dd55e1",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"hide\\u{b}stereotype\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "0b02477091d52b87b7f7360538390660852de8d6e5b09b47a458439f20da8083",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"hide\\u{b}stereotype\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "9fa1a13f6f66eb340f40362eeb3fe5f768d473dd5f12370642c74494171d4781",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"\\u{b}|||\\u{b}\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "ffe8de403160d4bb7612a33a2be8f6fe9a1e68b68e54790812a2d3ef696ed0c2",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"\\u{b}|||\\u{b}\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_ff_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "9fa1a13f6f66eb340f40362eeb3fe5f768d473dd5f12370642c74494171d4781",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"\\u{c}|||\\u{c}\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_ff_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "ffe8de403160d4bb7612a33a2be8f6fe9a1e68b68e54790812a2d3ef696ed0c2",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"\\u{c}|||\\u{c}\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_space_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "9fa1a13f6f66eb340f40362eeb3fe5f768d473dd5f12370642c74494171d4781",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"\\u{b} |||\\u{b}\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_space_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "ffe8de403160d4bb7612a33a2be8f6fe9a1e68b68e54790812a2d3ef696ed0c2",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"\\u{b} |||\\u{b}\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "031800a621bcf5171553732aa0fcf028d1c71d25869f0e0c6dbed4f97e470a3a",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"skinparam\\u{b}sequenceMessageAlign\\u{b}right\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "14b5368d3ab23d2ef32d9ecfa8f94a9979fa47ba9cdd538a5718bf441a6bfaed",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"skinparam\\u{b}sequenceMessageAlign\\u{b}right\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_space_nbsp_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8c391dfc6d2d1cadb6d71975a4f33ca52ad2eeadfcdcfcd31e138c9d9cab064a",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"\\u{a0}|||\\u{a0}\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_space_nbsp_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "60fbd00f1ee86419a2472112cbacb6904005a99cecb9ed66229beef881ff8430",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"\\u{a0}|||\\u{a0}\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "052ab3ee3628c609973e5a4fd4aef74b2210aa96f37b7418ee13ab1b5b263ed6",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"autonewpage\\u{b}90\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "793788c48986e3c2dedcc4eb921101d9159815be93e369050296309897f00289",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"autonewpage\\u{b}90\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "4a6a043c4b4c2e2861554d9af4060d958b2a5a5b09bda2aa38a01f6bd2602140",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"hide\\u{b}unlinked\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "ff4b94d3c5ecaa1339c90ab26c375c6bdd0ff5803fc47f4cf84d0bfbd3f1e34c",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 6: Syntax error: no registered sequence command accepts \"hide\\u{b}unlinked\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "66be69e2c3753d05a0c218ca058e540b958c12e5d674c6eec3dde824e565efb4",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"url\\u{b}of\\u{b}Vale\\u{b}is\\u{b}[[https://example.invalid/berth]]\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "4237293086cfd3ebbd053f186619a3da2faa1f57e77324e562b7950be071e321",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"url\\u{b}of\\u{b}Vale\\u{b}is\\u{b}[[https://example.invalid/berth]]\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "397f50c4616a38d5c99c768a047821c9de957ddc95d0a0bd3539f4d637bb90ef",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"participant\\u{b}Depot[\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "7b9f1c0758e23e1761621449de7023d91bf6ef5dc14830500be6fa7a4289d250",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"participant\\u{b}Depot[\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a2_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "1198d4c2ca9f78f722dc2c01cd02ab8f829a45e96a1062e4aee81f3b3e7225e8",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"actor\\u{b}Depot\\u{b}as\\u{b}\\\"Freighter\\\"\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a2_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e28f9ea0a7dadea802f56e711fb05db6e10b081db2b28a4737e930b69ccf71bb",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"actor\\u{b}Depot\\u{b}as\\u{b}\\\"Freighter\\\"\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a3_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "1198d4c2ca9f78f722dc2c01cd02ab8f829a45e96a1062e4aee81f3b3e7225e8",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"actor\\u{b}Freighter\\u{b}as\\u{b}Depot\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a3_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e28f9ea0a7dadea802f56e711fb05db6e10b081db2b28a4737e930b69ccf71bb",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"actor\\u{b}Freighter\\u{b}as\\u{b}Depot\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a4_vt_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e592390a341fe99e87d63e51df5a4cb0e080a106f335b0c3c1cf7a29f8451f4b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"actor\\u{b}\\\"Freighter\\\"\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a4_vt_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "45c9885ede91814a94dd73e97f857ba44274056e16211881eb9baa853275dff0",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Syntax error: no registered sequence command accepts \"actor\\u{b}\\\"Freighter\\\"\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_note_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8371cb10efbfb7fac9553496bcda9a0f8e43f7ef6f8ea4f317e4d9296e72e94e",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: No such color\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_note_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "84bca4d77a2757e413425316454ab2c10e0a62fe9681235cf0bc987465fc29d7",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: No such color\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_rnote_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8c915d8b64fff23aebe90d617e17c73cab7f5dba2a3f8282141deec9e9295a9b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: No such color\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_rnote_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "cf8767503d6f17357e3e778c6b09cd03e67c55100b1369e09d40674474992a97",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: No such color\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_hnote_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "3ba808f8c08e2cc993e61ac0bd7a52af1e3162d5a11ab023d00ab82b2c96324d",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: No such color\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_hnote_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "36466d203d5dac1a1c63e42744dc5e7173b691698ae38453181f118ec74f3805",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: No such color\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/unknown_command_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8e44f9a00edacf193e486daf60a963e6c50be4968b418af25d6faa46b96005e1",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"fling N sideways\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/unknown_command_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "07d726551bcb7829dd6ca9bf129b649afc59234b585790ebcdcd916705f79526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"fling N sideways\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/invalid_suffix_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8e44f9a00edacf193e486daf60a963e6c50be4968b418af25d6faa46b96005e1",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"hide footbox garbage\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/invalid_suffix_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "07d726551bcb7829dd6ca9bf129b649afc59234b585790ebcdcd916705f79526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"hide footbox garbage\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/invalid_gap_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "0e80e0315aa5c8067760dbb5fd23c3140f8b52d54703419bbbc31191ca6aa548",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"N\\u{2003}->\\u{2003}S: seed\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/invalid_gap_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c055fb874c18d09eef16dd0af7fda0ec7b342bcebe6ad7144f533be138436c16",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"N\\u{2003}->\\u{2003}S: seed\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_simple_invalid_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "41958488da0ad960e677b96eb3dcfe4bd744cb16e94efe5a061f8837d29c7968",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 2: No such color\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_simple_invalid_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "353683063697ef65264d62e292301653caf4eb386c1a9bb65afe90dc8d001fa5",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: No such color\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_composite_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8199348cfd2ee95d94d4d90a7559fc870b79b807354cf16835fde52b802333e9",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 2: No such color\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_composite_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c9d1a18b23f3aab66331481a60f19a117746e0e0cfcda5daeb8e911de29ed18d",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: No such color\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    }
+  ]
+}

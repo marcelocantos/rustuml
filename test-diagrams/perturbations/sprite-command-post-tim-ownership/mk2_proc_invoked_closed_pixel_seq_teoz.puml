@@ -1,0 +1,14 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+!procedure $gem()
+sprite $gem [2x2/16] {
+F0
+0F
+}
+!endprocedure
+$gem()
+Spruce -> Cedar: back
+@enduml

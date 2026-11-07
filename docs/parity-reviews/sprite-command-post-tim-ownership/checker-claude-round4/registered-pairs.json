@@ -1,0 +1,662 @@
+[
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_trailing_comment_class.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_trailing_comment_class.svg",
+  "result": "pass",
+  "axes": [
+   "svg body line",
+   "trailing /' '/",
+   "class",
+   "AY held out",
+   "after: match",
+   "93bf53e18: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_leading_comment_usecase.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_leading_comment_usecase.svg",
+  "result": "pass",
+  "axes": [
+   "svg body line",
+   "leading /' '/ (PLAIN, tail kept)",
+   "usecase",
+   "AY held out",
+   "after: match",
+   "93bf53e18: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_two_comments_object.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_two_comments_object.svg",
+  "result": "pass",
+  "axes": [
+   "svg body lines",
+   "two trailing spans, one without space",
+   "object",
+   "AY held out",
+   "after: match",
+   "93bf53e18: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_triple_word_component.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_triple_word_component.svg",
+  "result": "pass",
+  "axes": [
+   "svg body line",
+   "mid-line /'''word'''/ removed",
+   "component",
+   "AY held out",
+   "after: match",
+   "93bf53e18: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_triple_spaced_state.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_triple_spaced_state.svg",
+  "result": "pass",
+  "axes": [
+   "svg body line",
+   "mid-line /''' spaced '''/ kept (\\w only)",
+   "state",
+   "AY held out",
+   "after: match",
+   "93bf53e18: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_end_triple_word_seq.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_end_triple_word_seq.svg",
+  "result": "pass",
+  "axes": [
+   "svg END line",
+   "trailing /'''word'''/ (lastIndexOf /')",
+   "sequence",
+   "AY held out",
+   "after: match",
+   "93bf53e18: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_inline_leading_comment_deployment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_inline_leading_comment_deployment.svg",
+  "result": "pass",
+  "axes": [
+   "single-line svg sprite",
+   "leading /' '/ before the sprite command",
+   "deployment",
+   "AY held out",
+   "after: match",
+   "93bf53e18: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_start_trailing_comment_activity3.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_start_trailing_comment_activity3.svg",
+  "result": "pass",
+  "axes": [
+   "svg start line",
+   "trailing /' '/",
+   "activity3",
+   "AY held out",
+   "after: match",
+   "93bf53e18: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_triple_word_class.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_triple_word_class.svg",
+  "result": "pass",
+  "axes": [
+   "pixel row",
+   "mid-line /'''word'''/ removed",
+   "class",
+   "AY held out",
+   "after: match",
+   "93bf53e18: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_triple_spaced_trailing_deployment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_triple_spaced_trailing_deployment.svg",
+  "result": "pass",
+  "axes": [
+   "pixel row",
+   "/''' spaced '''/ then a space: Java trim ends with '/, trailing branch removes it",
+   "deployment",
+   "AY held out",
+   "after: match",
+   "93bf53e18: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_trailing_nospace_usecase.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_trailing_nospace_usecase.svg",
+  "result": "pass",
+  "axes": [
+   "pixel row",
+   "trailing /' '/ without space",
+   "usecase",
+   "AY held out",
+   "after: match",
+   "93bf53e18: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_start_nospace_comment_state.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_start_nospace_comment_state.svg",
+  "result": "pass",
+  "axes": [
+   "pixel start line",
+   "trailing /' '/ without space",
+   "state",
+   "AY held out",
+   "after: match",
+   "93bf53e18: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_end_leading_comment_object.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_end_leading_comment_object.svg",
+  "result": "pass",
+  "axes": [
+   "pixel END line",
+   "leading /' '/ before }",
+   "object",
+   "AY held out",
+   "after: match",
+   "93bf53e18: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_end_triple_word_deployment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_end_triple_word_deployment.svg",
+  "result": "pass",
+  "axes": [
+   "pixel END line",
+   "trailing /'''word'''/",
+   "deployment",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_triple_word_ref_component.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_triple_word_ref_component.svg",
+  "result": "fail",
+  "axes": [
+   "pixel row",
+   "mid-line /'''word'''/ removed",
+   "sprite referenced",
+   "component",
+   "AY held out",
+   "after: compare-3",
+   "93bf53e18: compare-3"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_trailing_ref_class.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_trailing_ref_class.svg",
+  "result": "fail",
+  "axes": [
+   "pixel row",
+   "trailing /' '/",
+   "sprite referenced",
+   "class",
+   "AY held out",
+   "after: mismatch",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_leading_start_ref_state.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_leading_start_ref_state.svg",
+  "result": "fail",
+  "axes": [
+   "pixel start line",
+   "leading /' '/ (was dropped whole)",
+   "sprite referenced",
+   "state",
+   "AY held out",
+   "after: mismatch",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_message_trailing_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_message_trailing_comment.svg",
+  "result": "pass",
+  "axes": [
+   "sequence message",
+   "trailing /' '/",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_message_leading_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_message_leading_comment.svg",
+  "result": "pass",
+  "axes": [
+   "sequence message",
+   "leading /' '/ (was dropped whole)",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_quoted_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_quoted_comment.svg",
+  "result": "pass",
+  "axes": [
+   "sequence message",
+   "span inside an open double quote (no quote handling)",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_participant_quote_then_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_participant_quote_then_comment.svg",
+  "result": "pass",
+  "axes": [
+   "sequence participant",
+   "/' inside quotes, last /' is the comment",
+   "AY held out",
+   "after: match",
+   "93bf53e18: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_note_body_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_note_body_comment.svg",
+  "result": "pass",
+  "axes": [
+   "sequence note body",
+   "trailing /' '/",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_apostrophe_not_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_apostrophe_not_comment.svg",
+  "result": "pass",
+  "axes": [
+   "sequence message",
+   "apostrophes that are not /' or '/ (unchanged)",
+   "AY held out",
+   "after: match",
+   "93bf53e18: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_class_member_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_class_member_comment.svg",
+  "result": "pass",
+  "axes": [
+   "class body member",
+   "trailing /' '/",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_class_leading_comment_decl.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_class_leading_comment_decl.svg",
+  "result": "pass",
+  "axes": [
+   "class declaration",
+   "leading /' '/ (was dropped whole)",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_object_triple_in_quotes.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_object_triple_in_quotes.svg",
+  "result": "pass",
+  "axes": [
+   "object declaration",
+   "/'''word'''/ inside quotes removed",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_component_trailing_nospace.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_component_trailing_nospace.svg",
+  "result": "pass",
+  "axes": [
+   "component",
+   "trailing /' '/ without space",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_state_transition_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_state_transition_comment.svg",
+  "result": "pass",
+  "axes": [
+   "state transition label",
+   "trailing /' '/",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_usecase_leading_comment_usecase.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_usecase_leading_comment_usecase.svg",
+  "result": "fail",
+  "axes": [
+   "usecase element",
+   "leading /' '/ (was dropped whole)",
+   "AY held out",
+   "after: mismatch",
+   "93bf53e18: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_activity3_action_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_activity3_action_comment.svg",
+  "result": "pass",
+  "axes": [
+   "activity3 action",
+   "trailing /' '/",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_mindmap_node_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_mindmap_node_comment.svg",
+  "result": "fail",
+  "axes": [
+   "mindmap node",
+   "trailing /' '/",
+   "AY held out",
+   "after: mismatch",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_gantt_task_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_gantt_task_comment.svg",
+  "result": "pass",
+  "axes": [
+   "gantt task",
+   "trailing /' '/",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_json_member_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_json_member_comment.svg",
+  "result": "pass",
+  "axes": [
+   "json body line",
+   "trailing /' '/ (Rust left invalid JSON before)",
+   "AY held out",
+   "after: match",
+   "93bf53e18: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_salt_widget_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_salt_widget_comment.svg",
+  "result": "pass",
+  "axes": [
+   "salt widget line",
+   "trailing /' '/",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_class_skinparam_leading_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_class_skinparam_leading_comment.svg",
+  "result": "pass",
+  "axes": [
+   "skinparam line",
+   "leading /' '/ (directive kept)",
+   "class",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_define_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_define_comment.svg",
+  "result": "pass",
+  "axes": [
+   "!define value",
+   "trailing /' '/",
+   "sequence",
+   "AY held out",
+   "after: match",
+   "93bf53e18: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_procedure_body_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_procedure_body_comment.svg",
+  "result": "pass",
+  "axes": [
+   "!procedure body",
+   "trailing /' '/",
+   "sequence",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_if_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_if_comment.svg",
+  "result": "pass",
+  "axes": [
+   "!if condition",
+   "trailing /' '/",
+   "class",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_sprite_in_procedure.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_sprite_in_procedure.svg",
+  "result": "fail",
+  "axes": [
+   "sprite inside !procedure body",
+   "pixel END trailing /' '/",
+   "class",
+   "AY held out",
+   "after: mismatch",
+   "93bf53e18: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_startsub_comment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_startsub_comment.svg",
+  "result": "pass",
+  "axes": [
+   "!startsub line",
+   "trailing /' '/",
+   "class",
+   "AY held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_leading_comment_ends_with_open.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_leading_comment_ends_with_open.svg",
+  "result": "fail",
+  "axes": [
+   "leading /' '/ on a line ending with /'",
+   "Rust long-comment start residue (unchanged)",
+   "sequence",
+   "AY held out",
+   "after: mismatch",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_text_fill_apostrophe_seq.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_text_fill_apostrophe_seq.svg",
+  "result": "fail",
+  "axes": [
+   "svg <text> with fill",
+   "apostrophe inside sprite text",
+   "control for ck3_svg_inline_quoted_apostrophe_seq",
+   "AY held out",
+   "after: mismatch",
+   "93bf53e18: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_ctl_svg_end_state.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_ctl_svg_end_state.svg",
+  "result": "fail",
+  "axes": [
+   "control: ck3_svg_end_inner_comment_state without the comment",
+   "state",
+   "AY held out",
+   "after: mismatch",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_ctl_pixel_end_seq.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_ctl_pixel_end_seq.svg",
+  "result": "fail",
+  "axes": [
+   "control: ck3_pixel_end_inner_comment_seq without the comment",
+   "sequence",
+   "AY held out",
+   "after: mismatch",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_trailing_comment_seq.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_trailing_comment_seq.svg",
+  "result": "pass",
+  "axes": [
+   "!theme seed source",
+   "trailing /' '/",
+   "sequence",
+   "AZ held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_trailing_comment_usecase.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_trailing_comment_usecase.svg",
+  "result": "fail",
+  "axes": [
+   "!theme seed source",
+   "trailing /' '/",
+   "usecase",
+   "AZ held out",
+   "after: valid-error",
+   "93bf53e18: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_leading_comment_component.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_leading_comment_component.svg",
+  "result": "fail",
+  "axes": [
+   "!theme seed source",
+   "leading /' '/ (PLAIN, tail kept)",
+   "component",
+   "AZ held out",
+   "after: mismatch",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_triple_word_state.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_triple_word_state.svg",
+  "result": "pass",
+  "axes": [
+   "!theme seed source",
+   "mid-line /'''word'''/",
+   "state",
+   "AZ held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_comment_before_theme_class.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_comment_before_theme_class.svg",
+  "result": "pass",
+  "axes": [
+   "!theme after an inner-comment line",
+   "trailing /' '/",
+   "class",
+   "AZ held out",
+   "after: match",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_pixel_sprite_end_comment_object.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_pixel_sprite_end_comment_object.svg",
+  "result": "fail",
+  "axes": [
+   "!theme seed source",
+   "pixel END trailing /' '/",
+   "object",
+   "AZ held out",
+   "after: mismatch",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_whole_line_comment_class.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_whole_line_comment_class.svg",
+  "result": "fail",
+  "axes": [
+   "!theme seed source",
+   "whole-line ' comment (residue: raw text kept in Rust seed source)",
+   "class",
+   "AZ held out",
+   "after: mismatch",
+   "93bf53e18: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_block_comment_class.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_block_comment_class.svg",
+  "result": "fail",
+  "axes": [
+   "!theme seed source",
+   "block comment (residue: raw text kept in Rust seed source)",
+   "class",
+   "AZ held out",
+   "after: mismatch",
+   "93bf53e18: mismatch"
+  ]
+ }
+]

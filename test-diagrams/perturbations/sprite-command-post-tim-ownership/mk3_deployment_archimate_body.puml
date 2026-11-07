@@ -1,0 +1,6 @@
+@startuml
+archimate #Business Plan [
+first
+Sprite plan text
+]
+@enduml

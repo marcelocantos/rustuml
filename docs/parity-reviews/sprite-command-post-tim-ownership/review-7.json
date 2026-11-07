@@ -1,0 +1,104 @@
+{
+ "schema_version": 1,
+ "mechanism": "sprite-command-post-tim-ownership",
+ "account_commit": "60bee23b82d691d241b1056029865f998bae642d",
+ "implementation_commit": "d28dd64a91a594d29fb661a5239659b9eabf2b00",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "reviewer": {
+  "task_id": "T3 thread t3-a7fabc1d, branch review/tim-continuation-round3-claude",
+  "model": "claude-opus-5-5"
+ },
+ "commands": [
+  "git switch -c review/tim-continuation-round3-claude f2accc662; submodule test-diagrams/golden hydrated with --reference at 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "checker-claude-round3/support/build.sh: git archive d28dd64a9 / a5720e095 / 93bf53e18 / 9834a7194 (Cargo.toml, Cargo.lock, crates, vendor), one CARGO_TARGET_DIR each, deleted after the binary was saved; compare_cli from unchanged source d1424469 linked against 93bf53e18 rustuml_oracle; hashes in binaries.sha256",
+  "Pre-registration commit 745c941acf74f3fda64adc37f49468365b900839 before any Java result: batch CR3 (88 cases, 22 resources), relayed as CA (tim-continuation-cr3, reference-results.json b7930a53...)",
+  "prepare.py (unchanged) for BZ (tim-continuation-mr3) and CA; strict_validity.py, no_diagram_validity.py; verify_fresh.py over all 13 prepared manifests: 0 source/SVG hash mismatches",
+  "run_all.sh: unchanged replay.py + compare_cli, 4 modes, each case from its recorded cwd, cohorts CA BZ BY BW BU BD BA AY AZ AX AV AT, AS/AQ/790/28 (915), retained 4,174, golden 12,550, at all four builds",
+  "summarize_r3.py (unchanged classify.outcome + validity adjustment + explicit Welcome classification); percase_r3.py",
+  "rejection_contract.py (unchanged), tip vs each before build, every fresh cohort",
+  "gates.sh: workspace lib, pipe_mode, golden_no_oracle, golden_pairs, parity_perturbations, harness_guards at the review branch; golden_no_oracle/golden_pairs at 9834a7194 (rerun to keep failure-name files: gates_9834_names.sh); parity_perturbations and harness_guards at a5720e095",
+  "register_r3.py: 40 Java-valid resource-free SVG pairs (3 BZ, 37 CA) into test-diagrams/perturbations/tim-line-continuation/; parity_perturbations rerun at the tip after registration for each pair's result"
+ ],
+ "findings": [
+  "WHOLE-LINE VERDICT REJECT at maker tip f2accc662 (code d28dd64a9). The continuation packet still carries packet-caused losses against the merged base a5720e095: lost matches cr3_dir_pragma_start and cr3_dir_teoz_pragma_start (two-line rule miscounts !pragma, which Java keeps as a TIM line), and lost rejections cr3_end_nel_before_bs_end (U+0085 treated as Java whitespace in is_end_directive) and cr3_end_bs_in_procdef (count-1 Empty description error rendered as the exit-0 Welcome page). See ../tim-line-continuation/review-3.json.",
+  "vs 93bf53e18 (pre-packet sprite baseline): lost matches ck4_procedure_sprite_end_comment_two and mk4_tim_sprite_in_procedure (T14.33); lost rejections ck3_svg_inline_quoted_apostrophe_seq (T14.32), mc1_seq_foreach_body (T14.52), cr3_end_nel_before_bs_end and cr3_end_bs_in_procdef (packet). Contract-listed but Java-equivalent: cr2_seq_tail_then_backslash_end, mr3_seq_bad_tail_then_end, mr3_seq_tail_then_backslash_end_then_text, cr3_two_double_tail, cr3_two_activity_tail (Java exit-0 Welcome pages, reproduced at the tip).",
+  "vs 9834a7194 (parity-recovery code): 0 lost matches, 0 lost rejections. New valid-input errors: the 13 approved retained sources (unchanged set); the 11 known fresh (mc1_usecase_continued, ck4_seq_divider_trailing, ck4_usecase_leading_actor_line, mk4b_theme_trailing_comment_usecase, ck3_usecase_note_top_of_paren, ck3_class_enum_upper_body, mk3_usecase_right_header_body, mk3_deployment_archimate_body, ck_usecase_header_body, mk2_proc_uninvoked_svg_usecase, mk2_usecase_note_upper: T14.21, ck4_seq_divider_trailing T14.31); r2_component_include_tail_then_variable (T14.21); cr2_seq_pre_start_backslash_text (T14.26); and 8 new from CA, all valid-error since 93bf53e18 where 9834a7194 rendered a mismatch: cr3_end_us_before_bs_end (U+001C-U+001F not Java whitespace in Rust), cr3_end_tim_chr64_enduml and cr3_end_tim_chr92_enduml (PSystemCommandFactory end peek), cr3_wrap_first_is_mindmap (Java dispatches '* mm' in @startuml to ACTIVITY; T14.21), cr3_wrap_superscript_header (isLetterOrDigit), cr3_wrap_bom_hash_header, cr3_wrap_bom_inner_line, cr3_raw_bom_include (per-line BOM strip).",
+  "Frozen items unchanged across 9834a7194..f2accc662; golden 12,550 at the tip: 11,181 match, 0 SVG byte changes vs a5720e095; retained 4,174: 2,667 match, 0 SVG byte changes vs a5720e095."
+ ],
+ "verdict": "rejected",
+ "record": "docs/parity-reviews/tim-line-continuation/checker-claude-round3/",
+ "perturbations": [
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_comment_only_then_msg.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_comment_only_then_msg.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at d28dd64a9 (maker tip f2accc662)",
+    "parity_perturbations at the review branch after registration: pass"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_next_leading.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_next_leading.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at d28dd64a9 (maker tip f2accc662)",
+    "parity_perturbations at the review branch after registration: pass"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_comment_then_backslash.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_comment_then_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at d28dd64a9 (maker tip f2accc662)",
+    "parity_perturbations at the review branch after registration: pass"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_component_comment_then_backslash.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_component_comment_then_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at d28dd64a9 (maker tip f2accc662)",
+    "parity_perturbations at the review branch after registration: pass"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_state_comment_then_backslash.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_state_comment_then_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at d28dd64a9 (maker tip f2accc662)",
+    "parity_perturbations at the review branch after registration: pass"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_continuation_next_leading.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_continuation_next_leading.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at d28dd64a9 (maker tip f2accc662)",
+    "parity_perturbations at the review branch after registration: pass"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_procedure_sprite_end_comment_two.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_procedure_sprite_end_comment_two.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at d28dd64a9 (maker tip f2accc662)",
+    "parity_perturbations at the review branch after registration: fail"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_sprite_in_procedure.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_sprite_in_procedure.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at d28dd64a9 (maker tip f2accc662)",
+    "parity_perturbations at the review branch after registration: fail"
+   ]
+  }
+ ]
+}

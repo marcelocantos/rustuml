@@ -1,0 +1,5 @@
+@startuml
+participant Spruce
+control Cedar<<woody>>#PaleGreen
+Spruce -> Cedar: pollen
+@enduml

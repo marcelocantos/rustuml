@@ -1,0 +1,11 @@
+@startuml
+<style>
+node {
+BackgroundColor #EEEEEE
+}
+</style>
+node Server
+note right of Server
+Sprite sheets are loaded
+end note
+@enduml

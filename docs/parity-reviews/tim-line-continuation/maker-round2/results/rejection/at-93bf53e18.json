@@ -1,0 +1,93 @@
+{
+  "entries": 3,
+  "before_rejections": 2,
+  "after_rejections": 3,
+  "introduced_losses": [],
+  "after_false_accepts": [],
+  "results": [
+    {
+      "source": "ck_svg_body_trailing_after_end_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-maker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nparse error: line 3: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\">\"\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-maker/bin/rustuml-tip",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\">\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "ck_svg_body_trailing_after_end_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-maker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nparse error: line 4: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\">\"\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-maker/bin/rustuml-tip",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\">\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "ck_svg_body_trailing_after_end_class.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-maker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "4f0fd0c91bbe44005b04ecb8112b470afb6ba17a32ba8872359db000dc98bf93",
+          "stderr": "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-maker/bin/rustuml-tip",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Syntax Error? sprite command never completed: sprite $tag <svg width=\"4\" height=\"4\">\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    }
+  ]
+}

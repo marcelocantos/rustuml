@@ -1,0 +1,6 @@
+@startuml
+state Idle
+left footer
+sprite $x [4x4/16] {
+endfooter
+@enduml

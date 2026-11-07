@@ -1,0 +1,66 @@
+{
+ "changes": [
+  {
+   "name": "ck4_seq_continuation_next_leading",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_seq_continuation_comment_only_then_msg",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_class_comment_then_backslash",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_component_comment_then_backslash",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_state_comment_then_backslash",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_class_continuation_next_leading",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  }
+ ],
+ "losses": [],
+ "disagreements": []
+}

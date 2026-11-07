@@ -1,0 +1,8 @@
+@startuml
+node Rack {
+node Box
+header
+Sprite sheets are loaded
+endheader
+}
+@enduml

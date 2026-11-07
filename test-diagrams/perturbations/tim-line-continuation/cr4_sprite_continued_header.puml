@@ -1,0 +1,10 @@
+@startuml
+sprite $kiwi \
+[4x4/16] {
+0000
+0F00
+00F0
+0000
+}
+Kea -> Tui : <$kiwi>
+@enduml

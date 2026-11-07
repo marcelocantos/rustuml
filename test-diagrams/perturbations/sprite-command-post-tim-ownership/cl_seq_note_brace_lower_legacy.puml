@@ -1,0 +1,8 @@
+@startuml
+participant Oak
+participant Elm
+note right of Elm
+sprite atlas {
+end note
+Oak -> Elm: go
+@enduml

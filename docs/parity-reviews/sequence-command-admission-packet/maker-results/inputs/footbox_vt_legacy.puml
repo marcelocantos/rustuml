@@ -1,0 +1,4 @@
+@startuml
+N -> S: seed
+hidefootbox
+@enduml

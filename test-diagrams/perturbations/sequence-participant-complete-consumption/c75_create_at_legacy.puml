@@ -1,0 +1,5 @@
+@startuml
+participant Spruce
+create @Cedar
+Spruce -> @Cedar: pollen
+@enduml

@@ -1,0 +1,5 @@
+@startyaml
+desc: |
+  sprite sheet ready
+name: atlas
+@endyaml

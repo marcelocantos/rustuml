@@ -1,0 +1,125 @@
+{
+  "entries": 4,
+  "before_rejections": 0,
+  "after_rejections": 1,
+  "introduced_losses": [],
+  "after_false_accepts": [
+    "mk4_pixel_row_triple_spaced_component.puml",
+    "mk4_svg_text_nofill_plain_seq.puml",
+    "mk4_svg_text_nofill_usecase.puml"
+  ],
+  "results": [
+    {
+      "source": "mk4_pixel_row_triple_spaced_component.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-maker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "81a95f23106198a3e513148aa27591793f4307607e0e1f353b37319f4338809f",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-maker/bin/rustuml-tip",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "81a95f23106198a3e513148aa27591793f4307607e0e1f353b37319f4338809f",
+          "stderr": "warning: component sprite command CommandFactorySprite$1 executed; component rendering of sprite references remains unsupported at line 1\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "mk4_pixel_end_two_spans_class.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-maker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e962d8a11dddca5c489e28e5feda2b00defdd5bac9e91ab7c1930a64eae45c13",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-maker/bin/rustuml-tip",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Cannot read: [2x2/16] {\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "mk4_svg_text_nofill_plain_seq.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-maker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "2447f668ca21c7aed54db90546a816f7a59f28a6cd4cfebcc61c152dacc51d71",
+          "stderr": "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-maker/bin/rustuml-tip",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "2447f668ca21c7aed54db90546a816f7a59f28a6cd4cfebcc61c152dacc51d71",
+          "stderr": "warning: sequence command CommandSpriteSvg is recognized but unimplemented at line 1: sprite $txt <svg width=\"20\" height=\"10\"><text x=\"0\" y=\"8\">ab</text></svg>\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "mk4_svg_text_nofill_usecase.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-maker/bin/rustuml-93bf53e18",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "81c2c0efe3e7f5c93c34967ba1c6d9c8434a4080e6b4a193d1cc98623539fbc6",
+          "stderr": "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-maker/bin/rustuml-tip",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "81c2c0efe3e7f5c93c34967ba1c6d9c8434a4080e6b4a193d1cc98623539fbc6",
+          "stderr": "warning: usecase sprite command CommandSpriteSvg is recognized; sprite materialization remains unsupported at line 1: sprite $txt <svg width=\"20\" height=\"10\"><text x=\"0\" y=\"8\">cd</text></svg>\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    }
+  ]
+}

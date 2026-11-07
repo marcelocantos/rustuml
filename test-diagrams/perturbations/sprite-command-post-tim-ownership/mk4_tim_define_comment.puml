@@ -1,0 +1,4 @@
+@startuml
+!define WHO Birch /' w '/
+Alder -> WHO : hi
+@enduml

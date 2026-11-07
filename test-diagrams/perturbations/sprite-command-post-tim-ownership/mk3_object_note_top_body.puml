@@ -1,0 +1,6 @@
+@startuml
+object Player
+note top of Player
+Sprite sheets cached
+end note
+@enduml

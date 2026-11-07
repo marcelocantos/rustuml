@@ -1,0 +1,11 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+!procedure $gem()
+sprite $gem <svg width="2" height="2">
+<rect width="2" height="2"/>
+!endprocedure
+$gem()
+Spruce -> Cedar: back
+@enduml

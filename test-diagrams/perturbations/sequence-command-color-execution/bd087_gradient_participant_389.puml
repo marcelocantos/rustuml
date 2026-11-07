@@ -1,0 +1,7 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+participant Walnut #Olive\automatic
+Kestrel --> Juniper: receipt
+@enduml

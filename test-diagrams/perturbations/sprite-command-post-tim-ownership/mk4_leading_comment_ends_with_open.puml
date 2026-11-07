@@ -1,0 +1,4 @@
+@startuml
+/' a '/ Alder -> Birch : x /'
+Birch -> Alder : y
+@enduml

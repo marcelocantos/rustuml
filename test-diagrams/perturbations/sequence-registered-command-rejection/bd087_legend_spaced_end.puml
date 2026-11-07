@@ -1,0 +1,9 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+legend left
+walnut
+end	legend
+Kestrel --> Juniper: receipt
+@enduml

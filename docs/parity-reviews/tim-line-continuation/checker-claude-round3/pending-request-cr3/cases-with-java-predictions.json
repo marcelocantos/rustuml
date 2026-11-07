@@ -1,0 +1,944 @@
+[
+ {
+  "name": "cr3_dir_define_start",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:define",
+   "position:start",
+   "two-line"
+  ],
+  "java_prediction": "Welcome: the directive has no TIM entry; the tail absorbs the end line; getTotalLineCount()==2",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_define_middle",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:define",
+   "position:middle"
+  ],
+  "java_prediction": "message 'x Tui -> Kea : y' (tail passes over the consumed directive)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_define_end",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:define",
+   "position:end"
+  ],
+  "java_prediction": "messages 'y' and 'x @enduml' (3 lines)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_procedure_start",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:procedure",
+   "position:start",
+   "two-line"
+  ],
+  "java_prediction": "Welcome: the directive has no TIM entry; the tail absorbs the end line; getTotalLineCount()==2",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_procedure_middle",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:procedure",
+   "position:middle"
+  ],
+  "java_prediction": "message 'x Tui -> Kea : y' (tail passes over the consumed directive)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_procedure_end",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:procedure",
+   "position:end"
+  ],
+  "java_prediction": "messages 'y' and 'x @enduml' (3 lines)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_if_start",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:if",
+   "position:start",
+   "two-line"
+  ],
+  "java_prediction": "Welcome: the directive has no TIM entry; the tail absorbs the end line; getTotalLineCount()==2",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_if_middle",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:if",
+   "position:middle"
+  ],
+  "java_prediction": "message 'x Tui -> Kea : y' (tail passes over the consumed directive)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_if_end",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:if",
+   "position:end"
+  ],
+  "java_prediction": "messages 'y' and 'x @enduml' (3 lines)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_include_start",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:include",
+   "position:start",
+   "two-line"
+  ],
+  "java_prediction": "Welcome: the directive has no TIM entry; the tail absorbs the end line; getTotalLineCount()==2",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_include_middle",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:include",
+   "position:middle"
+  ],
+  "java_prediction": "message 'x Tui -> Kea : y' (tail passes over the consumed directive)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_include_end",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:include",
+   "position:end"
+  ],
+  "java_prediction": "messages 'y' and 'x @enduml' (3 lines)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_theme_start",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:theme",
+   "position:start",
+   "two-line"
+  ],
+  "java_prediction": "no Welcome: the theme's TIM lines count; message 'x @enduml' with theme plain",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_theme_middle",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:theme",
+   "position:middle"
+  ],
+  "java_prediction": "tail joins the theme's first TIM line (pre-existing residue); 'y' renders",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_theme_end",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:theme",
+   "position:end"
+  ],
+  "java_prediction": "tail joins the theme's first TIM line (pre-existing residue)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_option_start",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:option",
+   "position:start",
+   "two-line"
+  ],
+  "java_prediction": "Welcome: the directive has no TIM entry; the tail absorbs the end line; getTotalLineCount()==2",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_option_middle",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:option",
+   "position:middle"
+  ],
+  "java_prediction": "message 'x Tui -> Kea : y' (tail passes over the consumed directive)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_option_end",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:option",
+   "position:end"
+  ],
+  "java_prediction": "messages 'y' and 'x @enduml' (3 lines)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_pragma_start",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:pragma",
+   "position:start",
+   "two-line"
+  ],
+  "java_prediction": "no Welcome: '!pragma layout smetana' is a PLAIN TIM line (count 3); message 'x @enduml'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_pragma_middle",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:pragma",
+   "position:middle"
+  ],
+  "java_prediction": "message 'x !pragma layout smetana' then 'y' (tail joins the PLAIN directive line)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_pragma_end",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:pragma",
+   "position:end"
+  ],
+  "java_prediction": "messages 'y' and 'x !pragma layout smetana'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_assume_start",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:assume",
+   "position:start",
+   "two-line"
+  ],
+  "java_prediction": "no Welcome: '!assume transparent light' is a PLAIN TIM line (count 3); message 'x @enduml'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_assume_middle",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:assume",
+   "position:middle"
+  ],
+  "java_prediction": "message 'x !assume transparent light' then 'y' (tail joins the PLAIN directive line)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_assume_end",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:assume",
+   "position:end"
+  ],
+  "java_prediction": "messages 'y' and 'x !assume transparent light'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_log_start",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:log",
+   "position:start",
+   "two-line"
+  ],
+  "java_prediction": "Welcome: the directive has no TIM entry; the tail absorbs the end line; getTotalLineCount()==2",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_log_middle",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:log",
+   "position:middle"
+  ],
+  "java_prediction": "message 'x Tui -> Kea : y' (tail passes over the consumed directive)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_log_end",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:log",
+   "position:end"
+  ],
+  "java_prediction": "messages 'y' and 'x @enduml' (3 lines)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_dump_start",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:dump",
+   "position:start",
+   "two-line"
+  ],
+  "java_prediction": "Welcome: the directive has no TIM entry; the tail absorbs the end line; getTotalLineCount()==2",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_dump_middle",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:dump",
+   "position:middle"
+  ],
+  "java_prediction": "message 'x Tui -> Kea : y' (tail passes over the consumed directive)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_dump_end",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:dump",
+   "position:end"
+  ],
+  "java_prediction": "messages 'y' and 'x @enduml' (3 lines)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_startsub_start",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:startsub",
+   "position:start",
+   "two-line"
+  ],
+  "java_prediction": "Welcome: the directive has no TIM entry; the tail absorbs the end line; getTotalLineCount()==2",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_startsub_middle",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:startsub",
+   "position:middle"
+  ],
+  "java_prediction": "message 'x Tui -> Kea : y' (tail passes over the consumed directive)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_startsub_end",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:startsub",
+   "position:end"
+  ],
+  "java_prediction": "messages 'y' and 'x @enduml' (3 lines)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_dir_teoz_pragma_start",
+  "intended_valid": true,
+  "axes": [
+   "typed-line",
+   "directive:pragma",
+   "teoz",
+   "two-line"
+  ],
+  "java_prediction": "no Welcome: the pragma is a PLAIN TIM line; teoz message 'x @enduml'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_two_one_line_after_join",
+  "intended_valid": false,
+  "axes": [
+   "two-line",
+   "count 1",
+   "end continued"
+  ],
+  "java_prediction": "tail and continued end both pending; source is the start line only (count 1): empty-description error, not the Welcome factory",
+  "crlf": false
+ },
+ {
+  "name": "cr3_two_zero_content_end_continued",
+  "intended_valid": false,
+  "axes": [
+   "two-line",
+   "count 1",
+   "end continued"
+  ],
+  "java_prediction": "count 1: empty-description error page",
+  "crlf": false
+ },
+ {
+  "name": "cr3_two_end_continued_after_two",
+  "intended_valid": true,
+  "axes": [
+   "two-line",
+   "count 2 with two content lines"
+  ],
+  "java_prediction": "Welcome: 'two \\' and the continued end are both pending and dropped; count 2",
+  "crlf": false
+ },
+ {
+  "name": "cr3_two_comments_only",
+  "intended_valid": true,
+  "axes": [
+   "two-line",
+   "comments only"
+  ],
+  "java_prediction": "Welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr3_two_directives_only",
+  "intended_valid": true,
+  "axes": [
+   "two-line",
+   "directives only"
+  ],
+  "java_prediction": "Welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr3_two_blank_after_tail",
+  "intended_valid": true,
+  "axes": [
+   "two-line",
+   "count 3",
+   "blank line is a TIM line"
+  ],
+  "java_prediction": "message 'x ' (3 lines)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_two_three_lines_before",
+  "intended_valid": true,
+  "axes": [
+   "two-line",
+   "count 3"
+  ],
+  "java_prediction": "messages 'y' and 'x @enduml'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_two_three_lines_after",
+  "intended_valid": true,
+  "axes": [
+   "two-line",
+   "count 3"
+  ],
+  "java_prediction": "message 'x Tui -> Kea : y'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_two_double_tail",
+  "intended_valid": true,
+  "axes": [
+   "two-line",
+   "two tails"
+  ],
+  "java_prediction": "Welcome ('a b @enduml')",
+  "crlf": false
+ },
+ {
+  "name": "cr3_two_activity_tail",
+  "intended_valid": true,
+  "axes": [
+   "two-line",
+   "activity text"
+  ],
+  "java_prediction": "Welcome (factory first)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_two_mindmap_control",
+  "intended_valid": true,
+  "axes": [
+   "two-line",
+   "control",
+   "no join outside @startuml"
+  ],
+  "java_prediction": "mindmap node 'r \\' (checkEndingBackslash false)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_two_nojoin_option_handwritten",
+  "intended_valid": true,
+  "axes": [
+   "two-line",
+   "no join",
+   "Rust-only line"
+  ],
+  "java_prediction": "Welcome: !option has no TIM entry, count 2",
+  "crlf": false
+ },
+ {
+  "name": "cr3_two_nojoin_pragma",
+  "intended_valid": true,
+  "axes": [
+   "two-line",
+   "no join",
+   "PLAIN directive"
+  ],
+  "java_prediction": "count 3: no Welcome factory; Java's empty-sequence outcome",
+  "crlf": false
+ },
+ {
+  "name": "cr3_two_include_tail_then_dump",
+  "intended_valid": true,
+  "axes": [
+   "two-line",
+   "dump",
+   "include tail"
+  ],
+  "java_prediction": "Welcome: !dump_memory has no TIM entry",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_bs_end_alone",
+  "intended_valid": true,
+  "axes": [
+   "end-form",
+   "\\end"
+  ],
+  "java_prediction": "'one' only",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_bs_endless_indented",
+  "intended_valid": true,
+  "axes": [
+   "end-form",
+   "\\end prefix",
+   "indented"
+  ],
+  "java_prediction": "'one' only",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_bs_endmindmap_in_uml",
+  "intended_valid": true,
+  "axes": [
+   "end-form",
+   "other family end"
+  ],
+  "java_prediction": "'one' only",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_bs_enduml_trailing",
+  "intended_valid": true,
+  "axes": [
+   "end-form",
+   "trailing text"
+  ],
+  "java_prediction": "'one' only",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_bs_End_case",
+  "intended_valid": false,
+  "axes": [
+   "end-form",
+   "case-sensitive"
+  ],
+  "java_prediction": "syntax error on '\\Enduml'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_double_backslash",
+  "intended_valid": false,
+  "axes": [
+   "end-form",
+   "double backslash"
+  ],
+  "java_prediction": "syntax error",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_bs_in_block_comment",
+  "intended_valid": true,
+  "axes": [
+   "end-form",
+   "inside block comment"
+  ],
+  "java_prediction": "BlockUmlBuilder ends at \\enduml (comments unknown there); TIM's open comment eats the end; count 2 -> Welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_at_in_block_comment",
+  "intended_valid": true,
+  "axes": [
+   "end-form",
+   "inside block comment",
+   "control @end"
+  ],
+  "java_prediction": "as the \\enduml case: Welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_bs_in_if0",
+  "intended_valid": true,
+  "axes": [
+   "end-form",
+   "inside inactive !if"
+  ],
+  "java_prediction": "block ends at \\enduml; the end line is inactive in TIM: count 2 -> Welcome (or a TIM error)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_at_in_if0",
+  "intended_valid": true,
+  "axes": [
+   "end-form",
+   "inside inactive !if",
+   "control @end"
+  ],
+  "java_prediction": "as the \\enduml case",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_bs_in_procdef",
+  "intended_valid": false,
+  "axes": [
+   "end-form",
+   "inside procedure definition"
+  ],
+  "java_prediction": "block ends inside the definition: no call, count 1 or TIM error",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_bs_in_note",
+  "intended_valid": false,
+  "axes": [
+   "end-form",
+   "inside note body"
+  ],
+  "java_prediction": "block ends at '\\endpoint': unclosed note, syntax error",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_us_before_bs_end",
+  "intended_valid": true,
+  "axes": [
+   "end-form",
+   "U+001F is Character#isWhitespace"
+  ],
+  "java_prediction": "'one' only",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_nel_before_bs_end",
+  "intended_valid": false,
+  "axes": [
+   "end-form",
+   "U+0085 is not Character#isWhitespace"
+  ],
+  "java_prediction": "not an end directive: syntax error",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_nbsp_before_bs_end",
+  "intended_valid": false,
+  "axes": [
+   "end-form",
+   "NBSP is not Character#isWhitespace"
+  ],
+  "java_prediction": "syntax error",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_tim_chr64_enduml",
+  "intended_valid": true,
+  "axes": [
+   "end-form",
+   "TIM-generated @enduml",
+   "PSystemCommandFactory end peek"
+  ],
+  "java_prediction": "the command loop stops at the generated end: 'one' only",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_tim_chr92_enduml",
+  "intended_valid": true,
+  "axes": [
+   "end-form",
+   "TIM-generated \\enduml"
+  ],
+  "java_prediction": "'one' only",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_mindmap_bs_end",
+  "intended_valid": true,
+  "axes": [
+   "end-form",
+   "mindmap family"
+  ],
+  "java_prediction": "root 'a' only",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_pipe_second_diagram",
+  "intended_valid": true,
+  "axes": [
+   "end-form",
+   "second diagram in Pipe text"
+  ],
+  "java_prediction": "'one' only",
+  "crlf": false
+ },
+ {
+  "name": "cr3_end_bs_end_no_at_end",
+  "intended_valid": true,
+  "axes": [
+   "end-form",
+   "Pipe appends @enduml"
+  ],
+  "java_prediction": "'one'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_three_blocks",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "multiple blocks"
+  ],
+  "java_prediction": "'first' only",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_three_blocks_bang2",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "!N suffix ignored for local files"
+  ],
+  "java_prediction": "'first' only",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_ids_bang_beta",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "!id suffix ignored for local files"
+  ],
+  "java_prediction": "'alpha' only",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_first_is_mindmap",
+  "intended_valid": false,
+  "axes": [
+   "wrapped",
+   "first start of any type"
+  ],
+  "java_prediction": "'* mm' extracted into the sequence: syntax error",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_hash_header",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "header ##",
+   "prefix line becomes empty"
+  ],
+  "java_prediction": "'hashed'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_angle_header",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "header <x>"
+  ],
+  "java_prediction": "'angled'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_superscript_header",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "header char not isLetterOrDigit (U+00B2)"
+  ],
+  "java_prediction": "'sup'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_bom_start",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "BOM"
+  ],
+  "java_prediction": "'bom' then 'two'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_bom_hash_header",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "BOM",
+   "header #"
+  ],
+  "java_prediction": "'bomhash' (ReadLineReader strips the BOM first)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_bom_inner_line",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "BOM on a body line"
+  ],
+  "java_prediction": "'midbom' (every line's BOM is stripped)",
+  "crlf": false
+ },
+ {
+  "name": "cr3_raw_bom_include",
+  "intended_valid": true,
+  "axes": [
+   "raw include",
+   "BOM"
+  ],
+  "java_prediction": "'rawbom'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_crlf_continuation_comments",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "CRLF",
+   "continuation skips comments"
+  ],
+  "java_prediction": "'c1 c2'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_tail_runs_into_second_block",
+  "intended_valid": false,
+  "axes": [
+   "wrapped",
+   "merge swallows end",
+   "nested start in body"
+  ],
+  "java_prediction": "body is 'x @enduml', '@startuml', 'y': the '@startuml' TIM line is no command: syntax error",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_nested_wrapped",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "nested"
+  ],
+  "java_prediction": "'inner' then 'outer'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_vars_and_procedure",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "definitions"
+  ],
+  "java_prediction": "'hi' to Moa",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_backslash_end",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "\\enduml end"
+  ],
+  "java_prediction": "'a' only",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_end_trailing_text",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "end with trailing text"
+  ],
+  "java_prediction": "'a' only",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_backslash_start",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "\\startuml"
+  ],
+  "java_prediction": "'bs'",
+  "crlf": false
+ },
+ {
+  "name": "cr3_wrap_mindmap_family",
+  "intended_valid": true,
+  "axes": [
+   "wrapped",
+   "mindmap family"
+  ],
+  "java_prediction": "root with child; pre/post dropped",
+  "crlf": false
+ },
+ {
+  "name": "cr3_raw_include_mid_end",
+  "intended_valid": true,
+  "axes": [
+   "raw include",
+   "included @enduml",
+   "PSystemCommandFactory end peek"
+  ],
+  "java_prediction": "the command loop stops at the included @enduml: 'a' only",
+  "crlf": false
+ }
+]

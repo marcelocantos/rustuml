@@ -1,0 +1,5 @@
+@startuml
+participant Spruce
+entity @Cedar
+Spruce -> @Cedar: pollen
+@enduml

@@ -1,0 +1,81 @@
+[
+ {
+  "name": "mk4_pixel_row_triple_spaced_component",
+  "cohort": "AY",
+  "outcomes": {
+   "93bf53e18": "nonpositive-accepted",
+   "044f73657": "nonpositive-accepted",
+   "c9e11493c": "nonpositive-accepted"
+  },
+  "axes": [
+   "pixel row",
+   "mid-line /''' spaced '''/ kept (\\w only)",
+   "component"
+  ],
+  "java_valid": false,
+  "java_markers": [
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "mk4_pixel_end_two_spans_class",
+  "cohort": "AY",
+  "outcomes": {
+   "93bf53e18": "nonpositive-accepted",
+   "044f73657": "nonpositive-rejected",
+   "c9e11493c": "nonpositive-rejected"
+  },
+  "axes": [
+   "pixel END line",
+   "two trailing spans: removeInnerComment runs once, '} /' a '/' is not END",
+   "class"
+  ],
+  "java_valid": false,
+  "java_markers": [
+   "Cannot read",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "mk4_svg_text_nofill_plain_seq",
+  "cohort": "AY",
+  "outcomes": {
+   "93bf53e18": "nonpositive-accepted",
+   "044f73657": "nonpositive-accepted",
+   "c9e11493c": "nonpositive-accepted"
+  },
+  "axes": [
+   "svg <text> without fill",
+   "no apostrophe",
+   "SvgNanoParser#drawText null fill"
+  ],
+  "java_valid": false,
+  "java_markers": [
+   "An error has occured"
+  ],
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "mk4_svg_text_nofill_usecase",
+  "cohort": "AY",
+  "outcomes": {
+   "93bf53e18": "nonpositive-accepted",
+   "044f73657": "nonpositive-accepted",
+   "c9e11493c": "nonpositive-accepted"
+  },
+  "axes": [
+   "svg <text> without fill",
+   "usecase",
+   "SvgNanoParser#drawText null fill"
+  ],
+  "java_valid": false,
+  "java_markers": [
+   "An error has occured"
+  ],
+  "reason": "Java-invalid reference"
+ }
+]

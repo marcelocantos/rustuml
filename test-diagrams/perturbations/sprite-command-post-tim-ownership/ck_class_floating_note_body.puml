@@ -1,0 +1,6 @@
+@startuml
+class Player
+note as N1
+Sprite sheets are loaded
+end note
+@enduml

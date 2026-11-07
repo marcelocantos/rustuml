@@ -1,0 +1,5 @@
+@startuml
+Kea -> Tui : x %chr(92)
+!pragma useVerticalIf on
+Tui -> Kea : y
+@enduml

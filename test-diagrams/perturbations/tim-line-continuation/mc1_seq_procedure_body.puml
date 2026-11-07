@@ -1,0 +1,9 @@
+@startuml
+!procedure $ping($to)
+Dock -> $to : ping \
+back
+!endprocedure
+$ping(Pier)
+$ping(Quay)
+Pier -> Quay : done
+@enduml

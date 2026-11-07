@@ -1,0 +1,821 @@
+[
+ {
+  "name": "mr4_pragma_svek_start",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "pragma",
+   "position:start",
+   "count:3",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "69cfef39e635f374f6a8a88a367705d09bcd425c445b7ba9727b6d6c3d2fbd32",
+  "java_svg_sha256": "a4ce45c2914c7ea1ca9cbab6c5023357dc4b1092a48fd834a6bca55fd97db6f0",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_svek_start.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_svek_start.svg"
+ },
+ {
+  "name": "mr4_pragma_two_then_tail",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "pragma",
+   "two pragmas",
+   "count:4",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "47887e9bbf3127f7ae977df953229b6ef096762110455a4ab53b265ec7d96926",
+  "java_svg_sha256": "97482773c3cfbf84ebfe54a1b36039ae855c9eabaa095fe5d8a3a7d0c5ee6465",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_two_then_tail.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_two_then_tail.svg"
+ },
+ {
+  "name": "mr4_pragma_middle_vertical",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "pragma",
+   "position:middle",
+   "join into pragma text",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "ee784043d1fef8d7814214ab9ee7753e16357c3637f72c248d9fc68e2a1d369c",
+  "java_svg_sha256": "1ab1215fd149137da5b042dbfb8b80ca875fa28303602e8832e59c4b353c8555",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_middle_vertical.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_middle_vertical.svg"
+ },
+ {
+  "name": "mr4_pragma_from_procedure",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "pragma",
+   "procedure output",
+   "count:3",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "6ee3f0eadec832393732f553a4798a2e3de79291e15b3e69771a2cc645e236cb",
+  "java_svg_sha256": "7ab8fd64b7776af7b5e196babdcc04a7abb8841a365f1bf90e9cded78ad02c07",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_from_procedure.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_from_procedure.svg"
+ },
+ {
+  "name": "mr4_pragma_variable_value",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "pragma",
+   "variable",
+   "count:3",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "a99945369ebc7fb2a16467809ed2226782b125a5faa193f9bba118b16eeb2d0a",
+  "java_svg_sha256": "a1a645e4e54e6afc2ac2e148b52225ea9a904da08b3f2d05280c8c4517181242",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_variable_value.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_variable_value.svg"
+ },
+ {
+  "name": "mr4_theme_unshipped_tail",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "theme",
+   "java-bundled theme Rust does not ship",
+   "count>2",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "mismatch",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "4732e25725d51c0a388607e01b1c33f5ab2456686662ada81a3c90097ae654e8",
+  "java_svg_sha256": "f3a046590fffe47a34866b11b2744136cb6299fa972d59d907f9aca898438ae7",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mr4_theme_unshipped_tail.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_theme_unshipped_tail.svg"
+ },
+ {
+  "name": "mr4_theme_shipped_tail",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "theme",
+   "shipped theme",
+   "count>2",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "10805552d168c27571ef1ad21731937d7c0cafedc94e1d58269bfb5520336290",
+  "java_svg_sha256": "24cdafa731ffe07b081cea660c557444147d8444506ab4de25f43f36b18dce87",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mr4_theme_shipped_tail.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_theme_shipped_tail.svg"
+ },
+ {
+  "name": "mr4_terminated_def_then_bs_end",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "control",
+   "terminated definition",
+   "\\enduml",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "match",
+   "1f6ffa9f4": "match",
+   "9ed52f435": "match",
+   "cb550c0d6": "match"
+  },
+  "source_sha256": "c98bb99ec4992d83957d5cb3471d460f798b7f538a6711a4d3f7ece8df51d6ad",
+  "java_svg_sha256": "ec603b691ff2f43505a8faacee77feddd7f9e1cdee01d0482080143a3984712f",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mr4_terminated_def_then_bs_end.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_terminated_def_then_bs_end.svg"
+ },
+ {
+  "name": "mr4_ws_fs_before_bs_end",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+001C",
+   "\\enduml",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "7ddaebb83d41e3b29eb3ee561736181a8a261acafecaba83bf63a15078e12616",
+  "java_svg_sha256": "c9d4401fb558337850a3007a973e497a928df1261baf7bc1286c0609a86dcd88",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_fs_before_bs_end.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_fs_before_bs_end.svg"
+ },
+ {
+  "name": "mr4_ws_gs_before_bs_end",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+001D",
+   "\\enduml",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "8057eea8cb2c62eeef30a4d7980b10ba00bc305fa1a803098276c316f67ab5db",
+  "java_svg_sha256": "d308da800a6671701693a165ef3a0dde52bf5ef33cd68647e030cf458fd561e2",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_gs_before_bs_end.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_gs_before_bs_end.svg"
+ },
+ {
+  "name": "mr4_ws_rs_before_bs_end",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+001E",
+   "\\enduml",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "17595aa306907efd72f6805adeea483f1bb487f781090b60a62109b0dce2f58a",
+  "java_svg_sha256": "d1cc43530242b7c6b8d9fd45e7e72ce7978790cd286b6b861c48595454e25d52",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_rs_before_bs_end.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_rs_before_bs_end.svg"
+ },
+ {
+  "name": "mr4_ws_ideographic_before_bs_end",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+3000",
+   "\\enduml",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "match",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "8b4c41f9d0ffec0cde4301edc4b103cdd04d7b8bd37f5dd6238d941be676dd44",
+  "java_svg_sha256": "b2d8b05b3e51fb975de391224b9c4bf52f2ca62ee14da759d73172e3627e1f2b",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_ideographic_before_bs_end.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_ideographic_before_bs_end.svg"
+ },
+ {
+  "name": "mr4_ws_line_separator_before_bs_end",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+2028",
+   "\\enduml",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "match",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "ae459b6a2331847caa4e8f02d46b5eaf3e9b755bef79976f4ace36ba4868ca0b",
+  "java_svg_sha256": "a59c3c1113e524b3f3d1309642f81f2634e4d5e672e90726156f5680436dbe0a",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_line_separator_before_bs_end.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_line_separator_before_bs_end.svg"
+ },
+ {
+  "name": "mr4_ws_em_quad_before_bs_end",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+2001",
+   "\\enduml",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "match",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "433f90541c7f660f361c3481452bb5fd35663d7c4aad411392e9fe580c97ba9e",
+  "java_svg_sha256": "d443c5c9b4733b92ca711833d8fdfe4d607e984803b0c1ec47f4c95c68311907",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_em_quad_before_bs_end.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_em_quad_before_bs_end.svg"
+ },
+ {
+  "name": "mr4_ws_gs_before_at_end",
+  "batch": "CB",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+001D",
+   "@enduml (not Pipe's end)",
+   "java-prediction:valid"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "match",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "5cdc40f5c160bb6114a933a5098e26a0b403cef44f3e6b06d92e82b8be04ec7b",
+  "java_svg_sha256": "e5aa666b3235d1e5cf991ab1f35a41144fe8383c9bf548d2c9176349e06a1f10",
+  "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_gs_before_at_end.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_gs_before_at_end.svg"
+ },
+ {
+  "name": "cr4_cnt_pragma_upper_msg",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": false,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "!PRAGMA: PLAIN; CommandPragma is case-sensitive",
+   "unsure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "mismatch",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "a322ed83b776501c2903e43daba59aa24fa18e8263b6ad034500d085a97cfe06",
+  "java_svg_sha256": "ae914bb5b1cfd4a23577cb96846bdfe4b24b71f964ec460df6c375b3fb16622d",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_pragma_upper_msg.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_pragma_upper_msg.svg"
+ },
+ {
+  "name": "cr4_cnt_pragma_from_variable_line",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "TIM-generated !pragma line",
+   "unsure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "match",
+   "9834a7194": "match",
+   "1f6ffa9f4": "match",
+   "9ed52f435": "match",
+   "cb550c0d6": "match"
+  },
+  "source_sha256": "1191d65b51c7e8a5fcc2c6877df338e3ae06b9d2a32aa971d6c5803cea33a1dd",
+  "java_svg_sha256": "14584a6d1e980f4051a6790ffc007065c0d69a7dc4e5988f0fb86dee2057707e",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_pragma_from_variable_line.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_pragma_from_variable_line.svg"
+ },
+ {
+  "name": "cr4_cnt_assume_alone",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "!assume PLAIN: count 3",
+   "unsure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "mismatch",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "79d6146008a3d3eda5cc9479196ba50701ecae14811bc54c68aefa5227402b61",
+  "java_svg_sha256": "25f0887e2777ccbfb69af12b40941c54268f5ff5f17a5e740f21cd9b1298d537",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_assume_alone.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_assume_alone.svg"
+ },
+ {
+  "name": "cr4_cnt_theme_unshipped_alone",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "unshipped bundled theme alone",
+   "unsure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "mismatch",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "6708014dd870869ead76f05efb51b3883ae2ec8092a64aeb49b7b20e6b529f12",
+  "java_svg_sha256": "42989c746d55140ba89724c7d957cfc99a02a5b5d67b3e7607fbebcb67a41a4d",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_theme_unshipped_alone.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_theme_unshipped_alone.svg"
+ },
+ {
+  "name": "cr4_exit_mid",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "BlockUmlBuilder !exit",
+   "lines after !exit dropped"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "valid-error",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "a9950edf37078319e6e2391b68867ce86cd446c868913373329790b4e4402f36",
+  "java_svg_sha256": "d269570d0360fe2d94072234e52cb03f39fd3f61e4e02d0a9ae4c5fa8e0c48b8",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_exit_mid.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_exit_mid.svg"
+ },
+ {
+  "name": "cr4_cnt_blank_then_message",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "count",
+   "control: blank then content"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "match",
+   "9ed52f435": "match",
+   "cb550c0d6": "match"
+  },
+  "source_sha256": "748649131431b5328773f29871dd45def3d6db56cf6e3efee186da8b21e3cd4d",
+  "java_svg_sha256": "c492fffaa76861a8e46ca69c8e2b3a986e40c011a897d7a1c2a64a7128d1e303",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_blank_then_message.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_blank_then_message.svg"
+ },
+ {
+  "name": "cr4_ws_vt_before_define",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "VT before !define: ASCII \\s"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "match",
+   "9834a7194": "match",
+   "1f6ffa9f4": "match",
+   "9ed52f435": "match",
+   "cb550c0d6": "match"
+  },
+  "source_sha256": "c1f9dcd0941abfa8916cfcae971b2dc8184613a4b5a6296b2424267af86f23d3",
+  "java_svg_sha256": "efc8801187258fd12cab3b3c4275e8f1ea029674c0b8d5575714d051aedb7ccd",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_vt_before_define.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_vt_before_define.svg"
+ },
+ {
+  "name": "cr4_ws_ideo_exit",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "StartUtils#isExit trims Character#isWhitespace"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "valid-error",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "2006e4294e91bc179f1b19b864292db1205fd83fa167b4a67a3da7fd4f713f9d",
+  "java_svg_sha256": "d269570d0360fe2d94072234e52cb03f39fd3f61e4e02d0a9ae4c5fa8e0c48b8",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_ideo_exit.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_ideo_exit.svg"
+ },
+ {
+  "name": "cr4_ws_ideo_before_at_end",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "whitespace",
+   "U+3000 before @enduml ends the block"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "match",
+   "9834a7194": "match",
+   "1f6ffa9f4": "match",
+   "9ed52f435": "match",
+   "cb550c0d6": "match"
+  },
+  "source_sha256": "40dfe6f3a8d227aaaae80d5e21666c43d344b3fcc89fab1e3bf6778014bd7f03",
+  "java_svg_sha256": "a88c5c49b13f5929957890dda6dbe72f899590bca85ae8dfeae1a15dc067b78c",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_ideo_before_at_end.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_ideo_before_at_end.svg"
+ },
+ {
+  "name": "cr4_main_bom_line2",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "BOM",
+   "main source body line"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "valid-error",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "fde48653a938d45aff5381c11952a59275db6450943782e4da7a02b48d4f49c0",
+  "java_svg_sha256": "0b36f4ea9488002ca51200f02188fe4cef58740f360569bdae4268b653d57fc8",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_main_bom_line2.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_main_bom_line2.svg"
+ },
+ {
+  "name": "cr4_main_bom_before_directive",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "BOM",
+   "main source, before a directive"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "valid-error",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "e72b95bc9428418d794720a4e9dad61839cdeff00a4d60fb55a1e62c0b7bf7c2",
+  "java_svg_sha256": "532b42a832ab3fa94e89b76753953e4afcc471ba71c8eee6480578f639ad48e3",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_main_bom_before_directive.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_main_bom_before_directive.svg"
+ },
+ {
+  "name": "cr4_main_endash_label",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "U+2013",
+   "main source label"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "mismatch",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "99c33e64649c2885dcf97f2ae33f723acee8e02ff5a16dbc17906ff28827fe06",
+  "java_svg_sha256": "87bc13e549dd8ab01516d86d5b77924bb33cebcb565c5d3410de1bbab3636b1f",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_main_endash_label.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_main_endash_label.svg"
+ },
+ {
+  "name": "cr4_main_endash_arrow",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "U+2013",
+   "main source arrow"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "valid-error",
+   "9ed52f435": "valid-error",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "ee9bcc27b24e1c1c8b92ba35fbbeddd8a1470b6e0330a848ded96e3508f3508a",
+  "java_svg_sha256": "3f854fc85d0405ca7a8c2daab2aadc9b91fd460c0b3c5a6304669b4f258e70f9",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_main_endash_arrow.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_main_endash_arrow.svg"
+ },
+ {
+  "name": "cr4_main_cr_only_lines",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "line split",
+   "Pipe BufferedReader splits on lone CR"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "mismatch",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "eef3d9d05e07c158e5c1d06d34ab594a5a98372048e6d41bc31c71a26ea074dd",
+  "java_svg_sha256": "8be4b57fc9ce31b28ef3110c291ead295b8752790f3630d5b908b010c09c007d",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_main_cr_only_lines.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_main_cr_only_lines.svg"
+ },
+ {
+  "name": "cr4_sprite_from_procedure",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "sprite",
+   "declared by a procedure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "mismatch",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "4e5d007b47b1f622446bb2f55943be613e261d7322775b4d1c19092ada789dc5",
+  "java_svg_sha256": "461f9ab62c27147cf933d52e2eb906230babefbfbb51b905c6f6f8eec3333df1",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_sprite_from_procedure.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_sprite_from_procedure.svg"
+ },
+ {
+  "name": "cr4_sprite_continued_header",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "sprite",
+   "continued header line"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "1f6ffa9f4": "mismatch",
+   "9ed52f435": "mismatch",
+   "cb550c0d6": "mismatch"
+  },
+  "source_sha256": "ba44c76797b67043d9d1a2e915d67cd783b70a512795cb00c2d4096faa6f0451",
+  "java_svg_sha256": "c7b55c606c90cd7cbad49b3a244debdfc78f422a160b0005dac4ae5db6876d8b",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_sprite_continued_header.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_sprite_continued_header.svg"
+ },
+ {
+  "name": "cr4_end_in_foreach_unterminated",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": false,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "swallowed end",
+   "!foreach without !endfor",
+   "unsure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "match",
+   "9834a7194": "match",
+   "1f6ffa9f4": "match",
+   "9ed52f435": "match",
+   "cb550c0d6": "match"
+  },
+  "source_sha256": "1d051f4642f2914073a0aebd25d0dfe39d7fc29baec9ba966b71c5290175975b",
+  "java_svg_sha256": "93aacaf792f0b17f074e565c884d6cb4069eebe6db5e989b7c216a9ce89eb61f",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_foreach_unterminated.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_foreach_unterminated.svg"
+ },
+ {
+  "name": "cr4_end_in_while_unterminated",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": false,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "swallowed end",
+   "!while without !endwhile",
+   "unsure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "match",
+   "9834a7194": "match",
+   "1f6ffa9f4": "match",
+   "9ed52f435": "match",
+   "cb550c0d6": "match"
+  },
+  "source_sha256": "0e3deadf4c03d569305fbafb7245acc0d2388176609a0848a2d4073ae2326911",
+  "java_svg_sha256": "6e75b736b6ba6722d87dca1762a3457a8277bd3f552d2d76e5038318ef4076ce",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_while_unterminated.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_while_unterminated.svg"
+ },
+ {
+  "name": "cr4_end_in_if_unterminated_active",
+  "batch": "CC",
+  "java_valid": true,
+  "intended_valid": false,
+  "java_exit": 0,
+  "validity_basis": null,
+  "axes": [
+   "swallowed end",
+   "active !if without !endif",
+   "unsure"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "match",
+   "9834a7194": "match",
+   "1f6ffa9f4": "match",
+   "9ed52f435": "match",
+   "cb550c0d6": "match"
+  },
+  "source_sha256": "afbd666f02d087074d4ce5e79bc96a596662d231ac2dd3d51e74e45b9957711b",
+  "java_svg_sha256": "3fd5bba6487138913c952e6a7fcfed67b78057b4eea265b82a8b5b2f053c574d",
+  "source": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_if_unterminated_active.puml",
+  "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_if_unterminated_active.svg"
+ }
+]

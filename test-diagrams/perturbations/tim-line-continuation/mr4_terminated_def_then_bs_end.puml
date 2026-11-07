@@ -1,0 +1,6 @@
+@startuml
+!procedure $p()
+Kea -> Tui : p
+!endprocedure
+$p()
+\enduml

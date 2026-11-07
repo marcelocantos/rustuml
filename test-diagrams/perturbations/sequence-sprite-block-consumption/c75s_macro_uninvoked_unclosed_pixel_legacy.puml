@@ -1,0 +1,7 @@
+@startuml
+participant Hazel
+!procedure $uninvoked()
+sprite $absent [2x1/16] {
+!endprocedure
+Hazel -> Elm: catkins
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+!function $f()
+!return "val" /' c '/
+!endfunction
+A -> B : $f()
+@enduml

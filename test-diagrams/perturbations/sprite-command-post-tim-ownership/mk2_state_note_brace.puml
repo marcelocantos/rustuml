@@ -1,0 +1,7 @@
+@startuml
+state Idle
+note right of Idle
+Sprite frame {
+end note
+Idle --> Busy
+@enduml

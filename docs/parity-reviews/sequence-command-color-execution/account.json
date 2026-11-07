@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-command-color-execution",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "command.SingleLineCommand2#execute",
+    "command.CommandMultilines2#execute",
+    "klimt.color.ColorParser#getRegex",
+    "klimt.color.ColorParser#getColor",
+    "klimt.color.Colors#Colors",
+    "klimt.color.HColorSet#getColor",
+    "klimt.color.HColorSet#parseSimpleColor",
+    "command.note.sequence.FactorySequenceNoteCommand#executeInternal"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::SeqParser::try_note",
+    "crates/rustuml-parser/src/parse/sequence.rs::valid_return_color"
+  ],
+  "invariant": "After syntactic command selection, captured colors are interpreted using the command color grammar and HColorSet; an unknown color yields a command execution error, including when a richer ColorParser alternative fails and the simple alternative captures a shorter name.",
+  "causal_divergence": "Rust note patterns approximate color with a delimiter class and store arbitrary names without validating execution. In #back:LightBlue: cargo, Java PART2 cannot end before colon, the simple alternative captures #back, and Colors/HColorSet throws; Rust currently emits a successful SVG.",
+  "planned_change": "Use registered command captures and source-derived ColorParser alternative/termination semantics for sequence color execution. Reuse the existing source-derived color name domain, extend validation only according to HColorSet/Colors, propagate badColor through ParseError rather than accepting a fallback paint color. Preserve valid simple/composite/gradient/transparent colors and distinguish unsupported paint residue.",
+  "perturbation_axes": [
+    "note shape/attachment and engine",
+    "simple/composite color grammar, delimiter placement and unknown names"
+  ],
+  "baseline_evidence": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "baseline_production": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "rejection": "0fb379a26ab64ead0744278935a0b6c64082ef35",
+  "status": "preimplementation hypothesis; no acceptance claim"
+}

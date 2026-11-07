@@ -1,0 +1,6 @@
+@startuml
+[Engine]
+note right of [Engine]
+Sprite cache budget
+end note
+@enduml

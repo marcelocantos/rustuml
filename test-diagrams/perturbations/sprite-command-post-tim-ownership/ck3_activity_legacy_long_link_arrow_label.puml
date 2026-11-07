@@ -1,0 +1,6 @@
+@startuml
+(*) -->[go] "multi
+Sprite sheets are loaded
+line"
+"multi\nSprite sheets are loaded\nline" --> (*)
+@enduml

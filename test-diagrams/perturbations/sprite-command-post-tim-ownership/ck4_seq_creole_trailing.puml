@@ -1,0 +1,3 @@
+@startuml
+A -> B : <b>bold</b> and <i>it</i> /' c '/
+@enduml

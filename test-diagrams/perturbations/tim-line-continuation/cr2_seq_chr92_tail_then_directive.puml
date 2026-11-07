@@ -1,0 +1,5 @@
+@startuml
+Kea -> Tui : tail %chr(92)
+!$v = 1
+Tui -> Kea : two $v
+@enduml

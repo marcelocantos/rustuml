@@ -1,0 +1,739 @@
+{
+ "note": "Rust outputs for batch o5s recorded before any Java result; tip ea5375293. Java validity predictions are the manifest's intended_valid.",
+ "builds": [
+  "ea5375293",
+  "1ad869dae",
+  "9ed52f435",
+  "28af44ab3"
+ ],
+ "cases": [
+  {
+   "name": "o5s_bs_uml_class",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "b49d374e24db21034ab415116676cefd43625e35c3e2376935042ff9a0183b1b",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 0,
+     "svg_sha256": "acf471496c150b94ecb7410ed4cf26810ff72edc0d214323973a63df90e3e534",
+     "stderr": ""
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "acf471496c150b94ecb7410ed4cf26810ff72edc0d214323973a63df90e3e534",
+     "stderr": ""
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "acf471496c150b94ecb7410ed4cf26810ff72edc0d214323973a63df90e3e534",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_bs_uml_activity",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "2eab51f5927c3aaa6c487ef07d52487f94894171023116cce40a2297529eb88e",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 0,
+     "svg_sha256": "2eab51f5927c3aaa6c487ef07d52487f94894171023116cce40a2297529eb88e",
+     "stderr": ""
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "2eab51f5927c3aaa6c487ef07d52487f94894171023116cce40a2297529eb88e",
+     "stderr": ""
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "2eab51f5927c3aaa6c487ef07d52487f94894171023116cce40a2297529eb88e",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_bs_mindmap",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "733f0586653451149494e4c9d7b9655d19e6268b5cbcfd872730852efda4832f",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startmindmap\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startmindmap\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_bs_wbs",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "01b192663e222132a13781157b0edaf00ba6f9ddc036d79a9927d746ab5352fe",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startwbs\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startwbs\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_bs_json",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "afd94c1fb3255e37b28c66a13bb1c2056e6529538ea2081be2d52d3117187643",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "stderr": ""
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "stderr": ""
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_bs_gantt",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "a1a613c4f073f2d7ccd36aaa72082ad38f0c19e77dda9c1c429f17daddfdb6d6",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "stderr": ""
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "stderr": ""
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_bs_salt",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "7b085dc0cd32b409675a66315d442864e1a8d88c83d08a57bef697abc6a521e4",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startsalt\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startsalt\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_bs_ebnf",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "85a33d116305ac46fdcce9782e3a485bf65e3fb841351fa2ae4ae559afab206d",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startebnf\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startebnf\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_mix_bs_start_at_end",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "6d5b7f7e66e7787dc4cf5860ce5f7d650531ea0b84446eef1b2b99e53690c625",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "eee2e5cdfa0d3fd60d5edf695e3220fb65365f47ffafc98f540e0a912333ae15",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_mix_at_start_bs_end",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "6d5b7f7e66e7787dc4cf5860ce5f7d650531ea0b84446eef1b2b99e53690c625",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 0,
+     "svg_sha256": "6d5b7f7e66e7787dc4cf5860ce5f7d650531ea0b84446eef1b2b99e53690c625",
+     "stderr": ""
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "6d5b7f7e66e7787dc4cf5860ce5f7d650531ea0b84446eef1b2b99e53690c625",
+     "stderr": ""
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "6d5b7f7e66e7787dc4cf5860ce5f7d650531ea0b84446eef1b2b99e53690c625",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_mix_bs_mindmap_at_end",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "733f0586653451149494e4c9d7b9655d19e6268b5cbcfd872730852efda4832f",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startmindmap\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startmindmap\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_nest_at_then_bs",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "775ec9b12d7ce8f9893c8369b91df931f109190d373fdeea4a3759fcd3008479",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "812248d1ea6ea4a9baa96f0665f0622cce49d27f24b5638ed1785fee2a4f0bda",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_nest_bs_then_at",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "775ec9b12d7ce8f9893c8369b91df931f109190d373fdeea4a3759fcd3008479",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "59b03ea8ac4206acba5f42e3181a264014b5581dd6cb1d4b71002d5acbeded52",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_two_blocks_bs",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "b4fad45556837b1827f94314e73fef3c220b8d0cebc5a7fb4d850bb6c18e43eb",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "930df8e6c0bf83a2fdc9af1d6f0c133b74ab337c857d6f795fc8c70036f0fc35",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_inc_wrapped_bs",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "3720f247dfe7434ffac53b3de68dc1bef9de9458cb8258dc75c2ee5193323eae",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 0,
+     "svg_sha256": "3720f247dfe7434ffac53b3de68dc1bef9de9458cb8258dc75c2ee5193323eae",
+     "stderr": ""
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "3720f247dfe7434ffac53b3de68dc1bef9de9458cb8258dc75c2ee5193323eae",
+     "stderr": ""
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "3720f247dfe7434ffac53b3de68dc1bef9de9458cb8258dc75c2ee5193323eae",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_inc_plain_in_bs",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "f8f95ab6ccd2c07b9f78452f0366a4477f408ce89623f7b6157d9f5b0a72f72e",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "f8f95ab6ccd2c07b9f78452f0366a4477f408ce89623f7b6157d9f5b0a72f72e",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_ws_tab_bs",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "690c99b766813e907d872be3d9b675b762649cfcd7efbdbfef9bc446ced062bb",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "7df18142924ce86fc2255be069a0b9915289494e8685fe36404d9ac627c6503c",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_ws_bs_end_indented",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "485905bd0fd894bd30ac857406ddafbdc4f43818100f2f4f022768e5108330ed",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "165de72855cf3c3cd7e8634fad2e47af71190a96f1029743473f43a3cfb90ccd",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_ws_leading_blank_line",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "f59f7a80e03d389b70e788d0cae950a9689d0363e70439fe2c505253cd4ad426",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "f59f7a80e03d389b70e788d0cae950a9689d0363e70439fe2c505253cd4ad426",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_ws_leading_blank_at",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "f59f7a80e03d389b70e788d0cae950a9689d0363e70439fe2c505253cd4ad426",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 0,
+     "svg_sha256": "f59f7a80e03d389b70e788d0cae950a9689d0363e70439fe2c505253cd4ad426",
+     "stderr": ""
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "f59f7a80e03d389b70e788d0cae950a9689d0363e70439fe2c505253cd4ad426",
+     "stderr": ""
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "f59f7a80e03d389b70e788d0cae950a9689d0363e70439fe2c505253cd4ad426",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_case_bs_upper_start",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "bba5c968fdda6d912a34879efbc1d8d507996008cc88b18676d0139c3a7b9236",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\STARTUML\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\STARTUML\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "2b57a938e8c55a7f4d21cd4380e958bcd597fce384ede3d3673630b3e45fa186",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_case_at_upper_start_lower_end",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "bba5c968fdda6d912a34879efbc1d8d507996008cc88b18676d0139c3a7b9236",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"@STARTUML\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"@STARTUML\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "2b57a938e8c55a7f4d21cd4380e958bcd597fce384ede3d3673630b3e45fa186",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_case_bs_mixed_type",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "733f0586653451149494e4c9d7b9655d19e6268b5cbcfd872730852efda4832f",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startMindMap\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startMindMap\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_neg_bs_start_bare",
+   "java_prediction_valid": false,
+   "rust": {
+    "ea5375293": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\start\"\n"
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\start\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\start\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "f3d71b1ec2832e4247bde684c857e39e5cba8135953a4a7cd7ef95d1897d16af",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_neg_bs_upper_end",
+   "java_prediction_valid": false,
+   "rust": {
+    "ea5375293": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\ENDUML\"\n"
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "774828cacd317204843f0a6b7187c06152ada4000f53acbb46bf67be48756ea1",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_bs_seq_continuation",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "9ea267aa21587f5dd6f6ce7d4e76a4ccc4742f0a1ace7dc6fde0960e0a5ac899",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "b9414dee7a5557010eac116c2a26cec5d421da8a047b20049616e533696c93ab",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_bs_uml_theme_continued",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "e46d3e6ebbf5e2013a4c224e496b68b88087342101f9faac758acce36566bb1e",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "c73c2ef0744b2e32b98015050ea94c8ffd4b6cf31392413ba163a0fe42bf2394",
+     "stderr": ""
+    }
+   }
+  },
+  {
+   "name": "o5s_bs_mindmap_continuation",
+   "java_prediction_valid": true,
+   "rust": {
+    "ea5375293": {
+     "exit": 0,
+     "svg_sha256": "d321419df6b84abf62d7f66ea667f65b796d1a6d1012aed80a8920a8d497bf05",
+     "stderr": ""
+    },
+    "1ad869dae": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startmindmap\"\n"
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startmindmap\"\n"
+    },
+    "28af44ab3": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": ""
+    }
+   }
+  }
+ ]
+}

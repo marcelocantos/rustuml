@@ -1,0 +1,9 @@
+@startuml
+Juniper -> Juniper: calibration
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+JUNIPER ++ #Wheat
+Juniper --
+Kestrel --> Juniper: receipt
+@enduml

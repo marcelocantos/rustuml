@@ -1,0 +1,7 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+@sprite $walnut [1x1/16z] 0@@
+Kestrel --> Juniper: receipt
+@enduml

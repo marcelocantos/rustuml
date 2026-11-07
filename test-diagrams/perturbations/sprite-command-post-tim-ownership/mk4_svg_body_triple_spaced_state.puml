@@ -1,0 +1,6 @@
+@startuml
+sprite $box <svg width="4" height="4">
+<rect width="4" height="4" fill="red"/> /''' kept '''/ <rect width="1" height="1" fill="blue"/>
+</svg>
+state Waiting
+@enduml

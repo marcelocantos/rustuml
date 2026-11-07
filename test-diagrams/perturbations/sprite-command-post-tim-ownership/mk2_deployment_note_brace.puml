@@ -1,0 +1,8 @@
+@startuml
+node Server
+note right of Server
+Sprite frame {
+end note
+node Client
+Client --> Server
+@enduml

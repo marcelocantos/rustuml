@@ -1,0 +1,9 @@
+@startuml
+[Engine]
+legend
+sprite $x <svg width="4">
+endlegend
+note as N
+it's ' fine
+end note
+@enduml

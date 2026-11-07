@@ -1,0 +1,497 @@
+{
+ "changes": [
+  {
+   "name": "ck4_seq_apostrophe_word_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_seq_url_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_seq_creole_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_seq_quoted_then_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_seq_span_in_quotes_trailing",
+   "cohort": "BA",
+   "java_valid": false,
+   "intended_valid": true,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"a\"\n"
+  },
+  {
+   "name": "ck4_seq_triple_in_quotes",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_seq_triple_name",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_seq_double_leading_top",
+   "cohort": "BA",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"/' b\"\n"
+  },
+  {
+   "name": "ck4_seq_note_multiline_body",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_seq_note_inline_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_seq_continuation_next_leading",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "valid-error",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"two\"\n"
+  },
+  {
+   "name": "ck4_seq_continuation_comment_only_then_msg",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "valid-error",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\\"\n"
+  },
+  {
+   "name": "ck4_seq_crlf_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_seq_leading_space_trailing_spaces",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_seq_divider_end_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_seq_title_leading",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_seq_skinparam_block",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_class_body_member_leading",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_class_note_multiline",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_class_relation_label",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_class_special_in_name",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_component_bracket_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_state_body_leading",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_activity3_if_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_object_field_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_yaml_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_json_leading_member",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_mindmap_leading",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_wbs_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_timing_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_ebnf_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_salt_trailing",
+   "cohort": "BA",
+   "java_valid": false,
+   "intended_valid": true,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-accepted",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_tim_function_return_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_tim_define_value_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_tim_definelong_body",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_tim_while_body",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_tim_foreach_body",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_tim_include_trailing",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_tim_include_body_comments",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_tim_if_else_comment",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_tim_startsub_inplace_double",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_tim_includesub_double",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_ctl_procedure_sprite_nocomment",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_procedure_sprite_end_comment_two",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "match",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck4_inv_nbsp_leading_comment_seq",
+   "cohort": "BA",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{a0}/' c\"\n"
+  },
+  {
+   "name": "ck4_inv_class_after_leading_two",
+   "cohort": "BA",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"/' b\"\n"
+  }
+ ],
+ "losses": [
+  {
+   "name": "ck4_seq_continuation_next_leading",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "valid-error",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"two\"\n"
+  },
+  {
+   "name": "ck4_seq_continuation_comment_only_then_msg",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "valid-error",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\\"\n"
+  },
+  {
+   "name": "ck4_procedure_sprite_end_comment_two",
+   "cohort": "BA",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "match",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  }
+ ],
+ "disagreements": []
+}

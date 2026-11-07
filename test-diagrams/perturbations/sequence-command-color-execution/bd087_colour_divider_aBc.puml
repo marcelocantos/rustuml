@@ -1,0 +1,7 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+== <color:aBc>Walnut</color> ==
+Kestrel --> Juniper: receipt
+@enduml

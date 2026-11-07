@@ -1,0 +1,6 @@
+@startuml
+class Pebble \
+<<stone>> \
+#tan
+class Sand
+@enduml

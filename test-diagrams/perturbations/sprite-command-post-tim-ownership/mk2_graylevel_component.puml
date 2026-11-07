@@ -1,0 +1,7 @@
+@startuml
+[Engine]
+sprite $gem [2x2/7] {
+F0
+0F
+}
+@enduml

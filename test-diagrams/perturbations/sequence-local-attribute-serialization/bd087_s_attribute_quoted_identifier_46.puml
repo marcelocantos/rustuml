@@ -1,0 +1,7 @@
+@startuml
+participant Alder
+participant Osprey
+Alder -> Osprey: audit
+participant "Fern\tHouse"
+"Fern\tHouse" -> Alder: metadata
+@enduml

@@ -1,0 +1,37 @@
+{
+ "label": "retained",
+ "categories": {
+  "ast: add[\"@startuml\\n !theme cerulean\\n!if N\\n!theme united\\n!endif\\n' consume this\\nclass Larch \\n\\nclass Pine\\nLarch --> Pine\\n | \"activationbox\", | \"activity\", | \"activitybar\", | \"actor\", | \"agent\", | \"arrow\", | \"artifact\", | \"boundary\", | \"box\",] rem[\"@startuml\\nclass Larch /' trailing \\n\\nclass Pine\\nLarch --> Pine\\n@enduml\\n\", | declarations: [], | skinparams: [],] (svg changed)": 1,
+  "yaml: add[- activationbox | - activity | - activitybar | - actor | - agent | - arrow | - artifact | - boundary | - box | - caption | - card | - circle | - class | - closed | - cloud | - collections | - component | - composite | - control | - database] rem[source: \"@startuml\\nclass Larch /' trailing \\n\\nclass Pine\\nLarch --> Pine\\n@enduml\\n\"] (svg changed)": 1,
+  "ast: add[\"@startuml\\n\\n\\n\\nskinparam backgroundColor transparent\\nskinparam useBetaStyle false\\n\\n\\n\\n\\n\\n\\n<style>\\n  root {\\n   | value: \"NhfNbqthlNfl\",] rem[\"@startuml\\n\\n\\n\\nskinparam backgroundColor transparent\\nskinparam useBetaStyle false\\n\\n\\n\\n\\n\\n\\n<style>\\n  root {\\n   | value: \"NzgrlNgneta\",] (svg changed)": 1,
+  "yaml: add[source: \"@startuml\\n\\n\\n\\nskinparam backgroundColor transparent\\nskinparam useBetaStyle false\\n\\n\\n\\n\\n\\n\\n<style>\\n  ro | value: 'NhfNbqthlNfl'] rem[source: \"@startuml\\n\\n\\n\\nskinparam backgroundColor transparent\\nskinparam useBetaStyle false\\n\\n\\n\\n\\n\\n\\n<style>\\n  ro | value: 'NzgrlNgneta'] (svg changed)": 1
+ },
+ "examples": {
+  "ast: add[\"@startuml\\n !theme cerulean\\n!if N\\n!theme united\\n!endif\\n' consume this\\nclass Larch \\n\\nclass Pine\\nLarch --> Pine\\n | \"activationbox\", | \"activity\", | \"activitybar\", | \"actor\", | \"agent\", | \"arrow\", | \"artifact\", | \"boundary\", | \"box\",] rem[\"@startuml\\nclass Larch /' trailing \\n\\nclass Pine\\nLarch --> Pine\\n@enduml\\n\", | declarations: [], | skinparams: [],] (svg changed)": [
+   "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml"
+  ],
+  "yaml: add[- activationbox | - activity | - activitybar | - actor | - agent | - arrow | - artifact | - boundary | - box | - caption | - card | - circle | - class | - closed | - cloud | - collections | - component | - composite | - control | - database] rem[source: \"@startuml\\nclass Larch /' trailing \\n\\nclass Pine\\nLarch --> Pine\\n@enduml\\n\"] (svg changed)": [
+   "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml"
+  ],
+  "ast: add[\"@startuml\\n\\n\\n\\nskinparam backgroundColor transparent\\nskinparam useBetaStyle false\\n\\n\\n\\n\\n\\n\\n<style>\\n  root {\\n   | value: \"NhfNbqthlNfl\",] rem[\"@startuml\\n\\n\\n\\nskinparam backgroundColor transparent\\nskinparam useBetaStyle false\\n\\n\\n\\n\\n\\n\\n<style>\\n  root {\\n   | value: \"NzgrlNgneta\",] (svg changed)": [
+   "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml"
+  ],
+  "yaml: add[source: \"@startuml\\n\\n\\n\\nskinparam backgroundColor transparent\\nskinparam useBetaStyle false\\n\\n\\n\\n\\n\\n\\n<style>\\n  ro | value: 'NhfNbqthlNfl'] rem[source: \"@startuml\\n\\n\\n\\nskinparam backgroundColor transparent\\nskinparam useBetaStyle false\\n\\n\\n\\n\\n\\n\\n<style>\\n  ro | value: 'NzgrlNgneta'] (svg changed)": [
+   "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml"
+  ]
+ },
+ "all": {
+  "ast: add[\"@startuml\\n !theme cerulean\\n!if N\\n!theme united\\n!endif\\n' consume this\\nclass Larch \\n\\nclass Pine\\nLarch --> Pine\\n | \"activationbox\", | \"activity\", | \"activitybar\", | \"actor\", | \"agent\", | \"arrow\", | \"artifact\", | \"boundary\", | \"box\",] rem[\"@startuml\\nclass Larch /' trailing \\n\\nclass Pine\\nLarch --> Pine\\n@enduml\\n\", | declarations: [], | skinparams: [],] (svg changed)": [
+   "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml"
+  ],
+  "yaml: add[- activationbox | - activity | - activitybar | - actor | - agent | - arrow | - artifact | - boundary | - box | - caption | - card | - circle | - class | - closed | - cloud | - collections | - component | - composite | - control | - database] rem[source: \"@startuml\\nclass Larch /' trailing \\n\\nclass Pine\\nLarch --> Pine\\n@enduml\\n\"] (svg changed)": [
+   "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml"
+  ],
+  "ast: add[\"@startuml\\n\\n\\n\\nskinparam backgroundColor transparent\\nskinparam useBetaStyle false\\n\\n\\n\\n\\n\\n\\n<style>\\n  root {\\n   | value: \"NhfNbqthlNfl\",] rem[\"@startuml\\n\\n\\n\\nskinparam backgroundColor transparent\\nskinparam useBetaStyle false\\n\\n\\n\\n\\n\\n\\n<style>\\n  root {\\n   | value: \"NzgrlNgneta\",] (svg changed)": [
+   "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml"
+  ],
+  "yaml: add[source: \"@startuml\\n\\n\\n\\nskinparam backgroundColor transparent\\nskinparam useBetaStyle false\\n\\n\\n\\n\\n\\n\\n<style>\\n  ro | value: 'NhfNbqthlNfl'] rem[source: \"@startuml\\n\\n\\n\\nskinparam backgroundColor transparent\\nskinparam useBetaStyle false\\n\\n\\n\\n\\n\\n\\n<style>\\n  ro | value: 'NzgrlNgneta'] (svg changed)": [
+   "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml"
+  ]
+ }
+}

@@ -61,22 +61,1142 @@ static EXTERNAL_MESSAGE_OUT_RE: LazyLock<Regex> = LazyLock::new(|| {
     .unwrap()
 });
 
+// Pattern2#transform/compileInternal: ASCII case folding and Java's default
+// ASCII predefined classes; Unicode identity properties remain Unicode.
+pub(super) fn registered_regex(pattern: &str) -> Regex {
+    let expanded = pattern
+        .replace("%pLN", r"\p{L}\p{N}")
+        .replace("%s", r"\x09-\x0d \u{00a0}")
+        .replace("%g", "\"\u{201c}\u{201d}\u{e121}")
+        .replace("%q", "'\u{2018}\u{2019}")
+        .replace(r"\w", "[A-Za-z_0-9]")
+        .replace(r"\d", "[0-9]")
+        .replace(r"\s", r"[\x09-\x0d ]")
+        .replace(r"\S", r"[^\x09-\x0d ]")
+        .replace(r"\b", r"(?-u:\b)")
+        .replace(r"\<", "<")
+        .replace(r"\>", ">")
+        .to_ascii_lowercase()
+        .replace(r"\p{l}", r"\p{L}")
+        .replace(r"\p{n}", r"\p{N}")
+        .replace("(?p<", "(?P<");
+    // Pattern2 does not enable DOTALL. Java dot excludes all five line
+    // terminators, whereas Rust's default dot excludes only LF.
+    let mut pattern = String::new();
+    let mut escaped = false;
+    let mut bracket_depth = 0;
+    for ch in expanded.chars() {
+        if escaped {
+            pattern.push(ch);
+            escaped = false;
+        } else if ch == '\\' {
+            pattern.push(ch);
+            escaped = true;
+        } else if ch == '[' {
+            bracket_depth += 1;
+            pattern.push(ch);
+        } else if ch == ']' {
+            bracket_depth -= 1;
+            pattern.push(ch);
+        } else if ch == '.' && bracket_depth == 0 {
+            pattern.push_str(r"[^\r\n\u{0085}\u{2028}\u{2029}]");
+        } else {
+            pattern.push(ch);
+        }
+    }
+    Regex::new(&format!(r"\A(?:{pattern})\z")).expect("pinned registered sequence grammar")
+}
+
+// StringLocated#getTrimmed -> StringUtils#trin, not Unicode str::trim.
+pub(super) fn sequence_command_trim(line: &str) -> &str {
+    line.trim_matches([' ', '\t', '\r', '\n', '\0'])
+}
+
+// FoxSignature's masks table and getFoxSignatureFromRealString. The required
+// masks in the inventory are derived from RegexConcat#foxRegex, not fitted.
+pub(super) fn sequence_fox_signature(line: &str) -> u64 {
+    const SYMBOLS: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0!\"#$%&'()*+,-./:;<=>?@[\\]^_{|}~";
+    let mut result = 0;
+    for ch in line.chars() {
+        if matches!(ch, ' ' | '\t' | '\r' | '\n' | '\u{000c}' | '\u{00a0}') {
+            result |= 1;
+        } else if let Some(index) = SYMBOLS.find(ch.to_ascii_uppercase()) {
+            result |= 1u64 << (index + 2);
+            if matches!(ch, '.' | '=' | '-' | '~') {
+                result |= 2;
+            }
+        }
+    }
+    result
+}
+
+enum CommandEnd {
+    Single,
+    End(Regex),
+    Brace,
+}
+
+enum RegisteredPattern {
+    Plain(Regex),
+    Color {
+        prefix: Regex,
+        suffix: Regex,
+        absent: Regex,
+    },
+}
+
+struct RegisteredSequenceCommand {
+    class: &'static str,
+    pattern: RegisteredPattern,
+    signature: u64,
+    end: CommandEnd,
+    implemented: bool,
+}
+
+impl RegisteredSequenceCommand {
+    fn new(
+        class: &'static str,
+        pattern: &str,
+        signature: u64,
+        end: CommandEnd,
+        implemented: bool,
+    ) -> Self {
+        let pattern = if let Some((prefix, suffix)) = pattern.split_once("{COLOR}") {
+            RegisteredPattern::Color {
+                prefix: registered_regex(prefix),
+                suffix: registered_regex(suffix),
+                absent: registered_regex(&format!("{prefix}{suffix}")),
+            }
+        } else {
+            RegisteredPattern::Plain(registered_regex(pattern))
+        };
+        Self {
+            class,
+            pattern,
+            signature,
+            end,
+            implemented,
+        }
+    }
+
+    // ColorParser.PART2 has one lookahead unavailable in regex::Regex. Split
+    // the command at its optional color leaf and enumerate its token boundaries.
+    // This preserves the language, including fallback to COLOR_REGEXP, without
+    // weakening the lookahead or requiring regex backtracking in Rust.
+    fn color_match<'a>(&self, line: &'a str) -> Option<Option<&'a str>> {
+        if self.signature & sequence_fox_signature(line) != self.signature {
+            return None;
+        }
+        match &self.pattern {
+            RegisteredPattern::Plain(regex) => regex.is_match(line).then_some(None),
+            RegisteredPattern::Color {
+                prefix,
+                suffix,
+                absent,
+            } => {
+                static SIMPLE: LazyLock<Regex> =
+                    LazyLock::new(|| registered_regex(r"#\w+[-\\|/]?\w+"));
+                // PART2: a nonfinal style must consume ';', because the next
+                // style begins with a word character. The final style may end
+                // without ';' only when the original negative lookahead holds.
+                static COMPOSITE: LazyLock<Regex> = LazyLock::new(|| {
+                    registered_regex(
+                        r"#(?:\w+[-\\|/]?\w+;)?(?:(?:text|back|header|line|line\.dashed|line\.dotted|line\.bold|shadowing)(?::\w+[-\\|/]?\w+)?;)*(?:text|back|header|line|line\.dashed|line\.dotted|line\.bold|shadowing)(?::\w+[-\\|/]?\w+)?;?",
+                    )
+                });
+                let boundaries = line
+                    .char_indices()
+                    .map(|(i, _)| i)
+                    .chain(std::iter::once(line.len()))
+                    .collect::<Vec<_>>();
+                for &start in boundaries.iter().rev() {
+                    if !line[start..].starts_with('#') || !prefix.is_match(&line[..start]) {
+                        continue;
+                    }
+                    // ColorParser tries PART2 before the simple alternative.
+                    for composite in [true, false] {
+                        for &end in boundaries.iter().rev().take_while(|&&end| end > start) {
+                            let token = &line[start..end];
+                            let matches = if composite {
+                                COMPOSITE.is_match(token)
+                                    && (token.ends_with(';')
+                                        || !line[end..].chars().next().is_some_and(|c| {
+                                            c.is_ascii_alphanumeric()
+                                                || matches!(c, '_' | ';' | ':' | '.')
+                                        }))
+                            } else {
+                                SIMPLE.is_match(token)
+                            };
+                            if matches && suffix.is_match(&line[end..]) {
+                                return Some(Some(token));
+                            }
+                        }
+                    }
+                }
+                absent.is_match(line).then_some(None)
+            }
+        }
+    }
+
+    fn command_end(&self, lines: &[String], start: usize) -> Option<usize> {
+        match &self.end {
+            CommandEnd::Single => Some(start),
+            CommandEnd::End(regex) => (start + 1..lines.len()).find(|&i| {
+                regex.is_match(
+                    &sequence_command_trim(super::source_text(&lines[i])).to_ascii_lowercase(),
+                )
+            }),
+            CommandEnd::Brace => {
+                // CommandMultilinesBracket#isValid / SkinLoader.p1.
+                static CONSISTENT: LazyLock<Regex> = LazyLock::new(|| {
+                    registered_regex(r"^([\w.]*(?:\<\<.*\>\>)?[\w.]*)[%s]+(?:(\{)|(.*))$|^\}?$")
+                });
+                // CommandSkinParamMultilines#hasStartingQuote delegates to
+                // CommandMultilinesComment.COMMENT_SINGLE_LINE, including %q.
+                static COMMENT: LazyLock<Regex> =
+                    LazyLock::new(|| registered_regex(r"^[%s]*([%q].*||/[%q].*[%q]/[%s]*)$"));
+                let mut level = 1;
+                for (index, raw) in lines.iter().enumerate().skip(start + 1) {
+                    let text = sequence_command_trim(super::source_text(raw)).to_ascii_lowercase();
+                    if !COMMENT.is_match(&text) && !CONSISTENT.is_match(&text) {
+                        return None;
+                    }
+                    if text.ends_with('{') {
+                        level += 1;
+                    }
+                    if text.ends_with('}') {
+                        level -= 1;
+                    }
+                    if level == 0 {
+                        return Some(index);
+                    }
+                }
+                None
+            }
+        }
+    }
+
+    // CODE capture position in CommandParticipantA/A2/A3/A4#getRegexConcat.
+    // Match the already selected command's prefix, then project its byte range
+    // onto the original (case-preserving) input. ASCII folding preserves offsets.
+    fn participant_code<'a>(&self, text: &'a str, color: Option<&str>) -> Option<&'a str> {
+        let code_index = match self.class {
+            "CommandParticipantA" | "CommandParticipantA3" => 4,
+            "CommandParticipantA2" | "CommandParticipantA4" => 3,
+            _ => return None,
+        };
+        let RegisteredPattern::Color { prefix, .. } = &self.pattern else {
+            return None;
+        };
+        let prefix_text = &text[..text.len() - color.map_or(0, str::len)];
+        let folded = prefix_text.to_ascii_lowercase();
+        let caps = prefix.captures(&folded)?;
+        let code = caps.get(code_index)?;
+        Some(&text[code.range()])
+    }
+
+    fn validate_colors(
+        &self,
+        line: &str,
+        token: Option<&str>,
+        source_line: usize,
+    ) -> Result<(), ParseError> {
+        let bad = |_color: &str| ParseError {
+            line: source_line,
+            message: "No such color".to_string(),
+        };
+        // CommandParticipantMultilines#executeNow never reads its COLOR
+        // capture. Single-line CommandParticipant#executeArg instead passes the
+        // entire token to HColorSet#getColor, not to Colors.
+        let token = if self.class == "CommandParticipantMultilines" {
+            None
+        } else if matches!(
+            self.class,
+            "CommandParticipantA"
+                | "CommandParticipantA2"
+                | "CommandParticipantA3"
+                | "CommandParticipantA4"
+        ) {
+            if let Some(token) = token
+                && !valid_sequence_color(token)
+            {
+                return Err(bad(token));
+            }
+            None
+        } else {
+            token
+        };
+        if let Some(token) = token {
+            // Colors#Colors removes '#' and splits ';'. Dotted line styles
+            // without ':' are styles; shadowing's value is a boolean, not color.
+            let data = token.replace('#', "");
+            for item in data.split(';').filter(|item| !item.is_empty()) {
+                if let Some((name, value)) = item.split_once(':') {
+                    if name != "shadowing" && !valid_sequence_color(value) {
+                        return Err(bad(value));
+                    }
+                } else if !item.contains('.') && !valid_sequence_color(item) {
+                    return Err(bad(item));
+                }
+            }
+        }
+        if let RegisteredPattern::Plain(regex) = &self.pattern
+            && let Some(caps) = regex.captures(line)
+        {
+            for name in regex
+                .capture_names()
+                .flatten()
+                .filter(|name| name.starts_with("seq_color"))
+            {
+                // CommandReferenceMultilinesOverSeveral#execute reads only
+                // REF[0]; its trailing BACKCOLOR capture is not applied.
+                if self.class == "CommandReferenceMultilinesOverSeveral" && name == "seq_color1" {
+                    continue;
+                }
+                if let Some(color) = caps.name(name)
+                    && !valid_sequence_color(color.as_str())
+                {
+                    return Err(bad(color.as_str()));
+                }
+            }
+        }
+        // CommandArrow#applyStyle is also used by both exo commands. Apart
+        // from these four style keywords, each token is passed to HColorSet.
+        if let RegisteredPattern::Plain(regex) = &self.pattern
+            && let Some(caps) = regex.captures(line)
+        {
+            for name in regex
+                .capture_names()
+                .flatten()
+                .filter(|name| name.starts_with("seq_style"))
+            {
+                if let Some(style) = caps.name(name) {
+                    for value in style.as_str().split(',') {
+                        if !matches!(value, "dashed" | "bold" | "dotted" | "hidden")
+                            && !valid_sequence_color(value)
+                        {
+                            return Err(bad(value));
+                        }
+                    }
+                }
+            }
+        }
+        Ok(())
+    }
+}
+
+// HColorSet#parseColor accepts simple colors and two-color gradients. Command
+// color grammars exclude the '?' scheme syntax; return's existing validator is
+// retained for its previously supported model input contract.
+fn valid_sequence_color(color: &str) -> bool {
+    if valid_return_color(color) {
+        return true;
+    }
+    // HColorSet#parseColor resolves gradient endpoints with parseSimpleColor,
+    // which excludes the transparent/background/automatic HColor symbols.
+    let simple = |part: &str| {
+        valid_return_color(part)
+            && !matches!(
+                part.trim_start_matches('#').to_ascii_lowercase().as_str(),
+                "transparent" | "background" | "automatic"
+            )
+    };
+    color.char_indices().any(|(index, ch)| {
+        matches!(ch, '-' | '\\' | '|' | '/')
+            && simple(&color[..index])
+            && simple(&color[index + ch.len_utf8()..])
+    })
+}
+
+// SequenceDiagramFactory#initCommandsList / CommonCommands#addCommonCommands1,
+// pinned 71806a23. Registration order and exact original patterns are preserved
+// in sequence-registered-command-rejection/inventory.json (81-command source
+// probe). These are source grammars, not fixture data. Account 3b38384b3.
+static REGISTERED_SEQUENCE_COMMANDS: LazyLock<Vec<RegisteredSequenceCommand>> = LazyLock::new(
+    || {
+        vec![
+            // 0: net.sourceforge.plantuml.command.CommandTitle
+            RegisteredSequenceCommand::new(
+                "CommandTitle",
+                r###"^title(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$"###,
+                2106432u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 1: net.sourceforge.plantuml.command.CommandMainframe
+            RegisteredSequenceCommand::new(
+                "CommandMainframe",
+                r###"^mainframe(?:[%s]*:[%s]*|[%s]+)(.*[%pLN_.].*)$"###,
+                574660u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 2: net.sourceforge.plantuml.command.CommandCaption
+            RegisteredSequenceCommand::new(
+                "CommandCaption",
+                r###"^caption(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$"###,
+                2327572u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 3: net.sourceforge.plantuml.command.CommandMultilinesCaption
+            RegisteredSequenceCommand::new(
+                "CommandMultilinesCaption",
+                r###"^caption$"###,
+                0u64,
+                CommandEnd::End(registered_regex(r###"^end[%s]?caption$"###)),
+                false,
+            ),
+            // 4: net.sourceforge.plantuml.command.CommandMultilinesTitle
+            RegisteredSequenceCommand::new(
+                "CommandMultilinesTitle",
+                r###"^title$"###,
+                0u64,
+                CommandEnd::End(registered_regex(r###"^end[%s]?title$"###)),
+                false,
+            ),
+            // 5: net.sourceforge.plantuml.command.CommandMultilinesLegend
+            RegisteredSequenceCommand::new(
+                "CommandMultilinesLegend",
+                r###"^legend(?:[%s]+(top|bottom))?(?:[%s]+(left|right|center))?$"###,
+                41312u64,
+                CommandEnd::End(registered_regex(r###"^end[%s]?legend$"###)),
+                true,
+            ),
+            // 6: net.sourceforge.plantuml.command.CommandLegend
+            RegisteredSequenceCommand::new(
+                "CommandLegend",
+                r###"^legend(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$"###,
+                41312u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 7: net.sourceforge.plantuml.command.CommandFooter
+            RegisteredSequenceCommand::new(
+                "CommandFooter",
+                r###"^(?:(left|right|center))?[%s]*footer(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$"###,
+                2687168u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 8: net.sourceforge.plantuml.command.CommandMultilinesFooter
+            RegisteredSequenceCommand::new(
+                "CommandMultilinesFooter",
+                r###"^(?:(left|right|center)?[%s]*)footer$"###,
+                0u64,
+                CommandEnd::End(registered_regex(r###"^end[%s]?footer$"###)),
+                false,
+            ),
+            // 9: net.sourceforge.plantuml.command.CommandHeader
+            RegisteredSequenceCommand::new(
+                "CommandHeader",
+                r###"^(?:(left|right|center))?[%s]*header(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$"###,
+                524900u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 10: net.sourceforge.plantuml.command.CommandMultilinesHeader
+            RegisteredSequenceCommand::new(
+                "CommandMultilinesHeader",
+                r###"^(?:(left|right|center)?[%s]*)header$"###,
+                0u64,
+                CommandEnd::End(registered_regex(r###"^end[%s]?header$"###)),
+                false,
+            ),
+            // 11: net.sourceforge.plantuml.classdiagram.command.CommandNamespaceSeparator
+            RegisteredSequenceCommand::new(
+                "CommandNamespaceSeparator",
+                r###"^set[%s]+(?:separator|namespaceseparator)[%s]+(\S+)$"###,
+                3145793u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 12: net.sourceforge.plantuml.command.CommandNope
+            RegisteredSequenceCommand::new(
+                "CommandNope",
+                r###"^[%s]*$"###,
+                0u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 13: net.sourceforge.plantuml.command.CommandPragma
+            RegisteredSequenceCommand::new(
+                "CommandPragma",
+                r###"^!pragma[%s]+([A-Za-z_][A-Za-z_0-9]*)(?:[%s]+(.*))?$"###,
+                537542917u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 14: net.sourceforge.plantuml.command.CommandAssumeTransparent
+            RegisteredSequenceCommand::new(
+                "CommandAssumeTransparent",
+                r###"^!assume[%s]+transparent[%s]+(dark|light)$"###,
+                544915525u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 15: net.sourceforge.plantuml.command.CommandSkinParam
+            RegisteredSequenceCommand::new(
+                "CommandSkinParam",
+                r###"^(skinparam|skinparamlocked)[%s]+([\w.]*(?:\<\<[^<>]*\>\>)?[\w.]*)[%s]+([^{}]*)$"###,
+                1758213u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 16: net.sourceforge.plantuml.command.CommandSkinParamJaws
+            RegisteredSequenceCommand::new(
+                "CommandSkinParamJaws",
+                r###"^((skinparam|skinparamlocked)[%s]+.*.*)+$"###,
+                0u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 17: net.sourceforge.plantuml.command.CommandSkinParamMultilines
+            RegisteredSequenceCommand::new(
+                "CommandSkinParamMultilines",
+                r###"^skinparam[%s]*(?:[%s]+([\w.]*(?:\<\<.*\>\>)?[\w.]*))?[%s]*\{$"###,
+                0u64,
+                CommandEnd::Brace,
+                true,
+            ),
+            // 18: net.sourceforge.plantuml.sequencediagram.command.CommandSkin
+            RegisteredSequenceCommand::new(
+                "CommandSkin",
+                r###"^skin[%s]+([\w.]+)$"###,
+                1086465u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 19: net.sourceforge.plantuml.command.CommandMinwidth
+            RegisteredSequenceCommand::new(
+                "CommandMinwidth",
+                r###"^minwidth[%s]+(\d+)$"###,
+                18925089u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 20: net.sourceforge.plantuml.command.CommandPage
+            RegisteredSequenceCommand::new(
+                "CommandPage",
+                r###"^page[%s]+(\d+)[%s]*x*[%s]*(\d+)$"###,
+                131397u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 21: net.sourceforge.plantuml.command.CommandRotate
+            RegisteredSequenceCommand::new(
+                "CommandRotate",
+                r###"^rotate$"###,
+                2687044u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 22: net.sourceforge.plantuml.command.CommandFactorySprite$1
+            RegisteredSequenceCommand::new(
+                "CommandFactorySprite$1",
+                r###"^sprite[%s]+\$?([-.%pLN_]+)[%s]*(?:\[(\d+)x(\d+)/(?:(\d+)(z)?|(color))\])?[%s]*\{$"###,
+                72057594041730113u64,
+                CommandEnd::End(registered_regex(r###"^end[%s]?sprite|\}$"###)),
+                false,
+            ),
+            // 23: net.sourceforge.plantuml.command.CommandFactorySprite$2
+            RegisteredSequenceCommand::new(
+                "CommandFactorySprite$2",
+                r###"^sprite[%s]+\$?([-.%pLN_]+)[%s]*(?:\[(\d+)x(\d+)/(?:(\d+)(z)|(color))\])?[%s]+([-_A-Za-z0-9]+)$"###,
+                3802177u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 24: net.sourceforge.plantuml.command.CommandSpriteSvg
+            RegisteredSequenceCommand::new(
+                "CommandSpriteSvg",
+                r###"^sprite[%s]+\$?([-%pLN_]+)[%s]+(\<svg\b.*\</svg\>)$"###,
+                360639826101569u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 25: net.sourceforge.plantuml.command.CommandSpriteStdlib
+            RegisteredSequenceCommand::new(
+                "CommandSpriteStdlib",
+                r###"^sprite[%s]+\$([-%pLN_]+)[%s]*#([^#]+)#([^%s]+)$"###,
+                4298769473u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 26: net.sourceforge.plantuml.command.CommandSpriteStdlibSvg
+            RegisteredSequenceCommand::new(
+                "CommandSpriteStdlibSvg",
+                r###"^sprite[%s]+\$?([-%pLN_]+)[%s]*:([^:]+):([^%s]+)$"###,
+                3802177u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 27: net.sourceforge.plantuml.command.CommandSpriteSvgMultiline
+            RegisteredSequenceCommand::new(
+                "CommandSpriteSvgMultiline",
+                r###"^sprite[%s]+\$?([-%pLN_]+)[%s]+(\<svg\b.*)$"###,
+                70368756368705u64,
+                CommandEnd::End(registered_regex(r###"(.*\</svg\>)$"###)),
+                false,
+            ),
+            // 28: net.sourceforge.plantuml.command.CommandSpriteFile
+            RegisteredSequenceCommand::new(
+                "CommandSpriteFile",
+                r###"^sprite[%s]+\$?([-%pLN_]+)[%s]+([^<>%g#]*)$"###,
+                3802177u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 29: net.sourceforge.plantuml.style.CommandStyleMultilinesCSS
+            RegisteredSequenceCommand::new(
+                "CommandStyleMultilinesCSS",
+                r###"^\<style\>$"###,
+                351843791151168u64,
+                CommandEnd::End(registered_regex(r###"^[%s]*\</?style\>[%s]*$"###)),
+                false,
+            ),
+            // 30: net.sourceforge.plantuml.style.CommandStyleImport
+            RegisteredSequenceCommand::new(
+                "CommandStyleImport",
+                r###"^\<style[%s]*\w+[%s]*=[%s]*[%q%g]?([^%q%g]*)[%q%g]?\>$"###,
+                492581279506498u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 31: net.sourceforge.plantuml.command.CommandScale
+            RegisteredSequenceCommand::new(
+                "CommandScale",
+                r###"^scale[%s]+([0-9.]+)(?:[%s]*/[%s]*([0-9.]+))?$"###,
+                1056853u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 32: net.sourceforge.plantuml.command.CommandScaleWidthAndHeight
+            RegisteredSequenceCommand::new(
+                "CommandScaleWidthAndHeight",
+                r###"^scale[%s]+([0-9.]+)[%s]*[*x][%s]*([0-9.]+)$"###,
+                1056853u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 33: net.sourceforge.plantuml.command.CommandScaleWidthOrHeight
+            RegisteredSequenceCommand::new(
+                "CommandScaleWidthOrHeight",
+                r###"^scale[%s]+([0-9.]+)[%s]+(width|height)$"###,
+                3155541u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 34: net.sourceforge.plantuml.command.CommandScaleMaxWidth
+            RegisteredSequenceCommand::new(
+                "CommandScaleMaxWidth",
+                r###"^scale[%s]+max[%s]+([0-9.]+)[%s]+width$"###,
+                53503605u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 35: net.sourceforge.plantuml.command.CommandScaleMaxHeight
+            RegisteredSequenceCommand::new(
+                "CommandScaleMaxHeight",
+                r###"^scale[%s]+max[%s]+([0-9.]+)[%s]+height$"###,
+                36726613u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 36: net.sourceforge.plantuml.command.CommandScaleMaxWidthAndHeight
+            RegisteredSequenceCommand::new(
+                "CommandScaleMaxWidthAndHeight",
+                r###"^scale[%s]+max[%s]+([0-9.]+)[%s]*[*x][%s]*([0-9.]+)$"###,
+                34627669u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 37: net.sourceforge.plantuml.statediagram.command.CommandHideEmptyDescription
+            RegisteredSequenceCommand::new(
+                "CommandHideEmptyDescription",
+                r###"^(hide|show)[%s]+empty[%s]+description$"###,
+                71026289u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 38: net.sourceforge.plantuml.classdiagram.command.CommandHideShowByVisibility
+            RegisteredSequenceCommand::new(
+                "CommandHideShowByVisibility",
+                r###"^(hide|show)[%s]+((?:public|private|protected|package)?(?:[,%s]+(?:public|private|protected|package))*)[%s]+(members?|attributes?|fields?|methods?)$"###,
+                577u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 39: net.sourceforge.plantuml.classdiagram.command.CommandHideShowByGender
+            RegisteredSequenceCommand::new(
+                "CommandHideShowByGender",
+                r###"^(hide|show)[%s]+(?:(class|object|interface|enum|annotation|dataclass|record|abstract|[%pLN_.]+|[%g][^%g]+[%g]|\<\<.*\>\>)[%s]+)*?(?:(empty)[%s]+)?(members?|attributes?|fields?|methods?|circles?|circled?|stereotypes?)$"###,
+                577u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 40: net.sourceforge.plantuml.sequencediagram.command.CommandHideUnlinked
+            RegisteredSequenceCommand::new(
+                "CommandHideUnlinked",
+                r###"^(hide|show)[%s]+@?unlinked$"###,
+                4240993u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 41: net.sourceforge.plantuml.sequencediagram.command.CommandActivate
+            RegisteredSequenceCommand::new(
+                "CommandActivate",
+                r###"^(activate|deactivate|destroy|create)[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?P<seq_color0>#\w+)?(?:[%s]+(?P<seq_color1>#\w+))?$"###,
+                2097217u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 42: net.sourceforge.plantuml.sequencediagram.command.CommandDeactivateShort
+            RegisteredSequenceCommand::new(
+                "CommandDeactivateShort",
+                r###"^deactivate[%s]*$"###,
+                10486900u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 43: net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA
+            RegisteredSequenceCommand::new(
+                "CommandParticipantA",
+                r###"^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+(?:[%g]([^%g]+)[%g][%s]+as[%s]+)?([%pLN_.@]+)[%s]*(?:(\<\<.+?\>\>))?[%s]*(?:order[%s]+(-?\d{1,7}))?[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?[%s]*{COLOR}$"###,
+                1u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 44: net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA2
+            RegisteredSequenceCommand::new(
+                "CommandParticipantA2",
+                r###"^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+([%pLN_.@]+)[%s]+as[%s]+[%g]([^%g]+)[%g][%s]*(?:(\<\<.+?\>\>))?[%s]*(?:order[%s]+(-?\d{1,7}))?[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?[%s]*{COLOR}$"###,
+                1048581u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 45: net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA3
+            RegisteredSequenceCommand::new(
+                "CommandParticipantA3",
+                r###"^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+([%pLN_.@]+)[%s]+as[%s]+([%pLN_.@]+)[%s]*(?:(\<\<.+?\>\>))?[%s]*(?:order[%s]+(-?\d{1,7}))?[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?[%s]*{COLOR}$"###,
+                1048581u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 46: net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA4
+            RegisteredSequenceCommand::new(
+                "CommandParticipantA4",
+                r###"^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+[%g]([^%g]+)[%g][%s]*(?:(\<\<.+?\>\>))?[%s]*(?:order[%s]+(-?\d{1,7}))?[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?[%s]*{COLOR}$"###,
+                1u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 47: net.sourceforge.plantuml.sequencediagram.command.CommandParticipantMultilines
+            RegisteredSequenceCommand::new(
+                "CommandParticipantMultilines",
+                r###"^(participant)[%s]+([%pLN_.@]+)[%s]*(?:(\<\<.+?\>\>))?[%s]*(?:order[%s]+(-?\d{1,7}))?[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?[%s]*{COLOR}[%s]*\[$"###,
+                2251799816471573u64,
+                CommandEnd::End(registered_regex(r###"^([^\[\]]*)\]$"###)),
+                false,
+            ),
+            // 48: net.sourceforge.plantuml.sequencediagram.command.CommandArrow
+            RegisteredSequenceCommand::new(
+                "CommandArrow",
+                r###"^(&[%s]*)?(\{([%pLN_]+)\}[%s]+)?(([%pLN_.@]+)|[%g]([^%g]+)[%g]|[%g]([^%g]+)[%g][%s]*as[%s]+([%pLN_.@]+)|([%pLN_.@]+)[%s]+as[%s]*[%g]([^%g]+)[%g])(\{([%pLN_]+)\}[%s]+)?[%s]*(?:([%s][ox]|(?:[%s][ox]|\(\d+\))?<<?_?|(?:[%s][ox])?//?|(?:[%s][ox])?\\\\?))?(?:(-+)(?:\[(?P<seq_style0>(?:#\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\d+)(?:,#\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\d+)*)\])?(-*)|(-*)(?:\[(?P<seq_style1>(?:#\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\d+)(?:,#\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\d+)*)\])?(-+))(?:(_?>>?(?:[ox][%s]|\(\d+\))?|//?(?:[ox][%s])?|\\\\?(?:[ox][%s])?|[ox][%s]))?[%s]*(([%pLN_.@]+)|[%g]([^%g]+)[%g]|[%g]([^%g]+)[%g][%s]*as[%s]+([%pLN_.@]+)|([%pLN_.@]+)[%s]+as[%s]*[%g]([^%g]+)[%g])((?:\s&\s[%pLN_.@]+)*)(\{([%pLN_]+)\}[%s]+)?[%s]*(?:(\+\+|\*\*|!!|--|--\+\+|\+\+--)?)[%s]*(?:(?P<seq_color0>#\w+)?)[%s]*(?:(\<\<.+?\>\>))?[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?[%s]*(?::[%s]*(.*))?$"###,
+                0u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 49: net.sourceforge.plantuml.sequencediagram.command.CommandExoArrowLeft
+            RegisteredSequenceCommand::new(
+                "CommandExoArrowLeft",
+                r###"^(&[%s]*)?(\{([%pLN_]+)\}[%s]+)?([?\[\]][ox]?)?(?:(<<?|//?|\\\\?)?(-+)(?:\[(?P<seq_style0>(?:#\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\d+)(?:,#\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\d+)*)\])?(-*)(>>?|//?|\\\\?)|(<<?|//?|\\\\?)(-*)(?:\[(?P<seq_style1>(?:#\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\d+)(?:,#\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\d+)*)\])?(-+))([ox][%s]+)?[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:([+*!-]+)?)[%s]*(?:(?P<seq_color0>#\w+)?)[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?[%s]*(?::[%s]*(.*))?$"###,
+                0u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 50: net.sourceforge.plantuml.sequencediagram.command.CommandExoArrowRight
+            RegisteredSequenceCommand::new(
+                "CommandExoArrowRight",
+                r###"^(&[%s]*)?(\{([%pLN_]+)\}[%s]+)?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*([%s]+[ox])?(?:(<<?|//?|\\\\?)?(-+)(?:\[(?P<seq_style0>(?:#\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\d+)(?:,#\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\d+)*)\])?(-*)(>>?|//?|\\\\?)|(<<?|//?|\\\\?)(-*)(?:\[(?P<seq_style1>(?:#\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\d+)(?:,#\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\d+)*)\])?(-+))([ox]?[?\]\[])?[%s]*(?:([+*!-]+)?)[%s]*(?:(?P<seq_color0>#\w+)?)[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?[%s]*(?::[%s]*(.*))?$"###,
+                0u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 51: net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteCommand$2
+            RegisteredSequenceCommand::new(
+                "FactorySequenceNoteCommand$2",
+                r###"^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\<\<.+?\>\>))?[%s]*(right|left|over)[%s]+(?:of[%s])?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\<\<.+?\>\>))?[%s]*{COLOR}[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?[%s]*:[%s]*(.*)$"###,
+                17592188239937u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 52: net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOverSeveralCommand$1
+            RegisteredSequenceCommand::new(
+                "FactorySequenceNoteOverSeveralCommand$1",
+                r###"^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\<\<.+?\>\>))?[%s]*over[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\<\<.+?\>\>))?[%s]*{COLOR}[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?[%s]*:[%s]*(.*)$"###,
+                18691708780609u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 53: net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteAcrossCommand$1
+            RegisteredSequenceCommand::new(
+                "FactorySequenceNoteAcrossCommand$1",
+                r###"^(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\<\<.+?\>\>))?[%s]*(accross|across)[%s]*(?:(\<\<.+?\>\>))?[%s]*{COLOR}[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?[%s]*:[%s]*(.*)$"###,
+                17592189812820u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 54: net.sourceforge.plantuml.sequencediagram.command.CommandBoxStart
+            RegisteredSequenceCommand::new(
+                "CommandBoxStart",
+                r###"^box(?:(?:[%s]+[%g]([^%g]+)[%g]|[%s]+([^#]+)))?[%s]*(?:(\<\<.+?\>\>))?[%s]*{COLOR}$"###,
+                33619976u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 55: net.sourceforge.plantuml.sequencediagram.command.CommandBoxEnd
+            RegisteredSequenceCommand::new(
+                "CommandBoxEnd",
+                r###"^end[%s]*box$"###,
+                33652840u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 56: net.sourceforge.plantuml.sequencediagram.command.CommandGrouping
+            RegisteredSequenceCommand::new(
+                "CommandGrouping",
+                r###"^(&[%s]*)?(?:(opt|alt|loop|par|par2|break|critical|group|partition)(?P<seq_color0>#\w+)?|(else|end|also))(?:[%s]+(?P<seq_color1>#\w+))?(?:[%s]+(.*?))?$"###,
+                0u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 57: net.sourceforge.plantuml.sequencediagram.command.CommandActivate2
+            RegisteredSequenceCommand::new(
+                "CommandActivate2",
+                r###"^([%pLN_.@]+)[%s]*(\+\+|--)[%s]*(?P<seq_color0>#\w+)?$"###,
+                0u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 58: net.sourceforge.plantuml.sequencediagram.command.CommandReturn
+            RegisteredSequenceCommand::new(
+                "CommandReturn",
+                r###"^(&[%s]*)?[%s]*return[%s]*(?:(?P<seq_color0>#\w+)[%s]+)?(.*)$"###,
+                6848576u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 59: net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOnArrowCommand$1
+            RegisteredSequenceCommand::new(
+                "FactorySequenceNoteOnArrowCommand$1",
+                r###"^[%s]*(note|hnote|rnote)[%s]*(?:(\<\<.+?\>\>))?[%s]*(right|left|bottom|top)[%s]*(?:(\<\<.+?\>\>))?[%s]*{COLOR}[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?[%s]*:[%s]*(.*)$"###,
+                17592188239936u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 60: net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteCommand$1
+            RegisteredSequenceCommand::new(
+                "FactorySequenceNoteCommand$1",
+                r###"^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\<\<.+?\>\>))?[%s]*(right|left|over)[%s]+(?:of[%s]+)?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\<\<.+?\>\>))?[%s]*{COLOR}[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?$"###,
+                2195521u64,
+                CommandEnd::End(registered_regex(r###"^end[%s]?(note|hnote|rnote)$"###)),
+                true,
+            ),
+            // 61: net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOverSeveralCommand$2
+            RegisteredSequenceCommand::new(
+                "FactorySequenceNoteOverSeveralCommand$2",
+                r###"^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\<\<.+?\>\>))?[%s]*over[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\<\<.+?\>\>))?[%s]*{COLOR}[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?$"###,
+                1099522736193u64,
+                CommandEnd::End(registered_regex(r###"^end[%s]?(note|hnote|rnote)$"###)),
+                true,
+            ),
+            // 62: net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOnArrowCommand$2
+            RegisteredSequenceCommand::new(
+                "FactorySequenceNoteOnArrowCommand$2",
+                r###"^[%s]*(note|hnote|rnote)[%s]*(?:(\<\<.+?\>\>))?[%s]*(right|left|bottom|top)[%s]*(?:(\<\<.+?\>\>))?[%s]*{COLOR}[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?$"###,
+                2195520u64,
+                CommandEnd::End(registered_regex(r###"^[%s]*end[%s]?note$"###)),
+                true,
+            ),
+            // 63: net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteAcrossCommand$2
+            RegisteredSequenceCommand::new(
+                "FactorySequenceNoteAcrossCommand$2",
+                r###"^(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\<\<.+?\>\>))?[%s]*(accross|across)[%s]*(?:(\<\<.+?\>\>))?[%s]*{COLOR}[%s]*(?:(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]))?$"###,
+                3768404u64,
+                CommandEnd::End(registered_regex(r###"^end[%s]?(note|hnote|rnote)$"###)),
+                true,
+            ),
+            // 64: net.sourceforge.plantuml.sequencediagram.command.CommandNewpage
+            RegisteredSequenceCommand::new(
+                "CommandNewpage",
+                r###"^@?newpage(?:(?:[%s]*:[%s]*|[%s]+)(.*[%pLN_.].*))?$"###,
+                16941380u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 65: net.sourceforge.plantuml.sequencediagram.command.CommandIgnoreNewpage
+            RegisteredSequenceCommand::new(
+                "CommandIgnoreNewpage",
+                r###"^ignore[%s]*newpage$"###,
+                17532228u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 66: net.sourceforge.plantuml.sequencediagram.command.CommandAutoNewpage
+            RegisteredSequenceCommand::new(
+                "CommandAutoNewpage",
+                r###"^autonewpage[%s]+(\d+)$"###,
+                23298373u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 67: net.sourceforge.plantuml.sequencediagram.command.CommandDivider
+            RegisteredSequenceCommand::new(
+                "CommandDivider",
+                r###"^==[%s]*(.*)[%s]*==$"###,
+                140737488355330u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 68: net.sourceforge.plantuml.sequencediagram.command.CommandHSpace
+            RegisteredSequenceCommand::new(
+                "CommandHSpace",
+                r###"^\|\|(\d+)?\|+$"###,
+                144115188075855872u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 69: net.sourceforge.plantuml.sequencediagram.command.CommandReferenceOverSeveral
+            RegisteredSequenceCommand::new(
+                "CommandReferenceOverSeveral",
+                r###"^ref(?P<seq_color0>#\w+)?[%s]+over[%s]+(([%pLN_.@]+|[%g][^%g]+[%g])([%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g]))*)[%s]*(?:(\[\[.*?\]\]))?[%s]*:[%s]*(.*)$"###,
+                17592195023041u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 70: net.sourceforge.plantuml.sequencediagram.command.CommandReferenceMultilinesOverSeveral
+            RegisteredSequenceCommand::new(
+                "CommandReferenceMultilinesOverSeveral",
+                r###"^ref(?P<seq_color0>#\w+)?[%s]+over[%s]+((?:[%pLN_.@]+|[%g][^%g]+[%g])(?:[%s]*,[%s]*(?:[%pLN_.@]+|[%g][^%g]+[%g]))*)[%s]*(?:(\[\[.*?\]\]))?[%s]*(?P<seq_color1>#\w+)?$"###,
+                0u64,
+                CommandEnd::End(registered_regex(r###"^end[%s]?(ref)?$"###)),
+                true,
+            ),
+            // 71: net.sourceforge.plantuml.sequencediagram.command.CommandAutonumber
+            RegisteredSequenceCommand::new(
+                "CommandAutonumber",
+                r###"^autonumber[%s]*(\d(?:(?:[^%pLN%s]+|\d+)*\d)?)?(?:[%s]+(\d+))?(?:[%s]+[%g]([^%g]+)[%g])?[%s]*$"###,
+                6930508u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 72: net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberStop
+            RegisteredSequenceCommand::new(
+                "CommandAutonumberStop",
+                r###"^autonumber[%s]+stop[%s]*$"###,
+                8110157u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 73: net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberResume
+            RegisteredSequenceCommand::new(
+                "CommandAutonumberResume",
+                r###"^autonumber[%s]+resume[%s]*(?:[%s]+(\d+))?(?:[%s]+[%g]([^%g]+)[%g])?$"###,
+                7979085u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 74: net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberIncrement
+            RegisteredSequenceCommand::new(
+                "CommandAutonumberIncrement",
+                r###"^autonumber[%s]+inc(?:[%s]+([A-Za-z]))?[%s]*$"###,
+                6931549u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 75: net.sourceforge.plantuml.sequencediagram.command.CommandAutoactivate
+            RegisteredSequenceCommand::new(
+                "CommandAutoactivate",
+                r###"^autoactivate[%s]+(off|on)$"###,
+                14746709u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 76: net.sourceforge.plantuml.sequencediagram.command.CommandFootbox
+            RegisteredSequenceCommand::new(
+                "CommandFootbox",
+                r###"^(hide|show)?[%s]*footbox$"###,
+                35717256u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 77: net.sourceforge.plantuml.sequencediagram.command.CommandDelay
+            RegisteredSequenceCommand::new(
+                "CommandDelay",
+                r###"^(?:\.{3}|…)(?:(.*)(?:\.{3}|…))?$"###,
+                0u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 78: net.sourceforge.plantuml.sequencediagram.command.CommandFootboxOld
+            RegisteredSequenceCommand::new(
+                "CommandFootboxOld",
+                r###"^footbox[%s]*(on|off)?[%s]*$"###,
+                35717256u64,
+                CommandEnd::Single,
+                true,
+            ),
+            // 79: net.sourceforge.plantuml.sequencediagram.command.CommandUrl
+            RegisteredSequenceCommand::new(
+                "CommandUrl",
+                r###"^url[%s]*(?:of|for)?[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]+(?:is)?[%s]*(\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]|\[\[[%s]*\{(.*)\}[%s]*\]\]|\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]|\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]|\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\])$"###,
+                4726785u64,
+                CommandEnd::Single,
+                false,
+            ),
+            // 80: net.sourceforge.plantuml.sequencediagram.command.CommandLinkAnchor
+            RegisteredSequenceCommand::new(
+                "CommandLinkAnchor",
+                r###"^\{([%pLN_]+)\}[%s]*\<-\>[%s]*\{([%pLN_]+)\}[%s]*(?::[%s]*(.*))?$"###,
+                354042744143874u64,
+                CommandEnd::Single,
+                false,
+            ),
+        ]
+    },
+);
+
 /// Parse preprocessed lines into a sequence diagram.
+/// The compiled start pattern, signature and END of a registered command.
+#[cfg(test)]
+pub(super) fn registered_grammar(class: &str) -> Option<(String, u64, Option<String>)> {
+    let command = REGISTERED_SEQUENCE_COMMANDS
+        .iter()
+        .find(|command| command.class == class)?;
+    let RegisteredPattern::Plain(start) = &command.pattern else {
+        return None;
+    };
+    let end = match &command.end {
+        CommandEnd::End(end) => Some(end.as_str().to_string()),
+        CommandEnd::Single | CommandEnd::Brace => None,
+    };
+    Some((start.as_str().to_string(), command.signature, end))
+}
+
 pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
     let mut parser = SeqParser::new();
 
-    for (i, line) in lines.iter().enumerate() {
-        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
-        let in_note = parser.note_buffer.is_some();
-        if trimmed.is_empty() && !in_note {
-            continue;
-        }
-        let text = if in_note {
-            super::source_text(line)
-        } else {
-            trimmed
+    let mut index = 0;
+    while index < lines.len() {
+        let line = &lines[index];
+        let (source_line, _) = super::source_line_and_trimmed(index + 1, line);
+        let text = sequence_command_trim(super::source_text(line));
+        let folded = text.to_ascii_lowercase();
+        // PSystemCommandFactory#getCandidate tries the registered commands in
+        // order, including completion of multiline candidates before selection.
+        let candidate = REGISTERED_SEQUENCE_COMMANDS.iter().find_map(|command| {
+            let color = command.color_match(&folded)?;
+            let end = command.command_end(lines, index)?;
+            Some((command, color, end))
+        });
+        let Some((command, color, end)) = candidate else {
+            return Err(ParseError {
+                line: source_line,
+                message: format!("Syntax error: no registered sequence command accepts {text:?}"),
+            });
         };
-        parser.parse_line(source_line, text)?;
+        // CommandParticipant#executeArg returns before color/stereotype/create
+        // execution when CODE already exists. CommandActivate's separate create
+        // path does not take this return and retains repeated creation events.
+        let existing_participant = command
+            .participant_code(text, color)
+            .is_some_and(|code| parser.participant_ids.iter().any(|id| id == code));
+        if !existing_participant {
+            command.validate_colors(&folded, color, source_line)?;
+        } else if let Some(code) = command.participant_code(text, color) {
+            parser.report_put_participant_in_last(code, source_line);
+        }
+        // CommandGrouping#executeArg: COLORS[1] is backColorGeneral, the
+        // colour of the whole group area; only COLORS[0] reaches the model.
+        if command.class == "CommandGrouping"
+            && let RegisteredPattern::Plain(regex) = &command.pattern
+            && regex
+                .captures(&folded)
+                .is_some_and(|caps| caps.name("seq_color1").is_some())
+        {
+            eprintln!(
+                "warning: sequence group second colour (CommandGrouping backColorGeneral) is not painted as the group background at line {source_line}"
+            );
+        }
+        if !existing_participant
+            && command.class != "CommandParticipantMultilines"
+            && color.is_some_and(|token| token.contains([':', ';', '/', '\\', '|', '-']))
+        {
+            eprintln!(
+                "warning: sequence command {} has an execution-valid composite/gradient color; complete style materialization remains unsupported at line {source_line}",
+                command.class
+            );
+        }
+        // CommonCommands sprite commands: the registry above selected the
+        // command after TIM; its executeNow/executeArg failures are errors.
+        // Sequence rendering does not draw sprite references, so execution
+        // still reports the command as unimplemented below.
+        if command.class.starts_with("CommandFactorySprite")
+            || command.class.starts_with("CommandSprite")
+        {
+            super::sprite::execute_selected(lines, index, end, command.class, &mut parser.meta)
+                .map_err(|message| ParseError {
+                    line: source_line,
+                    message,
+                })?;
+        }
+        if !command.implemented {
+            eprintln!(
+                "warning: sequence command {} is recognized but unimplemented at line {source_line}: {text}",
+                command.class
+            );
+        } else if command.class != "CommandNope" && !existing_participant {
+            let supported = parser.apply_registered(command.class, source_line, text)?;
+            if !supported {
+                eprintln!(
+                    "warning: sequence command {} variant is recognized but unimplemented at line {source_line}: {text}",
+                    command.class
+                );
+            } else {
+                for (offset, line) in lines[index + 1..end + 1].iter().enumerate() {
+                    let (number, trimmed) =
+                        super::source_line_and_trimmed(index + offset + 2, line);
+                    let content = if parser.note_buffer.is_some() {
+                        super::source_text(line)
+                    } else {
+                        trimmed
+                    };
+                    parser.unconsumed = false;
+                    // CommandReferenceMultilinesOverSeveral's terminator is
+                    // end[%s]?(ref)?; the admitted terminator owns the close.
+                    if index + offset + 1 == end && parser.ref_buffer.is_some() {
+                        parser.parse_line(number, "end ref")?;
+                    } else if parser.in_legend {
+                        // The selected multiline command owns every body line.
+                        parser.try_meta(if index + offset + 1 == end {
+                            "endlegend"
+                        } else {
+                            content
+                        });
+                    } else {
+                        parser.parse_line(number, content)?;
+                    }
+                    if parser.unconsumed {
+                        eprintln!(
+                            "warning: sequence command {} variant is recognized but unimplemented at line {number}: {content}",
+                            command.class
+                        );
+                    }
+                }
+            }
+        }
+        index = end + 1;
     }
 
     // PSystemCommandFactory#getCandidate requires a completed multiline
@@ -374,6 +1494,12 @@ struct SeqParser {
     events: Vec<Event>,
     autonumber: Option<AutoNumber>,
     participant_ids: Vec<String>,
+    /// SequenceDiagram#participantsList in Java's order: indices into
+    /// `participants`, maintained by [`SeqParser::java_add_with_order`].
+    java_list: Vec<usize>,
+    /// Participant#getOrder per participant: the explicit `order N`, else 0
+    /// (SequenceDiagram#getOrCreateParticipant, CommandParticipant#executeArg).
+    java_order: Vec<i64>,
     /// Multiline note accumulator.
     note_buffer: Option<NoteBuffer>,
     /// Multiline ref accumulator.
@@ -425,6 +1551,8 @@ impl SeqParser {
             events: Vec::new(),
             autonumber: None,
             participant_ids: Vec::new(),
+            java_list: Vec::new(),
+            java_order: Vec::new(),
             note_buffer: None,
             ref_buffer: None,
             last_message: None,
@@ -441,7 +1569,50 @@ impl SeqParser {
         }
     }
 
+    /// CommandParticipant#executeArg returns early for an existing CODE but
+    /// first calls SequenceDiagram#putParticipantInLast: the participant is
+    /// re-added with addWithOrder and takes the current box (englober).
+    /// SequenceDiagram#addWithOrder: insert before the first participant whose
+    /// order is strictly greater, else append.
+    fn java_add_with_order(&mut self, index: usize) {
+        let order = self.java_order[index];
+        let at = self
+            .java_list
+            .iter()
+            .position(|&other| order < self.java_order[other])
+            .unwrap_or(self.java_list.len());
+        self.java_list.insert(at, index);
+    }
+
+    fn java_create_participant(&mut self, order: i64) {
+        self.java_order.push(order);
+        self.java_add_with_order(self.java_order.len() - 1);
+    }
+
+    /// SequenceDiagram#putParticipantInLast removes the participant and
+    /// re-adds it with #addWithOrder into the current box. Warn only when
+    /// that changes its list position or its box.
+    fn report_put_participant_in_last(&mut self, code: &str, source_line: usize) {
+        let Some(index) = self.participants.iter().position(|p| p.id == code) else {
+            return;
+        };
+        let before = self.java_list.clone();
+        self.java_list.retain(|&other| other != index);
+        self.java_add_with_order(index);
+        let recorded_box = self.boxes.iter().position(|b| b.members.contains(&index));
+        if self.java_list != before || recorded_box != self.current_box {
+            eprintln!(
+                "warning: sequence participant re-declaration moves {code:?} within Java's participant order or into the current box (SequenceDiagram#putParticipantInLast, #addWithOrder); this reorder is not modelled at line {source_line}"
+            );
+        }
+    }
+
     fn finish(self) -> SequenceDiagram {
+        if self.teoz && self.participants.iter().any(|p| p.url.is_some()) {
+            eprintln!(
+                "warning: teoz participant link anchors ([[url]]) are not emitted; the links are dropped from the SVG"
+            );
+        }
         SequenceDiagram {
             meta: self.meta,
             participants: self.participants,
@@ -462,6 +1633,7 @@ impl SeqParser {
         let id = id.trim().to_string();
         if !self.participant_ids.contains(&id) {
             self.participant_ids.push(id.clone());
+            self.java_create_participant(0);
             self.participants.push(Participant {
                 id: id.clone(),
                 label: inline_sequence_display(&id),
@@ -470,11 +1642,112 @@ impl SeqParser {
                 stereotype: None,
                 stereotype_position_bottom: false,
                 url: None,
+                url_tooltip: None,
                 color: None,
                 source_line,
             });
         }
         id
+    }
+
+    // Execute only the handler belonging to the selected Java command. A
+    // permissive, unrelated Rust handler cannot masquerade as its support.
+    fn apply_registered(
+        &mut self,
+        class: &str,
+        line_num: usize,
+        line: &str,
+    ) -> Result<bool, ParseError> {
+        self.current_line = line_num;
+        Ok(match class {
+            "CommandTitle"
+            | "CommandCaption"
+            | "CommandFooter"
+            | "CommandHeader"
+            | "CommandMultilinesLegend" => self.try_meta(line),
+            "CommandPragma" => self.try_pragma(line),
+            "CommandSkinParam" | "CommandSkinParamMultilines" => self.try_skinparam(line),
+            "CommandHideShowByGender" | "CommandFootbox" | "CommandFootboxOld" => {
+                self.try_hide(line)
+            }
+            "CommandActivate" => {
+                self.try_activate_deactivate(line) || self.try_create_destroy(line)
+            }
+            "CommandParticipantA"
+            | "CommandParticipantA2"
+            | "CommandParticipantA3"
+            | "CommandParticipantA4" => {
+                // CommandParticipant#getRegexType includes typed CREATE and
+                // bare CREATE declarations with options; only a complete
+                // declaration can create a new participant and creation event.
+                static CREATE: LazyLock<Regex> =
+                    LazyLock::new(|| sequence_regex(r"^(?i-u:create)[%s]+(.*)$").unwrap());
+                if let Some(caps) = CREATE.captures(line) {
+                    let tail = &caps[1];
+                    let declaration = if [
+                        "participant",
+                        "actor",
+                        "boundary",
+                        "control",
+                        "entity",
+                        "database",
+                        "collections",
+                        "queue",
+                    ]
+                    .iter()
+                    .any(|kind| {
+                        tail.get(..kind.len())
+                            .is_some_and(|prefix| prefix.eq_ignore_ascii_case(kind))
+                            && tail[kind.len()..].starts_with(|c: char| {
+                                matches!(
+                                    c,
+                                    ' ' | '\t' | '\r' | '\n' | '\u{000b}' | '\u{000c}' | '\u{00a0}'
+                                )
+                            })
+                    }) {
+                        tail.to_owned()
+                    } else {
+                        format!("participant {tail}")
+                    };
+                    let before = self.participants.len();
+                    if self.try_participant_decl_in_command(&declaration, line) {
+                        if let Some(participant) = self.participants.get(before) {
+                            self.events.push(Event::Create(participant.id.clone()));
+                        }
+                        true
+                    } else {
+                        false
+                    }
+                } else {
+                    self.try_participant_decl(line)
+                }
+            }
+            "CommandArrow" => self.try_message(line),
+            "CommandExoArrowLeft" | "CommandExoArrowRight" => self.try_external_message(line),
+            "FactorySequenceNoteCommand$1"
+            | "FactorySequenceNoteCommand$2"
+            | "FactorySequenceNoteOverSeveralCommand$1"
+            | "FactorySequenceNoteOverSeveralCommand$2"
+            | "FactorySequenceNoteAcrossCommand$1"
+            | "FactorySequenceNoteAcrossCommand$2"
+            | "FactorySequenceNoteOnArrowCommand$1"
+            | "FactorySequenceNoteOnArrowCommand$2" => self.try_note(line)?,
+            "CommandBoxStart" | "CommandBoxEnd" => self.try_box(line),
+            "CommandGrouping" => self.try_group(line),
+            "CommandReturn" => self.try_return(line),
+            "CommandNewpage" => self.try_newpage(line),
+            "CommandDivider" => self.try_divider(line),
+            "CommandHSpace" => self.try_space(line),
+            "CommandReferenceOverSeveral" | "CommandReferenceMultilinesOverSeveral" => {
+                self.try_ref(line)
+            }
+            "CommandAutonumber" | "CommandAutonumberStop" | "CommandAutonumberResume" => {
+                self.try_autonumber(line)
+            }
+            "CommandAutoactivate" => self.try_autoactivate(line),
+            "CommandDelay" => self.try_delay(line),
+            _ => false,
+        })
     }
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
@@ -592,6 +1865,11 @@ impl SeqParser {
         if self.try_pragma(line) {
             return Ok(());
         }
+        // CommandFootbox accepts a zero-length separator. CommandArrow requires
+        // its arrow body, so identifiers such as hidefootbox cannot be arrows.
+        if self.try_hide(line) {
+            return Ok(());
+        }
         let message_line = line.strip_prefix('&').unwrap_or(line).trim_start();
         if let Some(caps) = MESSAGE_RE
             .captures(message_line)
@@ -624,9 +1902,6 @@ impl SeqParser {
         if self.try_skinparam(line) {
             return Ok(());
         }
-        if self.try_hide(line) {
-            return Ok(());
-        }
         if self.try_external_message(line) {
             return Ok(());
         }
@@ -649,6 +1924,28 @@ impl SeqParser {
             return false;
         }
         let (url, clean_line) = super::extract_link_url(line);
+        // CommandParticipant#executeArg builds the participant Url with
+        // UrlBuilder#getUrl (UrlMode.STRICT) from the whole [[...]] link;
+        // Url#getTooltip is its explicit tooltip, else the URL itself. A
+        // tooltip-only link (empty URL) keeps the existing no-anchor model.
+        let built = line.find("[[").and_then(|start| {
+            let end = line[start..].find("]]")? + start + 2;
+            super::url_builder_url(&line[start..end])
+        });
+        let (url, url_tooltip) = match (url, built) {
+            (Some(_), Some(built)) if !built.url.is_empty() => (Some(built.url), built.tooltip),
+            (url, _) => (url, None),
+        };
+        // A [[link]] inside the quoted FULL display is creole display text in
+        // Java (no participant URL); this parser lifts it to the participant.
+        let link_in_display = line.find("[[").is_some_and(|link| {
+            line.find('"').is_some_and(|open| {
+                open < link
+                    && line[open + 1..]
+                        .find('"')
+                        .is_some_and(|close| link < open + 1 + close)
+            })
+        });
         let line = clean_line.as_str();
         // Matches these forms (label = display text, id = entity key):
         //   1. keyword "Long Label" as alias  <<stereotype>>
@@ -656,15 +1953,28 @@ impl SeqParser {
         //   3. keyword Label as alias         <<stereotype>>  (both unquoted)
         //   4. keyword SimpleName             <<stereotype>>
         //   5. keyword "Long Label"           <<stereotype>>  (no alias; id = label)
+        // CommandParticipantA/A2/A3/A4: complete identity, optional touching
+        // stereotype, then ORDER, URL (extracted above), COLOR and end-of-line.
+        // Negative order is admitted but cannot be represented by usize. Keep
+        // the supported declaration fields and report the ordering residue.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             sequence_regex(
-                r#"^(participant|actor|boundary|control|entity|database|collections|queue)[%s]+(?:"([^"]+)"[%s]+as[%s]+(\w+)|(\w+)[%s]+as[%s]+"([^"]+)"|(\w+)[%s]+as[%s]+(\w+)|"([^"]+)"|(\w+))(?:[%s]+<<([^>]+)>>)?(?:[%s]+(#[^%s]+))?(?:[%s]+order[%s]+(\d+))?"#,
+                r#"^(?i-u:(participant|actor|boundary|control|entity|database|collections|queue))[%s]+(?:"([^"]+)"[%s]+(?i-u:as)[%s]+([\p{L}\p{N}_.@]+)|([\p{L}\p{N}_.@]+)[%s]+(?i-u:as)[%s]+"([^"]+)"|([\p{L}\p{N}_.@]+)[%s]+(?i-u:as)[%s]+([\p{L}\p{N}_.@]+)|"([^"]+)"|([\p{L}\p{N}_.@]+))[%s]*(?:<<(.+?)>>)?[%s]*(?:(?i-u:order)[%s]+(?P<order>-?[0-9]{1,7}))?[%s]*(?P<color>#[^%s]+)?$"#,
             )
             .unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
-            let kind = parse_participant_kind(&caps[1]);
+            if caps
+                .name("order")
+                .is_some_and(|m| m.as_str().starts_with('-'))
+            {
+                eprintln!(
+                    "warning: sequence participant signed order is recognized but unsupported; retaining declaration fields with fallback order at line {}",
+                    self.current_line
+                );
+            }
+            let kind = parse_participant_kind(&caps[1].to_ascii_lowercase());
             // `quoted` tracks whether the display text came from a `"..."` form.
             // PlantUML's grammar matches the stereotype (`STEREO`) only OUTSIDE the
             // quoted display string (`FULL` = `[%g]([^%g]+)[%g]`), so a `<<...>>`
@@ -716,17 +2026,40 @@ impl SeqParser {
                     .find(|param| param.key.eq_ignore_ascii_case("stereotypePosition"))
                     .is_some_and(|param| param.value.eq_ignore_ascii_case("bottom"));
 
-            let color = caps.get(11).map(|m| m.as_str().to_string());
+            let color = caps.name("color").map(|m| m.as_str().to_string());
 
             // Explicit `order N` sets the layout sort key; otherwise it defaults
             // to the declaration index. Implicit participants (created by a
             // message) also default to their declaration index, so a participant
             // declared with a large `order N` can be positioned to the right of a
             // later, implicitly-created one (matching Java PlantUML).
-            let explicit_order = caps.get(12).and_then(|m| m.as_str().parse::<usize>().ok());
+            let explicit_order = caps
+                .name("order")
+                .and_then(|m| m.as_str().parse::<usize>().ok());
 
             if !self.participant_ids.contains(&id) {
+                // Stereotype#build splits '<<a>><<b>>' into one label each.
+                if stereotype
+                    .as_deref()
+                    .is_some_and(|s| s.contains(">>") && s.contains("<<"))
+                {
+                    eprintln!(
+                        "warning: sequence participant has multiple stereotypes (Stereotype#build label list); rendering them as separate labels remains unsupported at line {}",
+                        self.current_line
+                    );
+                }
+                if link_in_display {
+                    eprintln!(
+                        "warning: sequence participant display contains a creole [[link]]; its label and tooltip are not rendered (treated as a participant link) at line {}",
+                        self.current_line
+                    );
+                }
                 self.participant_ids.push(id.clone());
+                self.java_create_participant(
+                    caps.name("order")
+                        .and_then(|m| m.as_str().parse::<i64>().ok())
+                        .unwrap_or(0),
+                );
                 let idx = self.participants.len();
                 self.participants.push(Participant {
                     id: id.clone(),
@@ -736,6 +2069,7 @@ impl SeqParser {
                     stereotype,
                     stereotype_position_bottom,
                     url,
+                    url_tooltip,
                     color,
                     source_line: self.current_line,
                 });
@@ -1165,7 +2499,7 @@ impl SeqParser {
             self.push_autonumber(AutonumberCmd::Stop);
             return true;
         }
-        // CommandAutonumberResume#getRegexConcat has a direct required space;
+        // CommandAutonumberResume#getConcat has a direct required space;
         // CommandAutonumber's optional argument groups do not contribute it.
         if has_fox_space(line)
             && let Some(caps) = RE_RESUME.captures(line)
@@ -1503,8 +2837,22 @@ impl SeqParser {
     }
 
     fn try_hide(&mut self, line: &str) -> bool {
-        if line == "hide footbox" {
-            self.hide_footbox = true;
+        // CommandFootbox#HIDE_SHOW_FOOTBOX and CommandFootboxOld#getRegexConcat:
+        // zero-or-more Pattern2 whitespace, with no required FoxSignature bit.
+        static FOOTBOX: LazyLock<Regex> =
+            LazyLock::new(|| sequence_regex(r"(?i)^(hide|show)?[%s]*footbox$").unwrap());
+        static FOOTBOX_OLD: LazyLock<Regex> =
+            LazyLock::new(|| sequence_regex(r"(?i)^footbox[%s]*(on|off)?[%s]*$").unwrap());
+        if let Some(caps) = FOOTBOX.captures(line) {
+            self.hide_footbox = !caps
+                .get(1)
+                .is_some_and(|m| m.as_str().eq_ignore_ascii_case("show"));
+            return true;
+        }
+        if let Some(caps) = FOOTBOX_OLD.captures(line) {
+            self.hide_footbox = !caps
+                .get(1)
+                .is_some_and(|m| m.as_str().eq_ignore_ascii_case("on"));
             return true;
         }
         // CommandHideShowByGender#executeSequenceDiagram ignores the gender
@@ -1749,6 +3097,362 @@ fn note_text_from_lines(lines: &[String]) -> String {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn sprite_blocks_own_only_their_command_body() {
+        for keyword in ["sprite ", "SPRITE\t", "SpRiTe\u{00a0}"] {
+            for (body, pixel) in [
+                (
+                    "$mark <svg width=\"2\" height=\"2\">\n}\n<rect width=\"2\" height=\"2\"/>\n</svg>",
+                    false,
+                ),
+                ("$mark <svg width=\"2\" height=\"2\"></svg>", false),
+                ("$mark [2x2/16] {\nFF\n00\n}", true),
+                ("$mark [2x2/16] {\nFF\n00\nEND SPRITE", true),
+                ("$mark [2x2/16] {\nFF\n00\nendsprite", true),
+            ] {
+                let source = format!("@startuml\n{keyword}{body}\nA -> B: retained\n@enduml");
+                let pre = crate::preprocess::preprocess_full(&source, None);
+                let diagram = parse_sequence(&pre.lines).unwrap();
+                assert_eq!(diagram.events.len(), 1, "{source}");
+                assert_eq!(diagram.meta.sprites.contains_key("mark"), pixel);
+                if pixel {
+                    assert_eq!(diagram.meta.sprites["mark"].rows, ["FF", "00"]);
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn sprite_completion_keeps_commands_before_an_included_opening() {
+        let nonce = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        let directory = std::env::temp_dir().join(format!(
+            "rustuml-sprite-span-{}-{nonce}",
+            std::process::id()
+        ));
+        std::fs::create_dir(&directory).unwrap();
+        for (header, body, end) in [
+            (
+                "sprite $s <svg width=\"2\" height=\"2\">",
+                "<rect width=\"2\" height=\"2\"/>",
+                "</svg>",
+            ),
+            ("sprite $s [2x2/16] {", "FF", "}"),
+        ] {
+            std::fs::write(
+                directory.join("opening.puml"),
+                format!("{header}\n{body}\n"),
+            )
+            .unwrap();
+            let input = format!(
+                "@startuml\nparticipant North\nparticipant South\n!include opening.puml\n{end}\nNorth -> South: retained\n@enduml"
+            );
+            let pre = crate::preprocess::preprocess_full(&input, Some(directory.clone()));
+            let diagram = parse_sequence(&pre.lines).unwrap();
+            assert_eq!(diagram.participants.len(), 2);
+            assert!(pre.lines.iter().any(|line| line == "participant North"));
+            assert!(pre.lines.iter().any(|line| line == "participant South"));
+            assert_eq!(diagram.events.len(), 1);
+        }
+        std::fs::remove_dir_all(directory).unwrap();
+    }
+
+    #[test]
+    fn incomplete_sprite_blocks_remain_syntax_errors() {
+        for header in [
+            "sprite $mark <svg width=\"2\" height=\"2\">",
+            "sprite $mark [2x2/16] {",
+        ] {
+            let source =
+                format!("@startuml\nparticipant A\nparticipant B\n{header}\nFF\nA -> B\n@enduml");
+            let pre = crate::preprocess::preprocess_full(&source, None);
+            assert!(parse_sequence(&pre.lines).is_err());
+        }
+    }
+
+    // TimLoader#load runs before PSystemCommandFactory: a sprite header in an
+    // inactive branch or an uninvoked procedure never reaches the registry,
+    // and an included body completes the command after expansion.
+    #[test]
+    fn sprite_commands_see_only_tim_output() {
+        for header in [
+            "sprite $mark <svg width=\"2\" height=\"2\">",
+            "sprite $mark [2x2/16] {",
+        ] {
+            for wrapped in [
+                format!("!if %false()\n{header}\nFF\n!endif"),
+                format!("!procedure $unused()\n{header}\nFF\n!endprocedure"),
+            ] {
+                let source =
+                    format!("@startuml\nparticipant A\nparticipant B\n{wrapped}\nA -> B\n@enduml");
+                for teoz in ["", "!pragma teoz true\n"] {
+                    let source = source.replacen("@startuml\n", &format!("@startuml\n{teoz}"), 1);
+                    let diagram = crate::parse::parse(&source).expect(&source);
+                    assert!(
+                        matches!(diagram, crate::diagram::Diagram::Sequence(_)),
+                        "{source}"
+                    );
+                }
+            }
+            // The same header active and unclosed is a Java error.
+            for wrapped in [
+                format!("!if %true()\n{header}\nFF\n!endif"),
+                format!("!procedure $used()\n{header}\nFF\n!endprocedure\n$used()"),
+            ] {
+                let source =
+                    format!("@startuml\nparticipant A\nparticipant B\n{wrapped}\nA -> B\n@enduml");
+                assert!(crate::parse::parse(&source).is_err(), "{source}");
+            }
+        }
+    }
+
+    // Multiline note/legend/ref commands own their bodies through END, so body
+    // text is never offered to the sprite commands.
+    #[test]
+    fn command_bodies_are_not_sprite_commands() {
+        for body in [
+            "note over A\nSprite sheets are loaded\nend note",
+            "note over A\nSprite frame {\nend note",
+            "note right of B\nsprite atlas {\nend note",
+            "legend\nSPRITE atlas version two\nendlegend",
+            "ref over A, B\nSprite cache warm\nend ref",
+        ] {
+            let source =
+                format!("@startuml\nparticipant A\nparticipant B\n{body}\nA -> B\n@enduml");
+            let pre = crate::preprocess::preprocess_full(&source, None);
+            parse_sequence(&pre.lines).expect(&source);
+        }
+        // At a command start the same text is CommandSpriteFile: Cannot read.
+        let pre = crate::preprocess::preprocess_full(
+            "@startuml\nparticipant A\nSprite sheets are loaded\n@enduml",
+            None,
+        );
+        assert!(parse_sequence(&pre.lines).is_err());
+    }
+
+    // SequenceDiagram#addWithOrder / #putParticipantInLast list positions.
+    #[test]
+    fn redeclaration_follows_java_add_with_order() {
+        let mut parser = SeqParser::new();
+        for order in [10, 20] {
+            parser.java_create_participant(order);
+        }
+        // An explicit order keeps its place: no strictly greater order before it.
+        let before = parser.java_list.clone();
+        parser.java_list.retain(|&p| p != 0);
+        parser.java_add_with_order(0);
+        assert_eq!(parser.java_list, before);
+        // Default order 0 everywhere: the re-added participant moves last.
+        let mut parser = SeqParser::new();
+        for _ in 0..2 {
+            parser.java_create_participant(0);
+        }
+        parser.java_list.retain(|&p| p != 0);
+        parser.java_add_with_order(0);
+        assert_eq!(parser.java_list, [1, 0]);
+        // A lower explicit order is inserted before every greater one.
+        let mut parser = SeqParser::new();
+        for order in [30, 20, -5] {
+            parser.java_create_participant(order);
+        }
+        assert_eq!(parser.java_list, [2, 1, 0]);
+    }
+
+    // Url#getTooltip: the {tooltip} of [[url{tooltip} label]] is the anchor
+    // title; without one the URL is.
+    #[test]
+    fn participant_link_tooltip_is_recorded() {
+        let d = parse("participant Cedar [[https://example.org/ring{rings} ring]]\nA -> Cedar");
+        assert_eq!(
+            d.participants[0].url.as_deref(),
+            Some("https://example.org/ring")
+        );
+        assert_eq!(d.participants[0].url_tooltip.as_deref(), Some("rings"));
+        let d = parse("participant Cedar [[https://example.org/ring]]\nA -> Cedar");
+        assert_eq!(d.participants[0].url_tooltip, None);
+        // UrlBuilder#getUrl alternatives, in order, untrimmed.
+        for (link, url, tooltip) in [
+            // LINK_WITH_OPTIONAL_TOOLTIP_WITH_OPTIONAL_LABEL: the label owns {x}.
+            (
+                "[[https://example.org/ring ring{x}]]",
+                "https://example.org/ring",
+                None,
+            ),
+            (
+                "[[https://example.org/ring{ rings }]]",
+                "https://example.org/ring",
+                Some(" rings "),
+            ),
+            (
+                "[[https://example.org/ring{}]]",
+                "https://example.org/ring",
+                Some(""),
+            ),
+            // LINK_TOOLTIP_NOLABEL: greedy (.+).
+            (
+                "[[https://example.org/ring{a{b}c}]]",
+                "https://example.org/ring",
+                Some("a{b}c"),
+            ),
+            // QUOTED: Url strips the quotes.
+            (
+                "[[\"https://example.org/q\"{ q } label]]",
+                "https://example.org/q",
+                Some(" q "),
+            ),
+        ] {
+            let d = parse(&format!("participant Cedar {link}\nA -> Cedar"));
+            assert_eq!(d.participants[0].url.as_deref(), Some(url), "{link}");
+            assert_eq!(d.participants[0].url_tooltip.as_deref(), tooltip, "{link}");
+        }
+    }
+
+    #[test]
+    fn complete_participant_declarations_preserve_identity_and_options() {
+        let d = parse(
+            "participant \"Tall tower\" as Top.Node<<edge>> order 7#Wheat\nqueue @Port as \"Mail room\"<<service>>#Olive\nA -> B",
+        );
+        assert_eq!(d.participants[0].id, "Top.Node");
+        assert_eq!(d.participants[0].label, "Tall tower");
+        assert_eq!(d.participants[0].stereotype.as_deref(), Some("edge"));
+        assert_eq!(d.participants[0].order, Some(7));
+        assert_eq!(d.participants[0].color.as_deref(), Some("#Wheat"));
+        assert_eq!(d.participants[1].id, "@Port");
+        assert_eq!(d.participants[1].label, "Mail room");
+        // Unsupported signed order must not erase the complete declaration.
+        let d = parse("participant West order -7\nA -> B");
+        assert_eq!(d.participants[0].id, "West");
+        let mut parser = SeqParser::new();
+        assert!(!parser.try_participant_decl("participant West unsupported"));
+        assert!(parser.participants.is_empty());
+    }
+
+    #[test]
+    fn command_specific_color_execution_respects_early_and_unused_paths() {
+        for color in [
+            "#back:Wheat;line:Olive",
+            "#line.dotted",
+            "#shadowing:true",
+            "#text:application",
+        ] {
+            assert!(
+                parse_sequence(&[format!("participant West {color}")]).is_err(),
+                "{color}"
+            );
+        }
+        for separator in ['-', '/', '\\', '|'] {
+            assert!(parse_sequence(&[format!("participant West #Wheat{separator}Olive")]).is_ok());
+        }
+        for declaration in [
+            "participant West #NotAColour",
+            "participant West as \"Another label\" #NotAColour",
+            "participant \"Another label\" as West #NotAColour",
+            "participant Else as West #NotAColour",
+            "participant \"West\" #NotAColour",
+        ] {
+            let d = parse_sequence(&["participant West".into(), declaration.into()]).unwrap();
+            assert_eq!(d.participants.len(), 1);
+            assert_eq!(d.participants[0].label, "West");
+        }
+        assert!(
+            parse_sequence(&[
+                "participant West #NotAColour [".into(),
+                "Label".into(),
+                "]".into()
+            ])
+            .is_ok()
+        );
+        assert!(
+            parse_sequence(&[
+                "box #back:Wheat;line:Olive".into(),
+                "participant West".into(),
+                "end box".into()
+            ])
+            .is_ok()
+        );
+    }
+
+    #[test]
+    fn registered_sequence_commands_separate_syntax_and_execution_residue() {
+        assert_eq!(super::REGISTERED_SEQUENCE_COMMANDS.len(), 81);
+        for text in [
+            "fling N sideways",
+            "hide footbox garbage",
+            "N\u{2003}->\u{2003}S: text",
+            "activate\u{000b}N",
+        ] {
+            assert!(
+                parse_sequence(&["N -> S: seed".into(), text.into()]).is_err(),
+                "{text:?}"
+            );
+        }
+        for text in [
+            "?-> N: short",
+            "activate \"North Pier\"",
+            "autonumber inc A",
+            "participant N [\nNorthern\nPier\n]",
+        ] {
+            let lines = format!("N -> S: seed\n{text}")
+                .lines()
+                .map(str::to_owned)
+                .collect::<Vec<_>>();
+            assert!(parse_sequence(&lines).is_ok(), "{text:?}");
+        }
+        assert!(
+            parse_sequence(&[
+                "N -> S: seed".into(),
+                "note over N".into(),
+                "fling N sideways".into(),
+                "end note".into()
+            ])
+            .is_ok()
+        );
+    }
+
+    #[test]
+    fn registered_color_execution_uses_complete_leaf_boundaries() {
+        assert!(super::valid_sequence_color("LightBlue/Yellow"));
+        assert!(!super::valid_sequence_color("transparent/Yellow"));
+        assert!(super::valid_sequence_color("transparent"));
+        for color in [
+            "#back:LightBlue: cargo",
+            "#CeruleanTypo: cargo",
+            "#line:MissingShade : cargo",
+        ] {
+            assert!(
+                parse_sequence(&["N -> S: seed".into(), format!("note over N {color}")]).is_err(),
+                "{color}"
+            );
+        }
+        for color in [
+            "#back:LightBlue : cargo",
+            "#LightBlue/Yellow: cargo",
+            "#transparent: cargo",
+            "#11223344: cargo",
+        ] {
+            assert!(
+                parse_sequence(&["N -> S: seed".into(), format!("note over N {color}")]).is_ok(),
+                "{color}"
+            );
+        }
+        assert!(parse_sequence(&["N -[#NoSuchShade]> S: seed".into()]).is_err());
+        assert!(parse_sequence(&["N -[#blue,dashed]> S: seed".into()]).is_ok());
+    }
+
+    #[test]
+    fn footbox_optional_pattern2_separator_and_both_command_orders() {
+        for gap in ["", " ", "\t", "\u{000b}", "\u{00a0}"] {
+            let hidden = parse(&format!("A -> B\nhide{gap}footbox"));
+            assert!(hidden.hide_footbox);
+            let shown = parse(&format!("A -> B\nhide footbox\nshow{gap}footbox"));
+            assert!(!shown.hide_footbox);
+            let old = parse(&format!("A -> B\nfootbox{gap}off"));
+            assert!(old.hide_footbox);
+        }
+    }
+
     use super::*;
 
     #[test]
@@ -2663,14 +4367,15 @@ Gate -> Mail: enqueue"#
     }
 
     #[test]
-    fn note_on_link() {
-        let d = parse("A -> B : msg\nnote on link : link note");
-        assert_eq!(d.events.len(), 2, "events: {:?}", d.events);
-        assert!(
-            matches!(&d.events[1], Event::NoteOnLink(s) if s == "link note"),
-            "event[1]: {:?}",
-            d.events[1]
-        );
+    fn note_on_link_is_not_registered_for_sequence() {
+        // SequenceDiagramFactory registers FactorySequenceNoteOnArrowCommand,
+        // whose POSITION is left/right/top/bottom. `note on link` belongs to
+        // other diagram factories and must not be silently accepted here.
+        let lines = [
+            "A -> B : msg".to_string(),
+            "note on link : link note".to_string(),
+        ];
+        assert!(parse_sequence(&lines).is_err());
     }
 
     #[test]

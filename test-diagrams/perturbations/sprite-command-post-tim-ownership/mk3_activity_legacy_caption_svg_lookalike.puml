@@ -1,0 +1,7 @@
+@startuml
+(*) --> "load"
+"load" --> (*)
+caption
+sprite $s <svg width="2">
+endcaption
+@enduml

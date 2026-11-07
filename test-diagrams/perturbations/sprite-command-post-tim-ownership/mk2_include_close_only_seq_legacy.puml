@@ -1,0 +1,8 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+sprite $gem <svg width="2" height="2">
+!include mk2_close.inc
+Spruce -> Cedar: back
+@enduml

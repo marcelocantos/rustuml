@@ -1,0 +1,861 @@
+[
+ {
+  "source": "mk4_svg_body_trailing_comment_class.puml",
+  "golden": "mk4_svg_body_trailing_comment_class.svg",
+  "cohort": "AY",
+  "name": "mk4_svg_body_trailing_comment_class",
+  "intended_valid": true,
+  "axes": [
+   "svg body line",
+   "trailing /' '/",
+   "class"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "d92f27e203aa4ed559001d1fffd455149d4d7de314b447e7a011a90bcda329d6",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_svg_body_leading_comment_usecase.puml",
+  "golden": "mk4_svg_body_leading_comment_usecase.svg",
+  "cohort": "AY",
+  "name": "mk4_svg_body_leading_comment_usecase",
+  "intended_valid": true,
+  "axes": [
+   "svg body line",
+   "leading /' '/ (PLAIN, tail kept)",
+   "usecase"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "433fe05dedcbdf125c68bd3fc62da35a87bf5802d4aae30c14b0b286c47725a9",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_svg_body_two_comments_object.puml",
+  "golden": "mk4_svg_body_two_comments_object.svg",
+  "cohort": "AY",
+  "name": "mk4_svg_body_two_comments_object",
+  "intended_valid": true,
+  "axes": [
+   "svg body lines",
+   "two trailing spans, one without space",
+   "object"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "1457fb467793e5b30dc8b8d0dcc6ccc4a3b2b5e529069c675171465856bd2054",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_svg_body_triple_word_component.puml",
+  "golden": "mk4_svg_body_triple_word_component.svg",
+  "cohort": "AY",
+  "name": "mk4_svg_body_triple_word_component",
+  "intended_valid": true,
+  "axes": [
+   "svg body line",
+   "mid-line /'''word'''/ removed",
+   "component"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "4829c59405a5dd392773d5f6f2569e591e006718d97454fca00fc4bec1cc9721",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_svg_body_triple_spaced_state.puml",
+  "golden": "mk4_svg_body_triple_spaced_state.svg",
+  "cohort": "AY",
+  "name": "mk4_svg_body_triple_spaced_state",
+  "intended_valid": true,
+  "axes": [
+   "svg body line",
+   "mid-line /''' spaced '''/ kept (\\w only)",
+   "state"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "b520ac56771ec6af96c970566d1d8758821bc1403b976f0de10dcbea6a231f6a",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_svg_end_triple_word_seq.puml",
+  "golden": "mk4_svg_end_triple_word_seq.svg",
+  "cohort": "AY",
+  "name": "mk4_svg_end_triple_word_seq",
+  "intended_valid": true,
+  "axes": [
+   "svg END line",
+   "trailing /'''word'''/ (lastIndexOf /')",
+   "sequence"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "0111712bbdb7c495535627cb23cae26b9068a95dbb64224ccca78e47dcf0ad03",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_svg_inline_leading_comment_deployment.puml",
+  "golden": "mk4_svg_inline_leading_comment_deployment.svg",
+  "cohort": "AY",
+  "name": "mk4_svg_inline_leading_comment_deployment",
+  "intended_valid": true,
+  "axes": [
+   "single-line svg sprite",
+   "leading /' '/ before the sprite command",
+   "deployment"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "6c774fde4a2ded8d739c0e0c251a32e381cfde48c702eae3855246ff5c7a465f",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_svg_start_trailing_comment_activity3.puml",
+  "golden": "mk4_svg_start_trailing_comment_activity3.svg",
+  "cohort": "AY",
+  "name": "mk4_svg_start_trailing_comment_activity3",
+  "intended_valid": true,
+  "axes": [
+   "svg start line",
+   "trailing /' '/",
+   "activity3"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "7bfc8ddbc5984c224eb4a0e7569b31bb23ab82591e0cf24ab104e53e76b504c9",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_pixel_row_triple_word_class.puml",
+  "golden": "mk4_pixel_row_triple_word_class.svg",
+  "cohort": "AY",
+  "name": "mk4_pixel_row_triple_word_class",
+  "intended_valid": true,
+  "axes": [
+   "pixel row",
+   "mid-line /'''word'''/ removed",
+   "class"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "6152aaffce765e7fdc225570198f4cd455fae56d94e521da078cdf83f25c646b",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_pixel_row_triple_spaced_component.puml",
+  "golden": "mk4_pixel_row_triple_spaced_component.svg",
+  "cohort": "AY",
+  "name": "mk4_pixel_row_triple_spaced_component",
+  "intended_valid": true,
+  "axes": [
+   "pixel row",
+   "mid-line /''' spaced '''/ kept (\\w only)",
+   "component"
+  ],
+  "mechanism": null,
+  "java_exit": 200,
+  "java_stderr": "s log (V1.2026.3beta6)\nError java.lang.IllegalArgumentException: level=-1 grayLevel=16\njava.lang.IllegalArgumentException: level=-1 grayLevel=16\n\tat net.sourceforge.plantuml.klimt.sprite.SpriteMonochrome.setGray(SpriteMonochrome.java:157)\n\tat net.sourceforge.plantuml.klimt.sprite.SpriteGrayLevel.buildSprite16(SpriteGrayLevel.java:200)\n\tat net.sourceforge.plantuml.klimt.sprite.SpriteGrayLevel.buildSprite(SpriteGrayLevel.java:178)\n\tat net.sourceforge.plantuml.command.CommandFactorySprite.executeInternal(CommandFactorySprite.java:138)\n\tat net.sourceforge.plantuml.command.CommandFactorySprite$1.executeNow(CommandFactorySprite.java:103)\n\tat net.sourceforge.plantuml.command.CommandFactorySprite$1.executeNow(CommandFactorySprite.java:91)\n\tat net.sourceforge.plantuml.command.CommandMultilines2.execute(CommandMultilines2.java:117)\n\tat net.sourceforge.plantuml.command.ProtectedCommand.execute(ProtectedCommand.java:57)\n\tat net.sourceforge.plantuml.core.AbstractDiagram.executeCommand(AbstractDiagram.java:169)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.executeFewLines(PSystemCommandFactory.java:148)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:104)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:61)\n\tat net.sourceforge.plantuml.PSystemBuilder.createPSystem(PSystemBuilder.java:237)\n\tat net.sourceforge.plantuml.BlockUml.getDiagram(BlockUml.java:193)\n\tat net.sourceforge.plantuml.SourceStringReader.updateStatus(SourceStringReader.java:276)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:93)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\nYou should send a mail to plantuml@gmail.com or post to https://plantuml.com/qa with this log (V1.2026.3beta6)\nERROR\n4\nYou should send a mail to plantuml@gmail.com or post to https://plantuml.com/qa with this log (V1.2026.3beta6) java.lang.IllegalArgumentException: level=-1 grayLevel=16 (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "97ef7c042e7a231dd68b34b44dff02af6cd8c9ac9bb6d5197646154e0cb5b2ed",
+  "java_markers": [
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "mk4_pixel_row_triple_spaced_trailing_deployment.puml",
+  "golden": "mk4_pixel_row_triple_spaced_trailing_deployment.svg",
+  "cohort": "AY",
+  "name": "mk4_pixel_row_triple_spaced_trailing_deployment",
+  "intended_valid": true,
+  "axes": [
+   "pixel row",
+   "/''' spaced '''/ then a space: Java trim ends with '/, trailing branch removes it",
+   "deployment"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "7d3b5a2e728788be8219af547b22e0dbd4af555663f616c7b51f6f62116d292e",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_pixel_row_trailing_nospace_usecase.puml",
+  "golden": "mk4_pixel_row_trailing_nospace_usecase.svg",
+  "cohort": "AY",
+  "name": "mk4_pixel_row_trailing_nospace_usecase",
+  "intended_valid": true,
+  "axes": [
+   "pixel row",
+   "trailing /' '/ without space",
+   "usecase"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "e1cfe088a543c6acdb290cf386a65983d8bcc5a317ba5bb786de7650a95b06cc",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_pixel_start_nospace_comment_state.puml",
+  "golden": "mk4_pixel_start_nospace_comment_state.svg",
+  "cohort": "AY",
+  "name": "mk4_pixel_start_nospace_comment_state",
+  "intended_valid": true,
+  "axes": [
+   "pixel start line",
+   "trailing /' '/ without space",
+   "state"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "ee60980daa77d5c599b5f9097a441cf25a13857b2a1606e6885c4d8498483b53",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_pixel_end_leading_comment_object.puml",
+  "golden": "mk4_pixel_end_leading_comment_object.svg",
+  "cohort": "AY",
+  "name": "mk4_pixel_end_leading_comment_object",
+  "intended_valid": true,
+  "axes": [
+   "pixel END line",
+   "leading /' '/ before }",
+   "object"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "5bfcd419c620f13ea18ba39ad5738385a7306966efb8b7bbce6b88678087aee6",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_pixel_end_triple_word_deployment.puml",
+  "golden": "mk4_pixel_end_triple_word_deployment.svg",
+  "cohort": "AY",
+  "name": "mk4_pixel_end_triple_word_deployment",
+  "intended_valid": true,
+  "axes": [
+   "pixel END line",
+   "trailing /'''word'''/",
+   "deployment"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "12589c7f12724c3672122d3de19abd0309b6c5196ab4226615eb2f0597a2565c",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_pixel_end_two_spans_class.puml",
+  "golden": "mk4_pixel_end_two_spans_class.svg",
+  "cohort": "AY",
+  "name": "mk4_pixel_end_two_spans_class",
+  "intended_valid": false,
+  "axes": [
+   "pixel END line",
+   "two trailing spans: removeInnerComment runs once, '} /' a '/' is not END",
+   "class"
+  ],
+  "mechanism": null,
+  "java_exit": 200,
+  "java_stderr": "ERROR\n1\nCannot read: [2x2/16] { (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "eeebb6a1ec4bc3cd5f8d0fc2df95e137f31486197122804faebf974ff41a12ac",
+  "java_markers": [
+   "Cannot read",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "mk4_pixel_row_triple_word_ref_component.puml",
+  "golden": "mk4_pixel_row_triple_word_ref_component.svg",
+  "cohort": "AY",
+  "name": "mk4_pixel_row_triple_word_ref_component",
+  "intended_valid": true,
+  "axes": [
+   "pixel row",
+   "mid-line /'''word'''/ removed",
+   "sprite referenced",
+   "component"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "e459178f1f413ff9180fe26201519a2e65565c1d7609852cb891e940f7ef61f6",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_pixel_row_trailing_ref_class.puml",
+  "golden": "mk4_pixel_row_trailing_ref_class.svg",
+  "cohort": "AY",
+  "name": "mk4_pixel_row_trailing_ref_class",
+  "intended_valid": true,
+  "axes": [
+   "pixel row",
+   "trailing /' '/",
+   "sprite referenced",
+   "class"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "fd9fc897cbacaf2f169666ba7acd769a84c50aacae0f57c5c05146f10c23d532",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_pixel_leading_start_ref_state.puml",
+  "golden": "mk4_pixel_leading_start_ref_state.svg",
+  "cohort": "AY",
+  "name": "mk4_pixel_leading_start_ref_state",
+  "intended_valid": true,
+  "axes": [
+   "pixel start line",
+   "leading /' '/ (was dropped whole)",
+   "sprite referenced",
+   "state"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "ff649f65d29404905c9615e384d6db8c63f2f95132dd3bfb6d257be27c59bdef",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_seq_message_trailing_comment.puml",
+  "golden": "mk4_seq_message_trailing_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_seq_message_trailing_comment",
+  "intended_valid": true,
+  "axes": [
+   "sequence message",
+   "trailing /' '/"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "cb18101f634e6290978ee9b747fad96ce76e753a36ec2468efaa7960dee69c62",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_seq_message_leading_comment.puml",
+  "golden": "mk4_seq_message_leading_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_seq_message_leading_comment",
+  "intended_valid": true,
+  "axes": [
+   "sequence message",
+   "leading /' '/ (was dropped whole)"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "154109a1b159ac52ea8ac002272960e2cf7e1400cc36e0522a9500b2c4cad569",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_seq_quoted_comment.puml",
+  "golden": "mk4_seq_quoted_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_seq_quoted_comment",
+  "intended_valid": true,
+  "axes": [
+   "sequence message",
+   "span inside an open double quote (no quote handling)"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "eac06e5cd347e6e1b03039b3a5366cae7012113205e69ff38c70ac23fcfc1c6d",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_seq_participant_quote_then_comment.puml",
+  "golden": "mk4_seq_participant_quote_then_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_seq_participant_quote_then_comment",
+  "intended_valid": true,
+  "axes": [
+   "sequence participant",
+   "/' inside quotes, last /' is the comment"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "8080187f9754dff3ae2a8c4e3656af44334cb9776d703c9c81b93381a9d475cf",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_seq_note_body_comment.puml",
+  "golden": "mk4_seq_note_body_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_seq_note_body_comment",
+  "intended_valid": true,
+  "axes": [
+   "sequence note body",
+   "trailing /' '/"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "ab21c6cd42954ecfa7bf9670a1adeccb0b145a044b73ae5f24018c9df0bff008",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_seq_apostrophe_not_comment.puml",
+  "golden": "mk4_seq_apostrophe_not_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_seq_apostrophe_not_comment",
+  "intended_valid": true,
+  "axes": [
+   "sequence message",
+   "apostrophes that are not /' or '/ (unchanged)"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "635e225262984e40023fbf0528d104994cfe1dfff56c120321143b32b0f6f9e0",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_class_member_comment.puml",
+  "golden": "mk4_class_member_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_class_member_comment",
+  "intended_valid": true,
+  "axes": [
+   "class body member",
+   "trailing /' '/"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "2a1e7bd2f897d498495bc5f4519cf8c815dcd857863ad60032046afc358a960e",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_class_leading_comment_decl.puml",
+  "golden": "mk4_class_leading_comment_decl.svg",
+  "cohort": "AY",
+  "name": "mk4_class_leading_comment_decl",
+  "intended_valid": true,
+  "axes": [
+   "class declaration",
+   "leading /' '/ (was dropped whole)"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "6f4f2b5c4ec956f0fbaa43437c570445df289684d1663a95f7d7aeef435d9fe7",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_object_triple_in_quotes.puml",
+  "golden": "mk4_object_triple_in_quotes.svg",
+  "cohort": "AY",
+  "name": "mk4_object_triple_in_quotes",
+  "intended_valid": true,
+  "axes": [
+   "object declaration",
+   "/'''word'''/ inside quotes removed"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "f0bf8f5c12bdc3f19b1455cdabd4dccf94a225d231be1863abdaf21066ecb3c4",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_component_trailing_nospace.puml",
+  "golden": "mk4_component_trailing_nospace.svg",
+  "cohort": "AY",
+  "name": "mk4_component_trailing_nospace",
+  "intended_valid": true,
+  "axes": [
+   "component",
+   "trailing /' '/ without space"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "e98008e88d32e0b27bcf3d9ea1a9499efa4872397c2c83967f22816c48e0dc19",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_state_transition_comment.puml",
+  "golden": "mk4_state_transition_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_state_transition_comment",
+  "intended_valid": true,
+  "axes": [
+   "state transition label",
+   "trailing /' '/"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "031c67359863d5651e02a0094b65b6cdae2c514f6068ddf172dc685b062efc9c",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_usecase_leading_comment_usecase.puml",
+  "golden": "mk4_usecase_leading_comment_usecase.svg",
+  "cohort": "AY",
+  "name": "mk4_usecase_leading_comment_usecase",
+  "intended_valid": true,
+  "axes": [
+   "usecase element",
+   "leading /' '/ (was dropped whole)"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "bfb0f5e47800ce91ea1101f0d858a36a4a21dbfc3182203be36947e24fa3f8c8",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_activity3_action_comment.puml",
+  "golden": "mk4_activity3_action_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_activity3_action_comment",
+  "intended_valid": true,
+  "axes": [
+   "activity3 action",
+   "trailing /' '/"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "b44f6a2e6d603fa63f8a65037bf2aac7c703efae4dfe3943bbce226478af3537",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_mindmap_node_comment.puml",
+  "golden": "mk4_mindmap_node_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_mindmap_node_comment",
+  "intended_valid": true,
+  "axes": [
+   "mindmap node",
+   "trailing /' '/"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "ce5bc686aeb48094232a1db618de18900d1083ee1b3ada3853141ee7d545f054",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_gantt_task_comment.puml",
+  "golden": "mk4_gantt_task_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_gantt_task_comment",
+  "intended_valid": true,
+  "axes": [
+   "gantt task",
+   "trailing /' '/"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "09a292c23ff1c984fd26b027543b865f11000740764ef9aba3f56864f9fdc1dd",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_json_member_comment.puml",
+  "golden": "mk4_json_member_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_json_member_comment",
+  "intended_valid": true,
+  "axes": [
+   "json body line",
+   "trailing /' '/ (Rust left invalid JSON before)"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "841c374b4a49bfcdc9ace73885c3ce35c050f85d3c483459d5fa2f8ce4674642",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_salt_widget_comment.puml",
+  "golden": "mk4_salt_widget_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_salt_widget_comment",
+  "intended_valid": true,
+  "axes": [
+   "salt widget line",
+   "trailing /' '/"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "3173a3e91ba3945f7f71c4aee9fd2d39f18b848f6b6aeba8d6e577424e179276",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_class_skinparam_leading_comment.puml",
+  "golden": "mk4_class_skinparam_leading_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_class_skinparam_leading_comment",
+  "intended_valid": true,
+  "axes": [
+   "skinparam line",
+   "leading /' '/ (directive kept)",
+   "class"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "3855666193c590e491c6226ce927d0d1c9b02dd35b427ef8605cae38aac7255b",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_tim_define_comment.puml",
+  "golden": "mk4_tim_define_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_tim_define_comment",
+  "intended_valid": true,
+  "axes": [
+   "!define value",
+   "trailing /' '/",
+   "sequence"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "05d7a10dde44a6b5781cb5debf64a73ecdfd9a755d34e0bc47c426e4db16cc38",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_tim_procedure_body_comment.puml",
+  "golden": "mk4_tim_procedure_body_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_tim_procedure_body_comment",
+  "intended_valid": true,
+  "axes": [
+   "!procedure body",
+   "trailing /' '/",
+   "sequence"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "76ffb072e2eef304c922b397a36d3887d892026dd90311f26dd2410d3b671513",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_tim_if_comment.puml",
+  "golden": "mk4_tim_if_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_tim_if_comment",
+  "intended_valid": true,
+  "axes": [
+   "!if condition",
+   "trailing /' '/",
+   "class"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "b849402b960680f7f177b73a6ac5b3701b0176f6fbe15382d663bbab63f8a613",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_tim_sprite_in_procedure.puml",
+  "golden": "mk4_tim_sprite_in_procedure.svg",
+  "cohort": "AY",
+  "name": "mk4_tim_sprite_in_procedure",
+  "intended_valid": true,
+  "axes": [
+   "sprite inside !procedure body",
+   "pixel END trailing /' '/",
+   "class"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "1ca0e16197e697b4d72130690b34a910cdcf1457b4e6801f411329c460041741",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_tim_startsub_comment.puml",
+  "golden": "mk4_tim_startsub_comment.svg",
+  "cohort": "AY",
+  "name": "mk4_tim_startsub_comment",
+  "intended_valid": true,
+  "axes": [
+   "!startsub line",
+   "trailing /' '/",
+   "class"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "1003ec3f3254cc0a220e961e28552ff5d31b66dfb81bccb2c89fc7d9180c4652",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_leading_comment_ends_with_open.puml",
+  "golden": "mk4_leading_comment_ends_with_open.svg",
+  "cohort": "AY",
+  "name": "mk4_leading_comment_ends_with_open",
+  "intended_valid": true,
+  "axes": [
+   "leading /' '/ on a line ending with /'",
+   "Rust long-comment start residue (unchanged)",
+   "sequence"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "c752faab374ec77ab76aed0fce65b12f1da2af528eb2021c5c8c05c07886c877",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_svg_text_fill_apostrophe_seq.puml",
+  "golden": "mk4_svg_text_fill_apostrophe_seq.svg",
+  "cohort": "AY",
+  "name": "mk4_svg_text_fill_apostrophe_seq",
+  "intended_valid": true,
+  "axes": [
+   "svg <text> with fill",
+   "apostrophe inside sprite text",
+   "control for ck3_svg_inline_quoted_apostrophe_seq"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "7b7d7395b748f0fea09e2b9d29cd59120d7a7c611b8613c8e5276e0c6d3d6cb9",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_svg_text_nofill_plain_seq.puml",
+  "golden": "mk4_svg_text_nofill_plain_seq.svg",
+  "cohort": "AY",
+  "name": "mk4_svg_text_nofill_plain_seq",
+  "intended_valid": false,
+  "axes": [
+   "svg <text> without fill",
+   "no apostrophe",
+   "SvgNanoParser#drawText null fill"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "java.lang.NullPointerException: Cannot invoke \"String.startsWith(String)\" because \"s\" is null\n\tat net.sourceforge.plantuml.klimt.color.HColorSet.parseColor(HColorSet.java:76)\n\tat net.sourceforge.plantuml.klimt.color.HColorSet.getColorOrWhite(HColorSet.java:60)\n\tat net.sourceforge.plantuml.svg.parser.SvgNanoParser.drawText(SvgNanoParser.java:302)\n\tat net.sourceforge.plantuml.svg.parser.SvgNanoParser.drawU(SvgNanoParser.java:164)\n\tat net.sourceforge.plantuml.svg.parser.SvgNanoParser$1.drawU(SvgNanoParser.java:477)\n\tat net.sourceforge.plantuml.klimt.creole.atom.AtomSprite.drawU(AtomSprite.java:77)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock1.drawU(SheetBlock1.java:215)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock2.drawU(SheetBlock2.java:106)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseArrow.drawInternalU(ComponentRoseArrow.java:179)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.MessageArrow.drawInternalU(MessageArrow.java:156)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.GraphicalElement.drawU(GraphicalElement.java:60)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:399)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:313)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n",
+  "java_svg_sha256": "32d2049c6355248053b25cca9a081b655aebfc74e5764b649c320c0323454c6e",
+  "java_markers": [
+   "An error has occured"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "mk4_svg_text_nofill_usecase.puml",
+  "golden": "mk4_svg_text_nofill_usecase.svg",
+  "cohort": "AY",
+  "name": "mk4_svg_text_nofill_usecase",
+  "intended_valid": false,
+  "axes": [
+   "svg <text> without fill",
+   "usecase",
+   "SvgNanoParser#drawText null fill"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": ".getColorOrWhite(HColorSet.java:60)\n\tat net.sourceforge.plantuml.svg.parser.SvgNanoParser.drawText(SvgNanoParser.java:302)\n\tat net.sourceforge.plantuml.svg.parser.SvgNanoParser.drawU(SvgNanoParser.java:164)\n\tat net.sourceforge.plantuml.svg.parser.SvgNanoParser$1.drawU(SvgNanoParser.java:477)\n\tat net.sourceforge.plantuml.klimt.creole.atom.AtomSprite.drawU(AtomSprite.java:77)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock1.drawU(SheetBlock1.java:215)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock2.drawU(SheetBlock2.java:106)\n\tat net.sourceforge.plantuml.cucadiagram.BodyEnhancedAbstract.drawU(BodyEnhancedAbstract.java:90)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockVertical.drawU(TextBlockVertical.java:95)\n\tat net.sourceforge.plantuml.svek.image.Footprint.getEllipse(Footprint.java:171)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockInEllipse.<init>(TextBlockInEllipse.java:61)\n\tat net.sourceforge.plantuml.decoration.symbol.USymbolUsecase$1.calculateDimension(USymbolUsecase.java:119)\n\tat net.sourceforge.plantuml.svek.image.EntityImageDescription.calculateDimensionSlow(EntityImageDescription.java:229)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockMemoized.calculateDimension(TextBlockMemoized.java:59)\n\tat net.sourceforge.plantuml.svek.EntityImageDegenerated.calculateDimension(EntityImageDegenerated.java:73)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.calculateDimension(TextBlockUtils.java:171)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.calculateFinalDimension(TextBlockExporter12026.java:195)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:158)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n",
+  "java_svg_sha256": "3d40b8cef6991123c5beaa4272c4673d313499053fed53e1b71d99c0c4bbfe26",
+  "java_markers": [
+   "An error has occured"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "mk4_ctl_svg_end_state.puml",
+  "golden": "mk4_ctl_svg_end_state.svg",
+  "cohort": "AY",
+  "name": "mk4_ctl_svg_end_state",
+  "intended_valid": true,
+  "axes": [
+   "control: ck3_svg_end_inner_comment_state without the comment",
+   "state"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "a138cf00085b6ffe4325caa62ac5b940b0e40d2294d233b19a13026cea6cff94",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4_ctl_pixel_end_seq.puml",
+  "golden": "mk4_ctl_pixel_end_seq.svg",
+  "cohort": "AY",
+  "name": "mk4_ctl_pixel_end_seq",
+  "intended_valid": true,
+  "axes": [
+   "control: ck3_pixel_end_inner_comment_seq without the comment",
+   "sequence"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "6259e4a775e1ba90e59cfed3b6ad2180b0be7608d4e933d004d581c3e2b1dc89",
+  "java_markers": [],
+  "observed_valid": true
+ }
+]

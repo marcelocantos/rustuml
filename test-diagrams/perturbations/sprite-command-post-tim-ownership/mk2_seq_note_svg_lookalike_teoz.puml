@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+note over Cedar
+sprite $gem <svg width="2" height="2">
+end note
+Spruce -> Cedar: back
+@enduml

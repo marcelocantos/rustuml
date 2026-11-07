@@ -1,0 +1,176 @@
+[
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page0.puml",
+    "diff": "--- before\n+++ after\n@@ -27,7 +27,7 @@\n             ),\n             legend: None,\n             legend_line: Some(\n-                4,\n+                3,\n             ),\n             legend_horizontal_alignment: Center,\n             legend_vertical_alignment: Bottom,\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page1.puml",
+    "diff": "--- before\n+++ after\n@@ -27,7 +27,7 @@\n             ),\n             legend: None,\n             legend_line: Some(\n-                4,\n+                3,\n             ),\n             legend_horizontal_alignment: Center,\n             legend_vertical_alignment: Bottom,\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page0.puml",
+    "diff": "--- before\n+++ after\n@@ -27,7 +27,7 @@\n             ),\n             legend: None,\n             legend_line: Some(\n-                5,\n+                4,\n             ),\n             legend_horizontal_alignment: Center,\n             legend_vertical_alignment: Bottom,\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page1.puml",
+    "diff": "--- before\n+++ after\n@@ -27,7 +27,7 @@\n             ),\n             legend: None,\n             legend_line: Some(\n-                5,\n+                4,\n             ),\n             legend_horizontal_alignment: Center,\n             legend_vertical_alignment: Bottom,\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_legacy.puml",
+    "diff": "--- before\n+++ after\n@@ -76,7 +76,7 @@\n             ),\n         ],\n         autonumber: None,\n-        hide_footbox: false,\n+        hide_footbox: true,\n         hide_stereotypes: false,\n         teoz: false,\n         boxes: [],\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_teoz.puml",
+    "diff": "--- before\n+++ after\n@@ -76,7 +76,7 @@\n             ),\n         ],\n         autonumber: None,\n-        hide_footbox: false,\n+        hide_footbox: true,\n         hide_stereotypes: false,\n         teoz: true,\n         boxes: [],\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_ff_legacy.puml",
+    "diff": "--- before\n+++ after\n@@ -76,7 +76,7 @@\n             ),\n         ],\n         autonumber: None,\n-        hide_footbox: false,\n+        hide_footbox: true,\n         hide_stereotypes: false,\n         teoz: false,\n         boxes: [],\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_ff_teoz.puml",
+    "diff": "--- before\n+++ after\n@@ -76,7 +76,7 @@\n             ),\n         ],\n         autonumber: None,\n-        hide_footbox: false,\n+        hide_footbox: true,\n         hide_stereotypes: false,\n         teoz: true,\n         boxes: [],\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_space_legacy.puml",
+    "diff": "--- before\n+++ after\n@@ -76,7 +76,7 @@\n             ),\n         ],\n         autonumber: None,\n-        hide_footbox: false,\n+        hide_footbox: true,\n         hide_stereotypes: false,\n         teoz: false,\n         boxes: [],\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_space_teoz.puml",
+    "diff": "--- before\n+++ after\n@@ -76,7 +76,7 @@\n             ),\n         ],\n         autonumber: None,\n-        hide_footbox: false,\n+        hide_footbox: true,\n         hide_stereotypes: false,\n         teoz: true,\n         boxes: [],\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_vt_legacy.puml",
+    "diff": "--- before\n+++ after\n@@ -49,32 +49,6 @@\n                 color: None,\n                 source_line: 2,\n             },\n-            Participant {\n-                id: \"footbox\",\n-                label: \"footbox\",\n-                kind: Participant,\n-                order: Some(\n-                    2,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 4,\n-            },\n-            Participant {\n-                id: \"ff\",\n-                label: \"ff\",\n-                kind: Participant,\n-                order: Some(\n-                    3,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 4,\n-            },\n         ],\n         events: [\n             Message(\n@@ -100,32 +74,9 @@\n                     source_line: 3,\n                 },\n             ),\n-            Message(\n-                Message {\n-                    parallel: false,\n-                    from: \"footbox\",\n-                    to: \"ff\",\n-                    label: \"\",\n-                    arrow: Arrow {\n-                        line: Solid,\n-                        head: Filled,\n-                        direction: LeftToRight,\n-                        color: None,\n-                        head_half: None,\n-                        thin_head: false,\n-                        source_cross: false,\n-                        source_circle: true,\n-                        target_circle: true,\n-                        source_dressing: None,\n-                    },\n-                    activation: None,\n-                    activation_color: None,\n-                    source_line: 4,\n-                },\n-            ),\n         ],\n         autonumber: None,\n-        hide_footbox: false,\n+        hide_footbox: true,\n         hide_stereotypes: false,\n         teoz: false,\n         boxes: [],\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_vt_teoz.puml",
+    "diff": "--- before\n+++ after\n@@ -49,32 +49,6 @@\n                 color: None,\n                 source_line: 3,\n             },\n-            Participant {\n-                id: \"footbox\",\n-                label: \"footbox\",\n-                kind: Participant,\n-                order: Some(\n-                    2,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 5,\n-            },\n-            Participant {\n-                id: \"ff\",\n-                label: \"ff\",\n-                kind: Participant,\n-                order: Some(\n-                    3,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 5,\n-            },\n         ],\n         events: [\n             Message(\n@@ -100,32 +74,9 @@\n                     source_line: 4,\n                 },\n             ),\n-            Message(\n-                Message {\n-                    parallel: false,\n-                    from: \"footbox\",\n-                    to: \"ff\",\n-                    label: \"\",\n-                    arrow: Arrow {\n-                        line: Solid,\n-                        head: Filled,\n-                        direction: LeftToRight,\n-                        color: None,\n-                        head_half: None,\n-                        thin_head: false,\n-                        source_cross: false,\n-                        source_circle: true,\n-                        target_circle: true,\n-                        source_dressing: None,\n-                    },\n-                    activation: None,\n-                    activation_color: None,\n-                    source_line: 5,\n-                },\n-            ),\n         ],\n         autonumber: None,\n-        hide_footbox: false,\n+        hide_footbox: true,\n         hide_stereotypes: false,\n         teoz: true,\n         boxes: [],\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_ff_legacy.puml",
+    "diff": "--- before\n+++ after\n@@ -49,32 +49,6 @@\n                 color: None,\n                 source_line: 2,\n             },\n-            Participant {\n-                id: \"footbox\",\n-                label: \"footbox\",\n-                kind: Participant,\n-                order: Some(\n-                    2,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 4,\n-            },\n-            Participant {\n-                id: \"ff\",\n-                label: \"ff\",\n-                kind: Participant,\n-                order: Some(\n-                    3,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 4,\n-            },\n         ],\n         events: [\n             Message(\n@@ -100,32 +74,9 @@\n                     source_line: 3,\n                 },\n             ),\n-            Message(\n-                Message {\n-                    parallel: false,\n-                    from: \"footbox\",\n-                    to: \"ff\",\n-                    label: \"\",\n-                    arrow: Arrow {\n-                        line: Solid,\n-                        head: Filled,\n-                        direction: LeftToRight,\n-                        color: None,\n-                        head_half: None,\n-                        thin_head: false,\n-                        source_cross: false,\n-                        source_circle: true,\n-                        target_circle: true,\n-                        source_dressing: None,\n-                    },\n-                    activation: None,\n-                    activation_color: None,\n-                    source_line: 4,\n-                },\n-            ),\n         ],\n         autonumber: None,\n-        hide_footbox: false,\n+        hide_footbox: true,\n         hide_stereotypes: false,\n         teoz: false,\n         boxes: [],\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_ff_teoz.puml",
+    "diff": "--- before\n+++ after\n@@ -49,32 +49,6 @@\n                 color: None,\n                 source_line: 3,\n             },\n-            Participant {\n-                id: \"footbox\",\n-                label: \"footbox\",\n-                kind: Participant,\n-                order: Some(\n-                    2,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 5,\n-            },\n-            Participant {\n-                id: \"ff\",\n-                label: \"ff\",\n-                kind: Participant,\n-                order: Some(\n-                    3,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 5,\n-            },\n         ],\n         events: [\n             Message(\n@@ -100,32 +74,9 @@\n                     source_line: 4,\n                 },\n             ),\n-            Message(\n-                Message {\n-                    parallel: false,\n-                    from: \"footbox\",\n-                    to: \"ff\",\n-                    label: \"\",\n-                    arrow: Arrow {\n-                        line: Solid,\n-                        head: Filled,\n-                        direction: LeftToRight,\n-                        color: None,\n-                        head_half: None,\n-                        thin_head: false,\n-                        source_cross: false,\n-                        source_circle: true,\n-                        target_circle: true,\n-                        source_dressing: None,\n-                    },\n-                    activation: None,\n-                    activation_color: None,\n-                    source_line: 5,\n-                },\n-            ),\n         ],\n         autonumber: None,\n-        hide_footbox: false,\n+        hide_footbox: true,\n         hide_stereotypes: false,\n         teoz: true,\n         boxes: [],\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_ff_legacy.puml",
+    "diff": "--- before\n+++ after\n@@ -60,7 +60,7 @@\n                 stereotype_position_bottom: false,\n                 url: None,\n                 color: None,\n-                source_line: 4,\n+                source_line: 7,\n             },\n         ],\n         events: [\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_ff_teoz.puml",
+    "diff": "--- before\n+++ after\n@@ -60,7 +60,7 @@\n                 stereotype_position_bottom: false,\n                 url: None,\n                 color: None,\n-                source_line: 5,\n+                source_line: 8,\n             },\n         ],\n         events: [\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/known_participant_block_legacy.puml",
+    "diff": "--- before\n+++ after\n@@ -34,27 +34,14 @@\n                 stereotype_position_bottom: false,\n                 url: None,\n                 color: None,\n-                source_line: 1,\n-            },\n-            Participant {\n-                id: \"rthern\",\n-                label: \"rthern\",\n-                kind: Participant,\n-                order: Some(\n-                    1,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 2,\n+                source_line: 5,\n             },\n             Participant {\n                 id: \"S\",\n                 label: \"S\",\n                 kind: Participant,\n                 order: Some(\n-                    2,\n+                    1,\n                 ),\n                 stereotype: None,\n                 stereotype_position_bottom: false,\n@@ -64,29 +51,6 @@\n             },\n         ],\n         events: [\n-            Message(\n-                Message {\n-                    parallel: false,\n-                    from: \"N\",\n-                    to: \"rthern\",\n-                    label: \"\",\n-                    arrow: Arrow {\n-                        line: Solid,\n-                        head: Filled,\n-                        direction: LeftToRight,\n-                        color: None,\n-                        head_half: None,\n-                        thin_head: false,\n-                        source_cross: false,\n-                        source_circle: true,\n-                        target_circle: true,\n-                        source_dressing: None,\n-                    },\n-                    activation: None,\n-                    activation_color: None,\n-                    source_line: 2,\n-                },\n-            ),\n             Message(\n                 Message {\n                     parallel: false,\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/known_participant_block_teoz.puml",
+    "diff": "--- before\n+++ after\n@@ -34,27 +34,14 @@\n                 stereotype_position_bottom: false,\n                 url: None,\n                 color: None,\n-                source_line: 2,\n-            },\n-            Participant {\n-                id: \"rthern\",\n-                label: \"rthern\",\n-                kind: Participant,\n-                order: Some(\n-                    1,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 3,\n+                source_line: 6,\n             },\n             Participant {\n                 id: \"S\",\n                 label: \"S\",\n                 kind: Participant,\n                 order: Some(\n-                    2,\n+                    1,\n                 ),\n                 stereotype: None,\n                 stereotype_position_bottom: false,\n@@ -64,29 +51,6 @@\n             },\n         ],\n         events: [\n-            Message(\n-                Message {\n-                    parallel: false,\n-                    from: \"N\",\n-                    to: \"rthern\",\n-                    label: \"\",\n-                    arrow: Arrow {\n-                        line: Solid,\n-                        head: Filled,\n-                        direction: LeftToRight,\n-                        color: None,\n-                        head_half: None,\n-                        thin_head: false,\n-                        source_cross: false,\n-                        source_circle: true,\n-                        target_circle: true,\n-                        source_dressing: None,\n-                    },\n-                    activation: None,\n-                    activation_color: None,\n-                    source_line: 3,\n-                },\n-            ),\n             Message(\n                 Message {\n                     parallel: false,\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/footbox_vt_legacy.puml",
+    "diff": "--- before\n+++ after\n@@ -76,7 +76,7 @@\n             ),\n         ],\n         autonumber: None,\n-        hide_footbox: false,\n+        hide_footbox: true,\n         hide_stereotypes: false,\n         teoz: false,\n         boxes: [],\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/footbox_vt_teoz.puml",
+    "diff": "--- before\n+++ after\n@@ -76,7 +76,7 @@\n             ),\n         ],\n         autonumber: None,\n-        hide_footbox: false,\n+        hide_footbox: true,\n         hide_stereotypes: false,\n         teoz: true,\n         boxes: [],\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/footbox_compact_legacy.puml",
+    "diff": "--- before\n+++ after\n@@ -49,45 +49,6 @@\n                 color: None,\n                 source_line: 1,\n             },\n-            Participant {\n-                id: \"hidefootb\",\n-                label: \"hidefootb\",\n-                kind: Participant,\n-                order: Some(\n-                    2,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 2,\n-            },\n-            Participant {\n-                id: \"x\",\n-                label: \"x\",\n-                kind: Participant,\n-                order: Some(\n-                    3,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 2,\n-            },\n-            Participant {\n-                id: \"showfootb\",\n-                label: \"showfootb\",\n-                kind: Participant,\n-                order: Some(\n-                    4,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 3,\n-            },\n         ],\n         events: [\n             Message(\n@@ -113,52 +74,6 @@\n                     source_line: 1,\n                 },\n             ),\n-            Message(\n-                Message {\n-                    parallel: false,\n-                    from: \"hidefootb\",\n-                    to: \"x\",\n-                    label: \"\",\n-                    arrow: Arrow {\n-                        line: Solid,\n-                        head: Filled,\n-                        direction: LeftToRight,\n-                        color: None,\n-                        head_half: None,\n-                        thin_head: false,\n-                        source_cross: false,\n-                        source_circle: true,\n-                        target_circle: true,\n-                        source_dressing: None,\n-                    },\n-                    activation: None,\n-                    activation_color: None,\n-                    source_line: 2,\n-                },\n-            ),\n-            Message(\n-                Message {\n-                    parallel: false,\n-                    from: \"showfootb\",\n-                    to: \"x\",\n-                    label: \"\",\n-                    arrow: Arrow {\n-                        line: Solid,\n-                        head: Filled,\n-                        direction: LeftToRight,\n-                        color: None,\n-                        head_half: None,\n-                        thin_head: false,\n-                        source_cross: false,\n-                        source_circle: true,\n-                        target_circle: true,\n-                        source_dressing: None,\n-                    },\n-                    activation: None,\n-                    activation_color: None,\n-                    source_line: 3,\n-                },\n-            ),\n         ],\n         autonumber: None,\n         hide_footbox: false,\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "retained3569",
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/footbox_compact_teoz.puml",
+    "diff": "--- before\n+++ after\n@@ -49,45 +49,6 @@\n                 color: None,\n                 source_line: 2,\n             },\n-            Participant {\n-                id: \"hidefootb\",\n-                label: \"hidefootb\",\n-                kind: Participant,\n-                order: Some(\n-                    2,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 3,\n-            },\n-            Participant {\n-                id: \"x\",\n-                label: \"x\",\n-                kind: Participant,\n-                order: Some(\n-                    3,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 3,\n-            },\n-            Participant {\n-                id: \"showfootb\",\n-                label: \"showfootb\",\n-                kind: Participant,\n-                order: Some(\n-                    4,\n-                ),\n-                stereotype: None,\n-                stereotype_position_bottom: false,\n-                url: None,\n-                color: None,\n-                source_line: 4,\n-            },\n         ],\n         events: [\n             Message(\n@@ -113,52 +74,6 @@\n                     source_line: 2,\n                 },\n             ),\n-            Message(\n-                Message {\n-                    parallel: false,\n-                    from: \"hidefootb\",\n-                    to: \"x\",\n-                    label: \"\",\n-                    arrow: Arrow {\n-                        line: Solid,\n-                        head: Filled,\n-                        direction: LeftToRight,\n-                        color: None,\n-                        head_half: None,\n-                        thin_head: false,\n-                        source_cross: false,\n-                        source_circle: true,\n-                        target_circle: true,\n-                        source_dressing: None,\n-                    },\n-                    activation: None,\n-                    activation_color: None,\n-                    source_line: 3,\n-                },\n-            ),\n-            Message(\n-                Message {\n-                    parallel: false,\n-                    from: \"showfootb\",\n-                    to: \"x\",\n-                    label: \"\",\n-                    arrow: Arrow {\n-                        line: Solid,\n-                        head: Filled,\n-                        direction: LeftToRight,\n-                        color: None,\n-                        head_half: None,\n-                        thin_head: false,\n-                        source_cross: false,\n-                        source_circle: true,\n-                        target_circle: true,\n-                        source_dressing: None,\n-                    },\n-                    activation: None,\n-                    activation_color: None,\n-                    source_line: 4,\n-                },\n-            ),\n         ],\n         autonumber: None,\n         hide_footbox: false,\n",
+    "same_line_multiset": false
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/dot/dot_graph_attributes.puml",
+    "diff": "--- before\n+++ after\n@@ -25,13 +25,13 @@\n         directed: true,\n         name: \"G\",\n         attrs: {\n-            \"label\": \"My Graph\",\n             \"bgcolor\": \"lightyellow\",\n             \"fontsize\": \"20\",\n+            \"label\": \"My Graph\",\n         },\n         node_defaults: {\n+            \"style\": \"filled\",\n             \"shape\": \"circle\",\n-            \"style\": \"filled\",\n             \"fillcolor\": \"white\",\n         },\n         edge_defaults: {\n",
+    "same_line_multiset": true
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/dot/dot_multi_edge.puml",
+    "diff": "--- before\n+++ after\n@@ -54,8 +54,8 @@\n                 to: \"B\",\n                 attrs: {\n                     \"dir\": \"back\",\n+                    \"label\": \"return\",\n                     \"style\": \"dashed\",\n-                    \"label\": \"return\",\n                 },\n             },\n             DotEdge {\n",
+    "same_line_multiset": true
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/dot/dot_node_colors.puml",
+    "diff": "--- before\n+++ after\n@@ -38,8 +38,8 @@\n             DotNode {\n                 id: \"B\",\n                 attrs: {\n+                    \"style\": \"filled\",\n                     \"fillcolor\": \"lightyellow\",\n-                    \"style\": \"filled\",\n                 },\n             },\n             DotNode {\n",
+    "same_line_multiset": true
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/dot/dot_node_url.puml",
+    "diff": "--- before\n+++ after\n@@ -31,8 +31,8 @@\n             DotNode {\n                 id: \"A\",\n                 attrs: {\n+                    \"URL\": \"http://example.com\",\n                     \"label\": \"Click me\",\n-                    \"URL\": \"http://example.com\",\n                 },\n             },\n             DotNode {\n",
+    "same_line_multiset": true
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/dot/dot_record_ports.puml",
+    "diff": "--- before\n+++ after\n@@ -38,8 +38,8 @@\n             DotNode {\n                 id: \"struct2\",\n                 attrs: {\n+                    \"label\": \"one|two\",\n                     \"shape\": \"record\",\n-                    \"label\": \"one|two\",\n                 },\n             },\n             DotNode {\n",
+    "same_line_multiset": true
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/dot/dot_weighted_edges.puml",
+    "diff": "--- before\n+++ after\n@@ -58,8 +58,8 @@\n                 from: \"A\",\n                 to: \"C\",\n                 attrs: {\n+                    \"weight\": \"1\",\n                     \"label\": \"1\",\n-                    \"weight\": \"1\",\n                 },\n             },\n             DotEdge {\n",
+    "same_line_multiset": true
+  },
+  {
+    "cohort": "golden12550",
+    "source": "test-diagrams/golden/sprites/sprite_multiple.puml",
+    "diff": "--- before\n+++ after\n@@ -18,6 +18,20 @@\n                 declarations: [],\n             },\n             sprites: {\n+                \"user\": SpriteData {\n+                    width: 8,\n+                    height: 8,\n+                    rows: [\n+                        \"00011000\",\n+                        \"00111100\",\n+                        \"00111100\",\n+                        \"00011000\",\n+                        \"01111110\",\n+                        \"11111111\",\n+                        \"11111111\",\n+                        \"01111110\",\n+                    ],\n+                },\n                 \"server\": SpriteData {\n                     width: 8,\n                     height: 8,\n@@ -30,20 +44,6 @@\n                         \"10000001\",\n                         \"11111111\",\n                         \"11111111\",\n-                    ],\n-                },\n-                \"user\": SpriteData {\n-                    width: 8,\n-                    height: 8,\n-                    rows: [\n-                        \"00011000\",\n-                        \"00111100\",\n-                        \"00111100\",\n-                        \"00011000\",\n-                        \"01111110\",\n-                        \"11111111\",\n-                        \"11111111\",\n-                        \"01111110\",\n                     ],\n                 },\n             },\n",
+    "same_line_multiset": true
+  }
+]

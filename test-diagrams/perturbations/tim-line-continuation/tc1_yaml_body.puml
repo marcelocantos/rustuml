@@ -1,0 +1,5 @@
+@startyaml
+fruit: apple \
+pie
+veg: leek
+@endyaml

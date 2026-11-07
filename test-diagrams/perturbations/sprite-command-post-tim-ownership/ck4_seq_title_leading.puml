@@ -1,0 +1,4 @@
+@startuml
+/' c '/ title My Title
+A -> B : x
+@enduml

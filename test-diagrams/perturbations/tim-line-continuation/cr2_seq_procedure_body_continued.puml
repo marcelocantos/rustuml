@@ -1,0 +1,7 @@
+@startuml
+!procedure $p($x)
+Wren -> Finch : $x \
+more
+!endprocedure
+$p("hi")
+@enduml

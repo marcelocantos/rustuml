@@ -1,0 +1,6 @@
+@startgantt
+!startsub G
+[Design] lasts 3 days
+!endsub
+[Build] lasts 2 days
+@endgantt

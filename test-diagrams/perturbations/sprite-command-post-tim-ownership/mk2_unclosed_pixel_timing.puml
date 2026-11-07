@@ -1,0 +1,8 @@
+@startuml
+robust "Web" as WB
+@0
+WB is Idle
+sprite $gem [2x2/16] {
+F0
+0F
+@enduml

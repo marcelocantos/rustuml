@@ -1,0 +1,6 @@
+@startuml
+skinparam class \
+BackgroundColor PaleGreen
+class Fennel
+class Dill
+@enduml

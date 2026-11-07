@@ -1,0 +1,4 @@
+@startuml
+/' c '/ skinparam monochrome true
+class Pine
+@enduml

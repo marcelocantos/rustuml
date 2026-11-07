@@ -1,0 +1,771 @@
+[
+ {
+  "name": "cr4_cnt_pragma_bare",
+  "intended_valid": false,
+  "axes": [
+   "count",
+   "!pragma bare: PLAIN, count 3",
+   "CommandPragma needs a NAME"
+  ],
+  "java_prediction": "syntax error (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_pragma_bare_tail",
+  "intended_valid": false,
+  "axes": [
+   "count",
+   "!pragma bare + tail",
+   "count 3"
+  ],
+  "java_prediction": "syntax error on !pragma (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_pragma_upper_msg",
+  "intended_valid": false,
+  "axes": [
+   "count",
+   "!PRAGMA: PLAIN; CommandPragma is case-sensitive",
+   "unsure"
+  ],
+  "java_prediction": "syntax error (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_pragma_continued_end",
+  "intended_valid": true,
+  "axes": [
+   "count",
+   "pragma ends with backslash",
+   "joined with end: count 2"
+  ],
+  "java_prediction": "welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_pragma_from_include_tail",
+  "intended_valid": true,
+  "axes": [
+   "count",
+   "!pragma from raw include",
+   "count 3"
+  ],
+  "java_prediction": "teoz message 'x @enduml'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_pragma_from_variable_line",
+  "intended_valid": true,
+  "axes": [
+   "count",
+   "TIM-generated !pragma line",
+   "unsure"
+  ],
+  "java_prediction": "teoz message 'one'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_option_unknown",
+  "intended_valid": true,
+  "axes": [
+   "count",
+   "!option consumed: count 2"
+  ],
+  "java_prediction": "welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_assume_alone",
+  "intended_valid": true,
+  "axes": [
+   "count",
+   "!assume PLAIN: count 3",
+   "unsure"
+  ],
+  "java_prediction": "an empty diagram (not Welcome)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_log_alone",
+  "intended_valid": true,
+  "axes": [
+   "count",
+   "!log consumed: count 2"
+  ],
+  "java_prediction": "welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_assert_alone",
+  "intended_valid": true,
+  "axes": [
+   "count",
+   "!assert consumed: count 2"
+  ],
+  "java_prediction": "welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_undef_alone",
+  "intended_valid": true,
+  "axes": [
+   "count",
+   "!undef consumed: count 2"
+  ],
+  "java_prediction": "welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_include_empty",
+  "intended_valid": true,
+  "axes": [
+   "count",
+   "include of an empty file: count 2"
+  ],
+  "java_prediction": "welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_include_blank_line",
+  "intended_valid": false,
+  "axes": [
+   "count",
+   "include of one blank line: count 3",
+   "UmlSource#isEmpty"
+  ],
+  "java_prediction": "empty-description (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_includesub_empty",
+  "intended_valid": true,
+  "axes": [
+   "count",
+   "empty sub: count 2"
+  ],
+  "java_prediction": "welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_theme_local_comment_only",
+  "intended_valid": true,
+  "axes": [
+   "count",
+   "local theme with no TIM lines: count 2"
+  ],
+  "java_prediction": "welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_theme_local_one_skinparam",
+  "intended_valid": true,
+  "axes": [
+   "count",
+   "local theme with one line: count 3",
+   "unsure"
+  ],
+  "java_prediction": "an empty diagram (not Welcome)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_theme_unshipped_alone",
+  "intended_valid": true,
+  "axes": [
+   "count",
+   "unshipped bundled theme alone",
+   "unsure"
+  ],
+  "java_prediction": "an empty diagram (not Welcome)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_exit_alone",
+  "intended_valid": true,
+  "axes": [
+   "count",
+   "BlockUmlBuilder !exit pauses; end line appended",
+   "count 2"
+  ],
+  "java_prediction": "welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr4_exit_mid",
+  "intended_valid": true,
+  "axes": [
+   "BlockUmlBuilder !exit",
+   "lines after !exit dropped"
+  ],
+  "java_prediction": "'one' only",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_blank_three",
+  "intended_valid": false,
+  "axes": [
+   "count",
+   "one blank line: count 3",
+   "UmlSource#isEmpty"
+  ],
+  "java_prediction": "empty-description (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_ws_only_line",
+  "intended_valid": false,
+  "axes": [
+   "count",
+   "whitespace-only line: count 3",
+   "UmlSource#isEmpty (trin)"
+  ],
+  "java_prediction": "empty-description (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_empty_var_line",
+  "intended_valid": false,
+  "axes": [
+   "count",
+   "TIM line evaluating to empty",
+   "UmlSource#isEmpty"
+  ],
+  "java_prediction": "empty-description (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_tim_comment_line",
+  "intended_valid": false,
+  "axes": [
+   "count",
+   "TIM line evaluating to a comment",
+   "UmlSource#isEmpty COMMENT_LINE"
+  ],
+  "java_prediction": "empty-description (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_cnt_blank_then_message",
+  "intended_valid": true,
+  "axes": [
+   "count",
+   "control: blank then content"
+  ],
+  "java_prediction": "'one'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_one_mindmap_procdef",
+  "intended_valid": false,
+  "axes": [
+   "one-line",
+   "mindmap",
+   "PSystemCommandFactory isEmpty"
+  ],
+  "java_prediction": "empty-description (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_one_gantt_procdef",
+  "intended_valid": false,
+  "axes": [
+   "one-line",
+   "gantt"
+  ],
+  "java_prediction": "empty-description (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_one_wbs_function",
+  "intended_valid": false,
+  "axes": [
+   "one-line",
+   "wbs",
+   "\\end form"
+  ],
+  "java_prediction": "empty-description (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_one_salt_definelong",
+  "intended_valid": false,
+  "axes": [
+   "one-line",
+   "salt",
+   "unsure"
+  ],
+  "java_prediction": "empty-description (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_one_json_procdef",
+  "intended_valid": false,
+  "axes": [
+   "one-line",
+   "json (not a command factory)",
+   "unsure"
+  ],
+  "java_prediction": "an error (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_two_mindmap_content_then_procdef",
+  "intended_valid": true,
+  "axes": [
+   "two-line",
+   "mindmap: no Welcome factory"
+  ],
+  "java_prediction": "mindmap 'root'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_two_class_content_then_function_end",
+  "intended_valid": true,
+  "axes": [
+   "two-line",
+   "class content",
+   "end swallowed by !function"
+  ],
+  "java_prediction": "welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr4_two_blank_then_procdef_end",
+  "intended_valid": true,
+  "axes": [
+   "two-line",
+   "blank line then swallowed end: count 2"
+  ],
+  "java_prediction": "welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr4_ws_ideo_before_assign",
+  "intended_valid": false,
+  "axes": [
+   "whitespace",
+   "U+3000 before a TIM assignment: PLAIN"
+  ],
+  "java_prediction": "syntax error (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_ws_ideo_before_comment",
+  "intended_valid": false,
+  "axes": [
+   "whitespace",
+   "U+3000 before ': PLAIN, not a comment"
+  ],
+  "java_prediction": "syntax error (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_ws_ideo_before_procedure",
+  "intended_valid": false,
+  "axes": [
+   "whitespace",
+   "U+3000 before !procedure: PLAIN"
+  ],
+  "java_prediction": "syntax error (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_ws_ideo_before_if",
+  "intended_valid": false,
+  "axes": [
+   "whitespace",
+   "U+3000 before !if: PLAIN; stray !endif"
+  ],
+  "java_prediction": "error (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_ws_nbsp_before_assign",
+  "intended_valid": true,
+  "axes": [
+   "whitespace",
+   "NBSP before a TIM assignment: [%s] includes U+00A0"
+  ],
+  "java_prediction": "message 'a'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_ws_vt_before_define",
+  "intended_valid": true,
+  "axes": [
+   "whitespace",
+   "VT before !define: ASCII \\s"
+  ],
+  "java_prediction": "Kea -> Moa",
+  "crlf": false
+ },
+ {
+  "name": "cr4_ws_us_before_assign",
+  "intended_valid": false,
+  "axes": [
+   "whitespace",
+   "U+001F before an assignment: not \\s"
+  ],
+  "java_prediction": "syntax error (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_ws_ideo_startsub_in_includesub",
+  "intended_valid": false,
+  "axes": [
+   "whitespace",
+   "Sub#fromFile: U+3000 before !startsub is no marker",
+   "cannot include"
+  ],
+  "java_prediction": "error (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_ws_ideo_exit",
+  "intended_valid": true,
+  "axes": [
+   "whitespace",
+   "StartUtils#isExit trims Character#isWhitespace"
+  ],
+  "java_prediction": "'one' only",
+  "crlf": false
+ },
+ {
+  "name": "cr4_ws_ideo_before_at_end",
+  "intended_valid": true,
+  "axes": [
+   "whitespace",
+   "U+3000 before @enduml ends the block"
+  ],
+  "java_prediction": "'one' only",
+  "crlf": false
+ },
+ {
+  "name": "cr4_main_bom_line2",
+  "intended_valid": true,
+  "axes": [
+   "BOM",
+   "main source body line"
+  ],
+  "java_prediction": "message 'bom'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_main_bom_before_directive",
+  "intended_valid": true,
+  "axes": [
+   "BOM",
+   "main source, before a directive"
+  ],
+  "java_prediction": "message 'a'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_main_endash_label",
+  "intended_valid": true,
+  "axes": [
+   "U+2013",
+   "main source label"
+  ],
+  "java_prediction": "message 'a - b'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_main_endash_arrow",
+  "intended_valid": true,
+  "axes": [
+   "U+2013",
+   "main source arrow"
+  ],
+  "java_prediction": "Kea -> Tui 'dash'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_main_endash_include_path",
+  "intended_valid": true,
+  "axes": [
+   "U+2013",
+   "main source !include path becomes cr4-a.iuml"
+  ],
+  "java_prediction": "message 'dashpath'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_inc_endash_includesub_body",
+  "intended_valid": true,
+  "axes": [
+   "U+2013",
+   "!includesub body"
+  ],
+  "java_prediction": "Kea -> Tui 'dash'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_inc_double_bom",
+  "intended_valid": false,
+  "axes": [
+   "BOM",
+   "two BOMs: one stays",
+   "unsure"
+  ],
+  "java_prediction": "syntax error (BOM before Kea)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_inc_cr_only_lines",
+  "intended_valid": true,
+  "axes": [
+   "line split",
+   "BufferedReader splits on lone CR"
+  ],
+  "java_prediction": "'a' and 'b'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_main_cr_only_lines",
+  "intended_valid": true,
+  "axes": [
+   "line split",
+   "Pipe BufferedReader splits on lone CR"
+  ],
+  "java_prediction": "message 'a'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_inc_yaml_header_raw",
+  "intended_valid": true,
+  "axes": [
+   "ReadLineWithYamlHeader",
+   "raw include"
+  ],
+  "java_prediction": "message 'y' only",
+  "crlf": false
+ },
+ {
+  "name": "cr4_inc_yaml_header_wrapped",
+  "intended_valid": true,
+  "axes": [
+   "ReadLineWithYamlHeader",
+   "wrapped include (extraction first)"
+  ],
+  "java_prediction": "message 'w'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_sfx_bang_empty",
+  "intended_valid": true,
+  "axes": [
+   "suffix",
+   "empty suffix"
+  ],
+  "java_prediction": "'first'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_sfx_bang0",
+  "intended_valid": true,
+  "axes": [
+   "suffix",
+   "!0"
+  ],
+  "java_prediction": "'first'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_sfx_two_bangs",
+  "intended_valid": true,
+  "axes": [
+   "suffix",
+   "lastIndexOf leaves cr4_w_two.iuml!1: no such file",
+   "unsure"
+  ],
+  "java_prediction": "nothing included: welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr4_sfx_include_many",
+  "intended_valid": true,
+  "axes": [
+   "suffix",
+   "!include_many"
+  ],
+  "java_prediction": "message 'plain'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_sfx_include_once_twice",
+  "intended_valid": true,
+  "axes": [
+   "suffix",
+   "!include_once twice: filesUsedCurrent is never filled"
+  ],
+  "java_prediction": "'plain' twice",
+  "crlf": false
+ },
+ {
+  "name": "cr4_sfx_includesub_double_bang",
+  "intended_valid": false,
+  "axes": [
+   "suffix",
+   "includesub indexOf: block 'P!x' missing"
+  ],
+  "java_prediction": "cannot include (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_sfx_quoted_plain",
+  "intended_valid": true,
+  "axes": [
+   "suffix",
+   "quoted path control",
+   "unsure"
+  ],
+  "java_prediction": "message 'plain'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_sfx_quoted_bang",
+  "intended_valid": true,
+  "axes": [
+   "suffix",
+   "quoted path with suffix",
+   "unsure"
+  ],
+  "java_prediction": "'first'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_hdr_u16_cyrillic_tje",
+  "intended_valid": true,
+  "axes": [
+   "header",
+   "U+1C89 (Unicode 16 letter, unassigned in 15.0)"
+  ],
+  "java_prediction": "wrapped: message 'hdr'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_hdr_u16_latin_a7cb",
+  "intended_valid": true,
+  "axes": [
+   "header",
+   "U+A7CB (Unicode 16 letter)"
+  ],
+  "java_prediction": "wrapped: message 'hdr'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_hdr_u17_latin_a7ce",
+  "intended_valid": true,
+  "axes": [
+   "header",
+   "U+A7CE (Unicode 17 letter)"
+  ],
+  "java_prediction": "wrapped: message 'hdr'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_hdr_u17_arabic_088f",
+  "intended_valid": true,
+  "axes": [
+   "header",
+   "U+088F (Unicode 17 letter)"
+  ],
+  "java_prediction": "wrapped: message 'hdr'",
+  "crlf": false
+ },
+ {
+  "name": "cr4_hdr_u15_thai_control",
+  "intended_valid": false,
+  "axes": [
+   "header",
+   "U+0E01 is a 15.0 letter: raw include"
+  ],
+  "java_prediction": "syntax error (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_hdr_u15_digit_control",
+  "intended_valid": false,
+  "axes": [
+   "header",
+   "U+0663 is Nd: raw include"
+  ],
+  "java_prediction": "syntax error (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_sprite_from_procedure",
+  "intended_valid": true,
+  "axes": [
+   "sprite",
+   "declared by a procedure"
+  ],
+  "java_prediction": "message with sprite",
+  "crlf": false
+ },
+ {
+  "name": "cr4_sprite_from_include",
+  "intended_valid": true,
+  "axes": [
+   "sprite",
+   "declared in a raw include"
+  ],
+  "java_prediction": "message with sprite",
+  "crlf": false
+ },
+ {
+  "name": "cr4_sprite_continued_header",
+  "intended_valid": true,
+  "axes": [
+   "sprite",
+   "continued header line"
+  ],
+  "java_prediction": "message with sprite",
+  "crlf": false
+ },
+ {
+  "name": "cr4_end_in_startsub_unterminated",
+  "intended_valid": true,
+  "axes": [
+   "swallowed end",
+   "CodeIteratorSub without !endsub",
+   "unsure"
+  ],
+  "java_prediction": "welcome",
+  "crlf": false
+ },
+ {
+  "name": "cr4_end_in_foreach_unterminated",
+  "intended_valid": false,
+  "axes": [
+   "swallowed end",
+   "!foreach without !endfor",
+   "unsure"
+  ],
+  "java_prediction": "error (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_end_in_while_unterminated",
+  "intended_valid": false,
+  "axes": [
+   "swallowed end",
+   "!while without !endwhile",
+   "unsure"
+  ],
+  "java_prediction": "error (exit 200)",
+  "crlf": false
+ },
+ {
+  "name": "cr4_end_in_if_unterminated_active",
+  "intended_valid": false,
+  "axes": [
+   "swallowed end",
+   "active !if without !endif",
+   "unsure"
+  ],
+  "java_prediction": "error (exit 200)",
+  "crlf": false
+ }
+]

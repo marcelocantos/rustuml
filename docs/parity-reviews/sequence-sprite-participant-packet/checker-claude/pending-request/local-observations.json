@@ -1,0 +1,977 @@
+{
+ "note": "Rust-only before/after observations; no Java verdict until the relay returns.",
+ "cases": [
+  {
+   "name": "cl_seq_note_upper_legacy",
+   "source_sha256": "d602148b27fe342082969674d644afbcd04923b1dbaba8d351bde7dbc26a60fd",
+   "intended_valid": true,
+   "axes": [
+    "multiline note text",
+    "Sprite capitalised",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "d760d577c4c18695359ba8fd0fd44aa44fc90a71e3320f7f96644d30fa2b2a6c",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "635131c5d270afd314a0cb8b5f63b4a9d1ff5e5e5d876a509b68716d6369617b",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_note_caps_legacy",
+   "source_sha256": "d0b4cf1b82be9b4da3760f5487db192a80eeeb52b838978e927774b8d9a9eb51",
+   "intended_valid": true,
+   "axes": [
+    "multiline note text",
+    "SPRITE uppercase",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "00ec2d71dd7960d389a74e9e772c70847474eef979b4f496c18c3d8cd384d93d",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "4b0c6eb513652e938b166f06b4c4042229896995b61b218549b546ac5d97ffe6",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_note_lower_legacy",
+   "source_sha256": "9fe1b9ea86088ccd813b35ea15f946f92e7061723766b44125e3abf25c1eded4",
+   "intended_valid": true,
+   "axes": [
+    "multiline note text",
+    "sprite lowercase control",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "635131c5d270afd314a0cb8b5f63b4a9d1ff5e5e5d876a509b68716d6369617b",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "635131c5d270afd314a0cb8b5f63b4a9d1ff5e5e5d876a509b68716d6369617b",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "cl_seq_note_brace_legacy",
+   "source_sha256": "767821e992bcfae3668de523c1773bcfc85453ff3123f978be014b5fb4671946",
+   "intended_valid": true,
+   "axes": [
+    "multiline note text",
+    "pixel header lookalike",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "782c5ff7dc88afae9c820939322680ed9fe1fcca4ba9fc927110a0a9f70770cb",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 7: Syntax error: no registered sequence command accepts \"@enduml\""
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_note_brace_lower_legacy",
+   "source_sha256": "2c8f5209e4e6acccc13738dce8091d75614aab6ee0c55aedd022805712e9037c",
+   "intended_valid": true,
+   "axes": [
+    "multiline note text",
+    "pixel header lookalike lowercase",
+    "legacy"
+   ],
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 3: Syntax error: no registered sequence command accepts \"note right of Elm\""
+    ]
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 7: Syntax error: no registered sequence command accepts \"@enduml\""
+    ]
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "cl_seq_legend_upper_legacy",
+   "source_sha256": "7bd334ff19957afbe85d0d58686d7de6e6e99ac04abaabb129fe8749f34e4935",
+   "intended_valid": true,
+   "axes": [
+    "legend text",
+    "Sprite capitalised",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "345afdf6e8c3fe66cfcac076443b138bcb0bdc4fc0499ffaa0b9eb505df6afe6",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "8862670c9ce2875c28e66eca222059f38fd10ee3b95fd99cb89f2b8a8c777f23",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_ref_upper_legacy",
+   "source_sha256": "6dc6a9c2b57ae1871dde855dd56cd2198278b72380aec173ded1a372b23bf9e1",
+   "intended_valid": true,
+   "axes": [
+    "ref text",
+    "Sprite capitalised",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "16ac2838616aa7e7a199c6481261f9db3809f50ace0983adc40a1fc58f046fbe",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "49b8ec623359e14fc7024f5a0198ead0e3694b2082bda07cd9a6e633b3a70404",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_lower_participant_msg_legacy",
+   "source_sha256": "3d0ba388fdfd6b768098865fcaa56ef50a3ce5282e420f01f206c87c4195670a",
+   "intended_valid": true,
+   "axes": [
+    "participant named sprite",
+    "lowercase message",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "59923d52045daa3ed7e5a67744b874c2c87c29d57ced517f6b7d368ce9406f04",
+    "stderr_tail": []
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_lower_participant_dashed_legacy",
+   "source_sha256": "2a143d9eb4125ecaf23fa1ca1cb6fdaa1613f7bac629c4be7042ca65c015f5ac",
+   "intended_valid": true,
+   "axes": [
+    "participant named sprite",
+    "dashed message",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "21bba49d3acf08b8c080180b7d7cb35644888de3f920c7144c8ef8282af857ce",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "a7f4f4e3eae55368db27072f0c278de83e3f71d984374442af10386233a523a5",
+    "stderr_tail": []
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_inline_svg_apostrophe_legacy",
+   "source_sha256": "c411664101bcaf871df2f27e9bea4ee3d8decdb2674096db87921ff300cad6a7",
+   "intended_valid": true,
+   "axes": [
+    "inline svg",
+    "space-apostrophe inside svg",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "f4e9995c136003cde9262a6c1080a7099e22c2e7e91d72bbbb04afe39a5c6dbb",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 3: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\"><text>\""
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_inline_svg_apostrophe_attr_legacy",
+   "source_sha256": "c5fb39b31db903bf082445d26420d425bfe5f0e9e51dce018077f8baab7b4e6f",
+   "intended_valid": true,
+   "axes": [
+    "inline svg",
+    "space-apostrophe inside title",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "a9a01e7b962e5ed4bd9f83319d62e5b9587fd2679dff85704d0726a878e39bce",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 3: Syntax error: no registered sequence command accepts \"sprite $mark <svg viewBox=\\\"0 0 4 4\\\"><title>\""
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_inline_svg_trailing_comment_legacy",
+   "source_sha256": "52ccd18ea7ab5f832ebc2ae0e53e21fa581388d4019d43e155bc2c78f72a634c",
+   "intended_valid": false,
+   "axes": [
+    "inline svg",
+    "text after closing svg",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "91cba903d9885a04db81283ddbd067219026a10fefbf91de4cf5bada9e56900a",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "91cba903d9885a04db81283ddbd067219026a10fefbf91de4cf5bada9e56900a",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported"
+    ]
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "cl_seq_bare_sprite_legacy",
+   "source_sha256": "8f0466624a6fec36c552ae698b1340e31a5d63bdfa4a9cd9ab292e2c31dec867",
+   "intended_valid": false,
+   "axes": [
+    "sprite without value",
+    "word name",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "91cba903d9885a04db81283ddbd067219026a10fefbf91de4cf5bada9e56900a",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 2: Syntax error: no registered sequence command accepts \"sprite foo\""
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_bare_dollar_sprite_legacy",
+   "source_sha256": "68a34368671455ad10237e6a179d75904d8da24f9ddb29edf1c49fb85bb5b321",
+   "intended_valid": false,
+   "axes": [
+    "sprite without value",
+    "dollar name",
+    "legacy"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "91cba903d9885a04db81283ddbd067219026a10fefbf91de4cf5bada9e56900a",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 2: Syntax error: no registered sequence command accepts \"sprite $x\""
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_note_upper_teoz",
+   "source_sha256": "f8d5e9802e1c381f700de4463b6e07247ae1860b7d876f6a5d95af6f0c2d3bfd",
+   "intended_valid": true,
+   "axes": [
+    "multiline note text",
+    "Sprite capitalised",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "4a88481fe6d9a2e7468db9291f0e399f1522a3d98430d2466198729de3b80bec",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "167401c6b4600835e8c6e9ff5fed145ae87359f0edd4887231288336884badd0",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_note_caps_teoz",
+   "source_sha256": "97ae2d1fb02dfa49c05622699580e2670cf1510a20a9f8809436738a00145c27",
+   "intended_valid": true,
+   "axes": [
+    "multiline note text",
+    "SPRITE uppercase",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "301a3d2d90339b26c1e721ab582b4c34de15546068f62ee691afd2b56b7beecf",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "5794f5626f581b2ef8be644c0002970185698c5859a397d894c1676ccfb78cca",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_note_lower_teoz",
+   "source_sha256": "8805287e5bfb704f69c45b09dc60781822ac268f2df10e73d6796ec40416557e",
+   "intended_valid": true,
+   "axes": [
+    "multiline note text",
+    "sprite lowercase control",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "167401c6b4600835e8c6e9ff5fed145ae87359f0edd4887231288336884badd0",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "167401c6b4600835e8c6e9ff5fed145ae87359f0edd4887231288336884badd0",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "cl_seq_note_brace_teoz",
+   "source_sha256": "9c7cfe6fa4f27b446a0d4956321fa5e585c5dfb79ff05e693b4c61e8847516ad",
+   "intended_valid": true,
+   "axes": [
+    "multiline note text",
+    "pixel header lookalike",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "05b94b78b991cb0a966f176e0e697b5df7d7c7c2c5ec52bc3ca78ed269d082ea",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 8: Syntax error: no registered sequence command accepts \"@enduml\""
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_note_brace_lower_teoz",
+   "source_sha256": "a5bce12cde92647f16afe85dadd4e02733020d86daac53071f83a23c8fc6b40d",
+   "intended_valid": true,
+   "axes": [
+    "multiline note text",
+    "pixel header lookalike lowercase",
+    "teoz"
+   ],
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 4: Syntax error: no registered sequence command accepts \"note right of Elm\""
+    ]
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 8: Syntax error: no registered sequence command accepts \"@enduml\""
+    ]
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "cl_seq_legend_upper_teoz",
+   "source_sha256": "95b4e86e0845626d08d808806adcb011dfc89c98517c472dbf85ed53560f7de7",
+   "intended_valid": true,
+   "axes": [
+    "legend text",
+    "Sprite capitalised",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "f737a5a237fe3bbb11a01aa54604e1f8646d80d57d0325c330fb5907ae3e220d",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "1ff6a16cb0966441af4f3a1f22c47139f5bb568542b7562435624504aa6dc7d9",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_ref_upper_teoz",
+   "source_sha256": "179c962fec1c49a120066dad36b86684bef90fdcf0efbaaa761f7b869aa7fe44",
+   "intended_valid": true,
+   "axes": [
+    "ref text",
+    "Sprite capitalised",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "d0cc4a6cc485c79543d41e7142094d27058f58a302424c3e2ff200a284460052",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "a044b449c0be7b90df5f08faf68a7c4a179ac1587fe500d16afba1d80bfb3a3e",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_lower_participant_msg_teoz",
+   "source_sha256": "f4b887154a0d24f0a1b3da86c0a2ac47fcae2795094a76b62d7ec553e2b192d2",
+   "intended_valid": true,
+   "axes": [
+    "participant named sprite",
+    "lowercase message",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "9c7bfaf197f43dc1079c4814ef63d5dbd8f5be73ce68a897324b7ddc87bd7ee6",
+    "stderr_tail": []
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_lower_participant_dashed_teoz",
+   "source_sha256": "aef15a190edd2854b77522c0cc89796095f4c122e745f71edf87162a1be46339",
+   "intended_valid": true,
+   "axes": [
+    "participant named sprite",
+    "dashed message",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "62b0be39cb631eda07de5422594a19f4746d2cac5adebd86d97a89ec05d5ddc0",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "6135a058d368c364a3be4fdbf007a4c6dff1b393af9ea10eeabd5c86abb166a9",
+    "stderr_tail": []
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_inline_svg_apostrophe_teoz",
+   "source_sha256": "68a714274b3c83b3c5e719425ec1012411273c9a3102b4b0fb24f7e7b87d11e3",
+   "intended_valid": true,
+   "axes": [
+    "inline svg",
+    "space-apostrophe inside svg",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "1ff6a16cb0966441af4f3a1f22c47139f5bb568542b7562435624504aa6dc7d9",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 4: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\"><text>\""
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_inline_svg_apostrophe_attr_teoz",
+   "source_sha256": "dd6b417f954704fdae1a7204ae2ebc8e077e42c8d9dfa6917f5e4e6376c77fe2",
+   "intended_valid": true,
+   "axes": [
+    "inline svg",
+    "space-apostrophe inside title",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "6c8459a59972ed87d1451cbbb675a9f71aa70c772f26d201e972f1bb43e8a5a4",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 4: Syntax error: no registered sequence command accepts \"sprite $mark <svg viewBox=\\\"0 0 4 4\\\"><title>\""
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_inline_svg_trailing_comment_teoz",
+   "source_sha256": "16d512f53be90a4fabfbc70d9b81b6624160ccc64e3e16cb2e65b0a7daf17f16",
+   "intended_valid": false,
+   "axes": [
+    "inline svg",
+    "text after closing svg",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "0fbfe5b617a255514629225f4402698ae97a80d92f2dba4b07984a6c7178f1c4",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "0fbfe5b617a255514629225f4402698ae97a80d92f2dba4b07984a6c7178f1c4",
+    "stderr_tail": [
+     "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported"
+    ]
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "cl_seq_bare_sprite_teoz",
+   "source_sha256": "275f392a53b63f75fed72f1281a344b539e7866697f9ee81123ca59baaa49b44",
+   "intended_valid": false,
+   "axes": [
+    "sprite without value",
+    "word name",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "0fbfe5b617a255514629225f4402698ae97a80d92f2dba4b07984a6c7178f1c4",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 3: Syntax error: no registered sequence command accepts \"sprite foo\""
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_seq_bare_dollar_sprite_teoz",
+   "source_sha256": "bbff13913f29af61ee5e55b8a9ace7272cd7029081b2125045ffdf4cfce91077",
+   "intended_valid": false,
+   "axes": [
+    "sprite without value",
+    "dollar name",
+    "teoz"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "0fbfe5b617a255514629225f4402698ae97a80d92f2dba4b07984a6c7178f1c4",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_tail": [
+     "parse error: line 3: Syntax error: no registered sequence command accepts \"sprite $x\""
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_class_link_upper",
+   "source_sha256": "62e4e8a03c8cf4edc4c0425b0a49db8ec26b8e339384a01da65b57b412f649a6",
+   "intended_valid": true,
+   "axes": [
+    "class link",
+    "Sprite capitalised",
+    "class"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "176686dd4e3425dfadb030a42ae200b919eedba2f71a7d6da03a843947253ce7",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "57df50018a1a8e4e9098c4546df4dab97d57a1891ae3fde5d93d481b5f052d79",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_class_link_lower",
+   "source_sha256": "d2cf8b7b058b56596b454f1674e9012a8e9402ae1f6b25f96fb58081465f58bf",
+   "intended_valid": true,
+   "axes": [
+    "class link",
+    "sprite lowercase control",
+    "class"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "57df50018a1a8e4e9098c4546df4dab97d57a1891ae3fde5d93d481b5f052d79",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "57df50018a1a8e4e9098c4546df4dab97d57a1891ae3fde5d93d481b5f052d79",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "cl_object_link_upper",
+   "source_sha256": "7a48b1c371f464fca74c920a5591502aef730b39b8bb081a7bc1b35976355efe",
+   "intended_valid": true,
+   "axes": [
+    "class link",
+    "Sprite capitalised",
+    "object"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "8ab56e2e3a60099a8b4e75d3abf6ab3490b06c0d0ef89c6d479121b369ef675c",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "40576b28221e5599dcd9e6f6b854c4052d4777c9a809b2d4b1741e286ca903cf",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_object_link_lower",
+   "source_sha256": "1000c89352ec5ed625f277f9c51b075fc1a13571f79854592d7f73db9b381ac9",
+   "intended_valid": true,
+   "axes": [
+    "class link",
+    "sprite lowercase control",
+    "object"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "40576b28221e5599dcd9e6f6b854c4052d4777c9a809b2d4b1741e286ca903cf",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "40576b28221e5599dcd9e6f6b854c4052d4777c9a809b2d4b1741e286ca903cf",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "cl_class_aggregation_label",
+   "source_sha256": "0312fe67a23ebdb719f4babe97063f2224d3c1efe1ab3d9d0245f20c2a95dbb4",
+   "intended_valid": true,
+   "axes": [
+    "class link",
+    "aggregation with label"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "2b1e6c748af6e083fcc21d94484beaf86210f2f0169784a366d381c3017452f1",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "57df50018a1a8e4e9098c4546df4dab97d57a1891ae3fde5d93d481b5f052d79",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_class_dotted",
+   "source_sha256": "eecd3af0c12f20c973521eab23b3f8d7450f25fccd27d86484893c16bafefafc",
+   "intended_valid": true,
+   "axes": [
+    "class link",
+    "dotted"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "c796d05c51ab2d2f385273c1ff37e7903d45d5af2e91306f6e2df88d43969d6e",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "e44a2338b92067a413faf61b7e7aa78de7c649682422ff50f3e1f90fe8f17f24",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_class_member_upper",
+   "source_sha256": "1e61734bc965fe56e73096a6ab1ea4d05470289c8a6d85619f2e419fe7e19034",
+   "intended_valid": true,
+   "axes": [
+    "class body",
+    "Sprite capitalised"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "ea5cbf51fecbfd91b4cdc0109ec8735b2354002c17e8eed1e6212f45d8ef21e6",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "57df50018a1a8e4e9098c4546df4dab97d57a1891ae3fde5d93d481b5f052d79",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_class_member_brace",
+   "source_sha256": "f3664473afe7554f2b85eb30cc7a2add9f94549f990cc890d8d0462f7fa1fad8",
+   "intended_valid": true,
+   "axes": [
+    "class body",
+    "pixel header lookalike"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "8470e12f9f166cddd67672cf6b07a35adadd36cb5de3743664a59905333650c4",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "e8e8636c6d6bfc5f07108c3271a1828e762d1e9fa5b92ec5c8a448346836775b",
+    "stderr_tail": []
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_class_note_upper",
+   "source_sha256": "df98a5ef93e3874d3de9924a57201bd3690288acbe96a9ca2adfa2784eb1f2c2",
+   "intended_valid": true,
+   "axes": [
+    "class note text",
+    "Sprite capitalised"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "6252e359606d0300954eed708a33296c426e053f565708d4fcda1714ccc9fd99",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "df2609ced59a76e572f97c010357c0755bb541d33fef020b0cca103596f6f9f6",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_class_bare_sprite",
+   "source_sha256": "b6b0d256ff67a7cea55ceb37aa9c6aedc5400c214859444a9bafd9bd4bc46c75",
+   "intended_valid": false,
+   "axes": [
+    "sprite without value",
+    "class"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "57df50018a1a8e4e9098c4546df4dab97d57a1891ae3fde5d93d481b5f052d79",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "57df50018a1a8e4e9098c4546df4dab97d57a1891ae3fde5d93d481b5f052d79",
+    "stderr_tail": []
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "cl_state_note_upper",
+   "source_sha256": "bf5450e4bae4b746b83affd29c3f98ce3be644003a338ab71311771c3d893a8d",
+   "intended_valid": true,
+   "axes": [
+    "state note text",
+    "Sprite capitalised"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "00e05d6f1f099ea9292d2c003bb1de0f8ff9782ec95e350e62e694cf62c2bef1",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "32bfec5982f590ada0ac814850b632e8f3ee9e9153a4a0611f26816279ed7371",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_activity_note_upper",
+   "source_sha256": "b37c651e73fe67270aeb0907ef0ebf08c54ec6ad5dc158d9a48047dac83a57ad",
+   "intended_valid": true,
+   "axes": [
+    "activity note text",
+    "Sprite capitalised"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "8d236903bdb17d52dc0546a72536823a780d3343626ce7b37c4a1bb70c4f6b45",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "a1d37faddaa3696181d9d9e2429b320b73e3185ea3317b7f0aeb9726b72353f6",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_component_link_upper",
+   "source_sha256": "74cfecb2718badca9ea339648a81d94e023e02716fdcffc4c247a0291c068a9e",
+   "intended_valid": false,
+   "axes": [
+    "description link",
+    "sprite file command precedes link"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "4a884a9b9e8c2991c4c90bdf2a669de890bf5ad5d831cdfce9029c663bc9cf8e",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "f802ecbf190d491f71d17848c7e151a9cbe054ba514f7421170f24f03528c806",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "cl_usecase_link_upper",
+   "source_sha256": "1d571b75215db985732d71d1417ac8d1c0e4381805b214db6ff48aa4a6b69aca",
+   "intended_valid": false,
+   "axes": [
+    "description link",
+    "sprite file command precedes link"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "726060664f17c7265053b97ca8b564fe14d30ca9f171058387a5cf4c5c1a6d11",
+    "stderr_tail": [
+     "warning: sequence command CommandSpriteFile is recognized but unimplemented at line 2: Sprite -- (Play)"
+    ]
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "726060664f17c7265053b97ca8b564fe14d30ca9f171058387a5cf4c5c1a6d11",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "cl_component_note_upper",
+   "source_sha256": "4a9a1af6057efa28f018feba3a19e9b52c7c7863a9eecca75b3b1a3afb496149",
+   "intended_valid": true,
+   "axes": [
+    "component note text",
+    "Sprite capitalised"
+   ],
+   "before": {
+    "exit": 0,
+    "svg_sha256": "5897d8f89f056a009df780425efa4461fe7ece7eff1b1a593dcb594ca6716f5f",
+    "stderr_tail": []
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "f802ecbf190d491f71d17848c7e151a9cbe054ba514f7421170f24f03528c806",
+    "stderr_tail": [
+     "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+    ]
+   },
+   "svg_changed": true
+  }
+ ]
+}

@@ -1,0 +1,1197 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-footbox-command-consumption",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A29fed3c4-f6f1-48fa-9925-601e7b0c6dcb",
+    "model": "gpt-6-astra; high reasoning effort",
+    "tool": "Codex harness in T3 Code",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-bd08723a",
+    "branch": "review/sequence-admission-bd08723a",
+    "independent": true,
+    "prior_involvement": false,
+    "children": 0
+  },
+  "account_commit": "3b38384b3642db119ce39bb4051e6103632f51fc",
+  "implementation_commit": "2cc081521f08ab928ba7e48f92a67acd1ebc6c6c",
+  "implementation_commits": [
+    "2cc081521f08ab928ba7e48f92a67acd1ebc6c6c"
+  ],
+  "tested_rust_revision": "c6295ccdef39719b60f0e88dfd9555919523c961",
+  "production_revision": "c525fd32ae97b642b440a161140e9457f29bcfc8",
+  "baseline_revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "baseline_production_revision": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE/target-before cargo build --release --jobs 4 -p rustuml -p rustuml-oracle --bin rustuml --example diff_one at dc438fd0cd0f5edd44816db81f0d765bf48ce4e6; independently repeat at c6295ccdef39719b60f0e88dfd9555919523c961 with target-after.",
+    "rustc --edition=2024 docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs -L dependency=PRIVATE_TARGET/release/deps --extern rustuml_oracle=EXACT_RLIB -o PRIVATE_BIN/compare_cli (exact binding records retained).",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST PRIVATE_BIN PRIVATE_OUTPUT REPO_CWD; retained3569 and fresh509+62 before/after.",
+    "replay.py before|after golden|retained|fresh-main|fresh-supplement: actual rustuml -tsvg/-ttxt/--ast/--yaml -pipe; full byte captures and unchanged compare_cli.",
+    "Parent existing Monkey Man relay batches AH/AI only; [\"/Users/marcelo/rustuml-reference/bin/reference\",\"--cwd\",\"PRIVATE_CWD\",\"--timezone\",\"GMT+11:00\",\"--\",\"-pipe\",\"-tsvg\"]. No local Java/javac, SSH, runner or child was launched.",
+    "cargo test --release --lib -p rustuml-parser -p rustuml-render; cargo test --release -p rustuml --test pipe_mode; cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture (stable broad run once; exact logs preserved).",
+    "uv run --no-project python docs/parity-reviews/sequence-consumer-contract-packet/checker-9784-astra-b4b6/support/rejection_contract.py REPO NEGATIVES BEFORE_CLI AFTER_CLI OUTPUT; historical, prior-fresh, exporter and fresh-checker cohorts separately.",
+    "xml.etree.ElementTree.fromstring over every nonempty CLI SVG capture and every new reference, with empty/error outcomes retained separately."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_zero_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_zero_legacy.svg",
+      "axes": [
+        "zero",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "38e4af78ec5807564291c356c3288bbab56a7e902b620c7e83acf83ba8507d8e",
+      "golden_sha256": "410e8580f82c2ec1ffebf8fdfb8ba472bb5b1d8dba63d17ea3fed719608f5c6b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_zero_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_zero_teoz.svg",
+      "axes": [
+        "zero",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "fafaa8bc1e9d835fb54b589160969012c3c3664b03365e26035b1ef61040214f",
+      "golden_sha256": "ace73d66dd17e0fc172b22f1a0a0d1e592415d68eca400a219285024d2125c64",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_zero_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_zero_legacy.svg",
+      "axes": [
+        "zero",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "c2b16f9ef0e8cda83f99733cd2742fd909cd45a967a1086ad731b6459fc5673d",
+      "golden_sha256": "812be33767d4aa964389fb2303dcb1d0e636239ebc87cf0dae9537f45352cbcb",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_zero_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_zero_teoz.svg",
+      "axes": [
+        "zero",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "ea963a0eeae5fc93ad4f77272027cd3bcfc0bcb74fbe04541856712b742c031f",
+      "golden_sha256": "a6c4c03cbf6233d2ff991bc91b6dec0d1b5e9b012ab16fd3fc5f10fc40bd31cb",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_sp_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_sp_legacy.svg",
+      "axes": [
+        "sp",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "41af1e0c955d8c536c6ce48d80d8ba086dae7ad2646682ec5d28dd4c67981cd2",
+      "golden_sha256": "65df404069a1be020a25722847503c57f5185d0d4e0077dc8fa79e0d1b823262",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_sp_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_sp_teoz.svg",
+      "axes": [
+        "sp",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "f2ac86737fa82f6bc651de1d767476fa5821924ab61ae8145c2e0bf1ddd00084",
+      "golden_sha256": "c322989d6ef560fe402601098accf5ccd2236873dcc2b77b51ef43ca63e017f9",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_sp_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_sp_legacy.svg",
+      "axes": [
+        "sp",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "136e5e668023888e31da7e131f304d9874c6e44460a458cf42a985eaceb40e97",
+      "golden_sha256": "40ac55dd3e2c944ec10a879f1df7b25a27ad9cbe5400887dfab48f2b6c62663e",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_sp_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_sp_teoz.svg",
+      "axes": [
+        "sp",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "b45f15ffa58824cdb62a5532a719d9a8618eebc076260f2bd7b520c1de315603",
+      "golden_sha256": "b87b18a71697e5758fed4df4860eec2b93f61f88ce69afb35b0b4c615997ee47",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_tab_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_tab_legacy.svg",
+      "axes": [
+        "tab",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "6b63481da8ad2703574645a99a75f7ef3046dd7feb49643fce5cf4e23257ea53",
+      "golden_sha256": "e1038ebd4e8bac46c624f0ef5fe9475f0f2e6a897c2dcced72694a8247e53ffd",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_tab_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_tab_teoz.svg",
+      "axes": [
+        "tab",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "1d55f32cc91c044ee90ec409e839996afbc9fca83dca0e2f22c38a9862791512",
+      "golden_sha256": "0f79a2364bd0db6762f8b6363e9f2c8880d4b14a2a62fadeb85f258080776fab",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_tab_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_tab_legacy.svg",
+      "axes": [
+        "tab",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "8019fa08bb82ec3a978291c4724cb2e782aaf47bcf9bd16e5bae48893b6bf483",
+      "golden_sha256": "b341a953a6f7168b931bbab254b88a97fd37558098d5265b56eeb93452cbeea0",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_tab_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_tab_teoz.svg",
+      "axes": [
+        "tab",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "f96b102ecfb6e1da7b9ca89229dcabcb4f4e0a567b702698fce14ab1814bef4a",
+      "golden_sha256": "ba9c083b34dfc7f3ae57e490333728c2ed9d94390b3342df7fb06d777198c33d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_vt_legacy.svg",
+      "axes": [
+        "vt",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "f67bd58860a9c1ccf8897cc7bc1cbe076c0ab77e7df1be036f8a0688afcef732",
+      "golden_sha256": "e269fa01a861098c8bdd72f951663b381c40439761d78779e3c0a5b25548a13d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_vt_teoz.svg",
+      "axes": [
+        "vt",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "b44fd048d3e764ba7e8c930a0aaa2b1b0d84b1e3f53fa0f98589bc08b8662dce",
+      "golden_sha256": "0f5c51a4302759b4b6c1e359477d25a34986bac682d093160b76722fa7cb66c7",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_vt_legacy.svg",
+      "axes": [
+        "vt",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "49d9fdffa691f9078a82b4313a9375d2c24168878136da75ab73db2fdb7eb0a9",
+      "golden_sha256": "9f61e90916b9616960577d7bca85def91b5f8a38d77eb009da79dfc24a08d47d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_vt_teoz.svg",
+      "axes": [
+        "vt",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "260498cce4730badf3aa5ffc4159427ed7dee9575c354a8ae70e6f478a1d6cc4",
+      "golden_sha256": "e1987b3de86bbc4fa39e4c1a82d046cc35da3f05f5d88b7b68e4e0f91ddfb45e",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_ff_legacy.svg",
+      "axes": [
+        "ff",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "55a4ddbe0fa4dd0a7151b2994239d12fb4c6a623e091ee8d9867bb00414f0ba3",
+      "golden_sha256": "17f78d1565845d0538ce6b11455ab56654849cbdc01c67791c24b17e0a417cd0",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_ff_teoz.svg",
+      "axes": [
+        "ff",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "01da2a78e8e2a90f5d336d91bdf107f16140b6e0bf7ff8695e9c6bc18907bff7",
+      "golden_sha256": "9dbd73beda2c35d7acb567b513e736006ff196d67293b8c9dc4a86df47472183",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_ff_legacy.svg",
+      "axes": [
+        "ff",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "cad4c28c3c1ae3aa9254a408e77e96d86eb9e3c208b321dbea39017896ca2151",
+      "golden_sha256": "0b052ad3ab3ffb3f7b70df9e915889d990b4286d2e5b92e6418907fc8949dc8b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_ff_teoz.svg",
+      "axes": [
+        "ff",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "d590b3d0fc43ec83bf74c3e4094c9f7a939cf473c7d973d6c8d9c9c455dc39e6",
+      "golden_sha256": "751c56d1e7d6ccc71cb2c58629d9468ea86a55d9cedcaa5a56ec539f79820918",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_cr_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_cr_legacy.svg",
+      "axes": [
+        "cr",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "e53de10eb3381793403dbca0edaaaced29accb1d00895190d7851bf4c9a03291",
+      "golden_sha256": "fd25b56ddd5abe6431c7f8aed5cf7d5ff95f5951fc168abb9be9a8c3c00c8a63",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 0,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_cr_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_cr_teoz.svg",
+      "axes": [
+        "cr",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "abe4bdc46d807d339d7b4e59abb29a58d55aa14d953266547bf6b4c532de2ea8",
+      "golden_sha256": "e6a43f460cbd5370d9590ce97f722e5fc1e940e6c5a2ffe1ba1d1f803aa3e633",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 0,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_cr_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_cr_legacy.svg",
+      "axes": [
+        "cr",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "61bd05366d4e293a7aa439ea602d25615286d7aad6b8c1dc6737f9c0400e3086",
+      "golden_sha256": "a76d8945018d6c85188f9fc6773d78d1e956d688493653f9481f8ec98092e831",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 0,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_cr_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_cr_teoz.svg",
+      "axes": [
+        "cr",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "1ab9399ab5f85b5a3e30d9d07811c71fe9ebb1e56dc107a2b4cd001dcad76d8f",
+      "golden_sha256": "2cbae0fe84d82d0609b7a76605c6353ac9ed7220ae6cb96ac1dd47049b3db622",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 0,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_lf_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_lf_legacy.svg",
+      "axes": [
+        "lf",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "9eb8d41e25783ba743e9872fef839f656b709b8aec15bb2f4e15b6adf2aecfbf",
+      "golden_sha256": "fd25b56ddd5abe6431c7f8aed5cf7d5ff95f5951fc168abb9be9a8c3c00c8a63",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_lf_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_lf_teoz.svg",
+      "axes": [
+        "lf",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "cd019452dec4da4de4b598971a495a0393250cd49ee4ed78717a0461344a0778",
+      "golden_sha256": "e6a43f460cbd5370d9590ce97f722e5fc1e940e6c5a2ffe1ba1d1f803aa3e633",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_lf_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_lf_legacy.svg",
+      "axes": [
+        "lf",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "65413be48fdeeaa7cc25e9a25319f96a63b41175bd12cb3633b9394db51278b0",
+      "golden_sha256": "a76d8945018d6c85188f9fc6773d78d1e956d688493653f9481f8ec98092e831",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_lf_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_lf_teoz.svg",
+      "axes": [
+        "lf",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "47ee5f188635927629c1423d61e14a1676f776cac4cc9a50959c06949f84ec8f",
+      "golden_sha256": "2cbae0fe84d82d0609b7a76605c6353ac9ed7220ae6cb96ac1dd47049b3db622",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_nbsp_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_nbsp_legacy.svg",
+      "axes": [
+        "nbsp",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "e1bcea2b26165f40b17466c3d28709ee919dedf88578ba80f8bfb1ff7c3a9976",
+      "golden_sha256": "aeb2e91351f9b16135fa778202376fdd1ef2d727f99aabe8ab1dc3ffdc19e198",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_nbsp_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_nbsp_teoz.svg",
+      "axes": [
+        "nbsp",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "bed56b49dbb884adfa8ab3cee01f0f91bda8759478de0da0c58da802df3c4d3b",
+      "golden_sha256": "247c611770f2671512383cef9b83ff4cd3cab2c284d4434b9b0930bc6fa2bd4d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_nbsp_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_nbsp_legacy.svg",
+      "axes": [
+        "nbsp",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "b16e59ea9fc7d371dbb15df9491e6cca15d5fc14e60ccb6545465b9ef4faf067",
+      "golden_sha256": "98a2fd66481585f8c137a84e5929585ef7f989d51f5972b034261ff6fe12e120",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_nbsp_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_nbsp_teoz.svg",
+      "axes": [
+        "nbsp",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "17e57d5df8bc2405d16b495a0f7b2709338118f1d5d2bc8b5ddc3f91bcacc994",
+      "golden_sha256": "81c2ba68d25bd9f20d36013aed7ebd72936d461dcb5e72c23a45807ec24ab740",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_em_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_em_legacy.svg",
+      "axes": [
+        "em",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "d2e3815127256708e2bcc19b1c6b247ad3bf37bea0a37e31381a8a5ebfac6ce7",
+      "golden_sha256": "46930e9476c5ad756fa03a62aa34793d9154528d5d164e10527401cbc08dfbcc",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_em_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_em_teoz.svg",
+      "axes": [
+        "em",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "36516a6331b1581cf41fbdb75b48ebeb4cd22c51aff99d72d738f1d3ade83954",
+      "golden_sha256": "0013166a7caf477f9e67dd39e0a7a5a9b73b68f75956b8ac5b27dea66a864c16",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_em_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_em_legacy.svg",
+      "axes": [
+        "em",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "d2929b5d2f63074eef0ed2de29cb7c3f84fb7328b9d87b24a6bd8e8323682623",
+      "golden_sha256": "88eb6fe392cffa028f0f8ee4345858e5f164dc94f9817197d364ece80a9733d6",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_em_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_em_teoz.svg",
+      "axes": [
+        "em",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "e054da6cb2c868f6cd9e7935addb53cd43b5272b82358a4e0a7820e25e7d2e25",
+      "golden_sha256": "1f22d07b2d60511fc7b322b4801627fdf2a85c9bb415ec905f11b7c7ac6982cb",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_nnbsp_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_nnbsp_legacy.svg",
+      "axes": [
+        "nnbsp",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "84d0123370d7189da8e35243225ccc54e18f4d7f06bb428b84b30c24882cd4af",
+      "golden_sha256": "5442927e7a5f92e49aaa9de2a25529a018809daad702e2397fab83ccd2fce043",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_nnbsp_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_nnbsp_teoz.svg",
+      "axes": [
+        "nnbsp",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "2a812b0537ff84936f019e4d950af34cac737db4645ec8aac3dbad40f5e9c9ac",
+      "golden_sha256": "048affe9ffe5f45d1075ea57c598947e67ea074d0ae934d08fc3fe352bcb946e",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_nnbsp_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_nnbsp_legacy.svg",
+      "axes": [
+        "nnbsp",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "3b596634c66a9f7e114de2665c7471e796786b2a63b4bcdc61ccef28d365f826",
+      "golden_sha256": "4802fc8ac7c3e5b4abaf9f91f49d2a727e56c205940b82e898342a575576e4d8",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_nnbsp_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_nnbsp_teoz.svg",
+      "axes": [
+        "nnbsp",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "45804f98d7c6adf558e729bf061e6466b0dfc8615a79b96a8f11b6abd2e81522",
+      "golden_sha256": "fa039441e2adc09ba0b3dc6ddfe6501b092236783a2f479c5a4f3cde421b7e65",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_nel_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_nel_legacy.svg",
+      "axes": [
+        "nel",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "5e0cc4152181535d9926a24c30a1b0d69b5ab6fcc4ee7e3ff0d0a96784b74b91",
+      "golden_sha256": "5972fb874e4220d7731d1ed6d8e52b78dd528293c60b3ac88d995c99e2103612",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_nel_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_nel_teoz.svg",
+      "axes": [
+        "nel",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "82b770178633bdb6f7ef28c7f6195e85c765e3d441997f71cec11a691b944ad8",
+      "golden_sha256": "ec3bedcbde366c7768b60aa6ad282c522529e44b361da2f60539394618a0b0db",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_nel_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_nel_legacy.svg",
+      "axes": [
+        "nel",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "94e7b2f0534f493c8fb53698df9e4f4a52e6fc95662d12b7aeac55d27463b349",
+      "golden_sha256": "9ef7f7ecd5f503976ecc9fbcfb2d00b506166b51c6b976caa15f0283789cfab3",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_nel_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_nel_teoz.svg",
+      "axes": [
+        "nel",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "921f36205e4ffecc8c8a910700b90f97607db56fc1d0fb7d9dfed744cd6a429b",
+      "golden_sha256": "4724324fb89408d07704b120fa8898703108aa12a33a9c9931e2d970a16b9c1c",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_ls_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_ls_legacy.svg",
+      "axes": [
+        "ls",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "40bd354d401355da7bcf347acc5425960f0b913b6fd3033e2a471e9e0d0e51ac",
+      "golden_sha256": "259dac6345450640fba74fdf1d1f40ba54698b561d1d0835f89c1efaefe21395",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_ls_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_ls_teoz.svg",
+      "axes": [
+        "ls",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "6c52df324326cec3330d5d6a33865203d91650d6003c6340e9cf7aec50268dc5",
+      "golden_sha256": "35b02a57edffe391831217509024a7b8b3d9257ae51771d4425ab36de8e2bc0e",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_ls_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_ls_legacy.svg",
+      "axes": [
+        "ls",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "77bb1f01a9612fdcdcc18543ccac0a7973ee4dd971e079d34eaea549f784614b",
+      "golden_sha256": "f0e6f7bc5edbfbad725c612a20168385b58b40f4086823773ee04856c38bea30",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_ls_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_ls_teoz.svg",
+      "axes": [
+        "ls",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "12a3af50d7ec883f6a59e8cc78eb7688e269d9c5ca908f4d5cca0e8ea6784bf2",
+      "golden_sha256": "39583120179f8f78d249b5ab437aa6a821219571cf4dcaf74fa45c3a39de77c9",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_ps_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_ps_legacy.svg",
+      "axes": [
+        "ps",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "5f60d270e0ec4d5d825b60c85172b80c79274c875ebba2fe850c420a165b5c7f",
+      "golden_sha256": "e145fb5f66edf2014a9a842545037649d5ffa22b1ae4b6130f67240144e69ecf",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_ps_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_ps_teoz.svg",
+      "axes": [
+        "ps",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "f4f70db558ece2556eee2d3ec9cce30242197a8b26dcc4b344bdfac35e279044",
+      "golden_sha256": "cf3ad7f6fd48fa483ab0e22a2f166831c7391e337dc28938b5249d0bfb5c018c",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_ps_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_ps_legacy.svg",
+      "axes": [
+        "ps",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "d0158084a2bc2a9d18c21f87d2da7147e6f647a54780ff478538928bf14cf1bb",
+      "golden_sha256": "52703839457fec8f0f1cf510ac469777cc089ad359ecbd73833b4baa0cc3cf8f",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_ps_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_ps_teoz.svg",
+      "axes": [
+        "ps",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "906dbbf86a3e8c4ab6a89fb9e29ded6922ebd148b2a0f1148651ec50d9e66d54",
+      "golden_sha256": "1855f4caee998530be25ccff841f2715a08a35fa354e7a5cdf785d9285d2fae2",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_s_bare_footbox.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_s_bare_footbox.svg",
+      "axes": [
+        "footbox",
+        "self and internal topology"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "35796fc9adf94929f1252a43c77f64cb53469b99dae189895cadedd1a2c870ac",
+      "golden_sha256": "32006fb25277a135f21ef1a71a50ac1160c91c4018d504b0f539bf33abccb220",
+      "intended_valid": true,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 0,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_s_bare_footboxon.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_s_bare_footboxon.svg",
+      "axes": [
+        "footboxon",
+        "self and internal topology"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "ed133d4e6f76eb478517440b9551690cb059d39f18a05488963198f235fb1d4a",
+      "golden_sha256": "ec5517591dab3c17b50eff7c24df36af4d2eb7812a74f133124fd1cc92a59d71",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_s_bare_footboxoff.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_s_bare_footboxoff.svg",
+      "axes": [
+        "footboxoff",
+        "self and internal topology"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "1df61af9156d54483cca78a167863f98ec4bfaf8d833b8575bd57095e25c2bbe",
+      "golden_sha256": "f3b8b03928f094e0be792e05da17990319e80e37872ce7d1050ac6f5b08aadf7",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_s_bare_hidefootbox.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_s_bare_hidefootbox.svg",
+      "axes": [
+        "hidefootbox",
+        "self and internal topology"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "6f1aaae744002a67a2b1b1272489e8e2977e557f2b01cc16b1c06b3fbff046d0",
+      "golden_sha256": "f96a2bd6362c8ca0e5db6cd11f698d24419240d8688ece28fbd8b99b8a844399",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_s_bare_showfootbox.puml",
+      "golden": "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_s_bare_showfootbox.svg",
+      "axes": [
+        "showfootbox",
+        "self and internal topology"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "9e3e086f3bc18384d21fc5e3eb171465c861fb988d62731deae8413dd119fda4",
+      "golden_sha256": "e573ab21102c7836f32739a30935d3f9dfd6debdb232591291cb3a7b8bd65465",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    }
+  ],
+  "findings": [
+    "The valid hide/show zero, SPACE, TAB, VT, FF and NBSP cases reach visibility state across legacy/Teoz and self/internal topology; all28 valid cases in this mechanism match. CR and LF are input-reader line boundaries in Java, not interchangeable in-line command spaces. Main57 includes24 correctly rejected controls and5 false successes.",
+    "REJECT whole-output/negative contract: bare footbox selects CommandFootbox before CommandFootboxOld. Its optional TYPE is null and executeArg:62 calls equalsIgnoreCase, throwing NPE. The Java error is preserved; Rust silently succeeds. Four embedded-CR controls also remain false successes because Rust keeps the CR inside a line where Java BufferedReader splits it. These are preexisting false successes, not introduced lost rejections.",
+    "The account precedes the implementation. New regex whitespace and legacy on/off routing have named Java provenance and remove bogus messages. This bounded support does not waive the executable negative failures."
+  ],
+  "verdict": "rejected",
+  "verdict_scope": "Whole-output and rejection-contract acceptance; bounded support is not a waiver. Source-correct or reverted portions are distinguished in findings.",
+  "fresh_counts": {
+    "before": {
+      "entries": 57,
+      "mismatch": 18,
+      "match": 10,
+      "nonpositive": 29
+    },
+    "after": {
+      "entries": 57,
+      "match": 28,
+      "nonpositive": 29
+    }
+  },
+  "evidence": "docs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra",
+  "bounded_next_obligations": [
+    "REJECT whole-output/negative contract: bare footbox selects CommandFootbox before CommandFootboxOld. Its optional TYPE is null and executeArg:62 calls equalsIgnoreCase, throwing NPE. The Java error is preserved; Rust silently succeeds. Four embedded-CR controls also remain false successes because Rust keeps the CR inside a line where Java BufferedReader splits it. These are preexisting false successes, not introduced lost rejections."
+  ],
+  "limits": [
+    "No shared-SVG combined correctness claim.",
+    "Java argv is wrapper-derived, not process-traced.",
+    "No baseline/comparator/skip/allow-list/target changes.",
+    "Prior accepted exceptions remain exactly15 frozen entries (14 distinct source hashes); fresh sprite loss is an unapproved16th error, not silently added to that set."
+  ]
+}

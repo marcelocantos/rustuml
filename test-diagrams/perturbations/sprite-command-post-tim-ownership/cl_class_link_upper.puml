@@ -1,0 +1,4 @@
+@startuml
+class Player
+Sprite -- Player
+@enduml

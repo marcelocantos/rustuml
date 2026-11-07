@@ -1,0 +1,5 @@
+@startuml
+!$p = "!pragma teoz true"
+$p
+Kea -> Tui : one
+@enduml

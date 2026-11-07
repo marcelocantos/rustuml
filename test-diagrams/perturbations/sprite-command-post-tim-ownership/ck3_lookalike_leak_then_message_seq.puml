@@ -1,0 +1,7 @@
+@startuml
+Alder -> Birch : one
+note over Alder
+sprite $p [2x2/16] {
+end note
+Alder -> Birch : two ' three
+@enduml

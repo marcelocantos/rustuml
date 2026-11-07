@@ -1,0 +1,12 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+skinparam sequence {
+participant {
+BackgroundColor Wheat
+}
+ArrowColor Olive
+}
+Kestrel --> Juniper: receipt
+@enduml

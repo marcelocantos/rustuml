@@ -1,0 +1,69 @@
+{
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "java_worktree_clean": true,
+ "java_head": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "file_sha256": {
+  "command/CommandSpriteSvg.java": "844f9180bfd10a6126d4ece42cadffd18a7a41f40cd004ddcd8f6182cc13b6d5",
+  "command/CommandSpriteSvgMultiline.java": "31479aa05dad54e1d62b39cc9935a30f8c1e6f86c619cb7374e999a3798a4a00",
+  "command/CommandFactorySprite.java": "d11e794549b2f8f2552cb99dd4ad07099e0d9b7234b8c299f0973927ddfd7815",
+  "command/CommandSpriteFile.java": "e1d4defb8c493d6ec590744d60941b898cadf7007ccf7c00a71674f0121b7814",
+  "command/CommandSpriteStdlib.java": "f2d9cdbeb60dfa43782485365348d77ac905a55589811d97930ff1595dc10dac",
+  "command/CommandSpriteStdlibSvg.java": "bd4caca79648b1f2935c92acadc5ba4532d56465674e86aa82be4c26c200e959",
+  "command/CommandMultilines2.java": "e92cf76aa5ae4aab8e1e911a6a158872c0c7b08151d7d1b988b854cb3cbb9d5a",
+  "command/PSystemCommandFactory.java": "78b1734665d5764adbf390a7b57a594f25737df425bac033860a1448028bea4c",
+  "command/CommonCommands.java": "4252b2835b721e1c4480b28c39a6101de39250ed314b6569a0b3334c28036947",
+  "command/SingleLineCommand2.java": "4d62980a0b6f4a20c3d49f2a44f784aa1a851329c21769d40c059a6df6435aa9",
+  "regex/Pattern2.java": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52",
+  "regex/RegexConcat.java": "8b8b9f89abb93776bc09b62360843e20e8522778ce47b96b4dbcd4bf1b2871cd",
+  "regex/RegexLeaf.java": "a2f2b6362509bbb4275401e18ba8ca424c7d714163f615858a9a08c6d5c9474b",
+  "text/FoxSignature.java": "327ea8b237d3a2d65ebb0775087b5d9203a4bfd40b4cae27d3dcf3e120ad6985",
+  "sequencediagram/command/CommandParticipant.java": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b",
+  "sequencediagram/command/CommandParticipantA.java": "61664e96e15f18e24a98352538b62ca9c09b7c3942670d969a6781693aa14597",
+  "sequencediagram/command/CommandParticipantA2.java": "04ef56cbcccf57d00ac734924789fd28035b30d6cea69cba566e0825e8bf06af",
+  "sequencediagram/command/CommandParticipantA3.java": "ed1f123de770356792aee51faa0baf1ceb2217cc2dc0d9371b2b30daa9427fa0",
+  "sequencediagram/command/CommandParticipantA4.java": "65d1e19a67935a50316be252968046d8baf7677378a56612e2fe0f079ddcff29",
+  "sequencediagram/command/CommandParticipantMultilines.java": "a9dcf9bc059e3c931048024b39aaf17a4e812c22ac8c039d004ac1b8fdd44508",
+  "sequencediagram/command/CommandBoxStart.java": "67d06b20d6bae9f5a28275a9f82c1a4b4e8802b7b292cc86c6efcd457096f198",
+  "command/note/sequence/FactorySequenceNoteCommand.java": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508",
+  "klimt/color/HColorSet.java": "cdd4b8ae6aaf39eebafb1107bab16184e671e639aafdc77fd925bc1b66597be1",
+  "klimt/color/Colors.java": "8a65832a713d37ddd8306d07dcaabd6958b14e03f3184c25ebd01d5277d67901",
+  "klimt/color/ColorParser.java": "16809219620993a934cc8a319bd286e081d7b5191999bf20c263e81e2cbb6cdd",
+  "stereo/StereotypePattern.java": "9a6f47de3fc289c0211ac0ca78dafd3fb77a53e2a3d356bd09c506b274d9e17d",
+  "sequencediagram/SequenceDiagram.java": "e929fbe92bf0c987c0e5f0f9f6ae1f87e20a099bffb1a4026a3e2a97b35e2f17",
+  "classdiagram/ClassDiagramFactory.java": "19ed17c5ec56c21ccf2b0042bdf9b9029995b53ad691bedf0d7d9a599ed6950a",
+  "descdiagram/DescriptionDiagramFactory.java": "4975f451561275ef39fd2850670677aa885903011ec6c339321c32d06ec028ba",
+  "statediagram/StateDiagramFactory.java": "25fb4cd3a5294e3c93b7d3afaf58ca8ad70fd5741ed498a94c2fee7419f8c846",
+  "sequencediagram/SequenceDiagramFactory.java": "16ac5c66de256a91afab3f80cab896ce2ae386db07dfc09c44a45af17bfaface"
+ },
+ "maker_source_provenance": "all 21 hashes in maker-results/source-provenance.json match the pinned files",
+ "citation_checks": {
+  "resolved": [
+   "CommandSpriteSvg#getRegexConcat",
+   "CommandSpriteSvgMultiline#getRegexConcat/END",
+   "CommandFactorySprite#multiline/END/executeInternal",
+   "CommandMultilines2#isValid",
+   "Pattern2#transform",
+   "RegexConcat#match",
+   "PSystemCommandFactory#getCandidate",
+   "CommandParticipantA..A4#getRegexConcat",
+   "CommandParticipant#getOrderRegex/executeArg",
+   "StereotypePattern#optional",
+   "CommandParticipantMultilines#executeNow",
+   "CommandBoxStart#executeArg",
+   "HColorSet#parseColor/parseSimpleColor",
+   "Colors#Colors",
+   "SingleLineCommand2#execute",
+   "SequenceDiagram#createNewParticipant/addWithOrder"
+  ],
+  "package_errors": [
+   "sequence-sprite-block-consumption account cites regex.FoxSignature#getMask; the class is net.sourceforge.plantuml.text.FoxSignature (maker source-provenance hashes the correct text/FoxSignature.java, but no clarification was recorded).",
+   "sequence-command-specific-color-paths account cites sequencediagram.command.FactorySequenceNoteCommand; the class is command.note.sequence.FactorySequenceNoteCommand (maker recorded this clarification)."
+  ],
+  "behavioural_omission": "CommandParticipant#executeArg's existing-CODE early return calls SequenceDiagram#putParticipantInLast before returning; the colour/participant accounts cite the early return but the Rust early return omits the reorder/englober side effect without a warning."
+ },
+ "java_ordering_facts": [
+  "CommonCommands#addCommonCommands2 order: CommandFactorySprite multi, single, CommandSpriteSvg, Stdlib, StdlibSvg, CommandSpriteSvgMultiline, CommandSpriteFile.",
+  "ClassDiagramFactory adds CommonCommands2 after CommandLinkClass; DescriptionDiagramFactory and SequenceDiagramFactory add CommonCommands1 first; StateDiagramFactory adds links before CommonCommands1.",
+  "CommandMultilines2#isValid returns OK_PARTIAL for a single line without END-checking it; PSystemCommandFactory#isMultilineCommandOk returns null at EOF so getCandidate continues to later commands (pixel header then reaches CommandSpriteFile)."
+ ]
+}

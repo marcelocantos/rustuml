@@ -1,0 +1,7 @@
+@startuml
+box "Grove"
+participant Cedar [[https://example.org/c{bark} cedar]]
+end box
+participant Spruce
+Spruce -> Cedar: pollen
+@enduml

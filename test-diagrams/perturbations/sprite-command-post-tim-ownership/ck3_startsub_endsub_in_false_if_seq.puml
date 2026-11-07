@@ -1,0 +1,8 @@
+@startuml
+!startsub S
+Alder -> Birch : one
+!if %false()
+!endsub
+!endif
+Birch -> Alder : two
+@enduml

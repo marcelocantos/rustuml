@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-sprite-pending-span",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "command.CommandMultilines2#isValid",
+    "command.PSystemCommandFactory#getCandidate"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs::SpriteBlockKind",
+    "crates/rustuml-parser/src/preprocess/mod.rs::PreprocessContext::process_one_line (sprite blocks only)"
+  ],
+  "invariant": "The pending sprite owns a suffix of the expanded output, independent of which recursive include buffer produced its opening line. Completion must not erase commands before that suffix.",
+  "causal_divergence": "The first deferred-blanking implementation stores an absolute index into the current output Vec. try_include recursively calls process with a fresh output Vec and then extends its caller; a sprite opened in the included file can close in the caller, so the absolute opening index no longer identifies its span. This is source-traced, not a measured Java claim.",
+  "planned_change": "Replace each enum payload output_start with pending_lines, initialized to one for the header and incremented for each body line. At END clear the last pending_lines entries, which are exactly the contiguous body after include expansion. No include, TIM, source-origin or other preprocessing code is changed. Add an owned sequence test using a private include file to verify preceding declarations survive.",
+  "perturbation_axes": [
+    "sprite opened in an include versus direct source",
+    "SVG/pixel terminators and commands before/after the expanded block"
+  ],
+  "status": "preimplementation corrective account; broad d15d6eaf9 results retained and final gates will be repeated only because code changes"
+}

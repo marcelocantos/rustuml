@@ -1,0 +1,9 @@
+{
+  "head": "589b3d5e656a9a02b8e03f9f4fd103be084f2bef",
+  "binary_sha256": "b36680d61772e9fafbfae3be3bbc876d059bcb4715bf5adb4648c853857a6c2f",
+  "patch_sha256": "3e3f4965bd6eec42cba40d22a861c21dc65243ca4eab7f0d6894fe3a71cafa88",
+  "sources": {
+    "crates/rustuml-parser/src/parse/sequence.rs": "b15f8bdcb66e760ae7b0a1de83029eb61d336a6c5038d637dfca7d540e10081a",
+    "crates/rustuml-parser/src/preprocess/mod.rs": "8315bec1f67151cc5b200b957e99c98b16d3a73e9fb41818734d6934eca9855a"
+  }
+}

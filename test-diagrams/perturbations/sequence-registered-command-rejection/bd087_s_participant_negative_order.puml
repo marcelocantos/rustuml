@@ -1,0 +1,7 @@
+@startuml
+participant Alder
+participant Osprey
+Alder -> Osprey: audit
+participant Cedar order -3
+Cedar -> Alder: ordered
+@enduml

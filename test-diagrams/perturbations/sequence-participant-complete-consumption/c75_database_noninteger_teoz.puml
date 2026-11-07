@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Spruce
+database Cedar order 2.5
+Spruce -> Cedar: pollen
+@enduml

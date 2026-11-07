@@ -1,0 +1,6 @@
+@startuml
+!define SAY(a, b) a -> b : said \
+  softly
+SAY(Fern, Moss)
+Moss -> Fern : ok
+@enduml

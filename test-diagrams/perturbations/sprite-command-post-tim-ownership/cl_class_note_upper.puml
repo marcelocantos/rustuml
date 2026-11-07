@@ -1,0 +1,6 @@
+@startuml
+class Player
+note right of Player
+Sprite pool size
+end note
+@enduml

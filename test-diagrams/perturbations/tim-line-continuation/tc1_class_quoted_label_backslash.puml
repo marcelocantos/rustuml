@@ -1,0 +1,6 @@
+@startuml
+class Fir
+class Yew
+Fir --> Yew : "alpha \
+beta"
+@enduml

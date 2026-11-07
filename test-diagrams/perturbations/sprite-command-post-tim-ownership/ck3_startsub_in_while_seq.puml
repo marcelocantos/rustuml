@@ -1,0 +1,9 @@
+@startuml
+!$i = 0
+!while $i < 2
+!startsub W
+Alder -> Birch : loop $i
+!endsub
+!$i = $i + 1
+!endwhile
+@enduml

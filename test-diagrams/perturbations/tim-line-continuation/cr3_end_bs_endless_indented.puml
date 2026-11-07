@@ -1,0 +1,5 @@
+@startuml
+Kea -> Tui : one
+  \endless story
+Tui -> Kea : two
+@enduml

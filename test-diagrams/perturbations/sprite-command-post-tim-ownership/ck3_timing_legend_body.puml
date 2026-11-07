@@ -1,0 +1,10 @@
+@startuml
+robust "Web" as W
+@0
+W is Idle
+@5
+W is Busy
+legend
+Sprite sheets are loaded
+endlegend
+@enduml

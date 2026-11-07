@@ -1,0 +1,5 @@
+@startuml
+participant Spruce
+actor Cedar order 7
+Spruce -> Cedar: pollen
+@enduml

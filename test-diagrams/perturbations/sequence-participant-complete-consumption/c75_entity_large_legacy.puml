@@ -1,0 +1,5 @@
+@startuml
+participant Spruce
+entity Cedar order 9999999
+Spruce -> Cedar: pollen
+@enduml

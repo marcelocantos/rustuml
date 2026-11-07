@@ -1,0 +1,63 @@
+{
+ "schema_version": 1,
+ "mechanism": "sprite-command-post-tim-ownership",
+ "status": "preimplementation account; independent review required",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "rejected_line": "dc1dfbb4ac8343fde59e041c651d288ffa318a52 (maker production d15d6eaf9, ba2e6c2b7)",
+ "integration_base": "9834a719455308120c3289b59a260567f141b724",
+ "obligations": [
+  "1 (blocking): only lines that survive !if, !procedure and !include may open, extend or close a sprite block",
+  "2: lines inside multiline command bodies, and lines a family matches before its sprite commands, are not sprite declarations",
+  "3: unclosed sprite blocks are rejected in families that register sprite commands"
+ ],
+ "java_trace": {
+  "tim_before_commands": [
+   "net.sourceforge.plantuml.BlockUml#<init>: TimLoader#load(rawSource) then data = TimLoader#getResultList (Jaws expansion); commands never see the raw source",
+   "net.sourceforge.plantuml.tim.TimLoader#load -> tim.TContext#executeLines: !if/!else/!endif, !procedure/!function definition and invocation, !include are all resolved here",
+   "net.sourceforge.plantuml.PSystemBuilder#createPSystem: each factory receives the post-TIM UmlSource",
+   "net.sourceforge.plantuml.command.PSystemCommandFactory#createSystem / #executeFewLines / #getCandidate / #isMultilineCommandOk: iterate the post-TIM lines; at each position the first registered command that is OK, or OK_PARTIAL and completes, owns the lines"
+  ],
+  "sprite_commands": [
+   "net.sourceforge.plantuml.command.CommonCommands#addCommonCommands2 registration order: CommandFactorySprite multiline, CommandFactorySprite single line, CommandSpriteSvg, CommandSpriteStdlib, CommandSpriteStdlibSvg, CommandSpriteSvgMultiline, CommandSpriteFile",
+   "net.sourceforge.plantuml.command.CommandMultilines2#isValid: first line matches the start pattern -> OK_PARTIAL; END (Matcher.matches on Trim.BOTH line) only tested on later lines; incomplete at EOF -> isMultilineCommandOk returns null -> the next command is tried",
+   "net.sourceforge.plantuml.command.CommandFactorySprite#executeNow: subExtract(1,1); empty -> error 'No sprite defined.'; executeInternal: graylevel not 4/8/16 -> error 'Only 4, 8 or 16 graylevel are allowed.'; z-compressed decode failure -> 'Cannot decode sprite.'",
+   "net.sourceforge.plantuml.command.CommandSpriteFile#executeArg: FILE ([^<>%g#]*) resolved through FileSystem#getFile; missing file -> error 'Cannot read: <src>'",
+   "Consequence: an unclosed pixel header such as 'sprite $x [2x2/16] {' falls through to CommandSpriteFile (FILE='[2x2/16] {') and fails with 'Cannot read'; an unclosed SVG header has no candidate (FILE excludes '<') -> SYNTAX_ERROR"
+  ],
+  "family_positions": [
+   "sequencediagram.SequenceDiagramFactory#initCommandsList: CommonCommands#addCommonCommands1 first (already ported as REGISTERED_SEQUENCE_COMMANDS 22-28)",
+   "classdiagram.ClassDiagramFactory#initCommandsList: CommonCommands#addCommonCommands2 last, after CommandLinkClass and every note factory",
+   "statediagram.StateDiagramFactory#initCommandsList: addCommonCommands1 after state/link/note commands",
+   "descdiagram.DescriptionDiagramFactory#initCommandsList and activitydiagram3.ActivityDiagramFactory3 / activitydiagram.ActivityDiagramFactory: addCommonCommands1 before the family commands",
+   "multiline note/legend/ref/class-body commands own every body line through their END, so body text is never offered to getCandidate"
+  ],
+  "comment_handling": "net.sourceforge.plantuml.text.StringLocated#removeInnerComment (used by tim.iterator.CodeIteratorInnerComment and preproc2.ReadFilterQuoteComment) removes only /' ... '/ forms; Java has no trailing-apostrophe comment stripping, so ' inside an inline SVG is command text",
+  "citation_corrections": "FoxSignature is net.sourceforge.plantuml.text.FoxSignature (not regex.FoxSignature); FactorySequenceNoteCommand is net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteCommand"
+ },
+ "rust_locations": [
+  "crates/rustuml-parser/src/preprocess/mod.rs: remove the sprite body branch, declaration block, SpriteBlockKind and sprite state from PreprocessContext::process_one_line (TIM). Inline-comment stripping is not applied to a line in the CommandSpriteSvgMultiline/CommandSpriteSvg start grammar (sprite-area exemption; Java strips none)",
+  "crates/rustuml-parser/src/parse/sprite.rs (new): CommonCommands sprite group candidate selection in registration order with CommandMultilines2 completion, plus executeNow/executeArg failures and pixel SpriteData collection",
+  "crates/rustuml-parser/src/parse/sequence.rs: REGISTERED_SEQUENCE_COMMANDS 22-28 already select sprite commands in Java order after TIM; add their execution failures",
+  "class/object/state/activity/usecase/component/deployment parsers: offer a top-level line to the sprite group at the end of the family dispatch chain (only reached when no body state and no family handler claimed the line)",
+  "crates/rustuml-parser/src/parse/mod.rs: families without a ported dispatch position consume only complete sprite commands post-TIM (previous TIM behaviour moved after TIM); subtype detection sees complete sprite commands masked"
+ ],
+ "known_deviation_planned": "Description and activity factories register sprite commands before their own commands; the Rust handlers in those families are lenient, so the sprite group is offered last. A line both a description handler and a sprite command accept (Java: sprite wins) stays a family command. Recorded as residual, not hidden.",
+ "precommitted_measurement": {
+  "builds": "private release builds, CARGO_TARGET_DIR outside the repo, -j 6; before = merged tree 93bf53e18 (rejected production + integration base); after = corrective tip",
+  "cli_cohorts": [
+   "retained 4,174-entry cohort (checker-claude retained-manifest.json) with the unchanged compare_cli, four modes",
+   "all 12,550 goldens, SVG bytes before/after",
+   "fresh Java references: 790-case and 28-case batches (~/Library/Caches/rustuml-sequence-sprite-checker-75ed0e64), 43-case batch1 (relay sprite-claude-batch1), plus any new maker batch once relayed"
+  ],
+  "gates": [
+   "golden_no_oracle failure names diffed against 9834a7194",
+   "golden_pairs assisted counts",
+   "parity_perturbations: zero new failures in pre-existing directories",
+   "harness_guards by violation category",
+   "pipe_mode, cargo test --release --workspace --lib",
+   "rejection_contract.py (docs/parity-reviews/sequence-consumer-contract-packet/checker-9784-astra-b4b6/support) on Java-invalid inputs"
+  ],
+  "reported_separately": "lost passes, lost rejections, new valid-input errors, panics"
+ },
+ "amendment_round3": "Correction recorded in round 3 (account of record maker-results-round3/account.json), without rewriting history: 'known_deviation_planned' above is wrong about the implementation. Round-2 production 95cf85252 offers a command-start line to the sprite group BEFORE the description (component.rs, deployment.rs, usecase.rs) and activity (activity.rs, both legacy and activity3) handlers, which is the Java order (DescriptionDiagramFactory, ActivityDiagramFactory and ActivityDiagramFactory3 #initCommandsList call CommonCommands#addCommonCommands1 before their own commands). A line both a description handler and a sprite command accept therefore becomes the sprite command, as in Java; no 'offered last' deviation exists. The round-2 commit message's 'description and activity families offer a command-start line before theirs' is the accurate statement."
+}

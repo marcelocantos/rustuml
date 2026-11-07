@@ -1,0 +1,6 @@
+@startuml
+class Player
+footer
+sprite $s <svg width="2">
+endfooter
+@enduml

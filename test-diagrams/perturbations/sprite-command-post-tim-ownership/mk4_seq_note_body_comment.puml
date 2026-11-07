@@ -1,0 +1,7 @@
+@startuml
+Alder -> Birch : go
+note right
+first /' n '/
+second
+end note
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+object O {
+name = "x" /' c '/
+}
+@enduml

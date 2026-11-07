@@ -1,0 +1,11 @@
+@startuml
+Juniper -> Juniper: calibration
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+SPRITE $cypress [2x2/16] {
+01
+23
+}
+Kestrel --> Juniper: receipt
+@enduml

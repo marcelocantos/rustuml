@@ -1,0 +1,7 @@
+@startuml
+Puffin -> Auk : wave \
+/' a
+b '/
+  hello
+Auk -> Puffin : hi
+@enduml

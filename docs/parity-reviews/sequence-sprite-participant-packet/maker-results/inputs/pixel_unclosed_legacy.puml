@@ -1,0 +1,8 @@
+@startuml
+participant Cliff
+participant Vale
+Cliff -> Vale: before
+sprite $cliff [2x2/16] {
+FF
+F0
+@enduml

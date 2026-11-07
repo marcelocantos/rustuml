@@ -1,0 +1,6 @@
+@startuml
+state Dormant : sleeps \
+soundly
+[*] --> Dormant
+Dormant --> Awake
+@enduml

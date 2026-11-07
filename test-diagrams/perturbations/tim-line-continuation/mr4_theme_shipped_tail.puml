@@ -1,0 +1,4 @@
+@startuml
+!theme cerulean
+Kea -> Tui : x %chr(92)
+@enduml

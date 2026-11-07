@@ -1,0 +1,9 @@
+@startuml
+start
+if (ok?) then (yes) /' c '/
+:a;
+else (no)
+:b;
+endif
+stop
+@enduml

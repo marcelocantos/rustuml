@@ -26,8 +26,9 @@ pub fn parse_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
     }
 
     let mut parser = ActivityParser::new();
-    for (i, line) in lines.iter().enumerate() {
-        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
+    let mut i = 0;
+    while i < lines.len() {
+        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, &lines[i]);
         if trimmed.is_empty() {
             if parser.pending_note.is_some() {
                 parser.accumulate_note_line("");
@@ -35,9 +36,23 @@ pub fn parse_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
             if parser.current_body_line > 0 {
                 parser.current_body_line += 1;
             }
+            i += 1;
+            continue;
+        }
+        // ActivityDiagramFactory3#initCommandsList registers
+        // CommonCommands#addCommonCommands1 (with the sprite commands) before
+        // every activity command; a line inside an open body is not offered.
+        if parser.at_command_start()
+            && let Some(end) =
+                super::sprite::dispatch(lines, i, &mut parser.meta, "activity", false)?
+        {
+            // Every owned line is a source line of this command.
+            parser.current_body_line += end - i + 1;
+            i = end + 1;
             continue;
         }
         parser.parse_line(source_line, trimmed)?;
+        i += 1;
     }
     parser.finish()
 }
@@ -90,10 +105,27 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
     let mut fork_bars: std::collections::HashMap<String, bool> = std::collections::HashMap::new();
     // Nesting depth of partition/group blocks (for legacy `}` handling).
     let mut partition_depth: usize = 0;
+    // PSystemCommandFactory#getCandidate never offers a line of a body that
+    // an earlier-selected multiline command owns.
+    let spans = super::command_spans::walk(lines, super::command_spans::Factory::LegacyActivity);
 
-    for line in lines {
+    let mut index = 0;
+    while index < lines.len() {
+        let line = &lines[index];
+        index += 1;
         let t = line.trim();
         if t.is_empty() {
+            continue;
+        }
+
+        // ActivityDiagramFactory#initCommandsList registers
+        // CommonCommands#addCommonCommands1 (with the sprite commands) before
+        // every legacy activity command.
+        if !spans.owned_by_other(index - 1)
+            && let Some(end) =
+                super::sprite::dispatch(lines, index - 1, &mut meta, "activity", false)?
+        {
+            index = end + 1;
             continue;
         }
 
@@ -408,6 +440,15 @@ impl ActivityParser {
 
     fn decoration_source_line(&self) -> usize {
         self.current_body_line.max(1)
+    }
+
+    /// No multiline body (skinparam block, meta block, note, multiline
+    /// action) owns the next line.
+    fn at_command_start(&self) -> bool {
+        !self.in_skinparam_block
+            && self.pending_meta.is_none()
+            && self.pending_note.is_none()
+            && self.continuation_text.is_none()
     }
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {

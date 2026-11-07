@@ -1,0 +1,9 @@
+@startuml
+[Engine]
+note as N2
+{{
+end note
+}}
+Sprite after embedded
+end note
+@enduml

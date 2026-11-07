@@ -1,0 +1,7 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+@scale max 270 width@@
+Kestrel --> Juniper: receipt
+@enduml

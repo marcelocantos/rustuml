@@ -1,0 +1,1066 @@
+[
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_caption_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_caption_body.svg",
+  "result": "fail",
+  "axes": [
+   "caption body",
+   "file-form text",
+   "component",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_usecase_right_header_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_usecase_right_header_body.svg",
+  "result": "fail",
+  "axes": [
+   "positioned header body",
+   "lowercase file-form",
+   "usecase",
+   "AV held out",
+   "after: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_center_footer_pixel_lookalike.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_center_footer_pixel_lookalike.svg",
+  "result": "fail",
+  "axes": [
+   "positioned footer body",
+   "pixel header lookalike",
+   "deployment",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_title_svg_lookalike.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_title_svg_lookalike.svg",
+  "result": "fail",
+  "axes": [
+   "title body",
+   "svg header lookalike",
+   "component",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_legend_top_left_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_legend_top_left_body.svg",
+  "result": "fail",
+  "axes": [
+   "legend with position",
+   "file-form",
+   "deployment",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_usecase_bracket_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_usecase_bracket_body.svg",
+  "result": "fail",
+  "axes": [
+   "description [ ] body",
+   "usecase element",
+   "usecase",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_as_quote_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_as_quote_body.svg",
+  "result": "fail",
+  "axes": [
+   "description as \"...\" body (TYPE0)",
+   "component",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_database_bracket_upper.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_database_bracket_upper.svg",
+  "result": "fail",
+  "axes": [
+   "description [ ] body",
+   "uppercase",
+   "deployment",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_note_of_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_note_of_body.svg",
+  "result": "pass",
+  "axes": [
+   "note of entity body",
+   "component",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_note_on_link_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_note_on_link_body.svg",
+  "result": "fail",
+  "axes": [
+   "note on link body",
+   "deployment",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_floating_note_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_floating_note_body.svg",
+  "result": "fail",
+  "axes": [
+   "floating note body",
+   "component",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_map_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_map_body.svg",
+  "result": "fail",
+  "axes": [
+   "map body",
+   "component",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_archimate_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_archimate_body.svg",
+  "result": "fail",
+  "axes": [
+   "archimate [ ] body",
+   "deployment",
+   "AV held out",
+   "after: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_nested_package_header.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_nested_package_header.svg",
+  "result": "fail",
+  "axes": [
+   "header body inside a package",
+   "deeper nesting",
+   "deployment",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_note_embedded_end_lookalike.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_note_embedded_end_lookalike.svg",
+  "result": "fail",
+  "axes": [
+   "note body with embedded diagram",
+   "END lookalike inside {{ }}",
+   "component",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_caption_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_caption_body.svg",
+  "result": "fail",
+  "axes": [
+   "caption body",
+   "state",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_left_footer_pixel_lookalike.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_left_footer_pixel_lookalike.svg",
+  "result": "fail",
+  "axes": [
+   "positioned footer body",
+   "pixel header lookalike",
+   "state",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_note_on_link_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_note_on_link_body.svg",
+  "result": "pass",
+  "axes": [
+   "note on link body",
+   "state",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_floating_note_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_floating_note_body.svg",
+  "result": "pass",
+  "axes": [
+   "floating note body",
+   "state",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_composite_header_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_composite_header_body.svg",
+  "result": "fail",
+  "axes": [
+   "header body inside a composite",
+   "deeper nesting",
+   "state",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_json_then_sprite.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_json_then_sprite.svg",
+  "result": "fail",
+  "axes": [
+   "json body extends to valid JSON",
+   "sprite after json",
+   "state",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_title_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_title_body.svg",
+  "result": "fail",
+  "axes": [
+   "title body",
+   "object",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_caption_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_caption_body.svg",
+  "result": "fail",
+  "axes": [
+   "caption body",
+   "uppercase",
+   "object",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_note_top_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_note_top_body.svg",
+  "result": "fail",
+  "axes": [
+   "note of entity body",
+   "object",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_map_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_map_body.svg",
+  "result": "fail",
+  "axes": [
+   "map body",
+   "object",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_class_footer_svg_lookalike.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_class_footer_svg_lookalike.svg",
+  "result": "pass",
+  "axes": [
+   "footer body",
+   "svg header lookalike",
+   "class",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_class_body_separate_bracket.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_class_body_separate_bracket.svg",
+  "result": "fail",
+  "axes": [
+   "class body with { on its own line",
+   "class",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_class_tip_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_class_tip_body.svg",
+  "result": "fail",
+  "axes": [
+   "member tip body",
+   "class",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_note_left_upper.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_note_left_upper.svg",
+  "result": "fail",
+  "axes": [
+   "legacy activity note body",
+   "uppercase",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_long_link_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_long_link_body.svg",
+  "result": "fail",
+  "axes": [
+   "legacy multiline link label",
+   "file-form body",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_header_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_header_body.svg",
+  "result": "fail",
+  "axes": [
+   "legacy activity header body",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_caption_svg_lookalike.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_caption_svg_lookalike.svg",
+  "result": "fail",
+  "axes": [
+   "legacy activity caption body",
+   "svg header lookalike",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_seq_caption_body_legacy.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_seq_caption_body_legacy.svg",
+  "result": "fail",
+  "axes": [
+   "caption body",
+   "sequence legacy control",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_seq_caption_body_teoz.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_seq_caption_body_teoz.svg",
+  "result": "fail",
+  "axes": [
+   "caption body",
+   "sequence teoz control",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_sprite_used_after_bodies.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_sprite_used_after_bodies.svg",
+  "result": "fail",
+  "axes": [
+   "sprite after an owned body is still a command",
+   "component",
+   "AV held out",
+   "after: compare-3"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_end_apos_usecase.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_end_apos_usecase.svg",
+  "result": "pass",
+  "axes": [
+   "svg END line with ' text",
+   "usecase",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_mid_apos_state.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_mid_apos_state.svg",
+  "result": "pass",
+  "axes": [
+   "svg body line with ' text",
+   "state",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_start_trailing_apos_component.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_start_trailing_apos_component.svg",
+  "result": "pass",
+  "axes": [
+   "' text after <svg ...> on the start line",
+   "component",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_inline_apos_object.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_inline_apos_object.svg",
+  "result": "pass",
+  "axes": [
+   "inline svg with ' text",
+   "object",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_pixel_component.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_pixel_component.svg",
+  "result": "fail",
+  "axes": [
+   "!startsub pixel sprite",
+   "component",
+   "AV held out",
+   "after: compare-3"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_svg_usecase.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_svg_usecase.svg",
+  "result": "pass",
+  "axes": [
+   "!startsub svg sprite",
+   "usecase",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_inside_false_if_deployment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_inside_false_if_deployment.svg",
+  "result": "pass",
+  "axes": [
+   "!startsub inside !if false",
+   "deployment",
+   "AV held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_pixel_seq_legacy.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_pixel_seq_legacy.svg",
+  "result": "fail",
+  "axes": [
+   "!startsub pixel sprite",
+   "sequence legacy",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_pixel_state.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_pixel_state.svg",
+  "result": "fail",
+  "axes": [
+   "!startsub pixel sprite",
+   "state",
+   "AV held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_two_blocks_component.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_two_blocks_component.svg",
+  "result": "fail",
+  "axes": [
+   "two !startsub blocks in place",
+   "component",
+   "AV held out",
+   "after: compare-3"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_skinparam_block_sprite_line.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_skinparam_block_sprite_line.svg",
+  "result": "pass",
+  "axes": [
+   "skinparam { } body",
+   "sprite-file lookalike",
+   "component",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_deployment_style_block_sprite_line.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_deployment_style_block_sprite_line.svg",
+  "result": "fail",
+  "axes": [
+   "<style> then note-of body",
+   "deployment",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_type1_stereo_color_url.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_type1_stereo_color_url.svg",
+  "result": "fail",
+  "axes": [
+   "TYPE1 with stereotype, colour and url",
+   "component",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_note_left_of_bracket_code.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_note_left_of_bracket_code.svg",
+  "result": "pass",
+  "axes": [
+   "note of [code] body",
+   "component",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_usecase_note_top_of_paren.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_usecase_note_top_of_paren.svg",
+  "result": "fail",
+  "axes": [
+   "note of (usecase) body",
+   "usecase",
+   "AX held out",
+   "after: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_note_of_color_url.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_note_of_color_url.svg",
+  "result": "fail",
+  "axes": [
+   "note of entity with colour and url",
+   "component",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_note_as_stereo_color.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_note_as_stereo_color.svg",
+  "result": "fail",
+  "axes": [
+   "note as code with stereotype and colour",
+   "sprite-file lookalike",
+   "component",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_state_note_left_of_color.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_state_note_left_of_color.svg",
+  "result": "fail",
+  "axes": [
+   "state note of entity with colour",
+   "state",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_state_note_bracket_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_state_note_bracket_body.svg",
+  "result": "fail",
+  "axes": [
+   "state note with { } body",
+   "state",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_class_generic_extends_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_class_generic_extends_body.svg",
+  "result": "fail",
+  "axes": [
+   "class generic + extends body",
+   "class",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_class_enum_upper_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_class_enum_upper_body.svg",
+  "result": "fail",
+  "axes": [
+   "enum body",
+   "uppercase",
+   "class",
+   "AX held out",
+   "after: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_object_quoted_as_color_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_object_quoted_as_color_body.svg",
+  "result": "pass",
+  "axes": [
+   "object quoted as, colour",
+   "object",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity_legacy_note_on_link_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity_legacy_note_on_link_body.svg",
+  "result": "fail",
+  "axes": [
+   "legacy note on link body",
+   "activity legacy",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity_legacy_long_link_arrow_label.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity_legacy_long_link_arrow_label.svg",
+  "result": "fail",
+  "axes": [
+   "legacy long link with arrow label",
+   "activity legacy",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity_legacy_partition_note.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity_legacy_partition_note.svg",
+  "result": "fail",
+  "axes": [
+   "legacy note inside partition",
+   "deeper nesting",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_legend_nested_header_text.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_legend_nested_header_text.svg",
+  "result": "fail",
+  "axes": [
+   "legend body containing header lookalike",
+   "nested",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_state_header_embedded_end_lookalike.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_state_header_embedded_end_lookalike.svg",
+  "result": "fail",
+  "axes": [
+   "header body with embedded diagram",
+   "END lookalike inside {{ }}",
+   "state",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_class_map_then_sprite_lookalike.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_class_map_then_sprite_lookalike.svg",
+  "result": "fail",
+  "axes": [
+   "map body",
+   "class",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_multi_diagram_header_then_sprite.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_multi_diagram_header_then_sprite.svg",
+  "result": "fail",
+  "axes": [
+   "multi-diagram file",
+   "deployment",
+   "AX held out",
+   "after: compare-3"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_timing_legend_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_timing_legend_body.svg",
+  "result": "fail",
+  "axes": [
+   "legend body",
+   "timing",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_mindmap_header_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_mindmap_header_body.svg",
+  "result": "fail",
+  "axes": [
+   "header body",
+   "mindmap",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_wbs_caption_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_wbs_caption_body.svg",
+  "result": "fail",
+  "axes": [
+   "caption body",
+   "wbs",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_gantt_title_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_gantt_title_body.svg",
+  "result": "fail",
+  "axes": [
+   "title body",
+   "gantt",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity3_note_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity3_note_body.svg",
+  "result": "pass",
+  "axes": [
+   "note body",
+   "activity3",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity3_header_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity3_header_body.svg",
+  "result": "fail",
+  "axes": [
+   "header body",
+   "activity3",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_seq_ref_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_seq_ref_body.svg",
+  "result": "pass",
+  "axes": [
+   "ref body",
+   "sequence legacy",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_body_inner_comment_seq.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_body_inner_comment_seq.svg",
+  "result": "fail",
+  "axes": [
+   "pixel body line ending in /' '/",
+   "sequence legacy",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_body_inner_comment_seq.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_body_inner_comment_seq.svg",
+  "result": "fail",
+  "axes": [
+   "svg body line ending in /' '/",
+   "sequence legacy",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_start_inner_comment_teoz.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_start_inner_comment_teoz.svg",
+  "result": "fail",
+  "axes": [
+   "svg start line ending in /' '/",
+   "teoz",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_block_comment_inside_pixel_body.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_block_comment_inside_pixel_body.svg",
+  "result": "fail",
+  "axes": [
+   "/' '/ block spanning pixel body lines",
+   "sequence legacy",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_lookalike_leak_then_note_component.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_lookalike_leak_then_note_component.svg",
+  "result": "fail",
+  "axes": [
+   "svg start lookalike in legend body",
+   "later ' text",
+   "component",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_lookalike_leak_then_message_seq.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_lookalike_leak_then_message_seq.svg",
+  "result": "fail",
+  "axes": [
+   "pixel start lookalike in note body",
+   "later ' text",
+   "sequence legacy",
+   "AX held out",
+   "after: mismatch"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_state.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_state.svg",
+  "result": "fail",
+  "axes": [
+   "svg END line followed by /' '/",
+   "state",
+   "AX held out",
+   "after: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_end_inner_comment_class.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_end_inner_comment_class.svg",
+  "result": "fail",
+  "axes": [
+   "pixel END line followed by /' '/",
+   "class",
+   "AX held out",
+   "after: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_end_inner_comment_seq.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_end_inner_comment_seq.svg",
+  "result": "fail",
+  "axes": [
+   "pixel END line followed by /' '/",
+   "sequence legacy",
+   "AX held out",
+   "after: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_nospace_component.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_nospace_component.svg",
+  "result": "fail",
+  "axes": [
+   "svg END line glued to /' '/",
+   "component",
+   "AX held out",
+   "after: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_teoz.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_teoz.svg",
+  "result": "fail",
+  "axes": [
+   "svg END line followed by /' '/",
+   "teoz",
+   "AX held out",
+   "after: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_inline_inner_comment_object.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_inline_inner_comment_object.svg",
+  "result": "fail",
+  "axes": [
+   "single-line svg sprite followed by /' '/",
+   "object",
+   "AX held out",
+   "after: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_start_inner_comment_deployment.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_start_inner_comment_deployment.svg",
+  "result": "fail",
+  "axes": [
+   "pixel start line followed by /' '/",
+   "deployment",
+   "AX held out",
+   "after: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_usecase.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_usecase.svg",
+  "result": "fail",
+  "axes": [
+   "svg END line followed by /' '/",
+   "usecase",
+   "AX held out",
+   "after: valid-error"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_in_procedure_seq.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_in_procedure_seq.svg",
+  "result": "pass",
+  "axes": [
+   "!startsub inside a procedure invoked twice",
+   "sequence legacy",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_in_uninvoked_procedure_seq.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_in_uninvoked_procedure_seq.svg",
+  "result": "pass",
+  "axes": [
+   "!startsub inside an uninvoked procedure",
+   "sequence legacy",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_in_while_seq.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_in_while_seq.svg",
+  "result": "pass",
+  "axes": [
+   "!startsub inside !while",
+   "sequence legacy",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_endsub_in_false_if_seq.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_endsub_in_false_if_seq.svg",
+  "result": "pass",
+  "axes": [
+   "!endsub inside !if false",
+   "sequence legacy",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_activity3.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_activity3.svg",
+  "result": "pass",
+  "axes": [
+   "!startsub in place",
+   "activity3",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_mindmap.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_mindmap.svg",
+  "result": "pass",
+  "axes": [
+   "!startsub in place",
+   "mindmap",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_gantt.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_gantt.svg",
+  "result": "pass",
+  "axes": [
+   "!startsub in place",
+   "gantt",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_timing.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_timing.svg",
+  "result": "pass",
+  "axes": [
+   "!startsub in place",
+   "timing",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_salt.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_salt.svg",
+  "result": "pass",
+  "axes": [
+   "!startsub in place",
+   "salt",
+   "AX held out",
+   "after: match"
+  ]
+ },
+ {
+  "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_class.puml",
+  "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_class.svg",
+  "result": "pass",
+  "axes": [
+   "!startsub in place",
+   "class",
+   "AX held out",
+   "after: match"
+  ]
+ }
+]

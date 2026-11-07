@@ -1,0 +1,575 @@
+{
+ "ca": {
+  "counts": {
+   "ascii:conflict": 5,
+   "ascii:pr_lost": 1,
+   "ascii:sprite_carried": 61,
+   "ascii:sprite_lost": 4,
+   "ascii:unchanged": 17,
+   "ast:conflict": 21,
+   "ast:pr_carried": 1,
+   "ast:sprite_carried": 60,
+   "ast:unchanged": 6,
+   "svg:conflict": 13,
+   "svg:pr_carried": 1,
+   "svg:sprite_carried": 58,
+   "svg:sprite_lost": 4,
+   "svg:unchanged": 12,
+   "yaml:conflict": 20,
+   "yaml:pr_carried": 2,
+   "yaml:sprite_carried": 55,
+   "yaml:unchanged": 11
+  },
+  "conflicts": {
+   "ascii=A": 1,
+   "asciineither": 4,
+   "ast=A": 5,
+   "ast=B": 1,
+   "astneither": 15,
+   "svg=A": 6,
+   "svgneither": 7,
+   "yaml=A": 5,
+   "yaml=B": 1,
+   "yamlneither": 14
+  },
+  "suspects": {
+   "svg:sprite_lost": [
+    "cr3_dir_theme_start.puml",
+    "cr3_dir_theme_middle.puml",
+    "cr3_dir_theme_end.puml",
+    "cr3_dir_startsub_end.puml"
+   ],
+   "ascii:sprite_lost": [
+    "cr3_dir_theme_start.puml",
+    "cr3_dir_theme_middle.puml",
+    "cr3_dir_theme_end.puml",
+    "cr3_dir_startsub_end.puml"
+   ],
+   "ascii:pr_lost": [
+    "cr3_dir_dump_start.puml"
+   ]
+  },
+  "suspect_counts": {
+   "svg:sprite_lost": 4,
+   "ascii:sprite_lost": 4,
+   "ascii:pr_lost": 1
+  }
+ },
+ "bz": {
+  "counts": {
+   "ascii:sprite_carried": 17,
+   "ascii:unchanged": 6,
+   "ast:conflict": 10,
+   "ast:sprite_carried": 12,
+   "ast:unchanged": 1,
+   "svg:conflict": 9,
+   "svg:sprite_carried": 10,
+   "svg:unchanged": 4,
+   "yaml:conflict": 10,
+   "yaml:sprite_carried": 9,
+   "yaml:unchanged": 4
+  },
+  "conflicts": {
+   "ast=A": 8,
+   "astneither": 2,
+   "svg=A": 8,
+   "svgneither": 1,
+   "yaml=A": 8,
+   "yamlneither": 2
+  },
+  "suspects": {},
+  "suspect_counts": {}
+ },
+ "by": {
+  "counts": {
+   "ascii:sprite_carried": 38,
+   "ascii:sprite_lost": 1,
+   "ascii:unchanged": 14,
+   "ast:conflict": 13,
+   "ast:sprite_carried": 34,
+   "ast:unchanged": 6,
+   "svg:conflict": 12,
+   "svg:sprite_carried": 28,
+   "svg:unchanged": 13,
+   "yaml:conflict": 13,
+   "yaml:sprite_carried": 28,
+   "yaml:unchanged": 12
+  },
+  "conflicts": {
+   "ast=A": 9,
+   "astneither": 4,
+   "svg=A": 9,
+   "svgneither": 3,
+   "yaml=A": 9,
+   "yamlneither": 4
+  },
+  "suspects": {
+   "ascii:sprite_lost": [
+    "cr2_seq_tail_then_theme.puml"
+   ]
+  },
+  "suspect_counts": {
+   "ascii:sprite_lost": 1
+  }
+ },
+ "bw": {
+  "counts": {
+   "ascii:sprite_carried": 19,
+   "ascii:unchanged": 4,
+   "ast:conflict": 8,
+   "ast:sprite_carried": 12,
+   "ast:unchanged": 3,
+   "svg:conflict": 8,
+   "svg:sprite_carried": 12,
+   "svg:unchanged": 3,
+   "yaml:conflict": 8,
+   "yaml:sprite_carried": 12,
+   "yaml:unchanged": 3
+  },
+  "conflicts": {
+   "ast=A": 7,
+   "astneither": 1,
+   "svg=A": 7,
+   "svgneither": 1,
+   "yaml=A": 7,
+   "yamlneither": 1
+  },
+  "suspects": {},
+  "suspect_counts": {}
+ },
+ "bu": {
+  "counts": {
+   "ascii:conflict": 1,
+   "ascii:drift_neither_parent": 1,
+   "ascii:sprite_carried": 24,
+   "ascii:unchanged": 14,
+   "ast:conflict": 11,
+   "ast:pr_carried": 1,
+   "ast:sprite_carried": 25,
+   "ast:sprite_lost": 1,
+   "ast:unchanged": 2,
+   "svg:conflict": 7,
+   "svg:pr_carried": 4,
+   "svg:pr_lost": 1,
+   "svg:sprite_carried": 25,
+   "svg:sprite_lost": 1,
+   "svg:unchanged": 2,
+   "yaml:conflict": 9,
+   "yaml:pr_carried": 2,
+   "yaml:pr_lost": 1,
+   "yaml:sprite_carried": 25,
+   "yaml:sprite_lost": 1,
+   "yaml:unchanged": 2
+  },
+  "conflicts": {
+   "ascii=A": 1,
+   "ast=A": 8,
+   "astneither": 3,
+   "svg=A": 5,
+   "svgneither": 2,
+   "yaml=A": 8,
+   "yamlneither": 1
+  },
+  "suspects": {
+   "svg:sprite_lost": [
+    "tc1_seq_include_directive_continued.puml"
+   ],
+   "ast:sprite_lost": [
+    "tc1_seq_include_directive_continued.puml"
+   ],
+   "yaml:sprite_lost": [
+    "tc1_seq_include_directive_continued.puml"
+   ],
+   "svg:pr_lost": [
+    "tc1_seq_theme_local_postjoin.puml"
+   ],
+   "ascii:drift_neither_parent": [
+    "tc1_seq_theme_local_postjoin.puml"
+   ],
+   "yaml:pr_lost": [
+    "tc1_seq_theme_local_postjoin.puml"
+   ]
+  },
+  "suspect_counts": {
+   "svg:sprite_lost": 1,
+   "ast:sprite_lost": 1,
+   "yaml:sprite_lost": 1,
+   "svg:pr_lost": 1,
+   "ascii:drift_neither_parent": 1,
+   "yaml:pr_lost": 1
+  }
+ },
+ "bd": {
+  "counts": {
+   "ascii:conflict": 1,
+   "ascii:sprite_carried": 19,
+   "ascii:unchanged": 13,
+   "ast:conflict": 7,
+   "ast:sprite_carried": 26,
+   "svg:conflict": 5,
+   "svg:sprite_carried": 23,
+   "svg:unchanged": 5,
+   "yaml:conflict": 7,
+   "yaml:sprite_carried": 24,
+   "yaml:unchanged": 2
+  },
+  "conflicts": {
+   "ascii=B": 1,
+   "ast=A": 2,
+   "astneither": 5,
+   "svg=A": 1,
+   "svg=B": 1,
+   "svgneither": 3,
+   "yaml=A": 2,
+   "yaml=B": 1,
+   "yamlneither": 4
+  },
+  "suspects": {},
+  "suspect_counts": {}
+ },
+ "ba": {
+  "counts": {
+   "ascii:conflict": 30,
+   "ascii:pr_carried": 4,
+   "ascii:sprite_carried": 4,
+   "ascii:sprite_lost": 1,
+   "ascii:unchanged": 25,
+   "ast:conflict": 58,
+   "ast:pr_carried": 1,
+   "ast:sprite_carried": 3,
+   "ast:sprite_lost": 2,
+   "svg:conflict": 41,
+   "svg:pr_carried": 6,
+   "svg:sprite_carried": 8,
+   "svg:sprite_lost": 2,
+   "svg:unchanged": 7,
+   "yaml:conflict": 55,
+   "yaml:pr_carried": 4,
+   "yaml:sprite_lost": 2,
+   "yaml:unchanged": 3
+  },
+  "conflicts": {
+   "ascii=A": 27,
+   "ascii=B": 3,
+   "ast=A": 44,
+   "ast=B": 3,
+   "astneither": 11,
+   "svg=A": 33,
+   "svg=B": 8,
+   "yaml=A": 45,
+   "yaml=B": 10
+  },
+  "suspects": {
+   "svg:sprite_lost": [
+    "ck4_ebnf_trailing.puml",
+    "ck4_tim_definelong_body.puml"
+   ],
+   "ast:sprite_lost": [
+    "ck4_ebnf_trailing.puml",
+    "ck4_tim_definelong_body.puml"
+   ],
+   "yaml:sprite_lost": [
+    "ck4_ebnf_trailing.puml",
+    "ck4_tim_definelong_body.puml"
+   ],
+   "ascii:sprite_lost": [
+    "ck4_tim_definelong_body.puml"
+   ]
+  },
+  "suspect_counts": {
+   "svg:sprite_lost": 2,
+   "ast:sprite_lost": 2,
+   "yaml:sprite_lost": 2,
+   "ascii:sprite_lost": 1
+  }
+ },
+ "ay": {
+  "counts": {
+   "ascii:conflict": 17,
+   "ascii:pr_carried": 1,
+   "ascii:sprite_carried": 1,
+   "ascii:unchanged": 29,
+   "ast:conflict": 46,
+   "ast:pr_lost": 1,
+   "ast:sprite_carried": 1,
+   "svg:conflict": 23,
+   "svg:pr_carried": 9,
+   "svg:sprite_carried": 1,
+   "svg:unchanged": 15,
+   "yaml:conflict": 46,
+   "yaml:pr_carried": 1,
+   "yaml:unchanged": 1
+  },
+  "conflicts": {
+   "ascii=A": 17,
+   "ast=A": 41,
+   "ast=B": 5,
+   "svg=A": 22,
+   "svg=B": 1,
+   "yaml=A": 44,
+   "yaml=B": 2
+  },
+  "suspects": {
+   "ast:pr_lost": [
+    "mk4_leading_comment_ends_with_open.puml"
+   ]
+  },
+  "suspect_counts": {
+   "ast:pr_lost": 1
+  }
+ },
+ "az": {
+  "counts": {
+   "ascii:conflict": 3,
+   "ascii:sprite_carried": 1,
+   "ascii:unchanged": 4,
+   "ast:conflict": 6,
+   "ast:pr_carried": 2,
+   "svg:conflict": 5,
+   "svg:pr_carried": 2,
+   "svg:sprite_carried": 1,
+   "yaml:conflict": 6,
+   "yaml:pr_carried": 2
+  },
+  "conflicts": {
+   "ascii=A": 3,
+   "ast=A": 6,
+   "svg=A": 5,
+   "yaml=A": 6
+  },
+  "suspects": {},
+  "suspect_counts": {}
+ },
+ "ax": {
+  "counts": {
+   "ascii:conflict": 11,
+   "ascii:sprite_carried": 4,
+   "ascii:sprite_lost": 1,
+   "ascii:unchanged": 61,
+   "ast:conflict": 32,
+   "ast:pr_carried": 4,
+   "ast:sprite_carried": 20,
+   "ast:sprite_lost": 1,
+   "ast:unchanged": 20,
+   "svg:conflict": 17,
+   "svg:pr_carried": 8,
+   "svg:sprite_carried": 9,
+   "svg:sprite_lost": 1,
+   "svg:unchanged": 42,
+   "yaml:conflict": 31,
+   "yaml:pr_carried": 1,
+   "yaml:sprite_carried": 9,
+   "yaml:sprite_lost": 1,
+   "yaml:unchanged": 35
+  },
+  "conflicts": {
+   "ascii=A": 10,
+   "ascii=B": 1,
+   "ast=A": 26,
+   "ast=B": 2,
+   "astneither": 4,
+   "svg=A": 12,
+   "svg=B": 5,
+   "yaml=A": 27,
+   "yaml=B": 4
+  },
+  "suspects": {
+   "svg:sprite_lost": [
+    "ck3_startsub_unterminated_seq.puml"
+   ],
+   "ast:sprite_lost": [
+    "ck3_startsub_unterminated_seq.puml"
+   ],
+   "ascii:sprite_lost": [
+    "ck3_startsub_unterminated_seq.puml"
+   ],
+   "yaml:sprite_lost": [
+    "ck3_startsub_unterminated_seq.puml"
+   ]
+  },
+  "suspect_counts": {
+   "svg:sprite_lost": 1,
+   "ast:sprite_lost": 1,
+   "ascii:sprite_lost": 1,
+   "yaml:sprite_lost": 1
+  }
+ },
+ "av": {
+  "counts": {
+   "ascii:sprite_carried": 7,
+   "ascii:unchanged": 56,
+   "ast:conflict": 21,
+   "ast:pr_carried": 6,
+   "ast:sprite_carried": 18,
+   "ast:unchanged": 18,
+   "svg:conflict": 2,
+   "svg:pr_carried": 6,
+   "svg:sprite_carried": 15,
+   "svg:unchanged": 40,
+   "yaml:conflict": 21,
+   "yaml:sprite_carried": 10,
+   "yaml:unchanged": 32
+  },
+  "conflicts": {
+   "ast=A": 17,
+   "ast=B": 4,
+   "svg=B": 2,
+   "yaml=A": 18,
+   "yaml=B": 3
+  },
+  "suspects": {},
+  "suspect_counts": {}
+ },
+ "at": {
+  "counts": {
+   "ascii:sprite_carried": 4,
+   "ascii:unchanged": 41,
+   "ast:conflict": 14,
+   "ast:pr_carried": 5,
+   "ast:sprite_carried": 12,
+   "ast:unchanged": 14,
+   "svg:pr_carried": 3,
+   "svg:sprite_carried": 9,
+   "svg:sprite_lost": 1,
+   "svg:unchanged": 32,
+   "yaml:conflict": 14,
+   "yaml:sprite_carried": 5,
+   "yaml:unchanged": 26
+  },
+  "conflicts": {
+   "ast=A": 12,
+   "ast=B": 2,
+   "yaml=A": 14
+  },
+  "suspects": {
+   "svg:sprite_lost": [
+    "ck_yaml_block_sprite_text.puml"
+   ]
+  },
+  "suspect_counts": {
+   "svg:sprite_lost": 1
+  }
+ },
+ "fresh": {
+  "counts": {
+   "ascii:conflict": 8,
+   "ascii:sprite_carried": 392,
+   "ascii:unchanged": 515,
+   "ast:conflict": 152,
+   "ast:pr_carried": 15,
+   "ast:sprite_carried": 723,
+   "ast:unchanged": 25,
+   "svg:conflict": 14,
+   "svg:pr_carried": 18,
+   "svg:sprite_carried": 456,
+   "svg:unchanged": 427,
+   "yaml:conflict": 152,
+   "yaml:pr_carried": 14,
+   "yaml:sprite_carried": 417,
+   "yaml:unchanged": 332
+  },
+  "conflicts": {
+   "ascii=A": 8,
+   "ast=A": 146,
+   "astneither": 6,
+   "svg=A": 11,
+   "svg=B": 3,
+   "yaml=A": 146,
+   "yaml=B": 6
+  },
+  "suspects": {},
+  "suspect_counts": {}
+ },
+ "retained": {
+  "counts": {
+   "ascii:conflict": 1,
+   "ascii:pr_carried": 28,
+   "ascii:sprite_carried": 323,
+   "ascii:unchanged": 3822,
+   "ast:conflict": 29,
+   "ast:pr_carried": 164,
+   "ast:sprite_carried": 3210,
+   "ast:unchanged": 771,
+   "svg:conflict": 9,
+   "svg:pr_carried": 354,
+   "svg:sprite_carried": 374,
+   "svg:unchanged": 3437,
+   "yaml:conflict": 29,
+   "yaml:pr_carried": 108,
+   "yaml:sprite_carried": 372,
+   "yaml:unchanged": 3665
+  },
+  "conflicts": {
+   "ascii=A": 1,
+   "ast=A": 25,
+   "ast=B": 3,
+   "astneither": 1,
+   "svg=A": 5,
+   "svg=B": 3,
+   "svgneither": 1,
+   "yaml=A": 25,
+   "yaml=B": 3,
+   "yamlneither": 1
+  },
+  "suspects": {},
+  "suspect_counts": {}
+ },
+ "golden": {
+  "counts": {
+   "ascii:conflict": 4,
+   "ascii:pr_carried": 7,
+   "ascii:sprite_carried": 135,
+   "ascii:unchanged": 12404,
+   "ast:conflict": 110,
+   "ast:drift_neither_parent": 3,
+   "ast:pr_carried": 1623,
+   "ast:pr_lost": 1,
+   "ast:sprite_carried": 2398,
+   "ast:unchanged": 8415,
+   "svg:conflict": 4,
+   "svg:pr_carried": 394,
+   "svg:sprite_carried": 135,
+   "svg:unchanged": 12017,
+   "yaml:conflict": 73,
+   "yaml:drift_neither_parent": 1,
+   "yaml:pr_carried": 1039,
+   "yaml:sprite_carried": 127,
+   "yaml:sprite_lost": 1,
+   "yaml:unchanged": 11309
+  },
+  "conflicts": {
+   "ascii=A": 2,
+   "ascii=B": 2,
+   "ast=A": 8,
+   "ast=B": 48,
+   "astneither": 54,
+   "svg=A": 2,
+   "svg=B": 2,
+   "yaml=A": 55,
+   "yaml=B": 2,
+   "yamlneither": 16
+  },
+  "suspects": {
+   "ast:drift_neither_parent": [
+    "test-diagrams/golden/dot/dot_edge_labels.puml",
+    "test-diagrams/golden/dot/dot_node_url.puml",
+    "test-diagrams/golden/dot/dot_record_simple.puml"
+   ],
+   "yaml:sprite_lost": [
+    "test-diagrams/golden/dot/dot_edge_labels.puml"
+   ],
+   "ast:pr_lost": [
+    "test-diagrams/golden/dot/dot_node_colors.puml"
+   ],
+   "yaml:drift_neither_parent": [
+    "test-diagrams/golden/dot/dot_node_url.puml"
+   ]
+  },
+  "suspect_counts": {
+   "ast:drift_neither_parent": 3,
+   "yaml:sprite_lost": 1,
+   "ast:pr_lost": 1,
+   "yaml:drift_neither_parent": 1
+  }
+ }
+}

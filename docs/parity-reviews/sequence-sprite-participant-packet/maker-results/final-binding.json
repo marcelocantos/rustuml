@@ -1,0 +1,11 @@
+{
+  "head": "ba2e6c2b79bb35841351ce2ed2e88e3a7abbe9d7",
+  "binary_sha256": "0859da0145ee24f6ec89d21854e99183b631fbeb24891448971c6e32defbc954",
+  "sources": {
+    "crates/rustuml-parser/src/parse/sequence.rs": "601cc2b32fad2ddbf21c2e5b530d0ca0d3606b6a926452621fa1289196fedf08",
+    "crates/rustuml-parser/src/preprocess/mod.rs": "ed693586d914f076a4dd1658331fc48c0101c10830361c35622802124cc955a0"
+  },
+  "jobs": 4,
+  "target": "/Users/marcelo/Library/Caches/rustuml-sequence-repair/target",
+  "local_java_invocations": 0
+}

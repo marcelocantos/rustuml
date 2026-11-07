@@ -1,0 +1,43 @@
+{
+ "revisions": {
+  "evidence_tip": "f4ff1cb4e0678fee8f099c14c92df07529b0afbb",
+  "production": "ba2e6c2b79bb35841351ce2ed2e88e3a7abbe9d7",
+  "baseline_evidence": "c6295ccdef39719b60f0e88dfd9555919523c961",
+  "baseline_production": "c525fd32ae97b642b440a161140e9457f29bcfc8",
+  "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "java": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+ },
+ "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)",
+ "cargo": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)",
+ "binaries": {
+  "rustuml-before": "8d3bfc9e35031196f801e942464d26fe3e15e5e8d16c15059951a5605e1b15b9",
+  "rustuml-after": "5c1aef56f64533e19123fa00498f7272fa68bebcbb8f17fe51d0caa0f5553d1f",
+  "compare_cli": "b98c4a233a13703ccaf4fbcf631570841afd4798884df6c7b2dfeb511c163492",
+  "compare_cli.rs": "d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701",
+  "oracle_rlib": [
+   "librustuml_oracle-9463d30e464f1e2a.rlib",
+   "cc6b91af631f7f7208fdf312b3f334ddf8ad442b94e2d951804ad97f462170ba"
+  ],
+  "rejection_contract.py": "09cd998bd50710ca37015f1dda0ee617275954f39519d7b610236ea469ac8789"
+ },
+ "source_trees": {
+  "before": "git archive c525fd32a (exported to private dir)",
+  "after": "git archive ba2e6c2b7 (exported to private dir)"
+ },
+ "environment": {
+  "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+  "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+  "jobs": 4
+ },
+ "manifests": {
+  "retained": "69cbf753f230026a55768fe6eee699b53fc87ee88188b201f5717483025e97c2",
+  "golden": "9d3875a4585f9861a55f0753a4debc1f6034f843fd18d5391b33b7d5680617ca",
+  "fresh": "9e60d38c8823e6e7e9343bdbc3c432ae757288b63bb7ed60ecc4914214a9c4db"
+ },
+ "java_references": {
+  "staged_cache": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-checker-75ed0e64",
+  "main_results_gz_sha256": "20389e1368cf560e98ed5f828eec1725b53042594b052bee46d31af7b8d478ae",
+  "supplement_results_gz_sha256": "460a0982295dff741924fd3f1c6767033fe03914424b9861c96b585ba1be8c3b",
+  "verification": "every source, stdin, stdout and stderr hash in both result files re-verified; .json equals gunzip(.json.gz); zero timeouts"
+ }
+}
