@@ -1,0 +1,8 @@
+ucd15 bmp letters 48965 runs 380 rust 48965 rust runs 380
+rust - ucd15 []
+ucd15 - rust []
+ucd17 - ucd15 ['0x1c89', '0x1c8a', '0x88f', '0xa7cb', '0xa7cc', '0xa7cd', '0xa7ce', '0xa7cf', '0xa7d2', '0xa7d4', '0xa7da', '0xa7db', '0xa7dc', '0xa7f1', '0xc5c', '0xcdc']
+ucd15 - ucd17 []
+Nd bmp 15/17 370 370 Nd diff []
+sorted-disjoint True
+Nd zeros table 37 covers 370 eq ucd15 Nd True

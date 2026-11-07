@@ -1,0 +1,1084 @@
+{
+ "df": {
+  "n": 72,
+  "tip_match": 43,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 4,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 3,
+    "other:valid-error->mismatch": 1
+   },
+   "svg_byte_changes": 6,
+   "model_changes": {
+    "ast": 9,
+    "yaml": 9,
+    "ascii": 5
+   }
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 11,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 9,
+    "other:valid-error->mismatch": 2
+   },
+   "svg_byte_changes": 12,
+   "model_changes": {
+    "ast": 14,
+    "yaml": 14,
+    "ascii": 11
+   }
+  },
+  "32684f81e": {
+   "worse": 2,
+   "better_or_other": 26,
+   "worse_cases": [
+    "cr5o_scope_uml_backslash_start",
+    "cr5o_scope_uml_usecase_theme"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "cr5o_scope_uml_usecase_theme",
+     "cr5o_scope_uml_backslash_start"
+    ]
+   },
+   "other_kinds": {
+    "gain": 20,
+    "newly_rejected": 6
+   },
+   "svg_byte_changes": 31,
+   "model_changes": {
+    "ast": 49,
+    "ascii": 17,
+    "yaml": 34
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "dd": {
+  "n": 13,
+  "tip_match": 10,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 2,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 2
+   },
+   "svg_byte_changes": 3,
+   "model_changes": {
+    "ast": 4,
+    "yaml": 4,
+    "ascii": 2
+   }
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 9,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 9
+   },
+   "svg_byte_changes": 9,
+   "model_changes": {
+    "ast": 10,
+    "ascii": 5,
+    "yaml": 10
+   }
+  },
+  "32684f81e": {
+   "worse": 0,
+   "better_or_other": 9,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 9
+   },
+   "svg_byte_changes": 9,
+   "model_changes": {
+    "ast": 10,
+    "yaml": 10,
+    "ascii": 2
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "cc": {
+  "n": 74,
+  "tip_match": 18,
+  "tip_welcome_match": 8,
+  "java_welcome": 9,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 4,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 4
+   },
+   "svg_byte_changes": 4,
+   "model_changes": {
+    "ast": 4,
+    "ascii": 4,
+    "yaml": 4
+   }
+  },
+  "32684f81e": {
+   "worse": 9,
+   "better_or_other": 19,
+   "worse_cases": [
+    "cr4_cnt_exit_alone",
+    "cr4_exit_mid",
+    "cr4_inc_cr_only_lines",
+    "cr4_inc_yaml_header_raw",
+    "cr4_main_bom_before_directive",
+    "cr4_main_bom_line2",
+    "cr4_main_endash_arrow",
+    "cr4_sfx_include_many",
+    "cr4_ws_ideo_exit"
+   ],
+   "worse_by_kind": {
+    "lost_welcome_match": [
+     "cr4_cnt_exit_alone"
+    ],
+    "new_valid_error": [
+     "cr4_exit_mid",
+     "cr4_ws_ideo_exit",
+     "cr4_main_bom_line2",
+     "cr4_main_bom_before_directive",
+     "cr4_main_endash_arrow",
+     "cr4_inc_cr_only_lines",
+     "cr4_sfx_include_many"
+    ],
+    "lost_match": [
+     "cr4_inc_yaml_header_raw"
+    ]
+   },
+   "other_kinds": {
+    "newly_rejected": 8,
+    "gain": 9,
+    "welcome_match_gain": 2
+   },
+   "svg_byte_changes": 30,
+   "model_changes": {
+    "ast": 56,
+    "yaml": 37,
+    "ascii": 19
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "cb": {
+  "n": 39,
+  "tip_match": 24,
+  "tip_welcome_match": 6,
+  "java_welcome": 6,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "32684f81e": {
+   "worse": 0,
+   "better_or_other": 36,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 23,
+    "welcome_match_gain": 5,
+    "newly_rejected": 8
+   },
+   "svg_byte_changes": 37,
+   "model_changes": {
+    "ast": 38,
+    "ascii": 33,
+    "yaml": 37
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "ca": {
+  "n": 88,
+  "tip_match": 49,
+  "tip_welcome_match": 16,
+  "java_welcome": 19,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "32684f81e": {
+   "worse": 3,
+   "better_or_other": 70,
+   "worse_cases": [
+    "cr3_end_tim_chr64_enduml",
+    "cr3_end_tim_chr92_enduml",
+    "cr3_wrap_first_is_mindmap"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "cr3_end_tim_chr64_enduml",
+     "cr3_end_tim_chr92_enduml",
+     "cr3_wrap_first_is_mindmap"
+    ]
+   },
+   "other_kinds": {
+    "welcome_match_gain": 15,
+    "gain": 45,
+    "newly_rejected": 10
+   },
+   "svg_byte_changes": 78,
+   "model_changes": {
+    "ast": 86,
+    "ascii": 73,
+    "yaml": 81
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "bz": {
+  "n": 23,
+  "tip_match": 13,
+  "tip_welcome_match": 5,
+  "java_welcome": 5,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "32684f81e": {
+   "worse": 0,
+   "better_or_other": 18,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "newly_rejected": 4,
+    "welcome_match_gain": 4,
+    "gain": 10
+   },
+   "svg_byte_changes": 19,
+   "model_changes": {
+    "ast": 22,
+    "ascii": 17,
+    "yaml": 19
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "by": {
+  "n": 53,
+  "tip_match": 26,
+  "tip_welcome_match": 5,
+  "java_welcome": 5,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "32684f81e": {
+   "worse": 1,
+   "better_or_other": 36,
+   "worse_cases": [
+    "cr2_seq_pre_start_backslash_text"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "cr2_seq_pre_start_backslash_text"
+    ]
+   },
+   "other_kinds": {
+    "newly_rejected": 11,
+    "gain": 20,
+    "welcome_match_gain": 5
+   },
+   "svg_byte_changes": 40,
+   "model_changes": {
+    "ast": 47,
+    "ascii": 34,
+    "yaml": 41
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "bw": {
+  "n": 23,
+  "tip_match": 15,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "32684f81e": {
+   "worse": 1,
+   "better_or_other": 18,
+   "worse_cases": [
+    "r2_component_include_tail_then_variable"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "r2_component_include_tail_then_variable"
+    ]
+   },
+   "other_kinds": {
+    "gain": 15,
+    "newly_rejected": 3
+   },
+   "svg_byte_changes": 20,
+   "model_changes": {
+    "ast": 20,
+    "ascii": 17,
+    "yaml": 20
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "bu": {
+  "n": 40,
+  "tip_match": 32,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 1,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 1
+   },
+   "svg_byte_changes": 1,
+   "model_changes": {
+    "ast": 1,
+    "ascii": 1,
+    "yaml": 1
+   }
+  },
+  "32684f81e": {
+   "worse": 0,
+   "better_or_other": 31,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 29,
+    "newly_rejected": 2
+   },
+   "svg_byte_changes": 34,
+   "model_changes": {
+    "ast": 37,
+    "ascii": 25,
+    "yaml": 35
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "bd": {
+  "n": 33,
+  "tip_match": 25,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "32684f81e": {
+   "worse": 1,
+   "better_or_other": 22,
+   "worse_cases": [
+    "mc1_usecase_continued"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "mc1_usecase_continued"
+    ]
+   },
+   "other_kinds": {
+    "gain": 20,
+    "newly_rejected": 2
+   },
+   "svg_byte_changes": 27,
+   "model_changes": {
+    "ast": 33,
+    "ascii": 19,
+    "yaml": 30
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "ba": {
+  "n": 64,
+  "tip_match": 52,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 2,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 2
+   },
+   "svg_byte_changes": 2,
+   "model_changes": {
+    "ast": 2,
+    "yaml": 2,
+    "ascii": 1
+   }
+  },
+  "32684f81e": {
+   "worse": 1,
+   "better_or_other": 12,
+   "worse_cases": [
+    "ck4_usecase_leading_actor_line"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "ck4_usecase_leading_actor_line"
+    ]
+   },
+   "other_kinds": {
+    "newly_rejected": 4,
+    "gain": 8
+   },
+   "svg_byte_changes": 13,
+   "model_changes": {
+    "ast": 44,
+    "ascii": 6,
+    "yaml": 14
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "ay": {
+  "n": 48,
+  "tip_match": 36,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "32684f81e": {
+   "worse": 0,
+   "better_or_other": 1,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "newly_rejected": 1
+   },
+   "svg_byte_changes": 1,
+   "model_changes": {
+    "ast": 14,
+    "yaml": 1
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "az": {
+  "n": 8,
+  "tip_match": 5,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "32684f81e": {
+   "worse": 1,
+   "better_or_other": 0,
+   "worse_cases": [
+    "mk4b_theme_trailing_comment_usecase"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "mk4b_theme_trailing_comment_usecase"
+    ]
+   },
+   "other_kinds": {},
+   "svg_byte_changes": 1,
+   "model_changes": {
+    "ast": 2,
+    "yaml": 1
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "ax": {
+  "n": 77,
+  "tip_match": 27,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "32684f81e": {
+   "worse": 2,
+   "better_or_other": 7,
+   "worse_cases": [
+    "ck3_class_enum_upper_body",
+    "ck3_usecase_note_top_of_paren"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "ck3_usecase_note_top_of_paren",
+     "ck3_class_enum_upper_body"
+    ]
+   },
+   "other_kinds": {
+    "other:valid-error->mismatch": 1,
+    "gain": 5,
+    "newly_rejected": 1
+   },
+   "svg_byte_changes": 12,
+   "model_changes": {
+    "ast": 41,
+    "yaml": 14,
+    "ascii": 2
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "av": {
+  "n": 63,
+  "tip_match": 20,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "32684f81e": {
+   "worse": 2,
+   "better_or_other": 10,
+   "worse_cases": [
+    "mk3_deployment_archimate_body",
+    "mk3_usecase_right_header_body"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "mk3_usecase_right_header_body",
+     "mk3_deployment_archimate_body"
+    ]
+   },
+   "other_kinds": {
+    "gain": 7,
+    "newly_rejected": 3
+   },
+   "svg_byte_changes": 15,
+   "model_changes": {
+    "ast": 28,
+    "ascii": 4,
+    "yaml": 17
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "at": {
+  "n": 45,
+  "tip_match": 20,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "32684f81e": {
+   "worse": 1,
+   "better_or_other": 8,
+   "worse_cases": [
+    "ck_usecase_header_body"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "ck_usecase_header_body"
+    ]
+   },
+   "other_kinds": {
+    "newly_rejected": 3,
+    "gain": 5
+   },
+   "svg_byte_changes": 10,
+   "model_changes": {
+    "ast": 20,
+    "ascii": 4,
+    "yaml": 10
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "fresh": {
+  "n": 915,
+  "tip_match": 249,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "32684f81e": {
+   "worse": 2,
+   "better_or_other": 334,
+   "worse_cases": [
+    "mk2_proc_uninvoked_svg_usecase",
+    "mk2_usecase_note_upper"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "mk2_proc_uninvoked_svg_usecase",
+     "mk2_usecase_note_upper"
+    ]
+   },
+   "other_kinds": {
+    "newly_rejected": 289,
+    "gain": 45
+   },
+   "svg_byte_changes": 459,
+   "model_changes": {
+    "ast": 854,
+    "ascii": 392,
+    "yaml": 488
+   }
+  },
+  "panics_tip": {},
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "retained": {
+  "n": 4174,
+  "tip_match": 2742,
+  "tip_welcome_match": 0,
+  "java_welcome": 0,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {}
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 1,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "gain": 1
+   },
+   "svg_byte_changes": 1,
+   "model_changes": {}
+  },
+  "32684f81e": {
+   "worse": 13,
+   "better_or_other": 331,
+   "worse_cases": [
+    "test-diagrams/perturbations/class-native-container-factory-precedence/case_tabs.puml",
+    "test-diagrams/perturbations/class-package-full-symbol-model/hexagon_empty_tb.puml",
+    "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+    "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_plain_state_paint_control.puml"
+   ],
+   "worse_by_kind": {
+    "new_valid_error": [
+     "test-diagrams/perturbations/class-native-container-factory-precedence/case_tabs.puml",
+     "test-diagrams/perturbations/class-package-full-symbol-model/hexagon_empty_tb.puml",
+     "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+     "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+     "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_plain_state_paint_control.puml"
+    ]
+   },
+   "other_kinds": {
+    "newly_rejected": 253,
+    "gain": 78
+   },
+   "svg_byte_changes": 379,
+   "model_changes": {
+    "ast": 3235,
+    "yaml": 376,
+    "ascii": 310
+   }
+  },
+  "panics_tip": {
+   "yaml": 63
+  },
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ },
+ "golden": {
+  "n": 12550,
+  "tip_match": 11182,
+  "tip_welcome_match": 17,
+  "java_welcome": 17,
+  "9dc1af5f9": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {
+    "ast": 5,
+    "yaml": 5
+   }
+  },
+  "9ed52f435": {
+   "worse": 0,
+   "better_or_other": 0,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {},
+   "svg_byte_changes": 0,
+   "model_changes": {
+    "ast": 4,
+    "yaml": 6
+   }
+  },
+  "32684f81e": {
+   "worse": 0,
+   "better_or_other": 126,
+   "worse_cases": [],
+   "worse_by_kind": {},
+   "other_kinds": {
+    "newly_rejected": 125,
+    "gain": 1
+   },
+   "svg_byte_changes": 138,
+   "model_changes": {
+    "ast": 2462,
+    "yaml": 143,
+    "ascii": 124
+   }
+  },
+  "panics_tip": {
+   "yaml": 148
+  },
+  "timeouts": {
+   "c4b5a8436": {},
+   "9dc1af5f9": {},
+   "9ed52f435": {},
+   "32684f81e": {}
+  }
+ }
+}

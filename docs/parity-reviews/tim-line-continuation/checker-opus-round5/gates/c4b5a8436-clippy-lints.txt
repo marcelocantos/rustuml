@@ -1,0 +1,24 @@
+crates/rustuml-layout/src/graph.rs: warning: items after a test module
+crates/rustuml-oracle/src/matrix/activity.rs: warning: useless use of `format!`: help: consider using `.to_string()`: `"Action 1".to_string()`
+crates/rustuml-parser/src/parse/component.rs: warning: function `looks_like_description_bracket_command` is never used
+crates/rustuml-render/src/class.rs: warning: this `let...else` may be rewritten with the `?` operator: help: replace it with: `let (&start, &end) = edge_points.first().zip(edge_points.last())?;`
+crates/rustuml-render/src/class.rs: warning: this method chain can be written more clearly with `if .. else ..`
+crates/rustuml-render/src/class.rs: warning: usage of `bool::then` in `filter_map`: help: use `filter` then `map` instead: `filter(|&(idx, role)| (*role == PackageRenderRole::Cluster)).map(|(idx, role)| package_cluster_id(idx))`
+crates/rustuml-render/src/component.rs: warning: using `chunks_exact` with a constant chunk size: help: consider using `as_chunks` instead: `as_chunks::<2>().0.iter()`
+crates/rustuml-render/src/component.rs: warning: using `chunks_exact` with a constant chunk size: help: consider using `as_chunks` instead: `as_chunks::<3>().0.iter()`
+crates/rustuml-render/src/deployment.rs: warning: using `chunks_exact` with a constant chunk size: help: consider using `as_chunks` instead: `as_chunks::<3>().0.iter()`
+crates/rustuml-render/src/handwritten.rs: warning: using `chunks_exact` with a constant chunk size: help: consider using `as_chunks` instead: `as_chunks::<3>().0`
+crates/rustuml-render/src/sequence.rs: warning: redundant reference in `write!` argument: help: remove the redundant `&`: `arrow_color`
+crates/rustuml-render/src/sequence.rs: warning: redundant reference in `write!` argument: help: remove the redundant `&`: `arrow_color`
+crates/rustuml-render/src/sequence.rs: warning: redundant reference in `write!` argument: help: remove the redundant `&`: `arrow_color`
+crates/rustuml-render/src/sequence.rs: warning: redundant reference in `write!` argument: help: remove the redundant `&`: `arrow_color`
+crates/rustuml-render/src/sequence.rs: warning: redundant reference in `write!` argument: help: remove the redundant `&`: `arrow_color`
+crates/rustuml-render/src/sequence.rs: warning: redundant reference in `write!` argument: help: remove the redundant `&`: `arrow_color`
+crates/rustuml-render/src/sequence.rs: warning: redundant reference in `write!` argument: help: remove the redundant `&`: `arrow_color`
+crates/rustuml-render/src/sequence.rs: warning: redundant reference in `write!` argument: help: remove the redundant `&`: `arrow_color`
+crates/rustuml-render/src/sequence.rs: warning: redundant reference in `write!` argument: help: remove the redundant `&`: `arrow_color`
+crates/rustuml-render/src/sequence.rs: warning: redundant reference in `write!` argument: help: remove the redundant `&`: `arrow_color`
+crates/rustuml-render/src/sequence.rs: warning: this `if` has identical blocks
+crates/rustuml-render/src/sequence.rs: warning: using `chunks_exact` with a constant chunk size: help: consider using `as_chunks` instead: `as_chunks::<2>().0.iter()`
+crates/rustuml-render/src/state.rs: warning: using `chunks_exact` with a constant chunk size: help: consider using `as_chunks` instead: `as_chunks::<3>().0.iter()`
+crates/rustuml/tests/pipe_mode.rs: error: couldn't read `crates/rustuml/tests/../../../test-diagrams/no_oracle_baseline.txt`: No such file or directory (os error 2)

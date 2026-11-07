@@ -1,0 +1,319 @@
+{
+ "note": "Every case where tip c4b5a8436 is worse than parity-recovery 32684f81e (T14.63 overlay), with membership in the round-4 checker list against cb550c0d6 (checker-claude-round4/summary.json t1463_vs_cb550c0d6).",
+ "total": 39,
+ "in_round4_list": 37,
+ "rows": [
+  {
+   "cohort": "df",
+   "case": "cr5o_scope_uml_usecase_theme",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": false,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "df",
+   "case": "cr5o_scope_uml_backslash_start",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": false,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_cnt_exit_alone",
+   "kind": "lost_welcome_match",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_exit_mid",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_ws_ideo_exit",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_main_bom_line2",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_main_bom_before_directive",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_main_endash_arrow",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_inc_cr_only_lines",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_sfx_include_many",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "cc",
+   "case": "cr4_inc_yaml_header_raw",
+   "kind": "lost_match",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "ca",
+   "case": "cr3_end_tim_chr64_enduml",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "ca",
+   "case": "cr3_end_tim_chr92_enduml",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "ca",
+   "case": "cr3_wrap_first_is_mindmap",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "by",
+   "case": "cr2_seq_pre_start_backslash_text",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "bw",
+   "case": "r2_component_include_tail_then_variable",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "bd",
+   "case": "mc1_usecase_continued",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "ba",
+   "case": "ck4_usecase_leading_actor_line",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "az",
+   "case": "mk4b_theme_trailing_comment_usecase",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "ax",
+   "case": "ck3_usecase_note_top_of_paren",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "ax",
+   "case": "ck3_class_enum_upper_body",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "av",
+   "case": "mk3_usecase_right_header_body",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "av",
+   "case": "mk3_deployment_archimate_body",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "at",
+   "case": "ck_usecase_header_body",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "fresh",
+   "case": "mk2_proc_uninvoked_svg_usecase",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "fresh",
+   "case": "mk2_usecase_note_upper",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/class-native-container-factory-precedence/case_tabs.puml",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/class-package-full-symbol-model/hexagon_empty_tb.puml",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.puml",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  },
+  {
+   "cohort": "retained",
+   "case": "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_plain_state_paint_control.puml",
+   "kind": "new_valid_error",
+   "in_round4_list_vs_cb550c0d6": true,
+   "worse_than_9ed52f435": false,
+   "worse_than_9dc1af5f9": false
+  }
+ ]
+}

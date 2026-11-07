@@ -1,0 +1,1231 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-line-continuation",
+ "account_commit": "10c9fe37b9aca4a1a655f80befba1a6563066a8a",
+ "implementation_commit": "c4b5a843638d6d93ae4b286a5a710845dac38d78",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "reviewer": {
+  "task_id": "T3 thread t3-7758f731, branch review/opus-tim-round5",
+  "model": "claude-opus-5-5"
+ },
+ "commands": [
+  "git fetch /Users/marcelo/.t3/worktrees/rustuml/t3-bc3abe07 maker/opus-tim-continuation-round5; git switch -c review/opus-tim-round5 FETCH_HEAD (36843c258); golden submodule fetched from the local reference and checked out at 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a (12,550 pairs)",
+  "checker-opus-round5/support/build.sh: git archive c4b5a8436 / 9dc1af5f9 / 9ed52f435 / 32684f81e, one private cargo-created CARGO_TARGET_DIR each, deleted after the binary was saved; compare_cli from the unchanged sequence-dependency-closure source against 32684f81e's rustuml_oracle",
+  "fresh cohorts copied from the round-4 checker cache and re-verified byte-for-byte against the immutable relay-parent reference-results (support/verify_fresh_r5.py: 15 manifests, 0 bad); the committed round-4 manifests are identical; DD and DF prepared with the unchanged prepare.py from relay-parent opus-tim-r5-dd and opus-tim-r5-checker-heldout",
+  "checker-opus-round5/support/run_all.sh: unchanged replay.py (1bb2ed6e) and classify.py (7cf54607), 4 modes (svg/ast/ascii/yaml), each case from its recorded cwd, all cohorts x 4 builds; support/summarize_r5c.py + table_r5c.py with the T14.63 welcome-match overlay",
+  "support/rejection_all.sh: unchanged rejection_contract.py (09cd998b) for 17 fresh cohorts (DF, DD, CC..AT, the 915), tip against 9dc1af5f9, 9ed52f435 and 32684f81e",
+  "support/gates.sh: workspace lib, pipe_mode, golden_no_oracle, golden_pairs, parity_perturbations, harness_guards, doc_claims and clippy -D warnings per crate in the checker worktree; golden_no_oracle/golden_pairs/parity_perturbations/harness_guards at a 9dc1af5f9 export and golden_no_oracle/parity_perturbations at a 32684f81e export; clippy on rustuml-parser at 32684f81e and 9ed52f435 exports and a workspace --all-targets lint census at all three trees",
+  "support/ucd_letters_check.py: BMP Lu/Ll/Lt/Lm/Lo and Nd from UCD 15.0.0 (806e9aed...) and 17.0.0 (2e1efc1d...), downloaded by the checker, against BMP_LETTER_RANGES / BMP_DECIMAL_DIGIT_ZEROS parsed from the tip source",
+  "support/gen_probes_cr5o.py, heldout_check.py, predict_rust_cr5o.py, stage_cr5o.py: batch CR5O (72 cases, 29 resources) generated, checked held out against 29,920 corpus files, Rust outputs at all four builds recorded and committed in c9e6dda12 before the relay (DF)"
+ ],
+ "findings": [
+  "VERDICT REJECT (round 5). The round-5 code (draft 790726291, completion 29c930a5f + c4b5a8436) is worse than nothing at the merged base 9dc1af5f9 or the round-4 code 9ed52f435 in any of 19 cohorts (18,402 cases), held-out DD and DF included, and its four obligations are accepted. The packet is not accept-ready because held-out DF finds one Java-valid source, cr5o_scope_uml_backslash_start (a '\\\\startuml' ... '\\\\enduml' block), that parity-recovery 32684f81e renders and the tip turns into a valid-input error, and no round-4-approved mechanism covers it. It is inherited from the sprite/participant line, not caused by round-5 code: d28dd64a9, 9ed52f435 and 9dc1af5f9 fail identically, cb550c0d6 and 32684f81e render.",
+  "Three-way, T14.63 overlay (worse = lost match, lost rejection, lost Welcome match, new valid-input error, panic, timeout): vs 9dc1af5f9 0 worse / 5 gains + 1 valid-error->mismatch (DD 2, DF 4), 0 SVG byte changes outside DD (3) and DF (6); vs 9ed52f435 0 worse / 26 gains + 2 valid-error->mismatch; vs 32684f81e 39 worse / 349 gains, 733 newly rejected, 31 Welcome-match gains. Of the 39: 37 are exactly the round-4 checker's list against cb550c0d6 (merge/worse-vs-32684f81e.json; the 13 retained, CC 9 = the maker's 8 plus the lost Welcome match cr4_cnt_exit_alone that review-4 names, CA's T14.66 trio, BY T14.26, BW T14.21, and the usecase/class strict-admission cases in BD, BA, AZ, AX, AV, AT and the 915); the round-4 list's other 5 (four Unicode headers, tc1_seq_theme_local_postjoin) are now fixed. The maker's '36' omits cr4_cnt_exit_alone; the set is otherwise identical. The 2 new are DF cr5o_scope_uml_usecase_theme ('(Fly) as F': 'no registered sequence command accepts' a usecase declaration, the approved usecase strict-admission mechanism; it fails without the theme too) and cr5o_scope_uml_backslash_start (not covered).",
+  "Tip totals: 14,588 matches + 57 Welcome matches of 18,402. Golden 11,182 + 17 Welcome; retained 2,742; the 915 249; DD 10/13 (12 Java-valid); DF 43/72 (57 Java-valid). Panics only in the unchanged --yaml set (retained 63, golden 148); 0 timeouts.",
+  "Obligation 2, diagram-type scope (claim upheld): PSystemBuilder#createPSystem (210-212) builds UmlSource with checkEndingBackslash = findStartTypes(source.get(0)).contains(SEQUENCE); DiagramType#getTypes returns SEQUENCE only for case 'u' + check(\"uml\") (regionMatches ignoreCase), i.e. [@\\\\]startuml. ReadFilterMergeLines (Preprocessor, main source only, disabled for ditaa) joins raw main-source lines for every type before TIM; themes (TContext#executeTheme) and raw includes (#executeInclude, ReadLineReader) are not merged; wrapped includes are merged by DiagramDetector. DF confirms: mindmap raw include, mindmap and wbs TIM-produced backslashes stay unjoined (match), @startuml raw include, TIM backslash, class header, procedure line and every cross-stream case join (match at the tip except where noted).",
+  "DD mindmap (the maker's mispredicted case): Java does not join and renders, because CommandMindMapOrgmode's TYPE is [ \\\\t]*[*#]+ so '#EEEEFF' is a depth-1 node 'EEEEFF' ahead of 'Totara'. The tip also does not join, but puts 'EEEEFF' after 'Totara' because local-theme body lines are relocated to theme_tail: a mismatch, not a new error, and not caused by the packet (the base joins and mismatches too; or5_theme_mindmap_flat_control mismatches at every build because the mindmap theme background is not painted). wbs: Java Syntax Error ('#EEEEFF' is no WBS line); every build renders it (false accept, pre-existing). DD: 10/13 match at the tip; 0 worse against any build.",
+  "Obligation 1, inner comments (accepted): all 15 DF TIM-body/sequence comment probes match at every build (quoted span then trailing comment, nested leading, unclosed /' on two lines, tab lead, special-only line, special span inside a quoted assignment, assignment, !if/!endif, procedure, function !return, while, foreach, includesub, raw include, theme with a short comment). EBNF: Java's TLineType COMMENT_SIMPLE (^\\\\s*') has no diagram-type test, so the parity-recovery EBNF short-comment exemption is wrong: cr5o_cmt_ebnf_short_line is a Java Syntax Error that every build accepts, cr5o_cmt_ebnf_short_indented is Java-valid and a valid-input error at every build. Other residue at every build: wbs leading inner comment ('/' d '/ ** Miro', Java Syntax Error, Rust accepts), yaml leading inner comment (Java valid, Rust YAML parse error), mindmap trailing inner comment keeps a trailing space in Java's label width.",
+  "Obligation 3, Unicode table (accepted): the checker's own generator over UCD 15.0.0 finds 48,965 BMP letters in 380 runs, identical to BMP_LETTER_RANGES; BMP Nd is 370 = the 37 zero digits; 17.0.0 differs by exactly the 16 BMP letters the maker names and removes none. DF header probes: the four further Unicode-16/17 letters (U+0C5C, U+0CDC, U+A7F1, U+1C8A), Mc U+0CF3, Mn U+0301, Nl U+2160, No U+00B2, supplementary U+1D400 and Cn U+0378 are Java-valid headers and match at the tip (9ed52f435: four valid-input errors; 32684f81e: ten mismatches); Unicode-14 letters U+A7C0, U+0870, Lm U+02B0, Nd U+0966 and Hangul U+AC00 are Java raw includes (Syntax Error) and the tip rejects them (32684f81e accepts).",
+  "Obligation 4, lock (accepted): edge_pragma_useVerticalIf is a whole-output match within the frozen comparator: every element is byte-identical to Java and only the root height differs (135 vs 134 px); it already matches at 9ed52f435. no-oracle 11,182/11,251 at the tip and the base (base fails only on the unlocked edge-cases 759 -> 760), 11,181 at 32684f81e; the 69 failure names are identical at the tip, the base and 9ed52f435 and equal the maker's list; against 32684f81e the only difference is edge_pragma_useVerticalIf. README, STABILITY, the help text (pipe_mode 17/17) and doc_claims (2/2) all carry 11,182/11,251.",
+  "Gates: workspace lib 1,668 passed / 0 failed; pipe_mode 17/17; doc_claims 2/2; golden_no_oracle pass; golden_pairs 10,498/753/1,299 at the tip and the base with identical per-directory failures; parity_perturbations 3,835 failing pairs at the tip and the base, identical names and equal to the maker's list; on the 6,379 sources shared with 32684f81e the tip fails none that 32684f81e passes; harness_guards: 5 pass, decimal_literal_ratchet and parity_review_records_are_complete fail identically at the tip and the base (normalised logs differ only in test order). clippy -D warnings fails for rustuml, rustuml-parser, rustuml-render and rustuml-oracle on the unused looks_like_description_bracket_command (parse/component.rs:74), which fails identically at 32684f81e and 9ed52f435; rustuml-layout and rustuml-math pass; the workspace --all-targets lint census is the same 24 lines at the tip, 9ed52f435 and 32684f81e.",
+  "rejection_contract.py: 0 introduced losses in all 17 cohorts against 9dc1af5f9, 9ed52f435 and 32684f81e. Java-invalid rejections at the tip: the 915 304 (32684f81e 15), DF 9/15 (32684f81e 3), DD 0/1.",
+  "Process: Grok account 10c9fe37b precedes draft 790726291; addendum 1 (5f74f24fa) precedes 29c930a5f; addendum 2 (6e2034c6f) precedes c4b5a8436; or5 pre-registration f9a6a6086 (11:43) precedes the DD results (12:42); the 26 recorded DD Rust outputs re-render identically. Account and addendum commits touch docs only. Round-5 non-test code adds no fixture-keyed literal (the only string literal on an added line is the moved 'skinparam __theme {name}' format). Against 32684f81e, crates/rustuml-oracle differs only in the doc_claims pin; scripts, .gitmodules and non-perturbation test-diagrams differ only in no_oracle_baseline.txt; against 9dc1af5f9 nothing under test-diagrams or crates/rustuml-oracle changes except those two pins. GEOM_EPS, markers, park list, error census, allow-lists, strict-XML list and the 15-source approved valid-error set are unchanged.",
+  "Other DF residue, identical at the tip and the base (not packet-caused): Java renders @startjson/@startyaml with a local !theme, every build reports a parse error (theme envelope lines reach the JSON/YAML parser); timing, mindmap and wbs do not paint a theme BackgroundColor; a theme body's open tail joined into @enduml and a theme whose open tail joins the next theme's first line still differ (ArrowColor/thickness styling); the line joined into a theme body takes Java's theme location (data-source-line 0), Rust's 4; leading whitespace before @startuml shifts data-source-line by one; @startgantt with an unjoined theme or TIM backslash, mindmap title theme and nwdiag theme are Java Syntax Errors that every build accepts. @STARTUML is a Java Syntax Error; the tip rejects it (gain against 32684f81e).",
+  "DF Java validity: 57 valid, 15 invalid (cr5o_scope_salt_theme is an exit-0 'An error has occured' crash page, counted invalid). Checker predictions were wrong on 6: @STARTUML, mindmap title theme, ebnf trailing multi-comment and wbs leading inner comment are Java errors; json and yaml with a local theme render.",
+  "Proposed targets (not filed; bullseye.yaml untouched): (a) recognise [@\\\\]start<type> main start lines as StartUtils#isStartDirective / DiagramType#findStartTypes do ('\\\\startuml' at least; Java rejects '@STARTUML' as a block, so case handling must follow Java's own result), clearing cr5o_scope_uml_backslash_start; (b) remove the EBNF short-comment exemption (TLineType COMMENT_SIMPLE has no diagram-type test); (c) keep a local theme body at its list position for non-UML parsers instead of relocating content lines to theme_tail (mindmap 'EEEEFF' order), and give a joined theme line Java's theme location; (d) JSON/YAML diagrams with a local !theme; (e) theme BackgroundColor in timing, mindmap and wbs; (f) false accepts: wbs '#…' line, gantt/nwdiag unknown lines, mindmap bare text line; (g) the dead looks_like_description_bracket_command that fails clippy -D warnings on master; (h) a leading inner comment before a YAML key."
+ ],
+ "verdict": "rejected",
+ "record": "docs/parity-reviews/tim-line-continuation/checker-opus-round5/",
+ "perturbations": [
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_no_start_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_no_start_continued.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_no_start_plain.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_no_start_plain.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_after_end_continued_tail.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_after_end_continued_tail.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_chained_continuation_indented_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_chained_continuation_indented_end.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_chr92_tail_then_directive.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_chr92_tail_then_directive.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_crlf_exact_start_endother_merged.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_crlf_exact_start_endother_merged.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_exact_start_col0_endother_merged.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_exact_start_col0_endother_merged.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_nested_start_in_continued_line.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_nested_start_in_continued_line.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_note_plain_rsp_control.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_note_plain_rsp_control.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_procedure_body_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_procedure_body_continued.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_procedure_call_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_procedure_call_continued.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_procedure_emits_tail.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_procedure_emits_tail.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_start_line_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_start_line_continued.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_tab_end_plain_control.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_tab_end_plain_control.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_assume_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_assume_end.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_assume_middle.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_assume_middle.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_assume_start.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_assume_start.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_define_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_define_end.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_define_middle.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_define_middle.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_dump_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_dump_end.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_dump_middle.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_dump_middle.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_if_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_if_end.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_if_middle.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_if_middle.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_log_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_log_end.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_log_middle.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_log_middle.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_option_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_option_end.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_option_middle.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_option_middle.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_pragma_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_pragma_end.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_pragma_middle.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_pragma_middle.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_pragma_start.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_pragma_start.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_procedure_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_procedure_end.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_procedure_middle.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_procedure_middle.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_teoz_pragma_start.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_dir_teoz_pragma_start.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_end_bs_end_alone.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_end_bs_end_alone.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_end_bs_end_no_at_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_end_bs_end_no_at_end.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_end_bs_endless_indented.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_end_bs_endless_indented.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_end_bs_endmindmap_in_uml.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_end_bs_endmindmap_in_uml.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_end_bs_enduml_trailing.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_end_bs_enduml_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_end_mindmap_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_end_mindmap_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_end_pipe_second_diagram.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_end_pipe_second_diagram.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_end_us_before_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_end_us_before_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_two_blank_after_tail.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_two_blank_after_tail.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_two_mindmap_control.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_two_mindmap_control.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_two_three_lines_after.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_two_three_lines_after.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr3_two_three_lines_before.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr3_two_three_lines_before.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_blank_then_message.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_blank_then_message.svg",
+   "result": "pass",
+   "axes": [
+    "count",
+    "control: blank then content",
+    "CC held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_pragma_from_variable_line.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_cnt_pragma_from_variable_line.svg",
+   "result": "pass",
+   "axes": [
+    "count",
+    "TIM-generated !pragma line",
+    "unsure",
+    "CC held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_foreach_unterminated.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_foreach_unterminated.svg",
+   "result": "pass",
+   "axes": [
+    "swallowed end",
+    "!foreach without !endfor",
+    "unsure",
+    "CC held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_if_unterminated_active.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_if_unterminated_active.svg",
+   "result": "pass",
+   "axes": [
+    "swallowed end",
+    "active !if without !endif",
+    "unsure",
+    "CC held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_while_unterminated.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_end_in_while_unterminated.svg",
+   "result": "pass",
+   "axes": [
+    "swallowed end",
+    "!while without !endwhile",
+    "unsure",
+    "CC held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_ideo_before_at_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_ideo_before_at_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+3000 before @enduml ends the block",
+    "CC held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_vt_before_define.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr4_ws_vt_before_define.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "VT before !define: ASCII \\s",
+    "CC held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_activity_multiline_action.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_activity_multiline_action.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_class_crlf_three.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_class_crlf_three.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_class_three_pieces_lines.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_class_three_pieces_lines.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_component_comments_between.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_component_comments_between.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_json.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_json.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_mindmap.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_mindmap.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_object_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_object_continued.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_backslash_space.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_backslash_space.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_block_comment_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_block_comment_continued.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_comment_only_continuation.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_comment_only_continuation.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_continued_comment_line.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_continued_comment_line.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_crlf.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_crlf.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_define_macro.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_define_macro.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_escaped_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_escaped_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_if_condition.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_if_condition.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_leading_space_continuation.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_leading_space_continuation.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_note_body.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_note_body.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_procedure_body.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_procedure_body.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_tim_assignment.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_seq_tim_assignment.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_skinparam_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_skinparam_continued.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_state_description.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_state_description.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_state_theme_bluegray.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_state_theme_bluegray.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mc1_style_block.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mc1_style_block.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr3_seq_backslash_end_plain.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr3_seq_backslash_end_plain.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr3_seq_backslash_end_then_more.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr3_seq_backslash_end_then_more.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr3_seq_end_continued_two_lines.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr3_seq_end_continued_two_lines.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_from_procedure.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_from_procedure.svg",
+   "result": "pass",
+   "axes": [
+    "pragma",
+    "procedure output",
+    "count:3",
+    "java-prediction:valid",
+    "CB held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_middle_vertical.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_middle_vertical.svg",
+   "result": "pass",
+   "axes": [
+    "pragma",
+    "position:middle",
+    "join into pragma text",
+    "java-prediction:valid",
+    "CB held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_svek_start.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_svek_start.svg",
+   "result": "pass",
+   "axes": [
+    "pragma",
+    "position:start",
+    "count:3",
+    "java-prediction:valid",
+    "CB held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_two_then_tail.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_two_then_tail.svg",
+   "result": "pass",
+   "axes": [
+    "pragma",
+    "two pragmas",
+    "count:4",
+    "java-prediction:valid",
+    "CB held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_variable_value.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_pragma_variable_value.svg",
+   "result": "pass",
+   "axes": [
+    "pragma",
+    "variable",
+    "count:3",
+    "java-prediction:valid",
+    "CB held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_terminated_def_then_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_terminated_def_then_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "control",
+    "terminated definition",
+    "\\enduml",
+    "java-prediction:valid",
+    "CB held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_theme_shipped_tail.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_theme_shipped_tail.svg",
+   "result": "pass",
+   "axes": [
+    "theme",
+    "shipped theme",
+    "count>2",
+    "java-prediction:valid",
+    "CB held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_em_quad_before_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_em_quad_before_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+2001",
+    "\\enduml",
+    "java-prediction:valid",
+    "CB held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_fs_before_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_fs_before_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+001C",
+    "\\enduml",
+    "java-prediction:valid",
+    "CB held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_gs_before_at_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_gs_before_at_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+001D",
+    "@enduml (not Pipe's end)",
+    "java-prediction:valid",
+    "CB held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_gs_before_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_gs_before_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+001D",
+    "\\enduml",
+    "java-prediction:valid",
+    "CB held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_ideographic_before_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_ideographic_before_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+3000",
+    "\\enduml",
+    "java-prediction:valid",
+    "CB held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_line_separator_before_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_line_separator_before_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+2028",
+    "\\enduml",
+    "java-prediction:valid",
+    "CB held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_rs_before_bs_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/mr4_ws_rs_before_bs_end.svg",
+   "result": "pass",
+   "axes": [
+    "whitespace",
+    "U+001E",
+    "\\enduml",
+    "java-prediction:valid",
+    "CB held out",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_class_indented_end_after_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_class_indented_end_after_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_mindmap_indented_end_after_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_mindmap_indented_end_after_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_seq_backslash_end_after_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_seq_backslash_end_after_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_seq_indented_end_crlf.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_seq_indented_end_crlf.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_seq_indented_end_then_more.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_seq_indented_end_then_more.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_seq_named_start_indented_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_seq_named_start_indented_end.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_seq_tab_end_after_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_seq_tab_end_after_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_state_indented_end_after_comment.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_state_indented_end_after_comment.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_block_comment_inner_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_block_comment_inner_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_crlf_comment_skip.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_crlf_comment_skip.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_four_pieces_lines.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_four_pieces_lines.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_note_body.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_note_body.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_quote_comment_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_quote_comment_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_quoted_label_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_quoted_label_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_class_two_merges_lines.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_class_two_merges_lines.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_json_two_pieces_nested.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_json_two_pieces_nested.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_mindmap_chr_backslash_no_postjoin.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_mindmap_chr_backslash_no_postjoin.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_mindmap_three.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_mindmap_three.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_salt_body.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_salt_body.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_block_comment_inner_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_block_comment_inner_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_chr_backslash_postjoin.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_chr_backslash_postjoin.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_four_pieces_lines.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_four_pieces_lines.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_indented_end_after_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_indented_end_after_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_legend_body.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_legend_body.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_next_apostrophe_leading.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_next_apostrophe_leading.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_next_long_comment_tail.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_next_long_comment_tail.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_quote_comment_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_quote_comment_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_quoted_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_quoted_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_separator_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_separator_continued.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_two_pieces_lines.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_two_pieces_lines.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_url_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_seq_url_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/tc1_yaml_body.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/tc1_yaml_body.svg",
+   "result": "pass",
+   "axes": [
+    "tim-line-continuation",
+    "c4b5a8436: pass (parity_perturbations)"
+   ]
+  }
+ ]
+}

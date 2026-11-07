@@ -1,0 +1,1335 @@
+[
+ {
+  "name": "cr5o_scope_uml_usecase_theme",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "valid-error",
+   "9dc1af5f9": "valid-error",
+   "9ed52f435": "valid-error",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "@startuml usecase",
+   "theme join"
+  ]
+ },
+ {
+  "name": "cr5o_scope_uml_component_theme",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "mismatch",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "@startuml component",
+   "theme join"
+  ]
+ },
+ {
+  "name": "cr5o_scope_uml_timing_theme",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "mismatch",
+   "9dc1af5f9": "mismatch",
+   "9ed52f435": "mismatch",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "@startuml timing",
+   "theme join"
+  ]
+ },
+ {
+  "name": "cr5o_scope_uml_upper_start",
+  "java_valid": false,
+  "outcomes": {
+   "c4b5a8436": "nonpositive-rejected",
+   "9dc1af5f9": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "32684f81e": "nonpositive-accepted"
+  },
+  "java_exit": 200,
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "@STARTUML (findStartTypes ignores case)",
+   "unsure"
+  ]
+ },
+ {
+  "name": "cr5o_scope_uml_leading_ws_start",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "mismatch",
+   "9dc1af5f9": "mismatch",
+   "9ed52f435": "valid-error",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "leading whitespace before @startuml"
+  ]
+ },
+ {
+  "name": "cr5o_scope_uml_backslash_start",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "valid-error",
+   "9dc1af5f9": "valid-error",
+   "9ed52f435": "valid-error",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "\\startuml",
+   "unsure"
+  ]
+ },
+ {
+  "name": "cr5o_scope_mindmap_flat_ctrl",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "mismatch",
+   "9dc1af5f9": "mismatch",
+   "9ed52f435": "mismatch",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "mindmap",
+   "control"
+  ]
+ },
+ {
+  "name": "cr5o_scope_mindmap_title_theme",
+  "java_valid": false,
+  "outcomes": {
+   "c4b5a8436": "nonpositive-accepted",
+   "9dc1af5f9": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "32684f81e": "nonpositive-accepted"
+  },
+  "java_exit": 200,
+  "java_markers": [
+   "Syntax Error",
+   "(Assumed diagram type:"
+  ],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "mindmap",
+   "theme title not joined",
+   "unsure"
+  ]
+ },
+ {
+  "name": "cr5o_scope_gantt_theme",
+  "java_valid": false,
+  "outcomes": {
+   "c4b5a8436": "nonpositive-accepted",
+   "9dc1af5f9": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "32684f81e": "nonpositive-accepted"
+  },
+  "java_exit": 200,
+  "java_markers": [
+   "Syntax Error",
+   "(Assumed diagram type:"
+  ],
+  "checker_java_prediction_valid": false,
+  "axes": [
+   "scope",
+   "gantt",
+   "no join: #DDEEDD line",
+   "unsure"
+  ]
+ },
+ {
+  "name": "cr5o_scope_json_theme",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "valid-error",
+   "9dc1af5f9": "valid-error",
+   "9ed52f435": "valid-error",
+   "32684f81e": "valid-error"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": false,
+  "axes": [
+   "scope",
+   "json",
+   "no join",
+   "unsure"
+  ]
+ },
+ {
+  "name": "cr5o_scope_yaml_theme",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "valid-error",
+   "9dc1af5f9": "valid-error",
+   "9ed52f435": "valid-error",
+   "32684f81e": "valid-error"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": false,
+  "axes": [
+   "scope",
+   "yaml",
+   "no join",
+   "unsure"
+  ]
+ },
+ {
+  "name": "cr5o_scope_ebnf_theme",
+  "java_valid": false,
+  "outcomes": {
+   "c4b5a8436": "nonpositive-rejected",
+   "9dc1af5f9": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "32684f81e": "nonpositive-rejected"
+  },
+  "java_exit": 200,
+  "java_markers": [
+   "Syntax Error",
+   "(Assumed diagram type:"
+  ],
+  "checker_java_prediction_valid": false,
+  "axes": [
+   "scope",
+   "ebnf",
+   "no join",
+   "unsure"
+  ]
+ },
+ {
+  "name": "cr5o_scope_salt_theme",
+  "java_valid": false,
+  "outcomes": {
+   "c4b5a8436": "nonpositive-rejected",
+   "9dc1af5f9": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "32684f81e": "nonpositive-rejected"
+  },
+  "java_exit": 0,
+  "java_markers": [
+   "An error has occured"
+  ],
+  "checker_java_prediction_valid": false,
+  "axes": [
+   "scope",
+   "salt",
+   "no join",
+   "unsure"
+  ]
+ },
+ {
+  "name": "cr5o_scope_nwdiag_theme",
+  "java_valid": false,
+  "outcomes": {
+   "c4b5a8436": "nonpositive-accepted",
+   "9dc1af5f9": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "32684f81e": "nonpositive-accepted"
+  },
+  "java_exit": 200,
+  "java_markers": [
+   "Syntax Error",
+   "(Assumed diagram type:"
+  ],
+  "checker_java_prediction_valid": false,
+  "axes": [
+   "scope",
+   "nwdiag",
+   "no join",
+   "unsure"
+  ]
+ },
+ {
+  "name": "cr5o_scope_wbs_flat_ctrl",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "mismatch",
+   "9dc1af5f9": "mismatch",
+   "9ed52f435": "mismatch",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "wbs",
+   "control"
+  ]
+ },
+ {
+  "name": "cr5o_scope_mindmap_raw_include",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "mindmap",
+   "raw include not merged nor joined"
+  ]
+ },
+ {
+  "name": "cr5o_scope_uml_raw_include",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "@startuml",
+   "raw include joined post-TIM"
+  ]
+ },
+ {
+  "name": "cr5o_scope_mindmap_wrapped_include",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "mindmap",
+   "wrapped include: DiagramDetector merges"
+  ]
+ },
+ {
+  "name": "cr5o_scope_mindmap_tim_bs",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "mindmap",
+   "TIM-produced backslash, no join"
+  ]
+ },
+ {
+  "name": "cr5o_scope_wbs_tim_bs",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "wbs",
+   "TIM-produced backslash, no join"
+  ]
+ },
+ {
+  "name": "cr5o_scope_uml_tim_bs",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "@startuml",
+   "TIM-produced backslash joined"
+  ]
+ },
+ {
+  "name": "cr5o_scope_class_tim_bs",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "scope",
+   "@startuml class",
+   "TIM backslash joins a class header",
+   "unsure"
+  ]
+ },
+ {
+  "name": "cr5o_scope_gantt_tim_bs",
+  "java_valid": false,
+  "outcomes": {
+   "c4b5a8436": "nonpositive-accepted",
+   "9dc1af5f9": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "32684f81e": "nonpositive-accepted"
+  },
+  "java_exit": 200,
+  "java_markers": [
+   "Syntax Error",
+   "Welcome to PlantUML",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "checker_java_prediction_valid": false,
+  "axes": [
+   "scope",
+   "gantt",
+   "no join: '[Dig] lasts \\' alone",
+   "unsure"
+  ]
+ },
+ {
+  "name": "cr5o_join_main_into_theme",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "mismatch",
+   "9dc1af5f9": "mismatch",
+   "9ed52f435": "mismatch",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "join",
+   "main pending folds into the theme's first line"
+  ]
+ },
+ {
+  "name": "cr5o_join_theme_open_then_end",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "mismatch",
+   "9dc1af5f9": "mismatch",
+   "9ed52f435": "mismatch",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "join",
+   "theme open tail joins @enduml",
+   "unsure"
+  ]
+ },
+ {
+  "name": "cr5o_join_nested_open_into_outer",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "valid-error",
+   "9ed52f435": "valid-error",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "join",
+   "nested open tail joins outer body line",
+   "outer open joins main line"
+  ]
+ },
+ {
+  "name": "cr5o_join_theme_tim_bs",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "valid-error",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "join",
+   "TIM-produced backslash inside a theme body"
+  ]
+ },
+ {
+  "name": "cr5o_join_two_themes",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "mismatch",
+   "9dc1af5f9": "valid-error",
+   "9ed52f435": "valid-error",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "join",
+   "theme A open tail joins theme B first line"
+  ]
+ },
+ {
+  "name": "cr5o_join_include_open_into_theme",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "valid-error",
+   "9ed52f435": "valid-error",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "join",
+   "raw include open tail joins theme first line"
+  ]
+ },
+ {
+  "name": "cr5o_join_theme_open_then_directive",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "valid-error",
+   "9ed52f435": "valid-error",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "join",
+   "a TIM directive is not a result line"
+  ]
+ },
+ {
+  "name": "cr5o_join_proc_bs_line",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "join",
+   "procedure output line ends with TIM backslash"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_seq_string_inner",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "trailing inner comment after a quoted /' '/"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_seq_nested",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "leading: text after the first '/"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_seq_open_only",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "no inner comment without both ends"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_seq_tab_lead",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "tab before a leading inner comment"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_special_only_line",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "special-only line is a whole-line comment (TLineType COMMENT_SIMPLE2)"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_special_in_assign",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "special inner comment inside a quoted assignment"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_assign_trailing",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "trailing inner comment on an assignment"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_if_trailing",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "inner comments on !if/!endif"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_procedure_body",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "procedure body"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_function_return",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "function !return"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_while_body",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "while body"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_foreach_body",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "foreach body"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_sub_body",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "includesub body"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_include_body",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "raw include body"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_theme_body",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "theme body: inner and short comments"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_ebnf_short_line",
+  "java_valid": false,
+  "outcomes": {
+   "c4b5a8436": "nonpositive-accepted",
+   "9dc1af5f9": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "32684f81e": "nonpositive-accepted"
+  },
+  "java_exit": 200,
+  "java_markers": [
+   "Syntax Error",
+   "Welcome to PlantUML",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "checker_java_prediction_valid": false,
+  "axes": [
+   "comment",
+   "ebnf",
+   "^\\s*' is COMMENT_SIMPLE: the 'b' line is dropped",
+   "unsure"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_ebnf_short_indented",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "valid-error",
+   "9dc1af5f9": "valid-error",
+   "9ed52f435": "valid-error",
+   "32684f81e": "valid-error"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "ebnf",
+   "indented short comment dropped"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_ebnf_trailing_multi",
+  "java_valid": false,
+  "outcomes": {
+   "c4b5a8436": "nonpositive-rejected",
+   "9dc1af5f9": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "32684f81e": "nonpositive-rejected"
+  },
+  "java_exit": 200,
+  "java_markers": [
+   "Welcome to PlantUML",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "ebnf",
+   "trailing: text before the last /'"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_mindmap_inner",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "mismatch",
+   "9dc1af5f9": "mismatch",
+   "9ed52f435": "mismatch",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "mindmap"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_wbs_inner",
+  "java_valid": false,
+  "outcomes": {
+   "c4b5a8436": "nonpositive-accepted",
+   "9dc1af5f9": "nonpositive-accepted",
+   "9ed52f435": "nonpositive-accepted",
+   "32684f81e": "nonpositive-accepted"
+  },
+  "java_exit": 200,
+  "java_markers": [
+   "Welcome to PlantUML",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "wbs"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_json_inner",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "json"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_yaml_inner",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "valid-error",
+   "9dc1af5f9": "valid-error",
+   "9ed52f435": "valid-error",
+   "32684f81e": "valid-error"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "yaml"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_yaml_quote_key",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "yaml",
+   "'quoted key line is COMMENT_SIMPLE: dropped"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_gantt_inner",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "gantt"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_salt_inner",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "salt"
+  ]
+ },
+ {
+  "name": "cr5o_cmt_class_inner",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "match"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "comment",
+   "class body"
+  ]
+ },
+ {
+  "name": "cr5o_hdr_0c5c",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "valid-error",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "header",
+   "U+0C5C Unicode 17 Lo -> header",
+   "raw-include validity unsure"
+  ]
+ },
+ {
+  "name": "cr5o_hdr_0cdc",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "valid-error",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "header",
+   "U+0CDC Unicode 17 Lo -> header",
+   "raw-include validity unsure"
+  ]
+ },
+ {
+  "name": "cr5o_hdr_a7f1",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "valid-error",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "header",
+   "U+A7F1 Unicode 17 Lm -> header",
+   "raw-include validity unsure"
+  ]
+ },
+ {
+  "name": "cr5o_hdr_1c8a",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "valid-error",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "header",
+   "U+1C8A Unicode 16 Ll -> header",
+   "raw-include validity unsure"
+  ]
+ },
+ {
+  "name": "cr5o_hdr_a7c0",
+  "java_valid": false,
+  "outcomes": {
+   "c4b5a8436": "nonpositive-rejected",
+   "9dc1af5f9": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "32684f81e": "nonpositive-accepted"
+  },
+  "java_exit": 200,
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "checker_java_prediction_valid": false,
+  "axes": [
+   "header",
+   "U+A7C0 Unicode 14 Lu -> raw include",
+   "raw-include validity unsure"
+  ]
+ },
+ {
+  "name": "cr5o_hdr_0870",
+  "java_valid": false,
+  "outcomes": {
+   "c4b5a8436": "nonpositive-rejected",
+   "9dc1af5f9": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "32684f81e": "nonpositive-accepted"
+  },
+  "java_exit": 200,
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "checker_java_prediction_valid": false,
+  "axes": [
+   "header",
+   "U+0870 Unicode 14 Lo -> raw include",
+   "raw-include validity unsure"
+  ]
+ },
+ {
+  "name": "cr5o_hdr_0cf3",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "header",
+   "U+0CF3 Unicode 15 Mc -> header",
+   "raw-include validity unsure"
+  ]
+ },
+ {
+  "name": "cr5o_hdr_02b0",
+  "java_valid": false,
+  "outcomes": {
+   "c4b5a8436": "nonpositive-rejected",
+   "9dc1af5f9": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "32684f81e": "nonpositive-accepted"
+  },
+  "java_exit": 200,
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "checker_java_prediction_valid": false,
+  "axes": [
+   "header",
+   "U+02B0 Lm -> raw include",
+   "raw-include validity unsure"
+  ]
+ },
+ {
+  "name": "cr5o_hdr_0301",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "header",
+   "U+0301 Mn -> header",
+   "raw-include validity unsure"
+  ]
+ },
+ {
+  "name": "cr5o_hdr_2160",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "header",
+   "U+2160 Nl -> header",
+   "raw-include validity unsure"
+  ]
+ },
+ {
+  "name": "cr5o_hdr_00b2",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "header",
+   "U+00B2 No -> header",
+   "raw-include validity unsure"
+  ]
+ },
+ {
+  "name": "cr5o_hdr_0966",
+  "java_valid": false,
+  "outcomes": {
+   "c4b5a8436": "nonpositive-rejected",
+   "9dc1af5f9": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "32684f81e": "nonpositive-accepted"
+  },
+  "java_exit": 200,
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "checker_java_prediction_valid": false,
+  "axes": [
+   "header",
+   "U+0966 Nd -> raw include",
+   "raw-include validity unsure"
+  ]
+ },
+ {
+  "name": "cr5o_hdr_ac00",
+  "java_valid": false,
+  "outcomes": {
+   "c4b5a8436": "nonpositive-rejected",
+   "9dc1af5f9": "nonpositive-rejected",
+   "9ed52f435": "nonpositive-rejected",
+   "32684f81e": "nonpositive-accepted"
+  },
+  "java_exit": 200,
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "checker_java_prediction_valid": false,
+  "axes": [
+   "header",
+   "U+AC00 Lo -> raw include",
+   "raw-include validity unsure"
+  ]
+ },
+ {
+  "name": "cr5o_hdr_1d400",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "header",
+   "U+1D400 supplementary -> surrogates -> header",
+   "raw-include validity unsure"
+  ]
+ },
+ {
+  "name": "cr5o_hdr_0378",
+  "java_valid": true,
+  "outcomes": {
+   "c4b5a8436": "match",
+   "9dc1af5f9": "match",
+   "9ed52f435": "match",
+   "32684f81e": "mismatch"
+  },
+  "java_exit": 0,
+  "java_markers": [],
+  "checker_java_prediction_valid": true,
+  "axes": [
+   "header",
+   "U+0378 Cn -> header",
+   "raw-include validity unsure"
+  ]
+ }
+]
