@@ -1,0 +1,432 @@
+{
+ "schema_version": 1,
+ "comparator": "rustuml_oracle::compare::compare_svg_strict, whole SVG (crates/rustuml-oracle identical in all three trees)",
+ "trees": {
+  "parity_recovery": "32684f81e4df2cf10bec9a74d935ea8ee944b5f0",
+  "g3_tip": "4761d217bbcd35add29e0393ba559c87e7b87d6d (code identical to 0063e0e77)",
+  "merge": "6484bb7e030828eb2ac3913aea27b5a48add2374 (single-parent squash onto 32684f81e)"
+ },
+ "binaries_sha256": {
+  "32684f81e": "435480591e1299b38ff742b5e583c0fc4749ddfe9d474a8bed3b1f1f11a33135",
+  "4761d217b": "413951b42977ea63fe1df5701981c18a7726a2d9ff4e767b85b5c83df4bfc541",
+  "6484bb7e0": "1d528c24ce1e3325e62360ed9a9345d6bd02e81cc85dc572495af2eb2cf23cfe"
+ },
+ "batches": {
+  "CZ": {
+   "relay": "grok-g3-recheck-heldout",
+   "reference_results_sha256": "3fb752b346049d34339c9f7d88697a695df59ac21e86525ae71ecd1cac07c925",
+   "cases": 68,
+   "java_valid": 68,
+   "java_invalid": [],
+   "whole_svg_match_of_valid": {
+    "parity_recovery_32684f81e": 24,
+    "g3_tip_4761d217b": 51,
+    "merge_6484bb7e0": 51
+   },
+   "must_equal": "G3 tip 4761d217b",
+   "stdout_bytes_differ_from_required_parent": 0,
+   "losses_vs_parity_recovery": [],
+   "losses_vs_g3_tip": [],
+   "merge_misses_of_valid": [
+    "g3r2_creole_decode_edges",
+    "g3r2_fb_courier_bi_cloud",
+    "g3r2_fb_menlo_bi_astral",
+    "g3r2_fb_menlo_bi_combining",
+    "g3r2_fb_menlo_bi_emoji13",
+    "g3r2_fb_menlo_bi_mix",
+    "g3r2_fb_menlo_italic_cloud",
+    "g3r2_fb_menlo_italic_jcaron",
+    "g3r2_fb_monaco_bi_cloud",
+    "g3r2_fb_monaco_bi_jcaron",
+    "g3r2_fs_class_bolder",
+    "g3r2_fs_class_lighter",
+    "g3r2_fs_seq_arrow_bold_italic_words",
+    "g3r2_fs_seq_arrow_bolditalic",
+    "g3r2_fs_seq_arrow_css700",
+    "g3r2_sk_empty",
+    "g3r2_sta_ignore_stereotypefont"
+   ]
+  },
+  "CN": {
+   "relay": "grok-g3-checker-heldout",
+   "reference_results_sha256": "7d1c1dadc323875f15b5ed15bb06a84a238bb57f1a279e1f7d0dc4bc16efdcd1",
+   "cases": 46,
+   "java_valid": 46,
+   "java_invalid": [],
+   "whole_svg_match_of_valid": {
+    "parity_recovery_32684f81e": 8,
+    "g3_tip_4761d217b": 38,
+    "merge_6484bb7e0": 38
+   },
+   "must_equal": "G3 tip 4761d217b",
+   "stdout_bytes_differ_from_required_parent": 0,
+   "losses_vs_parity_recovery": [],
+   "losses_vs_g3_tip": [],
+   "merge_misses_of_valid": [
+    "chk_creole_arial_deployment",
+    "chk_creole_arial_object",
+    "chk_creole_arial_state",
+    "chk_creole_arial_title",
+    "chk_creole_arial_usecase",
+    "chk_skin_helvetica_light",
+    "chk_skin_helvetica_lightoblique",
+    "chk_skin_menlo_quoted_pad"
+   ]
+  },
+  "CG": {
+   "relay": "grok-g3-menlo-name",
+   "reference_results_sha256": "087039ee0737a5084c2953de6665190848331ff69969bc1ec3bc0465ce5ab710",
+   "cases": 6,
+   "java_valid": 6,
+   "java_invalid": [],
+   "whole_svg_match_of_valid": {
+    "parity_recovery_32684f81e": 1,
+    "g3_tip_4761d217b": 6,
+    "merge_6484bb7e0": 6
+   },
+   "must_equal": "G3 tip 4761d217b",
+   "stdout_bytes_differ_from_required_parent": 0,
+   "losses_vs_parity_recovery": [],
+   "losses_vs_g3_tip": [],
+   "merge_misses_of_valid": []
+  },
+  "CQ": {
+   "relay": "grok-g3-menlo-bi-heldout",
+   "reference_results_sha256": "81223dfe8bcc275695047eefdab221bdc9c3862010fbd8c627c27908beecd4ff",
+   "cases": 7,
+   "java_valid": 7,
+   "java_invalid": [],
+   "whole_svg_match_of_valid": {
+    "parity_recovery_32684f81e": 0,
+    "g3_tip_4761d217b": 7,
+    "merge_6484bb7e0": 7
+   },
+   "must_equal": "G3 tip 4761d217b",
+   "stdout_bytes_differ_from_required_parent": 0,
+   "losses_vs_parity_recovery": [],
+   "losses_vs_g3_tip": [],
+   "merge_misses_of_valid": []
+  },
+  "CR": {
+   "relay": "grok-g3-menlo-bi-heldout2",
+   "reference_results_sha256": "292acc63242f916a470e0a704c2cf6da0916b83d64abfde33a538820524d982c",
+   "cases": 14,
+   "java_valid": 14,
+   "java_invalid": [],
+   "whole_svg_match_of_valid": {
+    "parity_recovery_32684f81e": 0,
+    "g3_tip_4761d217b": 13,
+    "merge_6484bb7e0": 13
+   },
+   "must_equal": "G3 tip 4761d217b",
+   "stdout_bytes_differ_from_required_parent": 0,
+   "losses_vs_parity_recovery": [],
+   "losses_vs_g3_tip": [],
+   "merge_misses_of_valid": [
+    "g3_bi2_emoji_12"
+   ]
+  },
+  "CX": {
+   "relay": "grok-g3-cx",
+   "reference_results_sha256": "b333ba69cb4b54d4c214da93b6ee4a81b322e216dfb8d5075c80ce5a64930c94",
+   "cases": 14,
+   "java_valid": 14,
+   "java_invalid": [],
+   "whole_svg_match_of_valid": {
+    "parity_recovery_32684f81e": 3,
+    "g3_tip_4761d217b": 11,
+    "merge_6484bb7e0": 11
+   },
+   "must_equal": "G3 tip 4761d217b",
+   "stdout_bytes_differ_from_required_parent": 0,
+   "losses_vs_parity_recovery": [],
+   "losses_vs_g3_tip": [],
+   "merge_misses_of_valid": [
+    "hn_creole_faces",
+    "hn_skin_quoted_pad",
+    "hn_skin_quoted_single"
+   ]
+  },
+  "CH": {
+   "relay": "grok-g6-creole",
+   "reference_results_sha256": "aa0069bd25043719bd1669b09493724832e001eddc42319caa29bcc1b62b38d5",
+   "cases": 20,
+   "java_valid": 17,
+   "java_invalid": [
+    "ref_invalid_amp_dollar",
+    "ref_invalid_uplus_nul",
+    "ref_invalid_uplus_surrogate"
+   ],
+   "whole_svg_match_of_valid": {
+    "parity_recovery_32684f81e": 13,
+    "g3_tip_4761d217b": 1,
+    "merge_6484bb7e0": 13
+   },
+   "must_equal": "parity-recovery 32684f81e",
+   "stdout_bytes_differ_from_required_parent": 0,
+   "losses_vs_parity_recovery": [],
+   "losses_vs_g3_tip": [],
+   "merge_misses_of_valid": [
+    "ref_activity_dec_sep",
+    "ref_class_eacute_amp",
+    "ref_class_line_sep",
+    "ref_class_para_sep"
+   ]
+  },
+  "CM": {
+   "relay": "grok-g6-checker-heldout",
+   "reference_results_sha256": "07a5679719ea9d84c729183ecaac5281ae2e44bfb48593bf28a1b21f38eb652a",
+   "cases": 48,
+   "java_valid": 40,
+   "java_invalid": [
+    "ckg6_amp_above_unicode",
+    "ckg6_amp_backslash",
+    "ckg6_amp_dollar",
+    "ckg6_amp_nul",
+    "ckg6_amp_surrogate",
+    "ckg6_img_object",
+    "ckg6_img_salt",
+    "ckg6_img_timing"
+   ],
+   "whole_svg_match_of_valid": {
+    "parity_recovery_32684f81e": 15,
+    "g3_tip_4761d217b": 4,
+    "merge_6484bb7e0": 15
+   },
+   "must_equal": "parity-recovery 32684f81e",
+   "stdout_bytes_differ_from_required_parent": 0,
+   "losses_vs_parity_recovery": [],
+   "losses_vs_g3_tip": [],
+   "merge_misses_of_valid": [
+    "ckg6_activity_action",
+    "ckg6_chrome_consumers",
+    "ckg6_class_name_amp128",
+    "ckg6_component_iface",
+    "ckg6_gantt_task",
+    "ckg6_img_activity",
+    "ckg6_img_class",
+    "ckg6_img_component",
+    "ckg6_img_deployment",
+    "ckg6_img_gantt",
+    "ckg6_img_mindmap",
+    "ckg6_img_sequence",
+    "ckg6_img_state",
+    "ckg6_img_usecase",
+    "ckg6_img_wbs",
+    "ckg6_json_string",
+    "ckg6_mindmap_nodes",
+    "ckg6_missing_emoji",
+    "ckg6_nwdiag_address",
+    "ckg6_present_only",
+    "ckg6_salt_cell",
+    "ckg6_state_internal",
+    "ckg6_timing_lanes",
+    "ckg6_usecase_name",
+    "ckg6_yaml_string"
+   ]
+  },
+  "CS": {
+   "relay": "grok-g6-cs",
+   "reference_results_sha256": "83d3cdd7b7d0baacefb1b8e2258727f6d9b21dcb729e5020aaa2fa8e30acfcc1",
+   "cases": 25,
+   "java_valid": 25,
+   "java_invalid": [],
+   "whole_svg_match_of_valid": {
+    "parity_recovery_32684f81e": 25,
+    "g3_tip_4761d217b": 3,
+    "merge_6484bb7e0": 25
+   },
+   "must_equal": "parity-recovery 32684f81e",
+   "stdout_bytes_differ_from_required_parent": 0,
+   "losses_vs_parity_recovery": [],
+   "losses_vs_g3_tip": [],
+   "merge_misses_of_valid": []
+  },
+  "CU": {
+   "relay": "grok-g6-recheck-heldout",
+   "reference_results_sha256": "0ea48490cd8c54e84e29c467c1c8d94782021b69398386bc691978bf050a4c49",
+   "cases": 18,
+   "java_valid": 13,
+   "java_invalid": [
+    "g6r3_d800_beside_last",
+    "g6r3_dollar_aborts",
+    "g6r3_high_then_ref",
+    "g6r3_low_then_escape_ref",
+    "g6r3_ref_then_low"
+   ],
+   "whole_svg_match_of_valid": {
+    "parity_recovery_32684f81e": 7,
+    "g3_tip_4761d217b": 2,
+    "merge_6484bb7e0": 7
+   },
+   "must_equal": "parity-recovery 32684f81e",
+   "stdout_bytes_differ_from_required_parent": 0,
+   "losses_vs_parity_recovery": [],
+   "losses_vs_g3_tip": [],
+   "merge_misses_of_valid": [
+    "g6r3_bmp_emoji_control",
+    "g6r3_class_mixed",
+    "g6r3_invalid_utf8_high",
+    "g6r3_invalid_utf8_low_beside_ref",
+    "g6r3_state_note",
+    "g6r3_styled_mono"
+   ]
+  },
+  "G2": {
+   "relay": "grok-g2-checker-heldout",
+   "reference_results_sha256": "58ad24e38951b645c0e926b35efb73200cf10194733e3c370a61cab2214068b4",
+   "cases": 28,
+   "java_valid": 28,
+   "java_invalid": [],
+   "whole_svg_match_of_valid": {
+    "parity_recovery_32684f81e": 0,
+    "g3_tip_4761d217b": 0,
+    "merge_6484bb7e0": 0
+   },
+   "must_equal": "parity-recovery 32684f81e",
+   "stdout_bytes_differ_from_required_parent": 10,
+   "losses_vs_parity_recovery": [],
+   "losses_vs_g3_tip": [],
+   "merge_misses_of_valid": [
+    "g2chk_arial_bold",
+    "g2chk_arial_bolditalic",
+    "g2chk_arial_italic",
+    "g2chk_arial_plain",
+    "g2chk_courier_bold",
+    "g2chk_courier_bolditalic",
+    "g2chk_courier_italic",
+    "g2chk_courier_plain",
+    "g2chk_helvetica_bold",
+    "g2chk_helvetica_bolditalic",
+    "g2chk_helvetica_italic",
+    "g2chk_helvetica_plain",
+    "g2chk_lucida_bold",
+    "g2chk_lucida_bolditalic",
+    "g2chk_lucida_italic",
+    "g2chk_lucida_plain",
+    "g2chk_menlo_bold",
+    "g2chk_menlo_bolditalic",
+    "g2chk_menlo_italic",
+    "g2chk_menlo_plain",
+    "g2chk_times_bold",
+    "g2chk_times_bolditalic",
+    "g2chk_times_italic",
+    "g2chk_times_plain",
+    "g2chk_verdana_bold",
+    "g2chk_verdana_bolditalic",
+    "g2chk_verdana_italic",
+    "g2chk_verdana_plain"
+   ]
+  }
+ },
+ "cz_registration": {
+  "rust_predictions_sha256": "debbce39468e70f19d6398e171d72ab18cba45496fca59aacc203e487cba3db9",
+  "merge_reproduces_registered_tip": "68/68 (exit, stdout SHA256, stderr SHA256)",
+  "g3_tip_reproduces": "68/68"
+ },
+ "corpus": {
+  "goldens": {
+   "cases": 12550,
+   "cli_whole_svg_match": {
+    "32684f81e": 11179,
+    "4761d217b": 11179,
+    "6484bb7e0": 11179
+   },
+   "losses_vs_either_parent": 0,
+   "stdout_changes": [
+    "edge-cases/edge_seq_title_with_variables"
+   ],
+   "stdout_change_cause": "%date() timestamp in the title; identical comparator result (DIFF 18) at all trees",
+   "failure_name_sets_identical": true
+  },
+  "perturbations": {
+   "cases": 6405,
+   "cli_whole_svg_match": {
+    "32684f81e": 3726,
+    "4761d217b": 3708,
+    "6484bb7e0": 3771
+   },
+   "losses_vs_parity_recovery": [],
+   "losses_vs_g3_tip": [],
+   "gains_vs_parity_recovery": 45,
+   "gains_vs_g3_tip": 63,
+   "stdout_changes_vs_parity_recovery": 91,
+   "stdout_changes_vs_g3_tip": 131,
+   "exit_code_changes": 0
+  },
+  "element_level_check": {
+   "checked_cases": {
+    "goldens:pr": 1,
+    "goldens:g3": 1,
+    "perturbations:pr": 91,
+    "perturbations:g3": 131,
+    "grok-g2-checker-heldout:pr": 10,
+    "grok-g2-checker-heldout:g3": 12,
+    "grok-g3-checker-heldout:pr": 36,
+    "grok-g3-cx:pr": 10,
+    "grok-g3-menlo-bi-heldout:pr": 7,
+    "grok-g3-menlo-bi-heldout2:pr": 14,
+    "grok-g3-menlo-name:pr": 5,
+    "grok-g3-recheck-heldout:pr": 34,
+    "grok-g6-checker-heldout:g3": 24,
+    "grok-g6-creole:g3": 17,
+    "grok-g6-cs:g3": 22,
+    "grok-g6-recheck-heldout:g3": 8
+   },
+   "flags": {
+    "perturbations": [
+     [
+      "pr",
+      "creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_courier_trailing",
+      "new differing elements [29]"
+     ],
+     [
+      "pr",
+      "creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_monospaced_case",
+      "new differing elements [29]"
+     ],
+     [
+      "g3",
+      "tim-builtin-value-boundaries/checker-claude-round9/c9a_sp_seqnote_mx_P",
+      "new differing elements [5, 6, 8, 9, 11, 12]"
+     ]
+    ],
+    "grok-g2-checker-heldout": [
+     [
+      "g3",
+      "g2chk_helvetica_bold",
+      "new differing elements [54, 55]"
+     ]
+    ]
+   },
+   "disposition": "every flagged merge output is byte-identical to the other parent; none is a composition artefact (see README)"
+  }
+ },
+ "gates_merge": {
+  "golden_no_oracle": "pass, 11181/11251, baseline file identical to both parents",
+  "golden_pairs": "fails as at 32684f81e: 10497 pass / 754 fail / 1299 skip at both; per-directory failure lines identical",
+  "parity_perturbations": "fails as at 32684f81e: 2662 failing paths at 32684f81e, 2640 at the merge; 25 fixed, 3 newly failing paths are menlo-font-name residue pairs absent at 32684f81e (chk_skin_helvetica_light, opus2_creole_decode_edges, opus2_sk_empty), failing identically at the G3 tip",
+  "pipe_mode": "17/17",
+  "doc_claims": "2/2",
+  "workspace_lib": "layout 41, math 10, oracle 31, parser 665, render 874 + 1 ignored; 0 failed (render #[test] count 875 = 863 base + 6 G3 + 6 parity-recovery)",
+  "clippy_per_crate": "warning sets identical at all three trees: render 21, parser 1, layout 1, math 0, oracle 21, rustuml 20"
+ },
+ "decimal_ratchet_guard_rule": {
+  "text_render.rs": {
+   "505999cac": 51,
+   "32684f81e": 68,
+   "4761d217b": 52,
+   "6484bb7e0": 68,
+   "baseline": 51
+  },
+  "listing_at_merge_equals_32684f81e": true,
+  "all_file_counts_merge_equal_32684f81e": true,
+  "listing": [
+   "class.rs: 383 -> 578",
+   "deployment.rs: 43 -> 44",
+   "plantuml_metrics.rs: 1053 -> 1055",
+   "state.rs: 53 -> 61",
+   "text_render.rs: 51 -> 68"
+  ]
+ }
+}

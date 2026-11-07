@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "mechanism": "menlo-bold-italic-fallback",
+  "reviewer": {
+    "task_id": "opus-g3-integ (T3 Code review sub-agent, branch review/opus-g3-integ)",
+    "model": "claude-opus-5-5 / Claude Code in T3 Code",
+    "independence": "Separate review task. No production, comparator, baseline, allow-list, or bullseye edits. No child agents, no other worktrees. Java relayed results only; no Java run locally."
+  },
+  "account_commit": "a0dca233c38251c0233dfb85179d0eb9aa127f0f",
+  "implementation_commit": "6484bb7e030828eb2ac3913aea27b5a48add2374",
+  "base_commit": "32684f81e4df2cf10bec9a74d935ea8ee944b5f0",
+  "packet_commit": "4761d217bbcd35add29e0393ba559c87e7b87d6d",
+  "previous_review": "4761d217bbcd35add29e0393ba559c87e7b87d6d review-2.json (accepted)",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git archive <rev> -- Cargo.toml Cargo.lock crates vendor; CARGO_TARGET_DIR=<private per tree> cargo build --release -p rustuml for 32684f81e, 4761d217b, 6484bb7e0. Binary SHA256: {\"32684f81e\": \"435480591e1299b38ff742b5e583c0fc4749ddfe9d474a8bed3b1f1f11a33135\", \"4761d217b\": \"413951b42977ea63fe1df5701981c18a7726a2d9ff4e767b85b5c83df4bfc541\", \"6484bb7e0\": \"1d528c24ce1e3325e62360ed9a9345d6bd02e81cc85dc572495af2eb2cf23cfe\"}",
+    "rustuml -pipe -tsvg < case.puml, cwd = the source directory, TZ=Australia/Sydney, for every case of CZ, CN, CG, CQ, CR, CX, CH, CM, CS, CU and grok-g2-checker-heldout (sources decoded from reference-input-bundle.json.gz), all 12,550 .puml under test-diagrams/golden (submodule 9efdc12fb) and all 6,405 .puml under test-diagrams/perturbations at 6484bb7e0",
+    "opus-cmp: stdin driver calling rustuml_oracle::compare::compare_svg_strict(java, rust) per case, whole SVG; plus an element-index loss check on every case whose stdout differs between a parent and the merge. Java validity from the raw relayed stdout and stderr (exit != 0, crash page markers, Java stack trace on stderr = invalid)",
+    "git merge-tree --write-tree 32684f81e 4761d217b (conflict only in text_render.rs) diffed against 6484bb7e0; changed-line multiset comparison of base->parent vs other-parent->merge for text_render.rs and creole.rs",
+    "decimal ratchet: the guard's count_high_precision_literals copied verbatim from harness_guards.rs, run over crates/rustuml-render/src at 505999cac, 32684f81e, 4761d217b, 6484bb7e0",
+    "cargo test --offline --release -p rustuml-oracle --test golden_no_oracle | golden_pairs | parity_perturbations | doc_claims | harness_guards --no-fail-fast; -p rustuml --test pipe_mode; --workspace --lib --no-fail-fast (merge); golden_pairs, parity_perturbations and harness_guards also at 32684f81e for comparison",
+    "cargo clippy --offline --release -p <crate> --all-targets -- -W clippy::all for all six crates at 32684f81e, 4761d217b and 6484bb7e0"
+  ],
+  "findings": [
+    "Verdict accepted. The JRS fallback advances survive the merge: CQ, CR and the CZ fallback cases are byte-identical to the G3 tip, and composing with G6 changes no fallback row because AtomImg fallbacks are monospace with no family and resolve to Mono before any Menlo face lookup.",
+    "Pairs: all 7 menlo-bold-italic-fallback pairs pass at the merge and are carried from review-2.json with unchanged source and golden SHA-256. The 5 failing fallback residue cases remain under checker-opus-2/residue, outside the executable walk.",
+    "Integration 6484bb7e0 is a single-parent squash onto parity-recovery 32684f81e carrying review/opus-g3-recheck 4761d217b; 4761d217b is not an ancestor. Reproducing the merge with git merge-tree gives a clean merge everywhere except text_render.rs; the committed tree differs from that result only in text_render.rs. class.rs, sequence.rs, state.rs, svg.rs, usecase.rs, plantuml_metrics.rs, menlo_bi_fallback.rs and lib.rs are byte-identical to the G3 tip; face_cmap_tables.rs and bullseye.yaml are byte-identical to 32684f81e; creole.rs carries every changed line of both sides (multiset check, 0 missing). No file is deleted relative to either parent.",
+    "Ratchet fix: the test explicit_font_monospace_decodes_to_dialog now binds `let dialog_base = base(26.0, 76.6016);` once and derives the Menlo base from it (`let mut menlo = dialog_base;`), so the pre-existing literal is the only one. With the guard's own counting rule text_render.rs has 51 literals at 505999cac, 68 at 32684f81e, 52 at 4761d217b and 68 at 6484bb7e0; every rustuml-render file count at the merge equals 32684f81e, and the decimal_literal_ratchet listing is identical to 32684f81e (class.rs 383->578, deployment.rs 43->44, plantuml_metrics.rs 1053->1055, state.rs 53->61, text_render.rs 51->68). The fix is minimal and test-only. The 51->68 text_render.rs line itself is pre-existing at parity-recovery (G2/G6), not caused by this merge.",
+    "Conflict resolution: trim_text_for_emit, text_width_for_style and tab_stop_width keep G3's style_face call; style_face now takes bold/italic from effective_bold/effective_italic, which return the atom's own bits when Style::owns_font_configuration is set and base||style otherwise. write_text_element keeps G6's effective_bold/effective_italic/effective_underline. Changed-line multiset check: every G3 line is present except the three base||style lines replaced by effective_*; every parity-recovery line is present except two effective_* pairs subsumed by style_face. Probe (CLI, Rust only, 10 inputs: Menlo/Helvetica/Dialog under classFontStyle bold, italic, bolditalic, creole <b><i> and participantFontStyle bold, each with <img:absent.png>): the (Cannot decode) atom is plain monospace at the merge exactly as at 32684f81e (the G3 tip wrongly emitted font-weight/font-style on it); ordinary atoms keep base bold/italic and G3's Menlo widths exactly as at the G3 tip; classFontStyle bolditalic stays plain as at the G3 tip; Helvetica ASCII advances follow G2 (32684f81e).",
+    "Corpus: all 12,550 goldens give identical CLI whole-SVG match sets at the three trees (11,179 each, 0 losses); the only stdout byte change is edge-cases/edge_seq_title_with_variables, a %date() timestamp, with the same comparator result. golden_no_oracle passes at the merge, 11181/11251, baseline file identical to both parents. golden_pairs 10497/754/1299 at 32684f81e and the merge with identical per-directory failure lines. Perturbations (6,405 at the merge): CLI whole-SVG 3,726 / 3,708 / 3,771 at 32684f81e / G3 tip / merge, 0 losses against either parent. parity_perturbations gate failing paths 2,662 at 32684f81e, 2,640 at the merge: 25 fixed, 3 new, and the 3 new are menlo-font-name residue pairs (chk_skin_helvetica_light, opus2_creole_decode_edges, opus2_sk_empty) that do not exist at 32684f81e and fail identically at the G3 tip.",
+    "Element-level check over every changed stdout found 4 flags, all byte-identical to the other parent: alias_courier_trailing and alias_monospaced_case equal the G3 tip (17 -> 3 differences); c9a_sp_seqnote_mx_P equals 32684f81e (G2 Verdana cmap width 73.6011 vs Java 74.8071; the G3 tip's pre-G2 76.21 coincidentally rounds the note to the Java x, so neither matches); g2chk_helvetica_bold equals 32684f81e (30 differences vs 84 at the G3 tip). None is a composition artefact.",
+    "G3 cohorts are byte-identical to the G3 tip in every case (CZ 68, CN 46, CG 6, CQ 7, CR 14, CX 14), and CZ reproduces the registered predictions debbce39 68/68 (exit, stdout, stderr). Scores (32684f81e / G3 tip / merge, of Java-valid): CZ 24/51/51 of 68, CN 8/38/38 of 46, CG 1/6/6 of 6, CQ 0/7/7 of 7, CR 0/13/13 of 14, CX 3/11/11 of 14. G6 cohorts are byte-identical to 32684f81e in every case: CH 13/1/13 of 17 valid (20 cases, 3 Java crash pages), CM 15/4/15 of 40 valid (48 cases, 6 exit-0 crash pages and 2 exit 200), CS 25/3/25 of 25, CU 7/2/7 of 13 valid (18 cases, 5 exit-0 crash pages). G2 grok-g2-checker-heldout: 0/0/0 of 28 whole-SVG, as the G2 checker recorded; 10 stdouts change against 32684f81e (G3 family resolution) with no element-level loss.",
+    "Gates at the merge: golden_no_oracle pass; golden_pairs and parity_perturbations fail exactly as at 32684f81e (above); pipe_mode 17/17; doc_claims 2/2; workspace lib layout 41, math 10, oracle 31, parser 665, render 874 + 1 ignored, 0 failed (render #[test] count 875 = 863 at 505999cac + 6 + 6). Clippy warning sets identical per crate at all three trees (render 21, parser 1, layout 1, math 0, oracle 21, rustuml 20). harness_guards by category: see harness finding.",
+    "harness_guards by category at the merge, with these records in place: comparator_constants_frozen, no_golden_data_embedded_in_shipping_crates, no_label_keyed_width_constants, error_golden_census_is_frozen and parity_review_paths_reject_traversal pass, as at 32684f81e. decimal_literal_ratchet fails with the identical five-line listing to 32684f81e. parity_review_records_are_complete fails with 2,684 violation lines at both 32684f81e and the merge, as identical sorted sets: this record adds 0 lines and none names menlo-font-name or menlo-bold-italic-fallback. Without review-3 the merge would add lines here, because menlo-font-name/review-2.json is rejected and names failing pairs."
+  ],
+  "verdict": "accepted",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bi_jcaron.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bi_jcaron.svg",
+      "axes": [
+        "JRS fallback Monaco advance (U+01F0)"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_fb_menlo_bi_jcaron",
+      "source_sha256": "939366aff396541efef134db108f2010ff29f60fed2336e54419d2b79bb07a4f",
+      "golden_sha256": "0340ae57d5c9f4198e509d33efeb764fb70c85bf2b2c9ffd6a32603d190bd106",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bi_ncap.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bi_ncap.svg",
+      "axes": [
+        "JRS fallback Monaco advance (U+0220)"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_fb_menlo_bi_ncap",
+      "source_sha256": "6ad797021cf5eb8a65e60472c4842a8600398a84f50e8fccbc267d7b1c007466",
+      "golden_sha256": "f0ca0174a52bd1115a00ea8d552eaae32ccbf2e503ce9b4af5c62627435eb689",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bi_cloud.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bi_cloud.svg",
+      "axes": [
+        "JRS fallback Hiragino advance (U+2602)"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_fb_menlo_bi_cloud",
+      "source_sha256": "2e6b0168cb5c8acfdd16b29ce3a534eef393e77210356b467eef5b0fe5ef73fe",
+      "golden_sha256": "974e34db0f1fb29ce804ea5dc2aa972b77b52b8f2bbe75f84957172bea94c665",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bold_cloud.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fb_menlo_bold_cloud.svg",
+      "axes": [
+        "Menlo Bold owns the glyph: no fallback"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_fb_menlo_bold_cloud",
+      "source_sha256": "5999dc62421a153bb429f163550ff59270e3ba3da3c97a010875a5803728ea75",
+      "golden_sha256": "795189f3c770fc28bff0cedc802abc3cb063ef7e64600a69ad5568df257ea43d",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fs_class_bolditalic.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fs_class_bolditalic.svg",
+      "axes": [
+        "asFontFace bolditalic is normal"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_fs_class_bolditalic",
+      "source_sha256": "518e7b1e6ab7dc7b22382037eea06c0398cdf4441fbfb88e58b9014bba6493fa",
+      "golden_sha256": "ce570963238290ad170887ee884ff5080703835196048c7dbb8f0ce8e3d6c08d",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fs_class_mixed_bi.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fs_class_mixed_bi.svg",
+      "axes": [
+        "asFontFace BoldItalic, case"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_fs_class_mixed_bi",
+      "source_sha256": "ed9750676cd2d6b9c09ebf7897c2f8c72492aca987ac98a1c9c0711a05869ac3",
+      "golden_sha256": "0ae74857b7a7db4418467f475de54932c141d700582111a6baf32cc2cfb15a76",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    },
+    {
+      "source": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fs_class_css700.puml",
+      "golden": "test-diagrams/perturbations/menlo-bold-italic-fallback/opus2_fs_class_css700.svg",
+      "axes": [
+        "asFontFace CSS weight 700"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "pre_packet_match": false,
+      "heldout": "CZ g3r2_fs_class_css700",
+      "source_sha256": "05bc189b1ff8b1f6d16c2f9056dff4ee627fe34efc614b481d3a2291ba35a90a",
+      "golden_sha256": "945c661a6dff8ee984a1fc200767f6d44ee47dbff0c1babbed608ddab5c6b56f",
+      "origin": "carried from review-2.json (4761d217b), re-measured on 6484bb7e0",
+      "parity_recovery_match": false,
+      "g3_tip_match": true,
+      "merge_match": true
+    }
+  ]
+}
