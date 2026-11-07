@@ -1,0 +1,414 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-link-labels",
+  "account_commit": "1bae6576943381bc7eb4a5ddb53f8745372725a3",
+  "implementation_commit": "a40e77c91df5953f9a1170c4453b03ffa91ca8dc",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewed_at": "2026-11-07T13:10:00+1100",
+  "reviewer": {
+    "task_id": "opus-g4-integ",
+    "model": "claude-opus-5-5",
+    "role": "independent checker of the integration merge (after rejection 02e4fdad3f06801a82c409bae77856cfba4af693)"
+  },
+  "packet": {
+    "integration_commit": "a40e77c91df5953f9a1170c4453b03ffa91ca8dc",
+    "integration_branch": "integ/g4-links",
+    "first_parent": "d86ac8befc00e8ec037f3af3143b728ddba66c1a",
+    "merged_side": "02e4fdad3f06801a82c409bae77856cfba4af693",
+    "g4_code_tip": "50218c8059ba111adb410222250db4a9aa856b63",
+    "merge_base": "9fb2e52a6932442b80937a7cf206ba53ee3cd901",
+    "automatic_merge_tree": "24b476ab9590b244d8def2492031dd97a98ea626",
+    "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a"
+  },
+  "binaries": {
+    "base": {
+      "commit": "d86ac8befc00e8ec037f3af3143b728ddba66c1a",
+      "sha256": "c8942fb42e27df5903d679c2ba58411c8a6350d593131106fece85ef4dd7910b"
+    },
+    "g4": {
+      "commit": "50218c8059ba111adb410222250db4a9aa856b63",
+      "sha256": "9abd435be9557cb416f0eaacb900f96487b6c451f48f8a675da0241889ad6cb2"
+    },
+    "merge": {
+      "commit": "a40e77c91df5953f9a1170c4453b03ffa91ca8dc",
+      "sha256": "09195f67b9f56bbabb00886fcb09c9c6cd16fb13ff9385e0ab6f54faddc788fc"
+    },
+    "note": "base and g4 built from git archive in ~/Library/Caches/rustuml-opus-g4-integ/src/<commit>; merge built from the review checkout. Each tree had its own CARGO_TARGET_DIR."
+  },
+  "verdict": "accepted",
+  "accept_ready": true,
+  "commands": [
+    "git merge-tree --write-tree d86ac8bef 02e4fdad3   (clean, tree 24b476ab9); git diff 24b476ab9 a40e77c91",
+    "git archive <commit> | tar -x; CARGO_TARGET_DIR=<private> cargo build --offline --release -p rustuml --bin rustuml   (d86ac8bef, 50218c805, a40e77c91)",
+    "python3 -I checker-opus-3/scripts/sweep3.py test-diagrams/golden <out> opus-score base=<d86> g4=<50218c805> merge=<a40e77c91>   (rustuml -pipe -tsvg, cwd = .puml dir; compare_svg_strict whole output)",
+    "python3 -I checker-opus-3/scripts/sweep3.py test-diagrams/perturbations <out> opus-score base=... g4=... merge=...",
+    "python3 -I checker-opus-3/scripts/materialize.py <relay> <dir>; render.py <manifest> <out> base= g4= merge= --cwd <src>; score.py <reference-results.json> <out> <score.json> base g4 merge; compare_cohorts.py <relay-root> <cohort-root> <summary> <cohort>=<reference label>",
+    "cargo test --offline --release -p rustuml-oracle --test golden_no_oracle   (merge and d86ac8bef; diff test-diagrams/no_oracle_failure_names.txt)",
+    "cargo test --offline --release -p rustuml-oracle --test golden_pairs -- --nocapture   (merge and d86ac8bef; diff golden_failure_names.txt and golden_ulp_candidates.txt)",
+    "cargo test --offline --release -p rustuml-oracle --test parity_perturbations -- --nocapture   (merge and d86ac8bef; failure-name diff)",
+    "cargo test --offline --release -p rustuml-oracle --test harness_guards --test doc_claims   (merge and d86ac8bef; per-category diff)",
+    "cargo test --offline --release -p rustuml --test pipe_mode",
+    "cargo test --offline --release --workspace --lib",
+    "cargo clippy --offline --release -p <crate> --all-targets --message-format=short -- -W clippy::all   (parser, render, layout, rustuml, oracle; merge and d86ac8bef)"
+  ],
+  "findings": [
+    "ACCEPTED. Accept-ready for local merge into parity-recovery. The merge loses nothing either parent had, drops no behaviour, and the clippy fix is behaviour-preserving. er/er_ecommerce_schema (strict DIFF 99 at d86ac8bef, DIFF 100 at the G4 tip and the merge) is declared residue, as the owner's net-positive rule allows; it was already failing at both parents.",
+    "Commit shape. a40e77c91 has one parent (d86ac8bef); it is a squash of merging 02e4fdad3, not a two-parent merge commit. git merge-tree --write-tree d86ac8bef 02e4fdad3 is clean (tree 24b476ab9), and no file is touched by both sides since merge base 9fb2e52a6. a40e77c91 differs from that automatic tree only in parse/class.rs (2 lines) and render/class.rs (+2/-1). Every other touched file is byte-identical to one side: parse/class.rs, render/class.rs, diagram/class.rs, ascii_class.rs, layout/graph.rs, main.rs, doc_claims.rs, README, STABILITY and the vendored rustuml_helpers.{c,h} come from the G4 side; creole.rs, text_render.rs, face_cmap_tables.rs and the tools/font-chain-reference tables come from parity-recovery. Neither side touched the other's files, so function by function each function is exactly one parent's.",
+    "Clippy fix. protect_creole_links: std::iter::repeat('\\u{E000}').take(full.len()) became std::iter::repeat_n('\\u{E000}', full.len()). That is the same iterator, still full.len() (bytes) copies of U+E000. restore_creole_links: std::iter::repeat('\\u{E000}').take(token.len()).collect::<String>() became \"\\u{E000}\".repeat(token.len()). The literal is one char, so it is the same token.len()-char placeholder, and replace_range still spans placeholder.len() bytes. The PlacedRow alias names the identical tuple type. Empirically, across all 12,550 goldens, the merge's CLI output is byte-identical to the G4 tip's (50218c805), and so is every case of the 5 G4 cohorts. Clippy per crate is identical, diagnostic for diagnostic, to d86ac8bef: parser 1, render 20, layout 1, rustuml 0, oracle 1. The 4 warnings from 50cec1dd1 are gone. The commit message's 'parser+render 21 -> 20' reads as the G4 tip's render count against the merge's; the merge's parser+render total is 21, equal to d86ac8bef.",
+    "Goldens (CLI, compare_svg_strict, whole output; 12,550). Strict MATCH: d86ac8bef 11,179, G4 tip 11,180, merge 11,180. No panics or timeouts. Merge against d86ac8bef: 6 change bytes. splines_multilevel_inheritance goes from DIFF 1 to MATCH; splines_self_reference_ortho improves from DIFF 10 to DIFF 1; er_financial (45), er_healthcare (54) and er_hr (158) keep their counts; er_ecommerce_schema worsens from DIFF 99 to DIFF 100. Merge against the G4 tip: 0 change bytes. No golden that passes at either parent fails at the merge.",
+    "Residue: er/er_ecommerce_schema. It is the only golden or perturbation that moves the wrong way. It fails at d86ac8bef (strict DIFF 99, in both the no-oracle and golden_pairs failure lists, park candidate 34.0) and at the G4 tip (DIFF 100). The merge reproduces the G4 tip: canvas width 1105 (Java 1035, base 1036), driven by the 'parent of' xlabel at x 1027.19 (Java 753.38). Rust's ortho self-loop goes round the right of Category, where Java's goes round the left. The xlabel port is faithful to SvekEdge.appendLine; the defect is the self-loop route. The golden_pairs max deviation (34.0) and its failure membership are unchanged. Held as residue pending the ortho self-loop route target.",
+    "golden_no_oracle passes on both trees. Failure names: 70 at d86ac8bef and 69 at the merge. The only difference is the removal of rendering/splines/splines_multilevel_inheritance. The merge's list is byte-identical to the G4 tip list recorded by checker-opus-2. golden_pairs: 10,497 passed, 754 failed and 1,299 skipped on both trees. It fails the same way on both (pre-existing); the failure names and golden_ulp_candidates.txt are byte-identical.",
+    "Perturbations. In the CLI sweep of the merge's corpus (6,408), strict MATCH is 3,725 at d86ac8bef, 3,708 at the G4 tip and 3,771 at the merge. Lost against d86ac8bef: 0. Lost against the G4 tip: 0. Merge output differs from both parents: 0 cases. Gained against d86ac8bef: 46 (27 class-link-labels, 19 tim-builtin c9a_af/c11a_fc_kcls). Gained against the G4 tip: 63 (G2/G6 families plus TIM). The parity_perturbations gate fails as before (pre-existing). Failure names fall from 2,662 at d86ac8bef to 2,643 at the merge: 0 merge-only names, and 19 base-only names, all tim-builtin round9/round11. Against checker-opus-2's G4-tip gate names, no case in the G4 tip's corpus fails at the merge and passed at the G4 tip. The 4 panics (shared-svg-corrective astra dash_01/03/06/07, parse/class.rs:285) occur on all three binaries.",
+    "G4 cohorts (strict, Java-valid only; invalid means exit 100/200 or an exit-0 crash page or stderr): DA grok-g4-recheck-heldout 25/55 (G4 tip 25, d86 3); CO grok-g4-checker-heldout 75/94 (75, 13); CK grok-g4-class-link 13/13 (13, 1); CT grok-g4-ct 45/46 (45, 0); CY grok-g4-cy 4/4 (4, 0). The merge equals the G4 tip byte for byte in stdout, stderr and exit on all 243 cases.",
+    "G1/G6/G2 cohorts: G1 grok-g1-checker-heldout 37/41; G6 grok-g6-creole 13/17; grok-g6-checker-heldout 15/40; grok-g6-cs 25/25; grok-g6-recheck-heldout 7/13; G2 grok-g2-checker-heldout 0/28 under compare_svg_strict (d86ac8bef also 0/28; the G2 packet was accepted on advance measurements). Each equals d86ac8bef byte for byte, with one exception: 2 g6r3_invalid_utf8_* cases panic at main.rs:91 (invalid UTF-8 stdin, pre-existing, target e57da91c6) on all binaries, and their stderr differs only in the thread id. The G4 tip drops to 1, 4, 3 and 2 on the G6 cohorts, so the G6 behaviour in the merge comes from parity-recovery and is intact. Java-invalid cases excluded: CO 6 and CT 24 (exit 200); DA 1 (g4r2_trail_bs, exit 100); G6 creole 3, checker 8 and recheck 5 (exit-0 error pages, or exit 200).",
+    "Gates on the merge tree: golden_no_oracle pass; golden_pairs 10,497/754/1,299 (fails identically at d86ac8bef); parity_perturbations 2,643 failures (fails at d86ac8bef with 2,662); pipe_mode 17/17; doc_claims 2/2; workspace lib all pass (layout 41, math 10, oracle 31, parser 667, render 869 with 1 ignored). harness_guards by category, against d86ac8bef: comparator_constants_frozen, no_golden_data_embedded_in_shipping_crates, no_label_keyed_width_constants, error_golden_census_is_frozen and parity_review_paths_reject_traversal pass on both. decimal_literal_ratchet fails identically on both (class 383->578, deployment 43->44, plantuml_metrics 1053->1055, state 53->61, text_render 51->68). Before this record, parity_review_records_are_complete had exactly one merge-only message: class-link-labels/review-2.json 'latest checker review must be accepted'. This accepted review-3 answers it.",
+    "Residue not decided by any oracle here: there is no Java evidence for inputs that combine G4 link labels with G2's Helvetica and cmap advances or G6 character references (for example a non-ASCII or &#...; link label in Helvetica). No cohort exercises both sides, and no shared file means no textual conflict, but the composed behaviour is unmeasured. Still open from checker-opus-2: integer triSize/2 in TextBlockArrow2, UrlBuilder.getUrl for link segments, ortho TB xlabel x inside nested packages, #--/x--/+-- decorations, trailing-backslash continuation, and literal <code> in link labels."
+  ],
+  "declared_residue": [
+    {
+      "golden": "test-diagrams/golden/er/er_ecommerce_schema.puml",
+      "strict_before": "DIFF 99 (d86ac8bef)",
+      "strict_after": "DIFF 100 (50218c805 and a40e77c91)",
+      "failing_at_both_parents": true,
+      "cause": "Rust ortho self-loop routes right of Category; Java routes left. The faithful SvekEdge.appendLine xlabel follows Rust's route (x 1027.19 against Java 753.38) and sets canvas width 1105 against 1035.",
+      "disposition": "held under the owner's net-positive merge rule; the parent files a target for the ortho self-loop route"
+    }
+  ],
+  "proposed_targets": [
+    "Ortho self-loops route as Java's dot ortho does, so the self-loop xlabel lands on Java's side. Witnesses: er/er_ecommerce_schema 'parent of' (Java x 753.38, canvas 1035) and DA g4r2_self_dl_cc_lr (canvas 145 against 135), plus a held-out renamed self-loop in LR and TB.",
+    "Combined-mechanism held-out batch: class link labels with non-ASCII text under Helvetica and Verdana, and with Creole character references (&#...; and <U+...>), scored against Java, so G4 x G2/G6 composition has evidence."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_sz15_nl.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_sz15_nl.svg",
+      "result": "pass",
+      "axes": [
+        "newline",
+        "font-size-15"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_fs_bi_token.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_fs_bi_token.svg",
+      "result": "pass",
+      "axes": [
+        "arrow-font-style",
+        "bold-italic-token"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_st_skin.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_st_skin.svg",
+      "result": "pass",
+      "axes": [
+        "stereotype",
+        "skinparam"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_q_both.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_q_both.svg",
+      "result": "pass",
+      "axes": [
+        "quantifier",
+        "both-ends"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_ortho_tb_nl3.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_ortho_tb_nl3.svg",
+      "result": "pass",
+      "axes": [
+        "ortho-xlabel",
+        "multiline"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_ortho_cc_dl.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_ortho_cc_dl.svg",
+      "result": "pass",
+      "axes": [
+        "ortho-xlabel",
+        "circle-crowfoot-to-double-line"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_magic_sz11.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_magic_sz11.svg",
+      "result": "pass",
+      "axes": [
+        "magic-arrow",
+        "font-size-11"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_st_dir_up.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_st_dir_up.svg",
+      "result": "pass",
+      "axes": [
+        "stereotype",
+        "direction-keyword"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_four_then_break.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_four_then_break.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "four-backslashes",
+        "then-real-newline"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_three_bs.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_three_bs.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "three-backslashes"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_tab_then_align.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_tab_then_align.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "tab",
+        "align-right",
+        "align-left"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_mono_split.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_mono_split.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "mono",
+        "newline-inside"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_url_label_nl.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_url_label_nl.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "url",
+        "newline-in-label",
+        "neighbors"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_url_multibar_nl.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_url_multibar_nl.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "url",
+        "bar",
+        "multiple",
+        "newline-in-label"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_tip_bar_nl.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_tip_bar_nl.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "url",
+        "tooltip",
+        "bar",
+        "newline-in-tooltip"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_roles_align.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_roles_align.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "role",
+        "align-right",
+        "align-left"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_quant_esc.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_quant_esc.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "quantifier",
+        "literal-backslash-n",
+        "tab"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_stereo_nl.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_stereo_nl.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "stereotype",
+        "newline"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_stereo_lit.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_stereo_lit.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "stereotype",
+        "literal-backslash-n",
+        "newline"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_esc_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_esc_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "double-line",
+        "circle-crowfoot",
+        "escaped-newline"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_flat_dl_cc_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_flat_dl_cc_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "double-line",
+        "circle-crowfoot",
+        "flat"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_flat_cc_dl_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_flat_cc_dl_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "circle-crowfoot",
+        "double-line",
+        "flat"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_nest_dl_cc_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_nest_dl_cc_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "double-line",
+        "circle-crowfoot",
+        "nested",
+        "three-line"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_nest_cc_dl_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_nest_cc_dl_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "circle-crowfoot",
+        "double-line",
+        "nested",
+        "three-line"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_ext_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_ext_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "<|--",
+        "nested",
+        "three-line"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_comp_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_comp_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "*--",
+        "nested",
+        "three-line"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_dep_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_dep_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "..>",
+        "nested",
+        "three-line"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_real_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_real_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "<|..",
+        "nested",
+        "three-line"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_note.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_note.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "note",
+        "newline"
+      ]
+    }
+  ]
+}

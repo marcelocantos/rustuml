@@ -1,0 +1,267 @@
+{
+ "grok-g1-checker-heldout": {
+  "cases": 41,
+  "java_invalid": {},
+  "java_valid": 41,
+  "merge_lost_vs_ref": [],
+  "merge_vs_ref_byte_or_exit_or_stderr_differs": [],
+  "merge_worse_vs_ref": [],
+  "panics": {
+   "base": 0,
+   "g4": 0,
+   "merge": 0
+  },
+  "reference_label": "base",
+  "strict_match": {
+   "base": 37,
+   "g4": 37,
+   "merge": 37
+  }
+ },
+ "grok-g2-checker-heldout": {
+  "cases": 28,
+  "java_invalid": {},
+  "java_valid": 28,
+  "merge_lost_vs_ref": [],
+  "merge_vs_ref_byte_or_exit_or_stderr_differs": [],
+  "merge_worse_vs_ref": [],
+  "panics": {
+   "base": 0,
+   "g4": 0,
+   "merge": 0
+  },
+  "reference_label": "base",
+  "strict_match": {
+   "base": 0,
+   "g4": 0,
+   "merge": 0
+  }
+ },
+ "grok-g4-checker-heldout": {
+  "cases": 100,
+  "java_invalid": {
+   "g4k_q_card_stereo": "exit 200",
+   "g4k_q_empty": "exit 200",
+   "g4k_st_space": "exit 200",
+   "g4k_st_style": "exit 200",
+   "g4k_st_two": "exit 200",
+   "g4k_st_two_tight": "exit 200"
+  },
+  "java_valid": 94,
+  "merge_lost_vs_ref": [],
+  "merge_vs_ref_byte_or_exit_or_stderr_differs": [],
+  "merge_worse_vs_ref": [],
+  "panics": {
+   "base": 0,
+   "g4": 0,
+   "merge": 0
+  },
+  "reference_label": "g4",
+  "strict_match": {
+   "base": 13,
+   "g4": 75,
+   "merge": 75
+  }
+ },
+ "grok-g4-class-link": {
+  "cases": 13,
+  "java_invalid": {},
+  "java_valid": 13,
+  "merge_lost_vs_ref": [],
+  "merge_vs_ref_byte_or_exit_or_stderr_differs": [],
+  "merge_worse_vs_ref": [],
+  "panics": {
+   "base": 0,
+   "g4": 0,
+   "merge": 0
+  },
+  "reference_label": "g4",
+  "strict_match": {
+   "base": 1,
+   "g4": 13,
+   "merge": 13
+  }
+ },
+ "grok-g4-ct": {
+  "cases": 70,
+  "java_invalid": {
+   "g4f_ortho_lr_lb_dl": "exit 200",
+   "g4f_ortho_lr_lb_lb": "exit 200",
+   "g4f_ortho_lr_lb_ob": "exit 200",
+   "g4f_ortho_lr_lb_ol": "exit 200",
+   "g4f_ortho_lr_ob_dl": "exit 200",
+   "g4f_ortho_lr_ob_lb": "exit 200",
+   "g4f_ortho_lr_ob_ob": "exit 200",
+   "g4f_ortho_lr_ob_ol": "exit 200",
+   "g4f_ortho_lr_ol_dl": "exit 200",
+   "g4f_ortho_lr_ol_lb": "exit 200",
+   "g4f_ortho_lr_ol_ob": "exit 200",
+   "g4f_ortho_lr_ol_ol": "exit 200",
+   "g4f_ortho_tb_lb_dl": "exit 200",
+   "g4f_ortho_tb_lb_lb": "exit 200",
+   "g4f_ortho_tb_lb_ob": "exit 200",
+   "g4f_ortho_tb_lb_ol": "exit 200",
+   "g4f_ortho_tb_ob_dl": "exit 200",
+   "g4f_ortho_tb_ob_lb": "exit 200",
+   "g4f_ortho_tb_ob_ob": "exit 200",
+   "g4f_ortho_tb_ob_ol": "exit 200",
+   "g4f_ortho_tb_ol_dl": "exit 200",
+   "g4f_ortho_tb_ol_lb": "exit 200",
+   "g4f_ortho_tb_ol_ob": "exit 200",
+   "g4f_ortho_tb_ol_ol": "exit 200"
+  },
+  "java_valid": 46,
+  "merge_lost_vs_ref": [],
+  "merge_vs_ref_byte_or_exit_or_stderr_differs": [],
+  "merge_worse_vs_ref": [],
+  "panics": {
+   "base": 0,
+   "g4": 0,
+   "merge": 0
+  },
+  "reference_label": "g4",
+  "strict_match": {
+   "base": 0,
+   "g4": 45,
+   "merge": 45
+  }
+ },
+ "grok-g4-cy": {
+  "cases": 4,
+  "java_invalid": {},
+  "java_valid": 4,
+  "merge_lost_vs_ref": [],
+  "merge_vs_ref_byte_or_exit_or_stderr_differs": [],
+  "merge_worse_vs_ref": [],
+  "panics": {
+   "base": 0,
+   "g4": 0,
+   "merge": 0
+  },
+  "reference_label": "g4",
+  "strict_match": {
+   "base": 0,
+   "g4": 4,
+   "merge": 4
+  }
+ },
+ "grok-g4-recheck-heldout": {
+  "cases": 56,
+  "java_invalid": {
+   "g4r2_trail_bs": "exit 100"
+  },
+  "java_valid": 55,
+  "merge_lost_vs_ref": [],
+  "merge_vs_ref_byte_or_exit_or_stderr_differs": [],
+  "merge_worse_vs_ref": [],
+  "panics": {
+   "base": 0,
+   "g4": 0,
+   "merge": 0
+  },
+  "reference_label": "g4",
+  "strict_match": {
+   "base": 3,
+   "g4": 25,
+   "merge": 25
+  }
+ },
+ "grok-g6-checker-heldout": {
+  "cases": 48,
+  "java_invalid": {
+   "ckg6_amp_above_unicode": "exit 0 crash/error page or stderr",
+   "ckg6_amp_backslash": "exit 0 crash/error page or stderr",
+   "ckg6_amp_dollar": "exit 0 crash/error page or stderr",
+   "ckg6_amp_nul": "exit 0 crash/error page or stderr",
+   "ckg6_amp_surrogate": "exit 0 crash/error page or stderr",
+   "ckg6_img_object": "exit 200",
+   "ckg6_img_salt": "exit 0 crash/error page or stderr",
+   "ckg6_img_timing": "exit 200"
+  },
+  "java_valid": 40,
+  "merge_lost_vs_ref": [],
+  "merge_vs_ref_byte_or_exit_or_stderr_differs": [],
+  "merge_worse_vs_ref": [],
+  "panics": {
+   "base": 0,
+   "g4": 0,
+   "merge": 0
+  },
+  "reference_label": "base",
+  "strict_match": {
+   "base": 15,
+   "g4": 4,
+   "merge": 15
+  }
+ },
+ "grok-g6-creole": {
+  "cases": 20,
+  "java_invalid": {
+   "ref_invalid_amp_dollar": "exit 0 crash/error page or stderr",
+   "ref_invalid_uplus_nul": "exit 0 crash/error page or stderr",
+   "ref_invalid_uplus_surrogate": "exit 0 crash/error page or stderr"
+  },
+  "java_valid": 17,
+  "merge_lost_vs_ref": [],
+  "merge_vs_ref_byte_or_exit_or_stderr_differs": [],
+  "merge_worse_vs_ref": [],
+  "panics": {
+   "base": 0,
+   "g4": 0,
+   "merge": 0
+  },
+  "reference_label": "base",
+  "strict_match": {
+   "base": 13,
+   "g4": 1,
+   "merge": 13
+  }
+ },
+ "grok-g6-cs": {
+  "cases": 25,
+  "java_invalid": {},
+  "java_valid": 25,
+  "merge_lost_vs_ref": [],
+  "merge_vs_ref_byte_or_exit_or_stderr_differs": [],
+  "merge_worse_vs_ref": [],
+  "panics": {
+   "base": 0,
+   "g4": 0,
+   "merge": 0
+  },
+  "reference_label": "base",
+  "strict_match": {
+   "base": 25,
+   "g4": 3,
+   "merge": 25
+  }
+ },
+ "grok-g6-recheck-heldout": {
+  "cases": 18,
+  "java_invalid": {
+   "g6r3_d800_beside_last": "exit 0 crash/error page or stderr",
+   "g6r3_dollar_aborts": "exit 0 crash/error page or stderr",
+   "g6r3_high_then_ref": "exit 0 crash/error page or stderr",
+   "g6r3_low_then_escape_ref": "exit 0 crash/error page or stderr",
+   "g6r3_ref_then_low": "exit 0 crash/error page or stderr"
+  },
+  "java_valid": 13,
+  "merge_lost_vs_ref": [],
+  "merge_vs_ref_byte_or_exit_or_stderr_differs": [
+   "g6r3_invalid_utf8_high",
+   "g6r3_invalid_utf8_low_beside_ref"
+  ],
+  "merge_worse_vs_ref": [],
+  "panics": {
+   "base": 2,
+   "g4": 2,
+   "merge": 2
+  },
+  "reference_label": "base",
+  "strict_match": {
+   "base": 7,
+   "g4": 2,
+   "merge": 7
+  }
+ }
+}

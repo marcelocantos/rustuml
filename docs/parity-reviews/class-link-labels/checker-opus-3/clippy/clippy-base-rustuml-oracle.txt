@@ -1,0 +1,1 @@
+crates/rustuml-oracle/src/matrix/activity.rs: warning: useless use of `format!`: help: consider using `.to_string()`: `"Action 1".to_string()`

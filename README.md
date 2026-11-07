@@ -7,7 +7,7 @@ JVM, no Graphviz, no external fonts.
 ## Status
 
 Pre-release. 23 parsed diagram models are supported, but release-readiness
-claims are based on the no-oracle product tier: 11,181/11,251 eligible SVG
+claims are based on the no-oracle product tier: 11,182/11,251 eligible SVG
 goldens currently pass when rendered through the same path as the CLI (99.4%).
 The strict oracle-assisted tier passes 11,130/11,251 eligible SVG goldens and
 remains a regression net, not the headline product metric. The 1,199 Java

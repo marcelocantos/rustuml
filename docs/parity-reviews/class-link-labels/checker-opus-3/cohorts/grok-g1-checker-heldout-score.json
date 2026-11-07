@@ -1,0 +1,740 @@
+{
+ "g1ck_a_size18": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_ab_control": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_ab_word": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_alias_a": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_arrow_a": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_attr_vs_title": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_block_bold": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_bold": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_bold_italic_keyword": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_bold_pragma": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_composite": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_concurrent": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_creole_b": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 2"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 2"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 2"
+  }
+ },
+ "g1ck_creole_plain": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_creole_wiki": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 3"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 3"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 3"
+  }
+ },
+ "g1ck_default_fontname": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_default_fontstyle": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_desc_is_a": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_desc_note": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_fontweight": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 4"
+  }
+ },
+ "g1ck_fullwidth": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_hash_bold": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 2"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 2"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "DIFF 2"
+  }
+ },
+ "g1ck_italic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_letter_c": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_letter_m": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_letter_q": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_lower_a": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_mixed_fontname": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_mixed_label": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_punct": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_quebec": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_quoted_font": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_sans_bold": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_size11": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_size23_italic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_size9_italic": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_stereo": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_style_fontname": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_tokyo": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_word_apex": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ },
+ "g1ck_word_bramble": {
+  "base": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "g4": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  },
+  "java_exit": 0,
+  "merge": {
+   "bytes_equal": false,
+   "exit": 0,
+   "strict": "MATCH"
+  }
+ }
+}

@@ -247,10 +247,9 @@ const ORTHO_XLABEL_VERTICAL_INSET: f64 = 5.0;
 // `ExtremityCircleCrowfoot`. The values are stable across renamed labels,
 // package depths, and chains of 2-9 nodes.
 const ORTHO_ER_VERTICAL_ROUTE_DELTAS: [f64; 4] = [-0.045, -0.075, -0.145, -0.155];
-/// Java `TextBlockArrow2` reserves one font-size square before the label. Its
-/// triangle size is `(int)(fontSize * .80)`, hence 10px at the 13px arrow font.
-const LINK_ARROW_BLOCK_SIZE: f64 = RELATIONSHIP_LABEL_FONT_SIZE;
-const LINK_ARROW_TRIANGLE_SIZE: f64 = 10.0;
+/// `TextBlockArrow2` (57–63) reserves a square of `font.getSize2D()` and draws
+/// a triangle of `(int)(size * .80)`. At the builtin 13px arrow font that
+/// triangle is 10. The resolved font size is applied at the call site.
 /// `SvekResult.drawU` normalises a label-bearing SVEK envelope at x=6 rather
 /// than the ordinary entity margin at x=7.
 const SVEK_LABEL_ENVELOPE_MARGIN: f64 = 6.0;
@@ -2499,27 +2498,31 @@ fn render_with_oracle_uid_origin(
             layout.add_plantuml_svek_line0_edge(&from, &to);
             layout.add_same_rank(&from, &to);
         }
-        // Java `SvekEdge.appendDotString` sends center labels through
-        // Graphviz's `xlabel` channel for `DotSplines.ORTHO`, so they do not
-        // reserve rank space.
+        // Java `SvekEdge.appendLine` sends every orthogonal center label as
+        // `xlabel`. The double-line / circle-crowfoot spline is rewritten only
+        // when the solved route is vertical; that decision is made after dot
+        // returns (`normalize_ortho_er_vertical_route`).
         let note = relationship_note_indices[rel_idx].map(|idx| &diagram.notes[idx]);
-        let label_size = (!uses_ortho_labels)
-            .then(|| relationship_center_layout(diagram, rel, note, &diagram.meta.sprites))
-            .flatten()
-            .map(|center| EdgeLabelSize {
-                width: center.width,
-                height: center.height,
+        let label_size =
+            relationship_center_layout(diagram, rel, note, &diagram.meta.sprites).map(|center| {
+                EdgeLabelSize {
+                    width: center.width,
+                    height: center.height,
+                }
             });
+        let cardinality_font =
+            relationship_label_font(&relationship_cardinality_style(diagram, rel));
         let endpoint_size = |label: Option<&str>| {
             label.map(|label| {
-                let (width, height) = relationship_endpoint_label_dimensions(label);
+                let (width, height) =
+                    relationship_endpoint_label_dimensions(label, &cardinality_font);
                 EdgeLabelSize {
                     width: width.floor(),
                     height: height.floor(),
                 }
             })
         };
-        layout.add_edge_with_label_sizes_and_minlen(
+        let edge_index = layout.add_edge_with_label_sizes_and_minlen(
             &from,
             &to,
             label_size,
@@ -2527,6 +2530,9 @@ fn render_with_oracle_uid_origin(
             endpoint_size(rel.to_multiplicity.as_deref()),
             Some(rel.length.saturating_sub(1)),
         );
+        if uses_ortho_labels && label_size.is_some() {
+            layout.set_center_label_xlabel(edge_index);
+        }
     }
     // Java `CucaDiagram.applySingleStrategy` appends Magma/SquareMaker links
     // after the source relationships. `DotStringFactory` still promotes its
@@ -5088,6 +5094,9 @@ fn render_plantuml_svg(
                 continue;
             };
             if relationship_has_center_label(relationship) {
+                // `LimitFinder` includes the painted label block. A horizontal
+                // ortho xlabel sits below the classes, so the block's bottom
+                // can extend the canvas (`SvekResult.calculateDimension`).
                 max_x = max_x.max(
                     position.x
                         + MARGIN
@@ -5095,6 +5104,7 @@ fn render_plantuml_svg(
                         + (center.width - center.label_width) / 2.0
                         + center.label_width,
                 );
+                max_y = max_y.max(position.y + MARGIN + center.label_height);
             }
             if note.is_some() {
                 let note_x =
@@ -11554,7 +11564,13 @@ fn render_relationship_svg(
         .property("fontColor")
         .map(crate::sequence::resolve_color)
         .unwrap_or_else(|| "#000000".to_string());
-    let (arrow_font_family, arrow_font_size) = relationship_label_font(&arrow_style);
+    let arrow_font = relationship_label_font(&arrow_style);
+    let cardinality_style = relationship_cardinality_style(diagram, rel);
+    let cardinality_font = relationship_label_font(&cardinality_style);
+    let cardinality_font_color = cardinality_style
+        .property("fontColor")
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| "#000000".to_string());
     let edge_color = rel
         .style
         .color
@@ -11779,6 +11795,71 @@ fn render_relationship_svg(
                       horizontal_margin: f64,
                       fallback: (f64, f64),
                       center_label: bool| {
+        if center_label {
+            // `Display.getWithNewlines` then `create0`: the block's natural
+            // alignment (from `\r` / `\l`) replaces the requested center.
+            let label = label.trim_matches('"');
+            let (lines, align) = relationship_label_display(label);
+            let stripes: Vec<RelationshipLabelStripe> = lines
+                .iter()
+                .map(|line| relationship_label_stripe(line, &arrow_font))
+                .collect();
+            let max_width = stripes
+                .iter()
+                .fold(0.0_f64, |width, stripe| width.max(stripe.width));
+            let origin = position
+                .map(|position| (position.x + MARGIN + horizontal_margin, position.y + MARGIN));
+            let (origin_x, mut line_top) = origin.unwrap_or(fallback);
+            for stripe in &stripes {
+                let x_shift = relationship_label_align_offset(align, max_width, stripe.width);
+                for row in &stripe.rows {
+                    let base = TextBase {
+                        x: origin_x + x_shift + row.x,
+                        y: line_top
+                            + row.y
+                            + text_render::label_ascent_with_family(
+                                &row.markup,
+                                arrow_font.size,
+                                &arrow_font.family,
+                            ),
+                        font_size: arrow_font.size as u32,
+                        font_family: &arrow_font.family,
+                        fill: &arrow_font_color,
+                        bold: arrow_font.bold,
+                        italic: arrow_font.italic,
+                        underline: false,
+                        skip_underline: true,
+                    };
+                    // `SvekEdge` center labels use Creole styling, but preserve
+                    // `__` and neutralize the `""` monospace delimiter.
+                    // A URL or stacked line that contains `|` is drawn directly.
+                    // Creole would treat the bar as the label separator.
+                    if let Some(url) = row.link_url.as_deref() {
+                        let h = crate::svg::escape_attribute(url);
+                        let title =
+                            crate::svg::escape_attribute(&crate::svg::normalize_svg_link_title(
+                                row.link_title.as_deref().unwrap_or(url),
+                            ));
+                        write!(
+                            svg,
+                            r#"<a href="{h}" target="_top" title="{title}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,
+                        )
+                        .unwrap();
+                        let link_base = TextBase {
+                            fill: "#0000FF",
+                            underline: true,
+                            ..base
+                        };
+                        text_render::emit_text_no_mono(svg, &row.markup, &link_base);
+                        svg.push_str("</a>");
+                    } else {
+                        text_render::emit_text_no_mono(svg, &row.markup, &base);
+                    }
+                }
+                line_top += stripe.height;
+            }
+            return;
+        }
         let (x, y) = position
             .map(|position| {
                 (
@@ -11787,8 +11868,8 @@ fn render_relationship_svg(
                         + MARGIN
                         + text_render::label_ascent_with_family(
                             label,
-                            arrow_font_size,
-                            &arrow_font_family,
+                            arrow_font.size,
+                            &arrow_font.family,
                         ),
                 )
             })
@@ -11796,21 +11877,15 @@ fn render_relationship_svg(
         let base = TextBase {
             x,
             y,
-            font_size: arrow_font_size as u32,
-            font_family: &arrow_font_family,
+            font_size: arrow_font.size as u32,
+            font_family: &arrow_font.family,
             fill: &arrow_font_color,
-            bold: false,
-            italic: false,
+            bold: arrow_font.bold,
+            italic: arrow_font.italic,
             underline: false,
-            skip_underline: center_label,
+            skip_underline: false,
         };
-        if center_label {
-            // `SvekEdge` center labels use Creole styling, but preserve `__`
-            // and neutralize the `""` monospace delimiter.
-            text_render::emit_text_no_mono(svg, label.trim_matches('"'), &base);
-        } else {
-            text_render::emit_text(svg, label.trim_matches('"'), &base);
-        }
+        text_render::emit_text(svg, label.trim_matches('"'), &base);
     };
     let emit_endpoint_label = |svg: &mut String,
                                label: &str,
@@ -11818,30 +11893,43 @@ fn render_relationship_svg(
                                horizontal_margin: f64,
                                fallback: (f64, f64)| {
         let mut line_top = position.map_or(fallback.1, |position| position.y + MARGIN);
-        for line in relationship_endpoint_label_lines(label) {
-            let line_width = text_render::measure(line, RELATIONSHIP_LABEL_FONT_SIZE, false);
+        let (lines, align) = relationship_label_display(label);
+        for line in &lines {
+            let line_width = text_render::measure_with_family_and_face(
+                line,
+                cardinality_font.size,
+                cardinality_font.bold,
+                cardinality_font.italic,
+                &cardinality_font.family,
+            );
             let x = position.map_or(fallback.0, |position| {
-                position.x + MARGIN + horizontal_margin + (position.width - line_width) / 2.0
+                position.x
+                    + MARGIN
+                    + horizontal_margin
+                    + relationship_label_align_offset(align, position.width, line_width)
             });
             let base = TextBase {
                 x,
                 y: line_top
                     + text_render::label_ascent_with_family(
                         line,
-                        arrow_font_size,
-                        &arrow_font_family,
+                        cardinality_font.size,
+                        &cardinality_font.family,
                     ),
-                font_size: arrow_font_size as u32,
-                font_family: &arrow_font_family,
-                fill: &arrow_font_color,
-                bold: false,
-                italic: false,
+                font_size: cardinality_font.size as u32,
+                font_family: &cardinality_font.family,
+                fill: &cardinality_font_color,
+                bold: cardinality_font.bold,
+                italic: cardinality_font.italic,
                 underline: false,
                 skip_underline: false,
             };
             text_render::emit_text(svg, line, &base);
-            line_top +=
-                text_render::label_height_with_family(line, arrow_font_size, &arrow_font_family);
+            line_top += text_render::label_height_with_family(
+                line,
+                cardinality_font.size,
+                &cardinality_font.family,
+            );
         }
     };
 
@@ -11861,17 +11949,18 @@ fn render_relationship_svg(
             let content_height = rel
                 .label
                 .as_deref()
-                .map(|label| {
-                    text_render::label_height_with_family(
-                        label,
-                        arrow_font_size,
-                        &arrow_font_family,
-                    )
-                })
+                .map(|label| relationship_label_text_extent(label, &arrow_font).1)
                 .unwrap_or(0.0)
-                .max(LINK_ARROW_BLOCK_SIZE);
-            let block_top = block_y + (content_height - LINK_ARROW_BLOCK_SIZE) / 2.0;
-            emit_link_arrow(svg, rel.label_arrow, &path_points, block_x, block_top);
+                .max(arrow_font.size);
+            let block_top = block_y + (content_height - arrow_font.size) / 2.0;
+            emit_link_arrow(
+                svg,
+                rel.label_arrow,
+                &path_points,
+                block_x,
+                block_top,
+                arrow_font.size,
+            );
         }
         if let Some(label) = rel.label.as_deref() {
             emit_label(
@@ -11882,7 +11971,7 @@ fn render_relationship_svg(
                         + if rel.label_arrow == LinkArrow::None {
                             0.0
                         } else {
-                            LINK_ARROW_BLOCK_SIZE
+                            arrow_font.size
                         },
                     y: position.y + label_margin,
                     width: position.width,
@@ -11984,8 +12073,17 @@ fn endpoint_tangent(
     }
 }
 
-fn emit_link_arrow(svg: &mut String, arrow: LinkArrow, edge_points: &[(f64, f64)], x: f64, y: f64) {
-    let Some([tip, side_a, side_b]) = link_arrow_polygon_points(arrow, edge_points, x, y) else {
+fn emit_link_arrow(
+    svg: &mut String,
+    arrow: LinkArrow,
+    edge_points: &[(f64, f64)],
+    x: f64,
+    y: f64,
+    font_size: f64,
+) {
+    let Some([tip, side_a, side_b]) =
+        link_arrow_polygon_points(arrow, edge_points, x, y, font_size)
+    else {
         return;
     };
     write!(
@@ -12008,6 +12106,7 @@ fn link_arrow_polygon_points(
     edge_points: &[(f64, f64)],
     x: f64,
     y: f64,
+    font_size: f64,
 ) -> Option<[(f64, f64); 3]> {
     let Some((&start, &end)) = edge_points.first().zip(edge_points.last()) else {
         return None;
@@ -12017,10 +12116,11 @@ fn link_arrow_polygon_points(
         direction = scale(direction, -1.0);
     }
 
-    // `TextBlockArrow2.drawU`: translate by (triSize/2, fontSize/2), then
-    // sample the guide angle at 0 and +/- 4*pi/5 radians.
-    let radius = LINK_ARROW_TRIANGLE_SIZE / 2.0;
-    let center = (x + radius, y + RELATIONSHIP_LABEL_FONT_SIZE / 2.0);
+    // `TextBlockArrow2.drawU`: `(int)(size * .80)`, then translate by
+    // (triSize/2, fontSize/2) and sample the guide angle at 0 and +/- 4*pi/5.
+    let triangle = (font_size * 0.80) as i32 as f64;
+    let radius = triangle / 2.0;
+    let center = (x + radius, y + font_size / 2.0);
     let beta = std::f64::consts::PI * 4.0 / 5.0;
     let rotated = |angle: f64| {
         (
@@ -12291,7 +12391,10 @@ fn resolve_endpoint_label_collisions(
             let (Some(position), Some(label)) = (position.as_mut(), label) else {
                 continue;
             };
-            (position.width, position.height) = relationship_endpoint_label_dimensions(label);
+            let font =
+                relationship_label_font(&relationship_cardinality_style(diagram, relationship));
+            (position.width, position.height) =
+                relationship_endpoint_label_dimensions(label, &font);
             for node in nodes {
                 move_label_away_from_node(position, node);
             }
@@ -12542,7 +12645,14 @@ fn relationship_label_arrow_x_bounds(
             0.0
         });
     let visible_path = shortened_endpoint_points(&edge.points, start_length, end_length);
-    let points = link_arrow_polygon_points(relationship.label_arrow, &visible_path, label_x, 0.0)?;
+    let font = relationship_label_font(&relationship_arrow_style(diagram, relationship));
+    let points = link_arrow_polygon_points(
+        relationship.label_arrow,
+        &visible_path,
+        label_x,
+        0.0,
+        font.size,
+    )?;
     let visible = points.into_iter().fold(
         (f64::INFINITY, f64::NEG_INFINITY),
         |(min_x, max_x), point| (min_x.min(point.0), max_x.max(point.0)),
@@ -12751,25 +12861,357 @@ fn relationship_has_center_label(relationship: &Relationship) -> bool {
     relationship.label.is_some() || relationship.label_arrow != LinkArrow::None
 }
 
-/// Java `SvekEdge` builds endpoint quantifiers through
-/// `Display.getWithNewlines(...).create(..., CENTER, ...)`. The escaped lines
-/// therefore form one centered text block for both Graphviz sizing and SVG
-/// emission.
-fn relationship_endpoint_label_lines(label: &str) -> impl Iterator<Item = &str> {
-    label.split("\\n")
+/// Font of one link `TextBlock`. Java measures and draws with the same
+/// `FontConfiguration` (`Style.getUFont` 203–214, `getFontConfiguration` 217–228).
+struct RelationshipLabelFont {
+    family: String,
+    size: f64,
+    bold: bool,
+    italic: bool,
 }
 
-fn relationship_endpoint_label_dimensions(label: &str) -> (f64, f64) {
-    relationship_endpoint_label_lines(label).fold((0.0_f64, 0.0_f64), |(width, height), line| {
-        (
-            width.max(text_render::measure(
-                line,
-                RELATIONSHIP_LABEL_FONT_SIZE,
-                false,
-            )),
-            height + text_render::label_height(line, RELATIONSHIP_LABEL_FONT_SIZE),
-        )
-    })
+/// Natural alignment of one `Display`. `\r` and `\l` replace it; the last one
+/// wins (`Display.getWithNewlines` 288–297, applied in `create0` 644–645).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum RelationshipLabelAlign {
+    Left,
+    Center,
+    Right,
+}
+
+/// One painted run inside a link-label stripe. `x` and `y` are the run's
+/// top-left relative to the stripe.
+struct RelationshipLabelRow {
+    markup: String,
+    x: f64,
+    y: f64,
+    /// Set when the URL or a stacked line contains `|`. Creole splits on the
+    /// first bar and would drop the rest of that line.
+    link_url: Option<String>,
+    link_title: Option<String>,
+}
+
+struct RelationshipLabelStripe {
+    width: f64,
+    height: f64,
+    rows: Vec<RelationshipLabelRow>,
+}
+
+/// `Display.getWithNewlines` (`Display.java` 258–341). `legacyReplaceBackslashNByNewline`
+/// is on. Outside raw mode (`[[`, `<math>`, `<latex>`), `\n` / `\r` / `\l` break
+/// the line, `\t` is a tab, and `\\` is one backslash. `%n()` stays literal
+/// because `JawsFlags.SPECIAL_NEWLINE_IN_DISPLAY_CLASS` is false.
+fn relationship_label_display(label: &str) -> (Vec<String>, RelationshipLabelAlign) {
+    let mut lines = Vec::new();
+    let mut current = String::new();
+    let mut align = RelationshipLabelAlign::Center;
+    let mut raw = false;
+    let mut chars = label.char_indices().peekable();
+    while let Some((offset, c)) = chars.next() {
+        let rest = &label[offset..];
+        if rest.starts_with("<math>") || rest.starts_with("<latex>") || rest.starts_with("[[") {
+            raw = true;
+        } else if rest.starts_with("</math>")
+            || rest.starts_with("</latex>")
+            || rest.starts_with("]]")
+        {
+            raw = false;
+        }
+        if !raw
+            && c == '\\'
+            && let Some((_, next)) = chars.next()
+        {
+            match next {
+                'n' => lines.push(std::mem::take(&mut current)),
+                'r' => {
+                    align = RelationshipLabelAlign::Right;
+                    lines.push(std::mem::take(&mut current));
+                }
+                'l' => {
+                    align = RelationshipLabelAlign::Left;
+                    lines.push(std::mem::take(&mut current));
+                }
+                't' => current.push('\t'),
+                '\\' => current.push('\\'),
+                other => {
+                    current.push('\\');
+                    current.push(other);
+                }
+            }
+            continue;
+        }
+        // `BLOCK_E1_NEWLINE` when raw mode is off (`Display.java` 326–328).
+        if !raw && c == '\n' {
+            lines.push(std::mem::take(&mut current));
+            continue;
+        }
+        current.push(c);
+    }
+    lines.push(current);
+    (lines, align)
+}
+
+fn relationship_label_align_offset(
+    align: RelationshipLabelAlign,
+    block_width: f64,
+    line_width: f64,
+) -> f64 {
+    match align {
+        RelationshipLabelAlign::Left => 0.0,
+        RelationshipLabelAlign::Center => (block_width - line_width) / 2.0,
+        RelationshipLabelAlign::Right => block_width - line_width,
+    }
+}
+
+/// Tooltip, href, and visible label. `UrlBuilder` separates a label with
+/// whitespace. A `|` stays inside the URL (`S_LINK_WITH_OPTIONAL_TOOLTIP_WITH_OPTIONAL_LABEL`).
+fn relationship_link_parts(inner: &str) -> (Option<String>, String, String) {
+    let (tooltip, body) = if let Some(brace) = inner.find('{') {
+        if let Some(end) = inner[brace..].find('}') {
+            let end = brace + end;
+            (
+                Some(inner[brace + 1..end].to_string()),
+                format!("{}{}", &inner[..brace], &inner[end + 1..]),
+            )
+        } else {
+            (None, inner.to_string())
+        }
+    } else {
+        (None, inner.to_string())
+    };
+    let (url, label) = if let Some(pos) = body.find(' ') {
+        (body[..pos].to_string(), body[pos + 1..].trim().to_string())
+    } else {
+        (body.clone(), body)
+    };
+    let visible = if label.is_empty() { url.clone() } else { label };
+    (tooltip, url, visible)
+}
+
+fn relationship_link_markup(url: &str, tooltip: Option<&str>, piece: &str) -> String {
+    match tooltip {
+        Some(tooltip) => format!("[[{url}{{{tooltip}}}|{piece}]]"),
+        None => format!("[[{url}|{piece}]]"),
+    }
+}
+
+enum RelationshipLineAtom {
+    Text(String),
+    /// `AtomTextUtils.createUrl`: a label `Display` of more than one line is
+    /// `AtomVerticalTexts` (width = widest line, each line left-aligned).
+    VerticalLink {
+        url: String,
+        tooltip: Option<String>,
+        lines: Vec<String>,
+    },
+}
+
+fn relationship_line_atoms(line: &str) -> Vec<RelationshipLineAtom> {
+    let mut atoms = Vec::new();
+    let mut text = String::new();
+    let mut rest = line;
+    while let Some(start) = rest.find("[[") {
+        text.push_str(&rest[..start]);
+        let after = &rest[start + 2..];
+        let Some(end) = after.find("]]") else {
+            text.push_str(&rest[start..]);
+            rest = "";
+            break;
+        };
+        let inner = &after[..end];
+        let original_end = start + 2 + end + 2;
+        let (tooltip, url, visible) = relationship_link_parts(inner);
+        let (link_lines, _) = relationship_label_display(&visible);
+        if link_lines.len() > 1 {
+            if !text.is_empty() {
+                atoms.push(RelationshipLineAtom::Text(std::mem::take(&mut text)));
+            }
+            atoms.push(RelationshipLineAtom::VerticalLink {
+                url,
+                tooltip,
+                lines: link_lines,
+            });
+        } else {
+            text.push_str(&rest[start..original_end]);
+        }
+        rest = &after[end + 2..];
+    }
+    text.push_str(rest);
+    if !text.is_empty() || atoms.is_empty() {
+        atoms.push(RelationshipLineAtom::Text(text));
+    }
+    atoms
+}
+
+/// One display line as a stripe. A single creole run keeps the old width and
+/// height. A multiline URL stacks like `AtomVerticalTexts` and bottom-aligns
+/// its neighbors (`Sea.doAlign`).
+fn relationship_label_stripe(line: &str, font: &RelationshipLabelFont) -> RelationshipLabelStripe {
+    let atoms = relationship_line_atoms(line);
+    let text_only = atoms.len() == 1 && matches!(atoms[0], RelationshipLineAtom::Text(_));
+    if text_only {
+        let width = relationship_label_line_width(line, font);
+        let height = text_render::label_height_with_family(line, font.size, &font.family);
+        return RelationshipLabelStripe {
+            width,
+            height,
+            rows: vec![RelationshipLabelRow {
+                markup: line.to_string(),
+                x: 0.0,
+                y: 0.0,
+                link_url: None,
+                link_title: None,
+            }],
+        };
+    }
+
+    /// One placed row: text, width, height, link URL, link title.
+    type PlacedRow = (String, f64, f64, Option<String>, Option<String>);
+    struct Placed {
+        x: f64,
+        height: f64,
+        rows: Vec<PlacedRow>,
+    }
+    let mut placed = Vec::new();
+    let mut x = 0.0_f64;
+    let mut stripe_height = 0.0_f64;
+    for atom in atoms {
+        match atom {
+            RelationshipLineAtom::Text(markup) => {
+                let width = relationship_label_line_width(&markup, font);
+                let height =
+                    text_render::label_height_with_family(&markup, font.size, &font.family);
+                placed.push(Placed {
+                    x,
+                    height,
+                    rows: vec![(markup, 0.0, width, None, None)],
+                });
+                x += width;
+                stripe_height = stripe_height.max(height);
+            }
+            RelationshipLineAtom::VerticalLink {
+                url,
+                tooltip,
+                lines,
+            } => {
+                let mut rows = Vec::new();
+                let mut y = 0.0_f64;
+                let mut box_width = 0.0_f64;
+                // Creole splits `[[url|label]]` on the first bar and keeps only
+                // the first label segment. A bar in the URL or in a stacked
+                // line cannot round-trip through that markup.
+                let direct = url.contains('|') || lines.iter().any(|piece| piece.contains('|'));
+                for piece in lines {
+                    let markup = if direct {
+                        piece.clone()
+                    } else {
+                        relationship_link_markup(&url, tooltip.as_deref(), &piece)
+                    };
+                    let width = relationship_label_line_width(&markup, font);
+                    let height =
+                        text_render::label_height_with_family(&markup, font.size, &font.family);
+                    box_width = box_width.max(width);
+                    rows.push((
+                        markup,
+                        y,
+                        width,
+                        direct.then(|| url.clone()),
+                        direct.then(|| tooltip.clone()).flatten(),
+                    ));
+                    y += height;
+                }
+                placed.push(Placed { x, height: y, rows });
+                x += box_width;
+                stripe_height = stripe_height.max(y);
+            }
+        }
+    }
+    let mut rows = Vec::new();
+    for atom in placed {
+        let y0 = stripe_height - atom.height;
+        for (markup, y, _, link_url, link_title) in atom.rows {
+            rows.push(RelationshipLabelRow {
+                markup,
+                x: atom.x,
+                y: y0 + y,
+                link_url,
+                link_title,
+            });
+        }
+    }
+    RelationshipLabelStripe {
+        width: x,
+        height: stripe_height,
+        rows,
+    }
+}
+
+fn relationship_label_line_width(line: &str, font: &RelationshipLabelFont) -> f64 {
+    text_render::measure_no_underline_with_family_and_face(
+        line,
+        font.size,
+        font.bold,
+        font.italic,
+        &font.family,
+    )
+}
+
+fn relationship_label_text_extent(label: &str, font: &RelationshipLabelFont) -> (f64, f64) {
+    let (lines, _) = relationship_label_display(label);
+    lines
+        .iter()
+        .fold((0.0_f64, 0.0_f64), |(width, height), line| {
+            let stripe = relationship_label_stripe(line, font);
+            (width.max(stripe.width), height + stripe.height)
+        })
+}
+
+/// Quantifier / role block. Width is the longest line; height is the sum of
+/// line heights. `appendTable` truncates later.
+fn relationship_endpoint_label_dimensions(label: &str, font: &RelationshipLabelFont) -> (f64, f64) {
+    let (lines, _) = relationship_label_display(label);
+    lines
+        .iter()
+        .fold((0.0_f64, 0.0_f64), |(width, height), line| {
+            (
+                width.max(text_render::measure_with_family_and_face(
+                    line,
+                    font.size,
+                    font.bold,
+                    font.italic,
+                    &font.family,
+                )),
+                height + text_render::label_height_with_family(line, font.size, &font.family),
+            )
+        })
+}
+
+/// Center-label box after `addVisibilityModifier`'s margin. The magic-arrow
+/// square (`TextBlockArrow2.size`) is reserved only when a guide arrow exists.
+fn relationship_center_block(
+    relationship: &Relationship,
+    font: &RelationshipLabelFont,
+) -> (f64, f64) {
+    let margin = relationship_label_margin(relationship);
+    let (text_width, text_height) = relationship
+        .label
+        .as_deref()
+        .map(|label| relationship_label_text_extent(label, font))
+        .unwrap_or((0.0, 0.0));
+    let arrow = if relationship.label_arrow == LinkArrow::None {
+        0.0
+    } else {
+        font.size
+    };
+    let content_height = if relationship.label_arrow == LinkArrow::None {
+        text_height
+    } else {
+        text_height.max(font.size)
+    };
+    (
+        text_width + arrow + 2.0 * margin,
+        content_height + 2.0 * margin,
+    )
 }
 
 #[derive(Clone, Copy)]
@@ -12821,36 +13263,11 @@ fn relationship_center_layout(
         return None;
     }
 
-    let margin = relationship_label_margin(relationship);
-    let (font_family, font_size) =
-        relationship_label_font(&relationship_arrow_style(diagram, relationship));
-    let label_width = if has_label {
-        relationship
-            .label
-            .as_deref()
-            .map(|label| {
-                text_render::measure_no_underline_with_family(label, font_size, false, &font_family)
-            })
-            .unwrap_or(0.0)
-            + if relationship.label_arrow == LinkArrow::None {
-                0.0
-            } else {
-                LINK_ARROW_BLOCK_SIZE
-            }
-            + 2.0 * margin
+    let font = relationship_label_font(&relationship_arrow_style(diagram, relationship));
+    let (label_width, label_height) = if has_label {
+        relationship_center_block(relationship, &font)
     } else {
-        0.0
-    };
-    let label_height = if has_label {
-        relationship
-            .label
-            .as_deref()
-            .map(|label| text_render::label_height_with_family(label, font_size, &font_family))
-            .unwrap_or(0.0)
-            .max(LINK_ARROW_BLOCK_SIZE)
-            + 2.0 * margin
-    } else {
-        0.0
+        (0.0, 0.0)
     };
     let (note_width, note_height) = note
         .map(|note| note_box_dims(diagram, note, sprites))
@@ -12872,23 +13289,50 @@ fn relationship_center_layout(
     })
 }
 
-/// The arrow style a relationship was created under (`Link#getStyleBuilder`).
+fn relationship_style_signature(relationship: &Relationship, cardinality: bool) -> StyleSignature {
+    let selectors: &[&str] = if cardinality {
+        &["root", "element", "classDiagram", "arrow", "cardinality"]
+    } else {
+        &["root", "element", "classDiagram", "arrow"]
+    };
+    let mut signature = StyleSignature::from_selectors(selectors.iter().copied());
+    for stereotype in &relationship.stereotypes {
+        signature = signature.with_stereotype(stereotype);
+    }
+    signature
+}
+
+/// The arrow style a relationship was created under (`Link#getStyleBuilder`),
+/// plus `GraphvizImageBuilder.getDefaultStyleDefinitionArrow` (116–121).
 fn relationship_arrow_style<'a>(
     diagram: &'a ClassDiagram,
     relationship: &Relationship,
 ) -> crate::style_cascade::ResolvedStyle<'a> {
     StyleCascade::new(&diagram.meta.style_program).resolve_link_at_source_line(
-        &StyleSignature::from_selectors(["root", "element", "classDiagram", "arrow"]),
+        &relationship_style_signature(relationship, false),
         StyleScheme::Regular,
         relationship.source_line,
     )
 }
 
-/// The font family and size of a relationship's center label. Java builds
-/// one `TextBlock` from the arrow style's font configuration
-/// (`GraphvizImageBuilder` 233-241 -> `SvekEdge` 279-319) and both sizes the
-/// dot label with it and draws it, so layout and emission share this font.
-fn relationship_label_font(arrow_style: &crate::style_cascade::ResolvedStyle<'_>) -> (String, f64) {
+/// `GraphvizImageBuilder.getStyleArrowCardinality` (124–130).
+fn relationship_cardinality_style<'a>(
+    diagram: &'a ClassDiagram,
+    relationship: &Relationship,
+) -> crate::style_cascade::ResolvedStyle<'a> {
+    StyleCascade::new(&diagram.meta.style_program).resolve_link_at_source_line(
+        &relationship_style_signature(relationship, true),
+        StyleScheme::Regular,
+        relationship.source_line,
+    )
+}
+
+/// Font of a link label. Layout and emission share it because Java builds one
+/// `TextBlock` from the arrow (or cardinality) font configuration
+/// (`GraphvizImageBuilder` 235–238, `SvekEdge` 279–344).
+fn relationship_label_font(
+    arrow_style: &crate::style_cascade::ResolvedStyle<'_>,
+) -> RelationshipLabelFont {
     let family = arrow_style
         .property("fontName")
         .map(canonical_class_font_family)
@@ -12897,7 +13341,27 @@ fn relationship_label_font(arrow_style: &crate::style_cascade::ResolvedStyle<'_>
         .property("fontSize")
         .and_then(|value| value.parse::<f64>().ok())
         .unwrap_or(RELATIONSHIP_LABEL_FONT_SIZE);
-    (family, size)
+    let (mut bold, italic) = arrow_style
+        .property("fontStyle")
+        .map(crate::style_cascade::font_face)
+        .unwrap_or((false, false));
+    if let Some(weight) = arrow_style.property("fontWeight") {
+        let regular = matches!(
+            weight.trim().to_ascii_lowercase().as_str(),
+            "" | "plain" | "normal" | "400"
+        );
+        if !regular {
+            // `Style.getUFont` 210–212: a non-400 FontWeight replaces only the
+            // weight axis and keeps the italic bit from FontStyle.
+            bold = crate::style_cascade::font_face(weight).0;
+        }
+    }
+    RelationshipLabelFont {
+        family,
+        size,
+        bold,
+        italic,
+    }
 }
 
 fn relationship_label_margin(relationship: &Relationship) -> f64 {
@@ -12917,7 +13381,15 @@ fn synthesize_ortho_edge_labels(diagram: &ClassDiagram, edge_paths: &mut [EdgePa
         let Some(edge) = edge_idx.and_then(|idx| edge_paths.get_mut(idx)) else {
             continue;
         };
-        normalize_ortho_er_vertical_route(relationship, edge);
+        // The synthesizer replaces an xlabel only when this call rewrites the
+        // spline. A horizontal route keeps the Graphviz `centerPt`.
+        let rewritten = normalize_ortho_er_vertical_route(relationship, edge);
+        if rewritten {
+            edge.label = None;
+        }
+        if edge.label.is_some() {
+            continue;
+        }
 
         let start_len = relationship
             .from_decor
@@ -12942,31 +13414,10 @@ fn synthesize_ortho_edge_labels(diagram: &ClassDiagram, edge_paths: &mut [EdgePa
             continue;
         };
         let midpoint = ((start.0 + end.0) / 2.0, (start.1 + end.1) / 2.0);
-        let margin = relationship_label_margin(relationship);
-        let (font_family, font_size) =
-            relationship_label_font(&relationship_arrow_style(diagram, relationship));
-        let width = (relationship
-            .label
-            .as_deref()
-            .map(|label| {
-                text_render::measure_no_underline_with_family(label, font_size, false, &font_family)
-            })
-            .unwrap_or(0.0)
-            + if relationship.label_arrow == LinkArrow::None {
-                0.0
-            } else {
-                LINK_ARROW_BLOCK_SIZE
-            }
-            + 2.0 * margin)
-            .floor();
-        let height = (relationship
-            .label
-            .as_deref()
-            .map(|label| text_render::label_height_with_family(label, font_size, &font_family))
-            .unwrap_or(0.0)
-            .max(LINK_ARROW_BLOCK_SIZE)
-            + 2.0 * margin)
-            .floor();
+        let font = relationship_label_font(&relationship_arrow_style(diagram, relationship));
+        let (width, height) = relationship_center_block(relationship, &font);
+        let width = width.floor();
+        let height = height.floor();
 
         let mostly_vertical = (end.1 - start.1).abs() >= (end.0 - start.0).abs();
         let (x, y) = if mostly_vertical {
@@ -12986,12 +13437,12 @@ fn synthesize_ortho_edge_labels(diagram: &ClassDiagram, edge_paths: &mut [EdgePa
     }
 }
 
-fn normalize_ortho_er_vertical_route(relationship: &Relationship, edge: &mut EdgePath) {
+fn normalize_ortho_er_vertical_route(relationship: &Relationship, edge: &mut EdgePath) -> bool {
     if relationship.from_decor != Some(EndpointDecor::DoubleLine)
         || relationship.to_decor != Some(EndpointDecor::CircleCrowFoot)
         || edge.points.len() != ORTHO_ER_VERTICAL_ROUTE_DELTAS.len()
     {
-        return;
+        return false;
     }
     let first_x = edge.points[0].0;
     if edge
@@ -12999,12 +13450,13 @@ fn normalize_ortho_er_vertical_route(relationship: &Relationship, edge: &mut Edg
         .iter()
         .any(|point| (point.0 - first_x).abs() > 0.01)
     {
-        return;
+        return false;
     }
     for (point, delta) in edge.points.iter_mut().zip(ORTHO_ER_VERTICAL_ROUTE_DELTAS) {
         point.0 = (point.0 * 100.0).round() / 100.0;
         point.1 = ((point.1 + delta) * 100.0).round() / 100.0;
     }
+    true
 }
 
 fn shortened_endpoint_points(
@@ -15597,6 +16049,80 @@ mod tests {
     use super::*;
     use rustuml_parser::diagram::DiagramMeta;
 
+    fn arrow_font() -> RelationshipLabelFont {
+        RelationshipLabelFont {
+            family: "sans-serif".to_string(),
+            size: 13.0,
+            bold: false,
+            italic: false,
+        }
+    }
+
+    #[test]
+    fn relationship_label_display_follows_java_newline_escapes() {
+        let (escaped, align) = relationship_label_display(r"a\\nb");
+        assert_eq!(escaped, vec!["a\\nb"]);
+        assert_eq!(align, RelationshipLabelAlign::Center);
+
+        let (two_slashes, _) = relationship_label_display(r"a\\\\nb");
+        assert_eq!(two_slashes, vec!["a\\\\nb"]);
+
+        let (tilde, _) = relationship_label_display("~\\ncrest");
+        assert_eq!(tilde, vec!["~", "crest"]);
+
+        let (right, align) = relationship_label_display("a\\rb");
+        assert_eq!(right, vec!["a", "b"]);
+        assert_eq!(align, RelationshipLabelAlign::Right);
+
+        let (url_lines, _) =
+            relationship_label_display("pre\\n[[http://example.com/a\\nb]]\\npost");
+        assert_eq!(
+            url_lines,
+            vec!["pre", "[[http://example.com/a\\nb]]", "post"]
+        );
+        let stripe = relationship_label_stripe(&url_lines[1], &arrow_font());
+        assert_eq!(stripe.rows.len(), 2);
+        let one = relationship_label_stripe("pre", &arrow_font());
+        assert!(stripe.width > one.width);
+        assert!(stripe.height > one.height * 1.5);
+
+        // `UrlBuilder` keeps `|` in the URL. The newline splits that URL.
+        let (pipe_lines, _) =
+            relationship_label_display("pre\\n[[http://example.com/a|la\\nbel]]\\npost");
+        assert_eq!(
+            pipe_lines,
+            vec!["pre", "[[http://example.com/a|la\\nbel]]", "post"]
+        );
+        let pipe = relationship_label_stripe(&pipe_lines[1], &arrow_font());
+        assert_eq!(pipe.rows.len(), 2);
+        assert_eq!(pipe.rows[0].markup, "http://example.com/a|la");
+        assert_eq!(pipe.rows[1].markup, "bel");
+        assert_eq!(
+            pipe.rows[0].link_url.as_deref(),
+            Some("http://example.com/a|la\\nbel")
+        );
+        assert!(pipe.rows[0].link_title.is_none());
+
+        // A bar in the label is text. Creole would keep only the segment
+        // before that bar, so the row is emitted directly.
+        let (label_pipe_lines, _) =
+            relationship_label_display("[[http://example.com/a{hot} x|y\\nz]]");
+        assert_eq!(
+            label_pipe_lines,
+            vec!["[[http://example.com/a{hot} x|y\\nz]]"]
+        );
+        let label_pipe = relationship_label_stripe(&label_pipe_lines[0], &arrow_font());
+        assert_eq!(label_pipe.rows.len(), 2);
+        assert_eq!(label_pipe.rows[0].markup, "x|y");
+        assert_eq!(label_pipe.rows[1].markup, "z");
+        assert_eq!(
+            label_pipe.rows[0].link_url.as_deref(),
+            Some("http://example.com/a")
+        );
+        assert_eq!(label_pipe.rows[0].link_title.as_deref(), Some("hot"));
+        assert_eq!(label_pipe.rows[1].link_title.as_deref(), Some("hot"));
+    }
+
     fn simple_class_diagram() -> ClassDiagram {
         ClassDiagram {
             meta: DiagramMeta::default(),
@@ -15675,6 +16201,7 @@ mod tests {
                 label_arrow: LinkArrow::None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                stereotypes: Vec::new(),
                 from_decor: None,
                 to_decor: None,
                 decorated_end: RelationshipEnd::From,
@@ -18398,6 +18925,7 @@ mod tests {
             label_arrow: LinkArrow::None,
             from_multiplicity: None,
             to_multiplicity: None,
+            stereotypes: Vec::new(),
             from_decor: Some(EndpointDecor::DoubleLine),
             to_decor: Some(EndpointDecor::CircleCrowFoot),
             decorated_end: RelationshipEnd::None,
@@ -18852,10 +19380,22 @@ mod tests {
             0.0,
             relationship_decoration_length(relationship),
         );
-        let unshortened_arrow =
-            link_arrow_polygon_points(relationship.label_arrow, &edge.points, 25.0, 0.0).unwrap();
-        let shortened_arrow =
-            link_arrow_polygon_points(relationship.label_arrow, &shortened, 25.0, 0.0).unwrap();
+        let unshortened_arrow = link_arrow_polygon_points(
+            relationship.label_arrow,
+            &edge.points,
+            25.0,
+            0.0,
+            RELATIONSHIP_LABEL_FONT_SIZE,
+        )
+        .unwrap();
+        let shortened_arrow = link_arrow_polygon_points(
+            relationship.label_arrow,
+            &shortened,
+            25.0,
+            0.0,
+            RELATIONSHIP_LABEL_FONT_SIZE,
+        )
+        .unwrap();
         assert_ne!(unshortened_arrow, shortened_arrow);
 
         let visible = shortened_arrow.into_iter().fold(
