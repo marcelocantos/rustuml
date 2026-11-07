@@ -6379,6 +6379,62 @@ fn simulate_state_compound(
 ///
 /// The output uses inline formatting (no extra whitespace) to match PlantUML's
 /// single-line SVG output as closely as possible.
+/// Give each synthetic region of a non-autarkic owner the `State` that Java's
+/// region group is.
+///
+/// Java provenance: `StateDiagram.concurrentState` creates the region as an
+/// `Entity` group of type `CONCURRENT_STATE` (StateDiagram.java:201-205), and
+/// `Entity.isAutarkic` is always true for that type (Entity.java:696-697).
+/// `CucaDiagramSimplifierState.simplify` turns the region into a
+/// `STATE_CONCURRENT` image leaf (CucaDiagramSimplifierState.java:56-66) while
+/// a non-autarkic owner stays for `Cluster.drawU`. `build_state_group_outcome`
+/// draws exactly that for regions that are reused quarks. A synthetic region
+/// gets the same treatment once it has a `State`. The region is created at
+/// the separator, so it takes its place in entity creation order there, and
+/// its display is `Display.create("")`. Autarkic owners keep their regions
+/// as image scopes and are not touched.
+fn materialize_cluster_owner_regions(diagram: &StateDiagram) -> Option<StateDiagram> {
+    let mut states = diagram.states.clone();
+    let mut changed = false;
+    for owner in diagram
+        .states
+        .iter()
+        .filter(|state| state.concurrent_separator.is_some())
+    {
+        if java_state_group_is_autarkic(diagram, &owner.id) {
+            continue;
+        }
+        for region in &owner.concurrent_regions {
+            if states.iter().any(|state| state.id == region.id) {
+                continue;
+            }
+            let at = states
+                .iter()
+                .position(|state| state.decl_line.is_none_or(|line| line > region.source_line))
+                .unwrap_or(states.len());
+            states.insert(
+                at,
+                State {
+                    id: region.id.clone(),
+                    composite: true,
+                    concurrent_separator: owner.concurrent_separator,
+                    parent: Some(owner.id.clone()),
+                    source_line: region.source_line,
+                    ..State::default()
+                },
+            );
+            changed = true;
+        }
+    }
+    changed.then(|| StateDiagram {
+        meta: diagram.meta.clone(),
+        direction: diagram.direction,
+        states,
+        transitions: diagram.transitions.clone(),
+        notes: diagram.notes.clone(),
+    })
+}
+
 pub fn render(diagram: &StateDiagram, theme: &Theme) -> String {
     render_with_oracle(diagram, theme, None)
 }
@@ -6413,6 +6469,12 @@ pub fn render_with_oracle(
         && diagram.states.iter().any(|s| s.composite)
     {
         return render_composite_with_oracle(diagram, orc);
+    }
+    if oracle.is_none()
+        && let Some(materialized) = materialize_cluster_owner_regions(diagram)
+        && let Some(svg) = render_autonomous_composite(&materialized)
+    {
+        return svg;
     }
     if oracle.is_none()
         && let Some(svg) = render_autonomous_composite(diagram)
