@@ -130,7 +130,13 @@ fn preprocess_full_inner(
     let mut identity = Vec::new();
     let mut tim_lines = Vec::new();
     let mut theme_tail = Vec::new();
-    project_events(&events, &mut identity, &mut tim_lines, &mut theme_tail);
+    project_events(
+        &events,
+        ctx.start_checks_ending_backslash,
+        &mut identity,
+        &mut tim_lines,
+        &mut theme_tail,
+    );
     let mut lines = if ctx.start_checks_ending_backslash {
         collapse_post_tim_ending_backslashes(tim_lines, ctx.block_end.as_ref(), false)
     } else {
@@ -198,8 +204,13 @@ enum EvaluatedEvent {
     },
 }
 
+/// `check_ending_backslash` is `UmlSource#loadInternal`'s flag
+/// (PSystemBuilder#createPSystem passes `findStartTypes` containing
+/// SEQUENCE). It joins a theme body's continued lines only when it is set,
+/// as Java joins the whole result list only then.
 fn project_events(
     events: &[EvaluatedEvent],
+    check_ending_backslash: bool,
     identity: &mut Vec<String>,
     lines: &mut Vec<TimLine>,
     theme_tail: &mut Vec<String>,
@@ -228,7 +239,13 @@ fn project_events(
             } => {
                 let mut expanded = Vec::new();
                 let mut nested_tail = Vec::new();
-                project_events(body, identity, &mut expanded, &mut nested_tail);
+                project_events(
+                    body,
+                    check_ending_backslash,
+                    identity,
+                    &mut expanded,
+                    &mut nested_tail,
+                );
                 lines.push(TimLine::RustOnly(source_line_marker(
                     *source_line,
                     &format!("skinparam __theme {name}"),
@@ -240,7 +257,9 @@ fn project_events(
                 // top-level join: this projection parks them in theme_tail.
                 // A nested theme's lines sit between the outer body's lines
                 // in that list, so joining `expanded` alone would skip them.
-                let body_lines = if nested_tail.is_empty() {
+                // Without checkEndingBackslash, loadInternal copies the list
+                // (UmlSource.java:118-134), so the body is not joined.
+                let body_lines = if check_ending_backslash && nested_tail.is_empty() {
                     collapse_post_tim_ending_backslashes(expanded, None, true)
                 } else {
                     tim_texts(expanded)
@@ -4406,7 +4425,9 @@ fn read_line_reader_lines(content: &str) -> Vec<Cow<'_, str>> {
 /// Nd is `BMP_DECIMAL_DIGIT_ZEROS`, not this table.
 ///
 /// Generated from UnicodeData.txt 15.0.0
-/// <https://www.unicode.org/Public/15.0.0/ucd/UnicodeData.txt>
+/// <https://www.unicode.org/Public/15.0.0/ucd/UnicodeData.txt> by
+/// `docs/parity-reviews/tim-line-continuation/maker-round5-opus/support/gen_bmp_letters.py`,
+/// which also checks this table against the file.
 /// sha256 806e9aed65037197f1ec85e12be6e8cd870fc5608b4de0fffd990f689f376a73.
 /// 48,965 BMP letters, 380 runs. Unicode 17 adds sixteen BMP letters
 /// (sha256 2e1efc1dcb59c575eedf5ccae60f95229f706ee6d031835247d843c11d96470c)
@@ -5139,7 +5160,13 @@ mod tests {
         assert!(ctx.error.is_none());
         ctx.process_one_line("class Tail", &mut events);
         let mut identity = Vec::new();
-        project_events(&events, &mut identity, &mut Vec::new(), &mut Vec::new());
+        project_events(
+            &events,
+            false,
+            &mut identity,
+            &mut Vec::new(),
+            &mut Vec::new(),
+        );
         assert_eq!(identity, ["class Head", "class Tail"]);
         let out = preprocess_full(
             "@startuml\n!startsub blank\n\n!endsub\nclass Continued\n@enduml",
@@ -7768,6 +7795,24 @@ $record(SaffronArchive)\n\
         assert!(
             lines.iter().all(|line| line.trim() != "#DD0000"),
             "{lines:?}"
+        );
+        // Without SEQUENCE in findStartTypes, loadInternal does not join.
+        let mindmap = strip_source_line_markers(
+            preprocess_full_for_parse(
+                "@startmindmap\n!theme grokr5 from .\n* root\n@endmindmap",
+                Some(dir.clone()),
+            )
+            .lines,
+        );
+        assert!(
+            mindmap
+                .iter()
+                .all(|line| !line.contains("skinparam ArrowColor #DD0000")),
+            "{mindmap:?}"
+        );
+        assert!(
+            mindmap.iter().any(|line| line.trim() == "#DD0000"),
+            "{mindmap:?}"
         );
         let _ = std::fs::remove_dir_all(&dir);
     }
