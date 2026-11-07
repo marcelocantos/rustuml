@@ -128,7 +128,7 @@ fn preprocess_full_inner(
     let merged = merge_ending_backslash_lines(&input_lines);
     // Every line is numbered from Pipe's text, so every content line carries
     // its number instead of its parser-stream position.
-    ctx.mark_source_lines = merged.pipe_positions.is_some();
+    ctx.mark_source_lines = merged.pipe_positions.is_some() || merged.format_removed;
     ctx.pipe_positions = merged.pipe_positions;
     let events = ctx.process_merged_lines(&merged.lines);
     let mut identity = Vec::new();
@@ -4288,6 +4288,9 @@ struct MergedInput<'a> {
     swallowed_end: bool,
     /// `pipe_text_positions` of the raw lines when Pipe found no start mark.
     pipe_positions: Option<Vec<usize>>,
+    /// A `@@@format ` line was removed, so stream positions no longer equal
+    /// input lines.
+    format_removed: bool,
 }
 
 /// What `Pipe#readSingleDiagram` hands to `SourceStringReader` for one
@@ -4325,7 +4328,7 @@ fn pipe_single_diagram(input: &[&str]) -> PipeDiagram {
     let mut expected_end = String::new();
     for (index, line) in input.iter().enumerate() {
         // `manageFormat` consumes these lines; they never reach `sb`.
-        if line.starts_with("@@@format ") {
+        if line.starts_with(PIPE_FORMAT_PREFIX) {
             continue;
         }
         if state == State::NoContent && !java_trim(line).is_empty() {
@@ -4451,15 +4454,26 @@ fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
     let pipe_positions = (!pipe.start_mark_found).then(|| pipe_text_positions(&appended));
     // Only the lines Pipe appends are in the text BlockUmlBuilder reads, as
     // UncommentReadLine(ReadLineReader) through the Preprocessor's
-    // ReadFilterMergeLines (BlockUmlBuilder.java:91-95). Each keeps its
-    // input index, so line numbers still count input lines.
-    let kept: Vec<usize> = (0..raw.len()).filter(|&index| appended[index]).collect();
+    // ReadFilterMergeLines (BlockUmlBuilder.java:91-95). A '@@@format ' line
+    // is removed; a leading trim-empty line, which precedes all content,
+    // stays as an empty line so stream positions keep counting input lines.
+    // Each kept line keeps its input index.
+    let format_removed = raw.iter().any(|line| line.starts_with(PIPE_FORMAT_PREFIX));
+    let kept: Vec<usize> = (0..raw.len())
+        .filter(|&index| !raw[index].starts_with(PIPE_FORMAT_PREFIX))
+        .collect();
     let mut reader = UncommentReadLine::default();
     let text: Vec<Cow<'a, str>> = raw
         .into_iter()
         .zip(&appended)
-        .filter(|(_, appended)| **appended)
-        .map(|(line, _)| reader.read(read_line_reader_line(line)))
+        .filter(|(line, _)| !line.starts_with(PIPE_FORMAT_PREFIX))
+        .map(|(line, &appended)| {
+            if appended {
+                reader.read(read_line_reader_line(line))
+            } else {
+                Cow::Borrowed("")
+            }
+        })
         .collect();
     let mut lines = read_filter_merge_lines(&text);
     for line in &mut lines {
@@ -4470,8 +4484,13 @@ fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
         lines,
         swallowed_end,
         pipe_positions,
+        format_removed,
     }
 }
+
+/// `Pipe#readSingleDiagram` hands a line with this prefix to `manageFormat`
+/// and never appends it (Pipe.java:188-189).
+const PIPE_FORMAT_PREFIX: &str = "@@@format ";
 
 /// The position (0-based, as `LineLocation` counts it) of each input line in
 /// the text `Pipe#readSingleDiagram` returns when no line
@@ -4501,7 +4520,7 @@ fn pipe_appended(raw: &[Cow<'_, str>]) -> Vec<bool> {
     let mut content_seen = false;
     raw.iter()
         .map(|line| {
-            if line.starts_with("@@@format ") {
+            if line.starts_with(PIPE_FORMAT_PREFIX) {
                 return false;
             }
             content_seen |= !java_trim(line).is_empty();
