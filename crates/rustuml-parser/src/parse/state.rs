@@ -694,7 +694,7 @@ impl StateParser {
     fn nearest_concurrent_ancestor(&self, endpoint: &str) -> Option<String> {
         let mut parent = self.endpoint_parent(endpoint);
         while let Some(id) = parent {
-            if self.concurrent_now.iter().any(|region| *region == id) {
+            if self.concurrent_now.contains(&id) {
                 return Some(id);
             }
             parent = self.quark_parent(&id);
