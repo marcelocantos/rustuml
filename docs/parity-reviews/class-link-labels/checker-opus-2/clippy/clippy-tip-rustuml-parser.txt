@@ -1,0 +1,4 @@
+crates/rustuml-parser/src/parse/class.rs: warning: manual implementation of `str::repeat` using iterators: help: try: `"\u{E000}".repeat(token.len())`
+crates/rustuml-parser/src/parse/class.rs: warning: this `repeat().take()` can be written more concisely: help: consider using `repeat_n()` instead: `std::iter::repeat_n('\u{E000}', full.len())`
+crates/rustuml-parser/src/parse/class.rs: warning: this `repeat().take()` can be written more concisely: help: consider using `repeat_n()` instead: `std::iter::repeat_n('\u{E000}', token.len())`
+crates/rustuml-parser/src/parse/component.rs: warning: function `looks_like_description_bracket_command` is never used

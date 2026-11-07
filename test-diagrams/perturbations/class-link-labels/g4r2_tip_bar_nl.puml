@@ -1,0 +1,5 @@
+@startuml
+class Ledger
+class Hopper
+Ledger --> Hopper : [[https://ledger.example/item{hot|rack\nrow} bin]]
+@enduml

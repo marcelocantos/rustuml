@@ -1,0 +1,6 @@
+@startuml
+skinparam ArrowFontSize 15
+class Kiln
+class Glaze
+Kiln --> Glaze : batch\nshelf wider
+@enduml

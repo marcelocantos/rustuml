@@ -1,0 +1,6 @@
+@startuml
+skinparam ArrowFontName Verdana
+class Kiln
+class Glaze
+Kiln -up-> Glaze <<batch>> : rises
+@enduml

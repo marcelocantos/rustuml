@@ -1,0 +1,8 @@
+@startuml
+skinparam ArrowFontName Arial
+skinparam ArrowFontStyle bold italic
+skinparam ArrowFontSize 12
+class Kiln
+class Glaze
+Kiln --> Glaze : batch shelf
+@enduml
