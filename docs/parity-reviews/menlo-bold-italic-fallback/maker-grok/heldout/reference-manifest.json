@@ -1,0 +1,189 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "cases": [
+  {
+   "name": "g3_bi_symbols",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout/g3_bi_symbols.puml",
+   "source_sha256": "57ef809f79a75d0873aa3e471608491cbfa6710c00a2e62b828d4051bdbc878b",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "symbols",
+    "AppleSymbols",
+    "U+2604",
+    "size-14",
+    "class-member"
+   ]
+  },
+  {
+   "name": "g3_bi_dingbat",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout/g3_bi_dingbat.puml",
+   "source_sha256": "685202909301f907f8673d00100d4a87f0feee46de0bab9ea8f871f265f3148e",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "dingbats",
+    "ZapfDingbatsITC",
+    "U+27B2",
+    "size-14",
+    "class-member"
+   ]
+  },
+  {
+   "name": "g3_bi_cjk",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout/g3_bi_cjk.puml",
+   "source_sha256": "079c1424f48ed03e0eb27e1b0c10fa83b9c1a4c93e1279eed4d844159f908cab",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "cjk-face",
+    "HiraginoSans-W6",
+    "U+2601",
+    "size-14",
+    "class-member"
+   ]
+  },
+  {
+   "name": "g3_bi_emoji",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout/g3_bi_emoji.puml",
+   "source_sha256": "cd8934601c2ef7a3b85db37733632642b86a3a4ee6f2c4b5511b1ac2f7ea03be",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "emoji",
+    "AppleColorEmoji",
+    "U+2614",
+    "size-14",
+    "class-member"
+   ]
+  },
+  {
+   "name": "g3_bi_mixed",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout/g3_bi_mixed.puml",
+   "source_sha256": "acca5c8d6c909df26fc338cc12f64ded4e7d1ca8530e3a5d589b7ea28f93413b",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "mixed-ascii",
+    "ZapfDingbatsITC",
+    "U+27B2",
+    "size-14",
+    "class-member"
+   ]
+  },
+  {
+   "name": "g3_bi_emoji_12",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout/g3_bi_emoji_12.puml",
+   "source_sha256": "c12892d2e755b9fa47ec03145650375ddd1e1622f0b6f3529b6a5086bdf3c8b2",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "emoji",
+    "AppleColorEmoji",
+    "U+2614",
+    "size-12",
+    "class-member"
+   ]
+  },
+  {
+   "name": "g3_bi_dingbat_12",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-bi-heldout/g3_bi_dingbat_12.puml",
+   "source_sha256": "ee3d148c93e349e9d2bbb340bd6ad698d4349d849c523d9e48739b002b34a48c",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "dingbats",
+    "ZapfDingbatsITC",
+    "U+27B2",
+    "size-12",
+    "class-member"
+   ]
+  }
+ ]
+}

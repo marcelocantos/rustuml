@@ -110,10 +110,38 @@ pub fn mono_text_width(text: &str, font_size: f64) -> f64 {
 
 /// [`mono_text_width`] in a style: the cell advance is the same in every
 /// Menlo face, but which characters take a cell depends on the face JDK
-/// measures (its cmap, cascade and HarfBuzz plan).
+/// measures (its cmap, cascade and HarfBuzz plan). Menlo Bold Italic
+/// measures a scalar it does not have with the extracted JRS fallback
+/// advance.
 pub fn mono_text_width_styled(text: &str, font_size: f64, bold: bool, italic: bool) -> f64 {
     let face = ChainFace::for_style(ChainFamily::Menlo, bold, italic);
+    if face == ChainFace::MenloBoldItalic {
+        return menlo_bold_italic_width(text, font_size);
+    }
     cell_count(text, face) as f64 * font_size * MONO_WIDTH_PER_SIZE
+}
+
+/// Menlo Bold Italic width. A scalar in the JRS fallback table takes that
+/// face's advance. Every other non-hidden scalar takes one Menlo cell.
+fn menlo_bold_italic_width(text: &str, font_size: f64) -> f64 {
+    let face = ChainFace::MenloBoldItalic;
+    let cell = font_size * MONO_WIDTH_PER_SIZE;
+    let complexity = face.complexity_per_token(text);
+    java_utf16::tokens(text)
+        .zip(complexity)
+        .map(|(token, complexity)| match token {
+            Token::Unit(_) => cell,
+            Token::Char(c) => {
+                crate::menlo_bi_fallback::advance(c, font_size).unwrap_or_else(|| {
+                    if face.resolve(c, complexity) == ChainGlyph::Hidden {
+                        0.0
+                    } else {
+                        cell
+                    }
+                })
+            }
+        })
+        .sum()
 }
 
 /// Java characters of `text` that advance one cell of a monospaced face: an

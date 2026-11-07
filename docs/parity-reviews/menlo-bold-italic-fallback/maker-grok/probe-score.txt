@@ -1,0 +1,50 @@
+# Score of rust-predictions.tsv against relayed probe.stdout
+# probe.stdout SHA256 bc7e8fc5319e1bd7fc72ff78c9226154ccd2d5b56804e49cb79e38e99cc32708
+# probe.exit 0, probe.stderr empty, 283 lines
+# predictions were not edited
+
+NAME rows in the prediction file: 13/13 match Java's getStringBounds.
+Java also printed times-wharf, which has no prediction row. Java resolved
+Times to Dialog/Dialog/Dialog at 58.2421875, the Lucida Grande width the
+account already claims for a bare Times name. That row was not added.
+
+CONTROL U+2580: bold and bold italic both 8.4287109375, equal to the
+Menlo cell 1233/2048*14. Matches the prediction.
+
+FALLBACK, 267 scalars:
+- bold column: all 267 equal the Menlo cell. All match the prediction.
+- bold italic column: 0 equal the Menlo cell. All 267 differ from the prediction.
+- 149 distinct bold-italic widths.
+
+The probe does not name the substituted face. Chain data does not name it either.
+
+What the chain files contain, for every modelled face: own-cmap coverage runs,
+the .notdef advance, and ASCII advances (U+0020–U+007E) in
+tools/font-chain-reference/ascii-advances-round11. They do not contain a
+per-glyph advance for U+01F0, U+0220, U+2060, or U+2601–U+27AF. Monaco and
+Apple Symbols, the first two cascade slots in Menlo-BoldItalic.tsv, have no
+cmap and no advances in the extraction. JRS fallback order is not that cascade
+order: CoreTextSupport.m (JDK 21.0.5) calls JRSFontCreateFallbackFontForCharacters
+and encodes the scalar as a negative glyph id, and the strike measures that
+CTFont's own advance.
+
+Width classes, bold italic, against advances that are in the repo:
+- 2 scalars, U+01F0 and U+0220, are 8.4013671875 = 1229/2048*14, the Courier
+  New cell. Other fonts can share 1229, and the probe did not name Courier New,
+  so this is not an identification.
+- 27 scalars are 14.0 = 2048/2048*14. That equals Verdana's .notdef and also
+  any full-em glyph. Not an identification.
+- 2 scalars, U+2060 and U+FEFF, are 0.0. JDK 21.0.5 does not map those
+  default ignorables to the later invisible-glyph id; 0.0 is a measured
+  fallback advance. The chain's Hidden entries do not feed the simple-path
+  resolver.
+- 19.0 (18 scalars) is not an integer number of 2048ths at 14 pt.
+- 12.109999656677246 (U+260F, U+262F) is the float32 value of 865/1000*14,
+  a 1000-UPM advance. No such advance is stored.
+- The remaining widths are exact 2048ths (1400, 1700, 1225, 1539, ...) that
+  are not the .notdef advance of any modelled face, and are not in the ASCII
+  tables.
+
+No fallback scalar can be given a substituted face from this probe or from
+advances already in the repo. The mechanism is not portable without face data
+we do not have. No production change. The follow-up probe is probe-jrs-face/.

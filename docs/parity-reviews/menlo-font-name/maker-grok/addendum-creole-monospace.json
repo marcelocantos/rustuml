@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "mechanism": "menlo-font-name",
+  "maker": "maker-grok",
+  "account_commit": "bf5fc5b94dd24682d94e3291f7a6dc57700c47a1",
+  "implementation_commit": "6d17122b73f87599a6a0e64fcb8f67046dc4993f",
+  "measurement": "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g3/target-tip cargo test --workspace --release --test golden_no_oracle --test golden_pairs",
+  "observed": "golden_no_oracle 11180/11251 against the locked baseline 11181/11251. The only family that moved is activity, 1297/1299 to 1296/1299. The new failure name is activity/act_creole_monospace. golden_pairs passed 10496 of 12550 against the locked 10497; activity failures went to 1. No panic.",
+  "cause": "style_face resolved the creole family name monospace through modelled_family, which maps that SVG spelling to Menlo. The pre-existing explicit_monospace_font_uses_surrounding_metrics path measures <font:monospace> and <font:monospaced> with the surrounding face. Java's golden for act_creole_monospace matches that surrounding face, not the Menlo cell. A skinparam or measure_with_family call whose name is monospace is still the logical Monospaced face.",
+  "change": "When the creole monospace flag is the surrounding-metrics exception, resolve the surrounding family, not the literal name monospace. Leave Font.decode and the PostScript table unchanged."
+}

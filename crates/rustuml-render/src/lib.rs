@@ -52,6 +52,7 @@ mod java_bidi_data;
 pub mod json_diagram;
 pub mod layout_oracle;
 pub mod math;
+mod menlo_bi_fallback;
 pub mod metrics;
 pub mod mindmap;
 mod non_ascii_widths;

@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Times
+class Berth
+Berth : Pier x
+@enduml

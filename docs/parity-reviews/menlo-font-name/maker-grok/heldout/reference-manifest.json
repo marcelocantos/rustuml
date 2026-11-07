@@ -1,0 +1,151 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "cases": [
+  {
+   "name": "g3_menlo_case",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-name-heldout/g3_menlo_case.puml",
+   "source_sha256": "9047412c12415b5639b1cd90f2d13e6930ae106261ccf33ca556c893471c0e28",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "case",
+    "Menlo",
+    "class"
+   ]
+  },
+  {
+   "name": "g3_menlo_regular",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-name-heldout/g3_menlo_regular.puml",
+   "source_sha256": "4ea88898e850048cfd3da3dfc2ad775f12f893601037ae690a85e2c23526b1cc",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "postscript",
+    "Menlo-Regular",
+    "class"
+   ]
+  },
+  {
+   "name": "g3_menlo_bold_token",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-name-heldout/g3_menlo_bold_token.puml",
+   "source_sha256": "068824ea2d5f9416602b65dfb1044017fe0d70d7688224db1de64dc06ede8636",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "decode-style-token",
+    "Menlo-Bold",
+    "class"
+   ]
+  },
+  {
+   "name": "g3_arial_boldmt",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-name-heldout/g3_arial_boldmt.puml",
+   "source_sha256": "832b260c9087283185e0ac13f57e357117d0b41f05d69a7d1bbaacfe035ecb74",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "postscript",
+    "Arial-BoldMT",
+    "class"
+   ]
+  },
+  {
+   "name": "g3_times_dialog",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-name-heldout/g3_times_dialog.puml",
+   "source_sha256": "cdb5398557485cc8d1eb7d89f85e282a0c6e0add4b9994ea27bbcf4aff0613f2",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "physical-name-times",
+    "Dialog",
+    "class"
+   ]
+  },
+  {
+   "name": "g3_serif_tnr",
+   "source": "/Users/marcelo/Library/Caches/rustuml-grok-g3/menlo-name-heldout/g3_serif_tnr.puml",
+   "source_sha256": "e9d467b7c36eadf23c82f24d8cb90c4394a668b4b5909fa02e49fc7d175b6bf6",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "logical-serif",
+    "Times New Roman",
+    "class"
+   ]
+  }
+ ]
+}

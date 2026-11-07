@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "mechanism": "menlo-bold-italic-fallback",
+  "maker": "maker-grok",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jdk": "OpenJDK 21.0.5 (jdk-21.0.5-ga), macOS 27.2",
+  "java_locations": [
+    "tools/FontChainExtract.swift (8-20): simple path is CCharToGlyphMapper then CoreTextSupport.m CTS_GetGlyphsAsIntsForCharacters (JDK 21.0.5, 99-135): own glyph, else JRSFontCreateFallbackFontForCharacters, else .notdef",
+    "sun.font.CFont#createCompositeFont (203-239) and CFontManager#getOrCreateFallbackFont (328-338): complex path walks the cascade",
+    "tools/font-chain-reference/monkeyman-round9/Menlo-Bold.bold.own.tsv and Menlo-BoldItalic.bolditalic.own.tsv: Bold's own cmap minus Bold Italic's is 267 BMP scalars",
+    "tools/font-chain-reference/monkeyman-round9/Menlo-BoldItalic.tsv: none of those 267 is an S (simple-path missing) run; 164 are C (complex mapped); the cascade starts Monaco, AppleSymbols, CourierNewPS-BoldItalicMT, Helvetica-BoldOblique, LucidaGrande-Bold"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/plantuml_metrics.rs::cell_count",
+    "crates/rustuml-render/src/plantuml_metrics.rs::mono_text_width_styled",
+    "crates/rustuml-render/src/font_chain.rs::ChainFace::resolve"
+  ],
+  "invariant": "A character the simple path does not draw from Menlo Bold Italic's own cmap is measured with the advance of the font JRS substitutes, not with Menlo's cell and not with .notdef.",
+  "causal_divergence": "cell_count charges one Menlo cell (1233/2048 of the size) for every non-hidden token. Menlo's .notdef equals that cell, so simple-path misses are already right. The 267 scalars Menlo Bold maps and Menlo Bold Italic does not are absent from Bold Italic's S runs, so resolve() returns Mapped and the cell is charged. Java's simple path draws a fallback glyph with that font's own advance. The chain TSVs name the cascade slots and do not record the fallback advance.",
+  "planned_change": "After the relayed probe returns each scalar's bold and bold-italic getStringBounds, measure those scalars with the fallback advance the probe identifies, using a face whose advance is already in the chain data when the probe matches one. Do not invent an advance. A scalar whose probe width equals the cell stays a cell.",
+  "precommitted_measurement": {
+    "cell_14": "1233/2048 * 14 = 8.4287109375",
+    "set": "267 scalars listed in probe/fallback-codepoints.txt, derived from the two own-cmap TSVs",
+    "rust_now": "both Menlo Bold and Menlo Bold Italic measure every scalar in the set, and the U+2580 control, as one cell",
+    "predictions": "probe/rust-predictions.tsv, registered before the Java run"
+  },
+  "perturbation_axes": [
+    "scalar in Menlo Bold's cmap and not in Menlo Bold Italic's",
+    "bold versus bold italic of the same scalar",
+    "own-cmap control U+2580 against a fallback scalar"
+  ]
+}

@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName MONOSPACE
+skinparam defaultFontSize 14
+class Zedvex
+@enduml

@@ -949,9 +949,10 @@ fn code_line_width(line: &str, font_size: f64) -> f64 {
 }
 
 fn code_line_metrics(font_size: f64) -> RenderedLineMetrics {
+    // Logical Monospaced. The SVG family stays the spelling "monospace".
     RenderedLineMetrics {
-        height: atom_height_with_family(font_size, "monospace"),
-        ascent: ascent_with_family(font_size, "monospace"),
+        height: atom_height_with_family(font_size, "Monospaced"),
+        ascent: ascent_with_family(font_size, "Monospaced"),
     }
 }
 
@@ -987,8 +988,8 @@ fn segment_font_size(seg: &creole::Segment, font_size: f64) -> f64 {
 }
 
 fn segment_font_family<'a>(seg: &'a creole::Segment, font_family: &'a str) -> &'a str {
-    if seg.style.monospace {
-        "monospace"
+    if seg.style.monospace && seg.style.font_family.is_none() {
+        "Monospaced"
     } else {
         seg.style.font_family.as_deref().unwrap_or(font_family)
     }
@@ -1114,8 +1115,8 @@ fn first_segment_metrics_with_family(
         return rendered_line_metrics_with_family(content, font_size, font_family);
     };
     let size = first.style.size.map_or(font_size, |s| s as f64);
-    let family = if first.style.monospace {
-        "monospace"
+    let family = if first.style.monospace && first.style.font_family.is_none() {
+        "Monospaced"
     } else if let Some(family) = first.style.font_family.as_deref() {
         family
     } else {
@@ -3161,7 +3162,7 @@ fn emit_generated_handwritten_warning(svg: &mut String, dx: f64) {
             x: dx + WARNING_TEXT_X,
             y: HEAD_BOX_Y + WARNING_RECT_X + rect_height - WARNING_BASELINE_LIFT,
             font_size: WARNING_FONT_SIZE as u32,
-            font_family: "monospace",
+            font_family: "Monospaced",
             fill: "#000000",
             bold: false,
             italic: false,
@@ -4524,7 +4525,8 @@ struct PlantUmlSvg {
     /// `skinparam participantFontColor`.
     participant_font_color: String,
     /// Plain participant head/tail label family. Driven by
-    /// `skinparam defaultFontName` / `sequenceFontName` / `participantFontName`.
+    /// `skinparam defaultFontName` / `participantFontName`.
+    /// `sequenceFontName` is not a FontParam and does not change this.
     participant_font_family: String,
     /// Plain participant head/tail label font size. Driven by
     /// `skinparam participantFontSize`.
@@ -4538,7 +4540,7 @@ struct PlantUmlSvg {
     /// Message/arrow label colour. Driven by `skinparam arrowFontColor`.
     message_font_color: String,
     /// Message/arrow label family. Driven by `skinparam defaultFontName` /
-    /// `sequenceFontName` / `arrowFontName`.
+    /// `arrowFontName`. `sequenceFontName` is not a FontParam.
     message_font_family: String,
     /// Message/arrow label font size. Driven by `skinparam arrowFontSize`.
     message_font_size: u32,
@@ -4550,7 +4552,7 @@ struct PlantUmlSvg {
     /// `skinparam noteFontSize`.
     note_font_size: u32,
     /// Note label family. Driven by `skinparam defaultFontName` /
-    /// `sequenceFontName` / `noteFontName`.
+    /// `noteFontName`. `sequenceFontName` is not a FontParam.
     note_font_family: String,
     /// Drop-shadow filter id for note bodies. Driven by
     /// `skinparam noteShadowing true`.
@@ -7044,13 +7046,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 page_font_family = family;
             }
             "sequencefontname" => {
-                let family = canonical_font_family(val);
-                message_font_family = family.clone();
-                participant_font_family = family.clone();
-                note_font_family = family.clone();
-                divider_font_family = family.clone();
-                group_header_font_family = family.clone();
-                page_font_family = family;
+                // SkinParam.cleanForKeySlow does not strip a bare "sequence"
+                // prefix. sequenceFontName is neither a FontParam nor a
+                // FromSkinparamToStyle key, so Java keeps the current family.
+                // sequenceParticipantFontName still becomes participantfontname.
             }
             "defaultfontcolor" => {
                 let c = resolve_color(val);

@@ -1,0 +1,42 @@
+# CG score, font-name held-out batch
+# reference-results.json SHA256 087039ee0737a5084c2953de6665190848331ff69969bc1ec3bc0465ce5ab710
+# comparator: rustuml_oracle::compare::compare_svg_strict (unchanged, GEOM_EPS 0.02)
+# expected = Java stdout, actual = Rust SVG. Processing instructions, comments,
+# and whitespace-only text are ignored by that function. Java files are 93 to 105
+# bytes longer than the pre-registered SVGs because of the plantuml-src trailer.
+# Predictions were not edited. Tip binary re-renders are byte-identical to the
+# pre-registered SVGs (SHA256). Base is rustuml-base from cb550c0d6.
+
+case                    tip-prediction  tip-binary  base
+g3_menlo_case           MATCH 0         MATCH 0     DIFF 6
+g3_menlo_regular        MATCH 0         MATCH 0     DIFF 6
+g3_menlo_bold_token     MATCH 0         MATCH 0     DIFF 6
+g3_arial_boldmt         MATCH 0         MATCH 0     DIFF 5
+g3_times_dialog         MATCH 0         MATCH 0     MATCH 0
+g3_serif_tnr            MATCH 0         MATCH 0     DIFF 6
+
+Base g3_times_dialog.svg is byte-identical to the pre-registered SVG. The other
+five base SVGs differ. Menlo base root width is 87px against Java 94px. Arial
+base rect width is 65.7012 against Java 64.6826. Serif base root width is 87px
+against Java 83px. No tip case differs, so this packet has no held-out failure
+to correct.
+
+Raw comparator lines (name, status, difference count, first differences):
+tip:g3_menlo_case	MATCH	0	[]
+base:g3_menlo_case	DIFF	6	[AttrMismatch { index: 0, tag: "svg", expected_attrs: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "84px"), ("preserveAspectRatio", "none"), ("style", "width:94px;height:84px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 94 84"), ("width", "94px"), ("zoomAndPan", "magnify")], actual_attrs: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "84px"), ("preserveAspectRatio", "none"), ("style", "width:87px;height:84px;backgrou
+tipbin:g3_menlo_case	MATCH	0	[]
+tip:g3_menlo_regular	MATCH	0	[]
+base:g3_menlo_regular	DIFF	6	[AttrMismatch { index: 0, tag: "svg", expected_attrs: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "84px"), ("preserveAspectRatio", "none"), ("style", "width:94px;height:84px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 94 84"), ("width", "94px"), ("zoomAndPan", "magnify")], actual_attrs: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "84px"), ("preserveAspectRatio", "none"), ("style", "width:87px;height:84px;backgrou
+tipbin:g3_menlo_regular	MATCH	0	[]
+tip:g3_menlo_bold_token	MATCH	0	[]
+base:g3_menlo_bold_token	DIFF	6	[AttrMismatch { index: 0, tag: "svg", expected_attrs: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "84px"), ("preserveAspectRatio", "none"), ("style", "width:94px;height:84px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 94 84"), ("width", "94px"), ("zoomAndPan", "magnify")], actual_attrs: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "84px"), ("preserveAspectRatio", "none"), ("style", "width:87px;height:84px;backgrou
+tipbin:g3_menlo_bold_token	MATCH	0	[]
+tip:g3_arial_boldmt	MATCH	0	[]
+base:g3_arial_boldmt	DIFF	5	[AttrMismatch { index: 4, tag: "rect", expected_attrs: [("fill", "#F1F1F1"), ("height", "64.0986"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "64.6826"), ("x", "7"), ("y", "7")], actual_attrs: [("fill", "#F1F1F1"), ("height", "64.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "65.7012"), ("x", "7"), ("y", "7")] }, AttrMismatch { index: 7, tag: "text", expected_attrs: [("fill", "#000000"), ("font-family",
+tipbin:g3_arial_boldmt	MATCH	0	[]
+tip:g3_times_dialog	MATCH	0	[]
+base:g3_times_dialog	MATCH	0	[]
+tipbin:g3_times_dialog	MATCH	0	[]
+tip:g3_serif_tnr	MATCH	0	[]
+base:g3_serif_tnr	DIFF	6	[AttrMismatch { index: 0, tag: "svg", expected_attrs: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "84px"), ("preserveAspectRatio", "none"), ("style", "width:83px;height:84px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 83 84"), ("width", "83px"), ("zoomAndPan", "magnify")], actual_attrs: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "84px"), ("preserveAspectRatio", "none"), ("style", "width:87px;height:84px;backgrou
+tipbin:g3_serif_tnr	MATCH	0	[]

@@ -1,0 +1,24 @@
+@startuml
+skinparam defaultFontName Menlo
+skinparam defaultFontSize 14
+class Host {
+  <font:Menlo-Bold-18>hyphen
+  <font:Menlo bold 16>spaces
+  <font:Arial-bold>namebold
+  <font:Verdana-bolditalic>namebi
+  <font:Helvetica-italic-12>italic12
+  <font:14>numeric
+  <font:Menlo->traildash
+  <font:monospace>cssmono
+  <font:monospaced>logicmono
+  <font:Monospaced>LogicMono
+  <font:Dialog>dialog
+  <font:DialogInput>dialogin
+  <font:Serif>SerifW
+  <font:SansSerif>SansW
+  <font:sans-serif>csssans
+  <font:serif>cssserif
+  <font:MONOSPACE>UpperMono
+  <font:courier>courierw
+}
+@enduml
