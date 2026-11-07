@@ -1,0 +1,2019 @@
+{
+ "note": "Rust outputs recorded before any Java result for batch Q7; java_prediction_valid is the checker's prediction.",
+ "builds": [
+  "7e13632cd",
+  "c25ccbf3c",
+  "9ed52f435",
+  "9fc567332"
+ ],
+ "cases": [
+  {
+   "name": "q7_num_bs_seq_cont",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "continuation",
+    "sequence"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "5bf788e82660030995fd0beefa31e6536c0bdc09f20f8b96d248ae0869b90119",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "08fb3646fce9b1e2646eac5a8f11cff0c87dbee3d56cebd8e40e253e324e8760",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "4b3cda9bdf35a7940f58e94d61f635f7f9d9c1fb69bdc0e10dfe639bb34cc07e",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_bs_class_cont",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "continuation",
+    "class"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "2151c85d4430a3ef94bf6d7a1c25e80cf1f482c66084eeb1409f695d74e8edd9",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "6295143dd88d88e0a94f2a37ed477a3126ea1a38d54c36dcb2c6fb0bdf967582",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "2151c85d4430a3ef94bf6d7a1c25e80cf1f482c66084eeb1409f695d74e8edd9",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "3a0306bd9a470abae02cec549e7345d1107a9d999b3c28105598479bdd491c33",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_bs_state_cont",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "continuation",
+    "state"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "07ca83d2cf27b85977a4d065d4cbfd6d5f8a8c7162192a96d82daa9ea6ae4cad",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "645440617504cd3714eb2f16d407979142b514570223352fa4e61b0773ef79e2",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "07ca83d2cf27b85977a4d065d4cbfd6d5f8a8c7162192a96d82daa9ea6ae4cad",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "4330343c03efd7171eaf11eef5c2f0330766727441f368fddb5319579e199b5c",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_ideo_blank_bs_class",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "U+3000-only first line is content for String#trim"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "f05f22fe7204bc8cda7eced5d73ca2668e06cebfaca289911cd14892310cfc45",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "f05f22fe7204bc8cda7eced5d73ca2668e06cebfaca289911cd14892310cfc45",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "f05f22fe7204bc8cda7eced5d73ca2668e06cebfaca289911cd14892310cfc45",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "f05f22fe7204bc8cda7eced5d73ca2668e06cebfaca289911cd14892310cfc45",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_nbsp_blank_bs_seq",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "NBSP-only first line is content for String#trim"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "f694973653637c5e6bc359107af457e8b424484152b648fc6cee30e6d49f2470",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "f694973653637c5e6bc359107af457e8b424484152b648fc6cee30e6d49f2470",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "f694973653637c5e6bc359107af457e8b424484152b648fc6cee30e6d49f2470",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_us_blank_bs_seq",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "U+001F-only first line is blank for String#trim"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{1f}\"\n",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{1f}\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{1f}\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "178121987650d559d8750f5d968452f337a6790abf91cf47f8bd927925c5e688",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_format_mid_class",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "@@@format between content lines"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "5e6ac66a66ae7f3f5662e2bc9bb1282f391b31f6cfe35d46583533931a3fe36f",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "445abe33b9b294c0ccd6dfb56cdf9476b8f3f0e6faf9008305d76f0bc541332b",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "6e40408de8fce113c5124b75fff430c886f93728eca2a96b0a52ac287bf609ca",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "6e40408de8fce113c5124b75fff430c886f93728eca2a96b0a52ac287bf609ca",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_format_mid_marked",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "marked control",
+    "@@@format between content lines"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "445abe33b9b294c0ccd6dfb56cdf9476b8f3f0e6faf9008305d76f0bc541332b",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "445abe33b9b294c0ccd6dfb56cdf9476b8f3f0e6faf9008305d76f0bc541332b",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "445abe33b9b294c0ccd6dfb56cdf9476b8f3f0e6faf9008305d76f0bc541332b",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "445abe33b9b294c0ccd6dfb56cdf9476b8f3f0e6faf9008305d76f0bc541332b",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_comment_blank_bs_obj",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "blank line after content seen is appended",
+    "object"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "d25b4b7867a918d610fa939e0e3f0bc27ba139231f2a2106679c4afd55b3f174",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "d25b4b7867a918d610fa939e0e3f0bc27ba139231f2a2106679c4afd55b3f174",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "f0dd85dde52711b5759c6baa641142aedbe30d7e3a6ca43562cf06cc8e3c6e3e",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "f0dd85dde52711b5759c6baa641142aedbe30d7e3a6ca43562cf06cc8e3c6e3e",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_crlf_tab_blank_bs_state",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "tab and blank leading lines",
+    "state"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "9f07ec89b0c6b1647d238c3f1ad946fc10bf1f8683078b03b5efc5946fe8de25",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "ae2386b110cc65db11bce1274fea23bff4514fb45d779b34680c5945ce34c7a9",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "36bd5e7aa034b0cc9a7a33698d3c86a8a827a20d17ac9278961c799a2f171639",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "36bd5e7aa034b0cc9a7a33698d3c86a8a827a20d17ac9278961c799a2f171639",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_nomark_plain_class",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no start line at all",
+    "class"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "cd1e23e5e390e2441995e3b332552c51e6e1960a6190c6477f1532ae18f4dd0b",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "cd1e23e5e390e2441995e3b332552c51e6e1960a6190c6477f1532ae18f4dd0b",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "cd1e23e5e390e2441995e3b332552c51e6e1960a6190c6477f1532ae18f4dd0b",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "cd1e23e5e390e2441995e3b332552c51e6e1960a6190c6477f1532ae18f4dd0b",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_bs_usecase_blank_inside",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "usecase"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "933866cc410d0a862be79be8b0cf58ae6070d26d50f2e517df73f41a083b6ae7",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "7462089506933886a91c614c73e68a2864239d894c5ca8e2baf54d30ec78dfa1",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "933866cc410d0a862be79be8b0cf58ae6070d26d50f2e517df73f41a083b6ae7",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "933866cc410d0a862be79be8b0cf58ae6070d26d50f2e517df73f41a083b6ae7",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_bs_activity_if",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "activity"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "aad85dcd02d5380b30aa835ba25f5df54f674bae028a97ed8a41292571cd84f1",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "aad85dcd02d5380b30aa835ba25f5df54f674bae028a97ed8a41292571cd84f1",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "aad85dcd02d5380b30aa835ba25f5df54f674bae028a97ed8a41292571cd84f1",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "aad85dcd02d5380b30aa835ba25f5df54f674bae028a97ed8a41292571cd84f1",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_ws_at_component",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "component"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "6498b08b3d15b9a2603587990acc81861b0c18efea4a20ac36392eb8be6029fc",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "e084d711c0804a08b97657ea747dcd09e90d039629a63fec1a0b066a1f77ba0e",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "e084d711c0804a08b97657ea747dcd09e90d039629a63fec1a0b066a1f77ba0e",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "e084d711c0804a08b97657ea747dcd09e90d039629a63fec1a0b066a1f77ba0e",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_inc_before_bs",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "include before \\start is in the discarded Pipe block"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "6107b410106362925d2b0f85f1246c09a2069fde4fe8340f75e9cef41a3140ac",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "a51e6a4892ed076bd104523c41073de89dabdbb3d5fcab9a022d543031d86f44",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "6107b410106362925d2b0f85f1246c09a2069fde4fe8340f75e9cef41a3140ac",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_def_before_bs",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "variable before \\start is in the discarded Pipe block"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "419514a5029a05c0e05cd062c26c126825e66cd626b5b8ba32788140840184b6",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "9740766026ba80c37e4c4f90eb9b16ced8a15ea467ef5f6c5db986299695eb19",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "9740766026ba80c37e4c4f90eb9b16ced8a15ea467ef5f6c5db986299695eb19",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_timing_bs",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "timing"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "9852db7b1d44e312fe3e2dbcf62a09dceb8e7b523cc6a2797367e2f7fad26a36",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "9852db7b1d44e312fe3e2dbcf62a09dceb8e7b523cc6a2797367e2f7fad26a36",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "9852db7b1d44e312fe3e2dbcf62a09dceb8e7b523cc6a2797367e2f7fad26a36",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "9852db7b1d44e312fe3e2dbcf62a09dceb8e7b523cc6a2797367e2f7fad26a36",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_gantt_blank_bs",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "gantt"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "39c4d78a75ba8f0db05ba61fcf7bc9b6ec37096007604b8128cc44f9b89d493f",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "39c4d78a75ba8f0db05ba61fcf7bc9b6ec37096007604b8128cc44f9b89d493f",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_ws_json",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "json"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "369a634e8ff5fb800882102a48507706ce1a4c6d9048a9221a66bd61a30874cd",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "369a634e8ff5fb800882102a48507706ce1a4c6d9048a9221a66bd61a30874cd",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "369a634e8ff5fb800882102a48507706ce1a4c6d9048a9221a66bd61a30874cd",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "369a634e8ff5fb800882102a48507706ce1a4c6d9048a9221a66bd61a30874cd",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_bs_wbs_cont",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "wbs",
+    "continuation"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "c0b31f44e7384650821c62f738137a2ab147b54460bdca909d7b03f93c7e8f9c",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "c0b31f44e7384650821c62f738137a2ab147b54460bdca909d7b03f93c7e8f9c",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startwbs\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "1bd8d6091079db5568671f29678e8ce7fe1b691e3630374047a4e662881ca538",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_bs_mindmap_crlf",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "mindmap"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "03f49d4ed0313cc0550ccf1f04967df123a505029d2c0ba2c2859255d1ddb748",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "03f49d4ed0313cc0550ccf1f04967df123a505029d2c0ba2c2859255d1ddb748",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startmindmap\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "q7_num_tim_func_bs",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "TIM function"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "5d8c6134ac8c0149bf883cae65a29625a506cb4c4c936fdeac0fcdd9fa2f4859",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "f38c377b7379efb00d45f3324cb725634f1642441ea7e024e1ee1ede497286ac",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "8cd7e36bc77b6df44a7e499dd3b3f93a0a8290eabafa457d2fe7d9da20cea96e",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_tim_if_bs_class",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "TIM if",
+    "class"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "b48a70bc83333765736fb493d5776cfdb8ce475c500bba09fdaea198dd5155f1",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "1c2430578ab57265321628dfe4d30e8649b166bf7aaafd1bd3c12d4983d41407",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "ffe4cf31e79ff575e49d52209c40edcb6d33fcd987e3fbbd3addf9d74476a499",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "ffe4cf31e79ff575e49d52209c40edcb6d33fcd987e3fbbd3addf9d74476a499",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_inc_raw_crlf",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "raw include"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "fec578939b50c39d358d34ffcaeee0f78697c731c7b417511016a03d64187415",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "fec578939b50c39d358d34ffcaeee0f78697c731c7b417511016a03d64187415",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "fec578939b50c39d358d34ffcaeee0f78697c731c7b417511016a03d64187415",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_num_inc_nbsp_wrapped",
+   "java_prediction_valid": true,
+   "axes": [
+    "numbering",
+    "no mark",
+    "wrapped include with NBSP header"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "5fde24cc96f9d3b8bc67ff35fee4b5f82243835520cbe09d09fbaceeb0926e08",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "5fde24cc96f9d3b8bc67ff35fee4b5f82243835520cbe09d09fbaceeb0926e08",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startuml\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "5fde24cc96f9d3b8bc67ff35fee4b5f82243835520cbe09d09fbaceeb0926e08",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_err_bs_class_line",
+   "java_prediction_valid": false,
+   "axes": [
+    "error",
+    "no mark",
+    "line number on error page"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "b5bc222e68ff88eb64424be6be985d18a9419c1aefcb44b8d0ba32cad203fb7c",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "202b7fdd3c9edd4845986294d3856031d945a8e7157a352d6bd96957903933d4",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "b5bc222e68ff88eb64424be6be985d18a9419c1aefcb44b8d0ba32cad203fb7c",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "b5bc222e68ff88eb64424be6be985d18a9419c1aefcb44b8d0ba32cad203fb7c",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_err_nbsp_hdr_seq",
+   "java_prediction_valid": false,
+   "axes": [
+    "error",
+    "NBSP header",
+    "line number on error page"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"this line ( is ]] not valid\"\n",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{a0}@startuml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{a0}this line ( is ]] not valid\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "2e18e71c035852eddfb4fcfe9d7ca202962aef0c154d6262a8fb648acf294399",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_type_bs_regexp",
+   "java_prediction_valid": true,
+   "axes": [
+    "start type",
+    "prefix regex"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "0eff7bafd994fcd51f3f546b5c45d63ef305e0f6982dc3a17a15733b233c697c",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @startregexp\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_type_bs_ebnfx",
+   "java_prediction_valid": true,
+   "axes": [
+    "start type",
+    "prefix ebnf"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "bb59bb6ebdd67df1c8136702cc57a94040a8f0db47f9a814952b027b28ee63e6",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @startebnfx\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startebnfx\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "q7_type_at_salt_mixed",
+   "java_prediction_valid": true,
+   "axes": [
+    "start type",
+    "mixed-case salt; Pipe expects @endSalt"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "1a456eaefe35c15704139ebb1a47e8f4e679c5e59e921ffcf136a8a0f7b07f45",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "1a456eaefe35c15704139ebb1a47e8f4e679c5e59e921ffcf136a8a0f7b07f45",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @startSalt\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @startSalt\n",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_type_bs_nwdiagram",
+   "java_prediction_valid": true,
+   "axes": [
+    "start type",
+    "prefix nwdiag"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "f8d10d7a304847181a044843bf46c32f86f0848c91f603df397383b01432f177",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @startnwdiagram\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startnwdiagram\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "q7_type_bs_yamlfile",
+   "java_prediction_valid": true,
+   "axes": [
+    "start type",
+    "prefix yaml"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "8f4d1ceafeb53ddea133929b15b8c5d80c568731de4e11cc89f879ba6e4b2340",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @startyamlfile\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_type_bs_umm",
+   "java_prediction_valid": false,
+   "axes": [
+    "start type",
+    "u but not uml: UNKNOWN"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @startumm\n",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @startumm\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startumm\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "d018e034360c74756fb7139f5af70cf6c1d0643ec779c5c3bedf715ad5c2101c",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_type_bare_bs_start",
+   "java_prediction_valid": false,
+   "axes": [
+    "start type",
+    "bare \\start is not a start directive (p >= length)",
+    "unsure"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\start\"\n",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\start\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\start\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "0a5cab15cac455b7933d1c318a9806d1cbb56a89da26e2c411aeb8e8f68fc2c3",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_type_at_tab_uml",
+   "java_prediction_valid": false,
+   "axes": [
+    "start type",
+    "tab after start: UNKNOWN"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @start\tuml\n",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "e782f7ac74b873f833290c2dea570811108335f0c8051a78114054478e55d1d9",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "e782f7ac74b873f833290c2dea570811108335f0c8051a78114054478e55d1d9",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "e782f7ac74b873f833290c2dea570811108335f0c8051a78114054478e55d1d9",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_type_bs_umlupper_diag",
+   "java_prediction_valid": true,
+   "axes": [
+    "start type",
+    "upper-case prefix uml"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "6b0788ca9a5e9e25179ae8734cb01ae4e540446482708364739b7f9ccf4dd373",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @startumldiagram\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startUMLdiagram\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "6b0788ca9a5e9e25179ae8734cb01ae4e540446482708364739b7f9ccf4dd373",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_type_bs_dotless_mindmap",
+   "java_prediction_valid": true,
+   "axes": [
+    "start type",
+    "regionMatches(true) folds U+0131 to I",
+    "unsure"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @startmındmap\n",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @startmındmap\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startmındmap\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "q7_type_inner_jsonx",
+   "java_prediction_valid": true,
+   "axes": [
+    "start type",
+    "inner prefix json restarts the block"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "2c3768949039e4b106a46ae0be73c8f2a906b887565da644417dd41396aed491",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @startjsonx\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @startjsonx\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @startjsonx\n",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_type_inner_quote_mindmap",
+   "java_prediction_valid": true,
+   "axes": [
+    "start type",
+    "commented inner start becomes a start through UncommentReadLine"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "48ebc14a54796c913edbeba808bceeb2cc1238d4b4d330fd26f4a290851e95f0",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"* Sedge\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"* Sedge\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "q7_type_bs_project_upper",
+   "java_prediction_valid": true,
+   "axes": [
+    "start type",
+    "upper-case project -> GANTT"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "a3f1fbbd32a4f9d5b013899d2a57b2002e58e93d011374b4390db42a7c4c521f",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: unsupported diagram type: @startproject\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_type_bs_wbs_name",
+   "java_prediction_valid": true,
+   "axes": [
+    "start type",
+    "wbs with a name"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "42cbd54bb07f0d7f1bd68939ae215abb34bdf3164abade63e584adda5f7de78a",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "42cbd54bb07f0d7f1bd68939ae215abb34bdf3164abade63e584adda5f7de78a",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\startwbs reedbed\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "q7_hdr_figsp_at",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "U+2007 is not Java whitespace"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "c225db673bc4c3ce887e5908cd608807828d073b0cfc9f24c4dfb71fdc5d65f5",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{2007}@startuml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "610774c15b171312249c82e1045f578cc36458bbdf0239274bef980f62c167ea",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "610774c15b171312249c82e1045f578cc36458bbdf0239274bef980f62c167ea",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_hdr_nnbsp_bs_class",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "U+202F header stripped from content and end"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "5e6ac66a66ae7f3f5662e2bc9bb1282f391b31f6cfe35d46583533931a3fe36f",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "5e6ac66a66ae7f3f5662e2bc9bb1282f391b31f6cfe35d46583533931a3fe36f",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "5e6ac66a66ae7f3f5662e2bc9bb1282f391b31f6cfe35d46583533931a3fe36f",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "5e6ac66a66ae7f3f5662e2bc9bb1282f391b31f6cfe35d46583533931a3fe36f",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_hdr_quote_start",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "quote header uncomments every line"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "26b11e757a28f7c5b0abefc948a5b95c7ff6eec21e0e07aac12fa3f11ca0e943",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "q7_hdr_quote_comment_live",
+   "java_prediction_valid": false,
+   "axes": [
+    "header",
+    "quote header turns a comment into content"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"plain remark\"\n",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "2e18e71c035852eddfb4fcfe9d7ca202962aef0c154d6262a8fb648acf294399",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "2e18e71c035852eddfb4fcfe9d7ca202962aef0c154d6262a8fb648acf294399",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "2e18e71c035852eddfb4fcfe9d7ca202962aef0c154d6262a8fb648acf294399",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_hdr_quote_continuation",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "continuation reads the uncommented line"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "ee4959ba427b0bfbb913dd98af6d04db3a4e0579e9bfd854b199279e01f50fba",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "f2de59fb567d8d51e4fe5089e55e55fdb6588b012c520843acde6fcc427498ea",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_hdr_tag_continuation",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "<...> header",
+    "continuation"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "17ebc415b718cda4104ff1a6d704e57c221b07017b3b9669eaf1e1714d5bd8d4",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"<q>@startuml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"<q>@startuml\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "q7_hdr_nbsp_end_only",
+   "java_prediction_valid": false,
+   "axes": [
+    "header",
+    "NBSP before the end only: content line",
+    "unsure"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{a0}@enduml\"\n",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{a0}@enduml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{a0}@enduml\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "58645a58a97bb23da699443009e4a972a2251c9ff7ad74e2d30824198e9fb9f4",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_hdr_nbsp_tab",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "NBSP then tab"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "db43a6fadfc202035276a6c4db95a9e1b72983303f0c882c6db63f41c3c8670e",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{a0}\\t@startuml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{a0}@enduml\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "07f1e555ea9406ca19cfc5510489e1e30986a65f4a63c94d0f831259b93af6ba",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_hdr_zwsp_class",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "U+200B header",
+    "class"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "5e6ac66a66ae7f3f5662e2bc9bb1282f391b31f6cfe35d46583533931a3fe36f",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{200b}@startuml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{200b}@startuml\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "q7_hdr_bom_content",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "BOM on a content line (ReadLineReader)"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{feff}Kestrel -> Marten : bom\"\n",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{feff}Kestrel -> Marten : bom\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{feff}Kestrel -> Marten : bom\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "q7_hdr_nbsp_state",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "NBSP",
+    "state",
+    "numbering"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "9f07ec89b0c6b1647d238c3f1ad946fc10bf1f8683078b03b5efc5946fe8de25",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "9f07ec89b0c6b1647d238c3f1ad946fc10bf1f8683078b03b5efc5946fe8de25",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "9f07ec89b0c6b1647d238c3f1ad946fc10bf1f8683078b03b5efc5946fe8de25",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "9f07ec89b0c6b1647d238c3f1ad946fc10bf1f8683078b03b5efc5946fe8de25",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_hdr_tilde",
+   "java_prediction_valid": false,
+   "axes": [
+    "header",
+    "'~' is isWordOrTilde: no header, content line"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"~@startuml\"\n",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"~@startuml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"~@startuml\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "2019ad37450bc72cc36c9c49201ab0721804e2b494052c3037df5d0b6d0be656",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_hdr_dash_space",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "header '-' before a spaced start"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "0c611becdec09be6f26ec6cd12fcf70c3e64eac596535b890ccdd926762a51a4",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"- @startuml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"- @startuml\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "q7_hdr_nested_angle",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "two <...> groups"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "0a1ef94f0accdabff1e9e09bc3e93921033c149c2dff8fe4e7442d49a21a560c",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"<a><b>@startuml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"<a><b>@startuml\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "q7_hdr_angle_unclosed",
+   "java_prediction_valid": true,
+   "axes": [
+    "header",
+    "directive test runs before the unclosed <...> test"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "235b34b8a96c740c6758585f24221bb5a86e01c3adf4a917e70231e120641be9",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"<a @startuml\"\n",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"<a @startuml\"\n",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stderr": "",
+     "welcome": true
+    }
+   }
+  },
+  {
+   "name": "q7_ctl_marked_seq_cont",
+   "java_prediction_valid": true,
+   "axes": [
+    "control",
+    "marked",
+    "continuation"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "fcee7e28c24b6a659bb4d7b155d401d00e3b35dea07170c6912034f0dbd22e52",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "fcee7e28c24b6a659bb4d7b155d401d00e3b35dea07170c6912034f0dbd22e52",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "fcee7e28c24b6a659bb4d7b155d401d00e3b35dea07170c6912034f0dbd22e52",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "d73a220fa5bdc8bd13be51c9dcaaacade976b4a849a398af5aaee50617bb35e2",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  },
+  {
+   "name": "q7_ctl_marked_class_crlf",
+   "java_prediction_valid": true,
+   "axes": [
+    "control",
+    "marked",
+    "class"
+   ],
+   "rust": {
+    "7e13632cd": {
+     "exit": 0,
+     "svg_sha256": "cd1e23e5e390e2441995e3b332552c51e6e1960a6190c6477f1532ae18f4dd0b",
+     "stderr": "",
+     "welcome": false
+    },
+    "c25ccbf3c": {
+     "exit": 0,
+     "svg_sha256": "cd1e23e5e390e2441995e3b332552c51e6e1960a6190c6477f1532ae18f4dd0b",
+     "stderr": "",
+     "welcome": false
+    },
+    "9ed52f435": {
+     "exit": 0,
+     "svg_sha256": "cd1e23e5e390e2441995e3b332552c51e6e1960a6190c6477f1532ae18f4dd0b",
+     "stderr": "",
+     "welcome": false
+    },
+    "9fc567332": {
+     "exit": 0,
+     "svg_sha256": "cd1e23e5e390e2441995e3b332552c51e6e1960a6190c6477f1532ae18f4dd0b",
+     "stderr": "",
+     "welcome": false
+    }
+   }
+  }
+ ]
+}
