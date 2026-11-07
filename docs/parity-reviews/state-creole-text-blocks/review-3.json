@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "account_commit": "da4c1733ef41cb40213bc3185964131b06bf7d96",
+  "implementation_commit": "a0b83000754aa03402569a1571c475a9f9e37fc3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "task_id": "opus-g5-recheck",
+    "model": "claude-opus-5-5",
+    "tool": "Claude Code in T3 Code"
+  },
+  "base_commit": "5e59b0421cf75c676cdd264bc9edf8dddafe6b54",
+  "parity_recovery_commit": "9df351f58933e7571cbd568782c954a2e15d2205",
+  "scored_tree": "6e7fd0b27b0383d2d81dbf0e41fb6f5cc65b3fbd",
+  "prior_reviews": [
+    "233daf5a5459620ba2e89216e991af68c160c571",
+    "eaadbd284795dd390e0e95601a72b3c791cb6661"
+  ],
+  "reference_results_sha256": {
+    "CL": "38737f4f0526bee52cd04311c8787adb109c6eb0b41ba4a6bdae4de8f3cc8a05",
+    "CV": "f206e324c7cc70028daee62887afc231669fd66c1644dfe97b4863a88dde1957",
+    "CW": "1fad4e1c1460cb2b14e052cf3f8ea7426862c02e94507eb8b1d4091e5e6d45d6",
+    "CF": "972b23a6ac582160acb8d1e145739962ea8e27094c9558bc3fd25393366b2cfb",
+    "DB": "37b6743791a6dba4a7445540605b649624d5519f220e464573e3ede68e7385b6",
+    "AU": "44959f34ee5ecaa773827942b7e46fa98a66de7821a0abe946b66808f2a51c60",
+    "DC": "63b8d020830c719d66a62feb30aef6944b71f64854d6a0e24eeba0bc7c66de39",
+    "DE": "76776af3d64657c2b003e8d44efa47f2fce7ee5ac47a84ee4f4534be899b7b64",
+    "DG": "737285037bb0ce11b18e8be8ce3f980e1db6809af179f9d72c5e88df1febfe18",
+    "DI": "1ad65d15fdeb28f0a02f198bf9657d4c90865bfc4023a45226ef9136a1c1f302"
+  },
+  "predictions_sha256": {
+    "DI_checker": "4032fd61726fa190f4f2d20d7cd992c6e79cdc3e21b108a50c1641fcb8e9200c",
+    "DG_maker": "f48ba101599fb1464c19ed0c937a10f537d8ecda6717bf2c0cef2a34fb578cff"
+  },
+  "heldout_manifest_sha256": "a53526d3d3ca54dee2cf3875265805441457a1bac6fd85942bbecb809bb3ca29",
+  "heldout_bundle_sha256": "94131659c75cbd846a3e2a47602ed47e63a8666996450d40c59fea6c4d304fa6",
+  "comparator": "rustuml_oracle::compare::compare_svg_strict on CLI -pipe -tsvg output (svgcmp wrapper, 20 s timeout per run); rejections compare Java stderr line 2 and line 3 minus the Assumed-diagram-type suffix with the CLI parse error",
+  "verdict": "accepted",
+  "accept_ready_for_local_merge": true,
+  "mechanism": "state-creole-text-blocks",
+  "commands": [
+    "git switch -c review/opus-g5-recheck 6e7fd0b27  # in T3 worktree t3-7b3a7e15",
+    "git -C test-diagrams/golden fetch /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a && git -C test-diagrams/golden checkout 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a  # the --reference submodule update could not fetch the local-only commit",
+    "git archive 5e59b0421 and 9df351f58 into ~/Library/Caches/rustuml-opus-g5-recheck/trees/<rev> (golden symlinked); CARGO_TARGET_DIR=~/Library/Caches/rustuml-opus-g5-recheck/target-{base,pr,tip} cargo build --release -p rustuml; binaries in ~/Library/Caches/rustuml-opus-g5-recheck/bin",
+    "python3 -I checker-opus-2/tools/stage.py <probes> batch-hk; python3 -I checker-opus-2/tools/predict.py batch-hk/sources ... base= pr= tip=  # predictions registered before Java ran (4032fd61...)",
+    "python3 -I checker-opus-2/tools/score.py <relay_dir> <work> <out> base=rustuml-base pr=rustuml-pr tip=rustuml-tip  # CL CV CW CF DB AU DC DE DG DI, 20 s timeout",
+    "python3 -I checker-opus-2/tools/golden_bytes.py <out> base= pr= tip=  # all 12550 golden .puml, stdout sha256 + exit, 20 s timeout",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release -p rustuml-oracle --test golden_no_oracle -- --test-threads=8 --nocapture  # base pr tip",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release -p rustuml-oracle --test golden_pairs -- --test-threads=8 --nocapture  # base pr tip",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release -p rustuml-oracle --test parity_perturbations -- --test-threads=8 --nocapture  # base pr tip, and the review tree with the 42 new pairs",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release -p rustuml-oracle --test harness_guards --no-fail-fast  # base pr tip",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release -p rustuml --test pipe_mode -- --test-threads=8; cargo test --release -p rustuml-oracle --test doc_claims; cargo test --release --workspace --lib --no-fail-fast  # base tip",
+    "CARGO_TARGET_DIR=<tree target> cargo clippy --release -p <crate> --all-targets -- -D warnings  # parser render layout math oracle rustuml; plus -A dead_code on parser+render; base tip"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-creole-text-blocks/ock_fork_join_choice_in_region.puml",
+      "golden": "test-diagrams/perturbations/state-creole-text-blocks/ock_fork_join_choice_in_region.svg",
+      "result": "pass",
+      "axes": [
+        "fork-join-choice",
+        "link-labels-in-region"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-creole-text-blocks/ock_history_inside_regions.puml",
+      "golden": "test-diagrams/perturbations/state-creole-text-blocks/ock_history_inside_regions.svg",
+      "result": "pass",
+      "axes": [
+        "history",
+        "start-inside-regions"
+      ]
+    }
+  ],
+  "findings": [
+    "ACCEPT, following the shared packet. The round-2 commits (3ba286126..6e7fd0b27) leave the Creole code untouched: they change only the parser's history and field resolution and the renderer's pseudo-only cluster rule and uid. The merge 5e59b0421 kept the Creole description path and took upstream's state_family_uses_nbsp. The Creole evidence still holds on the tip: CV 13/13 (11 match, 2 same rejection) and CF 10/10, both identical to the merge base and far above parity-recovery (CV 2, CF 1). The golden CLI bytes equal parity-recovery's on all 12550 goldens.",
+    "The two plain state-text controls inside regions (ock_fork_join_choice_in_region, ock_history_inside_regions) pass on the tip, the merge base and parity-recovery. See ../state-command-admission/review-3.json for the packet's held-out batch DI, cohort scores and gates, and checker-opus-2/ there for the evidence."
+  ],
+  "proposed_targets": [],
+  "evidence_dir": "docs/parity-reviews/state-command-admission/checker-opus-2"
+}

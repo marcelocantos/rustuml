@@ -1,0 +1,6 @@
+@startuml
+state Slate
+state Ledge {
+  [*] --> Slate
+}
+@enduml

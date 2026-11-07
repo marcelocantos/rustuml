@@ -1,0 +1,10 @@
+@startuml
+state Gravel
+state Quarry {
+  state Slate
+  state Ledge {
+    [*] --> Slate
+  }
+}
+Slate --> Gravel
+@enduml

@@ -1,0 +1,996 @@
+{
+ "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-checker-c1",
+ "reference_results_sha256": "44959f34ee5ecaa773827942b7e46fa98a66de7821a0abe946b66808f2a51c60",
+ "trees": {
+  "base": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-base",
+   "sha256": "6b88b14aac43e4ff8fc648fec344cb090157c56fd153eb88fa4c04d0cb34a348"
+  },
+  "pr": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-pr",
+   "sha256": "63e4f84d37d1c26ad0b41ba68f9705b51231137dcd548952db54cbed5a13cd32"
+  },
+  "tip": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-recheck/bin/rustuml-tip",
+   "sha256": "d7af4e4c89c3cdfd235294cf69b55865c359c88048f7fb07f47726e097d22e93"
+  }
+ },
+ "cases": [
+  {
+   "name": "cluster_concurrent_crossing",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n6\nThe state Blow cannot be used here. (Assumed diagram type: state)",
+   "java_line": "6",
+   "java_message": "The state Blow cannot be used here.",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state Blow cannot be used here.",
+    "line": "6",
+    "message": "The state Blow cannot be used here.",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "09f0b9ed902a051fb1db11ced81399409ddeb7900c5c8b7c3d10aa9bd45ed601",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 6: The state Blow cannot be used here.",
+    "line": "6",
+    "message": "The state Blow cannot be used here.",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "cluster_entry_inside_autarkic",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "e3a86cf55d1e0ce0a2b6958dc83e58d89f3499636201cbb528edc7f3ba869ffc",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "e3a86cf55d1e0ce0a2b6958dc83e58d89f3499636201cbb528edc7f3ba869ffc",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "e3a86cf55d1e0ce0a2b6958dc83e58d89f3499636201cbb528edc7f3ba869ffc",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "cluster_inputpin_mixed_case",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "1d73681130b8508478ed94f4eb0e3a6be0469f6340ae7011d6a862e87ef444e6",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "1d73681130b8508478ed94f4eb0e3a6be0469f6340ae7011d6a862e87ef444e6",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "1d73681130b8508478ed94f4eb0e3a6be0469f6340ae7011d6a862e87ef444e6",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "cluster_root_note_on_inner",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "c6e84c67ede4092f4ededc92b8acad34fa9670dcb922995e058b0ddb931bfd49",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "c6e84c67ede4092f4ededc92b8acad34fa9670dcb922995e058b0ddb931bfd49",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "c6e84c67ede4092f4ededc92b8acad34fa9670dcb922995e058b0ddb931bfd49",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "delay_legacy_empty",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "2dba2a9bd110b41506a2e42e8d34e8f67ba7b461832a6d6a039a7cf353bfdb04",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "2dba2a9bd110b41506a2e42e8d34e8f67ba7b461832a6d6a039a7cf353bfdb04",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "2dba2a9bd110b41506a2e42e8d34e8f67ba7b461832a6d6a039a7cf353bfdb04",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "delay_legacy_lead1",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "96b7b416eb9ee2f007735c05f4b56674ab4e0a0d8d542f0dd5ee68db43a973d9",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "96b7b416eb9ee2f007735c05f4b56674ab4e0a0d8d542f0dd5ee68db43a973d9",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "96b7b416eb9ee2f007735c05f4b56674ab4e0a0d8d542f0dd5ee68db43a973d9",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "delay_legacy_lead2_creole",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "ff55d831700e19ac3d266cc06463be20bbc4f95035708328e473cd6a51ef6ca3",
+    "stderr": "",
+    "differences": "9",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "ff55d831700e19ac3d266cc06463be20bbc4f95035708328e473cd6a51ef6ca3",
+    "stderr": "",
+    "differences": "9",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "ff55d831700e19ac3d266cc06463be20bbc4f95035708328e473cd6a51ef6ca3",
+    "stderr": "",
+    "differences": "9",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "delay_legacy_multiline",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "6f58abc03a719b53745b60d6e3a4b0b114bb3365c2ad678a1aaa8d4dd3d4b6c0",
+    "stderr": "",
+    "differences": "18",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "6f58abc03a719b53745b60d6e3a4b0b114bb3365c2ad678a1aaa8d4dd3d4b6c0",
+    "stderr": "",
+    "differences": "18",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "6f58abc03a719b53745b60d6e3a4b0b114bb3365c2ad678a1aaa8d4dd3d4b6c0",
+    "stderr": "",
+    "differences": "18",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "delay_legacy_plain0",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "de69db6c909844b717a0d862ca9b33a5072432bd27e12b9897228f866152b9e9",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "de69db6c909844b717a0d862ca9b33a5072432bd27e12b9897228f866152b9e9",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "de69db6c909844b717a0d862ca9b33a5072432bd27e12b9897228f866152b9e9",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "delay_teoz_empty",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "db7b7aa8b66562110438af0c29c2c9e5bcb3d9ade3f19eca31e56c8dc677924f",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "db7b7aa8b66562110438af0c29c2c9e5bcb3d9ade3f19eca31e56c8dc677924f",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "db7b7aa8b66562110438af0c29c2c9e5bcb3d9ade3f19eca31e56c8dc677924f",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "delay_teoz_lead3",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "57b99444cdccc31889b6609bbafd80e71eb7b197adac9b523df06b45decad6a7",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "57b99444cdccc31889b6609bbafd80e71eb7b197adac9b523df06b45decad6a7",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "57b99444cdccc31889b6609bbafd80e71eb7b197adac9b523df06b45decad6a7",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "delay_teoz_lead3_multiline",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "024337769cc269382277d2de113241d1d876c40e96f25a02815a9f6159c75fd9",
+    "stderr": "",
+    "differences": "17",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "024337769cc269382277d2de113241d1d876c40e96f25a02815a9f6159c75fd9",
+    "stderr": "",
+    "differences": "17",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "024337769cc269382277d2de113241d1d876c40e96f25a02815a9f6159c75fd9",
+    "stderr": "",
+    "differences": "17",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "deploy_alias_direction_matrix",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "396a7e1ba7bddad100edc3865f46480a2362d2100581967e86162777a3de47a7",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "396a7e1ba7bddad100edc3865f46480a2362d2100581967e86162777a3de47a7",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "396a7e1ba7bddad100edc3865f46480a2362d2100581967e86162777a3de47a7",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "deploy_nested_alias_reverse",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "fb7475b229284e6078d5d99b79c6c396a2877cef8d4d42131bd6ce9218f12112",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "fb7475b229284e6078d5d99b79c6c396a2877cef8d4d42131bd6ce9218f12112",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "fb7475b229284e6078d5d99b79c6c396a2877cef8d4d42131bd6ce9218f12112",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "history_external_suffix_form",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "e1a1e53733b0ed3704cf1eb2d76bd2026c72cfb20b04bbd3ef69120f5624a227",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "e1a1e53733b0ed3704cf1eb2d76bd2026c72cfb20b04bbd3ef69120f5624a227",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "e1a1e53733b0ed3704cf1eb2d76bd2026c72cfb20b04bbd3ef69120f5624a227",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "raw_blank_before_start",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "63b84e825a7ac06f9dd2db715acf3b48083ba068b43f6486783bd8778fc64199",
+    "stderr": "",
+    "differences": "7",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "63b84e825a7ac06f9dd2db715acf3b48083ba068b43f6486783bd8778fc64199",
+    "stderr": "",
+    "differences": "7",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "63b84e825a7ac06f9dd2db715acf3b48083ba068b43f6486783bd8778fc64199",
+    "stderr": "",
+    "differences": "7",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "raw_crlf_one_blank",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "bc5c25e9fa9d9b85c99ba732d652cee68fefa267c3267bd0d08b85f8275aa3ae",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "bc5c25e9fa9d9b85c99ba732d652cee68fefa267c3267bd0d08b85f8275aa3ae",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "bc5c25e9fa9d9b85c99ba732d652cee68fefa267c3267bd0d08b85f8275aa3ae",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "raw_include_leading_blanks",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "6bad683fed19b2d32d5817c2578845afec2952f6de6392ebfd3c2e5849b68de4",
+    "stderr": "",
+    "differences": "22",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "6bad683fed19b2d32d5817c2578845afec2952f6de6392ebfd3c2e5849b68de4",
+    "stderr": "",
+    "differences": "22",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "6bad683fed19b2d32d5817c2578845afec2952f6de6392ebfd3c2e5849b68de4",
+    "stderr": "",
+    "differences": "22",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "raw_multi_blank_first_block",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nEmpty description (Assumed diagram type: sequence)",
+   "java_line": "1",
+   "java_message": "Empty description",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "stderr": "",
+    "class": "under_rejection"
+   }
+  },
+  {
+   "name": "raw_sequence_two_blanks",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "621e292ef43128719f5970652388a9c0fb9331deab5adfe749d2eabffac99b54",
+    "stderr": "",
+    "differences": "16",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "621e292ef43128719f5970652388a9c0fb9331deab5adfe749d2eabffac99b54",
+    "stderr": "",
+    "differences": "16",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "621e292ef43128719f5970652388a9c0fb9331deab5adfe749d2eabffac99b54",
+    "stderr": "",
+    "differences": "16",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "raw_trailing_blanks",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "c8f8bab7920b1920d66fff24db2ba4c0c78ad7e1a4cc4404f7cad5c2364a1c57",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "c8f8bab7920b1920d66fff24db2ba4c0c78ad7e1a4cc4404f7cad5c2364a1c57",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "c8f8bab7920b1920d66fff24db2ba4c0c78ad7e1a4cc4404f7cad5c2364a1c57",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "raw_unit_test_input",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "af1e019ace73845fe0a779417f1a8bb1de3368dc48a9e0184cb250c4d0bf53eb",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "af1e019ace73845fe0a779417f1a8bb1de3368dc48a9e0184cb250c4d0bf53eb",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "af1e019ace73845fe0a779417f1a8bb1de3368dc48a9e0184cb250c4d0bf53eb",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "raw_whitespace_only_lines",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "f36ad75d1acb43cc058e428c2662a954a0c3766a714c4089f83ce048ef595b9f",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "f36ad75d1acb43cc058e428c2662a954a0c3766a714c4089f83ce048ef595b9f",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "f36ad75d1acb43cc058e428c2662a954a0c3766a714c4089f83ce048ef595b9f",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "stroke_arrow_skinparam_transparent",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "b0c628f70f93cf43873d9fbedcdad22b5c2fc880c3ac6aec7cb120e97a7375a7",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "b0c628f70f93cf43873d9fbedcdad22b5c2fc880c3ac6aec7cb120e97a7375a7",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "b0c628f70f93cf43873d9fbedcdad22b5c2fc880c3ac6aec7cb120e97a7375a7",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "stroke_per_arrow_css4",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "4c69cf6d7806cd560e6937cb52583073481cde55f8cf658b5296284e6df767da",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "4c69cf6d7806cd560e6937cb52583073481cde55f8cf658b5296284e6df767da",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "4c69cf6d7806cd560e6937cb52583073481cde55f8cf658b5296284e6df767da",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "stroke_per_state_css4",
+   "java_exit": 200,
+   "java_stderr": "ERROR\n1\nNo such color (Assumed diagram type: state)",
+   "java_line": "1",
+   "java_message": "No such color",
+   "java_error_page": false,
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "0779f3f0f897fab4f49c9a4d370e5f3e21eb204bd8d2e977fc3ee9493fe359ec",
+    "stderr": "",
+    "class": "under_rejection"
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No such color",
+    "line": "1",
+    "message": "No such color",
+    "class": "both_reject_same_message"
+   }
+  },
+  {
+   "name": "stroke_stereo_skinparam_css4",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "af0c183622d5eefb3d731ce43426360295e54c4b120936e02ff88bb61b188392",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "af0c183622d5eefb3d731ce43426360295e54c4b120936e02ff88bb61b188392",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "af0c183622d5eefb3d731ce43426360295e54c4b120936e02ff88bb61b188392",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "stroke_stereo_style_css4",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "d3612013aabd7d442c3a7ac0a90e5b0a7da4214caee1998b6a5709fe76b4ad5d",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "d3612013aabd7d442c3a7ac0a90e5b0a7da4214caee1998b6a5709fe76b4ad5d",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "d3612013aabd7d442c3a7ac0a90e5b0a7da4214caee1998b6a5709fe76b4ad5d",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "stroke_zero_alpha_nonblack",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "30a019fa78e9e85db52ee3cb1fb3ce2c972eb178832f4aad6185009c86c0d8b2",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "30a019fa78e9e85db52ee3cb1fb3ce2c972eb178832f4aad6185009c86c0d8b2",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "30a019fa78e9e85db52ee3cb1fb3ce2c972eb178832f4aad6185009c86c0d8b2",
+    "stderr": "",
+    "differences": "0",
+    "byte_identical": false,
+    "class": "match"
+   }
+  },
+  {
+   "name": "theme_mono_class",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "2d0e75bae14fa96ba10bb171e28ebbf6000481844a631a175421c346da70cd04",
+    "stderr": "",
+    "differences": "15",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "2d0e75bae14fa96ba10bb171e28ebbf6000481844a631a175421c346da70cd04",
+    "stderr": "",
+    "differences": "15",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "2d0e75bae14fa96ba10bb171e28ebbf6000481844a631a175421c346da70cd04",
+    "stderr": "",
+    "differences": "15",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "theme_plain_class_note",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "a0916c66e6c5ddded4b42ec2084605e77185f26a3b73b46c53a5326a74b4a9f1",
+    "stderr": "",
+    "differences": "18",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "a0916c66e6c5ddded4b42ec2084605e77185f26a3b73b46c53a5326a74b4a9f1",
+    "stderr": "",
+    "differences": "18",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "a0916c66e6c5ddded4b42ec2084605e77185f26a3b73b46c53a5326a74b4a9f1",
+    "stderr": "",
+    "differences": "18",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  },
+  {
+   "name": "theme_plain_sequence",
+   "java_exit": 0,
+   "java_stderr": "",
+   "java_error_page": false,
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "9b1b4ed9d22a15f10e3503a70cd7608fdb213059b841065463ed23d13a11f8e5",
+    "stderr": "",
+    "differences": "16",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "9b1b4ed9d22a15f10e3503a70cd7608fdb213059b841065463ed23d13a11f8e5",
+    "stderr": "",
+    "differences": "16",
+    "byte_identical": false,
+    "class": "mismatch"
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "9b1b4ed9d22a15f10e3503a70cd7608fdb213059b841065463ed23d13a11f8e5",
+    "stderr": "",
+    "differences": "16",
+    "byte_identical": false,
+    "class": "mismatch"
+   }
+  }
+ ],
+ "counts": {
+  "base": {
+   "both_reject_same_message": 2,
+   "match": 20,
+   "mismatch": 9,
+   "under_rejection": 1
+  },
+  "pr": {
+   "under_rejection": 3,
+   "match": 20,
+   "mismatch": 9
+  },
+  "tip": {
+   "both_reject_same_message": 2,
+   "match": 20,
+   "mismatch": 9,
+   "under_rejection": 1
+  }
+ },
+ "total": 32
+}

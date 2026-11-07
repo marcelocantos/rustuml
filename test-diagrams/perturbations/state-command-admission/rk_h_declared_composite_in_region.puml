@@ -1,0 +1,13 @@
+@startuml
+state Kestrel {
+  state Plover
+  --
+  state Merlin {
+    state Knot
+    state Ruff
+    Knot --> Ruff
+  }
+  state Godwit
+  Godwit --> Merlin[H]
+}
+@enduml

@@ -1,0 +1,495 @@
+{
+  "schema_version": 1,
+  "account_commit": "da4c1733ef41cb40213bc3185964131b06bf7d96",
+  "implementation_commit": "a0b83000754aa03402569a1571c475a9f9e37fc3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "task_id": "opus-g5-recheck",
+    "model": "claude-opus-5-5",
+    "tool": "Claude Code in T3 Code"
+  },
+  "base_commit": "5e59b0421cf75c676cdd264bc9edf8dddafe6b54",
+  "parity_recovery_commit": "9df351f58933e7571cbd568782c954a2e15d2205",
+  "scored_tree": "6e7fd0b27b0383d2d81dbf0e41fb6f5cc65b3fbd",
+  "prior_reviews": [
+    "233daf5a5459620ba2e89216e991af68c160c571",
+    "eaadbd284795dd390e0e95601a72b3c791cb6661"
+  ],
+  "reference_results_sha256": {
+    "CL": "38737f4f0526bee52cd04311c8787adb109c6eb0b41ba4a6bdae4de8f3cc8a05",
+    "CV": "f206e324c7cc70028daee62887afc231669fd66c1644dfe97b4863a88dde1957",
+    "CW": "1fad4e1c1460cb2b14e052cf3f8ea7426862c02e94507eb8b1d4091e5e6d45d6",
+    "CF": "972b23a6ac582160acb8d1e145739962ea8e27094c9558bc3fd25393366b2cfb",
+    "DB": "37b6743791a6dba4a7445540605b649624d5519f220e464573e3ede68e7385b6",
+    "AU": "44959f34ee5ecaa773827942b7e46fa98a66de7821a0abe946b66808f2a51c60",
+    "DC": "63b8d020830c719d66a62feb30aef6944b71f64854d6a0e24eeba0bc7c66de39",
+    "DE": "76776af3d64657c2b003e8d44efa47f2fce7ee5ac47a84ee4f4534be899b7b64",
+    "DG": "737285037bb0ce11b18e8be8ce3f980e1db6809af179f9d72c5e88df1febfe18",
+    "DI": "1ad65d15fdeb28f0a02f198bf9657d4c90865bfc4023a45226ef9136a1c1f302"
+  },
+  "predictions_sha256": {
+    "DI_checker": "4032fd61726fa190f4f2d20d7cd992c6e79cdc3e21b108a50c1641fcb8e9200c",
+    "DG_maker": "f48ba101599fb1464c19ed0c937a10f537d8ecda6717bf2c0cef2a34fb578cff"
+  },
+  "heldout_manifest_sha256": "a53526d3d3ca54dee2cf3875265805441457a1bac6fd85942bbecb809bb3ca29",
+  "heldout_bundle_sha256": "94131659c75cbd846a3e2a47602ed47e63a8666996450d40c59fea6c4d304fa6",
+  "comparator": "rustuml_oracle::compare::compare_svg_strict on CLI -pipe -tsvg output (svgcmp wrapper, 20 s timeout per run); rejections compare Java stderr line 2 and line 3 minus the Assumed-diagram-type suffix with the CLI parse error",
+  "verdict": "accepted",
+  "accept_ready_for_local_merge": true,
+  "mechanism": "state-command-admission",
+  "commands": [
+    "git switch -c review/opus-g5-recheck 6e7fd0b27  # in T3 worktree t3-7b3a7e15",
+    "git -C test-diagrams/golden fetch /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a && git -C test-diagrams/golden checkout 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a  # the --reference submodule update could not fetch the local-only commit",
+    "git archive 5e59b0421 and 9df351f58 into ~/Library/Caches/rustuml-opus-g5-recheck/trees/<rev> (golden symlinked); CARGO_TARGET_DIR=~/Library/Caches/rustuml-opus-g5-recheck/target-{base,pr,tip} cargo build --release -p rustuml; binaries in ~/Library/Caches/rustuml-opus-g5-recheck/bin",
+    "python3 -I checker-opus-2/tools/stage.py <probes> batch-hk; python3 -I checker-opus-2/tools/predict.py batch-hk/sources ... base= pr= tip=  # predictions registered before Java ran (4032fd61...)",
+    "python3 -I checker-opus-2/tools/score.py <relay_dir> <work> <out> base=rustuml-base pr=rustuml-pr tip=rustuml-tip  # CL CV CW CF DB AU DC DE DG DI, 20 s timeout",
+    "python3 -I checker-opus-2/tools/golden_bytes.py <out> base= pr= tip=  # all 12550 golden .puml, stdout sha256 + exit, 20 s timeout",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release -p rustuml-oracle --test golden_no_oracle -- --test-threads=8 --nocapture  # base pr tip",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release -p rustuml-oracle --test golden_pairs -- --test-threads=8 --nocapture  # base pr tip",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release -p rustuml-oracle --test parity_perturbations -- --test-threads=8 --nocapture  # base pr tip, and the review tree with the 42 new pairs",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release -p rustuml-oracle --test harness_guards --no-fail-fast  # base pr tip",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release -p rustuml --test pipe_mode -- --test-threads=8; cargo test --release -p rustuml-oracle --test doc_claims; cargo test --release --workspace --lib --no-fail-fast  # base tip",
+    "CARGO_TARGET_DIR=<tree target> cargo clippy --release -p <crate> --all-targets -- -D warnings  # parser render layout math oracle rustuml; plus -A dead_code on parser+render; base tip"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_cluster_owner_region_composite.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_cluster_owner_region_composite.svg",
+      "result": "pass",
+      "axes": [
+        "cluster-owner",
+        "composite-in-synthetic-region"
+      ],
+      "batch": "DE-era checker pair (eaadbd284)"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_nested_owner_clusters_region0.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_nested_owner_clusters_region0.svg",
+      "result": "pass",
+      "axes": [
+        "nested-owners",
+        "region0-crossing"
+      ],
+      "batch": "DE-era checker pair (eaadbd284)"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_owner_named_conc3_two_seps.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_owner_named_conc3_two_seps.svg",
+      "result": "pass",
+      "axes": [
+        "owner-named-CONC3",
+        "separator-compares-owner"
+      ],
+      "batch": "DE-era checker pair (eaadbd284)"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_two_owners_one_crossed.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_two_owners_one_crossed.svg",
+      "result": "pass",
+      "axes": [
+        "two-owners",
+        "one-crossed"
+      ],
+      "batch": "DE-era checker pair (eaadbd284)"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_owner_named_conc2_one_sep.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_owner_named_conc2_one_sep.svg",
+      "result": "pass",
+      "axes": [
+        "owner-named-CONC2",
+        "root-link-count-2"
+      ],
+      "batch": "DE-era checker pair (eaadbd284)"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_conc1_depth2_after_sep.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_conc1_depth2_after_sep.svg",
+      "result": "pass",
+      "axes": [
+        "user-CONC1-after",
+        "depth-2"
+      ],
+      "batch": "DE-era checker pair (eaadbd284)"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_control_autarkic_regions.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_control_autarkic_regions.svg",
+      "result": "pass",
+      "axes": [
+        "control",
+        "autarkic-owner"
+      ],
+      "batch": "DE-era checker pair (eaadbd284)"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_control_no_separator_crossing.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_control_no_separator_crossing.svg",
+      "result": "pass",
+      "axes": [
+        "control",
+        "no-separator"
+      ],
+      "batch": "DE-era checker pair (eaadbd284)"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_root_link_one_region_deep.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_root_link_one_region_deep.svg",
+      "result": "pass",
+      "axes": [
+        "root-link",
+        "both-ends-same-region"
+      ],
+      "batch": "DE-era checker pair (eaadbd284)"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_region_history_by_own_name.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_region_history_by_own_name.svg",
+      "result": "pass",
+      "axes": [
+        "history-by-region-own-name",
+        "depth-1",
+        "formerly-hung-20s-timeout"
+      ],
+      "timeout_s": 20,
+      "note": "hung on 9c98a0b0e and 5e59b0421 (exit 124 at 20 s); tip exit 0 and compare_svg_strict match"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_region_deep_history_by_own_name.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_region_deep_history_by_own_name.svg",
+      "result": "pass",
+      "axes": [
+        "deep-history-by-region-own-name",
+        "depth-2",
+        "formerly-hung-20s-timeout"
+      ],
+      "timeout_s": 20,
+      "note": "hung on 9c98a0b0e and 5e59b0421 (exit 124 at 20 s); tip exit 0 and compare_svg_strict match"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_f_later_declared_composite_root.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_f_later_declared_composite_root.svg",
+      "result": "pass",
+      "axes": [
+        "field-line",
+        "root",
+        "later_declared"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_f_later_declared_same_region.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_f_later_declared_same_region.svg",
+      "result": "pass",
+      "axes": [
+        "field-line",
+        "later_declared"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_f_owner_name_nosep_nested.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_f_owner_name_nosep_nested.svg",
+      "result": "pass",
+      "axes": [
+        "field-line",
+        "owner_name",
+        "nested",
+        "nosep"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_f_owner_name_region0.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_f_owner_name_region0.svg",
+      "result": "pass",
+      "axes": [
+        "field-line",
+        "owner_name"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_f_owner_name_region2.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_f_owner_name_region2.svg",
+      "result": "pass",
+      "axes": [
+        "field-line",
+        "owner_name"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_f_region_name_inside.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_f_region_name_inside.svg",
+      "result": "pass",
+      "axes": [
+        "field-line",
+        "region_name"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_f_sibling_after_separator.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_f_sibling_after_separator.svg",
+      "result": "pass",
+      "axes": [
+        "field-line",
+        "sibling"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_h_alias_in_region.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_h_alias_in_region.svg",
+      "result": "pass",
+      "axes": [
+        "history-by-name",
+        "alias"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_h_declared_composite_in_region.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_h_declared_composite_in_region.svg",
+      "result": "pass",
+      "axes": [
+        "history-by-name"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_h_nested_concurrent_composites.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_h_nested_concurrent_composites.svg",
+      "result": "pass",
+      "axes": [
+        "history-by-name",
+        "nested"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_h_owner_name_region0_nosep.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_h_owner_name_region0_nosep.svg",
+      "result": "pass",
+      "axes": [
+        "history-by-name",
+        "owner_name",
+        "nosep"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_h_plain_in_region.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_h_plain_in_region.svg",
+      "result": "pass",
+      "axes": [
+        "history-by-name"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_h_region_name_both_dirs.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_h_region_name_both_dirs.svg",
+      "result": "pass",
+      "axes": [
+        "history-by-name",
+        "region_name",
+        "both_dirs"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_h_region_name_depth2_deep_target.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_h_region_name_depth2_deep_target.svg",
+      "result": "pass",
+      "axes": [
+        "history-by-name",
+        "region_name",
+        "depth2",
+        "target"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_h_region_name_depth3_third_region.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_h_region_name_depth3_third_region.svg",
+      "result": "pass",
+      "axes": [
+        "history-by-name",
+        "region_name",
+        "depth3"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_h_region_name_target.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_h_region_name_target.svg",
+      "result": "pass",
+      "axes": [
+        "history-by-name",
+        "region_name",
+        "target"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_h_unknown_name_in_composite_nosep.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_h_unknown_name_in_composite_nosep.svg",
+      "result": "pass",
+      "axes": [
+        "history-by-name",
+        "unknown",
+        "nosep"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_h_unknown_name_in_region.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_h_unknown_name_in_region.svg",
+      "result": "pass",
+      "axes": [
+        "history-by-name",
+        "unknown"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_h_unknown_name_root_nosep.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_h_unknown_name_root_nosep.svg",
+      "result": "pass",
+      "axes": [
+        "history-by-name",
+        "unknown",
+        "nosep",
+        "root"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_h_unknown_name_two_links_root.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_h_unknown_name_two_links_root.svg",
+      "result": "pass",
+      "axes": [
+        "history-by-name",
+        "unknown",
+        "root"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_r_control_real_children.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_r_control_real_children.svg",
+      "result": "pass",
+      "axes": [
+        "pseudo-only-group-render",
+        "control"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_r_end_only_box_in_owner.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_r_end_only_box_in_owner.svg",
+      "result": "pass",
+      "axes": [
+        "pseudo-only-group-render",
+        "end"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_r_history_only_box_in_owner.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_r_history_only_box_in_owner.svg",
+      "result": "pass",
+      "axes": [
+        "pseudo-only-group-render",
+        "history"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_r_mixed_pseudo_box_in_owner.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_r_mixed_pseudo_box_in_owner.svg",
+      "result": "pass",
+      "axes": [
+        "pseudo-only-group-render",
+        "mixed"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_r_nested_pseudo_box.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_r_nested_pseudo_box.svg",
+      "result": "pass",
+      "axes": [
+        "pseudo-only-group-render",
+        "nested"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_r_pseudo_box_nonautarkic_owner.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_r_pseudo_box_nonautarkic_owner.svg",
+      "result": "pass",
+      "axes": [
+        "pseudo-only-group-render"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_r_reused_inner_nested.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_r_reused_inner_nested.svg",
+      "result": "pass",
+      "axes": [
+        "pseudo-only-group-render",
+        "nested"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_r_star_only_box_in_owner.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_r_star_only_box_in_owner.svg",
+      "result": "pass",
+      "axes": [
+        "pseudo-only-group-render",
+        "star"
+      ],
+      "batch": "DI"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/rk_r_star_only_box_root.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/rk_r_star_only_box_root.svg",
+      "result": "pass",
+      "axes": [
+        "pseudo-only-group-render",
+        "root",
+        "star"
+      ],
+      "batch": "DI"
+    }
+  ],
+  "findings": [
+    "ACCEPT. The four required DE pairs agree with Java on the tip: ock_region_history_by_own_name and ock_region_deep_history_by_own_name exit 0 and match under compare_svg_strict (merge base 5e59b0421 still hangs, exit 124 at 20 s; parity-recovery 9df351f58 mismatches, 29 and 43 differences); ock_conc2_declared_in_region_depth2 and ock_region_named_link_inside exit 1 at line 1 'Syntax Error?' as Java does (both references under-reject). The staged field pair ock_owner_field_by_own_name (batch DG) matches.",
+    "Held-out batch DI (37 fresh probes, relay opus-g5-recheck-heldout, results 1ad65d15..., predictions 4032fd61... registered before Java; Java 31 exit 0, 6 exit 200, matching the expected split). Tip: 29 match + 4 same rejection = 33/37, 2 mismatch, 2 under-rejection, 0 hang, 0 panic. Merge base: 10 match + 2 same, 5 hang. Parity-recovery: 10 match + 0 same, 6 under-rejection. Every case that is good on either reference is good on the tip: 0 losses. The 4 non-good tip cases fail on all three trees.",
+    "History fix (96abb4231) traces to Java. CommandLinkStateCommon.getEntity tests endsWith('[H]') / '[H*]' (CommandLinkStateCommon.java:171-177) before the current-group short-circuit (:189-190); StateDiagram.getHistorical/getDeepHistory(location, idShort) (StateDiagram.java:142-156, :177-191) call quarkInContext(true, X) and gotoGroup(STATE) with no checkConcurrentStateOk; CucaDiagram.quarkInContextSafe (CucaDiagram.java:264-272) reuses the sole quark only if it is not the current group. getUniqueSequence2 is cpt2.addAndGet(1) from 1 (CucaDiagram.java:127, :816-818), so the first separator is CONC2. DI confirms every axis: the region's own name at depths 1, 2 and 3, as source, as target and both directions (rk_h_region_name_*), inside nested concurrent composites (rk_h_nested_concurrent_composites), the owner's name from region 0 with and without separators naming the owner's child Owner.Owner (rk_h_owner_name_region0_nosep match; _withsep see residue), the owner's and an ancestor's name from inside a region refused at checkFinalError with line 1 'Syntax Error?' (rk_h_owner_name_from_region2, rk_h_ancestor_name_from_region; merge base gave a different message, parity-recovery under-rejected), unknown names inside a region, inside a composite and at the root (rk_h_unknown_name_*), an alias (rk_h_alias_in_region), a declared composite (rk_h_declared_composite_in_region) and plain [H] (rk_h_plain_in_region).",
+    "Self-parent and the ancestor walk: parent_for_new_state takes quark_parent for the current group reached by the short-circuit (Quark.child fixes the parent at creation), so no State has itself as parent; nearest_concurrent_ancestor starts at the endpoint's parent as getGroupParentIfItIsConcurrentState does (StateDiagram.java:256-266) and stops on a repeated id as a guard only. No hang anywhere: 0 timeouts over all 12550 goldens and all ten cohorts on the tip.",
+    "Field lines keep CommandAddField's current-group check (CommandAddField.java:82-85) with no concurrent check. DI: by the owner's name in region 0 and in a later region, nested with no separator, by the region's own name, on a sibling after a separator, on a state declared later in the same region and at the root all match; a field that creates a state in one region before its declaration in another is refused at the declaration, line 6, as Java does (rk_f_later_declared_other_region; parity-recovery under-rejects). The golden edge_state_entry_exit_actions is back to the 9df351f58 bytes (no Connected.Connected). rk_f_region_name_inside matches only on the tip: Java adds the field to the region group, which the STATE_CONCURRENT image does not draw, and the tip adds no State.",
+    "Renderer (db5105789, a0b830007) traces to Java. The pseudo-only group: Entity.isAutarkic (Entity.java:686-709) fails because its link is not EntityUtils.isPureInnerLink3 (EntityUtils.java:76-88), so CucaDiagramSimplifierState.simplify (CucaDiagramSimplifierState.java:56-66) does not image it and the enclosing GroupMakerState image draws it as a Cluster (GroupMakerState.java:147-149). The uid: Entity takes StringUtils.getUid('ent', getUniqueSequenceValue()) at construction (Entity.java:171; cpt1.addAndGet, CucaDiagram.java:808-810, reset per pass at :159-165), and getHistorical's gotoGroup creates the group (CucaDiagram.gotoGroup :343-360) before reallyCreateLeaf creates the pseudo-state.",
+    "The 'inside an imaged ancestor' condition is a dispatch between two Rust code paths for the same Java mechanism, not a golden carve-out. Java draws a non-autarkic group as a Cluster both at the root (root svek) and inside a GroupMakerState image. Rust models the root case in render_non_autarkic_root_clusters, which already matched the 12 state_composite_oN_iM goldens; the new branch handles only the image interior. Probes on both sides: inside an autarkic owner with only [*], only an end [*], only [H], a mix, nested two deep, and reused inner quarks all match on the tip and mismatch on both references (rk_r_*); the root case (rk_r_star_only_box_root), a non-autarkic owner (rk_r_pseudo_box_nonautarkic_owner) and a control with real children (rk_r_control_real_children) match on all three trees, unchanged.",
+    "No-separator diagrams the tip changes: 10 DI probes (the 9 flagged at pre-registration plus control rk_h_unknown_name_two_links_root). All 10 are gains: they match Java on the tip and mismatch on both the merge base and parity-recovery. They are rk_r_star_only_box_in_owner, rk_r_end_only_box_in_owner, rk_r_history_only_box_in_owner, rk_r_mixed_pseudo_box_in_owner, rk_r_nested_pseudo_box, rk_r_reused_inner_nested (no history), and rk_h_owner_name_region0_nosep, rk_h_unknown_name_root_nosep, rk_h_unknown_name_in_composite_nosep, rk_h_unknown_name_two_links_root (history). Each traces to the mechanisms above. No golden changes against parity-recovery.",
+    "No loss against either reference on any cohort (good = match or same rejection). Tip good / total: DI 33/37, DG 13/13, DE 23/42, DC 9/13, DB 10/10, CL 44/55, CV 13/13, CW 1/1, CF 10/10, AU 22/32. Merge base: DI 12, DG 3 (4 hangs), DE 19 (2 hangs), DC 9, DB 10, CL 43, CV 13, CW 1, CF 10, AU 22. Parity-recovery: DI 10, DG 4, DE 6, DC 2, DB 3, CL 16, CV 2, CW 0, CF 1, AU 20 (parity-recovery panics on CV 1, CW 1, DB 2; the tip on none). DG: the maker's 13 predictions (f48ba101..., tree a0b830007, which has the same crates as 6e7fd0b27) re-render byte-identically, and all 13 predicted Java exits hold. Earlier checker pairs: the 11 from eaadbd284 pass 11/11 on the tip and the merge base (6/11 on parity-recovery); grok's 11 from 233daf5 pass 10/11 on the tip and the merge base (g5ck_reenter_short_name fails on all three trees).",
+    "Gates (details in checker-opus-2/gates.json). no-oracle 11182/11251 on base, pr and tip, state 897/901, 69 failure names identical across the three. golden_pairs 12550 total, 10497 passed, 754 failed, 1299 skipped, 0 panics on all three; per-directory counts and the 746 park candidates identical. Golden CLI bytes, 20 s timeout: tip = parity-recovery on 12550/12550, tip = merge base on 12549/12550 (edge_state_entry_exit_actions, the field fix). parity_perturbations: 2556 failure lines on base and tip, identical, 2621 on pr (the tip clears 65, adds 0); with the 42 new pairs still 2556 and identical. harness_guards: 5 pass on all three; decimal_literal_ratchet and parity_review_records_are_complete red on all three with base-identical lines on the tip. pipe_mode 17/17, doc_claims 2/2, workspace lib exit 0 (parser 685 -> 689). Clippy -D warnings: same errors per crate; with -A dead_code render 23 at the same locations, shifted +49 lines.",
+    "Process. Each addendum is the parent of its fix and touches only its own docs file: 3ba286126 (13:31:37) before parser 96abb4231 (13:37:44); 9e16808fe (13:37:58) before renderer db5105789 (13:38:48); 4618ead54 before renderer a0b830007 (both stamped 13:46:42, parent order holds). 6e7fd0b27 is docs only. No fixture-, label- or name-keyed production logic: new string literals are history markers and diagnostics; fixture names appear only in unit tests. Frozen items (no_oracle_baseline.txt, ulp_parked.txt, rustuml-oracle, census, guard allow-lists, scripts) have an empty diff against both references. Decimal ratchet identical to the merge base (render/state.rs 66); the +5 against 9df351f58 predate round 2 and are a production comment and unit-test asserts, not constants.",
+    "Residue, not losses (same class on all three trees). (a) rk_h_owner_name_region0_withsep: `Kestrel[H] --> Plover` in region 0 of an owner with a separator. The tip now draws Java's Kestrel.Kestrel cluster but emits entity Kestrel.CONC2.Dunlin twice (17 differences; both references omit the cluster, 18). (b) rk_h_control_declared_composite_root: `Bog --> Mire[H]` on a declared composite at the root; the Mire cluster is 4 px narrower than Java (12 differences on all three). (c) rk_h_root_link_to_region_history and rk_h_sibling_region_name: X[H] naming a synthetic region from outside it; Java resolves the sole quark to the region and checkFinalError refuses (line 1 'Syntax Error?'); all three trees render. This is the declared synthetic-region-from-outside residue. Sources, Java outputs and tip SVGs are in checker-opus-2/residue/."
+  ],
+  "proposed_targets": [
+    "Top-level region separator: Java's concurrentState at the root creates a root CONCURRENT_STATE group, so later states live in it and a link across it is refused (ock_top_sep_link_across: Java line 4, 'The state Plinth cannot be used here.'); Rust ignores a separator outside a composite (pre-existing, base and tip).",
+    "Synchro bars in regions: `==X==` resolves through quarkInContext without checkConcurrentStateOk (CommandLinkStateCommon.java:180-187), so a root link to a region's bar is a checkFinalError (ock_synchro_bar_region_from_root, Java line 1 Syntax Error?); Rust renders (pre-existing).",
+    "Pass three: separators re-run after the pass-two links and re-mute a quark that X[H] muted to STATE, so checkFinalError sees CONCURRENT_STATE (ock_reuse_root_composite_then_history, Java line 1 Syntax Error?); Rust renders (maker residue).",
+    "Final-error location follows the multi-factory score: when the sequence (or an earlier) factory accepts the leading lines, Java reports that factory's later line (ock_final_error_after_skinparam and _after_hide_empty: Java line 2, tip line 1; DC h_final_error_after_title).",
+    "A name whose only quark is a synthetic region resolves to that region for declarations and `state X {` from outside (ock_conc4_declared_root_after, ock_reopen_region_by_name_root); Rust creates a separate state (maker residue).",
+    "An owner with a region separator whose region 0 holds an Owner[H] history group: the tip draws the region-1 state twice (rk_h_owner_name_region0_withsep, Java draws Kestrel.Kestrel once and Kestrel.CONC2.Dunlin once). Acceptance: no duplicate data-qualified-name, a compare_svg_strict match, and a perturbation with renamed states and two separators.",
+    "X[H] on a declared composite at the root: the composite's cluster width omits the history pseudo-state's contribution (rk_h_control_declared_composite_root, 4 px narrower on all trees). Acceptance: the width traces to the cluster's inner Graphviz bounds with the pseudo-state, plus a perturbation with [H*] and a longer composite name."
+  ],
+  "evidence_dir": "docs/parity-reviews/state-command-admission/checker-opus-2"
+}

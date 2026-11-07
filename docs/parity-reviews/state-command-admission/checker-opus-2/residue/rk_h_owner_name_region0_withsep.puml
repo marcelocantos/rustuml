@@ -1,0 +1,8 @@
+@startuml
+state Kestrel {
+  state Plover
+  Kestrel[H] --> Plover
+  --
+  state Dunlin
+}
+@enduml

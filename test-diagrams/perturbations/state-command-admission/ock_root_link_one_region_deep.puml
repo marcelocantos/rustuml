@@ -1,0 +1,13 @@
+@startuml
+state Barbican {
+  state Wicket
+  --
+  state Bailey {
+    state Solar
+  }
+  state Postern {
+    state Pantry
+  }
+}
+Solar --> Pantry
+@enduml

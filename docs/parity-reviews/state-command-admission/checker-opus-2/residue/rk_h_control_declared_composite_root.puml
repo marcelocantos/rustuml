@@ -1,0 +1,8 @@
+@startuml
+state Bog
+state Mire {
+  state Peat
+}
+Bog --> Mire[H]
+Mire --> Bog
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+state Kestrel {
+  state Plover
+  Kestrel : roosts at dusk
+  --
+  state Dunlin
+}
+@enduml
