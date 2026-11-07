@@ -1,0 +1,409 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-link-labels",
+  "account_commit": "1bae6576943381bc7eb4a5ddb53f8745372725a3",
+  "implementation_commit": "50218c8059ba111adb410222250db4a9aa856b63",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewed_at": "2026-11-07T12:30:00+1100",
+  "reviewer": {
+    "task_id": "opus-g4-recheck",
+    "model": "claude-opus-5-5",
+    "role": "independent checker (re-review after rejection 2d7f0dcfa4c24489788749e00d155eac3e6567fa)"
+  },
+  "packet": {
+    "maker_tip": "da6c18866ae5e4a681809955660fdb9592e0a4fa",
+    "code_commits": [
+      "50cec1dd1143fe60f2d92e08e2cabc4000f02220",
+      "50218c8059ba111adb410222250db4a9aa856b63"
+    ],
+    "addenda_before_fix": [
+      "77461b8f228e8fba04f45907c3223f842165604c precedes 50cec1dd1",
+      "69e9624c8d04b0b47da587f5ab069080a1632702 precedes 50218c805"
+    ],
+    "merge_base": "9fb2e52a6932442b80937a7cf206ba53ee3cd901",
+    "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a"
+  },
+  "binaries": {
+    "base": {
+      "commit": "9fb2e52a6932442b80937a7cf206ba53ee3cd901",
+      "sha256": "e2f077a54f896e7dc4f5cf2644821bf389444d41467a5adb3fc0d01368e30a17"
+    },
+    "tip": {
+      "commit": "50218c8059ba111adb410222250db4a9aa856b63",
+      "sha256": "1c9555f1828206f8bd364bc162ca93b3f3b1704cda523d6e004a7f33633c69e9"
+    },
+    "note": "Built from git archive in ~/Library/Caches/rustuml-opus-g4-recheck/src/<commit>; the registered DA binaries (a8a5bb1b..., c6809901...) hash differently because the build path is embedded, but all 112 DA renders reproduce byte for byte."
+  },
+  "verdict": "rejected",
+  "accept_ready": false,
+  "commands": [
+    "git archive <commit> | tar -x; CARGO_TARGET_DIR=<private> cargo build --offline --release -p rustuml --bin rustuml   (base 9fb2e52a6, tip 50218c805)",
+    "python3 -I checker-opus-2/scripts/render.py <manifest> <out> base=<bin> tip=<bin> [--cwd <src>]   (rustuml -pipe -tsvg on stdin)",
+    "python3 -I checker-opus-2/scripts/score.py <reference-results.json> <out> <out.json> base tip   (compare_svg_strict vendored verbatim from crates/rustuml-oracle/src/compare.rs, unchanged base..tip)",
+    "python3 -I checker-opus-2/scripts/sweep.py test-diagrams/golden <out> <base-bin> <tip-bin>",
+    "cargo test --offline --release -p rustuml-oracle --test golden_no_oracle   (base and tip; diff test-diagrams/no_oracle_failure_names.txt)",
+    "cargo test --offline --release -p rustuml-oracle --test golden_pairs -- --nocapture   (base and tip; diff test-diagrams/golden_failure_names.txt)",
+    "cargo test --offline --release -p rustuml-oracle --test parity_perturbations   (base and tip, before and after adding the class-link-labels pairs)",
+    "cargo test --offline --release -p rustuml-oracle --test harness_guards --test doc_claims",
+    "cargo test --offline --release -p rustuml --test pipe_mode",
+    "cargo test --offline --release --workspace --lib",
+    "cargo clippy --offline --release -p <crate> --all-targets --message-format=short -- -W clippy::all   (parser, render, layout, rustuml, oracle; base and tip)"
+  ],
+  "findings": [
+    "REJECTED. Not accept-ready for local merge. Two of the brief's explicit criteria fail. (1) Clippy is worse than at the merge base: 4 new warnings, all introduced by 50cec1dd1. In rustuml-parser (1 to 4), protect_creole_links and restore_creole_links at parse/class.rs:1977 and :1990 trigger two manual_repeat_n and one manual_str_repeat. In rustuml-render (20 to 21), the Placed.rows tuple Vec<(String, f64, f64, Option<String>, Option<String>)> at render/class.rs:13067 triggers type_complexity. (2) On the product (no-oracle CLI) path, er/er_ecommerce_schema gets worse under compare_svg_strict, from DIFF 99 to DIFF 100. The extra difference is the root canvas, which is 1036 wide at base (within ±1 of Java's 1035) and 1105 at the tip. No held-out case loses a strict match, and there is no fitted constant and no coordinate surgery.",
+    "DA verification. The registration in rust-predictions.json (SHA256 f3e7fa96cb81ad39746959c0ff982aff50a2d14a44ed6a89e0f74150b43d5697, mtime 10:32:26) predates the relayed Java results (10:35:03; reference-results.json SHA256 08cee6fb0993ad03bcf89574f030e619a2d69912901ee1ff092d608eea538a31). Both commits were rebuilt here and all 56 cases re-rendered: 112 of 112 base and tip renders match the registered exit code, stdout SHA256 and stderr SHA256. Only the binary hashes differ, because the build path is embedded in the binary.",
+    "DA score (compare_svg_strict, Java exit 0 = 55 of 56). Base matches 3 of 55, the tip 25 of 55. 22 cases are gains, 0 are losses, and no exit agreement changes (55 of 56 on both). The one exit disagreement is g4r2_trail_bs: Java exits 100 with 'No valid @start/@end found' because Java joins the trailing-backslash line onto @enduml. Rust exits 0 and draws 'trail\\'. That output is byte-identical on base and tip, so it is pre-existing: Rust splits blocks before uml_source_string collapses continuations (preprocess/mod.rs:317-330). 8 of the 30 tip DIFFs are byte-identical to base (#--, x-- and +-- in LR and TB, self_hash, note_inline), and so is trail_bs.",
+    "Cohort no-loss check, tip against merge base. CO: 13 to 75 of 94 Java-valid, 0 lost, 0 new exit mismatches. CK: 1 to 13 of 13. CT: 0 to 45 of 46 Java-valid; the 24 decoration-token syntax errors fail the same way on both (T14.96). CY: 0 to 4 of 4. c9a: 100 to 113 of 288. c11a: 245 to 251 of 515. No tip panics anywhere. The only CO case whose strict count rises is g4k_st_dir (14 to 16), because base drops the whole edge and the tip draws it; the first review counted that as a gain.",
+    "Goldens. In the CLI byte sweep, 7 of 12,550 goldens change bytes and none panic. edge_seq_title_with_variables is a %date() clock artefact: the two runs straddled a second, and a rerun gives identical bytes. splines_multilevel_inheritance goes from DIFF 1 to MATCH, and splines_self_reference_ortho from DIFF 10 to DIFF 1. On the ER goldens, er_financial (45/45), er_healthcare (54/54) and er_hr (158/158) are neutral by count, and er_ecommerce is worse (99 to 100). er_hr's 'manages' self-loop label moves from (344.82, 258.52) to (400.69, 282.23) against Java's (390.03, 308.82), which is closer. golden_no_oracle passes on both trees: 70 failures at base, 69 at the tip; the only name change is the gain rendering/splines/splines_multilevel_inheritance, consistent with the 11,182/11,251 lock and the doc pins (doc_claims passes). golden_pairs, the oracle-assisted strict tier, fails identically on both trees in this environment: 10,497 passed, 754 failed, the same names, and the same maximum deviation for the ER park candidates (ecommerce 34.0, hr 17.41).",
+    "Cause of the er_ecommerce worsening. The packet sends every ortho center label as xlabel, which is a faithful port of SvekEdge.appendLine 425-431 (useXLabelInsteadOfLabel || NO_LEFT_RIGHT_AND_XLABEL || DotSplines.ORTHO, self-loops included). For Category ||--o{ Category : \"parent of\", though, Rust's pre-existing self-loop route is a Bezier loop on the RIGHT of Category: 'M994.59,514.66 C1014.41,517.76 1021.2,529.73 1021.2,553.06 ...'. Java routes it orthogonally on the LEFT: 'M904,487.65 ... 816.38,491.62 ... 816.38,612.62 ... 931.4,612.62'. Graphviz puts the xlabel beside Rust's route, at x 1027.19, against Java's 753.38 and base's synthesized 936.53, and that label sets the canvas. Special-casing self-loops to dodge this would be un-Java. The fix is the ortho self-loop route itself, or explicit parent sign-off on this one golden.",
+    "Challenge 1, escape handling. relationship_label_display is a line-for-line port of Display.getWithNewlines 258-341: raw mode at [[, <math> and <latex>; \\\\n, \\\\r and \\\\l break the line, and \\\\r and \\\\l set natural alignment (last wins); \\\\t becomes a tab; \\\\\\\\ becomes one backslash; any other pair is kept; a trailing lone backslash is kept; %n() stays literal because SPECIAL_NEWLINE_IN_DISPLAY_CLASS is false. DA bears this out: four_then_break, three_bs, tab_then_align, quant_esc, roles_align, stereo_nl, stereo_lit, mono_split, url_label_nl, url_multibar_nl and tip_bar_nl all go from DIFF to MATCH, and unknown_esc and tilde_quant were already MATCH. Not ported: Jaws BLOCK_E1_BREAKLINE (U+E103, which splits even in raw mode), REAL_TABULATION, REAL_BACKSLASH, the NEWLINE_LEFT/RIGHT_ALIGN marks, INVISIBLE_QUOTE (dropped) and BackSlash.hiddenNewLine. Rust's port treats only a real '\\n' as BLOCK_E1_NEWLINE. No DA input exercises these. Residues outside the escape port: code_keep and code_split, where Rust applies <code> Creole and Java draws it literally (base fails too); mono_keep is DIFF 1 on canvas width (132 against 123).",
+    "Challenge 2, the bar. relationship_link_parts is not Java's UrlBuilder regex. It takes the first {...} anywhere as the tooltip and splits the label at the first plain space. It has none of the five-alternative order (QUOTED, ONLY_TOOLTIP, ONLY_TOOLTIP_AND_LABEL, LINK_TOOLTIP_NOLABEL, LINK_WITH_OPTIONAL...), no quote stripping (Url constructor), no [%s] (tab) or leading-whitespace rule, and no rejection of brackets. Held-out consequences in the packet's new direct-emit path: url_quoted_bar emits href '\"https://ledger.example/a|b\"' with the quotes kept (DIFF 13 to 2), and url_brace_nl takes 'extra' as the tooltip and truncates the label 'word{extra}' to 'word' (DIFF 11 to 5). The maker's claim that a bar 'is drawn as Java draws it' holds only for multi-line link labels. Single-line [[url|x]] still goes through the shared Creole URL parser, which splits on the first bar (creole.rs:426 and :1228). The same split happens in notes and class bodies on both binaries. url_bar_only (DIFF 3 to 4), url_bar_label (2 to 4; canvas 104 at base, 117 at the tip, 105 in Java) and url_brace_in_label (3 to 4) rise in strict count because the packet's Java-correct parser masking (protect_creole_links) now delivers the URL to that pre-existing parser. Base drew a stray ']' and no link. I attribute these to creole.rs, not to the packet. url_two (11 to 7), url_open (4 to 4, unclosed [[ stays text) and url_tip_only (10 to 10) are unchanged or improved.",
+    "Challenge 3, ortho. The xlabel skip is exactly 'route was rewritten': normalize_ortho_er_vertical_route returns true only for DoubleLine to CircleCrowFoot with four points sharing x (±0.01), and only then is edge.label cleared and the synthesizer run (render/class.rs synthesize_ortho_edge_labels). ORTHO_XLABEL_VERTICAL_INSET (5.0) and ORTHO_ER_VERTICAL_ROUTE_DELTAS are unchanged, and the diff adds no geometry constant. The only new numeric literal is TextBlockArrow2's .80. DA LR results: ext, comp, agg, dep and real (<|..), flat dl_cc and cc_dl, nest dl_cc and cc_dl, ortho_esc_lr and ortho_note all go from DIFF to MATCH. DA TB results: ext, comp, agg, dep and real are DIFF 18 at base and DIFF 3 at the tip; all three label lines are 43 px left of Java (x 48.95 against 91.95 at the same y) inside nested packages, a pre-existing Graphviz xlabel x-placement divergence. flat_dl_cc_tb (24 to 10) and nest_dl_cc_tb (24 to 11) leave the vertical synthesizer residue (labels 0.1 px high), which the packet was told not to refit. Self-links: self_dl_cc_tb goes from 18 to 1 (canvas height 99 against 114) and self_dl_cc_lr from 18 to 17 (labels within 0.1 px, canvas 135 against 145). #--, x-- and +-- links are dropped entirely by the parser on both binaries.",
+    "TextBlockArrow2 misses Java's integer division. Java computes final int triSize = (int)(size*.80) and then translates and samples with triSize / 2 in int arithmetic. link_arrow_polygon_points uses triangle / 2.0. Whenever triSize is odd, the radius and the translate are 0.5 too large: font sizes 7, 9, 12, 14 and 17 (triSize 5, 7, 9, 11, 13). That is exactly the CO residue at g4k_magic_sz7 and g4k_magic_sz9 (DIFF 1 each at the tip: Java tip x 43.86, Rust 44.36). This is not a loss, since base is DIFF 11 on both cases.",
+    "Process. Each correction addendum precedes its fix: 77461b8f2 precedes 50cec1dd1, and 69e9624c8 precedes 50218c805. The earlier first-round addendum-golden.md rode in the same commit as its fix, 492117846; the first checker did not flag it. No shipping-code literal is keyed to fixture labels; the only strings are syntax tokens, style selectors and the hyperlink colour. Frozen items are unchanged base to tip: compare.rs (GEOM_EPS), harness_guards.rs, ulp_parked.txt and the perturbation tree before this review. The decimal ratchet is identical on base and tip (class.rs 383 to 578, deployment 43 to 44, plantuml_metrics 1053 to 1055, state 53 to 61; all pre-existing). The added code has no literal with 3 or more decimals. harness_guards fails on both trees; the only new message at the tip is 'class-link-labels: account has no independent checker review', which this record answers. As a rejection it keeps 'latest checker review must be accepted' red, and the verdict was not flipped to satisfy the guard. pipe_mode passes 17 of 17 on both, the workspace lib tests pass on both (the tip adds 2 parser tests and 1 render test), and cargo fmt is clean on the touched files.",
+    "Perturbations. The parity_perturbations failure names go from 2,713 (base) to 2,694 (tip): 0 tip-only names and 19 base-only names, all c9a_af and c11a_fc_kcls retained cases. This review restores the first checker's 8 pairs and its review.json from 2d7f0dcfa, and adds 21 fresh held-out DA pairs whose Java SVG is the relayed DA stdout. All 29 class-link-labels pairs pass at the tip and 27 fail at base. The tip total stays 2,694.",
+    "Fix to make the packet accept-ready: clear the 4 clippy warnings, and resolve er_ecommerce_schema, either by porting the ortho self-loop route or with parent sign-off that the regression is this route residue. Also, without blocking: use integer triSize / 2 in link_arrow_polygon_points, and either port UrlBuilder.getUrl for link segments or narrow the '|' claim to multi-line link labels."
+  ],
+  "proposed_targets": [
+    "Creole [[...]] links are parsed by UrlBuilder.getUrl's five alternatives in order, in link labels, notes and class bodies (creole.rs:426, :1228 and render/class.rs relationship_link_parts): a bar stays in the URL, quotes are stripped (Url constructor), a {tooltip} binds only after the link, the label needs [%s], and brackets reject. Witnesses: DA g4r2_url_bar_only, g4r2_url_bar_label, g4r2_url_brace_in_label, g4r2_url_brace_nl, g4r2_url_quoted_bar, g4r2_url_two, g4r2_url_nested_br, plus held-out perturbations (tab separator, leading space, [[url{tip}label]] with no space).",
+    "Link-label magic arrows use TextBlockArrow2's integer triSize / 2 (drawU 63-75). Witnesses: CO g4k_magic_sz7 and g4k_magic_sz9, plus held-out sizes 12, 14 and 17.",
+    "Ortho self-loops route as Java's dot ortho does, so the self-loop xlabel lands on Java's side. Witnesses: er/er_ecommerce_schema 'parent of' (Java x 753.38) and DA g4r2_self_dl_cc_lr (canvas 145 against 135).",
+    "Ortho xlabels on TB edges inside nested packages take Java's x. Witnesses: DA g4r2_ortho_{ext,comp,agg,dep,real}_tb, all DIFF 3 with the label 43 px left of Java.",
+    "Class links with #--, x-- and +-- decorations (LinkDecor SQUARE, NOT_NAVIGABLE and PLUS via getRegexDecors1/2) are parsed and drawn. Witnesses: DA g4r2_ortho_{hash,cross,plus}_{lr,tb} and g4r2_self_hash; the edge is dropped on base and tip.",
+    "A line ending in a single backslash joins the next line before @start/@end detection, as in Java, so a continuation that swallows @enduml gives Java's 'No valid @start/@end found' (exit 100). Witness: DA g4r2_trail_bs.",
+    "<code>...</code> in link labels is drawn as Java draws it (literal, not Creole). Witnesses: DA g4r2_code_keep and g4r2_code_split."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_sz15_nl.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_sz15_nl.svg",
+      "result": "pass",
+      "axes": [
+        "newline",
+        "font-size-15"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_fs_bi_token.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_fs_bi_token.svg",
+      "result": "pass",
+      "axes": [
+        "arrow-font-style",
+        "bold-italic-token"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_st_skin.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_st_skin.svg",
+      "result": "pass",
+      "axes": [
+        "stereotype",
+        "skinparam"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_q_both.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_q_both.svg",
+      "result": "pass",
+      "axes": [
+        "quantifier",
+        "both-ends"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_ortho_tb_nl3.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_ortho_tb_nl3.svg",
+      "result": "pass",
+      "axes": [
+        "ortho-xlabel",
+        "multiline"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_ortho_cc_dl.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_ortho_cc_dl.svg",
+      "result": "pass",
+      "axes": [
+        "ortho-xlabel",
+        "circle-crowfoot-to-double-line"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_magic_sz11.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_magic_sz11.svg",
+      "result": "pass",
+      "axes": [
+        "magic-arrow",
+        "font-size-11"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4k_st_dir_up.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4k_st_dir_up.svg",
+      "result": "pass",
+      "axes": [
+        "stereotype",
+        "direction-keyword"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_four_then_break.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_four_then_break.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "four-backslashes",
+        "then-real-newline"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_three_bs.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_three_bs.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "three-backslashes"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_tab_then_align.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_tab_then_align.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "tab",
+        "align-right",
+        "align-left"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_mono_split.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_mono_split.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "mono",
+        "newline-inside"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_url_label_nl.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_url_label_nl.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "url",
+        "newline-in-label",
+        "neighbors"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_url_multibar_nl.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_url_multibar_nl.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "url",
+        "bar",
+        "multiple",
+        "newline-in-label"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_tip_bar_nl.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_tip_bar_nl.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "url",
+        "tooltip",
+        "bar",
+        "newline-in-tooltip"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_roles_align.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_roles_align.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "role",
+        "align-right",
+        "align-left"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_quant_esc.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_quant_esc.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "quantifier",
+        "literal-backslash-n",
+        "tab"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_stereo_nl.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_stereo_nl.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "stereotype",
+        "newline"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_stereo_lit.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_stereo_lit.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "escape",
+        "stereotype",
+        "literal-backslash-n",
+        "newline"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_esc_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_esc_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "double-line",
+        "circle-crowfoot",
+        "escaped-newline"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_flat_dl_cc_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_flat_dl_cc_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "double-line",
+        "circle-crowfoot",
+        "flat"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_flat_cc_dl_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_flat_cc_dl_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "circle-crowfoot",
+        "double-line",
+        "flat"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_nest_dl_cc_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_nest_dl_cc_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "double-line",
+        "circle-crowfoot",
+        "nested",
+        "three-line"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_nest_cc_dl_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_nest_cc_dl_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "circle-crowfoot",
+        "double-line",
+        "nested",
+        "three-line"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_ext_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_ext_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "<|--",
+        "nested",
+        "three-line"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_comp_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_comp_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "*--",
+        "nested",
+        "three-line"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_dep_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_dep_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "..>",
+        "nested",
+        "three-line"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_real_lr.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_real_lr.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "<|..",
+        "nested",
+        "three-line"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_note.puml",
+      "golden": "test-diagrams/perturbations/class-link-labels/g4r2_ortho_note.svg",
+      "result": "pass",
+      "axes": [
+        "held-out-DA",
+        "ortho",
+        "lr",
+        "note",
+        "newline"
+      ]
+    }
+  ]
+}

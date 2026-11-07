@@ -1,0 +1,5 @@
+@startuml
+class Ledger
+class Hopper
+Ledger --> Hopper : ""bin\nhex""
+@enduml

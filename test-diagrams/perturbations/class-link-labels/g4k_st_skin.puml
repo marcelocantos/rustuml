@@ -1,0 +1,9 @@
+@startuml
+skinparam ArrowFontSize<<batch>> 19
+skinparam ArrowFontName<<batch>> Courier New
+class Kiln
+class Glaze
+class Shelf
+Kiln --> Glaze <<batch>> : firing
+Kiln --> Shelf : plain clay
+@enduml

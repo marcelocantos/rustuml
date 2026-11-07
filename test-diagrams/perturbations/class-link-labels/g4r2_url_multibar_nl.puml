@@ -1,0 +1,5 @@
+@startuml
+class Ledger
+class Hopper
+Ledger --> Hopper : [[https://ledger.example/a|b|c two\nlines]]
+@enduml

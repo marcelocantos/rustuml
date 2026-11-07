@@ -79,6 +79,7 @@ int rustuml_edge_label_box(Agedge_t *e, int kind,
     if (kind == 0) label = ED_label(e);
     else if (kind == 1) label = ED_tail_label(e);
     else if (kind == 2) label = ED_head_label(e);
+    else if (kind == 3) label = ED_xlabel(e);
 
     if (!label || !label->set) return 0;
     *x = label->pos.x;

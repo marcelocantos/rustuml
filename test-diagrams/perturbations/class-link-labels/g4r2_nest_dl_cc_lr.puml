@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+package Dock {
+  package Shed {
+    class Ledger
+    class Hopper
+  }
+}
+Ledger ||--o{ Hopper : hauls\ncrates\npallets
+@enduml
