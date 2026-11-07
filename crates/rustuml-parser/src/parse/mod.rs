@@ -345,35 +345,36 @@ fn resembles_allow_mixing_command(line: &str) -> bool {
     })
 }
 
-/// Detect the diagram type from the @start tag.
+/// Detect the diagram type from the start directive.
+///
+/// A start directive is `StartUtils#isStartDirective`: whitespace, `@` or
+/// `\\`, then `start` and a type (DiagramType#findStartTypes). The type is
+/// case-insensitive (`getTypes` switches on `Character.toLowerCase` and
+/// `check` is `regionMatches(true, ...)`), so it is returned lower-cased.
 ///
 /// If the input has an outer `@startuml` wrapper with an inner `@startXxx`
 /// (e.g. `@startjson` nested inside `@startuml`), the inner type wins because
 /// PlantUML allows embedding any `@start*` block inside `@startuml`.
-fn detect_type(input: &str) -> &str {
-    let mut first_type: Option<&str> = None;
+fn detect_type(input: &str) -> String {
+    let mut first_type: Option<String> = None;
     for line in input.lines() {
-        let trimmed = line.trim();
-        if let Some(rest) = trimmed.strip_prefix("@start") {
-            let typ = rest.split_whitespace().next().unwrap_or(rest);
-            match first_type {
-                None => {
-                    first_type = Some(typ);
-                }
-                Some("uml") => {
-                    // An inner @start inside @startuml overrides the outer uml type.
-                    if typ != "uml" {
-                        return typ;
-                    }
-                }
-                _ => {
-                    // Already have a specific (non-uml) type; stop scanning.
-                    break;
-                }
+        if let Some(rest) = preprocess::start_directive_type(line) {
+            let typ = rest
+                .split_whitespace()
+                .next()
+                .unwrap_or(rest)
+                .to_ascii_lowercase();
+            match first_type.as_deref() {
+                None => first_type = Some(typ),
+                // An inner @start inside @startuml overrides the outer uml type.
+                Some("uml") if typ != "uml" => return typ,
+                Some("uml") => {}
+                // Already have a specific (non-uml) type; stop scanning.
+                Some(_) => break,
             }
         }
     }
-    first_type.unwrap_or("uml")
+    first_type.unwrap_or_else(|| "uml".to_string())
 }
 
 /// For @startuml, detect the specific UML subtype by scanning ALL lines
@@ -1012,10 +1013,11 @@ pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
 
     for (line_idx, &line) in input_lines.iter().enumerate() {
         let source_line = line_idx + 1;
-        let trimmed = line.trim();
         let directive = !merged_away[line_idx];
 
-        if directive && let Some(rest) = trimmed.strip_prefix("@start") {
+        // StartUtils#isStartDirective and #isEndDirective, which accept `@`
+        // or `\\` (BlockUmlBuilder.java:101 and 126).
+        if directive && let Some(rest) = preprocess::start_directive_type(line) {
             if current_start.is_none() {
                 // Starting a new top-level block.
                 let mut parts = rest.split_whitespace();
@@ -1034,7 +1036,7 @@ pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
                 block.lines.push(line);
                 block.depth += 1;
             }
-        } else if directive && trimmed.starts_with("@end") {
+        } else if directive && preprocess::is_end_directive(line) {
             if let Some(block) = &mut current_start {
                 block.lines.push(line);
                 block.depth -= 1;
@@ -1233,7 +1235,8 @@ pub fn parse_with_base(
     input: &str,
     base_dir: Option<&std::path::Path>,
 ) -> Result<Diagram, ParseError> {
-    let typ = detect_type(input);
+    let detected_type = detect_type(input);
+    let typ = detected_type.as_str();
     let mut preprocess_out = match base_dir {
         Some(dir) => preprocess::preprocess_full_for_parse(input, Some(dir.to_path_buf())),
         None => preprocess::preprocess_full_for_parse(input, None),

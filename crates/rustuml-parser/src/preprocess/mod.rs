@@ -1287,13 +1287,16 @@ impl PreprocessContext {
         // PlantUML renders only the first block. Files without any
         // @start tag pass through entirely.
         if self.include_depth == 0 {
-            if trimmed.starts_with("@start") {
+            // BlockUmlBuilder opens a block at every line for which
+            // StartUtils#isStartDirective holds (DiagramType#findStartTypes:
+            // whitespace, '@' or '\\', `start` and a type, case-insensitive),
+            // tested on the line before TIM, as the end test below is.
+            if let Some(kind) = start_directive_type(line) {
                 if !self.seen_start_tag {
                     self.seen_start_tag = true;
                     self.in_diagram_block = true;
-                    self.in_ebnf_block = trimmed.starts_with("@startebnf");
-                    self.start_checks_ending_backslash = start_directive_type(trimmed)
-                        .is_some_and(|kind| start_type_is(kind, "uml"));
+                    self.in_ebnf_block = start_type_is(kind, "ebnf");
+                    self.start_checks_ending_backslash = start_type_is(kind, "uml");
                     output.push(EvaluatedEvent::Boundary(line_no_comment));
                 }
                 return;
@@ -4149,7 +4152,7 @@ fn directive_tail(line: &str) -> Option<&str> {
 }
 
 /// `StartUtils#isEndDirective`: case-sensitive `end` after the marker.
-fn is_end_directive(line: &str) -> bool {
+pub(crate) fn is_end_directive(line: &str) -> bool {
     directive_tail(line).is_some_and(|tail| tail.starts_with("end"))
 }
 
@@ -4160,7 +4163,7 @@ fn is_pragma_directive(line: &str) -> bool {
 
 /// The diagram type text after `start` (`DiagramType#findStartTypes` matches
 /// `start` and the type name with `regionMatches(true, ...)`).
-fn start_directive_type(line: &str) -> Option<&str> {
+pub(crate) fn start_directive_type(line: &str) -> Option<&str> {
     let tail = directive_tail(line)?;
     let keyword = tail.get(..5)?;
     keyword
