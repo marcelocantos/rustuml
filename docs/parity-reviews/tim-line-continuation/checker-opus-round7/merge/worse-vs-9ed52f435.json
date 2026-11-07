@@ -1,0 +1,34 @@
+{
+ "total": 2,
+ "outside_allowed": [
+  {
+   "cohort": "dn",
+   "case": "q8_lead_blank_assert_bs",
+   "kind": "lost_rejection",
+   "in_review5_approved": false,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  }
+ ],
+ "rows": [
+  {
+   "cohort": "dn",
+   "case": "q8_lead_blank_assert_bs",
+   "kind": "lost_rejection",
+   "in_review5_approved": false,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": false
+  },
+  {
+   "cohort": "dj",
+   "case": "r5b_start_bs_chen",
+   "kind": "new_valid_error",
+   "in_review5_approved": false,
+   "named_inherited": false,
+   "by_inherited": false,
+   "chen": true
+  }
+ ]
+}

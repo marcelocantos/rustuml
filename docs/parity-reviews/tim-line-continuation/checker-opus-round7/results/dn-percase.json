@@ -1,0 +1,929 @@
+[
+ {
+  "name": "q8_fmt_mid_marked_seq",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   1,
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "fmt",
+   "marked",
+   "mid",
+   "java_lines 1,2"
+  ],
+  "df078f7d7": "mismatch",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_fmt_lead_marked_seq_two",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   1,
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "fmt",
+   "marked",
+   "before mark",
+   "java_lines 1,2"
+  ],
+  "df078f7d7": "mismatch",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_fmt_mid_bs_seq_svg",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2,
+   3
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "fmt",
+   "no mark",
+   "mid",
+   "java_lines 2,3"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_fmt_in_continuation_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2,
+   4
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "fmt",
+   "no mark",
+   "continuation joins across the dropped line",
+   "java_lines 2,4"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_fmt_tab_marked_invalid",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "fmt",
+   "tab is not the separator: line reaches the parser"
+  ],
+  "df078f7d7": "nonpositive-rejected",
+  "6d195c178": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_fmt_space_only_marked",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   1,
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "fmt",
+   "marked",
+   "prefix only",
+   "java_lines 1,2"
+  ],
+  "df078f7d7": "mismatch",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_fmt_upper_invalid",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "fmt",
+   "case-sensitive prefix"
+  ],
+  "df078f7d7": "nonpositive-rejected",
+  "6d195c178": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_fmt_crlf_mid_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2,
+   3
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "fmt",
+   "CRLF",
+   "java_lines 2,3"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_fmt_in_include_invalid",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "fmt",
+   "include is not read by Pipe"
+  ],
+  "df078f7d7": "nonpositive-rejected",
+  "6d195c178": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_fmt_two_mid_marked",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   1,
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "fmt",
+   "marked",
+   "two dropped",
+   "java_lines 1,2"
+  ],
+  "df078f7d7": "mismatch",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_fmt_after_blank_lead_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "fmt",
+   "blank lead",
+   "java_lines 2"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_fmt_bom_prefixed_invalid",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "fmt",
+   "BOM hides the prefix from Pipe; ReadLineReader then strips it"
+  ],
+  "df078f7d7": "nonpositive-rejected",
+  "6d195c178": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_fmt_mid_error_line_bs",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "fmt",
+   "error line 3 (Pipe text)"
+  ],
+  "df078f7d7": "nonpositive-rejected",
+  "6d195c178": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_fmt_include_parts_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   3
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "fmt",
+   "include",
+   "java_lines 3"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_inc_parts_bs_control",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   3
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "control for q8_fmt_include_parts_bs",
+   "java_lines 3"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "match",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "q8_lead_ws_nostart_seq",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   1,
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "lead",
+   "no start at all",
+   "java_lines 1,2"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "match",
+  "9ed52f435": "mismatch",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_lead_blank_comment_only",
+  "java_exit": 0,
+  "java_valid": false,
+  "java_welcome": true,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "lead",
+   "Welcome (2 lines after TIM)",
+   "unsure"
+  ],
+  "df078f7d7": "nonpositive-accepted",
+  "6d195c178": "nonpositive-accepted",
+  "9ed52f435": "nonpositive-accepted",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_lead_crlf_mixed_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "lead",
+   "mixed CRLF/LF",
+   "java_lines 2"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "match",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_lone_cr_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "line ends",
+   "lone CR ends a line (BufferedReader)",
+   "java_lines 2"
+  ],
+  "df078f7d7": "mismatch",
+  "6d195c178": "mismatch",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_cr_inside_marked",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   1,
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "line ends",
+   "lone CR inside",
+   "java_lines 1,2"
+  ],
+  "df078f7d7": "valid-error",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_blank_after_start_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   4
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "blank after content is appended",
+   "java_lines 4"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "match",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "q8_lead_blank_error_bs",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "lead",
+   "error line 3 (Pipe text)"
+  ],
+  "df078f7d7": "nonpositive-rejected",
+  "6d195c178": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_welcome_lead_ws_bs",
+  "java_exit": 0,
+  "java_valid": false,
+  "java_welcome": true,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "lead",
+   "comment-only body: Welcome",
+   "unsure"
+  ],
+  "df078f7d7": "nonpositive-accepted",
+  "6d195c178": "nonpositive-accepted",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_welcome_lead_ctrl_bs",
+  "java_exit": 0,
+  "java_valid": false,
+  "java_welcome": true,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "lead",
+   "U+001F trim-empty",
+   "Welcome",
+   "unsure"
+  ],
+  "df078f7d7": "nonpositive-accepted",
+  "6d195c178": "nonpositive-accepted",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_noc_ctrl_fmt_only",
+  "java_exit": 50,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "NO_CONTENT: Pipe returns null, no diagram",
+   "unsure exit"
+  ],
+  "df078f7d7": "nonpositive-rejected",
+  "6d195c178": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_lead_blank_cont_nostart_class",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": true,
+  "axes": [
+   "lead",
+   "no start",
+   "continuation",
+   "class"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "match",
+  "9ed52f435": "mismatch",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_lead_blank_assert_bs",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "lead",
+   "TIM error"
+  ],
+  "df078f7d7": "nonpositive-accepted",
+  "6d195c178": "nonpositive-accepted",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_cf_ws_at_longs_upper",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "fold",
+   "U+017F in start",
+   "indented: no Pipe mark",
+   "java_lines 2"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "q8_cf_bs_longs_upper_mindmap",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": true,
+  "axes": [
+   "fold",
+   "U+017F in start",
+   "upper type"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_cf_upper_dotted_mindmap",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": true,
+  "axes": [
+   "fold",
+   "U+0130 in type"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_cf_combining_dot_invalid",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "fold",
+   "I + U+0307 is not one unit: UNKNOWN"
+  ],
+  "df078f7d7": "valid-error",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_cf_fullwidth_invalid",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "fold",
+   "fullwidth u: UNKNOWN"
+  ],
+  "df078f7d7": "valid-error",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_cf_upper_at_col0_restart",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "fold",
+   "upper start is no Pipe mark",
+   "java_lines 2"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "match",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "q8_cf_upper_end_invalid",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "fold",
+   "end is case-sensitive: @ENDUML reaches the parser",
+   "unsure"
+  ],
+  "df078f7d7": "nonpositive-rejected",
+  "6d195c178": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_cf_sharp_s_start_invalid",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "fold",
+   "U+00DF does not fold to s: no start directive"
+  ],
+  "df078f7d7": "nonpositive-rejected",
+  "6d195c178": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_rlr_bom_marked_first",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "rlr",
+   "BOM hides the mark from Pipe",
+   "java_lines 2"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "match",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "q8_rlr_bom_continuation_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "rlr",
+   "BOM on a continued line",
+   "java_lines 2"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "mismatch",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_rlr_bom_comment_marked",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "rlr",
+   "BOM before a comment",
+   "java_lines 2"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "q8_rlr_bom_tim_var_marked",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "rlr",
+   "BOM before a TIM line",
+   "java_lines 2"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_rlr_endash_class_arrow",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": true,
+  "axes": [
+   "rlr",
+   "U+2013 arrow"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "mismatch",
+  "9ed52f435": "mismatch",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_rlr_emdash_invalid",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "rlr",
+   "U+2014 is not replaced",
+   "unsure"
+  ],
+  "df078f7d7": "nonpositive-rejected",
+  "6d195c178": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_rlr_minus_sign_invalid",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "rlr",
+   "U+2212 is not replaced",
+   "unsure"
+  ],
+  "df078f7d7": "nonpositive-rejected",
+  "6d195c178": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_rlr_figure_dash_invalid",
+  "java_exit": 200,
+  "java_valid": false,
+  "java_welcome": false,
+  "java_message_lines": null,
+  "predicted_valid": false,
+  "axes": [
+   "rlr",
+   "U+2012 is not replaced",
+   "unsure"
+  ],
+  "df078f7d7": "nonpositive-rejected",
+  "6d195c178": "nonpositive-rejected",
+  "9ed52f435": "nonpositive-rejected",
+  "f6a738af1": "nonpositive-accepted"
+ },
+ {
+  "name": "q8_rlr_endash_header_mixed_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "rlr",
+   "U+2013 header equals '- ' after the reader",
+   "java_lines 2"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_rlr_smart_quotes_label",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   1
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "rlr",
+   "quotes are not replaced"
+  ],
+  "df078f7d7": "mismatch",
+  "6d195c178": "mismatch",
+  "9ed52f435": "mismatch",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_rlr_endash_include_path",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "rlr",
+   "U+2013 in an include path becomes '-'"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "mismatch",
+  "9ed52f435": "mismatch",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_rlr_nbsp_kept_label",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   1
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "rlr",
+   "U+00A0 is not replaced"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "match",
+  "9ed52f435": "match",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "q8_rlr_bom_mid_line_kept",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   1
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "rlr",
+   "inner U+FEFF kept"
+  ],
+  "df078f7d7": "mismatch",
+  "6d195c178": "mismatch",
+  "9ed52f435": "mismatch",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_mix_crlf_fmt_bom_cont",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   2,
+   4
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "fmt",
+   "rlr",
+   "continuation",
+   "CRLF",
+   "java_lines 2,4"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ },
+ {
+  "name": "q8_mix_lead_bom_blank_ws",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   3
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "rlr",
+   "BOM+space line is content for String#trim",
+   "java_lines 3"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "valid-error",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "match"
+ },
+ {
+  "name": "q8_tim_def_after_blank_lead_bs",
+  "java_exit": 0,
+  "java_valid": true,
+  "java_welcome": false,
+  "java_message_lines": [
+   3
+  ],
+  "predicted_valid": true,
+  "axes": [
+   "lead",
+   "TIM",
+   "java_lines 3"
+  ],
+  "df078f7d7": "match",
+  "6d195c178": "match",
+  "9ed52f435": "valid-error",
+  "f6a738af1": "mismatch"
+ }
+]
