@@ -266,7 +266,7 @@ fn print_agent_guide() {
     println!(
         "Product truth is the no-oracle product tier: `cargo test --test golden_no_oracle --release`."
     );
-    println!("Current no-oracle baseline: 11,182/11,251 eligible SVG goldens pass (99.4%).");
+    println!("Current no-oracle baseline: 11,183/11,251 eligible SVG goldens pass (99.4%).");
     println!(
         "The strict tier is oracle-assisted: `cargo test --test golden_pairs` currently passes 11,130/11,251 eligible SVG goldens."
     );
