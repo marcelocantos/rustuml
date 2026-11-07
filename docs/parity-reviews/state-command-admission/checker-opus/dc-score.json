@@ -1,0 +1,430 @@
+{
+ "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/opus-g5-dc",
+ "reference_results_sha256": "63b8d020830c719d66a62feb30aef6944b71f64854d6a0e24eeba0bc7c66de39",
+ "trees": {
+  "base": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-base",
+   "sha256": "68e186ca6517d655a0be56a91fa9fcc7a67662b792feb1dc1356f6f73fe66c07"
+  },
+  "tip": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-tip",
+   "sha256": "556d79c08e19aa65686c36711420b4c024817aa8662413c1ae953cb9b6c29fae"
+  },
+  "pr": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-pr",
+   "sha256": "c16d110d88b1c57365a2d01efc2e8c632c85ab34a08322a58a5df40e77474aeb"
+  }
+ },
+ "total": 13,
+ "counts": {
+  "base": {
+   "both_reject_same_message": 4,
+   "over_rejection": 4,
+   "under_rejection": 3,
+   "mismatch": 2
+  },
+  "tip": {
+   "both_reject_same_message": 6,
+   "match": 3,
+   "both_reject_different_message": 1,
+   "mismatch": 3
+  },
+  "pr": {
+   "under_rejection": 7,
+   "match": 2,
+   "mismatch": 4
+  }
+ },
+ "cases": [
+  {
+   "name": "h_counter_advances_on_reuse",
+   "java_exit": 200,
+   "java_line": "17",
+   "java_message": "The state Bolt cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "17",
+    "message": "The state Bolt cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "17",
+    "message": "The state Bolt cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "h_counter_not_per_depth",
+   "java_exit": 200,
+   "java_line": "13",
+   "java_message": "The state Anchor cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "13",
+    "message": "The state Anchor cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "13",
+    "message": "The state Anchor cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "h_counter_spans_composites",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "over_rejection",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "h_final_error_after_title",
+   "java_exit": 200,
+   "java_line": "2",
+   "java_message": "Syntax Error?",
+   "base": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "both_reject_different_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "Syntax Error?"
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "h_final_error_from_region0",
+   "java_exit": 200,
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "base": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "Syntax Error?"
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "h_final_error_three_levels",
+   "java_exit": 200,
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "base": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "Syntax Error?"
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "h_name_after_two_regions",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "over_rejection",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "h_region0_nested_cluster_link",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "23",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "23",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "h_region_link_into_nested_child",
+   "java_exit": 200,
+   "java_line": "7",
+   "java_message": "The state Peat cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "7",
+    "message": "The state Peat cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "7",
+    "message": "The state Peat cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "h_reopen_mutes_back_to_state",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "over_rejection",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "33",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "28",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "h_reuse_root_quark_at_depth",
+   "java_exit": 200,
+   "java_line": "11",
+   "java_message": "The state Nave cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "11",
+    "message": "The state Nave cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "11",
+    "message": "The state Nave cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "h_second_separator_owner_named_like_sequence",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "over_rejection",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "19",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "24",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "h_synthetic_region_named_from_root",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "18",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "18",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "18",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  }
+ ]
+}

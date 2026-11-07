@@ -1,0 +1,62 @@
+{
+ "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-cw",
+ "reference_results_sha256": "1fad4e1c1460cb2b14e052cf3f8ea7426862c02e94507eb8b1d4091e5e6d45d6",
+ "trees": {
+  "base": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-base",
+   "sha256": "68e186ca6517d655a0be56a91fa9fcc7a67662b792feb1dc1356f6f73fe66c07"
+  },
+  "tip": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-tip",
+   "sha256": "556d79c08e19aa65686c36711420b4c024817aa8662413c1ae953cb9b6c29fae"
+  },
+  "pr": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-pr",
+   "sha256": "c16d110d88b1c57365a2d01efc2e8c632c85ab34a08322a58a5df40e77474aeb"
+  }
+ },
+ "total": 1,
+ "counts": {
+  "base": {
+   "match": 1
+  },
+  "tip": {
+   "match": 1
+  },
+  "pr": {
+   "panic": 1
+  }
+ },
+ "cases": [
+  {
+   "name": "region0_child_named_conc2",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "panic",
+    "exit": 101,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  }
+ ]
+}

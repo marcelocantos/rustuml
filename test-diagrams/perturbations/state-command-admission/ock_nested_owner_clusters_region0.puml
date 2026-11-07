@@ -1,0 +1,13 @@
+@startuml
+state Barbican {
+  state Bailey {
+    state Solar
+    --
+    state Pantry
+  }
+  --
+  state Postern
+}
+[*] --> Solar
+Solar --> Gable
+@enduml

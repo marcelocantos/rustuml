@@ -1,0 +1,8 @@
+@startuml
+state Bailey {
+  state Solar
+  --
+  state Pantry
+  CONC2 --> Pantry
+}
+@enduml

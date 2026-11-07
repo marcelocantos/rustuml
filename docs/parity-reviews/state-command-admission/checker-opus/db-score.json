@@ -1,0 +1,340 @@
+{
+ "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-db",
+ "reference_results_sha256": "37b6743791a6dba4a7445540605b649624d5519f220e464573e3ede68e7385b6",
+ "trees": {
+  "base": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-base",
+   "sha256": "68e186ca6517d655a0be56a91fa9fcc7a67662b792feb1dc1356f6f73fe66c07"
+  },
+  "tip": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-tip",
+   "sha256": "556d79c08e19aa65686c36711420b4c024817aa8662413c1ae953cb9b6c29fae"
+  },
+  "pr": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-pr",
+   "sha256": "c16d110d88b1c57365a2d01efc2e8c632c85ab34a08322a58a5df40e77474aeb"
+  }
+ },
+ "total": 10,
+ "counts": {
+  "base": {
+   "match": 2,
+   "both_reject_same_message": 3,
+   "over_rejection": 2,
+   "mismatch": 2,
+   "under_rejection": 1
+  },
+  "tip": {
+   "match": 6,
+   "both_reject_same_message": 4
+  },
+  "pr": {
+   "match": 3,
+   "under_rejection": 3,
+   "panic": 2,
+   "mismatch": 2
+  }
+ },
+ "cases": [
+  {
+   "name": "conc1_root_before_separator",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "conc1_after_separator",
+   "java_exit": 200,
+   "java_line": "6",
+   "java_message": "The state CONC1 cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "6",
+    "message": "The state CONC1 cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "6",
+    "message": "The state CONC1 cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "conc2_nested_link_muted",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "panic",
+    "exit": 101,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "conc2_declared_after_separator",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "over_rejection",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "conc3_not_selected_by_sequence",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "19",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "19",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "conc3_selected_at_inner_depth",
+   "java_exit": 200,
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "base": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "Syntax Error?"
+   },
+   "pr": {
+    "class": "panic",
+    "exit": 101,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "conc3_after_two_separators",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "over_rejection",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "two_separators_mute_conc2_and_conc3",
+   "java_exit": 200,
+   "java_line": "12",
+   "java_message": "The state Dock cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "12",
+    "message": "The state Dock cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "12",
+    "message": "The state Dock cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "nested_concurrent_composites",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "27",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "27",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "link_from_next_region_into_muted",
+   "java_exit": 200,
+   "java_line": "8",
+   "java_message": "The state CONC2 cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "8",
+    "message": "The state CONC2 cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "8",
+    "message": "The state CONC2 cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  }
+ ]
+}

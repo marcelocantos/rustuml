@@ -1,0 +1,1064 @@
+{
+ "schema_version": 1,
+ "manifest_sha256": "ad75a98ed4af07edc3688ad74e04869c886b692c204fdce6e3d6c2565e07f270",
+ "note": "Pre-registered by the independent checker before any Java result exists. Rust results are measured with -pipe -tsvg under a 20 s timeout (exit 124 = killed). predicted_java is reasoned from the pinned Java source; uncertain marks low confidence.",
+ "trees": {
+  "base": {
+   "commit": "2971000d4a1094677c1d955265f63529f105758a",
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-base",
+   "binary_sha256": "68e186ca6517d655a0be56a91fa9fcc7a67662b792feb1dc1356f6f73fe66c07"
+  },
+  "tip": {
+   "commit": "9c98a0b0e83be86022fbfaba6b56364fe19a8233",
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-tip",
+   "binary_sha256": "556d79c08e19aa65686c36711420b4c024817aa8662413c1ae953cb9b6c29fae"
+  },
+  "pr": {
+   "commit": "32684f81e4df2cf10bec9a74d935ea8ee944b5f0",
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-pr",
+   "binary_sha256": "c16d110d88b1c57365a2d01efc2e8c632c85ab34a08322a58a5df40e77474aeb"
+  }
+ },
+ "cases": [
+  {
+   "name": "ock_alias_region0_crossing",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "51aaca9e7e628118fa0b12d77ea6bb7da7ef169a5a890b80b666526b3b8eb645",
+    "stdout_len": 5481,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "9d9fec3a567f35444c186e8f53d8def1924cb0a1541b01619cb3785d67c89476",
+    "stdout_len": 5500,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "51aaca9e7e628118fa0b12d77ea6bb7da7ef169a5a890b80b666526b3b8eb645",
+    "stdout_len": 5481,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_alias_region1_from_root",
+   "predicted_java": {
+    "exit": 200,
+    "line": "6",
+    "message": "The state BK cannot be used here."
+   },
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 6: The state BK cannot be used here."
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 6: The state BK cannot be used here."
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "2c4be28d0a71120f529733a672187ce664bd9438b99b0a7a9ad4c1e09ff4ffb6",
+    "stdout_len": 2910,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_cluster_owner_coloured_desc",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "987e3828babae672d2ec775a829146e9034cba0880f97b779ca52406eae50978",
+    "stdout_len": 3572,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "32aece728f34be574df9648aa6dd10b65e39c4ece599a6b90ef820f509ce856d",
+    "stdout_len": 3428,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "987e3828babae672d2ec775a829146e9034cba0880f97b779ca52406eae50978",
+    "stdout_len": 3572,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_cluster_owner_region_composite",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "eb130c8284e5410510a09347dd0346e4bbad26ea23e9b4c9a9483898cf8dbecd",
+    "stdout_len": 3657,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "3087273720bcb05a4b7b24a842c687f6ada5a8e3c6b71d853de9e4fabe0196c4",
+    "stdout_len": 3713,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "eb130c8284e5410510a09347dd0346e4bbad26ea23e9b4c9a9483898cf8dbecd",
+    "stdout_len": 3657,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_conc1_depth2_after_sep",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "42eac04855479b0f2cb84104afed8d1a93f51466f743ae978cdd2d208a0b3d9a",
+    "stdout_len": 3281,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "42eac04855479b0f2cb84104afed8d1a93f51466f743ae978cdd2d208a0b3d9a",
+    "stdout_len": 3281,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "42eac04855479b0f2cb84104afed8d1a93f51466f743ae978cdd2d208a0b3d9a",
+    "stdout_len": 3281,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_conc2_declared_in_region_depth2",
+   "predicted_java": {
+    "exit": 200,
+    "line": "1",
+    "message": "Syntax Error?",
+    "uncertain": true
+   },
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 5: The state CONC2 has been created in a concurrent state : it cannot be used here."
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "ebcb64eaeb231a2ae01179071dbf2a1217dbacd3128b74d7e881e810fab2f9dd",
+    "stdout_len": 4419,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "f858caaa9d9f2d505d1299cec8756780d0047822b3d4267d97927052137a4d21",
+    "stdout_len": 3946,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_conc4_declared_root_after",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 9: The state Apse has been created in a concurrent state : it cannot be used here."
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "6c9fa9732999840a1d996cd758be847622feb7ac7ab2c22a2e7f1e9c12326132",
+    "stdout_len": 4907,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "6c9fa9732999840a1d996cd758be847622feb7ac7ab2c22a2e7f1e9c12326132",
+    "stdout_len": 4907,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_conc5_reused_depth3",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "b487e26ffcf541783830cc4a7128a93c180ff5b0dccc014d57d9f125fc37516f",
+    "stdout_len": 7890,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "b487e26ffcf541783830cc4a7128a93c180ff5b0dccc014d57d9f125fc37516f",
+    "stdout_len": 7890,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "2d60e2996cc86ad519a9a38047b062b28ecc311f9c0661993d9ddf2a8ab9f124",
+    "stdout_len": 7228,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_conc_users_root_before",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "dc85d4745b59107c715fb986d5a816df7f4861dccd33ab2674ab3ed7a5ab0ae4",
+    "stdout_len": 4395,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "dc85d4745b59107c715fb986d5a816df7f4861dccd33ab2674ab3ed7a5ab0ae4",
+    "stdout_len": 4395,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "aad5504ec3ec5efc06b6a9ac4cf84779880bf971ef58600fc80205228046a1a5",
+    "stdout_len": 4367,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_control_autarkic_regions",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "98cad6223cbe13facd875f14fb784aa8e31a4b6d92f9d96d7879f490db5817ae",
+    "stdout_len": 6340,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "98cad6223cbe13facd875f14fb784aa8e31a4b6d92f9d96d7879f490db5817ae",
+    "stdout_len": 6340,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "98cad6223cbe13facd875f14fb784aa8e31a4b6d92f9d96d7879f490db5817ae",
+    "stdout_len": 6340,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_control_no_separator_crossing",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "bcc7ac00ec77f02f396dcc73dc40c485df8a671694dbd3d830b25f2110e2d97e",
+    "stdout_len": 3617,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "bcc7ac00ec77f02f396dcc73dc40c485df8a671694dbd3d830b25f2110e2d97e",
+    "stdout_len": 3617,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "bcc7ac00ec77f02f396dcc73dc40c485df8a671694dbd3d830b25f2110e2d97e",
+    "stdout_len": 3617,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_crossing_owner_description_vertical",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "8eabd7aadb6e275b39b984d97c8d16ffaab2b9d78d703f6d31f4f104e689d49f",
+    "stdout_len": 3816,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "0024ac183e3877bfbf999c923035f34cda377ccf4dbd282fb9f3792e34458605",
+    "stdout_len": 3707,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "8eabd7aadb6e275b39b984d97c8d16ffaab2b9d78d703f6d31f4f104e689d49f",
+    "stdout_len": 3816,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_entry_point_region0",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "ad3d26fdfb8462991529a78fd938f186271e96c052d4ba0fb367b3217226e28b",
+    "stdout_len": 4038,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "ad3d26fdfb8462991529a78fd938f186271e96c052d4ba0fb367b3217226e28b",
+    "stdout_len": 4038,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "ad3d26fdfb8462991529a78fd938f186271e96c052d4ba0fb367b3217226e28b",
+    "stdout_len": 4038,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_final_error_after_block_comment",
+   "predicted_java": {
+    "exit": 200,
+    "line": "3",
+    "message": "Syntax Error?"
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "c1135520bad2b73e3e94c3546261a25059655bd129d243ea4b44b4d6fa98afd9",
+    "stdout_len": 2759,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 3: Syntax Error?"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "c1135520bad2b73e3e94c3546261a25059655bd129d243ea4b44b4d6fa98afd9",
+    "stdout_len": 2759,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_final_error_after_comment_blank",
+   "predicted_java": {
+    "exit": 200,
+    "line": "3",
+    "message": "Syntax Error?"
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "c1135520bad2b73e3e94c3546261a25059655bd129d243ea4b44b4d6fa98afd9",
+    "stdout_len": 2759,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 3: Syntax Error?"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "c1135520bad2b73e3e94c3546261a25059655bd129d243ea4b44b4d6fa98afd9",
+    "stdout_len": 2759,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_final_error_after_hide_empty",
+   "predicted_java": {
+    "exit": 200,
+    "uncertain": true
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "46b28f9ff333f8b28b3f9f30c64ef631ffe8c82009795b901d310b62af5aceeb",
+    "stdout_len": 2044,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 1: Syntax Error?"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "46b28f9ff333f8b28b3f9f30c64ef631ffe8c82009795b901d310b62af5aceeb",
+    "stdout_len": 2044,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_final_error_after_skinparam",
+   "predicted_java": {
+    "exit": 200,
+    "line": "2",
+    "message": "Syntax Error?"
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "fbbd710d0d4311bd1e8ed2e04806f6ed0fb886336258bd0eb9eb97860fde3aa2",
+    "stdout_len": 2757,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 1: Syntax Error?"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "fbbd710d0d4311bd1e8ed2e04806f6ed0fb886336258bd0eb9eb97860fde3aa2",
+    "stdout_len": 2757,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_final_error_link_first_line",
+   "predicted_java": {
+    "exit": 200,
+    "uncertain": true
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "95e6f674fb2e95a527b5be02a251fa31b6f1ea52e44ec0d31f05e9a891c498ba",
+    "stdout_len": 2757,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 1: Syntax Error?"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "95e6f674fb2e95a527b5be02a251fa31b6f1ea52e44ec0d31f05e9a891c498ba",
+    "stdout_len": 2757,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_final_error_region0_to_region1_deep",
+   "predicted_java": {
+    "exit": 200,
+    "line": "1",
+    "message": "Syntax Error?"
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "776959e1f62faf6fe000c524c126478b98fe10bd29d328670110f5d30e1cf281",
+    "stdout_len": 4084,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 1: Syntax Error?"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "776959e1f62faf6fe000c524c126478b98fe10bd29d328670110f5d30e1cf281",
+    "stdout_len": 4084,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_fork_join_choice_in_region",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "fe7741c9a205d9aab22063ec3847b0d6614f6c182e8a1f31f4e15ba4069e34a4",
+    "stdout_len": 7208,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "fe7741c9a205d9aab22063ec3847b0d6614f6c182e8a1f31f4e15ba4069e34a4",
+    "stdout_len": 7208,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "fe7741c9a205d9aab22063ec3847b0d6614f6c182e8a1f31f4e15ba4069e34a4",
+    "stdout_len": 7208,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_history_inside_regions",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "7f7e3794b23106545d632467d9622fc416efd1375f6aae248dcbe6491dc62c85",
+    "stdout_len": 5239,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "7f7e3794b23106545d632467d9622fc416efd1375f6aae248dcbe6491dc62c85",
+    "stdout_len": 5239,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "7f7e3794b23106545d632467d9622fc416efd1375f6aae248dcbe6491dc62c85",
+    "stdout_len": 5239,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_nested_owner_clusters_region0",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "2911d9225185ba18749d8172fab2c446a118742e91e80395208026415c641d52",
+    "stdout_len": 4093,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "b97f1e33b66cdba61faf95af5792a8f5ba8f6e00126bb30b8cdac8d5518f9352",
+    "stdout_len": 4321,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "2911d9225185ba18749d8172fab2c446a118742e91e80395208026415c641d52",
+    "stdout_len": 4093,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_note_in_region_and_root_note",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "fbc63f1c9c45f9b4ee0927117b0afeb527f574c19185c1c87d4fab15b85386c4",
+    "stdout_len": 3497,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "0cf653e7d85e412681baf481398b81175eb49a125da618749040255a87a9d7bd",
+    "stdout_len": 3921,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "fbc63f1c9c45f9b4ee0927117b0afeb527f574c19185c1c87d4fab15b85386c4",
+    "stdout_len": 3497,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_owner_history_from_root",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "2e29081962e0a4783a353f5ede7ae2fb017d5efa689c68be704b924bae8087da",
+    "stdout_len": 3399,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "088cd6d98ce581b1d4375bd455e2aea2aff809953347f03456609cc9294ce2d5",
+    "stdout_len": 3453,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "2e29081962e0a4783a353f5ede7ae2fb017d5efa689c68be704b924bae8087da",
+    "stdout_len": 3399,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_owner_named_conc2_one_sep",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "aa60b6868c6e166b83e935f8c8bc2e2d932138e9d2239df3f2556c1b62452d86",
+    "stdout_len": 4077,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "aa60b6868c6e166b83e935f8c8bc2e2d932138e9d2239df3f2556c1b62452d86",
+    "stdout_len": 4077,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "ff2bbb4f11301c3d0f8a627ca2c094ca8c954e41168ed8e688d19a0fe35ef2e8",
+    "stdout_len": 4077,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_owner_named_conc3_two_seps",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "7ee614f97a98ce98d3d10758d099afb09d1bba4063484771397f4aea28e2e22f",
+    "stdout_len": 4813,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "873acc416c49b87a2b049372b07c8dca3e7417a1c704d855ea238c6fac4b7750",
+    "stdout_len": 3780,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "8b21c30a7016eee0026a7ea96de8ec39e9b63ebd5d65f3d34e1a5fae8e92a070",
+    "stdout_len": 3780,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_region0_link_into_region1",
+   "predicted_java": {
+    "exit": 200,
+    "line": "3",
+    "message": "The state Pantry cannot be used here."
+   },
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 3: The state Pantry cannot be used here."
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 3: The state Pantry cannot be used here."
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "a623fd740160d7b6fd254df497ab78dc960cc3e72839a0d2a835f4de2c0e841e",
+    "stdout_len": 2718,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_region0_three_regions_crossed_lr",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "a3690310d621c0b0fbad1c491662352de6ad7d988f2c977972da183b9e001973",
+    "stdout_len": 3238,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "6eb0c171d2e5bf043665afd07c1bbf98cb8b3332119974dd94ea7713f5798287",
+    "stdout_len": 3406,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "a3690310d621c0b0fbad1c491662352de6ad7d988f2c977972da183b9e001973",
+    "stdout_len": 3238,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_region1_link_left_back",
+   "predicted_java": {
+    "exit": 200,
+    "line": "5",
+    "message": "The state Solar cannot be used here."
+   },
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 5: The state Solar cannot be used here."
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 5: The state Solar cannot be used here."
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "a075982da9cf5c54a11948a9ded72fcc36afced591817a0a6dc443b87ee3cd68",
+    "stdout_len": 2740,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_region_deep_history_by_own_name",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "83da042740cd2fe4174ef473a46454e93269b52d4f73c7128cc189ba1696a394",
+    "stdout_len": 4340,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 124,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "TIMEOUT after 20 s"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "3c977cdaa64633154feadbfc65d82eecce04ce6078b04a9887bbaf39cb86ef28",
+    "stdout_len": 4625,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_region_history_by_own_name",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "9b0019424be1748a1757650e217c02f559cf80ede57a7ed373af77e994919ae4",
+    "stdout_len": 2547,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 124,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "TIMEOUT after 20 s"
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "20c5b8ede233e1eb12a1c2e1fbb2389a89d0141f76d705de8bf3ff1a27684897",
+    "stdout_len": 3005,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_region_named_link_inside",
+   "predicted_java": {
+    "exit": 200,
+    "line": "1",
+    "message": "Syntax Error?",
+    "uncertain": true
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "e5f24ec2b957d2e3d4ad8f3774852a540b07f90d6d7f259b96e3892973169726",
+    "stdout_len": 2719,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "e5f24ec2b957d2e3d4ad8f3774852a540b07f90d6d7f259b96e3892973169726",
+    "stdout_len": 2719,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "0770ec654ef0a10543e2c5d17d9b0a7437d5c0926bed9caa9eb800c4ed435a30",
+    "stdout_len": 2725,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_reopen_before_link_after",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 12: The state Portcullis cannot be used here."
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "51fcca318c9f7dfd466b3a0b9cb007fca76a035f2a1e8ac68a31f1979e52949b",
+    "stdout_len": 5002,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "57ad9f6297f8ef3e271eb17577ef57eee09baa134370667a38587355d4e35530",
+    "stdout_len": 4638,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_reopen_region_by_name_root",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 4: The state Apse has been created in a concurrent state : it cannot be used here."
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "329a0a37d7b016823ca5330fe6f71aea614f0676c53cb396fde22b282d9c5e54",
+    "stdout_len": 3563,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "f3d77bafc0de83945b86d374e268f42a4fbf8f74aa4acb7fb4db467f175ccae9",
+    "stdout_len": 3908,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_reuse_root_composite_then_history",
+   "predicted_java": {
+    "exit": 200,
+    "line": "1",
+    "message": "Syntax Error?",
+    "uncertain": true
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "2e3fae792a41d7f1371ef8302d44bb5fd4514a66c8f4133ffa17edfed4f77df7",
+    "stdout_len": 3152,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "2e3fae792a41d7f1371ef8302d44bb5fd4514a66c8f4133ffa17edfed4f77df7",
+    "stdout_len": 3152,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "234a64f540a9400249ff03a22d98fb569b5cf98488edf52b86778faa5e22803d",
+    "stdout_len": 3792,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_root_link_one_region_deep",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "3767bd59b086bf7e6cfbe5d80a62f82463d20dd536f925b4e059d225b97211d6",
+    "stdout_len": 3990,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "3767bd59b086bf7e6cfbe5d80a62f82463d20dd536f925b4e059d225b97211d6",
+    "stdout_len": 3990,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "3767bd59b086bf7e6cfbe5d80a62f82463d20dd536f925b4e059d225b97211d6",
+    "stdout_len": 3990,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_self_named_child_decl",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "f452aa3cb84cf8e1c7e5b4d0929269e4dfcde5a454e9217bee09a37190740759",
+    "stdout_len": 2478,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "631d723f1bacf2fa6bb2e7df78392ff736ddb677dc780369cd9450351b2a3f2b",
+    "stdout_len": 2948,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "f452aa3cb84cf8e1c7e5b4d0929269e4dfcde5a454e9217bee09a37190740759",
+    "stdout_len": 2478,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_synchro_bar_region_from_root",
+   "predicted_java": {
+    "exit": 200,
+    "line": "1",
+    "message": "Syntax Error?",
+    "uncertain": true
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "3afd0a3882849e3626f1870604bed2899ffa41b37454e30e4d4bf70379f80ae2",
+    "stdout_len": 1832,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "3afd0a3882849e3626f1870604bed2899ffa41b37454e30e4d4bf70379f80ae2",
+    "stdout_len": 1832,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "3afd0a3882849e3626f1870604bed2899ffa41b37454e30e4d4bf70379f80ae2",
+    "stdout_len": 1832,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_top_sep_inner_link",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "f96ae1b9110e09625eb777fc27f3c7c8a54712dbcc0709f522ca11fdb8c71548",
+    "stdout_len": 2062,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "f96ae1b9110e09625eb777fc27f3c7c8a54712dbcc0709f522ca11fdb8c71548",
+    "stdout_len": 2062,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "f96ae1b9110e09625eb777fc27f3c7c8a54712dbcc0709f522ca11fdb8c71548",
+    "stdout_len": 2062,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_top_sep_link_across",
+   "predicted_java": {
+    "exit": 200,
+    "line": "4",
+    "message": "The state Plinth cannot be used here."
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "a382480450d8034e9bf24bf4c857c0199e4a4559fee19935ec9fc42602792948",
+    "stdout_len": 1613,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "a382480450d8034e9bf24bf4c857c0199e4a4559fee19935ec9fc42602792948",
+    "stdout_len": 1613,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "a382480450d8034e9bf24bf4c857c0199e4a4559fee19935ec9fc42602792948",
+    "stdout_len": 1613,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_two_owners_counter_spans",
+   "predicted_java": {
+    "exit": 200,
+    "line": "12",
+    "message": "The state Apse cannot be used here."
+   },
+   "base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 12: The state Apse cannot be used here."
+   },
+   "tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_len": 0,
+    "stderr": "parse error: line 12: The state Apse cannot be used here."
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "fb0c61ef3fe160e3066c401026b606ba0458036bd595f7feb272bdb688963756",
+    "stdout_len": 4873,
+    "stderr": ""
+   }
+  },
+  {
+   "name": "ock_two_owners_one_crossed",
+   "predicted_java": {
+    "exit": 0
+   },
+   "base": {
+    "exit": 0,
+    "stdout_sha256": "912b193cf1e3af41660b19f044e2669fbd4cd956b357880cd378a02423c3ce57",
+    "stdout_len": 4072,
+    "stderr": ""
+   },
+   "tip": {
+    "exit": 0,
+    "stdout_sha256": "602eee48be6ca7adde9451f557700e750b64ccdb51b3bb1ba9dcf90689bbdfc8",
+    "stdout_len": 4501,
+    "stderr": ""
+   },
+   "pr": {
+    "exit": 0,
+    "stdout_sha256": "912b193cf1e3af41660b19f044e2669fbd4cd956b357880cd378a02423c3ce57",
+    "stdout_len": 4072,
+    "stderr": ""
+   }
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+@startuml
+state Bailey {
+  state Solar
+  --
+  state Pantry
+}
+state Chancel {
+  state Lancet
+  --
+  state Apse
+}
+[*] --> Solar
+[*] --> Chancel
+@enduml

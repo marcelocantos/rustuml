@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-command-admission",
+  "account_commit": "da4c1733ef41cb40213bc3185964131b06bf7d96",
+  "implementation_commit": "53111c9c73c4e77ee936230196d6fd8800bca855",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "task_id": "opus-g5-state-checker",
+    "model": "claude-opus-5-5",
+    "tool": "Claude Code in T3 Code"
+  },
+  "base_commit": "2971000d4a1094677c1d955265f63529f105758a",
+  "parity_recovery_commit": "32684f81e4df2cf10bec9a74d935ea8ee944b5f0",
+  "scored_tree": "9c98a0b0e83be86022fbfaba6b56364fe19a8233",
+  "reference_results_sha256": {
+    "DE": "76776af3d64657c2b003e8d44efa47f2fce7ee5ac47a84ee4f4534be899b7b64",
+    "DC": "63b8d020830c719d66a62feb30aef6944b71f64854d6a0e24eeba0bc7c66de39"
+  },
+  "predictions_sha256": {
+    "DE_checker": "41c2035ebb241d65bf9a9405d384934f77e6e34d102183d55344f6785493194d",
+    "DC_maker": "498a9e37cf759c979c78ae3b46190d6cbcce8f818486c75500168a46d38c3a9a"
+  },
+  "heldout_manifest_sha256": "ad75a98ed4af07edc3688ad74e04869c886b692c204fdce6e3d6c2565e07f270",
+  "comparator": "rustuml_oracle::compare::compare_svg_strict on CLI -pipe -tsvg output (svgcmp wrapper); rejections compare Java stderr line 2 and line 3 minus the Assumed-diagram-type suffix with the CLI parse error",
+  "verdict": "rejected",
+  "accept_ready_for_local_merge": false,
+  "commands": [
+    "git fetch /Users/marcelo/.t3/worktrees/rustuml/t3-a6fd61fb maker/opus-g5-state-regions && git switch -c review/opus-g5-state FETCH_HEAD  # 9c98a0b0e83be86022fbfaba6b56364fe19a8233",
+    "git -C test-diagrams/golden fetch /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a && git -C test-diagrams/golden checkout 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+    "git archive 2971000d4 and 32684f81e into ~/Library/Caches/rustuml-opus-g5-checker/trees/<rev>, golden symlinked; CARGO_TARGET_DIR=~/Library/Caches/rustuml-opus-g5-checker/target-<tree> cargo build --release -p rustuml for base, tip (this worktree) and pr; binaries in ~/Library/Caches/rustuml-opus-g5-checker/bin (base 68e186ca..., tip 556d79c0..., pr c16d110d...)",
+    "~/Library/Caches/rustuml-opus-g5-checker/bin/svgcmp <java.svg> <rust.svg>  # thin wrapper over rustuml_oracle::compare::compare_svg_strict (unchanged crate)",
+    "python3 -I ~/Library/Caches/rustuml-opus-g5-checker/tools/score.py <relay_dir> <work> <out> base=rustuml-base tip=rustuml-tip pr=rustuml-pr  # CLI -pipe -tsvg, 20 s timeout, for DE DC DB CL CV CW CF AU",
+    "~/Library/Caches/rustuml-opus-g5-checker/tools/bytecmp.sh over all 12550 golden .puml (stdout sha and exit, base vs tip)",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release -p rustuml-oracle --test golden_no_oracle -- --test-threads=8 --nocapture  # base and tip",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release -p rustuml-oracle --test golden_pairs -- --test-threads=8 --nocapture  # base and tip",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release -p rustuml-oracle --test parity_perturbations -- --test-threads=8 --nocapture  # base, tip, and the review tree with the new pairs",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release -p rustuml-oracle --test harness_guards --no-fail-fast  # base and tip",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release -p rustuml --test pipe_mode -- --test-threads=8 ; cargo test --release -p rustuml-oracle --test doc_claims",
+    "CARGO_TARGET_DIR=<tree target> cargo test --release --workspace --lib --no-fail-fast",
+    "CARGO_TARGET_DIR=<tree target> cargo clippy --release -p <crate> --all-targets -- -D warnings  # parser render layout math oracle rustuml; plus -A dead_code on parser+render"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_cluster_owner_region_composite.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_cluster_owner_region_composite.svg",
+      "result": "pass",
+      "axes": [
+        "cluster-owner",
+        "composite-in-synthetic-region"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_nested_owner_clusters_region0.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_nested_owner_clusters_region0.svg",
+      "result": "pass",
+      "axes": [
+        "nested-owners",
+        "region0-crossing"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_owner_named_conc3_two_seps.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_owner_named_conc3_two_seps.svg",
+      "result": "pass",
+      "axes": [
+        "owner-named-CONC3",
+        "separator-compares-owner"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_two_owners_one_crossed.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_two_owners_one_crossed.svg",
+      "result": "pass",
+      "axes": [
+        "two-owners",
+        "one-crossed"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_owner_named_conc2_one_sep.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_owner_named_conc2_one_sep.svg",
+      "result": "pass",
+      "axes": [
+        "owner-named-CONC2",
+        "root-link-count-2"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_conc1_depth2_after_sep.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_conc1_depth2_after_sep.svg",
+      "result": "pass",
+      "axes": [
+        "user-CONC1-after",
+        "depth-2"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_control_autarkic_regions.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_control_autarkic_regions.svg",
+      "result": "pass",
+      "axes": [
+        "control",
+        "autarkic-owner"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_control_no_separator_crossing.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_control_no_separator_crossing.svg",
+      "result": "pass",
+      "axes": [
+        "control",
+        "no-separator"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/ock_root_link_one_region_deep.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/ock_root_link_one_region_deep.svg",
+      "result": "pass",
+      "axes": [
+        "root-link",
+        "both-ends-same-region"
+      ]
+    }
+  ],
+  "findings": [
+    "REJECT. Packet-caused hang on valid input, 2/42 held-out (batch DE, relay opus-g5-checker-heldout, results 76776af3...). ock_region_history_by_own_name and ock_region_deep_history_by_own_name: Java exit 0 with a real diagram (text Bailey|Solar|CONC2|H|Pantry and Chancel|Tympanum|Solar|Pantry|CONC3|H*|Buttery). Base 2971000d4 and parity-recovery 32684f81e exit 0 in about 0.1 s. The tip never terminates (killed at 20 s, exit 124). Mechanism: inside region Bailey.CONC2, `CONC2[H] --> Pantry` reaches ensure_state's history branch (parse/state.rs:808ff), which resolves the base through resolve_state_id with StateNameUse::Link, so the current-group short-circuit returns the scope Bailey.CONC2 itself. ensure_state then pushes a State for that synthetic region with parent = current_scope() = Bailey.CONC2, i.e. its own parent. mute_to_state removes it from concurrent_now. check_final_error -> nearest_concurrent_ancestor (parse/state.rs:694-703) then loops forever, because quark_parent (parse/state.rs:585) returns the id itself and it is no longer concurrent.",
+    "Java trace for the hang cases. CommandLinkStateCommon.getEntity tests `code.endsWith(\"[H]\")` / `[H*]` (CommandLinkStateCommon.java:171-177) before the current-group short-circuit at :189-190, and calls StateDiagram.getHistorical(location, idShort) / getDeepHistory(location, idShort) (StateDiagram.java:142, :177). Those call quarkInContext(true, \"CONC2\"); countByName is 1 but the quark is the current group, so CucaDiagram.quarkInContextSafe returns currentQuark.child(\"CONC2\") (CucaDiagram.java:264-272), i.e. Bailey.CONC2.CONC2, which gotoGroup creates as a STATE group holding the history pseudo-state. Minimal fix: (1) in the X[H]/X[H*] branch, resolve X with the quarkInContext rule and no current-group short-circuit (count == 1 and that quark is the current group means the current group's child); (2) a synthetic region's parent is its owner, never itself: do not create a State whose parent equals its own id, and make nearest_concurrent_ancestor start from the parent and stop on a repeated id.",
+    "Packet-caused lost rejection, 1/42: ock_conc2_declared_in_region_depth2. Java exit 200, line 1, 'Syntax Error? (Assumed diagram type: sequence)'. Base exit 1 (line 5, has been created in a concurrent state: rejected, different message). Tip exit 0, renders. The same mechanism makes ock_region_named_link_inside an under-rejection (Java line 1 Syntax Error?; base and tip both render, so not a loss there). Inside region Buttress.CONC2 the link `CONC2 --> Crenel` correctly takes the getEntity short-circuit (CommandLinkStateCommon.java:189-190) and links the region group itself. Java's getGroupParentIfItIsConcurrentState starts at ent.getParentContainer() (StateDiagram.java:256-266), so the region's own nearest concurrent ancestor is none while Crenel's is the region, and checkFinalError (StateDiagram.java:232-254) fails. The tip records the region with itself as parent, so both ends report the region and the check passes. Fix: the same parent fix as above (region parent = owner).",
+    "Packet-caused model regression on diagrams with no separator, source-traced and not relayed. CommandAddField (CommandAddField.java:82-85) uses the current group when its name equals the code, before quarkInContext. The tip's new `Some(*sole) != scope` rule (parse/state.rs:628) is correct for quarkInContext, but field lines (StateNameUse::Unchecked) have no short-circuit, so `Chancel : keeps the choir` inside `state Chancel {` now creates a child Chancel.Chancel and moves the description off the composite. Base and parity-recovery keep it on Chancel. Golden evidence: edge-cases/edge_state_entry_exit_actions is the only golden of 12550 whose CLI bytes change; its Java golden is a Syntax Error? page (line 4), so both tiers skip it, but the tip adds entity Connected.Connected. Fix: apply the current-group short-circuit to field lines as CommandAddField does. Pair ock_owner_field_by_own_name is staged for relay next round.",
+    "Region model is otherwise a faithful port, and it generalizes. Traced: one cpt2 per diagram, reset per pass (CucaDiagram.java:128, :159-165), advanced before quarkInContext on every separator (StateDiagram.java:194-208, getUniqueSequence2 CucaDiagram.java:816-818); countByName over every registered quark including the separator's group (Plasma.java:96-108); the separator first pops a current CONCURRENT_STATE so the sole-quark test compares against the owner; gotoGroup mutes the type on every entry (CucaDiagram.java:343-360, Entity.muteToGroupType Entity.java:200-203). Held-out DE confirms: ock_owner_named_conc3_two_seps (owner named like the second sequence) now matches, the four final-error cases with sequence-accepted or comment leading lines match Java's line, and counter-spans-owners, alias, left-arrow and region0-forward-link rejections keep Java's message. All 42 of this checker's pre-registered Java predictions were correct.",
+    "checkFinalError and the error-score tie: confirmed. finalizeDiagram locates the error at it.next() of the rewound iterator (PSystemCommandFactory.java:115-121) with a two-line trace, PSystemError.score = trace.size()*10 + singleError.score() (PSystemError.java:379-382) and buildExecutionError uses score 0 (PSystemAbstractFactory.java:68-70), so 20. SequenceDiagramFactory is the first command factory (PSystemBuilder.java:131-135) and its Syntax Error? at the first unparsed line scores (lines consumed)*10, and mergeV2 keeps the first strict maximum (PSystemErrorUtils.java:85-92). Java stderr in DE names 'Assumed diagram type: sequence' on every final-error case. Residue (declared by the maker, reproduced): when sequence accepts the first line (skinparam, hide empty description, title) Java reports line 2 and the tip reports line 1: ock_final_error_after_skinparam, ock_final_error_after_hide_empty (both_reject_different_message; base under-rejected, so not a loss).",
+    "Renderer change (57accc2b3): a model of Java, not keyed to one shape. It materializes a synthetic region as a State only for an owner that java_state_group_is_autarkic rejects, and that predicate ports Entity.isAutarkic (Entity.java:686-709): CONCURRENT_STATE always autarkic, every link must be isPureInnerLink3 (note links included), and every direct leaf must have EntityPosition.NORMAL; CucaDiagramSimplifierState.simplify then images only the regions (CucaDiagramSimplifierState.java:56-66). Fresh held-out gains: ock_cluster_owner_region_composite, ock_nested_owner_clusters_region0, ock_two_owners_one_crossed. No loss on any cohort or golden; diagrams without separators are untouched by the renderer edit (the one no-separator change is the parser regression above). The entry-point owner (ock_entry_point_region0) falls back to the old path and is a mismatch on both trees. Defect: the function was inserted between render's doc comment and `pub fn render` (render/state.rs:6379-6438), so render lost its doc and the new function carries render's two lines. Residue: the renderer reads the separator's region list, not the final group type (ock_reopen_before_link_after, ock_reopen_region_by_name_root mismatch on the tip; base over-rejected them).",
+    "Scores (compare_svg_strict via svgcmp on CLI output, whole output). DE 42: tip 11 match, 8 same rejection, 2 different rejection, 5 under-rejection, 13 mismatch, 2 hang, 1 Java crash page (ock_conc5_reused_depth3, IllegalArgumentException; Rust renders, not required to crash); base 7 match, 4 same, 1 different, 3 over-rejection, 10 under-rejection, 16 mismatch, 1 crash page. Every base match is still a match on the tip; losses are the two hangs and one lost rejection. DC 13: tip 3 match + 6 same + 1 different + 3 mismatch; base 0 + 4 + 0 + 2 mismatch with 4 over and 3 under; the maker's 13 predictions re-render byte-identically and all 13 predicted Java outcomes hold. DB 10: tip 6 match + 4 same = 10/10. CL 55: tip 28 match (base 25), no loss. CV 13, CW 1, CF 10, AU 32: tip classes identical to base. Against parity-recovery 32684f81e the tip loses no match on any cohort.",
+    "Gates, base 2971000d4 vs tip 9c98a0b0e, release. no-oracle 11181/11251 both, state 897/901, family block identical. Golden CLI bytes: 12549/12550 identical, the exception above. golden_pairs 12550 total, 10497 passed, 754 failed, 1299 skipped, 0 panics on both (exit 101 on both, asserts empty failures); 746 park-candidate names identical. parity_perturbations 2597 failure names on both, identical; the review tree with the 11 new pairs is still 2597 and the pairs pass. harness_guards: decimal_literal_ratchet red on both with the same five deltas, parity_review_records_are_complete red on both with identical violation lines; the other five guards pass on both. pipe_mode 17/17, doc_claims 2/2, workspace lib exit 0 on both (parser 677 -> 683). Clippy -D warnings: identical errors per crate (pre-existing dead_code parse/component.rs:74); with -A dead_code 23 errors each at the same locations, state.rs:8304 -> 8366 shifted only.",
+    "Process. Addendum 2e1d6a9a5 (11:13) precedes parser fix 366dd2ab1 (11:33); addendum 5beb4a30e (11:38) precedes renderer fix 57accc2b3 (11:43); each touches only its own docs or crate file. No fixture-keyed or name-keyed production logic: CONC is used only as Java's sequence prefix, fixture names appear only in unit tests. Frozen items (no_oracle_baseline.txt, ulp_parked.txt, rustuml-oracle, census, guard allow-lists) have an empty diff. No new 3+ place decimal literal. All 235 root account.json files parse."
+  ],
+  "next_round_required": [
+    {
+      "name": "ock_region_history_by_own_name",
+      "source": "docs/parity-reviews/state-command-admission/checker-opus/next-round/ock_region_history_by_own_name.puml",
+      "java": "docs/parity-reviews/state-command-admission/checker-opus/next-round/ock_region_history_by_own_name.java.svg",
+      "required": "exit 0, no hang, compare_svg_strict match with the Java SVG (Java draws Bailey.CONC2.CONC2 as a state holding the H pseudo-state)"
+    },
+    {
+      "name": "ock_region_deep_history_by_own_name",
+      "source": "docs/parity-reviews/state-command-admission/checker-opus/next-round/ock_region_deep_history_by_own_name.puml",
+      "java": "docs/parity-reviews/state-command-admission/checker-opus/next-round/ock_region_deep_history_by_own_name.java.svg",
+      "required": "exit 0, no hang, compare_svg_strict match"
+    },
+    {
+      "name": "ock_conc2_declared_in_region_depth2",
+      "source": "docs/parity-reviews/state-command-admission/checker-opus/next-round/ock_conc2_declared_in_region_depth2.puml",
+      "java": "docs/parity-reviews/state-command-admission/checker-opus/next-round/ock_conc2_declared_in_region_depth2.java.stderr",
+      "required": "exit 1, line 1, Syntax Error?"
+    },
+    {
+      "name": "ock_region_named_link_inside",
+      "source": "docs/parity-reviews/state-command-admission/checker-opus/next-round/ock_region_named_link_inside.puml",
+      "java": "docs/parity-reviews/state-command-admission/checker-opus/next-round/ock_region_named_link_inside.java.stderr",
+      "required": "exit 1, line 1, Syntax Error?"
+    },
+    {
+      "name": "ock_owner_field_by_own_name",
+      "source": "docs/parity-reviews/state-command-admission/checker-opus/next-round/ock_owner_field_by_own_name.puml",
+      "java": "not relayed",
+      "required": "relay it; Rust must keep the field on the composite Chancel (no Chancel.Chancel), as base and parity-recovery do"
+    }
+  ],
+  "minimal_fix": "Parser only. (1) X[H]/X[H*]: resolve X by the quarkInContext rule with no current-group short-circuit, so the region's own name yields the current group's child (StateDiagram.getHistorical/getDeepHistory with idShort, CommandLinkStateCommon.java:171-177). (2) Never record a State whose parent is its own id; a synthetic region's parent is its owner; start the nearest-concurrent walk from the parent and stop on a repeated id (StateDiagram.java:256-266). (3) Field lines take the current-group short-circuit (CommandAddField.java:82-85). Move render's doc comment back onto render. Keep everything else.",
+  "proposed_targets": [
+    "Top-level region separator: Java's concurrentState at the root creates a root CONCURRENT_STATE group, so later states live in it and a link across it is refused (ock_top_sep_link_across: Java line 4, 'The state Plinth cannot be used here.'); Rust ignores a separator outside a composite (pre-existing, base and tip).",
+    "Synchro bars in regions: `==X==` resolves through quarkInContext without checkConcurrentStateOk (CommandLinkStateCommon.java:180-187), so a root link to a region's bar is a checkFinalError (ock_synchro_bar_region_from_root, Java line 1 Syntax Error?); Rust renders (pre-existing).",
+    "Pass three: separators re-run after the pass-two links and re-mute a quark that X[H] muted to STATE, so checkFinalError sees CONCURRENT_STATE (ock_reuse_root_composite_then_history, Java line 1 Syntax Error?); Rust renders (maker residue).",
+    "Final-error location follows the multi-factory score: when the sequence (or an earlier) factory accepts the leading lines, Java reports that factory's later line (ock_final_error_after_skinparam and _after_hide_empty: Java line 2, tip line 1; DC h_final_error_after_title).",
+    "A name whose only quark is a synthetic region resolves to that region for declarations and `state X {` from outside (ock_conc4_declared_root_after, ock_reopen_region_by_name_root); Rust creates a separate state (maker residue)."
+  ],
+  "evidence_dir": "docs/parity-reviews/state-command-admission/checker-opus"
+}

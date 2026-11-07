@@ -1,0 +1,1695 @@
+{
+ "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-checker-heldout",
+ "reference_results_sha256": "38737f4f0526bee52cd04311c8787adb109c6eb0b41ba4a6bdae4de8f3cc8a05",
+ "trees": {
+  "base": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-base",
+   "sha256": "68e186ca6517d655a0be56a91fa9fcc7a67662b792feb1dc1356f6f73fe66c07"
+  },
+  "tip": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-tip",
+   "sha256": "556d79c08e19aa65686c36711420b4c024817aa8662413c1ae953cb9b6c29fae"
+  },
+  "pr": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-pr",
+   "sha256": "c16d110d88b1c57365a2d01efc2e8c632c85ab34a08322a58a5df40e77474aeb"
+  }
+ },
+ "total": 55,
+ "counts": {
+  "base": {
+   "both_reject_same_message": 15,
+   "match": 25,
+   "under_rejection": 2,
+   "mismatch": 10,
+   "java_error_page_exit_0": 1,
+   "both_reject_different_message": 2
+  },
+  "tip": {
+   "both_reject_same_message": 15,
+   "match": 28,
+   "under_rejection": 2,
+   "mismatch": 7,
+   "java_error_page_exit_0": 1,
+   "both_reject_different_message": 2
+  },
+  "pr": {
+   "under_rejection": 19,
+   "match": 16,
+   "mismatch": 19,
+   "java_error_page_exit_0": 1
+  }
+ },
+ "cases": [
+  {
+   "name": "g5ck_alias_cross",
+   "java_exit": 200,
+   "java_line": "5",
+   "java_message": "The state g5ckSpelt cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "5",
+    "message": "The state g5ckSpelt cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "5",
+    "message": "The state g5ckSpelt cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_alias_same_region",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_choice_cross",
+   "java_exit": 200,
+   "java_line": "5",
+   "java_message": "The state g5ckChoice cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "5",
+    "message": "The state g5ckChoice cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "5",
+    "message": "The state g5ckChoice cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_color_bad_gradient",
+   "java_exit": 200,
+   "java_line": "1",
+   "java_message": "No such color",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "No such color"
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "No such color"
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_color_bad_hex",
+   "java_exit": 200,
+   "java_line": "1",
+   "java_message": "No such color",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "No such color"
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "No such color"
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_color_dashed_stroke",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_color_gradients",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_color_hex_forms",
+   "java_exit": 200,
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "base": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_color_line_text_sub",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "2",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "2",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "2",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_color_name_case",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "java_error_page_exit_0",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "java_error_page_exit_0",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "java_error_page_exit_0",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_color_note_named",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "2",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "2",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "2",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_color_note_rebeccapurple",
+   "java_exit": 200,
+   "java_line": "2",
+   "java_message": "No such color",
+   "base": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_color_rebeccapurple_fill",
+   "java_exit": 200,
+   "java_line": "1",
+   "java_message": "No such color",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "No such color"
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "No such color"
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_color_rebeccapurple_stroke",
+   "java_exit": 200,
+   "java_line": "1",
+   "java_message": "No such color",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "No such color"
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "No such color"
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_color_skinparam_rebeccapurple",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_color_style_rebeccapurple",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_color_unknown_name",
+   "java_exit": 200,
+   "java_line": "1",
+   "java_message": "No such color",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "No such color"
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "No such color"
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_conc2_prefix_external",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "16",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_conc_prefix_external",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "16",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_conc_prefix_internal",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "2",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_creole_arial_markup",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "4",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_creole_composite_title",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_creole_decorations_courier",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "15",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_creole_escape_and_newline",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "13",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_creole_mixed_verdana",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "13",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_creole_multiline_desc",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "4",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_creole_plain_arial",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_creole_plain_courier",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "1",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "1",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "1",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_creole_plain_star_slash",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_cross_after_separator",
+   "java_exit": 200,
+   "java_line": "6",
+   "java_message": "The state g5ckSpelt cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "6",
+    "message": "The state g5ckSpelt cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "6",
+    "message": "The state g5ckSpelt cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_cross_sibling_regions",
+   "java_exit": 200,
+   "java_line": "5",
+   "java_message": "The state g5ckMidden cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "5",
+    "message": "The state g5ckMidden cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "5",
+    "message": "The state g5ckMidden cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_dash_separator_intra",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_decl_again_outside",
+   "java_exit": 200,
+   "java_line": "5",
+   "java_message": "The state g5ckMidden has been created in a concurrent state : it cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "5",
+    "message": "The state g5ckMidden has been created in a concurrent state : it cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "5",
+    "message": "The state g5ckMidden has been created in a concurrent state : it cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_field_from_outside",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "5",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_fork_cross_region",
+   "java_exit": 200,
+   "java_line": "6",
+   "java_message": "The state g5ckFork cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "6",
+    "message": "The state g5ckFork cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "6",
+    "message": "The state g5ckFork cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_fork_join_choice_inside",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_forward_decl_other_region",
+   "java_exit": 200,
+   "java_line": "2",
+   "java_message": "The state g5ckMidden cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "2",
+    "message": "The state g5ckMidden cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "2",
+    "message": "The state g5ckMidden cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_forward_same_region",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_history_cross",
+   "java_exit": 200,
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "base": {
+    "class": "both_reject_different_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "5",
+    "message": "The state g5ckMidden cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_different_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "5",
+    "message": "The state g5ckMidden cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_history_inside_region",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_link_after_region0",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "20",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "20",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_link_before_plain_composite",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_link_before_region",
+   "java_exit": 200,
+   "java_line": "1",
+   "java_message": "Syntax Error?",
+   "base": {
+    "class": "both_reject_different_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "The state g5ckSpelt cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_different_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "The state g5ckSpelt cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_nested_cross_to_deep",
+   "java_exit": 200,
+   "java_line": "7",
+   "java_message": "The state g5ckDeep cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "7",
+    "message": "The state g5ckDeep cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "7",
+    "message": "The state g5ckDeep cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_nested_inside_region",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_note_inside_region",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_pipe_cross",
+   "java_exit": 200,
+   "java_line": "6",
+   "java_message": "The state g5ckSpelt cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "6",
+    "message": "The state g5ckSpelt cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "6",
+    "message": "The state g5ckSpelt cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_pipe_separator_intra",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "1",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "1",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "1",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_qualified_into_region2",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "21",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "21",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "21",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_qualified_region0",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "19",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "19",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_reenter_from_region2",
+   "java_exit": 200,
+   "java_line": "4",
+   "java_message": "The state g5ckQuern cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "4",
+    "message": "The state g5ckQuern cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "4",
+    "message": "The state g5ckQuern cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_reenter_region0_group",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "17",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "10",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "17",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_reenter_short_name",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "10",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "10",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "22",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_region0_from_outside",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "19",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "19",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "g5ck_star_both_regions",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  }
+ ]
+}

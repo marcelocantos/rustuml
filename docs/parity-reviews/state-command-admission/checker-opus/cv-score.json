@@ -1,0 +1,427 @@
+{
+ "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-cv",
+ "reference_results_sha256": "f206e324c7cc70028daee62887afc231669fd66c1644dfe97b4863a88dde1957",
+ "trees": {
+  "base": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-base",
+   "sha256": "68e186ca6517d655a0be56a91fa9fcc7a67662b792feb1dc1356f6f73fe66c07"
+  },
+  "tip": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-tip",
+   "sha256": "556d79c08e19aa65686c36711420b4c024817aa8662413c1ae953cb9b6c29fae"
+  },
+  "pr": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-pr",
+   "sha256": "c16d110d88b1c57365a2d01efc2e8c632c85ab34a08322a58a5df40e77474aeb"
+  }
+ },
+ "total": 13,
+ "counts": {
+  "base": {
+   "match": 11,
+   "both_reject_same_message": 2
+  },
+  "tip": {
+   "match": 11,
+   "both_reject_same_message": 2
+  },
+  "pr": {
+   "mismatch": 9,
+   "match": 2,
+   "under_rejection": 1,
+   "panic": 1
+  }
+ },
+ "cases": [
+  {
+   "name": "region_user_concourse",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "16",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "region_user_conc4",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "16",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "region_user_concurrent_hall",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "region_synthetic_repeat",
+   "java_exit": 200,
+   "java_line": "4",
+   "java_message": "The state Bolt has been created in a concurrent state : it cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "4",
+    "message": "The state Bolt has been created in a concurrent state : it cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "4",
+    "message": "The state Bolt has been created in a concurrent state : it cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "region_user_conc_beside_separator",
+   "java_exit": 200,
+   "java_line": "9",
+   "java_message": "The state Pier cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "9",
+    "message": "The state Pier cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "9",
+    "message": "The state Pier cannot be used here."
+   },
+   "pr": {
+    "class": "panic",
+    "exit": 101,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "newline_bold_second_row",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "11",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "newline_tilde_then_plain",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "11",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "newline_right_aligned_row",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "11",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "desc_newline_italic",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "12",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "baseline_courier_three",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "11",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "baseline_arial_size_mix",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "8",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "baseline_verdana_back_and_font",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "13",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "baseline_sans_two_rows",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  }
+ ]
+}

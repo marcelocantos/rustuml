@@ -1,0 +1,1000 @@
+{
+ "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-checker-c1",
+ "reference_results_sha256": "44959f34ee5ecaa773827942b7e46fa98a66de7821a0abe946b66808f2a51c60",
+ "trees": {
+  "base": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-base",
+   "sha256": "68e186ca6517d655a0be56a91fa9fcc7a67662b792feb1dc1356f6f73fe66c07"
+  },
+  "tip": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-tip",
+   "sha256": "556d79c08e19aa65686c36711420b4c024817aa8662413c1ae953cb9b6c29fae"
+  },
+  "pr": {
+   "binary": "/Users/marcelo/Library/Caches/rustuml-opus-g5-checker/bin/rustuml-pr",
+   "sha256": "c16d110d88b1c57365a2d01efc2e8c632c85ab34a08322a58a5df40e77474aeb"
+  }
+ },
+ "total": 32,
+ "counts": {
+  "base": {
+   "both_reject_same_message": 2,
+   "match": 20,
+   "mismatch": 9,
+   "under_rejection": 1
+  },
+  "tip": {
+   "both_reject_same_message": 2,
+   "match": 20,
+   "mismatch": 9,
+   "under_rejection": 1
+  },
+  "pr": {
+   "under_rejection": 3,
+   "match": 20,
+   "mismatch": 9
+  }
+ },
+ "cases": [
+  {
+   "name": "cluster_concurrent_crossing",
+   "java_exit": 200,
+   "java_line": "6",
+   "java_message": "The state Blow cannot be used here.",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "6",
+    "message": "The state Blow cannot be used here."
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "6",
+    "message": "The state Blow cannot be used here."
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "cluster_entry_inside_autarkic",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "cluster_inputpin_mixed_case",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "cluster_root_note_on_inner",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "delay_legacy_empty",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "delay_legacy_lead1",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "delay_legacy_lead2_creole",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "9",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "9",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "9",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "delay_legacy_multiline",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "18",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "18",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "18",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "delay_legacy_plain0",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "delay_teoz_empty",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "delay_teoz_lead3",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "delay_teoz_lead3_multiline",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "17",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "17",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "17",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "deploy_alias_direction_matrix",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "deploy_nested_alias_reverse",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "history_external_suffix_form",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "raw_blank_before_start",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "7",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "7",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "7",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "raw_crlf_one_blank",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "raw_include_leading_blanks",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "22",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "22",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "22",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "raw_multi_blank_first_block",
+   "java_exit": 200,
+   "java_line": "1",
+   "java_message": "Empty description",
+   "base": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "raw_sequence_two_blanks",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "16",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "16",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "16",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "raw_trailing_blanks",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "raw_unit_test_input",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "raw_whitespace_only_lines",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "stroke_arrow_skinparam_transparent",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "stroke_per_arrow_css4",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "stroke_per_state_css4",
+   "java_exit": 200,
+   "java_line": "1",
+   "java_message": "No such color",
+   "base": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "No such color"
+   },
+   "tip": {
+    "class": "both_reject_same_message",
+    "exit": 1,
+    "differences": null,
+    "byte_identical": null,
+    "line": "1",
+    "message": "No such color"
+   },
+   "pr": {
+    "class": "under_rejection",
+    "exit": 0,
+    "differences": null,
+    "byte_identical": null,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "stroke_stereo_skinparam_css4",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "stroke_stereo_style_css4",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "stroke_zero_alpha_nonblack",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "match",
+    "exit": 0,
+    "differences": "0",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "theme_mono_class",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "15",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "15",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "15",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "theme_plain_class_note",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "18",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "18",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "18",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  },
+  {
+   "name": "theme_plain_sequence",
+   "java_exit": 0,
+   "java_line": null,
+   "java_message": null,
+   "base": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "16",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "tip": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "16",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   },
+   "pr": {
+    "class": "mismatch",
+    "exit": 0,
+    "differences": "16",
+    "byte_identical": false,
+    "line": null,
+    "message": null
+   }
+  }
+ ]
+}

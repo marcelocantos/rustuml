@@ -1,0 +1,7 @@
+@startuml
+[*] --> Chancel
+state Chancel {
+  state Lancet
+  Chancel : keeps the choir
+}
+@enduml

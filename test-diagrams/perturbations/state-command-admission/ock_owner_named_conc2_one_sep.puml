@@ -1,0 +1,10 @@
+@startuml
+state CONC2 {
+  state Merlon
+  --
+  state Oriel
+  Oriel --> [*]
+}
+[*] --> CONC2
+CONC2 --> Fascia
+@enduml
